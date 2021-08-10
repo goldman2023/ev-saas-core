@@ -1,0 +1,16 @@
+/*------------------------------------
+  Button Sizes
+------------------------------------*/
+
+/* Wide */
+.btn-wide {
+  min-width: $btn-wide;
+}
+
+/* Extra Small */
+.btn-xs {
+  font-size: $btn-xs-font-size;
+  font-weight: $font-weight-normal;
+  padding: $input-btn-padding-y-xs $input-btn-padding-x-xs;
+  @include border-radius($btn-border-radius-xs);
+}

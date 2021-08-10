@@ -1,0 +1,7 @@
+/*------------------------------------
+  Content Centered
+------------------------------------*/
+
+.content-centered-x {
+  @include content-centered(true, false);
+}

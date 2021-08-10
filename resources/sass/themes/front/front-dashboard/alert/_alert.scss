@@ -1,0 +1,16 @@
+/*------------------------------------
+  Alert
+------------------------------------*/
+
+.alert-dismissible {
+  .close {
+    line-height: .8;
+    font-size: $alert-dismissible-close-font-size;
+  }
+}
+
+.alert-soft-dark {
+  hr {
+    border-color: $alert-soft-dark-hr-border-color;
+  }
+}

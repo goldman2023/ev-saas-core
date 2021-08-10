@@ -1,0 +1,124 @@
+/*------------------------------------
+  Card Options
+------------------------------------*/
+
+// Header Borderless
+.card-header-borderless .card-header {
+  border-width: 0;
+  padding-bottom: 0;
+}
+
+// Body
+.card-body-height {
+  height: $card-body-height;
+  overflow: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: $scrollbar-width;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-bg-color;
+  }
+}
+
+.card-body-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+// Body stretched
+.card-body-stretched {
+  padding: 0 $card-spacer-x $card-spacer-y $card-spacer-x;
+}
+
+// Dashed
+.card-dashed {
+  border-width: 0;
+
+  &:hover {
+    border-color: $card-dashed-border-hover-color;
+
+    .card-dashed-body {
+      color: $card-dashed-body-text-hover-color;
+    }
+  }
+}
+
+.card-dashed-body {
+  color: $card-dashed-body-text-color;
+  border: $card-border-width dashed darken($card-border-color, 5%);
+  @include border-radius($card-border-radius);
+  transition: $card-dashed-body-transition;
+}
+
+// Border Left
+.card-border-left {
+  border-left: $card-border-left-border-width $card-border-left-border-type $card-border-left-border-color;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+}
+
+// Shadow On Hover
+.card-hover-shadow {
+  transition: $card-hover-shadow-transition;
+
+  &:hover {
+    box-shadow: $card-hover-shadow-box-shadow !important;
+  }
+}
+
+// Button Toggle
+.card-btn {
+  display: flex;
+  justify-content: space-between;
+  white-space: inherit;
+
+  &-toggle {
+    display: inline-block;
+    color: $card-btn-arrow-color;
+
+    &-default {
+      display: none;
+    }
+
+    &-active {
+      display: block;
+    }
+  }
+
+  &.collapsed {
+    .card-btn-toggle-default {
+      display: block;
+    }
+
+    .card-btn-toggle-active {
+      display: none;
+    }
+  }
+}
+
+// Pinned
+.card-pinned {
+  position: absolute;
+  top: $card-pinned-top-offset;
+  right: $card-pinned-right-offset;
+}
+
+// Table
+.card-table {
+  margin-bottom: 0;
+
+  th, td {
+    padding-right: $card-spacer-x;
+    padding-left: $card-spacer-x;
+  }
+
+  .table-thead-bordered {
+    margin-top: -$table-border-width;
+  }
+}

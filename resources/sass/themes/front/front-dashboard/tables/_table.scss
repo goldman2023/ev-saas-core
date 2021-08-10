@@ -1,0 +1,27 @@
+/*------------------------------------
+  Tables
+------------------------------------*/
+
+.table {
+  th {
+    font-weight: $table-th-font-weight;
+  }
+
+  thead th {
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+    font-weight: $table-thead-th-font-weight;
+  }
+
+  tfoot {
+    th, td {
+      color: $table-tfoot-color;
+      font-weight: $table-tfoot-font-weight;
+      border-top: $table-border-width solid $table-border-color;
+    }
+  }
+
+  .btn {
+    white-space: nowrap;
+  }
+}

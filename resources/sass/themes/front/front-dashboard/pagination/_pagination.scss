@@ -1,0 +1,26 @@
+/*------------------------------------
+  Pagination
+------------------------------------*/
+
+.page-link {
+  cursor: pointer;
+	text-align: center;
+	min-width: $pagination-min-width;
+}
+
+.page-item:not(.active) .page-link:hover {
+  color: $pagination-hover-color;
+}
+
+.page-item {
+	margin-left: $pagination-margin-x;
+	margin-right: $pagination-margin-x;
+
+  .page-link {
+    @include border-left-radius($pagination-page-link-border-radius);
+  }
+
+  .page-link {
+    @include border-right-radius($pagination-page-link-border-radius);
+  }
+}

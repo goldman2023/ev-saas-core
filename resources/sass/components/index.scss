@@ -1,0 +1,14 @@
+/*  We should Include all Component styles here */
+
+@import "news-categories";
+@import "category-list";
+@import "progress-bar";
+@import "star-rating";
+@import "count-down";
+@import "company-industries-list";
+
+
+.b2b-stat-label {
+    font-size: 11px;
+    white-space: nowrap;
+}

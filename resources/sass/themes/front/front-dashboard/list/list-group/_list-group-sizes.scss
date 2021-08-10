@@ -1,0 +1,25 @@
+/*------------------------------------
+  List Group Sizes
+------------------------------------*/
+
+.list-group-sm {
+  .list-group-item {
+    font-size: $list-group-sm-item-font-size;
+    padding: $list-group-item-padding-y / 2 $list-group-item-padding-x / 2;
+  }
+}
+
+.list-group-lg {
+  .list-group-icon {
+    font-size: $list-group-lg-icon-font-size;
+    width: $list-group-lg-icon-width;
+    margin-right: $list-group-lg-icon-margin-x;
+  }
+}
+
+.list-group-no-gutters {
+  .list-group-item {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}

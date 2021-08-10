@@ -1,0 +1,27 @@
+/*------------------------------------
+  Modal Sizes
+------------------------------------*/
+
+// Medium Devices
+@include media-breakpoint-up(md) {
+  .modal-xl,
+  .modal-lg {
+    .modal-header {
+      padding-top: $modal-inner-padding * 1.5;
+    }
+
+    .modal-header,
+    .modal-footer {
+      padding-right: $modal-inner-padding * 1.5;
+      padding-left: $modal-inner-padding * 1.5;
+    }
+
+    .modal-body {
+      padding: $modal-inner-padding * 1.5;
+    }
+
+    .modal-footer {
+      padding-bottom: $modal-inner-padding * 1.5;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+/*------------------------------------
+  Form Quantity Counter
+------------------------------------*/
+
+.input-group-quantity-counter {
+  position: relative;
+  width: $input-group-quantity-counter-width;
+
+  .input-group-quantity-counter-control {
+    padding-right: $input-group-quantity-counter-control-padding-x;
+  }
+
+  .input-group-quantity-counter-toggle {
+    position: absolute;
+    top: 50%;
+    right: $input-group-quantity-counter-toggle-right-offset;
+    transform: translateY(-50%);
+  }
+
+  .input-group-quantity-counter-btn {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    color: $input-group-quantity-counter-btn-color;
+    font-size: $input-group-quantity-counter-btn-font-size-xs;
+    width: $input-group-quantity-counter-btn-width-xs;
+    height: $input-group-quantity-counter-btn-height-xs;
+    background-color: $input-group-quantity-counter-btn-bg-color;
+    border: $input-group-quantity-counter-btn-border-width $input-group-quantity-counter-btn-border-type $input-group-quantity-counter-btn-border-color;
+    @include border-radius($input-group-quantity-counter-btn-border-radius);
+
+    &:hover {
+      color: $input-group-quantity-counter-btn-hover-color;
+      box-shadow: $input-group-quantity-counter-btn-box-shadow-hover;
+    }
+  }
+}

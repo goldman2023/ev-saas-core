@@ -1,0 +1,77 @@
+scripts:
+  artisan: kool exec app php artisan
+  composer: kool exec app composer
+  refresh:
+  - kool run artisan optimize
+  - kool run artisan config:cache
+  mysql: kool exec db mysql -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE
+  mysql-export-db: kool exec db mysqldump -u root -p$DB_ROOT_PASSWORD --databases $DB_DATABASE --skip-comments > $HOME/$APP_NAME-dump.sql
+  mysql-import-db: kool run mysql < $HOME/$APP_NAME-dump.sql
+  node-setup-prod:
+  - kool run yarn install --frozen-lockfile
+  - kool run yarn prod
+  node-setup-watch:
+  - kool run yarn install --frozen-lockfile
+  - kool run yarn watch
+  phpunit: kool exec app php ./bin/phpunit
+  yarn: kool docker kooldev/node:14 yarn
+  cypress-install: kool run yarn cypress install
+  cypress-gui: ./node_modules/.bin/cypress open
+  local-tests:
+  - ./node_modules/.bin/cypress verify
+  - ./node_modules/.bin/cypress run
+  e2e-tests:
+  - ./node_modules/.bin/cypress verify
+  - ./node_modules/.bin/cypress run --record
+  e2e:
+  - cp .env.local .env
+  - kool start
+  - kool run composer install
+  - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+  - kool run artisan migrate:fresh --seed
+  - kool run artisan storage:link
+  - kool run artisan key:generate
+  - kool run refresh
+  - chown -R www-data:www-data storage/
+  - kool run node-setup-prod
+  - kool run cypress-install
+  - kool run e2e-tests
+  local:
+  - cp .env.local .env
+  - kool start
+  - kool run composer install
+  - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+  - kool run artisan storage:link
+  - kool run artisan key:generate
+  - kool run refresh
+  - kool run node-setup-watch
+  local-seed:
+  - cp .env.local .env
+  - kool start
+  - kool run composer install
+  - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+  - kool run artisan migrate:fresh --seed
+  - kool run artisan storage:link
+  - kool run artisan key:generate
+  - kool run refresh
+  - kool run node-setup-watch
+  local-seed-staging:
+  - cp .env.dbdump .env
+  - kool start
+  - ./import-staging-db.sh
+  - kool run composer install
+  - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+  - kool run artisan storage:link
+  - kool run artisan key:generate
+  - kool run refresh
+  - kool run node-setup-watch
+  local-seed-production:
+  - cp .env.dbdump .env
+  - kool start
+  - ./import-production-db.sh
+  - kool run composer install
+  - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+  - kool run artisan storage:link
+  - kool run artisan key:generate
+  - kool run refresh
+  - kool run node-setup-watch

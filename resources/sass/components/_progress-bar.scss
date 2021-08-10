@@ -1,0 +1,8 @@
+/* Progress bar */
+#b2b-progress-bar {
+    --scrollAmount: 0%;    
+    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+    width: var(--scrollAmount);
+    height: 6px;
+    z-index: 2000;
+}

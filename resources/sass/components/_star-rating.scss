@@ -1,0 +1,58 @@
+/* Star Rating */
+.b2b-star-rating {
+    display: inline-block;
+    position: relative;
+    height: 30px;
+    line-height: 30px;
+    font-size: 30px;
+    vertical-align: middle;
+    margin-left: 1em;
+    label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        cursor: pointer;
+        &:last-child {
+            position: static;
+            .las.la-star {
+                color: #677788;
+            }
+        }
+        &:nth-child(1) {
+            z-index: 5;
+        }
+        &:nth-child(2) {
+            z-index: 4;
+        }
+        &:nth-child(3) {
+            z-index: 3;
+        }
+        &:nth-child(4) {
+            z-index: 2;
+        }
+        &:nth-child(5) {
+            z-index: 1;
+        }
+
+        input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+        .las.la-star {
+            float: left;
+            color: transparent;
+        }
+
+        input:focus:not(:checked) ~ .icon:last-child {
+            color: #677788;
+            text-shadow:  0 0 5px #ffa707;
+        }
+    }
+    &:not(:hover) label input:checked ~ .las.la-star,
+    &:hover label:hover input ~ .las.la-star {
+        color: #ffa707;
+    }
+}

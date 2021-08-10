@@ -1,0 +1,185 @@
+/*------------------------------------
+  Avatar Sizes
+------------------------------------*/
+
+.avatar {
+  &.avatar-circle {
+    .avatar-status {
+      bottom: -($avatar-status-height / 6);
+      right: -($avatar-status-height / 6);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-sm-status {
+      bottom: 0;
+      right: 0;
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-lg-status {
+      bottom: -($avatar-status-lg-height / 5);
+      right: -($avatar-status-lg-height / 5);
+    }
+  }
+}
+
+.avatar-xss {
+  width: $avatar-xss-width;
+  height: $avatar-xss-height;
+
+  .avatar-initials {
+    font-size: $avatar-xss-font-size;
+  }
+}
+
+.avatar-xs {
+  width: $avatar-xs-width;
+  height: $avatar-xs-height;
+
+  .avatar-initials {
+    font-size: $avatar-xs-font-size;
+  }
+
+  &.avatar-circle {
+    .avatar-status {
+      bottom: -($avatar-status-height / 6);
+      right: -($avatar-status-height / 6);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-sm-status {
+      bottom: -($avatar-status-sm-height / 8);
+      right: -($avatar-status-sm-height / 8);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-lg-status {
+      bottom: -($avatar-status-lg-height / 5);
+      right: -($avatar-status-lg-height / 5);
+    }
+  }
+}
+
+.avatar-sm {
+	width: $avatar-sm-width;
+	height: $avatar-sm-height;
+
+  .avatar-initials {
+    font-size: $avatar-sm-font-size;
+  }
+
+  &.avatar-circle {
+    .avatar-status {
+      bottom: -($avatar-status-height / 6);
+      right: -($avatar-status-height / 6);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-sm-status {
+      bottom: -($avatar-status-sm-height / 10);
+      right: -($avatar-status-sm-height / 10);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-lg-status {
+      bottom: -($avatar-status-lg-height / 4);
+      right: -($avatar-status-lg-height / 4);
+    }
+  }
+}
+
+.avatar-lg {
+  width: $avatar-lg-width;
+  height: $avatar-lg-height;
+
+  .avatar-initials {
+    font-size: $avatar-lg-font-size;
+  }
+
+  &.avatar-circle {
+    .avatar-status {
+      bottom: -($avatar-status-height / 10);
+      right: -($avatar-status-height / 10);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-sm-status {
+      bottom: ($avatar-status-sm-height / 10);
+      right: ($avatar-status-sm-height / 10);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-lg-status {
+      bottom: -($avatar-status-lg-height / 8);
+      right: -($avatar-status-lg-height / 8);
+    }
+  }
+}
+
+.avatar-xl {
+  width: $avatar-xl-width;
+  height: $avatar-xl-height;
+
+  .avatar-initials {
+    font-size: $avatar-xl-font-size;
+  }
+
+  &.avatar-circle {
+    .avatar-status {
+      bottom: ($avatar-status-height / 8);
+      right: ($avatar-status-height / 8);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-sm-status {
+      bottom: ($avatar-status-sm-height / 4);
+      right: ($avatar-status-sm-height / 4);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-lg-status {
+      bottom: ($avatar-status-lg-height / 12);
+      right: ($avatar-status-lg-height / 12);
+    }
+  }
+}
+
+.avatar-xxl {
+  width: $avatar-xxl-width;
+  height: $avatar-xxl-height;
+
+  .avatar-initials {
+    font-size: $avatar-xxl-font-size;
+  }
+
+  &.avatar-circle {
+    .avatar-status {
+      bottom: ($avatar-status-height / 3.5);
+      right: ($avatar-status-height / 3.5);
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-sm-status {
+      bottom: $avatar-status-sm-height;
+      right: $avatar-status-sm-height;
+    }
+  }
+
+  &.avatar-circle {
+    .avatar-lg-status {
+      bottom: ($avatar-status-lg-height / 4);
+      right: ($avatar-status-lg-height / 4);
+    }
+  }
+}

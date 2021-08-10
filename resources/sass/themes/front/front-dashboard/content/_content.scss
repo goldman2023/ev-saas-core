@@ -1,0 +1,48 @@
+/*------------------------------------
+  Content
+------------------------------------*/
+
+.content-space {
+  padding: $content-space-padding;
+
+  // Small Devices
+  @include media-breakpoint-down(xs) {
+    padding: $content-space-padding / 2;
+  }
+}
+
+.navbar-expand {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+      &#{$infix} {
+        .navbar-vertical-aside.navbar-vertical-fixed ~ .main {
+          padding-left: $navbar-brand-wrapper-width;
+        }
+      }
+    }
+  }
+}
+
+.footer-offset {
+  margin-bottom: $footer-height;
+}
+
+.main {
+  .content {
+    padding-top: $content-padding-y;
+    padding-bottom: $content-padding-y;
+  }
+}
+
+.container-fluid {
+  padding-right: $content-padding-x;
+  padding-left: $content-padding-x;
+
+  // Small Devices
+  @include media-breakpoint-down(xs) {
+    padding-right: $content-padding-x / 2;
+    padding-left: $content-padding-x / 2;
+  }
+}

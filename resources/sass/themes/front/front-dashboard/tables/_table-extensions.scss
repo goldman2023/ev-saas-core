@@ -1,0 +1,15 @@
+/*------------------------------------
+  Table Extensions
+------------------------------------*/
+
+// Input Group
+.table-input-group {
+  min-width: $table-input-group-min-width;
+}
+
+// Progress
+.table-progress {
+  flex-grow: 1;
+  min-width: $table-progress-min-width;
+  height: $table-progress-height;
+}

@@ -1,0 +1,24 @@
+/*------------------------------------
+  Kanban
+------------------------------------*/
+
+.kanban-board {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    height: $scrollbar-horizontal-height;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-horizontal-bg-color;
+  }
+
+  .kanban-board-row {
+    flex-wrap: nowrap;
+
+    > [class*=col] {
+      max-width: $kanban-board-max-width;
+    }
+  }
+}

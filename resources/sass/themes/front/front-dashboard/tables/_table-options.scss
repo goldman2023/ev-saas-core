@@ -1,0 +1,46 @@
+/*------------------------------------
+  Table Options
+------------------------------------*/
+
+// Nowrap
+.table-nowrap {
+  th, td {
+    white-space: nowrap;
+  }
+}
+
+// Align Middle
+.table-align-middle {
+  tbody td {
+    vertical-align: middle;
+  }
+}
+
+// Text Center
+.table-text-center {
+  th, td {
+    text-align: center;
+  }
+}
+
+// Column Right Aligned
+.table-column-right-aligned {
+  text-align: right;
+}
+
+// Padding Spaces
+.table-column-pr-0 {
+  padding-right: 0 !important;
+}
+
+.table-column-pl-0 {
+  padding-left: 0 !important;
+}
+
+// thead Bordered
+.table-thead-bordered {
+  thead th {
+    border-top: $table-border-width solid $table-border-color;
+    border-bottom: $table-border-width solid $table-border-color;
+  }
+}

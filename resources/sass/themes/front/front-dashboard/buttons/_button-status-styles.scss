@@ -1,0 +1,10 @@
+/*------------------------------------
+  Button Status Styles
+------------------------------------*/
+
+@each $color, $value in $theme-colors {
+  .btn-status-#{$color} {
+    color: color-yiq($value);
+    background-color: $value;
+  }
+}

@@ -1,0 +1,9 @@
+/*------------------------------------
+  Borders
+------------------------------------*/
+
+@each $color, $value in $theme-colors {
+  .border-left-#{$color} {
+    border-left-color: $value !important;
+  }
+}

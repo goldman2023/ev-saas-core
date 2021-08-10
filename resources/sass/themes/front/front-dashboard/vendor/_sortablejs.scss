@@ -1,0 +1,20 @@
+/*------------------------------------
+  SortableJS
+------------------------------------*/
+
+.sortablejs-custom {
+  &.sortable-ghost {
+    opacity: .3;
+  }
+}
+
+.sortablejs-custom-rotate {
+  &.sortable-fallback {
+    transform: rotate(10deg);
+    opacity: 1 !important;
+  }
+}
+
+.sortablejs-custom-handle {
+  cursor: pointer;
+}

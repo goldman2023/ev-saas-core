@@ -1,0 +1,47 @@
+/*------------------------------------
+  Custom Forms
+------------------------------------*/
+
+.custom-select,
+.custom-control-label {
+  cursor: pointer;
+}
+
+.form-control {
+  .custom-control-label {
+    width: 100%;
+  }
+}
+
+.custom-control-input:checked:disabled ~ .custom-control-label::before {
+  border-color: rgba($custom-control-indicator-checked-disabled-bg, 0);
+}
+
+.custom-select-lg {
+  @include border-radius($btn-border-radius-lg);
+}
+
+.custom-select-sm {
+  @include border-radius($btn-border-radius-sm);
+}
+
+// Radio Reverse
+.custom-radio-reverse {
+  width: 100%;
+  padding-left: 0;
+  padding-right: $custom-control-gutter + $custom-control-indicator-size;
+
+  .custom-control-label {
+    width: 100%;
+  }
+
+  .custom-control-label::before {
+    left: auto;
+    right: -($custom-control-gutter + $custom-control-indicator-size);
+  }
+
+  .custom-control-label::after {
+    left: auto;
+    right: -($custom-control-gutter + $custom-control-indicator-size);
+  }
+}

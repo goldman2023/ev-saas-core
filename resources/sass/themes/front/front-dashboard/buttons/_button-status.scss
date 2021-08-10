@@ -1,0 +1,26 @@
+/*------------------------------------
+  Button Status
+------------------------------------*/
+
+.btn-status {
+  position: absolute;
+  top: -$btn-status-top-offset;
+  right: -$btn-status-top-offset;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: $btn-status-font-size;
+  font-weight: $btn-status-font-weight;
+  width: $btn-status-width;
+  height: $btn-status-height;
+  background-color: $btn-status-bg-color;
+  border: $btn-status-border-width $btn-status-border-type $btn-status-border-color;
+  padding: 0;
+  @include border-radius($btn-status-border-radius);
+
+  .btn.rounded-circle & {
+    top: -$btn-status-top-offset / 1.5;
+    right: -$btn-status-right-offset / 1.5;
+  }
+}

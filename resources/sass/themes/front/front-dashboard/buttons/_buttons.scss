@@ -1,0 +1,43 @@
+/*------------------------------------
+  Buttons
+------------------------------------*/
+
+.btn {
+  position: relative;
+}
+
+label.btn {
+  cursor: pointer !important;
+}
+
+.btn.dropdown-toggle::after {
+  transition: $btn-transition;
+}
+
+.btn-pill {
+  @include border-radius($border-radius-pill);
+}
+
+.btn-link {
+  font-weight: $btn-link-font-weight;
+}
+
+// Toggle
+.btn-toggle-default {
+  display: inline-block;
+}
+
+.btn-toggle-toggled {
+  display: none;
+}
+
+.btn.toggled,
+.btn[aria-expanded="true"] {
+  .btn-toggle-default {
+    display: none;
+  }
+
+  .btn-toggle-toggled {
+    display: inline-block;
+  }
+}

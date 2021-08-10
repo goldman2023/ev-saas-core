@@ -1,0 +1,7 @@
+/*------------------------------------
+  Background Image Style
+------------------------------------*/
+
+.bg-img-hero {
+  @include background-cover(cover, no-repeat, top, center);
+}

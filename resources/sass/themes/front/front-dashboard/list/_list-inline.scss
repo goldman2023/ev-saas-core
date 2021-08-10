@@ -1,0 +1,11 @@
+/*------------------------------------
+  List Inline
+------------------------------------*/
+
+.list-inline-m-1 {
+  margin-left: -$list-inline-margin !important;
+
+  .list-inline-item {
+    margin: $list-inline-margin !important;
+  }
+}

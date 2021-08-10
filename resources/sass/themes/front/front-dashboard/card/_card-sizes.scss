@@ -1,0 +1,43 @@
+/*------------------------------------
+  Card Sizes
+------------------------------------*/
+
+.card-sm {
+  > .card-header,
+  > .card-footer {
+    padding-right: $card-sm-padding-x;
+    padding-left: $card-sm-padding-x;
+  }
+
+  > .card-body,
+  > .collapse .card-body {
+    padding: $card-sm-padding-y $card-sm-padding-x;
+  }
+
+  .card-table {
+    th, td {
+      padding-right: $card-sm-padding-x;
+      padding-left: $card-sm-padding-x;
+    }
+  }
+}
+
+.card-lg {
+  > .card-header,
+  > .card-footer {
+    padding-right: $card-lg-padding-x;
+    padding-left: $card-lg-padding-x;
+  }
+
+  > .card-body,
+  > .collapse .card-body {
+    padding: $card-lg-padding-y $card-lg-padding-x;
+  }
+
+  .card-table {
+    th, td {
+      padding-right: $card-lg-padding-x;
+      padding-left: $card-lg-padding-x;
+    }
+  }
+}

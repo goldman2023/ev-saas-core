@@ -1,0 +1,91 @@
+/*------------------------------------
+  Datatable
+------------------------------------*/
+
+.datatable-custom {
+  .dataTables_length,
+  .dataTables_filter,
+  .dataTables_info,
+  .dataTables_paginate {
+    display: none;
+  }
+
+  // Sorting Arrows
+  .sorting,
+  .sorting_asc,
+  .sorting_desc {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:after {
+      display: inline-flex;
+      align-items: center;
+      width: $datatable-sort-arrow-width;
+      height: $datatable-sort-arrow-height;
+      background: $datatable-link-sorting-pseudo-bg;
+      content: "";
+      margin-left: $datatable-link-sorting-pseudo-margin-x;
+      transform: translateY(-50%);
+    }
+  }
+
+  // Active Sorting Arrows
+  .sorting_asc {
+    &:after {
+      background: $datatable-link-sorting-pseudo-asc-bg;
+      content: "";
+    }
+  }
+
+  .sorting_desc {
+    &:after {
+      background: $datatable-link-sorting-pseudo-desc-bg;
+      content: "";
+    }
+  }
+}
+
+// Pagination
+.datatable-custom-pagination {
+  margin-bottom: 0;
+}
+
+// Content Box
+.datatable-custom-content-box {
+  &.dataTable,
+  &.dataTable th,
+  &.dataTable td {
+    box-sizing: content-box;
+  }
+}
+
+// Centered
+.datatable-custom-centered {
+  .dataTable {
+    margin: 0 auto;
+  }
+}
+
+// Collapsible
+.datatable-custom-collapsible {
+  td.details-control {
+    position: relative;
+  }
+
+  td.details-control::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: $datatable-custom-collapsible-control-pseudo-width;
+    height: $datatable-custom-collapsible-control-pseudo-height;
+    background: $datatable-custom-collapsible-control-pseudo-bg;
+    content: "";
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+  }
+
+  tr.shown td.details-control::before {
+    background: $datatable-custom-collapsible-control-pseudo-active-bg;
+  }
+}

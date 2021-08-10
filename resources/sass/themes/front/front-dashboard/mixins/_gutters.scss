@@ -1,0 +1,35 @@
+// Gutters
+//
+// Make use of `.g-*`, `.gx-*` or `.gy-*` utilities to change spacing between the columns.
+
+@mixin make-grid-columns($columns: $grid-columns, $gutter: $grid-gutter-width, $breakpoints: $grid-breakpoints) {
+  @each $breakpoint in map-keys($breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $breakpoints);
+
+    @include media-breakpoint-up($breakpoint, $breakpoints) {
+      @each $key, $value in $gutters-spacers {
+        .g#{$infix}-#{$key},
+        .gx#{$infix}-#{$key} {
+          margin-left: -#{$value - .0625rem};
+          margin-right: -#{$value - .0625rem};
+
+          > * {
+            padding-left: #{$value};
+            padding-right: #{$value};
+          }
+        }
+
+        .g#{$infix}-#{$key},
+        .gy#{$infix}-#{$key} {
+          margin-top: -#{$value};
+          margin-bottom: -#{$value};
+
+          > * {
+            padding-top: #{$value};
+            padding-bottom: #{$value};
+          }
+        }
+      }
+    }
+  }
+}

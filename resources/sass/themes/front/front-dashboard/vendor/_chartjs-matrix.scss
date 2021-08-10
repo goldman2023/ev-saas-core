@@ -1,0 +1,33 @@
+/*------------------------------------
+  Chartjs Matrix
+------------------------------------*/
+
+.chartjs-matrix-custom {
+  position: relative;
+}
+
+.hs-chartjs-matrix-legend {
+  display: inline-block;
+  position: relative;
+  height: $chartjs-matrix-legend-height;
+  list-style: none;
+  padding-left: 0;
+}
+
+.hs-chartjs-matrix-legend-item {
+  width: $chartjs-matrix-legend-item-height;
+  height: $chartjs-matrix-legend-item-height;
+  display: inline-block;
+}
+
+.hs-chartjs-matrix-legend-min {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.hs-chartjs-matrix-legend-max {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}

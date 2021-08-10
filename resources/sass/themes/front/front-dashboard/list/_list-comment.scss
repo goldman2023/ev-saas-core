@@ -1,0 +1,14 @@
+/*------------------------------------
+  List Comment
+------------------------------------*/
+
+.list-comment {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-comment-item:not(:first-child) {
+  border-top: $list-comment-item-border-top-width $list-comment-item-border-top-type $list-comment-item-border-top-color;
+  padding-top: $list-comment-padding-y;
+  margin-top: $list-comment-margin-y;
+}

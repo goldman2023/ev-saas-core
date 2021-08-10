@@ -1,0 +1,75 @@
+/*------------------------------------
+  JVectormap
+------------------------------------*/
+
+.jvectormap-custom {
+  width: 100%;
+  height: 100%;
+}
+
+.jvectormap-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.jvectormap-tip,
+.jvectormap-zoomin,
+.jvectormap-zoomout {
+  position: absolute;
+  @include border-radius($jvectormap-indicators-border-radius);
+}
+
+.jvectormap-tip {
+  z-index: $jvectormap-tip-z-index;
+  display: none;
+  color: $jvectormap-tooltip-color;
+  background-color: $jvectormap-tooltip-bg-color;
+  padding: $jvectormap-indicators-padding-y $jvectormap-indicators-padding-x;
+  margin: $jvectormap-indicators-margin;
+  box-shadow: $jvectormap-tooltip-box-shadow;
+
+  &::before {
+    position: absolute;
+    left: calc(50% - #{$jvectormap-tooltip-arrow-pointer-pseudo-width / 2});
+    bottom: -$jvectormap-tooltip-arrow-pointer-pseudo-height + .0625rem;
+    width: $jvectormap-tooltip-arrow-pointer-pseudo-width;
+    height: $jvectormap-tooltip-arrow-pointer-pseudo-height;
+    content: "";
+    background-image: $jvectormap-tooltip-arrow-pointer-bg;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: $jvectormap-tooltip-arrow-pointer-bg-size;
+  }
+}
+
+.jvectormap-zoomin,
+.jvectormap-zoomout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  color: $jvectormap-zoom-color;
+  background-color: $jvectormap-zoom-bg-color;
+  border: $jvectormap-zoom-border-width $jvectormap-zoom-border-type $jvectormap-zoom-border-color;
+  width: $jvectormap-indicators-width;
+  height: $jvectormap-indicators-height;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: $jvectormap-indicators-hover-color;
+  }
+}
+
+.jvectormap-zoomin {
+  top: $jvectormap-zoomin-indicator-top-offset;
+  left: $jvectormap-zoomin-indicator-left-offset;
+}
+
+.jvectormap-zoomout {
+  top: $jvectormap-zoomout-indicator-top-offset;
+  left: $jvectormap-zoomout-indicator-left-offset;
+}

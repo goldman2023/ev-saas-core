@@ -1,0 +1,22 @@
+/*------------------------------------
+  Checkbox Styles
+------------------------------------*/
+
+@each $color, $value in $theme-colors {
+  .checkbox-outline-#{$color} {
+    .custom-control-label::before {
+      border-color: $value;
+    }
+
+    .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+      border-color: rgba($value, .4);
+    }
+
+    .custom-control-input:not(:disabled):active ~ .custom-control-label::before,
+    .custom-control-input:checked ~ .custom-control-label::before {
+      color: color-yiq($value);
+      border-color: $value;
+      background-color: $value;
+    }
+  }
+}

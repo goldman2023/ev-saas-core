@@ -1,0 +1,38 @@
+/*------------------------------------
+  List Checked
+------------------------------------*/
+
+.list-checked {
+  padding-left: 0;
+  list-style: none;
+}
+
+.list-checked-item {
+  position: relative;
+  display: block;
+  color: $list-checked-item-color;
+  padding-left: $list-checked-item-padding-x;
+  margin: $list-checked-item-margin-y;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $list-checked-pseudo-width;
+    height: $list-checked-pseudo-height;
+    background: $list-checked-pseudo;
+    content: "";
+    margin-top: $list-checked-pseudo-margin-y;
+  }
+
+  &[hover]:hover {
+    color: $list-checked-item-hover-color;
+  }
+}
+
+[class*="list-checked-bg-"],
+[class*="list-checked-soft-bg-"] {
+  .list-checked-item::before {
+    margin-top: $list-checked-bg-pseudo-margin-y;
+  }
+}

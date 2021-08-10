@@ -1,0 +1,16 @@
+/*------------------------------------
+  Button Icon
+------------------------------------*/
+
+.btn-icon {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: $btn-icon-font-size;
+  font-weight: $btn-icon-font-weight;
+  width: $btn-icon-width;
+  height: $btn-icon-height;
+  padding: 0;
+}

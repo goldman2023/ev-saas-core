@@ -1,0 +1,77 @@
+/*------------------------------------
+  Unfold
+------------------------------------*/
+
+.hs-unfold {
+  position: relative;
+  display: inline-block;
+}
+
+.hs-unfold-content {
+  display: block !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hs-unfold-content-initialized {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.hs-unfold-hidden {
+  display: none !important;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hs-unfold-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: $dropdown-overlay-z-index;
+  background-color: $dropdown-overlay-bg-color;
+}
+
+.hs-unfold-content.hs-unfold-reverse-y {
+  top: auto;
+  bottom: 100%;
+  margin-top: 0;
+}
+
+.hs-unfold-has-submenu {
+  top: 0;
+  right: calc(100% + .75rem);;
+  left: auto;
+  margin-top: 0;
+}
+
+.hs-unfold-has-submenu::after {
+  position: absolute;
+  top: 0;
+  display: block;
+  left: calc(100% - .0625rem);
+  width: 1rem;
+  height: 100%;
+  content: "";
+}
+
+.hs-unfold-has-submenu-right {
+  top: 0;
+  right: auto;
+  left: calc(100% + .75rem);
+  margin-top: 0;
+}
+
+.hs-unfold-has-submenu-right::after {
+  position: absolute;
+  top: 0;
+  display: block;
+  right: calc(100% - .0625rem);
+  width: 1rem;
+  height: 100%;
+  content: "";
+}

@@ -1,0 +1,201 @@
+/*------------------------------------
+  Navbar Skins
+------------------------------------*/
+
+// Light
+.navbar-light {
+  background-color: $navbar-light-bg-color;
+
+  .navbar-collapse {
+    background-color: transparent;
+  }
+
+  .navbar-nav .nav-link {
+    color: $navbar-nav-link-color;
+  }
+
+  .navbar-brand-wrapper {
+    background-color: $navbar-light-bg-color;
+  }
+
+  .navbar-toggler {
+    border-color: transparent;
+  }
+}
+
+// Dark
+.navbar-dark {
+  background-color: $navbar-dark-bg-color !important;
+
+  .navbar-collapse {
+    background-color: transparent;
+  }
+
+  .navbar-toggler {
+    border-color: transparent;
+  }
+
+  .navbar-vertical-aside-has-menu.show > .nav-link-toggle::before,
+  .navbar-vertical-aside-has-menu > .nav-link-toggle.active::before,
+  .navbar-vertical-aside-has-menu > .nav-link-toggle:hover::before {
+    background-color: $navbar-dark-vertical-aside-has-menu-pseudo-bg-active-color;
+  }
+
+  .navbar-nav {
+    .dropdown-menu:not(.navbar-dropdown-menu) {
+      .show > .nav-link,
+      .active > .nav-link,
+      .nav-link.show,
+      .nav-link.active {
+        color: $navbar-dark-hover-color;
+      }
+    }
+
+    .nav-indicator-icon {
+      color: $navbar-dark-indicator-icon-color;
+    }
+
+    .nav-link {
+      color: $navbar-dark-color;
+    }
+
+    .show > .nav-link,
+    .active > .nav-link,
+    .nav-link.show,
+    .nav-link.active,
+    .dropdown-item.active {
+      color: $navbar-dark-active-color;
+    }
+
+    .nav-link.active .nav-indicator-icon,
+    .nav-link:hover .nav-indicator-icon {
+      color: $navbar-dark-hover-color;
+    }
+
+    .show > .nav-link > .nav-indicator-icon,
+    .active .nav-indicator-icon {
+      color: $navbar-dark-indicator-icon-color;
+    }
+
+    .navbar-dropdown-menu {
+      .nav-link {
+        color: $navbar-nav-link-color;
+
+        &:hover,
+        &.active {
+          color: $nav-link-hover-color;
+        }
+      }
+    }
+
+    .navbar-vertical-aside-compact-mini-mode &,
+    .navbar-vertical-aside-mini-mode & {
+      .nav-sub .nav-link {
+        color: $nav-link-color;
+
+        &:hover {
+          color: $navbar-light-active-color;
+        }
+      }
+
+      .navbar-vertical-aside-has-menu {
+        .show > .nav-link,
+        .active > .nav-link,
+        .nav-link.show,
+        &.show .nav-sub .nav-link.active {
+          color: $nav-link-active-color;
+        }
+      }
+
+      .show > .nav-link > .nav-indicator-icon,
+      .active .nav-indicator-icon,
+      .nav-link:hover .nav-indicator-icon {
+        color: $navbar-light-active-color;
+      }
+    }
+  }
+
+  .navbar-vertical-aside-compact-mini-mode & {
+    .nav-compact-icon .navbar-vertical-aside-has-menu.show > .nav-link {
+      .nav-icon {
+        color: $navbar-dark-nav-compact-icon-hover-color;
+        background-color: $navbar-dark-nav-compact-icon-hover-bg-color;
+      }
+    }
+  }
+
+  .nav-compact-title {
+    color: $navbar-dark-color;
+  }
+
+  .nav-compact {
+    > .nav-item > .nav-link {
+      &:hover,
+      &.active {
+        color: $navbar-dark-nav-compact-icon-hover-color;
+        background-color: $navbar-dark-nav-compact-icon-hover-bg-color;
+
+        .nav-compact-title {
+          color: $navbar-dark-hover-color;
+        }
+      }
+    }
+
+    > .show > .nav-link {
+      color: $navbar-dark-nav-compact-icon-hover-color;
+      background-color: $navbar-dark-nav-compact-icon-hover-bg-color;
+
+      .nav-compact-title {
+        color: $navbar-dark-nav-compact-icon-hover-color;
+      }
+    }
+  }
+
+  .nav-compact-icon {
+    .nav-icon {
+      color: $navbar-dark-color;
+
+      &:focus,
+      &:hover,
+      &.active {
+        color: $navbar-dark-nav-compact-icon-hover-color !important;
+        background-color: $navbar-dark-nav-compact-icon-hover-bg-color;
+      }
+    }
+
+    .nav-link.active {
+      .nav-icon {
+        color: $navbar-dark-nav-compact-icon-hover-color;
+        background-color: $navbar-dark-nav-compact-icon-hover-bg-color;
+      }
+    }
+  }
+
+  .nav-compact-icon > .show > .nav-link {
+    .nav-icon {
+      color: $navbar-dark-color;
+    }
+  }
+
+  &.navbar-bordered {
+    &,
+    .navbar-vertical-footer {
+      border-color: $navbar-dark-border-color;
+    }
+  }
+
+  .input-group-hover-light .form-control {
+    &,
+    &:hover {
+      background-color: $navbar-dark-input-group-hover-light-bg-color;
+    }
+
+    &:focus {
+      background-color: $navbar-dark-input-group-hover-light-bg-focus-color;
+    }
+  }
+
+  .navbar-nav .nav-divider {
+    border-color: $navbar-dark-border-color;
+  }
+}

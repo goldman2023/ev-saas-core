@@ -1,0 +1,72 @@
+/*------------------------------------
+  Chartjs
+------------------------------------*/
+
+.chartjs-custom {
+  position: relative;
+  overflow: hidden;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.hs-chartjs-tooltip-wrap {
+  position: absolute;
+  z-index: 3;
+  transition: $chartjs-tooltip-transition;
+}
+
+.hs-chartjs-tooltip {
+  position: relative;
+  font-size: $chartjs-tooltip-font-size;
+  background-color: $chartjs-tooltip-bg-color;
+  @include border-radius($chartjs-tooltip-border-radius);
+  padding: $chartjs-tooltip-padding-y $chartjs-tooltip-padding-x;
+  transition: $chartjs-tooltip-transition, top 0s;
+
+  &::before {
+    position: absolute;
+    left: calc(50% - #{$chartjs-tooltip-arrow-pointer-pseudo-width / 2});
+    bottom: -$chartjs-tooltip-arrow-pointer-pseudo-height + .0625rem;
+    width: $chartjs-tooltip-arrow-pointer-pseudo-width;
+    height: $chartjs-tooltip-arrow-pointer-pseudo-height;
+    content: "";
+    background-image: $chartjs-tooltip-arrow-pointer-bg;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: $chartjs-tooltip-arrow-pointer-bg-size;
+  }
+}
+
+.hs-chartjs-tooltip-left {
+  left: -130%;
+
+  &::before {
+    top: 50%;
+    transform: translateY(-50%);
+    right: -$chartjs-tooltip-arrow-pointer-pseudo-position-x-offset;
+    left: auto;
+    transform: translateY(-50%) rotate(270deg);
+  }
+}
+
+.hs-chartjs-tooltip-right {
+  left: 30%;
+
+  &::before {
+    top: 50%;
+    transform: translateY(-50%);
+    left: -$chartjs-tooltip-arrow-pointer-pseudo-position-x-offset;
+    right: auto;
+    transform: translateY(-50%) rotate(90deg);
+  }
+}
+
+.hs-chartjs-tooltip-header {
+  color: $chartjs-tooltip-header-color;
+  font-weight: $chartjs-tooltip-header-font-weight;
+  white-space: nowrap;
+}
+
+.hs-chartjs-tooltip-body {
+  color: $chartjs-tooltip-body-color;
+}

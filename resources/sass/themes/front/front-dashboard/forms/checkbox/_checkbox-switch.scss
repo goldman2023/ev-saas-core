@@ -1,0 +1,55 @@
+/*------------------------------------
+  Checkbox Switch
+------------------------------------*/
+
+.custom-checkbox-switch {
+  display: inline-block;
+  padding-left: 0;
+}
+
+.custom-checkbox-switch-label {
+  cursor: pointer;
+  color: $custom-checkbox-switch-label-color;
+  background-color: $custom-checkbox-switch-label-bg-color;
+  border: $custom-checkbox-switch-label-border-width $custom-checkbox-switch-label-border-type $custom-checkbox-switch-label-border-color;
+  margin-bottom: 0;
+
+  &:hover {
+    color: $custom-checkbox-switch-label-hover-color;
+  }
+}
+
+.custom-checkbox-switch-label-btn-dashed {
+  border: $border-width dashed $border-color;
+}
+
+.custom-checkbox-switch-input ~ .custom-checkbox-switch-label {
+  .custom-checkbox-switch-default {
+    display: block;
+  }
+
+  .custom-checkbox-switch-active {
+    display: none;
+  }
+}
+
+// Checked
+.custom-checkbox-switch-input:checked ~ .custom-checkbox-switch-label {
+  color: $custom-checkbox-switch-label-active-color;
+  border-style: $custom-checkbox-switch-label-border-type;
+  background-color: $custom-checkbox-switch-label-active-bg-color;
+
+  .custom-checkbox-switch-default {
+    display: none;
+  }
+
+  .custom-checkbox-switch-active {
+    display: block;
+  }
+}
+
+// Disabled
+.custom-checkbox-switch-input:disabled ~ .custom-checkbox-switch-label {
+  color: $custom-checkbox-switch-label-disabled-color;
+  background-color: $custom-checkbox-switch-label-disabled-bg-color;
+}

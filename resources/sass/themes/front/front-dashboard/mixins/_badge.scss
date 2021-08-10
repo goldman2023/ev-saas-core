@@ -1,0 +1,28 @@
+//
+// Badges
+//
+
+@mixin badge-soft($hs-soft-bg) {
+  color: ($hs-soft-bg);
+  background-color: rgba($hs-soft-bg, .1);
+
+  @at-root a#{&} {
+    @include hover-focus() {
+      color: color-yiq($hs-soft-bg);
+      background-color: $hs-soft-bg;
+    }
+  }
+}
+
+@mixin badge-outline-variant($color, $color-hover: color-yiq($color), $active-background: $color, $active-border: $color) {
+  color: $color;
+  border: $badge-border-width $badge-border-type $color;
+
+  @at-root a#{&} {
+    @include hover-focus() {
+      color: $color-hover;
+      background-color: $active-background;
+      border-color: $active-border;
+    }
+  }
+}

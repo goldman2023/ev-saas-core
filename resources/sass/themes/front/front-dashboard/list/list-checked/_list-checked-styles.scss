@@ -1,0 +1,23 @@
+/*------------------------------------
+  List Checked
+------------------------------------*/
+
+@each $color, $value in $theme-colors {
+  .list-checked-#{$color} {
+    .list-checked-item::before {
+      background-image: str-replace(url("data:image/svg+xml,%3Csvg width='10' height='9' viewBox='0 0 100 90' fill='#{$value}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M98.1,16.2c-2.5-2.3-6.4-2.2-8.7,0.2L36.7,70.1l-13-15.5c-2.9-3.5-7.9-4.1-11.1-1.4c-2.9,2.4-3.5,6.6-1.4,10.1l16.5,28c3.2,5.4,10.8,5.8,14.5,0.8l56.5-67.3C100.7,22.1,100.4,18.5,98.1,16.2z'/%3E%3C/svg%3E%0A"), "#", "%23");
+    }
+  }
+
+  .list-checked-bg-#{$color} {
+    .list-checked-item::before {
+      background-image: str-replace(url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 110 110' fill='#{$value}' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M55,110L55,110C24.6,110,0,85.4,0,55v0C0,24.6,24.6,0,55,0h0c30.4,0,55,24.6,55,55v0C110,85.4,85.4,110,55,110zM81.6,31c-1.5-1.4-3.9-1.4-5.4,0.1L43.7,64.3l-8-9.6c-1.8-2.2-4.9-2.6-6.9-0.9c-1.8,1.5-2.1,4.1-0.9,6.2l10.2,17.3c2,3.3,6.7,3.6,9,0.5L82,36.2C83.3,34.7,83.1,32.4,81.6,31z' /%3E%3C/svg%3E%0A"), "#", "%23");
+    }
+  }
+
+  .list-checked-soft-bg-#{$color} {
+    .list-checked-item::before {
+      background-image: str-replace(url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 110 110' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='#{$value}' opacity='.1' d='M55,110L55,110C24.6,110,0,85.4,0,55l0,0C0,24.6,24.6,0,55,0l0,0c30.4,0,55,24.6,55,55l0,0 C110,85.4,85.4,110,55,110z'/%3E%3Cpath fill='#{$value}' d='M81.6,31c-1.5-1.4-3.9-1.4-5.4,0.1L43.7,64.3l-8-9.6c-1.8-2.2-4.9-2.6-6.9-0.9c-1.8,1.5-2.1,4.1-0.9,6.2 l10.2,17.3c2,3.3,6.7,3.6,9,0.5L82,36.2C83.3,34.7,83.1,32.4,81.6,31z'/%3E%3C/svg%3E"), "#", "%23");
+    }
+  }
+}

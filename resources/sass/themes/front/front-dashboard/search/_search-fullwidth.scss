@@ -1,0 +1,15 @@
+/*------------------------------------
+  Search Fullwidth
+------------------------------------*/
+
+.search-fullwidth {
+  position: fixed;
+  top: 0;
+  left: 0 !important;
+  width: 100%;
+  z-index: $search-fullwidth-z-index;
+
+  .form-control {
+    height: $search-fullwidth-height;
+  }
+}

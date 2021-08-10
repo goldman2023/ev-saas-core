@@ -1,0 +1,43 @@
+/*------------------------------------
+  List Checked
+------------------------------------*/
+
+.list-checked-sm {
+  .list-checked-item {
+    padding-left: $list-checked-sm-item-padding-x;
+
+    &::before {
+      width: $list-checked-sm-pseudo-width;
+      height: $list-checked-sm-pseudo-height;
+      background-size: $list-checked-sm-pseudo-width $list-checked-sm-pseudo-height;
+      margin-top: $list-checked-sm-pseudo-margin-y;
+    }
+  }
+
+  &[class*="list-checked-bg-"],
+  &[class*="list-checked-soft-bg-"] {
+    .list-checked-item::before {
+      margin-top: $list-checked-sm-bg-pseudo-margin-y;
+    }
+  }
+}
+
+.list-checked-lg {
+  .list-checked-item {
+    padding-left: $list-checked-lg-item-padding-x;
+
+    &::before {
+      width: $list-checked-lg-pseudo-width;
+      height: $list-checked-lg-pseudo-height;
+      background-size: $list-checked-lg-pseudo-width $list-checked-lg-pseudo-height;
+      margin-top: 0;
+    }
+  }
+
+  &[class*="list-checked-bg-"],
+  &[class*="list-checked-soft-bg-"] {
+    .list-checked-item::before {
+      margin-top: $list-checked-lg-bg-pseudo-margin-y;
+    }
+  }
+}

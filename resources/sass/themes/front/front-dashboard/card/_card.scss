@@ -1,0 +1,54 @@
+/*------------------------------------
+  Card
+------------------------------------*/
+
+.card {
+  box-shadow: $card-box-shadow;
+}
+
+.card[href]:hover {
+  .card-title,
+  .card-header-title {
+    color: $card-title-hover-color;
+  }
+}
+
+.card-title {
+  display: block;
+  color: $card-title-color;
+  margin-bottom: 0;
+}
+
+.card-subtitle {
+  display: block;
+  color: $card-subtitle-color;
+  font-weight: $card-subtitle-font-weight;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing;
+  margin-top: 0;
+  margin-bottom: $card-subtitle-margin-y;
+}
+
+.card-text {
+  display: block;
+  color: $card-text-color;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: $card-header-padding-y;
+  padding-bottom: $card-header-padding-y;
+}
+
+.card-header-title {
+  margin-bottom: 0;
+}
+
+.card-footer {
+  display: block;
+  padding-top: $card-footer-padding-y;
+  padding-bottom: $card-footer-padding-y;
+}

@@ -1,0 +1,41 @@
+/*------------------------------------
+  Custom File Boxed
+------------------------------------*/
+
+.custom-file-boxed {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  border: $custom-file-boxed-border-width $custom-file-boxed-border-type $custom-file-boxed-border-color;
+  cursor: pointer;
+  padding: $custom-file-boxed-padding-y $custom-file-boxed-padding-x;
+  @include border-radius($custom-file-boxed-border-radius);
+  transition: $custom-file-boxed-transition;
+
+  &:hover {
+    background-color: $custom-file-boxed-bg-hover-color;
+  }
+}
+
+.custom-file-boxed-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.custom-file-boxed-label {
+  text-align: center;
+  cursor: pointer;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: $custom-file-boxed-label-margin-y;
+}
+
+// Sizes
+.custom-file-boxed-sm {
+  padding: $custom-file-boxed-sm-padding-y $custom-file-boxed-sm-padding-x;
+}

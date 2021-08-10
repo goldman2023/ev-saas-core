@@ -1,0 +1,116 @@
+@extends('frontend.layouts.app')
+
+@section('content')
+    <!-- Team Section -->
+    <div class="container space-2">
+        <!-- Title -->
+        <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-5 mb-md-9">
+            <span class="d-block small font-weight-bold text-cap mb-2">{{ translate('B2BWood Partners') }}</span>
+            <h1>{{ translate('B2BClub Verification System') }}</h1>
+
+        </div>
+        <!-- End Title -->
+        <div class="row">
+            <div class="col-12">
+                <p class="text-center">
+                    {{ translate('We work with serious and trusted companies and confirmed traction. Partner relationships help us to
+                    improve services') }}
+                </p>
+            </div>
+            <div class="col-sm-6 col-lg-3 px-2 mb-3">
+                <!-- Team -->
+                <div class="card h-100 transition-3d-hover">
+                    <div class="card-body">
+                        <div class=" mb-4">
+                            {{-- TODO: Replace this with local images --}}
+                            <img class="img-fluid"
+                                src="https://ite-prod-cdn-end.azureedge.net/sharedmedia/woodexpo/media/assets/%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D0%BE_ru_logo.jpg?ext=.jpg"
+                                alt="Derewo.ru">
+                        </div>
+
+                        <span class="d-block small font-weight-bold text-cap mb-1">Russia</span>
+                        <h4 class="text-lh-sm">Derewo.ru</h4>
+                    </div>
+
+                    <div class="card-footer border-0 pt-0">
+                        <!-- Social Networks -->
+                        <ul class="list-inline mb-0 text-center">
+                            <li class="list-inline-item">
+                                <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" target="_blank" href="#">
+                                    <i class="lab la-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" target="_blank" href="#">
+                                    <i class="lab la-linkedin-in"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" target="_blank" href="#">
+                                    <i class="lab la-google"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- End Social Networks -->
+                    </div>
+                </div>
+                <!-- End Team -->
+            </div>
+
+
+            {{-- TODO: Make this a blade component like: <x-partner-card> --}}
+
+            <div class="col-sm-6 col-lg-3 px-2 mb-3">
+                <!-- Team -->
+                <div class="card h-100 transition-3d-hover">
+                    <div class="card-body">
+                        <div class=" mb-4">
+                            {{-- TODO: Replace this with local images --}}
+                            <img class="img-fluid"
+                                src="https://whatwood.ru/english/wp-content/themes/whatwood_en/images/logo.jpg"
+                                alt="whatwood.ru">
+                        </div>
+
+                        <span class="d-block small font-weight-bold text-cap mb-1">Russia</span>
+                        <h4 class="text-lh-sm">What Wood</h4>
+                    </div>
+
+                    <div class="card-footer border-0 pt-0">
+                        <!-- Social Networks -->
+                        <ul class="list-inline mb-0 text-center">
+                            <li class="list-inline-item">
+                                <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" target="_blank" href="#">
+                                    <i class="lab la-facebook-f"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" target="_blank" href="#">
+                                    <i class="lab la-linkedin-in"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" target="_blank" href="#">
+                                    <i class="lab la-google"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- End Social Networks -->
+                    </div>
+                </div>
+                <!-- End Team -->
+            </div>
+        </div>
+
+    </div>
+
+
+    @php
+    $button_text = 'Try it out';
+    $image_source = 'assets/img/img1.jpg';
+    $heading = 'Register to B2BWood';
+    $body = "Building brands people can't live without is how our clients grow.";
+    @endphp
+    <x-promo-banner :heading="$heading" :body="$body" :buttonText="$button_text" :imageSource="$image_source">
+    </x-promo-banner>
+    <!-- End Team Section -->
+@endsection

@@ -1,0 +1,190 @@
+/*------------------------------------
+  Nav Options
+------------------------------------*/
+
+// Divider
+.nav-divider {
+  height: 0;
+  margin: $nav-divider-margin-y 0;
+  overflow: hidden;
+  border-top: $nav-divider-border-width $nav-divider-border-type $nav-divider-border-color;
+}
+
+// Toggle
+.nav-link-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link-toggle::after,
+.nav-link-toggle[data-toggle=collapse]::after {
+  display: inline-block;
+  width: $nav-link-toggle-width;
+  height: $nav-link-toggle-height;
+  background: $nav-link-toggle-pseudo-bg;
+  content: "";
+  margin-left: auto;
+}
+
+.nav-pills .show {
+  > .nav-link-toggle:not(:hover)::after,
+  > .nav-link-toggle:not(:hover)[data-toggle=collapse]::after {
+    background: $nav-pills-active-link-toggle-pseudo-bg;
+  }
+}
+
+.nav-item.active {
+  .nav-link {
+    color: $nav-item-active-link-color;
+  }
+}
+
+// Icon
+.nav-icon {
+  font-size: $nav-icon-font-size;
+  line-height: $nav-icon-line-height;
+  opacity: $nav-icon-opacity;
+  flex: 0 0 $nav-icon-flex;
+}
+
+// Compact
+.nav-compact {
+  text-align: center;
+  align-items: center;
+
+  > .nav-item {
+    margin: $nav-compact-item-margin-y 0;
+
+    &:not(:last-child) {
+      margin-right: 0;
+    }
+  }
+
+  > .nav-item > .nav-link {
+    width: $nav-compact-link-width;
+    @include border-radius($nav-compact-link-border-radius);
+
+    &:hover,
+    &.active {
+      color: $nav-compact-icon-active-color;
+      background-color: $nav-compact-icon-active-bg-color;
+    }
+
+    .nav-icon {
+      font-size: $nav-compact-link-icon-font-size;
+    }
+  }
+
+  > .show > .nav-link {
+    color: $nav-compact-icon-active-color;
+    background-color: $nav-compact-icon-active-bg-color;
+  }
+}
+
+.nav-compact-title {
+  display: block;
+}
+
+// Compact Icon
+.nav-compact-icon {
+  text-align: center;
+  align-items: center;
+
+  > .nav-item {
+    margin: $nav-compact-item-margin-y 0;
+
+    &:not(:last-child) {
+      margin-right: 0;
+    }
+  }
+
+  .nav-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: $nav-compact-icon-width;
+    height: $nav-compact-icon-height;
+    font-size: $nav-compact-icon-font-size;
+    color: $nav-compact-icon-color;
+    background-color: $nav-compact-icon-bg-color;
+    opacity: 1;
+    margin-right: 0;
+    @include border-radius($nav-compact-icon-border-radius);
+    text-align: center;
+
+    &:hover,
+    &.active {
+      color: $nav-compact-icon-active-color;
+      background-color: $nav-compact-icon-active-bg-color;
+    }
+  }
+
+  .nav-link.active {
+    .nav-icon {
+      color: $nav-compact-icon-active-color;
+      background-color: $nav-compact-icon-active-bg-color;
+    }
+  }
+}
+
+.nav-compact-icon-circle .nav-icon {
+  @include border-radius($nav-compact-icon-circle-border-radius);
+}
+
+// Indicator Icon
+.nav-indicator-icon {
+  color: $nav-indicator-icon-color;
+  font-size: $nav-indicator-icon-font-size;
+  flex: 0 0 $nav-indicator-icon-flex;
+}
+
+// Segment
+.nav-segment {
+  position: relative;
+  background-color: $nav-segment-bg-color;
+  padding: $nav-segment-padding-y $nav-segment-padding-x;
+  @include border-radius($nav-segment-border-radius);
+
+  &:not(.nav-fill) {
+    display: inline-flex;
+  }
+
+  .nav-link {
+    color: $nav-segment-link-color;
+    font-size: $nav-segment-font-size;
+    padding: $nav-segment-link-padding-y $nav-segment-link-padding-x;
+    @include border-radius($nav-segment-link-border-radius);
+
+    &:hover {
+      color: $nav-segment-link-hover-color;
+    }
+
+    &.active {
+      color: $nav-segment-link-active-color;
+      background-color: $nav-segment-link-active-bg-color;
+      box-shadow: $nav-segment-link-active-box-shadow;
+    }
+  }
+
+  &.nav-pills {
+    @include border-radius($nav-pills-segment-border-radius);
+
+    .nav-link {
+      @include border-radius($nav-pills-segment-link-border-radius);
+    }
+  }
+}
+
+// Break
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $next: breakpoint-next($breakpoint, $grid-breakpoints);
+  $infix: breakpoint-infix($next, $grid-breakpoints);
+
+  .nav#{$infix}-down-break {
+    @include media-breakpoint-down($breakpoint) {
+      flex-wrap: nowrap;
+      flex-direction: column;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+/*------------------------------------
+  Popover
+------------------------------------*/
+
+.popover {
+  box-shadow: $popover-box-shadow;
+}
+
+.popover-header {
+  @include font-size($font-size-lg);
+  font-weight: $popover-header-font-weight;
+}
+
+// Dark
+.popover-dark {
+  background-color: $popover-dark-bg-color;
+
+  &.bs-popover-top > .arrow::after {
+    border-top-color: $popover-dark-arrow-color;
+  }
+
+  &.bs-popover-right > .arrow::after {
+    border-right-color: $popover-dark-arrow-color;
+  }
+
+  &.bs-popover-bottom > .arrow::after {
+    border-bottom-color: $popover-dark-arrow-color;
+  }
+
+  &.bs-popover-left > .arrow::after {
+    border-left-color: $popover-dark-arrow-color;
+  }
+  
+  .popover-header {
+    color: $popover-dark-header-color;
+    background-color: $popover-dark-header-bg-color;
+    border-bottom-color: $popover-dark-header-border-color;
+  }
+  
+  .popover-body {
+    color: $popover-dark-body-color;
+  }
+}

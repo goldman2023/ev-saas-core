@@ -1,0 +1,35 @@
+/*
+ |--------------------------------------------------------------------------
+ | Breakpoints
+ |--------------------------------------------------------------------------
+ |
+ | Provide custom breakpoints for responsive layouts.
+ |
+ | Default values:
+ | xs: 0, sm: 640px, md: 768px, lg: 1024px, xl: 1280px, xxl: 1536px
+ |
+ */
+@import "~line-awesome/dist/line-awesome/css/line-awesome.min";
+@import 'dependencies/aiz-core'; // Active Commerce Custom Code
+@import 'themes/landing/front';  // Front Template: https://htmlstream.com/front/index.html
+@import 'themes/front/theme';  // Front Dashboard Template: https://htmlstream.com/front-dashboard/index.html
+@import "~bootstrap-select/dist/css/bootstrap-select.min";
+@import "dependencies/vendor/slick";
+@import "dependencies/vendor/js-social";
+@import "~metismenu/dist/metisMenu.min";
+@import "~@yaireo/tagify/dist/tagify";
+@import "dependencies/description-editor";
+@import "dependencies/datetime-picker";
+@import "dependencies/vendor/nouislider";
+@import "dependencies/vendor/uppy";
+/* Custom Css for Components and Pages  */
+@import 'global';
+@import 'custom/index';
+@import 'components/index';
+@import 'pages/index';
+// if we comment this one we will be facing some overlay between fields container and dropdowns selection
+// also header banner "banner-placeholder-900x198.png" would throw net::ERR_SSL_PROTOCOL_ERROR
+// along side some side effects
+//@import "dependencies/vendors";
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
+@import "~datatables.net-buttons-bs4/css/buttons.bootstrap4.css";

@@ -1,0 +1,31 @@
+/*------------------------------------
+  Avatar Ratio
+------------------------------------*/
+
+.avatar.avatar-4by3 {
+  width: $avatar-width * 4 / 3;
+}
+
+.avatar-xss.avatar-4by3 {
+  width: $avatar-xss-width * 4 / 3;
+}
+
+.avatar-xs.avatar-4by3 {
+  width: $avatar-xs-width * 4 / 3;
+}
+
+.avatar-sm.avatar-4by3 {
+  width: $avatar-sm-width * 4 / 3;
+}
+
+.avatar-lg.avatar-4by3 {
+  width: $avatar-lg-width * 4 / 3;
+}
+
+.avatar-xl.avatar-4by3 {
+  width: $avatar-xl-width * 4 / 3;
+}
+
+.avatar-xxl.avatar-4by3 {
+  width: $avatar-xxl-width * 4 / 3;
+}

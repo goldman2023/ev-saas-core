@@ -1,0 +1,14 @@
+/*------------------------------------
+  Table Sizes
+------------------------------------*/
+
+.table-sm {
+  font-size: $table-sm-font-size;
+}
+
+.table-lg {
+  th, td {
+    padding-top: $table-lg-padding-y;
+    padding-bottom: $table-lg-padding-y;
+  }
+}

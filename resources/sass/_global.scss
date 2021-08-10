@@ -1,0 +1,33 @@
+/* General styles for global website styles */
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.front-header-search {
+    opacity: 1 !important;
+    position: relative !important;
+    height: auto !important;
+}
+
+@media (max-width: 768px) {
+    #b2bwood-footer {
+        padding-bottom: 120px !important;
+    }
+}
+
+/* Disable UserSnap on mobile */
+
+@media(max-width: 768px) {
+    html body iframe[name="us-entrypoint-buttonV2"] {
+        display: none !important;
+        opacity: 0 !important;
+    }
+}
+
+/* Reset button styles for safari */
+input[type=text], input[type=button] {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+}

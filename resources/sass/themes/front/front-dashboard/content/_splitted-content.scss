@@ -1,0 +1,118 @@
+/*------------------------------------
+  Splitted Content
+------------------------------------*/
+
+.splitted-content-main {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.navbar-vertical.splitted-content-navbar {
+  width: $navbar-brand-wrapper-width + $splitted-content-mini-width;
+
+  .navbar-vertical-content {
+    height: 100%;
+  }
+
+  .navbar-nav {
+    margin-left: $splitted-content-mini-width;
+  }
+
+  .navbar-vertical-footer {
+    margin-left: $splitted-content-mini-width;
+  }
+}
+
+.splitted-content-bordered {
+  &:not(:last-child) {
+    border-right: $splitted-content-col-border-width $splitted-content-col-border-type $splitted-content-col-border-color;
+  }
+
+  &:not(:first-child) {
+    border-left: $splitted-content-col-border-width $splitted-content-col-border-type $splitted-content-col-border-color;
+  }
+}
+
+.navbar-vertical-aside ~ .splitted-content-small.splitted-content-bordered:not(:last-child) {
+  margin-left: -$splitted-content-col-border-width;
+}
+
+.splitted-content-mini,
+.splitted-content-small {
+  background-color: $splitted-content-bg-color;
+}
+
+.splitted-content-mini {
+  width: $splitted-content-mini-width;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .navbar-brand {
+    margin-right: 0;
+  }
+}
+
+.splitted-content-small,
+.splitted-content-fluid {
+  min-height: 100vh;
+}
+
+.splitted-content-small {
+  flex: 0 0 auto;
+  width: $splitted-content-small-width;
+  max-width: 100%;
+}
+
+.splitted-content-fluid {
+  flex-basis: 0;
+  flex-grow: 1;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.header ~ .main {
+  .splitted-content-mini,
+  .splitted-content-small,
+  .splitted-content-fluid {
+    min-height: calc(100vh - #{$navbar-height});
+  }
+}
+
+.splitted-content-mini.hs-unfold-content-initialized,
+.splitted-content-small.hs-unfold-content-initialized {
+  display: flex !important;
+  opacity: 1;
+  visibility: visible;
+}
+
+// Extra Large Devices
+@include media-breakpoint-up(xl) {
+  .splitted-content-toggle {
+    display: none;
+  }
+}
+
+// Extra Large Devices
+@include media-breakpoint-down(lg) {
+  .splitted-content-mini.hs-unfold-hidden,
+  .splitted-content-small.hs-unfold-hidden {
+    display: none !important;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .splitted-content-small {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $splitted-content-small-z-index;
+  }
+
+  .splitted-content-mini-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: $splitted-content-small-z-index;
+  }
+}

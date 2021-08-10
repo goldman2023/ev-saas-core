@@ -1,0 +1,27 @@
+/*------------------------------------
+  Avatar Styles
+------------------------------------*/
+
+@each $color, $value in $theme-colors {
+  .avatar-#{$color} {
+    .avatar-initials {
+      @include avatar($value, $value);
+    }
+  }
+
+  .avatar-status-#{$color} {
+    @include avatar($value, $value);
+  }
+}
+
+@each $color, $value in $theme-colors {
+  .avatar-soft-#{$color} {
+    .avatar-initials {
+      @include avatar-soft($value, $value);
+    }
+  }
+
+  .avatar-status-soft-#{$color} {
+    @include avatar-soft($value, $value);
+  }
+}

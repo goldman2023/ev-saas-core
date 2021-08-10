@@ -1,0 +1,34 @@
+/*------------------------------------
+  Form
+------------------------------------*/
+
+.custom-select:focus,
+.form-control:focus {
+  box-shadow: $input-focus-box-shadow;
+}
+
+.form-text {
+  color: $form-text-color;
+}
+
+.form-link {
+  display: inline-block;
+  margin-top: $form-link-margin-y;
+}
+
+.form-control-single-number {
+  font-size: $form-control-single-number-font-size;
+  text-align: center;
+}
+
+.form-control-title {
+  font-size: $input-title-font-size;
+  line-height: $input-title-line-height;
+  font-weight: $input-title-font-weight;
+  border: none;
+  padding: 0;
+
+  &:focus {
+    box-shadow: none;
+  }
+}

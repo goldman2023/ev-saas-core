@@ -1,0 +1,36 @@
+/*------------------------------------
+  Fullscreen
+------------------------------------*/
+
+.hs-fullscreen {
+  position: fixed !important;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  @include border-radius(0);
+
+  .hs-fullscreen-icon-default {
+    display: none;
+  }
+
+  .hs-fullscreen-icon-active {
+    display: block;
+  }
+}
+
+.hs-fullscreen-on {
+  overflow: hidden;
+}
+
+.hs-fullscreen-icon-default {
+  display: block;
+}
+
+.hs-fullscreen-icon-active {
+  display: none;
+}

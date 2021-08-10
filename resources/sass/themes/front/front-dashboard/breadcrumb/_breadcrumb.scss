@@ -1,0 +1,23 @@
+/*------------------------------------
+  Breadcrumb
+------------------------------------*/
+
+.breadcrumb {
+  .breadcrumb-item {
+    color: $breadcrumb-item-color;
+    font-size: $breadcrumb-item-font-size;
+  }
+
+  .breadcrumb-link {
+    color: $breadcrumb-link-color;
+
+    &:hover {
+      color: $breadcrumb-link-hover-color;
+    }
+  }
+}
+
+// No Gutter
+.breadcrumb-no-gutter {
+  padding: 0;
+}

@@ -1,0 +1,39 @@
+name: e2e
+
+on:
+
+  push:
+    branches: [ master ]
+  pull_request:
+     branches: [ staging ]
+
+  workflow_dispatch:
+
+jobs:
+
+  e2e:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Env File
+        run: cp .env.docker .env
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Cache NPM Dependencies
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+      - name: Install NPM Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci && npm run prod
+      - name: Install PHP Dependencies
+        run: composer install
+      - name: Setup Env Variables
+        run:  sed -i -r "s/^(CYPRESS_RECORDKEY=).*/\1${{ secrets.CYPRESS_RECORDKEY }}/" .env
+      - name: Run Cypress Test
+        run: docker-compose -f docker-compose.e2e.yml up  --abort-on-container-exit --exit-code-from cypress

@@ -1,0 +1,53 @@
+/*------------------------------------
+  States
+------------------------------------*/
+
+.form-control {
+  &.is-valid {
+    background-size: $input-valid-state-bg-size $input-valid-state-bg-size;
+
+    &,
+    &:focus {
+      box-shadow: $input-valid-state-box-shadow;
+    }
+  }
+
+  &.is-invalid {
+    background-size: $input-valid-state-bg-size $input-valid-state-bg-size;
+
+    &,
+    &:focus {
+      box-shadow: $input-invalid-state-box-shadow;
+    }
+  }
+}
+
+.was-validated .custom-control-input:valid:checked ~ .custom-control-label::before,
+.custom-control-input.is-valid:checked ~ .custom-control-label::before {
+  border-color: $input-valid-state-color;
+  background-color: $input-valid-state-color;
+}
+
+.is-valid {
+  .custom-select {
+    background-size: $input-valid-state-bg-size $input-valid-state-bg-size;
+    border-color: $input-valid-success-state;
+
+    &,
+    &:focus {
+      box-shadow: $input-valid-state-box-shadow;
+    }
+  }
+}
+
+.is-invalid {
+  .custom-select {
+    background-size: $input-valid-state-bg-size $input-valid-state-bg-size;
+    border-color: $input-valid-danger-state;
+
+    &,
+    &:focus {
+      box-shadow: $input-invalid-state-box-shadow;
+    }
+  }
+}

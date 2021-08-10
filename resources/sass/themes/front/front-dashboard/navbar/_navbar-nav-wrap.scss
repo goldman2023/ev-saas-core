@@ -1,0 +1,66 @@
+/*------------------------------------
+  Nav Wrap
+------------------------------------*/
+
+.navbar-nav-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  align-items: center;
+}
+
+.navbar-nav-wrap-content-left {
+  align-items: center;
+}
+
+.navbar-nav-wrap-content-right {
+  margin-left: auto;
+}
+
+.navbar-expand {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+      &#{$infix} {
+        .navbar-nav-wrap-content-left {
+          order: 2;
+          display: flex;
+          padding-left: $navbar-collapse-padding-x;
+        }
+
+        .navbar-nav-wrap-content-right {
+          order: 4;
+        }
+
+        .navbar-nav-wrap-toggle {
+          order: 4;
+          text-align: right;
+        }
+
+        .navbar-nav-wrap-navbar {
+          order: 3;
+        }
+      }
+    }
+  }
+}
+
+.navbar-expand {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $next: breakpoint-next($breakpoint, $grid-breakpoints);
+    $infix: breakpoint-infix($next, $grid-breakpoints);
+
+    &#{$infix} {
+      @include media-breakpoint-down($breakpoint) {
+        .navbar-nav-wrap {
+          justify-content: flex-start;
+        }
+
+        .navbar-nav-wrap-content-right {
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}

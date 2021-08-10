@@ -1,0 +1,32 @@
+/*------------------------------------
+  SVG IE10+ specific styles go here
+------------------------------------*/
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+  // Nowrap
+  .table-nowrap {
+    th, td {
+      white-space: normal;
+    }
+  }
+
+  .step-item-between .step-item:last-child {
+    flex: 0 0 17%;
+    width: auto;
+  }
+
+  .ie-modal-curved-shape {
+    height: 1.75rem;
+  }
+
+  .ie-welcome-brands {
+    width: 5rem;
+  }
+
+  .ie-sidebar-activity-img {
+    width: 3.5rem;
+  }
+
+  .ie-card-img {
+    width: 5.5rem;
+  }
+}

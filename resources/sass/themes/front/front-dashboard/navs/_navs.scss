@@ -1,0 +1,84 @@
+/*------------------------------------
+  Navs
+------------------------------------*/
+
+.nav-link {
+	color: $nav-link-color;
+
+	&:hover {
+		color: $nav-link-hover-color;
+	}
+
+	&.active {
+		color: $nav-link-active-color;
+	}
+}
+
+.nav-title {
+  display: block;
+  color: $nav-title-color;
+  font-size: $nav-title-font-size;
+  font-weight: $nav-title-font-weight;
+  margin-bottom: $nav-title-margin-y;
+}
+
+.nav-subtitle {
+  display: block;
+  color: $nav-subtitle-color;
+  font-weight: $nav-subtitle-font-weight;
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing;
+}
+
+// Tabs
+.nav-tabs .nav-link {
+  border-bottom-width: $nav-tabs-link-border-width;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  padding: $nav-tabs-link-padding-y $nav-tabs-link-padding-x;
+  margin-bottom: 0;
+}
+
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+  border-bottom-width: $nav-tabs-link-active-border-width;
+  margin-bottom: -$nav-tabs-link-active-border-width / 2;
+}
+
+.nav-tabs-light .nav-link.active,
+.nav-tabs-light .nav-item.show .nav-link {
+  color: $nav-tabs-light-link-active-color;
+}
+
+// Nav Tabs Light
+.nav-tabs-light .nav-link {
+  color: $nav-tabs-light-link-color;
+
+  &:hover {
+    color: $nav-tabs-light-link-active-color;
+  }
+}
+
+// Pills
+.nav-pills {
+  .nav-item:not(:first-child) {
+    margin-left: $nav-item-margin-x;
+  }
+
+  .nav-item:not(:last-child) {
+    margin-right: $nav-item-margin-x;
+  }
+}
+
+.nav-pills:not(.nav-segment) .nav-link {
+  &:hover {
+    color: $nav-link-color;
+    background-color: $nav-pills-link-hover-bg;
+  }
+
+  &.active {
+    color: $nav-segment-link-active-hover-color;
+    background-color: $nav-pills-link-active-bg;
+  }
+}

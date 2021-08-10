@@ -1,0 +1,33 @@
+/*------------------------------------
+  Dropdown Sizes
+------------------------------------*/
+
+.dropdown-menu-sm {
+  padding: $dropdown-sm-padding-y 0;
+
+  .dropdown-header,
+  .dropdown-item {
+    padding: $dropdown-sm-item-padding-y $dropdown-sm-item-padding-x;
+  }
+
+  .dropdown-divider {
+    margin: $dropdown-sm-divider-margin-y;
+  }
+}
+
+.dropdown-menu-lg {
+  .dropdown-header,
+  .dropdown-item {
+    padding: $dropdown-lg-item-padding-y $dropdown-lg-item-padding-x;
+  }
+
+  .dropdown-item {
+    font-size: $dropdown-lg-item-font-size;
+  }
+
+  .dropdown-item-icon {
+    font-size: $dropdown-lg-icon-font-size;
+    width: $dropdown-lg-icon-width;
+    margin-right: $dropdown-lg-icon-margin-x;
+  }
+}

@@ -1,0 +1,8 @@
+/*------------------------------------
+  Circles
+------------------------------------*/
+
+.circle-custom-text {
+  z-index: 1;
+  @include content-centered(false, true);
+}

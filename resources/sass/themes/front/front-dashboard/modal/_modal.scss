@@ -1,0 +1,30 @@
+/*------------------------------------
+  Modal
+------------------------------------*/
+
+.modal {
+  padding-right: 0 !important;
+}
+
+.modal-header {
+  align-items: center;
+  border-width: 0;
+  padding-bottom: 0;
+
+  .close {
+    padding: $modal-close-padding-y $modal-close-padding-x;
+    margin: 0 0 0 auto;
+  }
+}
+
+.modal-footer {
+  > * {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.modal-footer-text:last-child {
+  font-size: $modal-footer-text-font-size;
+  margin-bottom: 0;
+}

@@ -1,0 +1,37 @@
+/*------------------------------------
+  Avatar Status
+------------------------------------*/
+
+.avatar-status {
+  position: absolute;
+  bottom: -($avatar-status-height / 2.5);
+  right: -($avatar-status-width / 2.5);
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: baseline;
+  font-weight: $avatar-status-font-weight;
+  border: $avatar-status-border-width $avatar-status-border-type $avatar-status-border-color;
+  width: $avatar-status-width;
+  height: $avatar-status-height;
+  line-height: $avatar-status-line-height;
+  font-size: $avatar-status-font-size;
+  @include border-radius($avatar-status-border-radius);
+}
+
+.avatar-sm-status {
+  bottom: -($avatar-status-height / 5);
+  right: -($avatar-status-width / 5);
+  width: $avatar-status-sm-width;
+  height: $avatar-status-sm-height;
+  font-size: $avatar-status-sm-font-size;
+}
+
+.avatar-lg-status {
+  width: $avatar-status-lg-width;
+  height: $avatar-status-lg-height;
+  font-size: $avatar-status-lg-font-size;
+}

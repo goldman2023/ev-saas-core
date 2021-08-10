@@ -1,0 +1,24 @@
+/*------------------------------------
+  List Group
+------------------------------------*/
+
+.list-group-item {
+  &:first-child {
+    @include border-top-radius($list-group-border-radius);
+  }
+
+  &:last-child {
+    @include border-bottom-radius($list-group-border-radius);
+  }
+}
+
+.list-group-icon {
+  width: $list-group-icon-width;
+  text-align: center;
+  margin-right: $list-group-icon-margin-x;
+}
+
+// Light
+.list-group-item-light {
+  background-color: $light;
+}

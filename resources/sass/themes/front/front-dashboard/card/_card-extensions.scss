@@ -1,0 +1,92 @@
+/*------------------------------------
+  Card Extensions
+------------------------------------*/
+
+// Alert
+.card-alert {
+  @include border-radius(0);
+  margin-bottom: 0;
+}
+
+.card-dropdown-filter-centered {
+  // Small Devices
+  @include media-breakpoint-down(xs) {
+    left: -8rem;
+    min-width: 18rem !important;
+  }
+}
+
+// Unfold
+.card-unfold {
+  z-index: 2;
+}
+
+// Progress
+.card-progress-wrap {
+  overflow: hidden;
+  @include border-top-radius($card-border-radius);
+}
+
+.card-progress {
+  height: $card-progress-height;
+
+  &:first-child {
+    .progress-bar {
+      @include border-top-left-radius($card-border-radius);
+
+      &[aria-valuenow="100"] {
+        @include border-top-right-radius($card-border-radius);
+      }
+    }
+  }
+}
+
+// Nav Vertical
+.card-nav-vertical {
+  flex-direction: column;
+
+  .nav-link {
+    padding-top: $nav-list-padding-y;
+    padding-bottom: $nav-list-padding-y;
+  }
+
+  &.card-nav {
+    margin-left: -$nav-link-padding-x;
+    margin-right: -$nav-link-padding-x;
+  }
+}
+
+// Navbar Nav
+.card-navbar-nav {
+  width: 100%;
+  padding-top: $card-navbar-nav-padding-y;
+  padding-bottom: $card-navbar-nav-padding-y;
+
+  .nav-icon {
+    margin-right: $card-navbar-nav-icon-margin-x;
+  }
+}
+
+// Profile Cover
+.card > .profile-cover {
+  &,
+  .profile-cover-img,
+  .profile-cover-img-wrapper {
+    @include border-bottom-radius(0);
+  }
+}
+
+.card > .card-header ~ .profile-cover {
+  &,
+  .profile-cover-img,
+  .profile-cover-img-wrapper {
+    @include border-radius(0);
+  }
+}
+
+// JVector Map
+.card-jvectormap {
+  .jvectormap-container {
+    @include border-bottom-radius($card-border-radius);
+  }
+}

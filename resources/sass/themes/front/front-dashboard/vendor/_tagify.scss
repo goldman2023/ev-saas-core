@@ -1,0 +1,121 @@
+/*------------------------------------
+  Tagify
+------------------------------------*/
+
+.tagify {
+  --tag-bg: unset;
+  --tag-hover: unset;
+  align-items: center;
+  border-color: $tagify-border-color;
+  @include border-radius($tagify-border-radius);
+
+  &:hover {
+    border-color: $tagify-hover-border-color;
+  }
+
+  &.tagify--focus {
+    border-color: $tagify-focus-border-color;
+  }
+}
+
+.tagify__tag--hide {
+  height: 0;
+}
+
+.tagify__tag {
+  margin: $tagify-tag-margin-y $tagify-tag-margin-x $tagify-tag-margin-y 0;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  background-color: $tagify-bg-color;
+  @include border-radius($tagify-border-radius);
+
+  > div {
+    color: $tagify-tag-color;
+    padding: $tagify-tag-padding-y $tagify-tag-padding-x;
+    @include border-radius($tagify-tag-border-radius);
+  }
+}
+
+.tagify__tag__removeBtn {
+  color: $tagify-removebtn-color;
+  width: $tagify-removebtn-width;
+  height: $tagify-removebtn-height;
+  line-height: $tagify-removebtn-line-height;
+
+  &:hover {
+    background-color: $tagify-removebtn-bg-hover-color;
+
+    + div {
+      &::before {
+        box-shadow: $tagify-removebtn-hover-box-shadow !important;
+      }
+
+      .tagify__tag-text {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.tagify-form-control {
+  display: flex;
+  height: auto;
+  padding: 0 $tagify-tag-margin-y;
+
+  &.tagify--empty {
+    padding: 0 $input-padding-x;
+  }
+}
+
+.tagify__input {
+  &:first-child {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  &::before {
+    color: $tagify-input-placeholder-color;
+    line-height: $tagify-input-pseudo-line-height;
+  }
+
+  .tagify__tag {
+    > div {
+      padding: $tagify-tag-padding-y $tagify-tag-padding-x;
+      line-height: normal;
+    }
+  }
+}
+
+.tagify__dropdown__menu {
+  overflow: hidden;
+  border: $tagify-dropdown-menu-border-width $tagify-dropdown-menu-border-type $tagify-dropdown-menu-border-color;
+  @include border-bottom-right-radius($tagify-dropdown-menu-bottom-radius);
+  @include border-bottom-left-radius($tagify-dropdown-menu-bottom-radius);
+  margin-top: -1px;
+}
+
+.tagify__dropdown__wrapper {
+  border: none;
+  box-shadow: none;
+  transition: none !important;
+}
+
+.tagify__dropdown__item {
+  color: $tagify-dropdown-item-color;
+  padding: $input-padding-y $input-padding-x;
+  margin: 0;
+  @include border-radius(0);
+}
+
+.tagify__dropdown__item--active {
+  // color: $tagify-dropdown-item-active-color;
+  background-color: $tagify-dropdown-item-active-bg-color;
+}
+
+.tagify.tagify-form-control-list {
+  @include border-bottom-right-radius($tagify-form-control-list-bottom-radius);
+  @include border-bottom-left-radius($tagify-form-control-list-bottom-radius);
+}

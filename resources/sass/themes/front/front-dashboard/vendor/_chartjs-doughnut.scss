@@ -1,0 +1,14 @@
+/*------------------------------------
+  Chartjs Doughnut
+------------------------------------*/
+
+.chartjs-doughnut-custom {
+  position: relative;
+}
+
+.chartjs-doughnut-custom-stat {
+  position: absolute;
+  top: $chartjs-doughnut-custom-stat-top-offset;
+  left: 50%;
+  transform: translateX(-50%);
+}

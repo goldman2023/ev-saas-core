@@ -1,0 +1,66 @@
+/*------------------------------------
+  Custom Checkbox List
+------------------------------------*/
+
+.custom-checkbox-list {
+  position: static;
+  z-index: auto;
+
+  .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: none;
+  }
+
+  .custom-control-label {
+    &::before {
+      width: $custom-checkbox-list-width;
+      height: $custom-checkbox-list-height;
+      border: none;
+      background-color: $custom-checkbox-list-bg-color;
+      @include border-radius($custom-checkbox-list-border-radius);
+    }
+
+    &::after {
+      z-index: 2;
+    }
+  }
+
+  &:hover {
+    .custom-control-label::before {
+      background-color: $custom-checkbox-list-hover-label-bg-color;
+    }
+
+    .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: $custom-checkbox-list-checked-hover-label-bg-color;
+    }
+  }
+}
+
+.custom-checkbox-list-stretched-bg::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: auto;
+  content: "";
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.custom-checkbox-list-wrapper:hover {
+  .custom-checkbox-list-stretched-bg::after {
+    background-color: $custom-checkbox-list-stretched-bg-color;
+  }
+}
+
+.custom-checkbox-list {
+  .custom-control-input:checked ~ {
+    .custom-checkbox-list-stretched-bg::after {
+      background-color: $custom-checkbox-list-stretched-bg-color;
+    }
+  }
+
+  .custom-control-input:disabled ~ .custom-control-label::before {
+    background-color: $custom-checkbox-list-disabled-label-bg-color;
+  }
+}

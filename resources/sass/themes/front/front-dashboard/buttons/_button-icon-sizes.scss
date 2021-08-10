@@ -1,0 +1,23 @@
+/*------------------------------------
+  Button Icon Sizes
+------------------------------------*/
+
+.btn-icon {
+  &.btn-xs {
+    font-size: $btn-icon-xs-font-size;
+    width: $btn-icon-xs-width;
+    height: $btn-icon-xs-height;
+  }
+
+  &.btn-sm {
+    font-size: $btn-icon-sm-font-size;
+    width: $btn-icon-sm-width;
+    height: $btn-icon-sm-height;
+  }
+
+  &.btn-lg {
+    font-size: $btn-icon-lg-font-size;
+    width: $btn-icon-lg-width;
+    height: $btn-icon-lg-height;
+  }
+}

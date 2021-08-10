@@ -1,0 +1,37 @@
+/*------------------------------------
+  Dropdown
+------------------------------------*/
+
+.dropdown-menu {
+  box-shadow: $dropdown-box-shadow;
+}
+
+.dropdown-item {
+  font-size: $dropdown-item-font-size;
+
+  &:active {
+    color: $dropdown-link-color;
+    background-color: $dropdown-link-hover-bg;
+  }
+
+  &.active:not(:focus):not(:active) {
+    color: $dropdown-link-active-color;
+    background-color: $dropdown-link-active-bg;
+  }
+
+  &[href]:hover {
+    &.dropdown-toggle::after {
+      background: $dropdown-toggle-link-pseudo-bg;
+    }
+  }
+}
+
+// Header
+.dropdown-header {
+  text-transform: uppercase;
+  letter-spacing: $dropdown-header-letter-spacing;
+  font-size: $dropdown-header-font-size;
+  font-weight: $dropdown-header-font-weight;
+  padding-top: $dropdown-header-padding-y;
+  padding-bottom: $dropdown-header-padding-y;
+}

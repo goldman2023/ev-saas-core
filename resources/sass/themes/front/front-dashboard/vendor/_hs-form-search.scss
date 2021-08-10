@@ -1,0 +1,22 @@
+/*------------------------------------
+  Form search
+------------------------------------*/
+
+.hs-form-search-menu-content {
+  position: absolute;
+  display: block !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hs-form-search-menu-hidden {
+  display: none !important;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hs-form-search-menu-initialized {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}

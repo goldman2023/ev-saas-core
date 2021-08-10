@@ -1,0 +1,108 @@
+/*------------------------------------
+  Checkbox Card
+------------------------------------*/
+
+.custom-checkbox-card {
+  position: relative;
+  height: 100%;
+  padding-left: 0;
+  margin-right: 0;
+
+  &.card {
+    border-width: 0;
+  }
+}
+
+.custom-checkbox-card-input {
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  opacity: 0;
+}
+
+.custom-checkbox-card-label {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  border: $custom-checkbox-card-label-border-width $custom-checkbox-card-label-border-type $custom-checkbox-card-label-border-color;
+  @include border-radius($custom-checkbox-card-border-radius);
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.custom-checkbox-card-label::after {
+  position: absolute;
+  top: $custom-checkbox-card-label-psuedo-top-offset;
+  right: $custom-checkbox-card-label-psuedo-right-offset;
+  width: $custom-checkbox-card-label-psuedo-width;
+  height: $custom-checkbox-card-label-psuedo-height;
+  z-index: 1;
+  content: "";
+}
+
+.custom-checkbox-card-label-stretched {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.custom-checkbox-card-label-stretched::after {
+  background: $custom-checkbox-card-label-psuedo-bg;
+}
+
+.custom-checkbox-card-img {
+  max-width: 100%;
+  height: auto;
+  @include border-radius($custom-checkbox-card-border-radius);
+}
+
+.custom-checkbox-card-text {
+  display: block;
+  padding: $custom-checkbox-card-padding-y 0;
+}
+
+// Size
+.custom-checkbox-card-lg {
+  &,
+  .custom-checkbox-card-label {
+    @include border-radius($custom-checkbox-card-lg-border-radius);
+  }
+}
+
+.custom-checkbox-card-lg .custom-checkbox-card-label::after {
+  top: $custom-checkbox-card-lg-label-psuedo-top-offset;
+  right: $custom-checkbox-card-lg-label-psuedo-right-offset;
+  width: $custom-checkbox-card-lg-label-psuedo-width;
+  height: $custom-checkbox-card-lg-label-psuedo-height;
+  background: $custom-checkbox-card-lg-label-psuedo-bg;
+}
+
+// Checked
+.custom-checkbox-card-input:checked ~ .custom-checkbox-card-label::after {
+  background: $custom-checkbox-card-label-active-psuedo-bg;
+}
+
+.custom-checkbox-card-lg .custom-checkbox-card-input:checked ~ .custom-checkbox-card-label::after {
+  background: $custom-checkbox-card-lg-label-active-psuedo-bg;
+}
+
+.custom-checkbox-card-input:checked ~ .custom-checkbox-card-label,
+.custom-checkbox-card-input:checked ~ .custom-checkbox-card-label-stretched {
+  border-color: $custom-checkbox-card-label-checked-border-color;
+}
+
+.custom-checkbox-card.checked .custom-checkbox-card-btn {
+  color: $custom-checkbox-card-btn-color;
+  background-color: $custom-checkbox-card-btn-bg-color;
+  border-color: $custom-checkbox-card-btn-border-color;
+}
+
+// Disabled
+.custom-checkbox-card-input:disabled ~ .custom-checkbox-card-label {
+  opacity: $custom-checkbox-card-label-disabled-opacity;
+}
+
+.custom-checkbox-card.disabled .custom-checkbox-card-btn {
+  cursor: default;
+  opacity: $custom-checkbox-card-label-disabled-opacity;
+}

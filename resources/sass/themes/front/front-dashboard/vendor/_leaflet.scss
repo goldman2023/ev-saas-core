@@ -1,0 +1,50 @@
+/*------------------------------------
+  Leaflet
+------------------------------------*/
+
+.leaflet-custom {
+  z-index: $leaflet-z-index;
+}
+
+.leaflet-bar,
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  border: none;
+  box-shadow: none;
+}
+
+.leaflet-bar a {
+  &,
+  &:hover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: $leaflet-bar-link-width;
+    height: $leaflet-bar-link-height;
+    line-height: $leaflet-bar-link-line-height;
+    font-size: $leaflet-bar-link-font-size;
+    font-family: $leaflet-bar-link-font-family;
+    color: $leaflet-bar-link-color;
+    background-color: $leaflet-bar-link-bg-color;
+    border: $leaflet-bar-link-border-width $leaflet-bar-link-border-type $leaflet-bar-link-border-color;
+    @include border-radius($leaflet-popup-wrapper-border-radius);
+    text-indent: inherit;
+  }
+
+  &:first-child {
+    margin-bottom: $leaflet-bar-link-margin-y;
+  }
+
+  &:last-child {
+    border-bottom: $leaflet-bar-link-border-width $leaflet-bar-link-border-type $leaflet-bar-link-border-color;
+  }
+
+  &:hover {
+    color: $leaflet-bar-link-hover-color;
+  }
+}
+
+.leaflet-popup {
+  margin-bottom: $leaflet-popup-margin-y;
+}

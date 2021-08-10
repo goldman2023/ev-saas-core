@@ -1,0 +1,19 @@
+/*------------------------------------
+  Toggle Switch Sizes
+------------------------------------*/
+
+.toggle-switch-sm {
+  .toggle-switch-label {
+    width: $toggle-switch-sm-width;
+    height: $toggle-switch-sm-height;
+  }
+
+  .toggle-switch-indicator {
+    width: $toggle-switch-sm-indicator-size;
+    height: $toggle-switch-sm-indicator-size;
+  }
+
+  .toggle-switch-input:checked + .toggle-switch-label .toggle-switch-indicator {
+    transform: translate3d($custom-switch-sm-checked-translateX, 50%, 0);
+  }
+}

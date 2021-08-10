@@ -1,0 +1,53 @@
+/*------------------------------------
+  Dropdown Options
+------------------------------------*/
+
+// Icon
+.dropdown-item-icon {
+  display: inline-block;
+  opacity: $dropdown-icon-opacity;
+  font-size: $dropdown-icon-font-size;
+  width: $dropdown-icon-width;
+  color: $dropdown-icon-color;
+}
+
+// Toggle
+.dropdown-toggle {
+  position: relative;
+
+  &::after {
+    display: inline-block;
+    width: $dropdown-toggle-pseudo-width;
+    height: $dropdown-toggle-pseudo-height;
+    background: $dropdown-toggle-pseudo-bg;
+    content: "";
+  }
+
+  &:not(.dropdown-toggle-empty)::after {
+    margin-left: $dropdown-toggle-pseudo-margin-x;
+  }
+}
+
+.dropup .dropdown-toggle::after {
+  transform: rotate(-180deg);
+}
+
+.dropright .dropdown-toggle::after {
+  transform: rotate(-90deg);
+}
+
+.dropleft .dropdown-toggle::after {
+  transform: rotate(90deg);
+}
+
+.dropdown-toggle-collapse {
+  &::after {
+    transition: $dropdown-toggle-arrow-transition;
+  }
+
+  &[aria-expanded="true"] {
+    &::after {
+      transform: $dropdown-toggle-arrow-collapse-rotation;
+    }
+  }
+}

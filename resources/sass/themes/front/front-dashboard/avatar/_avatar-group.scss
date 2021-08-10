@@ -1,0 +1,40 @@
+/*------------------------------------
+  Avatar Group
+------------------------------------*/
+
+.avatar-group {
+  position: relative;
+  z-index: $avatar-group-z-index;
+  display: inline-flex;
+  align-items: center;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+
+  .avatar {
+    &:hover {
+      z-index: $avatar-group-z-index;
+    }
+  }
+
+  .avatar-xs,
+  .avatar-sm,
+  .avatar {
+    padding: $avatar-padding-y $avatar-padding-x;
+  }
+
+  .avatar-lg,
+  .avatar-xl,
+  .avatar-xxl {
+    padding: $avatar-padding-y * 2 $avatar-padding-x * 2;
+  }
+
+  &.avatar-circle .avatar {
+    @include border-radius($avatar-circle-border-radius);
+
+    .avatar-initials,
+    .avatar-img {
+      @include border-radius($avatar-circle-border-radius);
+    }
+  }
+}

@@ -1,0 +1,15 @@
+/*------------------------------------
+  Pagination Sizes
+------------------------------------*/
+
+.pagination-sm {
+  .page-link {
+    @include border-radius($pagination-sm-page-link-border-radius);
+  }
+}
+
+.pagination-lg {
+  .page-link {
+    @include border-radius($pagination-lg-page-link-border-radius);
+  }
+}

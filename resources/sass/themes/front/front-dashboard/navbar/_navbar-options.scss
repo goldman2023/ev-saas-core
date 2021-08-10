@@ -1,0 +1,133 @@
+/*------------------------------------
+  Navbar Options
+------------------------------------*/
+
+// Fixed
+.navbar-fixed {
+  @each $breakpoint in map-keys($grid-breakpoints) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+      &#{$infix} {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: $navbar-z-index;
+
+        ~ .main {
+          padding-top: $navbar-height;
+        }
+      }
+    }
+  }
+}
+
+// Flush
+.navbar-flush {
+  .navbar {
+    padding-right: $navbar-padding-x;
+  }
+}
+
+// Bordered
+.navbar-bordered {
+  border-width: 0 0 $navbar-border-width 0;
+  border-style: $navbar-border-type;
+  border-color: $navbar-border-color;
+
+  &.navbar-vertical {
+    border-width: 0 $navbar-border-width 0 0;
+  }
+}
+
+// Shadow
+.navbar-shadow {
+  box-shadow: $navbar-box-shadow;
+}
+
+// Navbar Brand
+.navbar-brand {
+  padding-top: $navbar-brand-padding-y;
+  padding-bottom: $navbar-brand-padding-y;
+}
+
+.navbar-brand-logo {
+  width: 100%;
+  min-width: $navbar-brand-default-width;
+  max-width: $navbar-brand-default-width;
+}
+
+.navbar-brand-logo-short {
+  width: 100%;
+  min-width: $navbar-brand-short-width;
+  max-width: $navbar-brand-short-width;
+}
+
+.navbar-brand-wrapper {
+  position: relative;
+  overflow-x: hidden;
+}
+
+// Toggle
+.navbar-toggler {
+  background-color: $navbar-toggle-bg-color;
+  border-color: $navbar-light-toggle-border-color;
+
+  &:hover {
+    background-color: $navbar-toggle-bg-hover-color;
+  }
+
+  &.btn-white {
+    border-color: $btn-white-border-color;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      color: $btn-white-hover-color;
+      background-color: $btn-white-bg-color;
+      box-shadow: $btn-white-box-shadow-hover;
+    }
+  }
+
+  .navbar-toggle-default {
+    display: flex;
+  }
+
+  .navbar-toggle-toggled {
+    display: none;
+  }
+
+  &[aria-expanded="true"] {
+    .navbar-toggle-default {
+      display: none;
+    }
+
+    .navbar-toggle-toggled {
+      display: flex;
+    }
+  }
+}
+
+// Collapse
+.navbar-collapse {
+  .navbar-nav {
+    margin-top: 0;
+  }
+}
+
+// Mega Menu
+.navbar-nav-mega-menu {
+  width: 100%;
+
+  .navbar-nav-mega-menu-title,
+  .dropdown-item {
+    padding-right: $navbar-nav-mega-menu-title-padding-x;
+    padding-left: $navbar-nav-mega-menu-title-padding-x;
+  }
+
+  .navbar-nav-mega-menu-title {
+    display: block;
+  }
+}

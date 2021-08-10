@@ -1,0 +1,22 @@
+/*------------------------------------
+  Close
+------------------------------------*/
+
+.close {
+  opacity: $close-opacity;
+
+  &:hover {
+    color: $close-hover-color;
+  }
+}
+
+// Light
+.close-light {
+  color: $close-light-color;
+  opacity: $close-light-opacity;
+
+  &:hover {
+    color: $close-light-hover-color;
+    opacity: $close-light-hover-opacity;
+  }
+}
