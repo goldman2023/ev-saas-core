@@ -1,67 +1,74 @@
-version: "3.8"
+# For more information: https://laravel.com/docs/sail
+version: '3'
 services:
-  db:
-    image: mariadb:latest
-    command: '--default-authentication-plugin=mysql_native_password'
-    ports:
-      - '${DB_DOCKER_PORT_EXTERNAL:-3333}:3306'
-    environment:
-      MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD-rootpass}'
-      MYSQL_DATABASE: '${DB_DATABASE-database}'
-      MYSQL_USER: '${DB_PASSWORD-user}'
-      MYSQL_PASSWORD: '${DB_PASSWORD-pass}'
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-    volumes:
-      - type: volume
-        source: dbdata
-        target: /var/lib/mysql
+    app:
+        build:
+            context: ./docker/8.0
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.0/app
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+        ports:
+          - '9501:9501'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - pgsql
 
-  cache:
-    image: redis:6.0.9-alpine
+    pgsql:
+        image: 'postgres'
+        ports:
+            - '${DB_DOCKER_PORT_EXTERNAL:-5432}:5432'
+        environment:
+            PGUSER: '${DB_USERNAME:-postgres}'
+            PGPASSWORD: '${DB_PASSWORD:-123456}'
+            POSTGRES_DB: '${DB_DATABASE:-evsaas}'
+            POSTGRES_USER: '${DB_USERNAME:-postgres}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-123456}'
+        volumes:
+            - 'sailpgsql:/var/lib/postgresql/data'
+        networks:
+            - sail
+        healthcheck:
+          test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+          retries: 3
+          timeout: 5s
 
-  app:
-    user: "33:33"
-    depends_on:
-      - db
-    image: jeankhawand/laradev:latest
-    volumes:
-      - .:/var/www/html/
+    cache:
+      image: 'redis:alpine'
+      ports:
+        - '${FORWARD_REDIS_PORT:-6379}:6379'
+      volumes:
+        - 'sailredis:/data'
+      networks:
+        - sail
+      healthcheck:
+        test: [ "CMD", "redis-cli", "ping" ]
+        retries: 3
+        timeout: 5s
 
+    nginx:
+      depends_on:
+        - app
+      image: nginx:alpine
+      ports:
+        - 80:80
+        - 443:443
+      networks:
+        - sail
+      volumes:
+        - ./docker/nginx:/etc/nginx/conf.d/
 
-  nginx:
-    depends_on:
-      - app
-    image: nginx:alpine
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - .:/var/www/html/
-      - ./nginx:/etc/nginx/conf.d/
-  cypress:
-    depends_on:
-      - nginx
-    image: cypress/included:7.6.0
-    volumes:
-      - .:/src/
-    environment:
-      - CYPRESS_BASE_URL=${CYPRESS_BASEURL}
-      - CYPRESS_RECORD_KEY=${CYPRESS_RECORDKEY}
-    working_dir: /src/
-
-  phpmyadmin:
-    depends_on:
-      - db
-    image: phpmyadmin:latest
-    ports:
-      - 8080:80
-    environment:
-      - PMA_HOST=${DB_HOST}
-      - PMA_PORT=${DB_PORT}
-      - PMA_USER=${DB_USERNAME}
-      - PMA_PASSWORD=${DB_PASSWORD}
-      - PMA_ABSOLUTE_URI=${DB_PWA_URL}
-
+networks:
+    sail:
+        driver: bridge
 volumes:
-  dbdata:
-    driver: local
+    sailpgsql:
+        driver: local
+    sailredis:
+      driver: local
