@@ -17,11 +17,12 @@ class CreateTenantsTable extends Migration
     {
         Schema::create('tenants', function (Blueprint $table) {
             $table->string('id')->primary();
-
-            // your custom columns may go here
-
+            if(config('database.default') === 'pgsql') {
+                $table->jsonb('data')->nullable();
+            } else {
+                $table->json('data')->nullable();
+            }
             $table->timestamps();
-            $table->json('data')->nullable();
         });
     }
 

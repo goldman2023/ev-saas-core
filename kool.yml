@@ -30,7 +30,7 @@ scripts:
     - kool run cypress verify
     - kool run cypress run --record
   local:
-    - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+    - find ./bootstrap/cache/ -type f -not  -name '.gitignore' -delete
     - cp .env.local .env
     - php artisan key:generate
     - php artisan config:cache
@@ -41,7 +41,7 @@ scripts:
     - kool run refresh
     - kool run node-setup-watch
   local-seed:
-    - find ./bootstrap/cache/ -type f -not -name '.gitignore' -delete
+    - find ./bootstrap/cache/* -type f -not -name '.gitignore' -delete
     - cp .env.local .env
     - php artisan key:generate
     - php artisan config:cache

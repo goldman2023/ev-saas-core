@@ -25,6 +25,7 @@
         "iyzico/iyzipay-php": "^2.0.48",
         "laracasts/flash": "^3.0",
         "laravel/framework": "8.*",
+        "laravel/nova": "~3.0",
         "laravel/octane": "^1.0",
         "laravel/passport": "^10.1",
         "laravel/slack-notification-channel": "^2.3",
@@ -52,8 +53,7 @@
         "stripe/stripe-php": "^7.83.0",
         "twilio/sdk": "^6.1",
         "yajra/laravel-datatables": "^1.5",
-        "yajra/laravel-datatables-oracle": "~9.0",
-        "laravel/nova": "~3.0"
+        "yajra/laravel-datatables-oracle": "~9.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
