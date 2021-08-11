@@ -7,14 +7,17 @@ use Illuminate\Http\Request;
 
 class EVSaaSController extends Controller
 {
+    public function index() {
+        return view('core.index');
+    }
     // Funtion to display tenant info
     public function info() {
         return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
     }
 
     public function create() {
-        $tenant1 = Tenant::create(['id' => 'eim']);
-        $tenant1->domains()->create(['domain' => 'eim.localhost']);
+        $tenant1 = Tenant::create(['id' => 'demo']);
+        $tenant1->domains()->create(['domain' => 'demo-ev.localhost']);
 
         $tenant1->save();
 

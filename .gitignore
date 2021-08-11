@@ -42,3 +42,4 @@ public/assets/img/.DS_Store
 composer.phar
 /cypress/videos/*
 /cypress/screenshots/*
+storage/*

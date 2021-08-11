@@ -101,3 +101,5 @@ function get_vendor_mode() {
 
     return $option;
 }
+
+

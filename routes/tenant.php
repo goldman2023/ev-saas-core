@@ -31,7 +31,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 |
 */
 
-
+Route::get('/ev', [EVSaasController::class, 'index']);
 Route::get('/ev-tenant/create', [EVSaaSController::class, 'create']);
 
 Route::middleware([
