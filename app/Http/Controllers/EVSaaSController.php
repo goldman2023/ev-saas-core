@@ -16,8 +16,8 @@ class EVSaaSController extends Controller
     }
 
     public function create() {
-        $tenant1 = Tenant::create(['id' => 'demo']);
-        $tenant1->domains()->create(['domain' => 'demo-ev.localhost']);
+        $tenant1 = Tenant::create(['id' => 'demo1']);
+        $tenant1->domains()->create(['domain' => 'demo1-ev.localhost']);
 
         $tenant1->save();
 
