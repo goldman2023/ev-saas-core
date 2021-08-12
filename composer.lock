@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d91adc97e104e1f658a3c07be9d04be",
+    "content-hash": "b142328ee1ab4e39e1c302b19da6f6ae",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -8919,23 +8919,24 @@
         },
         {
             "name": "spatie/once",
-            "version": "2.2.1",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/once.git",
-                "reference": "e6c13ae474a7d4b30975ef6a502a593874ac12d2"
+                "reference": "8b78d1d61a93ba3bf45c500498824bf5bfe6fa8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/once/zipball/e6c13ae474a7d4b30975ef6a502a593874ac12d2",
-                "reference": "e6c13ae474a7d4b30975ef6a502a593874ac12d2",
+                "url": "https://api.github.com/repos/spatie/once/zipball/8b78d1d61a93ba3bf45c500498824bf5bfe6fa8c",
+                "reference": "8b78d1d61a93ba3bf45c500498824bf5bfe6fa8c",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0"
+                "php": "^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^8.0"
+                "phpunit/phpunit": "^9.3",
+                "symfony/var-dumper": "^5.1"
             },
             "type": "library",
             "autoload": {
@@ -8963,13 +8964,13 @@
             "keywords": [
                 "cache",
                 "callable",
-                "memozation",
+                "memoization",
                 "once",
                 "spatie"
             ],
             "support": {
                 "issues": "https://github.com/spatie/once/issues",
-                "source": "https://github.com/spatie/once/tree/2.2.1"
+                "source": "https://github.com/spatie/once/tree/3.0.1"
             },
             "funding": [
                 {
@@ -8977,7 +8978,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-10-29T18:22:10+00:00"
+            "time": "2021-07-04T12:06:29+00:00"
         },
         {
             "name": "spatie/schema-org",

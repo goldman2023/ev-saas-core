@@ -149,10 +149,14 @@ return [
         'options' => [
             'enable_coroutine' => true,
             'task_enable_coroutine' => false, // this should be false because swoole-server in laravel octane is throwing error on line 136 because onTask event is sending Swoole/Server/Task instead of int taskId!
+            'task_use_object' => false, // Laravel Octane enforces int instead of object use in Task event listener callback fn. This prevents us using task_enable_coroutine for now. We should check if this can be possible by changing swoole-server php cli script later on...
             'log_level' => 1,
+            'max_request' => 10000, // Until all memory leaks are fixed, this can help - Check: https://www.swoole.co.uk/docs/modules/swoole-server/configuration#max_request
+            'max_request_grace' => 0, // no grace period which means that after 10k req. worker is restarted
+            'task_max_request' => 10000, // same logic as max_request but for task requests
             'reactor_num' => env('OCTANE_REACTOR_NUM', swoole_cpu_num()+1), // number of cpu cores
             'worker_num' => env('OCTANE_WORKER_NUM', swoole_cpu_num()*2), // usually number of cpu cores times 1-5
-            'task_worker_num' => env('OCTANE_TASK_WORKER_NUM', swoole_cpu_num()*5) // depends on benchmarks tbh
+            'task_worker_num' => env('OCTANE_TASK_WORKER_NUM', swoole_cpu_num()*5), // depends on benchmarks tbh
         ]
     ],
 

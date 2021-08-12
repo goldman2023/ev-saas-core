@@ -11,8 +11,8 @@ scripts:
   redis: ./sail redis
   cypress: ./node_modules/.bin/cypress
   refresh:
-    - kool run artisan optimize
     - kool run artisan config:cache
+    - kool run artisan optimize
   node-setup-prod:
     - kool run yarn install --frozen-lockfile
     - kool run yarn prod
@@ -46,7 +46,8 @@ scripts:
     - php artisan key:generate
     - php artisan config:cache
     - kool run up
-    - kool run artisan migrate:fresh --seed
+    - kool run artisan migrate:fresh # Migrate Central app DB
+    - kool run artisan migrate --path=/database/migrations/tenant --seed # Migrate Central app DB (we should fix this up by cherry-picking necessary tables, like languages etc. for central app)
     - kool run artisan config:cache
     - kool run artisan storage:link
     - kool run composer install

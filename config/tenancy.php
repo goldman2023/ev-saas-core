@@ -199,4 +199,18 @@ return [
         '--class' => 'DatabaseSeeder', // root seeder class
         // '--force' => true,
     ],
+
+    /**
+     * Default Parameters used by the tenants:pull command.
+     */
+    'pull_parameters' => [
+        '--path' => [database_path('migrations/tenant')],
+        '--drop-views' => true,
+        '--drop-types' => true,
+        '--force' => true,
+        '--realpath' => true,
+        //'--type' => 'demo', // Demo creates a demo tenant, while Real fetches the Central App tenants
+        //'--fetch' => 'local' // If --type is "real", --fetch can be "local" or "production"
+        // '--force' => true,
+    ],
 ];

@@ -16,9 +16,9 @@ class TranslationsTableSeeder extends Seeder
     {
 
         if (\DB::table('translations')->count() == 0) {
-            \DB::table('translations')->delete();
+            //\DB::table('translations')->delete();
 
-            \DB::table('translations')->insert(array(
+            /*\DB::table('translations')->insert(array(
                 0 =>
                     array(
                         'id' => 3,
@@ -13433,7 +13433,7 @@ class TranslationsTableSeeder extends Seeder
                         'created_at' => '2021-05-13 12:20:50',
                         'updated_at' => '2021-05-13 12:20:50',
                     ),
-            ));
+            ));*/
 
         }
     }
