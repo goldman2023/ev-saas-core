@@ -419,14 +419,6 @@ class BusinessSettingsTableSeeder extends Seeder
                         'created_at' => '2020-09-22 13:58:21',
                         'updated_at' => '2020-09-22 13:58:21',
                     ),
-                50 =>
-                    array(
-                        'id' => 64,
-                        'type' => 'header_logo',
-                        'value' => '11',
-                        'created_at' => '2020-11-16 09:26:36',
-                        'updated_at' => '2021-04-08 13:26:22',
-                    ),
                 51 =>
                     array(
                         'id' => 65,
@@ -451,14 +443,7 @@ class BusinessSettingsTableSeeder extends Seeder
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
                     ),
-                54 =>
-                    array(
-                        'id' => 68,
-                        'type' => 'footer_logo',
-                        'value' => '11',
-                        'created_at' => '2020-11-16 09:26:36',
-                        'updated_at' => '2021-04-08 13:34:42',
-                    ),
+
                 55 =>
                     array(
                         'id' => 69,

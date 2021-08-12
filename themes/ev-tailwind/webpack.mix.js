@@ -12,6 +12,12 @@ const mix = require("laravel-mix");
  */
  
  
-mix.setPublicPath("public/themes/Yoga")
+mix.setPublicPath("public/themes/ev-tailwind")
     .js(`${__dirname}/js/app.js`, "js")
-    .sass(`${__dirname}/sass/app.scss`, "css");
+    .postCss(`${__dirname}/css/app.css`, "css", [
+        require("postcss-import"),
+        require("tailwindcss")({
+            config: `${__dirname}/tailwind.config.js`,
+        }),
+        require("autoprefixer"),
+    ]);
