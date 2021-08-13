@@ -41,6 +41,12 @@ class Kernel extends ConsoleKernel
         // Sail
         \Laravel\Sail\Console\InstallCommand::class,
         \Laravel\Sail\Console\PublishCommand::class,
+
+        \Laravel\Nova\Console\InstallCommand::class,
+        \Laravel\Nova\Console\PublishCommand::class,
+        \Laravel\Nova\Console\ResourceCommand::class,
+        \Laravel\Nova\Console\BaseResourceCommand::class,
+        \Laravel\Nova\Console\UserCommand::class
     ];
 
     /**

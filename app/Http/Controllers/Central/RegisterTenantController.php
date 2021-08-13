@@ -24,13 +24,13 @@ class RegisterTenantController extends Controller
             'password' => 'required|string|confirmed|max:255',
         ]);
 
+
         $data['password'] = bcrypt($data['password']);
 
         $domain = $data['domain'];
         unset($data['domain']);
 
         $tenant = (new CreateTenantAction)($data, $domain);
-
         // We impersonate user with id 1. This user will be created by the CreateTenantAdmin job.
         return redirect($tenant->impersonationUrl(1));
     }
