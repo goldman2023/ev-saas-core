@@ -9,7 +9,7 @@ Route::get('/refresh-csrf', function() {
 });
 
 
-Route::view('/', 'central.landing')->name('central.landing');
+Route::view('/', 'central.landing-pages.landing')->name('central.landing');
 
 Route::get('/register', [RegisterTenantController::class, 'show'])->name('central.tenants.register');
 Route::post('/register/submit', [RegisterTenantController::class, 'submit'])->name('central.tenants.register.submit');

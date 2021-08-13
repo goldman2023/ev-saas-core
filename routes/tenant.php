@@ -15,7 +15,10 @@ use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\Tenant\DownloadInvoiceController;
+use App\Http\Middleware\OwnerOnly;
 use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
@@ -345,5 +348,23 @@ Route::middleware([
         Route::get('/checkout', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
         Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
         Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
+    });
+
+
+
+    // Tenant Management routes - added from SaaS Boilerplate
+
+    Route::get('/impersonate/{token}', function ($token) {
+        return UserImpersonation::makeResponse($token);
+    })->name('tenant.impersonate');
+
+    Route::get('/settings/user', 'UserSettingsController@show')->name('settings.user');
+    Route::post('/settings/user/personal', 'UserSettingsController@personal')->name('settings.user.personal');
+    Route::post('/settings/user/password', 'UserSettingsController@password')->name('settings.user.password');
+
+    Route::middleware(OwnerOnly::class)->group(function () {
+        Route::get('/settings/application', 'ApplicationSettingsController@show')->name('settings.application');
+        Route::post('/settings/application/configuration', 'ApplicationSettingsController@storeConfiguration')->name('settings.application.configuration');
+        Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('invoice.download');
     });
 });
