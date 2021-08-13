@@ -949,7 +949,7 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@tailwindcss/forms@^0.3.3":
+"@tailwindcss/forms@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.3.3.tgz#a29d22668804f3dae293dcadbef1aa6315c45b64"
   integrity sha512-U8Fi/gq4mSuaLyLtFISwuDYzPB73YzgozjxOIHsK6NXgg/IWD1FLaHbFlWmurAMyy98O+ao74ksdQefsquBV1Q==

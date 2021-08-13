@@ -4,6 +4,7 @@
         <div class="row">
             <div class="col-md-4 mb-7 mb-md-0">
                 <!-- Contacts -->
+{{--             TODO: Make this somehow dynamic    --}}
                 <div class="media">
                     <figure class="w-100 max-w-8rem mr-4">
                         <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-65.svg" alt="SVG">

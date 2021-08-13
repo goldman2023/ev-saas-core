@@ -1,1 +1,1 @@
-this is shity footer
+This is Footer Overide Example

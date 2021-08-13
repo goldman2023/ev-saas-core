@@ -419,14 +419,6 @@ class BusinessSettingsTableSeeder extends Seeder
                         'created_at' => '2020-09-22 13:58:21',
                         'updated_at' => '2020-09-22 13:58:21',
                     ),
-                50 =>
-                    array(
-                        'id' => 64,
-                        'type' => 'header_logo',
-                        'value' => '11',
-                        'created_at' => '2020-11-16 09:26:36',
-                        'updated_at' => '2021-04-08 13:26:22',
-                    ),
                 51 =>
                     array(
                         'id' => 65,
@@ -451,19 +443,12 @@ class BusinessSettingsTableSeeder extends Seeder
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
                     ),
-                54 =>
-                    array(
-                        'id' => 68,
-                        'type' => 'footer_logo',
-                        'value' => '11',
-                        'created_at' => '2020-11-16 09:26:36',
-                        'updated_at' => '2021-04-08 13:34:42',
-                    ),
+
                 55 =>
                     array(
                         'id' => 69,
                         'type' => 'about_us_description',
-                        'value' => 'B2BWood platform helps to increase sales. You can promote your products on the platform, many simple users will see furniture products from different countries, so you will be know for global market.',
+                        'value' => 'Your business idea description',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:34:42',
                     ),
@@ -471,7 +456,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 70,
                         'type' => 'contact_address',
-                        'value' => 'Laisvės alėja 59',
+                        'value' => 'Your Address',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:52',
                     ),
@@ -487,7 +472,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 72,
                         'type' => 'contact_email',
-                        'value' => 'support@b2bwood.com',
+                        'value' => 'support@ev-saas.com',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:52',
                     ),
@@ -535,7 +520,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 78,
                         'type' => 'facebook_link',
-                        'value' => 'https://www.facebook.com/B2BWood/',
+                        'value' => 'https://www.facebook.com/',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:02:50',
                     ),
@@ -567,7 +552,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 82,
                         'type' => 'linkedin_link',
-                        'value' => 'https://www.linkedin.com/company/uab-b2b-wood/',
+                        'value' => '#',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:02:50',
                     ),
@@ -591,7 +576,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 85,
                         'type' => 'home_slider_links',
-                        'value' => '["https:\\/\\/b2bwood.com"]',
+                        'value' => '["https:\\/\\/ev-saas.com"]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:43:09',
                     ),
@@ -655,7 +640,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 93,
                         'type' => 'website_name',
-                        'value' => 'B2BWood',
+                        'value' => 'EV SaaS App',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:04',
                     ),
@@ -663,7 +648,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 94,
                         'type' => 'site_motto',
-                        'value' => 'Wood Industry News And Companies catalog',
+                        'value' => 'Perfect canvas for your great business idea',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:04',
                     ),
@@ -727,7 +712,7 @@ class BusinessSettingsTableSeeder extends Seeder
                     array(
                         'id' => 102,
                         'type' => 'site_name',
-                        'value' => 'B2BWood',
+                        'value' => 'EV-SaaS Demo',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 12:58:39',
                     ),

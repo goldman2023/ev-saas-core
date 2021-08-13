@@ -30,15 +30,10 @@ class DatabaseSeeder extends Seeder
         $this->call(BlogsTableSeeder::class);
         $this->call(BlogCategoriesTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
-        $this->call(CategoryTranslationsTableSeeder::class);
         $this->call(CustomersTableSeeder::class);
         $this->call(ProductsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(SellersTableSeeder::class);
         $this->call(ShopsTableSeeder::class);
-        //   $this->call(AttributesTableSeeder::class);
-        //  $this->call(AttributeTranslationsTableSeeder::class);
-      //  $this->call(AttributeValuesTableSeeder::class);
-      //  $this->call(AttributeValueTranslationsTableSeeder::class);
     }
 }

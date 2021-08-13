@@ -1,5 +1,7 @@
 const mix = require('laravel-mix');
 
+require(`${__dirname}/themes/ev-tailwind/webpack.mix.js`);
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -25,3 +27,4 @@ mix.scripts([
 mix.scripts([
     'resources/js/flare.js',
 ], 'public/assets/js/flare.js');
+

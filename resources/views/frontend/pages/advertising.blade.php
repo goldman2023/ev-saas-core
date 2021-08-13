@@ -2,10 +2,8 @@
 
 @section('content')
     <!-- Team Section -->
-    <x-page-hero-advertising></x-page-hero-advertising>
+    <x-page-hero-company></x-page-hero-company>
 
 
-    <section id="b2b-pricing-wqe">
-        <x-ads-pricing-table></x-ads-pricing-table>
-    </section>
+{{--    TODO: Make this smomehow dynamic and what do we do with these kind of pages in general, how menu is managed? --}}
 @endsection

@@ -16,8 +16,10 @@ class EVSaaSController extends Controller
     }
 
     public function create() {
-        $tenant1 = Tenant::create(['id' => 'demo']);
-        $tenant1->domains()->create(['domain' => 'demo-ev.localhost']);
+        $tenant1 = Tenant::create(['id' => 'tailwind']);
+
+        /* !Important, on local development server, you need to point the tenant domain in your /etc/hosts file to 127.0.01   domain.localhost*/
+        $tenant1->domains()->create(['domain' => 'tailwind.localhost']);
 
         $tenant1->save();
 
