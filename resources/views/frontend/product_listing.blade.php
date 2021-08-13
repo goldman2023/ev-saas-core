@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="bg-white shadow-sm rounded mb-3">
                                     <div class="fs-15 fw-600 p-3 border-bottom">
-                                        {{ translate('Categories')}}
+
                                     </div>
                                     <div class="p-3">
                                         <ul class="list-unstyled">
@@ -125,7 +125,7 @@
                                                     class="la la-2x la-long-arrow-left"></i></button>
                                         </div>
                                         <div class="input-group">
-                                            <input type="text" 
+                                            <input type="text"
                                                 class="border-0 border-lg form-control" id="search" name="q"
                                                 value="{{ $query }}"
                                                 placeholder="{{ translate('Search query...') }}"
@@ -159,7 +159,7 @@
                                         @if($product_count > 0 && $content == null && !isset($category_id))
                                             <div class="ml-auto text-right">
                                                 <a class="font-weight-bold" href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">{{ translate('View all ') }}<i
-                                                        class="las la-angle-right la-sm ml-1"></i></a>                                    
+                                                        class="las la-angle-right la-sm ml-1"></i></a>
                                             </div>
                                         @endif
                                         <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">
@@ -173,7 +173,7 @@
                                     <div class="row gutters-5 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-4 row-cols-md-3 row-cols-2 mt-2">
                                         @foreach ($products as $key => $product)
                                             <x-search.product-card :product="$product"></x-search.product-card>
-                                        @endforeach           
+                                        @endforeach
                                     </div>
                                     @if ($content == 'product' || isset($category_id))
                                         <div class="aiz-pagination aiz-pagination-center d-flex justify-content-center mt-4">
@@ -203,7 +203,7 @@
                                     @if($event_count > 0 && $content == null && !isset($category_id))
                                         <div class="ml-auto text-right">
                                             <a class="font-weight-bold" href="{{ route('search', ['q' => $query, 'content' => 'event']) }}">{{ translate('View all ') }}<i
-                                                    class="las la-angle-right la-sm ml-1"></i></a>                                    
+                                                    class="las la-angle-right la-sm ml-1"></i></a>
                                         </div>
                                     @endif
                                     <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">
@@ -246,7 +246,7 @@
                                     @if($company_count > 0 && $content == null && !isset($category_id))
                                         <div class="ml-auto text-right">
                                             <a class="font-weight-bold" href="{{ route('search', ['q' => $query, 'content' => 'company']) }}">{{ translate('View all ') }}<i
-                                                    class="las la-angle-right la-sm ml-1"></i></a>                                    
+                                                    class="las la-angle-right la-sm ml-1"></i></a>
                                         </div>
                                     @endif
                                     <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">

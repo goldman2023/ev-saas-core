@@ -60,26 +60,6 @@
                                         </div>
                                     </form>
 
-                                    @if (env("DEMO_MODE") == "On")
-                                        <div class="mb-5">
-                                            <table class="table table-bordered mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>{{ translate('Seller Account')}}</td>
-                                                        <td>
-                                                            <button class="btn btn-info btn-sm" onclick="autoFillSeller()">{{ translate('Copy credentials') }}</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{{ translate('Customer Account')}}</td>
-                                                        <td>
-                                                            <button class="btn btn-info btn-sm" onclick="autoFillCustomer()">{{ translate('Copy credentials') }}</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    @endif
 
                                     @if(\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
                                         <div class="separator mb-3">

@@ -14,7 +14,7 @@
         <span class="d-block font-size-1 text-body"> {{ $item->category->name }}</span>
 
         @if ($item->user != null)
-            <span class="d-block font-size-2 text-body"><i class="las la-user text-muted mr-1"></i>{{ $item->user->name }}</span>
+            <span class="d-block font-size-2 text-body"><i class="las la-user text-muted mr-1"></i></span>
         @endif
         @if($item->estimated_time != null)
             <span class="d-block font-size-2 text-body"><i class="las la-clock text-muted mr-1"></i>{{$item->estimated_time ." " . translate('min. Read')}}</span>
@@ -33,7 +33,7 @@
         <ul class="list-inline list-separator font-size-1 text-body">
             @if(visits($item)->count() != null || visits($item,'auth')->count() != null)
                 <li class="list-inline-item">
-                    <i class="las la-eye text-muted mr-1"></i> {{(visits($item)->count()+visits($item,'auth')->count()) ." " . translate('Views')}}
+                    <i class="las la-eye text-muted mr-1"></i>
                 </li>
             @endif
             <li class="list-inline-item">

@@ -15,7 +15,12 @@ use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\Tenant\ApplicationSettingsController;
+use App\Http\Controllers\Tenant\DownloadInvoiceController;
+use App\Http\Controllers\Tenant\UserSettingsController;
+use App\Http\Middleware\OwnerOnly;
 use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
@@ -134,7 +139,7 @@ Route::middleware([
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
     Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
-    Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
+    Route::group(['middleware' => []], function () {
         Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
         Route::get('/dashboard/thank-you', 'CompanyController@thankYouPage')->name('company.thank-you');
         Route::get('/profile', 'HomeController@profile')->name('profile');
@@ -345,5 +350,23 @@ Route::middleware([
         Route::get('/checkout', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
         Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
         Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
+    });
+
+
+
+    // Tenant Management routes - added from SaaS Boilerplate
+
+    Route::get('/impersonate/{token}', function ($token) {
+        return UserImpersonation::makeResponse($token);
+    })->name('tenant.impersonate');
+
+    Route::get('/settings/user', [UserSettingsController::class, 'show'])->name('tenant.settings.user');
+    Route::post('/settings/user/personal', 'UserSettingsController@personal')->name('tenant.settings.user.personal');
+    Route::post('/settings/user/password', 'UserSettingsController@password')->name('tenant.settings.user.password');
+
+    Route::middleware(OwnerOnly::class)->group(function () {
+        Route::get('/settings/application', [ApplicationSettingsController::class, 'show'])->name('tenant.settings.application');
+        Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
+        Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
 });

@@ -166,7 +166,7 @@ class BlogController extends Controller
     {
         $blogs = Blog::where('status', 1)->orderBy('created_at', 'desc')->paginate(12);
         $categories = $categories = Category::where('level', 0)->orderBy('order_level', 'desc')->get();
-        return view("frontend.blog.listing", compact('blogs', 'categories'));
+        return view("frontend.blog.index", compact('blogs', 'categories'));
     }
 
     public function blog_details($slug)

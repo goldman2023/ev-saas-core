@@ -446,7 +446,7 @@ class HomeController extends Controller
     public function all_brands(Request $request)
     {
         $categories = Category::all();
-        return view('frontend.all_brand', compact('categories'));
+        return view('frontend.brand.index', compact('categories'));
     }
 
     public function show_product_upload_form(Request $request)
