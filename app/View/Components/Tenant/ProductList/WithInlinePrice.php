@@ -13,10 +13,10 @@ class WithInlinePrice extends ProductList
      *
      * @return void
      */
-    public function __construct($products = [])
+    public function __construct($products = [], $style = 'with-inline-price')
     {
         // Please add all product logic to ProductList Class and add all general dynamic options used accross the blocks
-        parent::__construct($products);
+        parent::__construct($products, $style);
     }
 
     /**

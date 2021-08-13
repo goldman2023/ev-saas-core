@@ -9,16 +9,17 @@ class ProductList extends Component
 {
 
     public $products;
+    public $style = 'with-inline-price';
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($products = [])
+    public function __construct($products = [], $style = 'with-inline-price')
     {
         //
         $products = Product::all();
-
+        $this->style = $style;
         $this->products = $products;
     }
 
@@ -29,6 +30,6 @@ class ProductList extends Component
      */
     public function render()
     {
-        return view('components.tenant.product-list.with-inline-price');
+        return view('components.tenant.product-list.'. $this->style);
     }
 }

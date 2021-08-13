@@ -22,6 +22,6 @@
         @yield('content')
     </main>
 </div>
-<x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
+<x-tenant.footer></x-tenant.footer>
 </body>
 </html>
