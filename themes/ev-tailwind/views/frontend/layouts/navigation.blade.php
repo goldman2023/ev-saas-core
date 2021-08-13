@@ -24,6 +24,10 @@
                             </a>
                         @endforeach
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-join-button></x-join-button>
+                </div>
             </div>
             @endif
         </div>

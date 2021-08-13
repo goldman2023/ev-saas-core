@@ -1,78 +1,177 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    <div class="flex flex-col items-center min-h-screen pt-6 bg-gray-100 sm:justify-center sm:pt-0">
-        <div>
-            <a href="/">
-                <x-application-logo class="w-20 h-20 text-gray-500 fill-current" />
-            </a>
-        </div>
+    <!--
+  This example requires Tailwind CSS v2.0+
 
-        <div class="w-full px-6 py-4 mt-6 overflow-hidden bg-white shadow-md sm:max-w-md sm:rounded-lg">
+  This example requires some changes to your config:
 
-            <!-- Session Status -->
-            <x-auth-session-status class="mb-4" :status="session('status')" />
-
-            <!-- Validation Errors -->
-            <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
-                <!-- Email Address -->
-                <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700">
-                        {{ __('Email') }}
-                    </label>
-
-                    <input id="email" type="email"
-                            class="form-input w-full @error('email') border-red-500 @enderror" name="email"
-                            value="{{ old('email') }}" required autocomplete="email">
-
-                    @error('email')
-                        <p class="mt-1 text-xs italic text-red-500">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-
-                <!-- Password -->
-                <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700">
-                        {{ __('Password') }}
-                    </label>
-
-                    <input id="password" type="password"
-                            class="form-input w-full @error('password') border-red-500 @enderror" name="password"
-                            required autocomplete="new-password">
-
-                    @error('password')
-                        <p class="mt-1 text-xs italic text-red-500">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-
-                <!-- Remember Me -->
-                <div class="block mt-4">
-                    <label for="remember_me" class="inline-flex items-center">
-                        <input id="remember_me" type="checkbox" class="text-indigo-600 border-gray-300 rounded shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                        <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                    </label>
-                </div>
-
-                <div class="flex items-center justify-end mt-4">
-                    @if (Route::has('password.request'))
-                        <a class="text-sm text-gray-600 underline hover:text-gray-900" href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+-->
+    <div class="min-h-screen bg-white flex">
+        <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+            <div class="mx-auto w-full max-w-sm lg:w-96">
+                <div>
+                    <img class="h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
+                    <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                        Sign in to your account
+                    </h2>
+                    <p class="mt-2 text-sm text-gray-600">
+                        Or
+                        <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            start your 14-day free trial
                         </a>
-                    @endif
-
-                    <button type="submit" class="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-800 border border-transparent rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25">
-                        {{ __('Log in') }}
-                    </button>
+                    </p>
                 </div>
-            </form>
+
+                <div class="mt-8">
+                    <div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">
+                                Sign in with
+                            </p>
+
+                            <div class="mt-1 grid grid-cols-3 gap-3">
+                                <div>
+                                    <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Sign in with Facebook</span>
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Sign in with Twitter</span>
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                                        </svg>
+                                    </a>
+                                </div>
+
+                                <div>
+                                    <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Sign in with GitHub</span>
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 relative">
+                            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+              <span class="px-2 bg-white text-gray-500">
+                Or continue with
+              </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <div class="px-4 py-3 py-lg-4">
+                            <div class="">
+                                <form class="form-default" role="form" action="{{ route('user.login.submit') }}" method="POST">
+                                    @csrf
+                                    @error('incorrect')
+                                    <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                    <div class="form-group">
+                                        @if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated)
+                                            <input type="text" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{ translate('Email Or Phone')}}" name="email" data-test="email" id="email">
+                                        @else
+                                            <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email" data-test="email">
+                                        @endif
+                                        @if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated)
+                                            <span class="opacity-60">{{  translate('Use country code before number') }}</span>
+                                        @endif
+                                        @error('email')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ translate('Password')}}" name="password" id="password"  data-test="password">
+                                        @error('password')
+                                        <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+
+
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <label class="aiz-checkbox">
+                                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                                <span class=opacity-60>{{  translate('Remember Me') }}</span>
+                                                <span class="aiz-square-check"></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <a href="{{ route('password.request') }}" class="text-reset opacity-60 fs-14">{{ translate('Forgot password?')}}</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-5">
+                                        <button type="submit" class="btn btn-primary btn-block fw-600"  data-test="submit">{{  translate('Login') }}</button>
+                                    </div>
+                                </form>
+
+
+                                @if(\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
+                                    <div class="separator mb-3">
+                                        <span class="bg-white px-3 opacity-60">{{ translate('Or Login With')}}</span>
+                                    </div>
+                                    <ul class="list-inline social colored text-center mb-5">
+                                        @if (\App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1)
+                                            <li class="list-inline-item">
+                                                <a href="{{ route('social.login', ['provider' => 'facebook']) }}" class="facebook">
+                                                    <i class="lab la-facebook-f"></i>
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if(\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1)
+                                            <li class="list-inline-item">
+                                                <a href="{{ route('social.login', ['provider' => 'google']) }}" class="google">
+                                                    <i class="lab la-google"></i>
+                                                </a>
+                                            </li>
+                                        @endif
+                                        @if (\App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
+                                            <li class="list-inline-item">
+                                                <a href="{{ route('social.login', ['provider' => 'twitter']) }}" class="twitter">
+                                                    <i class="lab la-twitter"></i>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                @endif
+                            </div>
+                            <div class="text-center">
+                                <p class="text-muted mb-0">{{ translate('Dont have an account?')}}</p>
+                                <a href="{{ route('user.registration') }}">{{ translate('Register Now')}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden lg:block relative w-0 flex-1">
+            <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1505904267569-f02eaeb45a4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="">
         </div>
     </div>
+
 @endsection

@@ -15,9 +15,9 @@ class OwnerOnly
      */
     public function handle($request, Closure $next)
     {
-        if (! auth()->user()->isOwner()) {
-            abort(403);
-        }
+//        if (! auth()->user()->isOwner()) {
+//            abort(403);
+//        }
 
         return $next($request);
     }
