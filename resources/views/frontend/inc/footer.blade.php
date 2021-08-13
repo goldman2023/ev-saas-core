@@ -6,12 +6,12 @@
             <div class="col-lg-12 col-xl-12 text-center text-md-left">
                 <a href="{{ route('home') }}" class="d-block">
                     @if (get_setting('footer_logo') != null)
-                        <img class="lazyload" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
-                             data-src="{{ uploaded_asset(get_setting('footer_logo')) }}" alt="{{ env('APP_NAME') }}"
+                        <img class="lazyload" src="{{ static_asset('assets/img/logo.jpg') }}"
+                             data-src="{{ uploaded_asset(get_setting('footer_logo')) }}" alt="{{ get_site_name() }}"
                              height="44">
                     @else
                         <img class="lazyload" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
-                             data-src="{{ static_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}"
+                             data-src="{{ static_asset('assets/img/logo.png') }}" alt="{{ get_site_name() }}"
                              height="44">
                     @endif
                 </a>
@@ -27,19 +27,19 @@
 
                 <ul class="list-unstyled">
                     <li class="mb-1">
-                        {{ translate('Company: UAB B2BWood') }}
+                        {{ translate('Company:') }} {{ get_site_name() }}
                     </li>
 
                     <li class="mb-1">
-                        {{ translate('Address: Laisves Al. 76, Kaunas, Lithuania') }}
+                        {{ translate('Address:') }} {{ get_setting('contact_address') }}
                     </li>
 
                     <li class="mb-1">
-                        {{ translate('Phone: +370615347777') }}
+                        {{ translate('Phone:') }} {{ get_setting('contact_phone') }}
                     </li>
 
                     <li class="mb-1">
-                        {{ translate('Email: contact@b2bwood.com') }}
+                        {{ translate('Email:') }}{{ get_setting('contact_email') }}
                     </li>
                 </ul>
 
@@ -72,6 +72,7 @@
             </div>
             <div class="col-lg-3 col-md-3 pt-4">
                 <div class="text-center text-md-left">
+
                     <h4 class="fs-16 fw-600 text-white">
                         {{ translate('What We Do') }}
                     </h4>

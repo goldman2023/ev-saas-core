@@ -7,16 +7,16 @@
                 <div class="w-lg-80 text-center text-lg-left mb-5 mb-lg-7">
                     <h1 class="display-4">
                         @php
-                            
+
                             $image = asset('assets/img/hero-images/b2bwood-homepage-banner.jpg');
-                            
+
                             if ($category) {
                                 $categoryTitle = $category->tile;
                                 $categoryTitle = $category->name;
                             }
-                            
+
                             //$country = 'Germany';
-                            
+
                         @endphp
                         @if ($categoryTitle)
                             {{ translate('Find ') }} <span class="">{{ $categoryTitle }}</span>
@@ -32,8 +32,10 @@
 
                     </h1>
                 @else
-                    {{ translate('Find Trusted Global Wood Companies') }}
-                    <br><span class="text-primary text-highlight-warning">{{ translate('in') }}</span> B2BWood Club
+                    {{ translate('Welcome to your new digital home') }}
+                    <br><span class="text-primary text-highlight-warning">
+                            {{ translate('Go ahead look around and make yourself comfortable...') }}
+                        </span>
                     </h1>
                     @endif
 

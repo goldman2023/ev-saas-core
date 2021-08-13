@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee4b9fc6b964d77b04e64ebae8e33f7d",
+    "content-hash": "bbb7558dbbe7345b7487cb3276c1db76",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -64,16 +64,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.189.0",
+            "version": "3.190.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8"
+                "reference": "5f6149b626e916dbfcd1b1b8e90c726060d5beba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
-                "reference": "f1f9e6cc3f5df8ef53a46d590985ca1b8dabb0f8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5f6149b626e916dbfcd1b1b8e90c726060d5beba",
+                "reference": "5f6149b626e916dbfcd1b1b8e90c726060d5beba",
                 "shasum": ""
             },
             "require": {
@@ -148,9 +148,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.189.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.190.1"
             },
-            "time": "2021-08-10T18:17:34+00:00"
+            "time": "2021-08-12T18:14:37+00:00"
         },
         {
             "name": "awssat/laravel-visits",
@@ -4511,16 +4511,16 @@
         },
         {
             "name": "maatwebsite/excel",
-            "version": "3.1.32",
+            "version": "3.1.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Maatwebsite/Laravel-Excel.git",
-                "reference": "9dc29b63a77fb7f2f514ef754af3a1b57e83cadf"
+                "reference": "b2de5ba92c5c1ad9415f0eb7c72838fb3eaaa5b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/9dc29b63a77fb7f2f514ef754af3a1b57e83cadf",
-                "reference": "9dc29b63a77fb7f2f514ef754af3a1b57e83cadf",
+                "url": "https://api.github.com/repos/Maatwebsite/Laravel-Excel/zipball/b2de5ba92c5c1ad9415f0eb7c72838fb3eaaa5b8",
+                "reference": "b2de5ba92c5c1ad9415f0eb7c72838fb3eaaa5b8",
                 "shasum": ""
             },
             "require": {
@@ -4573,7 +4573,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Maatwebsite/Laravel-Excel/issues",
-                "source": "https://github.com/Maatwebsite/Laravel-Excel/tree/3.1.32"
+                "source": "https://github.com/Maatwebsite/Laravel-Excel/tree/3.1.33"
             },
             "funding": [
                 {
@@ -4585,7 +4585,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-08T10:11:21+00:00"
+            "time": "2021-08-12T15:52:25+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -8391,16 +8391,16 @@
         },
         {
             "name": "spatie/laravel-backup",
-            "version": "6.16.1",
+            "version": "6.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-backup.git",
-                "reference": "11a3fdb6938566ba75f3dd9ab790319d5e90b0fc"
+                "reference": "409acef61feedb47bf47da961740217071d22107"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/11a3fdb6938566ba75f3dd9ab790319d5e90b0fc",
-                "reference": "11a3fdb6938566ba75f3dd9ab790319d5e90b0fc",
+                "url": "https://api.github.com/repos/spatie/laravel-backup/zipball/409acef61feedb47bf47da961740217071d22107",
+                "reference": "409acef61feedb47bf47da961740217071d22107",
                 "shasum": ""
             },
             "require": {
@@ -8465,7 +8465,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-backup/issues",
-                "source": "https://github.com/spatie/laravel-backup/tree/6.16.1"
+                "source": "https://github.com/spatie/laravel-backup/tree/6.16.2"
             },
             "funding": [
                 {
@@ -8477,7 +8477,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2021-07-10T14:54:21+00:00"
+            "time": "2021-08-11T21:09:11+00:00"
         },
         {
             "name": "spatie/laravel-newsletter",
@@ -9036,16 +9036,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.92.0",
+            "version": "v7.93.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "4b549e6f7d3e7ffd877547a0f1e8bd01c363e268"
+                "reference": "c739cf6841bb3498e23bd52ecfadfcb21c521a14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/4b549e6f7d3e7ffd877547a0f1e8bd01c363e268",
-                "reference": "4b549e6f7d3e7ffd877547a0f1e8bd01c363e268",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/c739cf6841bb3498e23bd52ecfadfcb21c521a14",
+                "reference": "c739cf6841bb3498e23bd52ecfadfcb21c521a14",
                 "shasum": ""
             },
             "require": {
@@ -9091,9 +9091,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v7.92.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v7.93.0"
             },
-            "time": "2021-07-28T17:38:57+00:00"
+            "time": "2021-08-11T18:48:54+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -12046,16 +12046,16 @@
         },
         {
             "name": "twilio/sdk",
-            "version": "6.27.1",
+            "version": "6.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twilio/twilio-php.git",
-                "reference": "2e36a394c854719091136c09ad69f5b839716a64"
+                "reference": "bf3fc7e3a4619923bbc7d57817a52b8f016da951"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/2e36a394c854719091136c09ad69f5b839716a64",
-                "reference": "2e36a394c854719091136c09ad69f5b839716a64",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/bf3fc7e3a4619923bbc7d57817a52b8f016da951",
+                "reference": "bf3fc7e3a4619923bbc7d57817a52b8f016da951",
                 "shasum": ""
             },
             "require": {
@@ -12094,9 +12094,9 @@
             ],
             "support": {
                 "issues": "https://github.com/twilio/twilio-php/issues",
-                "source": "https://github.com/twilio/twilio-php/tree/6.27.1"
+                "source": "https://github.com/twilio/twilio-php/tree/6.28.0"
             },
-            "time": "2021-07-28T19:07:01+00:00"
+            "time": "2021-08-11T17:40:06+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -12440,16 +12440,16 @@
         },
         {
             "name": "yajra/laravel-datatables-editor",
-            "version": "v1.24.1",
+            "version": "v1.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables-editor.git",
-                "reference": "d413a8991227b554b5c81a32264647cd63ea691c"
+                "reference": "8418f7f2fb4fb73e095687c464a50d92e9f1f357"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables-editor/zipball/d413a8991227b554b5c81a32264647cd63ea691c",
-                "reference": "d413a8991227b554b5c81a32264647cd63ea691c",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables-editor/zipball/8418f7f2fb4fb73e095687c464a50d92e9f1f357",
+                "reference": "8418f7f2fb4fb73e095687c464a50d92e9f1f357",
                 "shasum": ""
             },
             "require": {
@@ -12457,8 +12457,7 @@
                 "illuminate/database": "*",
                 "illuminate/http": "*",
                 "illuminate/validation": "*",
-                "php": ">=7.0",
-                "yajra/laravel-datatables-buttons": "3.*|4.*"
+                "php": ">=7.0"
             },
             "require-dev": {
                 "orchestra/testbench": "~3.5"
@@ -12500,7 +12499,7 @@
             ],
             "support": {
                 "issues": "https://github.com/yajra/laravel-datatables-editor/issues",
-                "source": "https://github.com/yajra/laravel-datatables-editor/tree/v1.24.1"
+                "source": "https://github.com/yajra/laravel-datatables-editor/tree/v1.24.2"
             },
             "funding": [
                 {
@@ -12512,7 +12511,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-07-30T12:36:47+00:00"
+            "time": "2021-08-13T01:43:33+00:00"
         },
         {
             "name": "yajra/laravel-datatables-fractal",
@@ -15307,7 +15306,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4.3|^8.0",
+        "php": "^7.4|^8.0",
         "ext-gd": "*"
     },
     "platform-dev": [],
