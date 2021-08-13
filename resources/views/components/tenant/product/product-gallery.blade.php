@@ -8,19 +8,8 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
         @foreach ($photos as $key => $photo)
             <div class="@if($key == 0) lg:col-span-2 @endif hidden lg:block rounded-lg">
-                <img
-                    class="rounded-lg lazyload "
-                    style="width: 100%;"
-                    src="{{ static_asset('img/placeholder.jpg') }}"
-                    data-src="{{ uploaded_asset($photo) }}"
-                    onerror="this.onerror=null;this.src='{{ static_asset('img/placeholder.jpg') }}';"
-                >
+               <x-tenant.system.image :image="$photo"></x-tenant.system.image>
             </div>
-
         @endforeach
-
-
-
-
     </div>
 </div>
