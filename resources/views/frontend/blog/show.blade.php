@@ -33,10 +33,10 @@
     <div class="container space-top-2 space-bottom-2">
         <div class="w-lg-60 mx-lg-auto">
             <div class="text-left mb-3">
-                <a class="font-weight-bold" href="{{ route('blog.index') }}">
-                    <i class="las la-angle-left la-sm"></i>
-                    {{ translate('Back to all news') }}
-                </a>
+{{--                <a class="font-weight-bold" href="{{ route('blog.index') }}">--}}
+{{--                    <i class="las la-angle-left la-sm"></i>--}}
+{{--                    {{ translate('Back to all news') }}--}}
+{{--                </a>--}}
             </div>
             <x-blog.news-article-header :blog="$blog"></x-blog.news-article-header>
 
@@ -70,15 +70,6 @@
         {{--            <x-affiliate-banner></x-affiliate-banner>--}}
 
         <!-- CTA Section -->
-            <div class="">
-                <h3>{{ translate('Get the full conference recording') }}</h3>
-                @php
-                    $featured_product = App\Models\Product::find(9);
-                @endphp
-
-                <x-product-list-card :product="$featured_product"></x-product-list-card>
-            </div>
-            <!-- End CTA Section -->
 
         {{--            <x-blog.news-article-subscribe></x-blog.news-article-subscribe>--}}
 
@@ -97,17 +88,4 @@
             <x-blog.news-article-author :blog="$blog"></x-blog.news-article-author>
         </div>
     </div>
-    @guest
-        @php
-            $button_text = 'Register Your Company For Free';
-            $image_source = 'assets/img/img1.jpg';
-            $heading = 'Register to B2BWood';
-            $body = 'Join the global network of verified forestry and wood industry companies, to step into the digital age with B2BWood Club!';
-        @endphp
-        <x-promo-banner :heading="$heading" :body="$body" :buttonText="$button_text" :imageSource="$image_source">
-        </x-promo-banner>
-    @else
-        {{-- TODO: Add related articles by category and date --}}
-    @endguest
-
 @endsection

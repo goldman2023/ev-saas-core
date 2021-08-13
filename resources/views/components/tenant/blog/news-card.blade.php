@@ -1,7 +1,7 @@
 <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
     <div class="flex-shrink-0">
 
-        <x-tenant.system.image :image="$item->banner"></x-tenant.system.image>
+        <x-tenant.system.image class="h-48 w-full object-cover" :image="$item->banner"></x-tenant.system.image>
     </div>
     <div class="flex-1 bg-white p-6 flex flex-col justify-between">
         <div class="flex-1">
