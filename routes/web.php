@@ -1,4 +1,7 @@
 <?php
+
+use App\Http\Controllers\Central\LoginTenantController;
+use App\Http\Controllers\Central\RegisterTenantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/refresh-csrf', function() {
@@ -8,13 +11,14 @@ Route::get('/refresh-csrf', function() {
 
 Route::view('/', 'central.landing')->name('central.landing');
 
-Route::get('/register', 'RegisterTenantController@show')->name('central.tenants.register');
-Route::post('/register/submit', 'RegisterTenantController@submit')->name('central.tenants.register.submit');
+Route::get('/register', [RegisterTenantController::class, 'show'])->name('central.tenants.register');
+Route::post('/register/submit', [RegisterTenantController::class, 'submit'])->name('central.tenants.register.submit');
 
-Route::get('/login', [\App\Http\Controllers\Central\LoginTenantController::class, 'show'])->name('central.tenants.login');
-Route::post('/login/submit', 'LoginTenantController@submit')->name('central.tenants.login.submit');
+Route::get('/login', [LoginTenantController::class, 'show'])->name('central.tenants.login');
+Route::post('/login/submit', [LoginTenantController::class, 'submit'])->name('central.tenants.login.submit');
 
 //Paypal END
+
 // SSLCOMMERZ Start
 Route::get('/sslcommerz/pay', 'PublicSslCommerzPaymentController@index');
 Route::POST('/sslcommerz/success', 'PublicSslCommerzPaymentController@success');

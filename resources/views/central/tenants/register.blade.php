@@ -1,4 +1,5 @@
-@extends('contral.layouts.central')
+@extends('central.layouts.central')
+
 @section('main')
 
 <div>

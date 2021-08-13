@@ -19,8 +19,6 @@ class AppServiceProvider extends ServiceProvider
   {
     Schema::defaultStringLength(191);
     Theme::set('ev-tailwind');
-
-
   }
 
   /**

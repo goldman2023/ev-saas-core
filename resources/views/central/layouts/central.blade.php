@@ -10,8 +10,12 @@
 
 </head>
 <body>
-<div class="container">
-    <h1>Aaa</h1>
+<style>
+    /* TODO: Vukasin put this in a logical place */
+    .container {
+    }
+</style>
+<div class="">
     @yield('main')
 </div>
 </body>
