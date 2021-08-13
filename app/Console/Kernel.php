@@ -30,13 +30,13 @@ class Kernel extends ConsoleKernel
         // I'm adding these commands manually here because they are not added to artisan for whatever reason...
 
         // Octane
-        \Laravel\Octane\Commands\InstallCommand::class,
-        \Laravel\Octane\Commands\ReloadCommand::class,
-        \Laravel\Octane\Commands\StartCommand::class,
-        \Laravel\Octane\Commands\StartRoadRunnerCommand::class,
-        \Laravel\Octane\Commands\StartSwooleCommand::class,
-        \Laravel\Octane\Commands\StatusCommand::class,
-        \Laravel\Octane\Commands\StopCommand::class,
+//        \Laravel\Octane\Commands\InstallCommand::class,
+//        \Laravel\Octane\Commands\ReloadCommand::class,
+//        \Laravel\Octane\Commands\StartCommand::class,
+//        \Laravel\Octane\Commands\StartRoadRunnerCommand::class,
+//        \Laravel\Octane\Commands\StartSwooleCommand::class,
+//        \Laravel\Octane\Commands\StatusCommand::class,
+//        \Laravel\Octane\Commands\StopCommand::class,
 
         // Sail
         \Laravel\Sail\Console\InstallCommand::class,
