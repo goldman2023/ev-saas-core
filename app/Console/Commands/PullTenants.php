@@ -66,7 +66,7 @@ class PullTenants extends FreshCommand
             $tenant = Tenant::find('demo');
 
             if(!empty($tenant)) {
-                DB::statement("DROP DATABASE IF EXISTS ".$tenant->tenancy_db_name); // this is just in case.
+                //DB::statement("DROP DATABASE IF EXISTS ".$tenant->tenancy_db_name); // this is just in case.
 
                 // TODO: Change tenant_id foreign key in domains table to have a RESTRICT onDelete constraint
                 $tenant->domains()->delete(); // Remove domains manually since they should be in RESTRICTED onDelete constraint
