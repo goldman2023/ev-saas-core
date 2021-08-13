@@ -1,21 +1,19 @@
 <?php
 
-namespace App\View\Components\Tenant\Hero;
+namespace App\View\Components\Tenant;
 
 use Illuminate\View\Component;
 
-class SimpleCentered extends Component
+class Footer extends Component
 {
-
-    public $button;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($button = 'Get Started')
+    public function __construct()
     {
-        $this->button = $button;
+        //
     }
 
     /**
@@ -25,6 +23,6 @@ class SimpleCentered extends Component
      */
     public function render()
     {
-        return view('components.tenant.hero.simple-centered');
+        return view('components.tenant.footer');
     }
 }

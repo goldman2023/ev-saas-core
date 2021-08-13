@@ -39,7 +39,7 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-    Route::get('/tenant/info', [EVSaaSController::class, 'info']);
+    Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
     //Home Page
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

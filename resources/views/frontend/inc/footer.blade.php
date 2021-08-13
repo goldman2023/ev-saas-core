@@ -27,7 +27,7 @@
 
                 <ul class="list-unstyled">
                     <li class="mb-1">
-                        {{ translate('Company: UAB B2BWood') }}
+                        {{ translate('Company:') }} {{ get_site_name() }}
                     </li>
 
                     <li class="mb-1">
@@ -72,7 +72,7 @@
             </div>
             <div class="col-lg-3 col-md-3 pt-4">
                 <div class="text-center text-md-left">
-                    
+
                     <h4 class="fs-16 fw-600 text-white">
                         {{ translate('What We Do') }}
                     </h4>
