@@ -837,7 +837,6 @@ if (!function_exists('uploaded_asset')) {
             /* TODO: This is temporary fix */
 
             $file = str_replace('tenancy/assets/', '', $data);
-
             return $file;
         }
         return null;
