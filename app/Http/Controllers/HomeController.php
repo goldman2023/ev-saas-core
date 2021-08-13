@@ -351,7 +351,9 @@ class HomeController extends Controller
 
     public function product(Request $request, $slug)
     {
+        /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         $detailedProduct  = Product::where('slug', $slug)->first();
+        $product  = $detailedProduct;
 
         if ($detailedProduct != null && $detailedProduct->published) {
             //updateCartSetup();
@@ -375,9 +377,9 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
             if ($detailedProduct->digital == 1) {
-                return view('frontend.digital_product_details', compact('detailedProduct'));
+                return view('frontend.digital_product_details', compact('detailedProduct', 'product'));
             } else {
-                return view('frontend.product_details', compact('detailedProduct'));
+                return view('frontend.product.show', compact('detailedProduct', 'product'));
             }
             // return view('frontend.product_details', compact('detailedProduct'));
         }
@@ -444,7 +446,7 @@ class HomeController extends Controller
     public function all_brands(Request $request)
     {
         $categories = Category::all();
-        return view('frontend.all_brand', compact('categories'));
+        return view('frontend.brand.index', compact('categories'));
     }
 
     public function show_product_upload_form(Request $request)
