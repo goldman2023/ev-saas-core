@@ -18,7 +18,7 @@
                                 $target = "_self";
                             @endphp
                             <a href="{{ json_decode(get_setting('header_menu_links'), true)[$key] }}"
-                               class="inline-flex items-center px-1 pt-1 border-b-2 focus:outline-none"
+                               class="inline-flex items-center px-1 pt-1  focus:outline-none"
                                target="{{$target}}">
                                 {{ translate($value) }}
                             </a>

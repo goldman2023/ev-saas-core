@@ -28,12 +28,13 @@
         "sass": "^1.32.1",
         "sass-loader": "^10.1.1",
         "tailwindcss": "^2.2.7",
-        "vue": "^2.6.12",
+        "vue": "^3.*",
         "vue-loader": "^15.9.5",
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
         "@flareapp/flare-client": "^1.0.12",
+        "@headlessui/vue": "^1.4.0",
         "@yaireo/tagify": "^4.1.1",
         "bootstrap-select": "^1.13.18",
         "datatables.net-bs4": "^3.2.2",
