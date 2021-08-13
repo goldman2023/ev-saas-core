@@ -16,12 +16,20 @@
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
-@include('frontend.layouts.navigation')
-<!-- Page Content -->
+    <header>
+        @include('frontend.layouts.navigation')
+
+    </header>
+    <!-- Page Content -->
     <main>
         @yield('content')
     </main>
+
+    <footer>
+        <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
+
+    </footer>
+
 </div>
-<x-tenant.footer></x-tenant.footer>
 </body>
 </html>
