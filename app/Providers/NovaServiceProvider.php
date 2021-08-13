@@ -8,7 +8,7 @@ use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Central\SubscriptionCancelation;
 use App\Nova\Tenant\Post;
 use App\Nova\Tenant\User;
-use App\Tenant;
+use App\Models\Central\Tenant;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Element;
