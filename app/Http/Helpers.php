@@ -833,7 +833,12 @@ if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)
     {
         if (($asset = \App\Models\Upload::find($id)) != null) {
-            return my_asset($asset->file_name);
+            $data = my_asset($asset->file_name);
+            /* TODO: This is temporary fix */
+
+            $file = str_replace('tenancy/assets/', '', $data);
+
+            return $file;
         }
         return null;
     }
