@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 
 use Laravel\Octane\Contracts\OperationTerminated;
@@ -244,3 +245,5 @@ return [
     'max_execution_time' => env('OCTANE_MAX_EXECUTE_TIME', 600), // Default 10 min
 
 ];
+=======
+>>>>>>> task/dynamic-values/main

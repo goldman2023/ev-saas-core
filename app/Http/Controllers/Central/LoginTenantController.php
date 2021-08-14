@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Central;
 
 use App\Http\Controllers\Controller;
-use App\Tenant;
+use App\Models\Central\Tenant;
 use Illuminate\Http\Request;
 
 class LoginTenantController extends Controller
@@ -23,7 +23,7 @@ class LoginTenantController extends Controller
         $tenant = Tenant::where('email', $email = $request->post('email'))->firstOrFail();
 
         return redirect(
-            $tenant->route('tenant.login', ['email' => $email]),
+            $tenant->route('central.tenants.login', ['email' => $email]),
         );
     }
 }

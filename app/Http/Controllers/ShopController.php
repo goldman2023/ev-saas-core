@@ -76,7 +76,8 @@ class ShopController extends Controller
                 $user->email = $request->email;
                 $user->user_type = "seller";
                 $user->phone = $request->phone_number;
-                $news = NewsletterFacade::subscribe($request->email, ['FNAME'=>$request->name, 'LNAME'=>""]);
+//          TODO: Make sure this does not throw error when mailchimp is not setup
+//                $news = NewsletterFacade::subscribe($request->email, ['FNAME'=>$request->name, 'LNAME'=>""]);
                 $user->password = Hash::make($request->password);
                 $user->save();
                 $this->simpleLog("New User Created and Registered to newsletter using email: ".$user->email);
@@ -98,26 +99,7 @@ class ShopController extends Controller
         $seller->save();
 
 
-        /* Assign County Atttibute */
-        $value = AttributeValue::where('values', $request->country)->first();
-        if (!$value) {
-            $attributeValueCountry = new AttributeValue();
-            $attributeValueCountry->attribute_id = 12;
-            $attributeValueCountry->values = $request->country;
-            $attributeValueCountry->save();
-        }
 
-        $value = AttributeValue::where('values', $request->country)->first();
-
-
-        if ($value) {
-            $attribute_relationship_country = new AttributeRelationship;
-            $attribute_relationship_country->subject_type = "App\Models\Seller";
-            $attribute_relationship_country->subject_id = $user->seller->id;
-            $attribute_relationship_country->attribute_id = 12;
-            $attribute_relationship_country->attribute_value_id = $value->id;
-            $attribute_relationship_country->save();
-        }
 
         $user->save();
         if (Shop::where('user_id', $user->id)->first() == null) {

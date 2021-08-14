@@ -15,7 +15,9 @@ use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
+use App\Http\Controllers\Tenant\UserSettingsController;
 use App\Http\Middleware\OwnerOnly;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
@@ -137,7 +139,7 @@ Route::middleware([
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
     Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
-    Route::group(['middleware' => ['user', 'verified', 'unbanned']], function () {
+    Route::group(['middleware' => []], function () {
         Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
         Route::get('/dashboard/thank-you', 'CompanyController@thankYouPage')->name('company.thank-you');
         Route::get('/profile', 'HomeController@profile')->name('profile');
@@ -358,13 +360,13 @@ Route::middleware([
         return UserImpersonation::makeResponse($token);
     })->name('tenant.impersonate');
 
-    Route::get('/settings/user', 'UserSettingsController@show')->name('settings.user');
-    Route::post('/settings/user/personal', 'UserSettingsController@personal')->name('settings.user.personal');
-    Route::post('/settings/user/password', 'UserSettingsController@password')->name('settings.user.password');
+    Route::get('/settings/user', [UserSettingsController::class, 'show'])->name('tenant.settings.user');
+    Route::post('/settings/user/personal', 'UserSettingsController@personal')->name('tenant.settings.user.personal');
+    Route::post('/settings/user/password', 'UserSettingsController@password')->name('tenant.settings.user.password');
 
     Route::middleware(OwnerOnly::class)->group(function () {
-        Route::get('/settings/application', 'ApplicationSettingsController@show')->name('settings.application');
-        Route::post('/settings/application/configuration', 'ApplicationSettingsController@storeConfiguration')->name('settings.application.configuration');
-        Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('invoice.download');
+        Route::get('/settings/application', [ApplicationSettingsController::class, 'show'])->name('tenant.settings.application');
+        Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
+        Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
 });
