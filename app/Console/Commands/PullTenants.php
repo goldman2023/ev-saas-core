@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Tenant;
+use App\Models\Central\Tenant;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Database\Console\Migrations\FreshCommand;
 use Illuminate\Database\Migrations\Migrator;
@@ -74,7 +74,15 @@ class PullTenants extends FreshCommand
             }
 
             // Create "demo" Tenant and it's domain AND Migrate tables. Database creation and migration will take place once Events\TenantCreated is fired!
-            $tenant = Tenant::create(['id' => 'demo', 'tenancy_db_name' => 'demo_tenant']);
+            $tenant = Tenant::create([
+                'id' => 'demo',
+                'tenancy_db_name' => 'demo_tenant',
+                'stripe_id' => '123',
+                'email' => 'demo@example.com',
+                'card_brand' => 'visa',
+                'card_last_four' => '0000',
+                'trial_ends_at' => date('Y-m-d',strtotime('+999 day'))
+            ]);
             $tenant->domains()->create(['domain' => 'demo-ev.localhost']);
 
             $tenant->save();

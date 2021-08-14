@@ -24,6 +24,7 @@
         "intervention/image": "^2.5",
         "iyzico/iyzipay-php": "^2.0.48",
         "laracasts/flash": "^3.0",
+        "laravel/cashier": "^13.4",
         "laravel/framework": "8.*",
         "laravel/nova": "~3.0",
         "laravel/octane": "^1.0",

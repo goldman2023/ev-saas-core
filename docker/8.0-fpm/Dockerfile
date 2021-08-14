@@ -27,7 +27,7 @@ RUN apt-get update \
        php8.0-xml php8.0-zip php8.0-bcmath php8.0-soap \
        php8.0-intl php8.0-readline php8.0-pcov \
        php8.0-msgpack php8.0-igbinary php8.0-ldap \
-       php8.0-redis php8.0-swoole \
+       php8.0-fpm php8.0-redis php8.0-swoole \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs \
@@ -38,6 +38,7 @@ RUN apt-get update \
     && apt-get install -y mysql-client \
     && apt-get install -y postgresql-client \
     && apt-get install -y nano \
+    && apt-get install -y lsof \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -57,7 +58,14 @@ RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
 COPY start-container /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY php.ini /etc/php/8.0/cli/conf.d/99-sail.ini
+COPY php.ini /etc/php/8.0/fpm/conf.d/99-sail.ini
+COPY www.conf /etc/php/8.0/fpm/pool.d/www.conf
 RUN chmod +x /usr/local/bin/start-container
+RUN mkdir /usr/log
+RUN touch /usr/log/www.access.log
+RUN chown -R 1000:$WWWGROUP /usr/log/
+RUN chmod -R 777 /usr/log/
+RUN chown -R 1000:$WWWGROUP /var/www/html/
 
 EXPOSE 9000
 

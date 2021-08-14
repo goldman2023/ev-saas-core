@@ -22,7 +22,7 @@ return [
         'ev-saas.test',
         'app.ev-saas.com',
         '127.0.0.1',
-
+        'localhost'
         /* Production */
     ],
 
