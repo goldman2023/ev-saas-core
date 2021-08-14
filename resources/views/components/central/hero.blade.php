@@ -108,7 +108,7 @@
                             <p class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                                 {{ translate('It was never easier to launch your SaaS Platform. Just register and try it yourself. Demo tells a thousand words, view it here') }}
                             </p>
-                            <p class="mt-8 text-sm text-white uppercase tracking-wide font-semibold sm:mt-10">{{ translate('Powered by') }}</p>
+                            <p class="mt-8 text-sm text-white uppercase tracking-wide font-semibold sm:mt-10">{{ translate('Powered byphp arr') }}</p>
                             <div class="mt-5 w-full sm:mx-auto sm:max-w-lg lg:ml-0">
                                 <div class="flex flex-wrap items-start justify-between">
                                     <div class="flex justify-center px-1">
