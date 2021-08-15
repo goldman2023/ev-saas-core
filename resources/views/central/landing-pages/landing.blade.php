@@ -28,4 +28,7 @@
     </div>
 
     </div>
+
+
+{{--    <x-tenant.banners.floating-at-bottom></x-tenant.banners.floating-at-bottom>--}}
 @endsection
