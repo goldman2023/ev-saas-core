@@ -27,7 +27,7 @@
         echo get_setting('header_script');
     @endphp
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 <div class="min-h-screen">
     <header>
         @include('frontend.layouts.navigation')

@@ -1,9 +1,9 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
-<nav class="relative bg-white" x-data="{ open_mobile: false }" >
+<nav class="relative bg-white" x-data="{ open_mobile: false }" @main-navigation-dropdown-hide.window="open_mobile = false">
     <div class="flex justify-between items-center px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
         <div>
             <a href="{{ route('home') }}" class="flex">
-                <x-application-logo class="block w-auto h-10 text-gray-600 fill-current"/>
+                <x-application-logo class="block w-auto h-[50px] text-gray-600 fill-current"/>
             </a>
         </div>
         <div class="-mr-2 -my-2 md:hidden">
@@ -18,7 +18,7 @@
         </div>
         <div class="hidden md:flex-1 md:flex md:items-center md:justify-between">
             <nav class="flex space-x-10">
-                <div class="relative" x-data="{open:false}">
+                <div class="relative" x-data="{open:false}" @main-navigation-dropdown-hide.window="open = false" @click.away="open = false">
                     <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
                     <button type="button" class="group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none " aria-expanded="false"
                          :class="{ 'text-gray-900': open, 'text-gray-500': !open }" @click="open = !open">
@@ -110,7 +110,7 @@
                 </a>
 
 
-                <div class="relative" x-data="{open:false}">
+                <div class="relative" x-data="{open:false}" @main-navigation-dropdown-hide.window="open = false" @click.away="open = false">
                     <!-- Item active: "text-gray-900", Item inactive: "text-gray-500" -->
                     <button type="button" class="text-gray-500 group bg-white rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none" aria-expanded="false"
                             :class="{ 'text-gray-900': open, 'text-gray-500': !open }" @click="open = !open">
@@ -207,7 +207,7 @@
         From: "opacity-100 scale-100"
         To: "opacity-0 scale-95"
     -->
-    <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+    <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-50"
          x-show="open_mobile"
          x-transition:enter="duration-200 ease-out"
          x-transition:enter-start="opacity-0 scale-95"
