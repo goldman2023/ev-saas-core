@@ -31,6 +31,7 @@ class RegisterTenantController extends Controller
         unset($data['domain']);
 
         $tenant = (new CreateTenantAction)($data, $domain);
+
         // We impersonate user with id 1. This user will be created by the CreateTenantAdmin job.
         return redirect($tenant->impersonationUrl(1));
     }

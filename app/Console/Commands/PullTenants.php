@@ -84,7 +84,7 @@ class PullTenants extends FreshCommand
                 'card_last_four' => '0000',
                 'trial_ends_at' => date('Y-m-d',strtotime('+999 day'))
             ]);
-            $tenant->domains()->create(['domain' => 'demo-ev.localhost']);
+            $tenant->domains()->create(['domain' => 'demo-ev.localhost', 'theme' => 'ev-tailwind']);
 
             $tenant->save();
 
