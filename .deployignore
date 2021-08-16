@@ -1,0 +1,6 @@
+vendor/
+tests/
+node_modules/
+docker/
+cypress/
+.git/
