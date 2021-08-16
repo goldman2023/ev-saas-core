@@ -17,11 +17,11 @@ class CreateTenantAction
     public function __invoke(array $data, string $domain, bool $createStripeCustomer = true): Tenant
     {
         $tenant = Tenant::create($data + [
-                'ready' => false,
-                'trial_ends_at' => now()->addDays(config('saas.trial_days')),
-            ]);
+            'ready' => false,
+            'trial_ends_at' => now()->addDays(config('saas.trial_days')),
+        ]);
 
-        $tenant->domains()->create(['domain' => $domain,]);
+        $tenant->domains()->create(['domain' => $domain, 'theme' => 'ev-tailwind']); // Set default theme to: ev-tailwind
 
         $tenant->save();
 
