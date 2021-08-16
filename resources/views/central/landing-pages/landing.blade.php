@@ -18,7 +18,8 @@
         <x-tenant.stats.split-with-image></x-tenant.stats.split-with-image>
     </div>
     <div class="container mx-auto">
-        <x-tenant.cta.brand-panel-with-app-screenshot></x-tenant.cta.brand-panel-with-app-screenshot>
+<!--   TODO: Some issue with name while using CTA in php artisan make:component CTA      -->
+{{--        <x-tenant.cta.brand-panel-with-app-screenshot></x-tenant.cta.brand-panel-with-app-screenshot>--}}
     </div>
 
 
