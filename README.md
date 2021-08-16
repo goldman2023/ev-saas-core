@@ -10,6 +10,15 @@ A complete solution for E-commerce Business with exclusive features & super resp
 * run `php artisan serve --host=tenant.localhost` - tenant application, see docs regarding adding the local domains on your system
 
 
+#local setup for assets
+In case you running into issues with wcompile permissions run
+`chmod 777 wcompile.sh`
+
+To download dependecies and build assets:
+* `yarn install`
+* `yarn dev`
+
+
 **Project URL:**
 
 https://ev-saas.com

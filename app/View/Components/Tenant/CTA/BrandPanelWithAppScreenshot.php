@@ -23,6 +23,6 @@ class BrandPanelWithAppScreenshot extends Component
      */
     public function render()
     {
-        return view('components.tenant.c-t-a.brand-panel-with-app-screenshot');
+        return view('components.tenant.cta.brand-panel-with-app-screenshot');
     }
 }

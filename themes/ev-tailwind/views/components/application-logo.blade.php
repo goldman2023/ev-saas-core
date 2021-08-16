@@ -1,4 +1,4 @@
-<div class="block w-50px mh-10 text-gray-600 fill-current">
+<div class="block w-[50px] mh-10 text-gray-600 fill-current">
     @php
         $header_logo = get_setting('header_logo');
     @endphp

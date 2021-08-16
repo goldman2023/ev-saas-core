@@ -1,10 +1,9 @@
 const mix = require('laravel-mix');
-
-require(`${__dirname}/themes/ev-tailwind/webpack.mix.js`);
+const path = require("path");
 
 /*
  |--------------------------------------------------------------------------
- | Mix Asset Management
+ | Mix Asset Management for CENTRAL APP and ADMIN DASHBOARD
  |--------------------------------------------------------------------------
  |
  | Mix provides a clean, fluent API for defining some Webpack build steps
@@ -13,18 +12,21 @@ require(`${__dirname}/themes/ev-tailwind/webpack.mix.js`);
  |
  */
 
-mix.js('resources/js/app.js', 'public/js').vue()
-   .sass('resources/sass/app.scss', 'public/css')
-
-
-/* Minimal dependency requirements for public parts of the website */
-mix.scripts([
-    'resources/js/vendor/vendors.js',
-    'resources/js/vendor/aiz-core.js',
-], 'public/assets/js/vendors.js');
-
-
-mix.scripts([
-    'resources/js/flare.js',
-], 'public/assets/js/flare.js');
-
+mix.setPublicPath("public")
+    .js('resources/js/app.js', 'public/js').vue().version()
+    .sass('resources/scss/app.scss', 'public/css').version()
+    /* Minimal dependency requirements for public parts of the CENTRAL EV-SAAS app AND Tenants Dashboards! */
+    .scripts([
+        'resources/js/vendor/intlTelutils.js',
+        'resources/js/vendor/aiz-core.js',
+    ], 'public/js/vendors.js').version()
+    .scripts([
+        'resources/js/flare.js',
+    ], 'public/js/flare.js').version()
+    .webpackConfig({
+        resolve: {
+            alias: {
+                '@': path.resolve('./resources'),
+            },
+        }
+    });

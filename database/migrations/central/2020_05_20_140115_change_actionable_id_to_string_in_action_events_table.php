@@ -13,11 +13,11 @@ class ChangeActionableIdToStringInActionEventsTable extends Migration
      */
     public function up()
     {
-//        Schema::table('action_events', function (Blueprint $table) {
-//            $table->string('actionable_id')->change();
-//            $table->string('target_id')->change();
-//            $table->string('model_id')->change();
-//        });
+        /*Schema::table('action_events', function (Blueprint $table) {
+            $table->string('actionable_id')->change();
+            $table->string('target_id')->change();
+            $table->string('model_id')->change();
+        });*/
     }
 
     /**
@@ -27,10 +27,10 @@ class ChangeActionableIdToStringInActionEventsTable extends Migration
      */
     public function down()
     {
-//        Schema::table('action_events', function (Blueprint $table) {
-//            $table->unsignedBigInteger('actionable_id')->change();
-//            $table->unsignedBigInteger('target_id')->change();
-//            $table->unsignedBigInteger('model_id')->change();
-//        });
+        /*Schema::table('action_events', function (Blueprint $table) {
+            $table->unsignedBigInteger('actionable_id')->change();
+            $table->unsignedBigInteger('target_id')->change();
+            $table->unsignedBigInteger('model_id')->change();
+        });*/
     }
 }

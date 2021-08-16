@@ -18,6 +18,12 @@ class CreateTenantsTable extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->string('id')->primary();
 
+            if(config('database.default') === 'pgsql') {
+                $table->jsonb('data')->nullable();
+            } else {
+                $table->json('data')->nullable();
+            }
+
             $table->string('email')->unique();
 
             $table->string('stripe_id')->nullable()->index();
@@ -26,7 +32,6 @@ class CreateTenantsTable extends Migration
             $table->timestamp('trial_ends_at')->nullable();
             // your custom columns may go here
             $table->timestamps();
-            $table->json('data')->nullable();
         });
     }
 

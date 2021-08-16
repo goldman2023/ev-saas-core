@@ -12,28 +12,25 @@
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ static_asset('css/app.css', 'themes/ev-tailwind') }}">
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
 
     <!-- Scripts -->
-    <script src="{{ static_asset('js/app.js', 'themes/ev-tailwind') }}" defer></script>
+    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
 
     {{ seo()->render() }}
 
-<!-- Favicon -->
+    <!-- Favicon -->
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
     @php
         echo get_setting('header_script');
     @endphp
 </head>
-<body class="font-sans antialiased">
-<div class="min-h-screen bg-gray-100">
+<body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
+<div class="min-h-screen">
     <header>
         @include('frontend.layouts.navigation')
-
     </header>
     <!-- Page Content -->
     <main>
@@ -42,7 +39,6 @@
 
     <footer>
         <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
-
     </footer>
 
 </div>

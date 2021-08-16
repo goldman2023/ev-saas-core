@@ -887,10 +887,7 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-        $root = (isHttps() ? "https://" : "http://") . $_SERVER['HTTP_HOST'];
-        $root .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-
-        return $root;
+        return config('app.url');
     }
 }
 

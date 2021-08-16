@@ -49,6 +49,7 @@
         "spatie/laravel-backup": "^6.16",
         "spatie/laravel-newsletter": "^4.10",
         "spatie/laravel-sluggable": "^2.6",
+        "spatie/once": "^3.0",
         "spatie/schema-org": "^3.4",
         "stancl/tenancy": "^3.4",
         "stripe/stripe-php": "^7.83.0",

@@ -14,7 +14,8 @@ class AddTextListAndWysiwygAttributeTypeToAttributesTable extends Migration
     public function up()
     {
         Schema::table('attributes', function (Blueprint $table) {
-            DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'number', 'date', 'text_list', 'wysiwyg')");
+            // TODO: fix this one up :) Don't use vanilla SQL statements
+            //DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'number', 'date', 'text_list', 'wysiwyg')");
         });
     }
 

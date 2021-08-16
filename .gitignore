@@ -9,6 +9,7 @@
 /public/assets/css
 !/public/assets/img/*
 /public/css
+/public/themes
 /storage/*.key
 /vendor
 /temp
