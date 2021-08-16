@@ -19,6 +19,9 @@ scripts:
   node-setup-prod:
     - kool run yarn install --frozen-lockfile
     - kool run yarn prod
+  node-setup-dev:
+    - kool run yarn install --frozen-lockfile
+    - kool run yarn dev
   node-setup-watch:
     - kool run yarn install --frozen-lockfile
     - kool run yarn watch
