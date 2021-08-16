@@ -27,7 +27,7 @@ class RegisterTenantController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $domain = $data['domain'] . env('DEFAULT_CENTRAL_DOMAIN', 'ev-saas.com');
+        $domain = $data['domain'] . '.' . env('DEFAULT_CENTRAL_DOMAIN', 'ev-saas.com');
         unset($data['domain']);
 
         $tenant = (new CreateTenantAction)($data, $domain);
