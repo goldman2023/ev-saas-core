@@ -108,19 +108,43 @@
                             <p class="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
                                 {{ translate('It was never easier to launch your SaaS Platform. Just register and try it yourself. Demo tells a thousand words, view it here') }}
                             </p>
-                            <p class="mt-8 text-sm text-white uppercase tracking-wide font-semibold sm:mt-10">{{ translate('Powered byphp arr') }}</p>
-                            <div class="mt-5 w-full sm:mx-auto sm:max-w-lg lg:ml-0">
-                                <div class="flex flex-wrap items-start justify-between">
+
+                            <div class="mt-10">
+                                <button type="button" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Try it live
+                                    <!-- Heroicon name: solid/mail -->
+                                    <svg class="ml-3 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                    </svg>
+                                </button>
+
+                                <button type="button" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-5">
+                                    Book a Demo
+                                    <!-- Heroicon name: solid/mail -->
+                                    <svg class="ml-3 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <p class="mt-8 text-lg text-white uppercase tracking-wide font-semibold sm:mt-10">
+                                {{ translate('Powerful integrations') }}
+                            </p>
+                            <div class="mt-5 w-full sm:mx-auto  lg:ml-0">
+                                <div class="flex  items-start justify-between">
                                     <div class="flex justify-center px-1">
-                                        <img class="h-9 sm:h-10" src="https://tailwindui.com/img/logos/tuple-logo-gray-400.svg" alt="Tuple">
+                                        <img class="h-9 sm:h-20" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png" alt="Tuple">
                                     </div>
                                     <div class="flex justify-center px-1">
-                                        <img class="h-9 sm:h-10" src="https://tailwindui.com/img/logos/workcation-logo-gray-400.svg" alt="Workcation">
+                                        <img class="h-9 sm:h-20" src="https://logos-world.net/wp-content/uploads/2021/06/Calendly-Logo.png" alt="Calendly">
                                     </div>
                                     <div class="flex justify-center px-1">
-                                        <img class="h-9 sm:h-10" src="https://tailwindui.com/img/logos/statickit-logo-gray-400.svg" alt="StaticKit">
+                                        <img class="h-9 sm:h-10  mt-5 w-auto" src="https://www.pngkit.com/png/full/429-4297456_mail-chimp-logo-white-mailchimp.png" alt="Mailchimp">
                                     </div>
                                 </div>
+                                <span class="text-white opacity-80">* Custom integrations available</span>
                             </div>
                         </div>
                     </div>
