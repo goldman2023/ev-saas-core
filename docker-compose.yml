@@ -1,74 +1,75 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    app:
-        build:
-            context: ./docker/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.0/app
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
-        ports:
-          - '9501:9501'
-        volumes:
-            - '.:/var/www/html'
-        networks:
-            - sail
-        depends_on:
-            - pgsql
+  app:
+    build:
+      context: ./docker/8.0-octane
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    image: sail-8.0/app
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_SAIL: 1
+    ports:
+      - '9501:9501'
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - sail
+    depends_on:
+      - pgsql
 
-    pgsql:
-        image: 'postgres'
-        ports:
-            - '${DB_DOCKER_PORT_EXTERNAL:-5432}:5432'
-        environment:
-            PGUSER: '${DB_USERNAME:-postgres}'
-            PGPASSWORD: '${DB_PASSWORD:-123456}'
-            POSTGRES_DB: '${DB_DATABASE:-evsaas}'
-            POSTGRES_USER: '${DB_USERNAME:-postgres}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD:-123456}'
-        volumes:
-            - 'sailpgsql:/var/lib/postgresql/data'
-        networks:
-            - sail
-        healthcheck:
-          test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
-          retries: 3
-          timeout: 5s
+  pgsql:
+    image: 'postgres'
+    ports:
+      - '${DB_DOCKER_PORT_EXTERNAL:-5432}:5432'
+    environment:
+      PGUSER: '${DB_USERNAME:-postgres}'
+      PGPASSWORD: '${DB_PASSWORD:-123456}'
+      POSTGRES_DB: '${DB_DATABASE:-evsaas}'
+      POSTGRES_USER: '${DB_USERNAME:-postgres}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-123456}'
+    volumes:
+      - 'sailpgsql:/var/lib/postgresql/data'
+    networks:
+      - sail
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+      retries: 3
+      timeout: 5s
 
-    cache:
-      image: 'redis:alpine'
-      ports:
-        - '${FORWARD_REDIS_PORT:-6379}:6379'
-      volumes:
-        - 'sailredis:/data'
-      networks:
-        - sail
-      healthcheck:
-        test: [ "CMD", "redis-cli", "ping" ]
-        retries: 3
-        timeout: 5s
+  cache:
+    image: 'redis:alpine'
+    ports:
+      - '${FORWARD_REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'sailredis:/data'
+    networks:
+      - sail
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      retries: 3
+      timeout: 5s
 
-    nginx:
-      depends_on:
-        - app
-      image: nginx:alpine
-      ports:
-        - 80:80
-        - 443:443
-      networks:
-        - sail
-      volumes:
-        - ./docker/nginx:/etc/nginx/conf.d/
+#  nginx:
+#    depends_on:
+#      - app
+#    image: nginx:alpine
+#    ports:
+#      - 80:80
+#      - 443:443
+#    networks:
+#      - sail
+#    volumes:
+#      - ./docker/nginx/default-octane.conf:/etc/nginx/conf.d/default.conf
+#      - ./docker/nginx/ssl:/etc/nginx/conf.d/
 
 networks:
-    sail:
-        driver: bridge
+  sail:
+    driver: bridge
 volumes:
-    sailpgsql:
-        driver: local
-    sailredis:
-      driver: local
+  sailpgsql:
+    driver: local
+  sailredis:
+    driver: local

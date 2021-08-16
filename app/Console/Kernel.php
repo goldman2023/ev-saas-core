@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         \Stancl\Tenancy\Commands\Seed::class,
         \Qirolab\Theme\Commands\MakeThemeCommand::class,
 
+
         // For some very weird reason some commands from few packages are not added to artisan even though there is no error in code nor in logs
         // They also seem properly resolved through package ServiceProviders, but still...they are not visible when running: php artisan list
         // Examples: php artisan octane:{start:install:stop...etc} or php artisan sail:{install, publish} are returning following error pattern:
