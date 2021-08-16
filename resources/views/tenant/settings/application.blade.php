@@ -98,8 +98,8 @@
                 <div class="mt-4 md:mt-0 w-full md:w-2/3 pl-0 md:pl-2">
                     @livewire('subscription-banner')
                     @livewire('upcoming-payment')
-                    @livewire('billing-address')
-                    @livewire('invoices')
+{{--                    @livewire('billing-address')--}}
+{{--                    @livewire('invoices')--}}
                     @livewire('subscription-plan')
                     @livewire('payment-method')
                 </div>
