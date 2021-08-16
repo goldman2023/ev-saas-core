@@ -52,9 +52,9 @@ scripts:
     - php artisan key:generate
     - php artisan config:cache
     - composer install
-    - kool run up-fpm
+    - kool run up
     - kool run artisan nova:install
-    - kool run artisan migrate:fresh --path=/database/migrations/central  # Migrate Central app DB
+    - kool run artisan migrate:fresh --path=/database/migrations/central --seed # Migrate Central app DB
     #- kool run artisan migrate --path=/database/migrations/tenant --seed # Migrate Central app DB (we should fix this up by cherry-picking necessary tables, like languages etc. for central app)
     - kool run artisan tenants:pull --type=demo
     - kool run artisan config:cache
