@@ -18,13 +18,12 @@ return [
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
     'central_domains' => [
-        'main' => env('default_central_domain', 'ev-saas.com'),
-
+        'main' => env('DEFAULT_CENTRAL_DOMAIN', 'ev-saas.com'),
         'ev-saas.com',
         'ev-saas.test',
-        'localhost',
         '127.0.0.1',
         'app.ev-saas.com',
+        'localhost',
         /* Production */
     ],
 
