@@ -28,8 +28,5 @@
         <x-tenant.footer.simple-centered></x-tenant.footer.simple-centered>
     </div>
 
-    </div>
-
-
 {{--    <x-tenant.banners.floating-at-bottom></x-tenant.banners.floating-at-bottom>--}}
 @endsection
