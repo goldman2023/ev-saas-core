@@ -1,4 +1,6 @@
 const mix = require("laravel-mix");
+const tailwindcss = require('tailwindcss');
+const path = require("path");
 
 /*
  |--------------------------------------------------------------------------
@@ -10,9 +12,19 @@ const mix = require("laravel-mix");
  | file for the application as well as bundling up all the JS files.
  |
  */
- 
- 
-mix.setPublicPath("public/themes/ev-saas-default")
-    .js(`${__dirname}/js/app.js`, "js")
-    .vue()
-    .sass(`${__dirname}/sass/app.scss`, "css");
+
+// NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
+// That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
+let theme = 'ev-saas-default';
+
+mix.setPublicPath(`public/themes/${theme}`)
+    .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
+    .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).version()
+    .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
+    .webpackConfig({
+        resolve: {
+            alias: {
+                '@': path.resolve(`themes/${theme}`),
+            },
+        }
+    });
