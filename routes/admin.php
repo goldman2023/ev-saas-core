@@ -320,7 +320,7 @@ Route::middleware([
         Route::view('/system/server-status', 'backend.system.server_status')->name('system_server');
 
         // uploaded files
-        Route::get('/uploaded-files/file-info', 'AizUploadController@file_info')->name('uploaded-files.info');
+        Route::any('/uploaded-files/file-info', 'AizUploadController@file_info')->name('uploaded-files.info');
         Route::resource('uploaded-files', 'AizUploadController')->parameters([
             'uploaded-files' => 'id',
         ])->except(['destroy']);
