@@ -18,10 +18,27 @@ To download dependecies and build assets:
 * `yarn install`
 * `yarn dev`
 
+After creating new tenant on local version: `127.0.0.1:8000`
+
+You should see in central app database table `tenants` new row with details
+
+And in `domains` table , you should see added domain details. 
+
+* You might need to edit it manually to fit your local setup.
+* You need to modify your hosts file by running `sudo nano /etc/hosts`
+* You need to run another `php artisan serve --host=test.localhost` process with your desired domain name
+
+#Routing
+All tenant routes should be located in `routes/tenant.php` 
+All Central app routes should be located in `routes/web.php`
+
+#Filesystem
+In config you need to define `FILESYSTEM_DRIVER` to `s3` , but it's actually using DigitalOcean Spaces
+Access Details can be found in `.env.example` file
 
 **Project URL:**
 
-https://ev-saas.com
+https://app.ev-saas.com
 
 ## Documentation:
 https://docs.ev-saas/

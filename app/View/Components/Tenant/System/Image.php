@@ -7,15 +7,16 @@ use Illuminate\View\Component;
 class Image extends Component
 {
 
-    public int $image;
+    public $image;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(int $image)
+    public function __construct($image)
     {
         //
+
         $this->image = $image;
     }
 

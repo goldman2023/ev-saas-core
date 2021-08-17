@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Response;
 use Auth;
 use Image;
+use File;
 
 class AizUploadController extends Controller
 {
@@ -120,8 +121,21 @@ class AizUploadController extends Controller
                     $tenant_path = tenant('id');
                 }
 
+                $uploads_path = public_path('uploads/');
 
-                $response = Storage::makeDirectory('uploads/' .$tenant_path);
+
+                // Check if uploads folder exist
+                if(!File::isDirectory($uploads_path)){
+                    File::makeDirectory($uploads_path, 0777, true, true);
+                }
+
+                // Check if tenant uploads folder exists an create it
+                $path = public_path('uploads/' . $tenant_path);
+
+                if(!File::isDirectory($path)){
+                    File::makeDirectory($path, 0777, true, true);
+                }
+                $response = Storage::makeDirectory('public/uploads/' .$tenant_path);
                 $path = $request->file('aiz_file')->store('uploads/' . $tenant_path, 'local');
 
 
@@ -155,7 +169,7 @@ class AizUploadController extends Controller
                 if (env('FILESYSTEM_DRIVER') == 's3') {
                     $file_path = file_get_contents(base_path('public/').$path);
 
-                    $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path));
+                    $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path), 'public');
 
 
 
