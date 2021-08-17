@@ -155,7 +155,7 @@ class AizUploadController extends Controller
                 if (env('FILESYSTEM_DRIVER') == 's3') {
                     $file_path = file_get_contents(base_path('public/').$path);
 
-                    $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path));
+                    $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path), 'public');
 
 
 
