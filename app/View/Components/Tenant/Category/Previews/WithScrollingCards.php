@@ -2,10 +2,12 @@
 
 namespace App\View\Components\Tenant\Category\Previews;
 
+use App\Models\Category;
 use Illuminate\View\Component;
 
 class WithScrollingCards extends Component
 {
+    public $categories;
     /**
      * Create a new component instance.
      *
@@ -14,6 +16,7 @@ class WithScrollingCards extends Component
     public function __construct()
     {
         //
+        $this->categories = Category::where('level', 0)->get();
     }
 
     /**
