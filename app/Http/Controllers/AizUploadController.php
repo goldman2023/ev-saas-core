@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Upload;
+use Illuminate\Support\Facades\Storage;
 use Response;
 use Auth;
-use Storage;
 use Image;
 
 class AizUploadController extends Controller
@@ -110,7 +110,21 @@ class AizUploadController extends Controller
                     }
                 }
 
-                $path = $request->file('aiz_file')->store('uploads/all', 'local');
+
+                $tenant_path = 'all';
+
+                if(tenant('id')) {
+                    $data = tenant('id');
+//                    return response()->json($data, 200);
+
+                    $tenant_path = tenant('id');
+                }
+
+
+                $response = Storage::makeDirectory('uploads/' .$tenant_path);
+                $path = $request->file('aiz_file')->store('uploads/' . $tenant_path, 'local');
+
+
                 $size = $request->file('aiz_file')->getSize();
 
                 if($type[$extension] == 'image' && get_setting('disable_image_optimization') != 1){
@@ -131,14 +145,22 @@ class AizUploadController extends Controller
                         clearstatcache();
                         $size = $img->filesize();
 
-                        /* TODO: Figure out the s3 and DO for tenants */
-                        if (env('FILESYSTEM_DRIVER') == 's3') {
-                            Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path));
-                            unlink(base_path('public/').$path);
-                        }
+
                     } catch (\Exception $e) {
                         //dd($e);
                     }
+                }
+
+                /* TODO: Figure out the s3 and DO for tenants */
+                if (env('FILESYSTEM_DRIVER') == 's3') {
+                    $file_path = file_get_contents(base_path('public/').$path);
+
+                    $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path));
+
+
+
+
+                    unlink(base_path('public/').$path);
                 }
 
                 $upload->extension = $extension;
