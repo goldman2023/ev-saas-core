@@ -32,10 +32,15 @@
 -->
     <div class="relative min-h-screen bg-gray-100">
         <main class="pt-10 pb-8">
+            <div class="max-w-xl"></div>
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h1 class="sr-only">Profile</h1>
                 <!-- Main 3 column grid -->
-                <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-3 lg:gap-8">
+                <div class="grid grid-cols-1 gap-4 items-start lg:grid-cols-4 lg:gap-8">
+                    <div class="grid grid-cols-1 gap-1">
+                        <x-tenant.dashboard.user-menu></x-tenant.dashboard.user-menu>
+                    </div>
+
                     <!-- Left column -->
                     <div class="grid grid-cols-1 gap-4 lg:col-span-2">
                         <!-- Welcome panel -->
@@ -426,11 +431,5 @@
                 </div>
             </div>
         </main>
-        <footer>
-            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-7xl">
-                <div class="border-t border-gray-200 py-8 text-sm text-gray-500 text-center sm:text-left"><span class="block sm:inline">&copy; 2021 Tailwind Labs Inc.</span> <span class="block sm:inline">All rights reserved.</span></div>
-            </div>
-        </footer>
     </div>
-
 @endsection

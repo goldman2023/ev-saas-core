@@ -65,7 +65,7 @@ module.exports = {
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
         require('tailwindcss-pseudo-elements'),
-        
+
         plugin(function({ addUtilities }) {
             // Add new classes if needed
         }),
