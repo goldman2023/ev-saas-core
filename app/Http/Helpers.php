@@ -887,7 +887,9 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-        return config('app.url');
+       return  route('home');
+
+//        return config('app.url');
     }
 }
 
@@ -896,6 +898,8 @@ if (!function_exists('getFileBaseURL')) {
     function getFileBaseURL()
     {
         if (env('FILESYSTEM_DRIVER') == 's3') {
+            return env('DIGITALOCEAN_SPACES_ENDPOINT') . '/';
+            /* TODO: Refactor this to support S3 AND Digital Ocean, right now digital ocean is used */
             return env('AWS_URL') . '/';
         } else {
             return getBaseURL();

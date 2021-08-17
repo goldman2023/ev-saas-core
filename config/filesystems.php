@@ -57,21 +57,21 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-
-        's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
-        ],
         'google' => [
             'driver' => 'google',
             'clientId' => env('GOOGLE_DRIVE_CLIENT_ID'),
             'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET'),
             'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
             'folderId' => env('GOOGLE_DRIVE_FOLDER_ID'),
+        ],
+        /* It's digital ocean spaces bucket running on S3 Driver */
+        's3' => [
+            'driver' => 's3',
+            'key' => env('DIGITALOCEAN_SPACES_KEY'),
+            'secret' => env('DIGITALOCEAN_SPACES_SECRET'),
+            'endpoint' => env('DIGITALOCEAN_SPACES_ENDPOINT'),
+            'region' => env('DIGITALOCEAN_SPACES_REGION'),
+            'bucket' => env('DIGITALOCEAN_SPACES_BUCKET'),
         ],
 
     ],
