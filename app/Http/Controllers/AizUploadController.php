@@ -121,6 +121,15 @@ class AizUploadController extends Controller
                     $tenant_path = tenant('id');
                 }
 
+                $uploads_path = public_path('uploads/');
+
+
+                // Check if uploads folder exist
+                if(!File::isDirectory($uploads_path)){
+                    File::makeDirectory($uploads_path, 0777, true, true);
+                }
+
+                // Check if tenant uploads folder exists an create it
                 $path = public_path('uploads/' . $tenant_path);
 
                 if(!File::isDirectory($path)){
