@@ -179,10 +179,15 @@ class ProductController extends Controller
         $product->stock_visibility_state = $request->stock_visibility_state;
 
         $tags = array();
-        if($request->tags[0] != null){
-            foreach (json_decode($request->tags[0]) as $key => $tag) {
-                array_push($tags, $tag->value);
+
+        if($request->tags){
+            $tagsData = json_decode($request->tags[0]);
+            if(is_array($tagsData)) {
+                foreach ($tagsData as $key => $tag) {
+                    array_push($tags, $tag->value);
+                }
             }
+
         }
         $product->tags = implode(',', $tags);
 
@@ -468,11 +473,17 @@ class ProductController extends Controller
         $product->stock_visibility_state = $request->stock_visibility_state;
 
         $tags = array();
-        if($request->tags[0] != null){
-            foreach (json_decode($request->tags[0]) as $key => $tag) {
-                array_push($tags, $tag->value);
+        
+        if($request->tags){
+            $tagsData = json_decode($request->tags[0]);
+            if(is_array($tagsData)) {
+                foreach ($tagsData as $key => $tag) {
+                    array_push($tags, $tag->value);
+                }
             }
+
         }
+
         $product->tags           = implode(',', $tags);
 
         $product->video_provider = $request->video_provider;

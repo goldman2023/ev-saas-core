@@ -17,14 +17,14 @@ const path = require("path");
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
 let theme = 'ev-saas-default';
 
-mix.setPublicPath(`public/themes/${theme}`)
-    .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
-    .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).version()
-    .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
-    .webpackConfig({
-        resolve: {
-            alias: {
-                '@': path.resolve(`themes/${theme}`),
-            },
-        }
-    });
+// mix.setPublicPath(`public/themes/${theme}`)
+//     .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
+//     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).version()
+//     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
+//     .webpackConfig({
+//         resolve: {
+//             alias: {
+//                 '@': path.resolve(`themes/${theme}`),
+//             },
+//         }
+//     });
