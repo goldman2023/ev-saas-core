@@ -1,7 +1,3 @@
-@owner
-<liwire:image-edit id="something" :image="$image"></liwire:image-edit>
-<liwire:label-edit :label="$label"></liwire:label-edit>
-<liwire:button-edit :label="$button"></liwire:button-edit>
 <img
     {{ $attributes->merge(['class' => 'lazyload ']) }}
     src="{{ uploaded_asset($image) }}"
@@ -14,4 +10,3 @@ and add job to queue to generate such version.
 Image size can be different for mobile,desktop/etc, different in different components.
 -->
 
-@endowner

@@ -395,8 +395,10 @@
                         @endif
                         {{ $title }}
 
-                        <x-tenant.system.image class="max-h-12 d-inline ml-3"
-                                               :image="App\Models\Brand::find($brand_id)->logo"></x-tenant.system.image>
+                        @if(App\Models\Brand::find($brand_id))
+                            <x-tenant.system.image class="max-h-12 d-inline ml-3"
+                                                   :image="App\Models\Brand::find($brand_id)->logo"></x-tenant.system.image>
+                        @endif
                     </h1>
 
                     <div class="flex items-center">
