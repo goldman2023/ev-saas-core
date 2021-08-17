@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Response;
 use Auth;
 use Image;
+use File;
 
 class AizUploadController extends Controller
 {
@@ -120,8 +121,12 @@ class AizUploadController extends Controller
                     $tenant_path = tenant('id');
                 }
 
+                $path = public_path('uploads/' . $tenant_path);
 
-                $response = Storage::makeDirectory('uploads/' .$tenant_path);
+                if(!File::isDirectory($path)){
+                    File::makeDirectory($path, 0777, true, true);
+                }
+                $response = Storage::makeDirectory('public/uploads/' .$tenant_path);
                 $path = $request->file('aiz_file')->store('uploads/' . $tenant_path, 'local');
 
 
