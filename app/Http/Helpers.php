@@ -887,7 +887,7 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-       return  route('home');
+       return  secure_url('/');
 
 //        return config('app.url');
     }
