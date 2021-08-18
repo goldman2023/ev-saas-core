@@ -13,6 +13,13 @@
                 </div>
             </div>
             <x-tenant.product-list></x-tenant.product-list>
+            <x-tenant.product.reviews.show-reviews></x-tenant.product.reviews.show-reviews>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script type="text/javascript">
+        console.log("wahaahahahahahahahah")
+    </script>
 @endsection
