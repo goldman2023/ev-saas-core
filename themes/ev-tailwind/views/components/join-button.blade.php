@@ -1,7 +1,7 @@
 <div class="flex items-center">
     @guest
         <a href="{{ route('shops.create') }}"
-           class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+           class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 {{ $class }}">
             {{ translate('Register') }}
             <i class="la la-angle-right "></i>
         </a>

@@ -90,6 +90,7 @@ Route::middleware([
         Route::post('/business-settings/update', 'BusinessSettingsController@update')->name('business_settings.update');
         Route::post('/business-settings/update/activation', 'BusinessSettingsController@updateActivationSettings')->name('business_settings.update.activation');
         Route::get('/general-setting', 'BusinessSettingsController@general_setting')->name('general_setting.index');
+        Route::get('/checkout-flow', 'BusinessSettingsController@checkout_flow')->name('checkout_flow.index');
         Route::get('/activation', 'BusinessSettingsController@activation')->name('activation.index');
         Route::get('/payment-method', 'BusinessSettingsController@payment_method')->name('payment_method.index');
         Route::get('/file_system', 'BusinessSettingsController@file_system')->name('file_system.index');

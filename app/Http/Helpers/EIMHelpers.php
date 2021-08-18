@@ -3,6 +3,7 @@
 
 use App\Models\Category;
 use App\Models\User;
+use Qirolab\Theme\Theme;
 
 function shorten_string($string, $wordsreturned)
 {
@@ -21,12 +22,12 @@ function shorten_string($string, $wordsreturned)
 
 function get_active_theme()
 {
-    $theme = 'frontend';
+    /*$theme = 'frontend';
 
     if(get_vendor_mode() === 'single') {
         $theme = 'frontend_mt_front';
-    }
-    return $theme;
+    }*/
+    return Theme::active();
 }
 
 function get_site_name() {
@@ -100,6 +101,68 @@ function get_vendor_mode() {
     }
 
     return $option;
+}
+
+/**
+ * Gets the available cart types(components) for current tenant theme
+ *
+ * Returns available cart types for the current theme.
+ * This function is used to determine which cart from the theme client wants to use on site.
+ * Note: Only carts from current tenant theme can be displayed
+ *
+ * @param string $type - full/adhoc/mini cart types
+ *
+ * @return array $cart_templates - name of the cart blade file inside a specific theme
+ */
+function get_theme_cart_templates($type = 'full') {
+    if(in_array($type, ['full','adhoc','mini'])) {
+        $carts_path = Theme::path('views/components/tenant/cart/'.$type);
+    } else {
+        return [];
+    }
+
+    $cart_templates = [];
+    $files = array_diff(scandir($carts_path), array('.', '..'));
+
+    if(empty($files)) {
+        // TODO: Get global carts if no carts are present in chosen tenant theme
+    }
+
+    foreach ($files as $filename) {
+        $path = $carts_path.'/'.$filename;
+
+        $base_filename = str_replace('.blade.php', '', $filename);
+        if($base_filename === 'mini-cart') {
+           continue;
+        }
+
+        $tokens = token_get_all(file_get_contents($path));
+        $file_comments = [];
+
+        foreach($tokens as $token) {
+
+            if(isset($token[0]) && isset($token[1])) {
+                if($token[0] == T_COMMENT || $token[0] == T_DOC_COMMENT) {
+                    $file_comments[] = $token[1];
+                    break;
+                }
+            }
+        }
+
+        if($file_comments) {
+            $_to_string = trim(current($file_comments), "\**/");
+            foreach ( explode(PHP_EOL, $_to_string) as $item ) {
+                $itemData = explode(":", $item);
+
+                if (count($itemData) === 2 && (trim($itemData[0]) == 'Title' || trim($itemData[0]) == '* Title')) {
+                    $cart_templates[$base_filename] = trim($itemData[1]);
+                }
+            }
+        }
+
+    }
+
+    return $cart_templates;
 }
 
 
