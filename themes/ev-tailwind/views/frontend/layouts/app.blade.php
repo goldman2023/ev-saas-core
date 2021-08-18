@@ -26,21 +26,29 @@
     @php
         echo get_setting('header_script');
     @endphp
+
+    @livewireStyles
+    
+    <!-- AlpineJS -->    
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+
 </head>
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
-<div class="min-h-screen">
-    <header>
-        @include('frontend.layouts.navigation')
-    </header>
-    <!-- Page Content -->
-    <main>
-        @yield('content')
-    </main>
+    <div class="min-h-screen">
+        <header>
+            @include('frontend.layouts.navigation')
+        </header>
+        <!-- Page Content -->
+        <main>
+            @yield('content')
+        </main>
 
-    <footer>
-        <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
-    </footer>
+        <footer>
+            <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
+        </footer>
 
-</div>
+    </div>
+
+    @livewireScripts
 </body>
 </html>
