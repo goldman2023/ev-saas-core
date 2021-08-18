@@ -6,7 +6,7 @@ module.exports = {
     purge: [
         `${__dirname}/views/**/*.blade.php`, // absolute path
         `./resources/views/components/tenant/**/*.blade.php`, // relative to root
-        `./resources/views/livewire/tenant/**/*.blade.php`, // relative to root
+        `./resources/views/livewire/**/*.blade.php`, // relative to root
         `./resources/views/layouts/**/*.blade.php`, // relative to root
         `${__dirname}/js/**/*.vue`, // absolute path
         `${__dirname}/js/**/*.js` // absolute path

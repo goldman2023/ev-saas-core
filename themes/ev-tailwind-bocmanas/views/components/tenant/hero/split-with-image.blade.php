@@ -17,7 +17,9 @@
             <div class="bg-white w-1/2"></div>
             <div class="bg-gray-50 w-1/2"></div>
         </div>
+
         <livewire:home-search />
+
         <div class="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2">
             <nav class="grid gap-y-10 px-4 py-8 bg-white sm:grid-cols-2 sm:gap-x-8 sm:py-12 sm:px-6 lg:px-8 xl:pr-12" aria-labelledby="solutions-heading">
                 <h2 id="solutions-heading" class="sr-only">Solutions menu</h2>
