@@ -33,7 +33,7 @@ mix.setPublicPath("public")
     .sass('resources/scss/app.scss', 'public/css').version()
     /* Minimal dependency requirements for public parts of the CENTRAL EV-SAAS app AND Tenants Dashboards! */
     .scripts([
-        'resources/js/vendor/intlTelutils.js',
+        'resources/js/admin/vendors.js',
         'resources/js/vendor/aiz-core.js',
     ], 'public/js/vendors.js').version()
     .scripts([

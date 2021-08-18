@@ -8,6 +8,11 @@ A complete solution for E-commerce Business with exclusive features & super resp
 * run `php artisan migrate --path=/database/migrations/tenant`
 * run `php artisan serve` - central application
 * run `php artisan serve --host=tenant.localhost` - tenant application, see docs regarding adding the local domains on your system
+* Create tenant and domain manually by going to central app url and registering OR run `php artisan tenants:pull --type=demo`
+* Compiling webpack for both central and themes: `yarn dev` (not in watch mode)
+* Compiling for central: `npx mix --mix-config="webpack.mix.js` (from root directory)
+* Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
+* Compiling specific theme watch: `npx mix watch --mix-config="hemes/{theme-name}/webpack.mix.js"`
 
 
 #local setup for assets
