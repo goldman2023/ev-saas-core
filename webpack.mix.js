@@ -16,10 +16,7 @@ const path = require("path");
 
 /* Minimal dependency requirements for public parts of the website */
 mix.scripts([
-    'resources/js/vendor/jquery.js',
-    'resources/js/vendor/uppy.js',
-    'resources/js/vendor/footable.js',
-    'resources/js/vendor/chart.js',
+    'resources/js/admin/vendors.js',
     'resources/js/vendor/aiz-core.js',
 ], 'public/assets/js/vendors.js');
 
