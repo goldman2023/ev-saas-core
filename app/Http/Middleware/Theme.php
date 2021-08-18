@@ -17,15 +17,21 @@ class Theme
     public function handle(Request $request, Closure $next)
     {
 
+// Check if multitenancy is enabled
+        if(function_exists(tenant())) {
 
         // Get tenant info
-        $domain = tenant()->domains()->first();
 
-        if($domain) {
-            // Set active theme
-            \Qirolab\Theme\Theme::set($domain->theme);
+            $domain = tenant()->domains()->first();
+
+            if($domain) {
+                // Set active theme
+                \Qirolab\Theme\Theme::set($domain->theme);
+            }
+    
         }
 
+       
 
         return $next($request);
     }
