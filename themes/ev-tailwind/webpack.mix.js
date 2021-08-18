@@ -25,6 +25,8 @@ mix.setPublicPath(`public/themes/${theme}`)
         processCssUrls: false,
         //postCss: [ tailwindcss(`${__dirname}/tailwind.config.js`) ], // NOT HERE!
     }).version()
+    .copyDirectory(`${__dirname}/fonts`, `public/themes/${theme}/fonts`)
+    .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)
     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
     .webpackConfig({
         resolve: {
