@@ -18,7 +18,7 @@ class ProductList extends Component
     public function __construct($products = [], $style = 'with-inline-price')
     {
         //
-        $products = Product::all();
+        $products = Product::paginate(4);
         $this->style = $style;
         $this->products = $products;
     }
