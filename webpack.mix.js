@@ -27,9 +27,9 @@ mix.scripts([
 
 
 /* Builder JS */
-mix.scripts([
-    'resources/js/builder/builder.js',
-], 'public/assets/builder/js/builder.js');
+// mix.scripts([
+//     'resources/js/builder/builder.js',
+// ], 'public/assets/builder/js/builder.js');
 
 mix.setPublicPath("public")
     .js('resources/js/app.js', 'public/js').vue().version()
