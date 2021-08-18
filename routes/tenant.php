@@ -102,6 +102,7 @@ Route::middleware([
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
+    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
