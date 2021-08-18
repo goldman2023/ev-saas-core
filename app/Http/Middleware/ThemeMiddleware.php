@@ -4,8 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use \Qirolab\Theme\Theme as Theme;
 
-class Theme
+class ThemeMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,7 +19,7 @@ class Theme
     {
 
 // Check if multitenancy is enabled
-        if(function_exists(tenant())) {
+        if(tenant()) {
 
         // Get tenant info
 
@@ -26,12 +27,12 @@ class Theme
 
             if($domain) {
                 // Set active theme
-                \Qirolab\Theme\Theme::set($domain->theme);
+                Theme::set($domain->theme, 'ev-tailwind');
             }
-    
+
         }
 
-       
+
 
         return $next($request);
     }
