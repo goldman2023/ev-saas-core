@@ -12,6 +12,22 @@ const path = require("path");
  |
  */
 
+
+
+/* Minimal dependency requirements for public parts of the website */
+mix.scripts([
+    'resources/js/vendor/jquery.js',
+    'resources/js/vendor/uppy.js',
+    'resources/js/vendor/footable.js',
+    'resources/js/vendor/chart.js',
+    'resources/js/vendor/aiz-core.js',
+], 'public/assets/js/vendors.js');
+
+mix.scripts([
+    'resources/js/vendor/vendors.js',
+    'resources/js/vendor/aiz-core.js',
+], 'public/assets/js/vendors-guest.js');
+
 mix.setPublicPath("public")
     .js('resources/js/app.js', 'public/js').vue().version()
     .sass('resources/scss/app.scss', 'public/css').version()

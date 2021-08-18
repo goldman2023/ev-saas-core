@@ -226,6 +226,7 @@ Route::middleware([
         Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
         Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
+        /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */
         Route::get('/shop/{company_name}/review/create', 'ReviewController@create')->name('reviews.create');
         Route::post('/review/store', 'ReviewController@store')->name('reviews.store');
         Route::post('/review/published', 'ReviewController@updatePublished')->name('reviews.published');
