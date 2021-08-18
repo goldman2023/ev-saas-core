@@ -18,7 +18,6 @@
         "facade/ignition": "^2.10",
         "fideloper/proxy": "^4.0",
         "gabrielbull/ups-api": "^2.0.1",
-        "gitterdoc/critical": "^1.0",
         "guzzlehttp/guzzle": "^6.5",
         "instamojo/instamojo-php": "^0.4.0",
         "intervention/image": "^2.5",
