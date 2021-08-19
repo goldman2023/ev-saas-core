@@ -1,6 +1,5 @@
 <div class="lg:col-span-4">
     <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Customer Reviews</h2>
-    $average_rating
     <div class="mt-3 flex items-center">
         <div>
             <div class="flex items-center">
