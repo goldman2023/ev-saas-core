@@ -51,7 +51,7 @@
         <h3 class="text-lg font-medium text-gray-900">Share your thoughts</h3>
         <p class="mt-1 text-sm text-gray-600">If you’ve used this product, share your thoughts with other customers</p>
 
-        <a href="#" onclick="openModal()" class="mt-6 inline-flex w-full bg-white border border-gray-300 rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full" onclick="addReview">Write a review</a>
+        <button href="#" onclick="openModal()" class="mt-6 inline-flex w-full bg-white border border-gray-300 rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full">Write a review</button>
     </div>
     
 </div>
