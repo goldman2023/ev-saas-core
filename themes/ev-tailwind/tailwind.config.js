@@ -50,6 +50,12 @@ module.exports = {
                 11: '11',
                 12: '12',
             },
+            keyframes: {
+                loader: {
+                    '0%, 80%, 100%': { transform: 'scale(0)', opacity: '0.2' },
+                    '40%': { transform: 'scale(1)', opacity: '0.8' }
+                }
+            },
             animation: {
                 loader: 'loader 1.48s ease-in-out infinite both',
             }
