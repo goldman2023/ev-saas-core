@@ -46,7 +46,7 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($keywords as $key => $keyword)
                                 <li class="list-group-item py-1 px-3">
-                                    <a class="text-reset hov-text-primary" href="{{ route('suggestion.search', $keyword) }}">{{ $keyword }}</a>
+                                    <a class="text-[14px]" href="{{ route('suggestion.search', $keyword) }}">{{ $keyword }}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -58,7 +58,7 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($categories as $key => $category)
                                 <li class="list-group-item py-1 px-3">
-                                    <a class="text-reset hov-text-primary" href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
+                                    <a class="text-[14px]" href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -70,20 +70,20 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($products as $key => $product)
                                 <li class="list-group-item py-3 px-5">
-                                    <a class="text-reset" href="{{ route('product', $product->slug) }}">
+                                    <a class="text-[14px]" href="{{ route('product', $product->slug) }}">
                                         <div class="flex search-product align-items-center">
                                             <div class="mr-3">
-                                                <img class="w-[40px] h-[40px] img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img) }}">
+                                                <img class="w-[40px] h-[40px] rounded-full" src="{{ uploaded_asset($product->thumbnail_img) }}">
                                             </div>
-                                            <div class="flex-grow overflow--hidden minw-0">
-                                                <div class="product-name text-truncate fs-14 mb-5px">
+                                            <div class="flex-grow overflow--hidden min-w-0">
+                                                <div class="product-name text-truncate text-[14px] mb-5px">
                                                     {{  $product->getTranslation('name')  }}
                                                 </div>
                                                 <div class="">
                                                     @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                                        <del class="opacity-60 fs-15">{{ home_base_price($product->id) }}</del>
+                                                        <del class="opacity-60 text-[15px]">{{ home_base_price($product->id) }}</del>
                                                     @endif
-                                                    <span class="fw-600 fs-16 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                                    <span class="font-semibold text-[16px] text-primary">{{ home_discounted_base_price($product->id) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -99,13 +99,13 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($events as $key => $event)
                                 <li class="list-group-item py-3 px-5">
-                                    <a class="text-reset" href="{{ route('event.visit', $event->slug) }}">
+                                    <a class="text-[14px]" href="{{ route('event.visit', $event->slug) }}">
                                         <div class="flex search-product align-items-center">
                                             <div class="mr-3">
-                                                <img class="w-[40px] h-[40px] img-fit rounded" src="{{ uploaded_asset($event->upload_id) }}">
+                                                <img class="w-[40px] h-[40px] rounded-full" src="{{ uploaded_asset($event->upload_id) }}">
                                             </div>
-                                            <div class="flex-grow overflow--hidden minw-0">
-                                                <div class="product-name text-truncate fs-14 mb-5px">
+                                            <div class="flex-grow overflow--hidden min-w-0">
+                                                <div class="product-name text-truncate text-[14px] mb-5px">
                                                     {{  $event->getTranslation('title')  }}
                                                 </div>
                                                 <div class="">
@@ -130,16 +130,16 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($shops as $key => $shop)
                                 <li class="list-group-item py-3 px-5">
-                                    <a class="text-reset" href="{{ route('shop.visit', $shop->slug) }}">
+                                    <a class="text-[14px]" href="{{ route('shop.visit', $shop->slug) }}">
                                         <div class="flex search-product align-items-center">
                                             <div class="mr-3">
-                                                <img class="w-[40px] h-[40px] img-fit rounded" src="{{ uploaded_asset($shop->logo) }}">
+                                                <img class="w-[40px] h-[40px] rounded-full" src="{{ uploaded_asset($shop->logo) }}">
                                             </div>
                                             <div class="flex-grow overflow--hidden">
-                                                <div class="product-name text-truncate fs-14 mb-5px">
+                                                <div class="product-name text-truncate text-[14px] mb-5px">
                                                     {{ $shop->name }}
                                                 </div>
-                                                <div class="opacity-60">
+                                                <div class="text-opacity-60">
                                                     {{ $shop->address }}
                                                 </div>
                                             </div>
