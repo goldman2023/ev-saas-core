@@ -21,11 +21,8 @@ function shorten_string($string, $wordsreturned)
 
 function get_active_theme()
 {
-    $theme = 'frontend';
+    $theme = 'ev-tailwind';
 
-    if(get_vendor_mode() === 'single') {
-        $theme = 'frontend_mt_front';
-    }
     return $theme;
 }
 

@@ -18,6 +18,12 @@ class HomeSearch extends Component
     public $shops;
     public $query = '';
     public $isEmpty = true;
+    public $tenant;
+
+    public function mount()
+    {
+        $this->tenant = tenant();
+    }
 
     public function render()
     {
@@ -25,8 +31,8 @@ class HomeSearch extends Component
         $this->products = array();
         $this->categories = array();
         $this->events = array();
-        $this->shops = array();        
-        
+        $this->shops = array();
+
         if (trim($this->query) != '') {
 
             $products = Product::where('tags', 'like', '%' . $this->query . '%')->get();
@@ -50,9 +56,9 @@ class HomeSearch extends Component
 
             $this->shops = Shop::where('name', 'like', '%' . $this->query . '%')->get()->take(3);
 
-            $this->events = Event::where('title', 'like', '%' . $this->query . '%')->orWhere('description', 'like', '%' . $this->query . '%')->get()->take(3);            
+            $this->events = Event::where('title', 'like', '%' . $this->query . '%')->orWhere('description', 'like', '%' . $this->query . '%')->get()->take(3);
 
-        }        
+        }
 
         if (sizeof($this->keywords) > 0 || sizeof($this->categories) > 0 || sizeof($this->products) > 0 || sizeof($this->shops) > 0) {
             $this->isEmpty = false;
