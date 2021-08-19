@@ -17,7 +17,7 @@ class HomeSearch extends Component
     public $events;
     public $shops;
     public $query = '';
-    public $isEmpty = true;
+    public $isEmpty = false;
     public $tenant;
 
     public function mount()
@@ -25,16 +25,8 @@ class HomeSearch extends Component
         $this->tenant = tenant();
     }
 
-    public function render()
-    {
-        $this->keywords = array();
-        $this->products = array();
-        $this->categories = array();
-        $this->events = array();
-        $this->shops = array();
-
+    public function search() {
         if (trim($this->query) != '') {
-
             $products = Product::where('tags', 'like', '%' . $this->query . '%')->get();
             foreach ($products as $key => $product) {
                 foreach (explode(',', $product->tags) as $key => $tag) {
@@ -60,11 +52,25 @@ class HomeSearch extends Component
 
         }
 
-        if (sizeof($this->keywords) > 0 || sizeof($this->categories) > 0 || sizeof($this->products) > 0 || sizeof($this->shops) > 0) {
+        if (sizeof($this->keywords) > 0 || sizeof($this->categories) > 0 || sizeof($this->products) > 0 || sizeof($this->shops) > 0 || trim($this->query) == '') {
             $this->isEmpty = false;
         }else {
             $this->isEmpty = true;
         }
+
+    }
+
+    public function render()
+    {
+        $this->keywords = array();
+        $this->products = array();
+        $this->categories = array();
+        $this->events = array();
+        $this->shops = array();
+
+        $this->search();
+
+        $this->dispatchBrowserEvent('searched');
 
         return view('livewire.home-search');
     }
