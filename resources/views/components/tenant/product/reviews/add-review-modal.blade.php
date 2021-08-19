@@ -14,7 +14,7 @@
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                             <x-label for="rating" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                Rating
+                                {{ translate('Rating') }}
                             </x-label>
                             <div class="mt-2 sm:mt-2 sm:col-span-2">
                                 @livewire('tenant.rating-input')
@@ -23,7 +23,7 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                             <label for="comment" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                Comment
+                                {{ translate('Comment') }}
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                 <textarea id="about" name="comment" rows="3" class="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
