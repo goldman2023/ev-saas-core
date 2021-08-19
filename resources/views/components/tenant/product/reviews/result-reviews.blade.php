@@ -15,7 +15,7 @@
                     </svg>
                 @endfor
             </div>
-            <p class="sr-only">4 out of 5 stars</p>
+            <p>{{$average_rating}} out of 5 stars</p>
         </div>
         <p class="ml-2 text-sm text-gray-900">Based on {{$count}} reviews</p>
     </div>
