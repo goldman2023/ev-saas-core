@@ -18,7 +18,7 @@
                             </svg>
                         @endfor
                     </div>
-                    <p class="sr-only">5 out of 5 stars</p>
+                    <p>{{$review->review->rating}} out of 5 stars</p>
                 </div>
             </div>
 
