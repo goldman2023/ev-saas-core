@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Cache;
 use Illuminate\Http\Request;
 use App\Models\Currency;
 use App\Models\BusinessSetting;
@@ -14,6 +15,12 @@ class BusinessSettingsController extends Controller
     {
 //        CoreComponentRepository::instantiateShopRepository();
     	return view('backend.setup_configurations.general_settings');
+    }
+
+    public function checkout_flow(Request $request)
+    {
+//        CoreComponentRepository::instantiateShopRepository();
+        return view('backend.setup_configurations.checkout_flow');
     }
 
     public function activation(Request $request)
@@ -298,26 +305,25 @@ class BusinessSettingsController extends Controller
             }
             else {
                 $business_settings = BusinessSetting::where('type', $type)->first();
-                if($business_settings!=null){
-                    if(gettype($request[$type]) == 'array'){
-                        $business_settings->value = json_encode($request[$type]);
-                    }
-                    else {
-                        $business_settings->value = $request[$type];
-                    }
-                    $business_settings->save();
-                }
-                else{
+                $cache_key = 'settings_'.$type;
+                $value = is_array($request[$type]) ? json_encode($request[$type]) : $request[$type];
+
+                if(empty($business_settings)) {
+                    // Create setting if it doesn't exist
                     $business_settings = new BusinessSetting;
-                    $business_settings->type = $type;
-                    if(gettype($request[$type]) == 'array'){
-                        $business_settings->value = json_encode($request[$type]);
-                    }
-                    else {
-                        $business_settings->value = $request[$type];
-                    }
-                    $business_settings->save();
                 }
+
+                $business_settings->type = $type;
+                $business_settings->value = $value;
+
+                // Save setting to primary DB
+                $business_settings->save();
+
+                // Remove the cached setting
+                Cache::forget($cache_key);
+
+                // Store setting in cache
+                Cache::put($cache_key, $value);
             }
         }
         flash(translate("Settings updated successfully"))->success();
@@ -328,7 +334,6 @@ class BusinessSettingsController extends Controller
     {
         $env_changes = ['FORCE_HTTPS', 'FILESYSTEM_DRIVER'];
         if (in_array($request->type, $env_changes)) {
-
             return $this->updateActivationSettingsInEnv($request);
         }
 
@@ -352,6 +357,7 @@ class BusinessSettingsController extends Controller
             $business_settings = new BusinessSetting;
             $business_settings->type = $request->type;
             $business_settings->value = $request->value;
+
             $business_settings->save();
         }
         return '1';
@@ -415,12 +421,12 @@ class BusinessSettingsController extends Controller
         return view('backend.seo.index');
     }
 
-    public function update_seo_setting(Request $request) {     
+    public function update_seo_setting(Request $request) {
         foreach($request->types as $key => $type) {
             $business_settings = BusinessSetting::where('type', $type)->first();
             if($business_settings == null){
                 $business_settings = new BusinessSetting;
-                $business_settings->type = $type;                
+                $business_settings->type = $type;
             }
             $business_settings->value = $request[$type];
             $business_settings->save();
