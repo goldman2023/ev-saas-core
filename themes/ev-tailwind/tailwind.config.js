@@ -50,6 +50,9 @@ module.exports = {
                 11: '11',
                 12: '12',
             },
+            animation: {
+                loader: 'loader 1.48s ease-in-out infinite both',
+            }
         },
     },
 

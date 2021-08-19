@@ -1,25 +1,44 @@
-<div class="mt-[20px] bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-teal-500 focus-within:ring focus-within:ring-primary dark:focus-within:border-teal-500 focus-within:ring-opacity-40">
+<div x-data="{ 
+        open: @entangle('isEmpty'),
+        start: @entangle('isStart'),
+        checkSearchQuery() {
+            if ($refs.searchQuery.value.length > 0) {
+                $('.typed-search-box').removeClass('hidden');
+            }else{
+                $('.typed-search-box').addClass('hidden');
+            }
+        }
+    }" 
+    class="mt-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
 	<form action="/search" class="flex flex-wrap justify-between md:flex-row">
-		<input type="search" name="query" placeholder="Search Components" required="required" class="flex-1 h-10 px-4 m-1 text-gray-700 placeholder-gray-400 bg-transparent border-none appearance-none lg:h-12 dark:text-gray-200 focus:outline-none focus:placeholder-transparent focus:ring-0">
-		<button type="submit" class="flex items-center justify-center w-full p-2 m-1 text-white transition-colors duration-200 transform rounded-md lg:w-12 lg:h-12 lg:p-0 bg-primary hover:bg-teal-300 focus:outline-none focus:bg-teal-300">
+		<input 
+            type="search" 
+            name="query"
+            x-ref="searchQuery"
+            @keyup="checkSearchQuery()"
+            @focus="checkSearchQuery()"
+            wire:model="query" 
+            placeholder="Search Companies Example: Wood mills" 
+            required="required" 
+            class="flex-1 h-10 px-4 m-1 text-gray-700 placeholder-gray-400 bg-transparent border-none appearance-none lg:h-12 dark:text-gray-200 focus:outline-none focus:placeholder-transparent focus:ring-0">
+		<button type="submit" class="flex items-center justify-center w-full p-2 m-1 text-white transition-colors duration-200 transform rounded-md lg:w-12 lg:h-12 lg:p-0 bg-indigo-600 hover:bg-indigo-300 focus:outline-none focus:bg-indigo-300">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
 			</svg>
 		</button>
 	</form>
-    <div class="typed-search-box stop-propagation document-click-d-none d-none bg-white rounded shadow-lg position-absolute left-0 top-100 w-100" style="min-height: 200px">
-        <div class="search-preloader absolute-top-center">
-            <div class="dot-loader">
-                <div></div>
-                <div></div>
-                <div></div>
+    <div class="typed-search-box stop-propagation hidden min-h-[200px]">
+        <div :class="{ 'hidden': [start] }" class="flex justify-center">
+            <div>
+                <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
+                <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
+                <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
             </div>
-        </div>
-        <div class="search-nothing d-none p-3 text-center fs-16">
-            Sorry, nothing found for <strong>"' + searchKey + '"</strong>
+        </div>        
+        <div :class="{ 'hidden': ![open] }" class="search-nothing p-3 text-center fs-16">
+            {{ translate('Sorry, nothing found for ') }} <strong>{{ $isStart }}</strong>
         </div>
         <div id="search-content" class="text-left">
-
             <div class="">
                 @if (sizeof($keywords) > 0)
                     <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Popular Suggestions')}}</div>
@@ -95,6 +114,32 @@
                                                     {{$event->getTranslation('description')}}
                                                 @endif
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+            <div class="">
+                @if (count($shops) > 0)
+                    <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Shops')}}</div>
+                    <ul class="list-group list-group-raw">
+                        @foreach ($shops as $key => $shop)
+                            <li class="list-group-item">
+                                <a class="text-reset" href="{{ route('shop.visit', $shop->slug) }}">
+                                    <div class="d-flex search-product align-items-center">
+                                        <div class="mr-3">
+                                            <img class="size-40px img-fit rounded" src="{{ uploaded_asset($shop->logo) }}">
+                                        </div>
+                                        <div class="flex-grow-1 overflow--hidden">
+                                            <div class="product-name text-truncate fs-14 mb-5px">
+                                                {{ $shop->name }}
+                                            </div>
+                                            <div class="opacity-60">
+                                                {{ $shop->address }}
                                             </div>
                                         </div>
                                     </div>
