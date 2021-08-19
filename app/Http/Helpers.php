@@ -912,6 +912,17 @@ if (!function_exists('getFileBaseURL')) {
     }
 }
 
+if (!function_exists('getBucketBaseURL')) {
+    function getBucketBaseURL() {
+        if (env('FILESYSTEM_DRIVER') == 's3') {
+            return env('AWS_URL') . '/';
+        } else {
+            return getBaseURL();
+        }
+    }
+}
+
+
 
 if (!function_exists('isUnique')) {
     /**

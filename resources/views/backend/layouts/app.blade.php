@@ -8,6 +8,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta name="app-url" content="{{ getBaseURL() }}">
 	<meta name="file-base-url" content="{{ getFileBaseURL() }}">
+	<meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
 
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
