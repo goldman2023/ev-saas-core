@@ -37,11 +37,11 @@
                         <div class="ml-3 relative flex-1">
                             <div class="h-3 bg-gray-100 border border-gray-200 rounded-full"></div>
 
-                            <div style="width: calc(<?php echo $each_stars[$i]; ?> * 1%);" class="absolute inset-y-0 bg-yellow-400 border border-yellow-400 rounded-full"></div>
+                            <div style="width: calc(<?php echo round(($each_stars[$i] / $count) * 100); ?> * 1%);" class="absolute inset-y-0 bg-yellow-400 border border-yellow-400 rounded-full"></div>
                         </div>
                     </div>
                 </dt>
-                <dd class="ml-3 w-10 text-right tabular-nums text-sm text-gray-900">{{$each_stars[$i]}}%</dd>
+                <dd class="ml-3 w-10 text-right tabular-nums text-sm text-gray-900">{{round(($each_stars[$i] / $count) * 100)}}%</dd>
             </div>
             @endfor
         </dl>

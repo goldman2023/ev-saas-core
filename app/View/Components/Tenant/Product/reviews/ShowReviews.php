@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\tenant\product\reviews;
+namespace App\View\Components\Tenant\Product\Reviews;
 
 use App\Models\Product;
 use Illuminate\View\Component;
