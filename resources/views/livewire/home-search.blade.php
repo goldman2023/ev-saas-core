@@ -1,6 +1,6 @@
 <div x-data="{ 
-        open: @entangle('isEmpty'),
-        start: @entangle('isStart'),
+        open: @entangle('isEmpty').defer,
+        isStart: false,
         checkSearchQuery() {
             if ($refs.searchQuery.value.length > 0) {
                 $('.typed-search-box').removeClass('hidden');
@@ -12,12 +12,12 @@
     class="mt-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
 	<form action="/search" class="flex flex-wrap justify-between md:flex-row">
 		<input 
+            wire:model="query"
             type="search" 
             name="query"
             x-ref="searchQuery"
             @keyup="checkSearchQuery()"
-            @focus="checkSearchQuery()"
-            wire:model="query" 
+            @focus="checkSearchQuery()"             
             placeholder="Search Companies Example: Wood mills" 
             required="required" 
             class="flex-1 h-10 px-4 m-1 text-gray-700 placeholder-gray-400 bg-transparent border-none appearance-none lg:h-12 dark:text-gray-200 focus:outline-none focus:placeholder-transparent focus:ring-0">
@@ -27,16 +27,19 @@
 			</svg>
 		</button>
 	</form>
-    <div class="typed-search-box stop-propagation hidden min-h-[200px]">
-        <div :class="{ 'hidden': [start] }" class="flex justify-center">
+    <div wire:ignore class="typed-search-box stop-propagation hidden min-h-[200px]">
+        <div :class="{ 'hidden': false }" class="flex justify-center">
             <div>
                 <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
                 <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
                 <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
             </div>
         </div>        
+        @php 
+            \Illuminate\Support\Facades\Log::info($query);
+        @endphp
         <div :class="{ 'hidden': ![open] }" class="search-nothing p-3 text-center fs-16">
-            {{ translate('Sorry, nothing found for ') }} <strong>{{ $isStart }}</strong>
+            {{ translate('Sorry, nothing found for ') }} <strong>{{ $query }}</strong>
         </div>
         <div id="search-content" class="text-left">
             <div class="">
