@@ -6,14 +6,16 @@ use Illuminate\View\Component;
 
 class ReviewCard extends Component
 {
+    public $review;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($review)
     {
         //
+        $this->review = $review;
     }
 
     /**

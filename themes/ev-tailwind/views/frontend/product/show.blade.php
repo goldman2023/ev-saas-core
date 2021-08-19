@@ -12,15 +12,9 @@
                   <x-tenant.product.product-gallery :product="$product"></x-tenant.product.product-gallery>
                 </div>
             </div>
-            <x-tenant.product.reviews.with-summary-chart></x-tenant.product.reviews.with-summary-chart>
             <x-tenant.product-list></x-tenant.product-list>
-            <x-tenant.product.reviews.show-reviews></x-tenant.product.reviews.show-reviews>
+            <x-tenant.product.reviews.show-reviews :product="$product"></x-tenant.product.reviews.show-reviews>
         </div>
     </div>
 @endsection
 
-@section('script')
-    <script type="text/javascript">
-        console.log("wahaahahahahahahahah")
-    </script>
-@endsection

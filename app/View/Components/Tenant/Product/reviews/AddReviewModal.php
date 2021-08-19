@@ -2,18 +2,22 @@
 
 namespace App\View\Components\tenant\product\reviews;
 
+use App\Models\Product;
 use Illuminate\View\Component;
 
 class AddReviewModal extends Component
 {
+
+    public Product $product;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Product $product)
     {
         //
+        $this->product = $product;
     }
 
     /**
