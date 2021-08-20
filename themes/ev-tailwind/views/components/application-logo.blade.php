@@ -8,7 +8,7 @@
              alt="{{ env('APP_NAME') }}"
         >
     @else
-        <img src="{{ static_asset('img/logo.png') }}"
+        <img src="{{ static_asset('img/logo.jpg') }}"
              width="70px"
              alt="{{ env('APP_NAME') }}"
         >

@@ -8,6 +8,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<meta name="app-url" content="{{ getBaseURL() }}">
 	<meta name="file-base-url" content="{{ getFileBaseURL() }}">
+	<meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
 
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -24,7 +25,7 @@
 {{--    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">--}}
     <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
     @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
-        <link rel="stylesheet" href="{{ global_asset('assets/css/bootstrap-rtl.min.css') }}">
+        <link rel="stylesheet" href="{{ global_asset('css/bootstrap-rtl.min.css') }}">
     @endif
 {{--    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">--}}
 
@@ -80,7 +81,7 @@
     @yield('modal')
 
 
-	<script src="{{ global_asset('assets/js/vendors.js') }}" ></script>
+	<script src="{{ global_asset('js/vendors.js') }}" ></script>
 
 	@include('backend.layouts.partials.app-js')
 

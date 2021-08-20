@@ -30,8 +30,8 @@ function get_site_name() {
     $site_name =  'GunOB';
     if(isset($_SERVER['SERVER_NAME'])) {
         if($_SERVER['SERVER_NAME'] === 'gunob.com') {
-            $single_vendor = config('ev-saas.company');
-            $site_name = $single_vendor->name;
+
+            $site_name = 'MT Baltic';
         }
     }
 
@@ -98,5 +98,7 @@ function get_vendor_mode() {
 
     return $option;
 }
+
+
 
 

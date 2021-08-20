@@ -102,6 +102,7 @@ Route::middleware([
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
+    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
@@ -226,6 +227,7 @@ Route::middleware([
         Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
         Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
+        /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */
         Route::get('/shop/{company_name}/review/create', 'ReviewController@create')->name('reviews.create');
         Route::post('/review/store', 'ReviewController@store')->name('reviews.store');
         Route::post('/review/published', 'ReviewController@updatePublished')->name('reviews.published');

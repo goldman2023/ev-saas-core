@@ -16,7 +16,10 @@ use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
 use App\Models\Attribute;
 use App\Models\Country;
+use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 include('Helpers/EIMHelpers.php');
@@ -707,6 +710,13 @@ if (!function_exists('convertPrice')) {
 
 function translate($key, $lang = null)
 {
+    $label_prefix =  Route::currentRouteName();
+
+    $stringKey = $label_prefix . '.' . $key;
+
+
+
+
     if ($lang == null) {
         $lang = App::getLocale();
     }
@@ -721,6 +731,20 @@ function translate($key, $lang = null)
         $translation_def->lang_value = $key;
         $translation_def->save();
     }
+
+    $dynamic_label = EVLabel::where('key', $stringKey)->get();
+
+    /*  TODO: Make sure to upgrade this for multilanguage support */
+    if(count($dynamic_label)) {
+        $dynamic_label = $dynamic_label[0];
+    } else {
+        $dynamic_label = new EVLabel();
+        $dynamic_label->key = $stringKey;
+        $dynamic_label->value = $key;
+        $dynamic_label->save();
+    }
+
+    return $dynamic_label->value;
 
     //Check for session lang
     $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
@@ -911,6 +935,17 @@ if (!function_exists('getFileBaseURL')) {
         }
     }
 }
+
+if (!function_exists('getBucketBaseURL')) {
+    function getBucketBaseURL() {
+        if (env('FILESYSTEM_DRIVER') == 's3') {
+            return env('AWS_URL') . '/';
+        } else {
+            return getBaseURL();
+        }
+    }
+}
+
 
 
 if (!function_exists('isUnique')) {
