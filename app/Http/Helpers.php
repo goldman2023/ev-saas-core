@@ -16,7 +16,10 @@ use App\Utility\MimoUtility;
 use Twilio\Rest\Client;
 use App\Models\Attribute;
 use App\Models\Country;
+use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
+
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 include('Helpers/EIMHelpers.php');
@@ -714,6 +717,10 @@ if (!function_exists('convertPrice')) {
 
 function translate($key, $lang = null)
 {
+
+
+
+
     if ($lang == null) {
         $lang = App::getLocale();
     }
@@ -918,6 +925,17 @@ if (!function_exists('getFileBaseURL')) {
         }
     }
 }
+
+if (!function_exists('getBucketBaseURL')) {
+    function getBucketBaseURL() {
+        if (env('FILESYSTEM_DRIVER') == 's3') {
+            return env('AWS_URL') . '/';
+        } else {
+            return getBaseURL();
+        }
+    }
+}
+
 
 
 if (!function_exists('isUnique')) {

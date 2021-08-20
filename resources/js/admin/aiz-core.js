@@ -13,7 +13,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
     AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
         appUrl: $('meta[name="app-url"]').attr("content"),
-        fileBaseUrl: $('meta[name="file-base-url"]').attr("content"),
+        fileBaseUrl: $('meta[name="file-bucket-url"]').attr("content"),
     };
     AIZ.uploader = {
         data: {
@@ -837,7 +837,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         $this.val(selected);
                     }
                     $this.selectpicker({
-                        size: 5,                    
+                        size: 5,
                         virtualScroll: false
                     });
                 }
@@ -1321,7 +1321,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             max: parseInt(c.getAttribute("data-range-value-max")),
                         },
                     }),
-                    
+
                     c.noUiSlider.on("update", function (a, b) {
                         f[b].textContent = a[b];
                     }),
@@ -1662,7 +1662,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 var type = $(this).attr("data-type");
                 var input = $("input[name='" + fieldName + "']");
                 var currentVal = parseInt(input.val());
-                
+
 
                 if (!isNaN(currentVal)) {
                     if (type == "minus") {
