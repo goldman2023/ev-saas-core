@@ -7,7 +7,6 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\Shop;
-use Illuminate\Support\Facades\Log;
 
 class HomeSearch extends Component
 {
