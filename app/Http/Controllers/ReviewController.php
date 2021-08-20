@@ -67,6 +67,10 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'comment' => 'required',
+            'rating' => 'required',
+        ]);
         $review = new Review;
         $review->comment = $request->comment;
         $review->rating = $request->rating;
