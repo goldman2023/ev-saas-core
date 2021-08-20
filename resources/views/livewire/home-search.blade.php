@@ -1,6 +1,6 @@
-<div x-data="searchForm()"
-     class="my-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
+<div x-data="searchForm()" class="my-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
     <div class="relative">
+        <!-- Seach input form -->
         <form action="/search" class="flex flex-wrap justify-between md:flex-row">
             <input 
                 wire:model="query"
@@ -18,7 +18,11 @@
                 </svg>
             </button>
         </form>
+        <!-- End Seach input form -->
+
+        <!-- Seach result container -->
         <div :class="{ 'hidden': !showResult }" class="typed-search-box document-click-d-none hidden absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">    
+            <!-- Dot loader -->
             <div class="flex justify-center">
                 <div :class="{ 'hidden': !showLoader }" class="dot-loader hidden">
                     <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
@@ -26,9 +30,15 @@
                     <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
                 </div>
             </div>
+            <!-- End Dot loader -->
+
+            <!-- Empty text -->
             <div :class="{ 'hidden': !showEmpty }" class="search-nothing p-3 text-center text-gray-500">
                 {{ translate('Sorry, nothing found for ') }} <strong>{{ '"' . $query . '"'}}</strong>
             </div>
+            <!-- End Empty text -->
+
+            <!-- Seach result list -->
             <div id="search-content" class="text-left">
                 <div class="">
                     @if (sizeof($keywords) > 0)
@@ -141,7 +151,9 @@
                     @endif
                 </div>        
             </div>
+            <!-- End Seach result list -->
         </div>
+        <!-- End Seach result container -->
     </div>	
 </div>
 
