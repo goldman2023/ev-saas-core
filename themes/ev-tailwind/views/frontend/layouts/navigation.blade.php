@@ -45,7 +45,10 @@
                         </button>
 
 
-                        <x-tenant.cart.mini.mini-cart-simple />
+                        @if($cart_mini_template = get_setting('cart_mini_template'))
+                            @php $name = 'mini.'.$cart_mini_template; @endphp
+                            <livewire:cart :template="$name" />
+                        @endif
                     </div>
 
                     <div class="md:hidden inline-flex items-center px-1 pt-1 -mr-2 focus:outline-none">

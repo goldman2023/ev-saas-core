@@ -23,31 +23,27 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
 
-    <h2 class="sr-only">Shopping Cart</h2>
+    <h2 class="sr-only">{{ translate('Shopping Cart') }}</h2>
 
     <form class="max-w-2xl mx-auto px-4">
         <ul role="list" class="divide-y divide-gray-200">
-            <li class="py-6 flex items-center">
-                <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="flex-none w-16 h-16 rounded-md border border-gray-200">
-                <div class="ml-4 flex-auto">
-                    <h3 class="font-medium text-gray-900">
-                        <a href="#">Throwback Hip Bag</a>
-                    </h3>
-                    <p class="text-gray-500">Salmon</p>
-                </div>
-            </li>
+            @if(!empty($items))
+                @foreach ($items as $item)
+                    @php
+                        $prices = home_discounted_base_price($item['id'], false, true);
+                    @endphp
+                    <li class="py-6 flex items-center">
+                        <img src="{{ $item['images']['thumbnail']['url'] ?? '' }}" alt="{{ $item['name'] }}" class="flex-none w-16 h-16 rounded-md border border-gray-200">
+                        <div class="ml-4 flex-auto">
+                            <h3 class="font-medium text-gray-900">
+                                <a href="{{ $item['permalink'] }}">{{ $item['name'] }}</a>
+                            </h3>
+                            <p class="text-gray-500">Salmon</p>
+                        </div>
+                    </li>
+                @endforeach
+            @endif
 
-            <li class="py-6 flex items-center">
-                <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg" alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." class="flex-none w-16 h-16 rounded-md border border-gray-200">
-                <div class="ml-4 flex-auto">
-                    <h3 class="font-medium text-gray-900">
-                        <a href="#">Medium Stuff Satchel</a>
-                    </h3>
-                    <p class="text-gray-500">Blue</p>
-                </div>
-            </li>
-
-            <!-- More products... -->
         </ul>
 
         <button type="submit" class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
