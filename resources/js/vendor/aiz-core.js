@@ -13,7 +13,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
     AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
         appUrl: $('meta[name="app-url"]').attr("content"),
-        fileBaseUrl: $('meta[name="file-base-url"]').attr("content"),
+        fileBaseUrl: $('meta[name="file-bucket-url"]').attr("content"),
     };
     AIZ.uploader = {
         data: {
@@ -671,7 +671,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 function (data) {
                     $("body").append(data);
                     $("#aizUploaderModal").modal("show");
-                    AIZ.plugins.aizUppy(elem);
+                    AIZ.plugins.aizUppy();
                     AIZ.uploader.getAllUploads(
                         AIZ.data.appUrl + "/aiz-uploader/get_uploaded_files",
                         null,
@@ -837,7 +837,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         $this.val(selected);
                     }
                     $this.selectpicker({
-                        size: 5,                    
+                        size: 5,
                         virtualScroll: false
                     });
                 }
@@ -960,10 +960,8 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 var timePicker = $this.data("time-picker");
                 var timePickerIncrement = $this.data("time-gap");
                 var advncdRange = $this.data("advanced-range");
-                var filterable = $this.data("filterable");
 
                 single = !single ? false : single;
-                filterable = !filterable ? false : filterable;
                 monthYearDrop = !monthYearDrop ? false : monthYearDrop;
                 format = !format ? "YYYY-MM-DD" : format;
                 separator = !separator ? " / " : separator;
@@ -999,7 +997,6 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                 separator +
                                 picker.endDate.format(format)
                         );
-                        if (filterable) filter();
                     });
                 }
 
@@ -1087,7 +1084,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 }
             );
         },
-        aizUppy: function (elem) {
+        aizUppy: function () {
             if ($("#aiz-upload-files").length > 0) {
                 var uppy = Uppy.Core({
                     autoProceed: true,
@@ -1138,17 +1135,9 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         'X-CSRF-TOKEN': AIZ.data.csrf,
                     },
                 });
-                uppy.on("upload-success", function (file, response) {
+                uppy.on("upload-success", function () {
                     AIZ.uploader.getAllUploads(
                         AIZ.data.appUrl + "/aiz-uploader/get_uploaded_files"
-                    );
-                    $('[data-toggle="aizUploaderAddSelected"]').on(
-                        "click",
-                        function () {
-                                AIZ.uploader.data.selectedFiles = [response.body.upload_id];
-                                AIZ.uploader.inputSelectPreviewGenerate(elem);
-                            $("#aizUploaderModal").modal("hide");
-                        }
                     );
                 });
             }
@@ -1316,9 +1305,9 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
         noUiSlider: function(){
             if ($(".aiz-range-slider")[0]) {
                 $(".aiz-range-slider").each(function () {
-                    var c = $(this).find('.input-slider-range')[0],
-                    d = $(this).find('.range-slider-value.value-low')[0],
-                    e = $(this).find('.range-slider-value.value-high')[0],
+                    var c = document.getElementById("input-slider-range"),
+                    d = document.getElementById("input-slider-range-value-low"),
+                    e = document.getElementById("input-slider-range-value-high"),
                     f = [d, e];
 
                     noUiSlider.create(c, {
@@ -1331,18 +1320,13 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             min: parseInt(c.getAttribute("data-range-value-min")),
                             max: parseInt(c.getAttribute("data-range-value-max")),
                         },
-                        step: 1,
-                        format: {
-                            from: Number,
-                            to: function(t) { return parseInt(t); }
-                        }
                     }),
-                    
+
                     c.noUiSlider.on("update", function (a, b) {
                         f[b].textContent = a[b];
                     }),
                     c.noUiSlider.on("change", function (a, b) {
-                        rangefilter(a, c);
+                        rangefilter(a);
                     });
                 });
             }
@@ -1678,7 +1662,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 var type = $(this).attr("data-type");
                 var input = $("input[name='" + fieldName + "']");
                 var currentVal = parseInt(input.val());
-                
+
 
                 if (!isNaN(currentVal)) {
                     if (type == "minus") {

@@ -136,7 +136,7 @@ class HomeController extends Controller
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
         } else {
-            abort(404);
+            return view('frontend.user.admin.dasboard');
         }
     }
 
@@ -402,7 +402,7 @@ class HomeController extends Controller
             }
 
             // Seo integration with Schema.org
-            if(get_setting('enable_seo_company') == "on") {
+            if (get_setting('enable_seo_company') == "on") {
                 seo()->addSchema($seller->get_schema());
             }
 
@@ -578,13 +578,13 @@ class HomeController extends Controller
 
         $conditions = ['published' => 1];
 
-        if($seller_id != null){
+        if ($seller_id != null) {
             $conditions = array_merge($conditions, ['user_id' => Seller::findOrFail($seller_id)->user->id]);
         }
 
         $products = Product::where($conditions);
 
-        if($category_id != null){
+        if ($category_id != null) {
             $category_ids = CategoryUtility::children_ids($category_id);
             $category_ids[] = $category_id;
 
@@ -593,20 +593,19 @@ class HomeController extends Controller
             $category = Category::find($category_id);
             $shops = $category->companies();
             $shops = $shops->whereIn('user_id', verified_sellers_id());
-
-        }else {
+        } else {
             $shops = Shop::whereIn('user_id', verified_sellers_id());
         }
 
         $events = Event::whereIn('user_id', verified_sellers_id());
 
-        if($query != null){
+        if ($query != null) {
             $searchController = new SearchController;
             $searchController->store($request);
-            $products = $products->where('name', 'like', '%'.$query.'%');
-            $shops = $shops->where('name', 'like', '%'.$query.'%');
-            $events = $events->where('title', 'like', '%'.$query.'%')
-                             ->orWhere('description', 'like', '%'.$query.'%');
+            $products = $products->where('name', 'like', '%' . $query . '%');
+            $shops = $shops->where('name', 'like', '%' . $query . '%');
+            $events = $events->where('title', 'like', '%' . $query . '%')
+                ->orWhere('description', 'like', '%' . $query . '%');
         }
 
         $product_count = $products->count();
@@ -624,7 +623,7 @@ class HomeController extends Controller
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops','events', 'attributes','product_count', 'company_count', 'event_count','query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'product_count', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content'));
     }
 
     public function home_settings(Request $request)

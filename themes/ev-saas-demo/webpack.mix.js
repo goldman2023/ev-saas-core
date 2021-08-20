@@ -15,7 +15,7 @@ const path = require("path");
 
 // NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
-let theme = 'ev-saas-default';
+// let theme = 'ev-saas-default';
 
 mix.setPublicPath(`public/themes/${theme}`)
     .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
