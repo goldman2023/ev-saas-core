@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Tenant\Cart\Mini;
 
 use Illuminate\View\Component;
 
-class JoinButton extends Component
+class MiniCartSimple extends Component
 {
     public string $class;
 
@@ -25,6 +25,6 @@ class JoinButton extends Component
      */
     public function render()
     {
-        return view('components.join-button');
+        return view('components.tenant.cart.mini.mini-cart-simple');
     }
 }

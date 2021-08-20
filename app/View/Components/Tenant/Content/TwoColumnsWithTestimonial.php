@@ -1,21 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Tenant\Content;
 
 use Illuminate\View\Component;
 
-class JoinButton extends Component
+class TwoColumnsWithTestimonial extends Component
 {
-    public string $class;
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($class = '')
+    public function __construct()
     {
-        $this->class = $class;
+        //
     }
 
     /**
@@ -25,6 +23,6 @@ class JoinButton extends Component
      */
     public function render()
     {
-        return view('components.join-button');
+        return view('components.tenant.content.two-columns-with-testimonial');
     }
 }

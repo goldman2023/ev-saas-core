@@ -710,9 +710,6 @@ if (!function_exists('convertPrice')) {
 
 function translate($key, $lang = null)
 {
-    $label_prefix =  Route::currentRouteName();
-
-    $stringKey = $label_prefix . '.' . $key;
 
 
 
@@ -731,20 +728,6 @@ function translate($key, $lang = null)
         $translation_def->lang_value = $key;
         $translation_def->save();
     }
-
-    $dynamic_label = EVLabel::where('key', $stringKey)->get();
-
-    /*  TODO: Make sure to upgrade this for multilanguage support */
-    if(count($dynamic_label)) {
-        $dynamic_label = $dynamic_label[0];
-    } else {
-        $dynamic_label = new EVLabel();
-        $dynamic_label->key = $stringKey;
-        $dynamic_label->value = $key;
-        $dynamic_label->save();
-    }
-
-    return $dynamic_label->value;
 
     //Check for session lang
     $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
