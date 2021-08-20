@@ -1,24 +1,14 @@
-<div x-data="{ 
-        open: @entangle('isEmpty').defer,
-        checkSearchQuery() {            
-            if ($refs.searchQuery.value.length > 0) {
-                $('.typed-search-box').removeClass('hidden');
-                $('.dot-loader').removeClass('hidden');
-            }else{
-                $('.typed-search-box').addClass('hidden');
-            }
-        }
-    }"
-    class="my-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
+<div x-data="searchForm()"
+     class="my-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
     <div class="relative">
         <form action="/search" class="flex flex-wrap justify-between md:flex-row">
             <input 
                 wire:model="query"
-                type="search" 
+                type="search"
                 name="query"
                 x-ref="searchQuery"
-                @keyup="checkSearchQuery()"
-                @focus="checkSearchQuery()"             
+                @keyup="checkSearchQuery('keyup')"
+                @focus="checkSearchQuery('focus')"
                 placeholder="Search Companies Example: Wood mills" 
                 required="required" 
                 class="flex-1 h-10 px-4 m-1 text-gray-700 placeholder-gray-400 bg-transparent border-none appearance-none lg:h-12 dark:text-gray-200 focus:outline-none focus:placeholder-transparent focus:ring-0">
@@ -27,16 +17,16 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
             </button>
-        </form>    
-        <div class="typed-search-box stop-propagation absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">    
+        </form>
+        <div :class="{ 'hidden': !showResult }" class="typed-search-box document-click-d-none hidden absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">    
             <div class="flex justify-center">
-                <div class="dot-loader hidden">
+                <div :class="{ 'hidden': !showLoader }" class="dot-loader hidden">
                     <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
                     <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
                     <div class="animate-loader w-[8px] h-[8px] bg-gray-400 rounded-full mx-[2px] inline-flex"></div>
                 </div>
             </div>
-            <div :class="{ 'hidden': !open }" class="search-nothing p-3 text-center text-gray-500">
+            <div :class="{ 'hidden': !showEmpty }" class="search-nothing p-3 text-center text-gray-500">
                 {{ translate('Sorry, nothing found for ') }} <strong>{{ '"' . $query . '"'}}</strong>
             </div>
             <div id="search-content" class="text-left">
@@ -156,7 +146,27 @@
 </div>
 
 <script>
-    window.addEventListener('searched', event => {
-        $('.dot-loader').addClass('hidden');
-    })
+    function searchForm() {
+        return { 
+            showEmpty: @entangle('isEmpty').defer,
+            showResult: @entangle('isOpen').defer,
+            showLoader: @entangle('isLoader').defer,
+            checkSearchQuery(action) {
+                if (this.$refs.searchQuery.value.trim().length > 0) {
+                    this.showResult = true;
+                    this.showLoader = true;
+                    if (action == 'focus') {
+                        @this.search();
+                    }
+                }
+            }
+        };
+    }
+    window.onload = function() {
+        $(document).on('click', function (e) {
+            if (e.target.name != "query") {
+                $('.document-click-d-none').addClass('hidden');
+            }
+        });
+    };
 </script>

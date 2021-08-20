@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Log;
 
 class HomeSearch extends Component
 {
-    public $keywords;
-    public $products;
-    public $categories;
-    public $events;
-    public $shops;
+    public $keywords = array();
+    public $products = array();
+    public $categories = array();
+    public $events = array();
+    public $shops = array();
     public $query = '';
-    public $isEmpty = false;
+    public $isEmpty = false;    // Check empty string show/hide
+    public $isOpen = false;     // Check search result show/hide
+    public $isLoader = false;   // Check loader show/hide
     public $tenant;
 
     public function mount()
@@ -26,7 +28,10 @@ class HomeSearch extends Component
     }
 
     public function search() {
+        $this->reset(['keywords', 'products', 'categories', 'events', 'shops', 'isOpen', 'isLoader', 'isEmpty']);
+
         if (trim($this->query) != '') {
+            $this->isOpen = true;
             $products = Product::where('tags', 'like', '%' . $this->query . '%')->get();
             foreach ($products as $key => $product) {
                 foreach (explode(',', $product->tags) as $key => $tag) {
@@ -43,34 +48,19 @@ class HomeSearch extends Component
             }
 
             $this->products = $products->take(3);
-
             $this->categories = Category::where('name', 'like', '%' . $this->query . '%')->get()->take(3);
-
             $this->shops = Shop::where('name', 'like', '%' . $this->query . '%')->get()->take(3);
-
             $this->events = Event::where('title', 'like', '%' . $this->query . '%')->orWhere('description', 'like', '%' . $this->query . '%')->get()->take(3);
-
         }
 
-        if (sizeof($this->keywords) > 0 || sizeof($this->categories) > 0 || sizeof($this->products) > 0 || sizeof($this->shops) > 0 || trim($this->query) == '') {
-            $this->isEmpty = false;
-        }else {
+        if (sizeof($this->keywords) == 0 && sizeof($this->categories) == 0 && sizeof($this->products) == 0 && sizeof($this->shops) == 0) {
             $this->isEmpty = true;
         }
-
     }
 
     public function render()
     {
-        $this->keywords = array();
-        $this->products = array();
-        $this->categories = array();
-        $this->events = array();
-        $this->shops = array();
-
         $this->search();
-
-        $this->dispatchBrowserEvent('searched');
 
         return view('livewire.home-search');
     }
