@@ -15,8 +15,7 @@
         <div class="relative lg:grid lg:grid-cols-3 lg:gap-x-8">
             <div class="lg:col-span-1">
                 <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    <x-label>
-                        {!! ev_dynamic_translate('Grid Title') !!}
+                    <x-label :label="ev_dynamic_translate('Grid Title')">
                     </x-label>
                 </h2>
             </div>
@@ -36,8 +35,7 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-1') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 1') !!}
+                                <x-label :label="ev_dynamic_translate('Item 1')">
                                 </x-label>
                             </a>
 
@@ -45,8 +43,8 @@
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 1 Description') !!}
+
+                        <x-label :label="ev_dynamic_translate('Item 1 Description')">
                         </x-label>
                     </dd>
                 </div>
@@ -63,15 +61,15 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-2') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 2') !!}
+
+                                <x-label :label="ev_dynamic_translate('Item 2')">
                                 </x-label>
                             </a>
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 2 Description') !!}
+
+                        <x-label :label="ev_dynamic_translate('Item 2 Description')">
                         </x-label>
                     </dd>
                 </div>
@@ -88,15 +86,14 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-3') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 3') !!}
+                                <x-label :label="ev_dynamic_translate('Item 3')">
                                 </x-label>
                             </a>
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 3 Description') !!}
+
+                        <x-label :label="ev_dynamic_translate('Item 3 Description')">
                         </x-label>
                     </dd>
                 </div>
@@ -113,16 +110,16 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-4') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 4') !!}
+
+                                <x-label :label="ev_dynamic_translate('Item 4')">
                                 </x-label>
+
                             </a>
 
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 4 Description') !!}
+                        <x-label :label="ev_dynamic_translate('Item 4 Description')">
                         </x-label>
                     </dd>
                 </div>
