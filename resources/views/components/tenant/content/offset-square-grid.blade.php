@@ -25,7 +25,7 @@
                     <dt>
                         <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                             <!-- Heroicon name: outline/globe-alt -->
-                            <a href="{!! ev_dynamic_translate('#item-1') !!}">
+                            <a href="{!! ev_dynamic_translate('#item-1')->value !!}">
                                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -60,7 +60,7 @@
                             </svg>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-2') !!}">
+                            <a href="{!! ev_dynamic_translate('#item-2')->value !!}">
 
                                 <x-label :label="ev_dynamic_translate('Item 2')">
                                 </x-label>
@@ -85,7 +85,7 @@
                             </svg>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-3') !!}">
+                            <a href="{!! ev_dynamic_translate('#item-3')->value !!}">
                                 <x-label :label="ev_dynamic_translate('Item 3')">
                                 </x-label>
                             </a>
@@ -109,7 +109,7 @@
                             </svg>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-4') !!}">
+                            <a href="{!! ev_dynamic_translate('#item-4')->value !!}">
 
                                 <x-label :label="ev_dynamic_translate('Item 4')">
                                 </x-label>

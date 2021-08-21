@@ -1,23 +1,19 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Tenant\Dashboard\Pages;
 
 use Illuminate\View\Component;
 
-class Label extends Component
+class PagesList extends Component
 {
-
-    public $label;
-    public $some;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($label = '')
+    public function __construct()
     {
-        $this->label = $label;
-
+        //
     }
 
     /**
@@ -27,6 +23,6 @@ class Label extends Component
      */
     public function render()
     {
-        return view('components.label');
+        return view('components.tenant.dashboard.pages.pages-list');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 
 return [
 
