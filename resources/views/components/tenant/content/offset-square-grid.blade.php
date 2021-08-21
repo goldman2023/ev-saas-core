@@ -15,8 +15,7 @@
         <div class="relative lg:grid lg:grid-cols-3 lg:gap-x-8">
             <div class="lg:col-span-1">
                 <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    <x-label>
-                        {!! ev_dynamic_translate('Grid Title') !!}
+                    <x-label :label="ev_dynamic_translate('Grid Title')">
                     </x-label>
                 </h2>
             </div>
@@ -26,7 +25,7 @@
                     <dt>
                         <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
                             <!-- Heroicon name: outline/globe-alt -->
-                            <a href="{!! ev_dynamic_translate('#item-1') !!}">
+                            <a href="{!! ev_dynamic_translate('#item-1')->value !!}">
                                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -36,8 +35,7 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-1') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 1') !!}
+                                <x-label :label="ev_dynamic_translate('Item 1')">
                                 </x-label>
                             </a>
 
@@ -45,8 +43,8 @@
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 1 Description') !!}
+
+                        <x-label :label="ev_dynamic_translate('Item 1 Description')">
                         </x-label>
                     </dd>
                 </div>
@@ -62,16 +60,16 @@
                             </svg>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-2') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 2') !!}
+                            <a href="{!! ev_dynamic_translate('#item-2')->value !!}">
+
+                                <x-label :label="ev_dynamic_translate('Item 2')">
                                 </x-label>
                             </a>
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 2 Description') !!}
+
+                        <x-label :label="ev_dynamic_translate('Item 2 Description')">
                         </x-label>
                     </dd>
                 </div>
@@ -87,16 +85,15 @@
                             </svg>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-3') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 3') !!}
+                            <a href="{!! ev_dynamic_translate('#item-3')->value !!}">
+                                <x-label :label="ev_dynamic_translate('Item 3')">
                                 </x-label>
                             </a>
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 3 Description') !!}
+
+                        <x-label :label="ev_dynamic_translate('Item 3 Description')">
                         </x-label>
                     </dd>
                 </div>
@@ -112,17 +109,17 @@
                             </svg>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-4') !!}">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Item 4') !!}
+                            <a href="{!! ev_dynamic_translate('#item-4')->value !!}">
+
+                                <x-label :label="ev_dynamic_translate('Item 4')">
                                 </x-label>
+
                             </a>
 
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-label>
-                            {!! ev_dynamic_translate('Item 4 Description') !!}
+                        <x-label :label="ev_dynamic_translate('Item 4 Description')">
                         </x-label>
                     </dd>
                 </div>

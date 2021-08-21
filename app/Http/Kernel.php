@@ -49,6 +49,8 @@ class Kernel extends HttpKernel
             'throttle:100,1',
             'bindings',
         ],
+        'universal' => [],
+
     ];
 
     /**
