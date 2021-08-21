@@ -1,13 +1,14 @@
 <div class="relative">
     {!! $label->value !!}
 
+
+    {{-- TODO: Make nice icon and general styling --}}
     <button wire:click.prevent="editLabel()" class="text-xs">
         {{ translate('Edit') }}
     </button>
 
-
-
     @if ($show_input_field)
+    {{-- TODO: Improve UX and UI of this element --}}
         <div class="absolute top-0">
 
             <input type="text" wire:model="label.value" class="mt-2 text-sm sm:text-base pl-2 pr-4
