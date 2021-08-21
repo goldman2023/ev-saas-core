@@ -13,12 +13,16 @@ class DynamicLabel extends Component
     public $show_input_field = false;
     public $info;
 
+    /* Available types for now: text, textarea */
+    public $type = 'text';
+
     protected $rules = [
         'label.value' => 'required|string|min:6',
     ];
 
-    public function mount($label)
+    public function mount($label, $type = 'text')
     {
+        $this->type = $type;
         $this->show_input_field = false;
         $this->label = $label;
         $this->info = 0;
