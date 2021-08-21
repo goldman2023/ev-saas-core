@@ -27,10 +27,11 @@
     @php
         echo get_setting('header_script');
     @endphp
+    @auth
+        @livewireStyles
 
-    @livewireStyles
-
-    @livewireScripts
+        @livewireScripts
+    @endauth
 </head>
 
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
