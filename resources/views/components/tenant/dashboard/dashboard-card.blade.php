@@ -1,19 +1,15 @@
-<div
-{{ $attributes }}>
+<div {{ $attributes }}>
     <div>
         <span class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white">
             <!-- Heroicon name: outline/clock -->
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+
+                {{ $icon ?? '' }}
         </span>
     </div>
     <div class="mt-8">
         <h3 class="text-lg font-medium">
-                <!-- Extend touch target to entire panel -->
-                {{ $title }}
+            <!-- Extend touch target to entire panel -->
+            {{ $title }}
         </h3>
         <p class="mt-2 text-sm text-gray-500">
             {{ $slot }}

@@ -8,7 +8,8 @@
         </div>
         <div class="-mr-2 -my-2 md:hidden">
             <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none " aria-expanded="false"
-                    :class="{ 'text-gray-900': open_mobile, 'text-gray-500': !open_mobile }" @click="open_mobile = !open_mobile">
+                    :class="{ 'text-gray-900': open_mobile, 'text-gray-500': !open_mobile }"
+                    @click="open_mobile = !open_mobile">
                 <span class="sr-only">Open menu</span>
                 <!-- Heroicon name: outline/menu -->
                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -197,13 +198,6 @@
 
     <!--
       Mobile menu, show/hide based on mobile menu state.
-
-      Entering: "duration-200 ease-out"
-        From: "opacity-0 scale-95"
-        To: "opacity-100 scale-100"
-      Leaving: "duration-100 ease-in"
-        From: "opacity-100 scale-100"
-        To: "opacity-0 scale-95"
     -->
     <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-50"
          x-show="open_mobile"
