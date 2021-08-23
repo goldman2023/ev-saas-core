@@ -2,10 +2,18 @@
 
 @section('content')
     {{-- <x-tenant.search.hero-search></x-tenant.search.hero-search> --}}
+
+
+    <x-tenant.hero.with-angled-image-on-right></x-tenant.hero.with-angled-image-on-right>
+    <x-tenant.promo.with-image-titles></x-tenant.promo.with-image-titles>
+
+
     <div class="pb-3">
     <x-tenant.hero.simple-centered></x-tenant.hero.simple-centered>
 
     </div>
+
+
 
 
 

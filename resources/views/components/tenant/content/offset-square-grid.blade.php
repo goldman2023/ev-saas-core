@@ -34,7 +34,7 @@
                             </a>
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
-                            <a href="{!! ev_dynamic_translate('#item-1') !!}">
+                            <a href="{!! ev_dynamic_translate('#item-1')->value !!}">
                                 <x-label :label="ev_dynamic_translate('Item 1')">
                                 </x-label>
                             </a>

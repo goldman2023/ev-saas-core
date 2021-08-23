@@ -26,6 +26,12 @@
     @php
         echo get_setting('header_script');
     @endphp
+
+    @auth
+        @livewireStyles
+
+        @livewireScripts
+    @endauth
 </head>
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
 <div class="min-h-screen">
