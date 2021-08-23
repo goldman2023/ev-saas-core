@@ -4,13 +4,13 @@
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
             <div>
                 <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
-                    {{ __('labels.brands_title') }}
+                    {{ translate('Store Brands') }}
                 </h2>
                 <p class="mt-3 max-w-3xl text-lg text-gray-500">
-                    {{ __('labels.brands_description') }}
+                    {{ translate('Brands Description') }}
                 </p>
                 <div class="mt-8 sm:flex">
-{{--                    TODO: Add dynamic buttons --}}
+                    {{-- TODO: Add dynamic buttons --}}
                 </div>
             </div>
             <div class="mt-8 grid grid-cols-2 gap-0.5 md:grid-cols-3 lg:mt-0 lg:grid-cols-2">
