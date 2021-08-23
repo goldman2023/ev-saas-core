@@ -22,16 +22,16 @@
         </p>
         <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
             <div class="rounded-md shadow">
-                <a href="#"
+                <a href="{{ ev_dynamic_translate('#button-1')->value }}"
                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                    {{ $button }}
+                    <x-label :label="ev_dynamic_translate('Button 1')">
+                    </x-label>
                 </a>
             </div>
             <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-                <a href="https://calendly.com/eim-solutions/new-project-inquries" target="_blank"
+                <a href="{{ ev_dynamic_translate('#button-2')->value }}" target="_blank"
                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                    <x-label>
-                        {{ translate('Example Booking') }}
+                    <x-label :label="ev_dynamic_translate('Button 2')">
                     </x-label>
                 </a>
             </div>
