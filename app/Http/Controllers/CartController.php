@@ -12,6 +12,7 @@ use Cookie;
 
 class CartController extends Controller
 {
+
     public function index(Request $request)
     {
         //dd($cart->all());
@@ -42,10 +43,10 @@ class CartController extends Controller
 
         if($product->digital != 1 && $request->quantity < $product->min_qty) {
             return array('status' => 0, 'view' => view('frontend.partials.minQtyNotSatisfied', [
-                'min_qty' => $product->min_qty
+                'min_qty' => $product->min_qty,
+                'class' => 'mt-5'
             ])->render());
         }
-
 
         //check the color enabled or disabled for the product
         if($request->has('color')){
@@ -54,17 +55,22 @@ class CartController extends Controller
 
         if ($product->digital != 1) {
             //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
-            foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
-                if($str != null){
-                    $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
-                }
-                else{
-                    $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+            $choice_options = Product::find($request->id)->choice_options;
+
+            if(!empty($choice_options)) {
+                foreach ($choice_options as $key => $choice) {
+                    if($str != null){
+                        $str .= '-'.str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+                    }
+                    else{
+                        $str .= str_replace(' ', '', $request['attribute_id_'.$choice->attribute_id]);
+                    }
                 }
             }
         }
 
         $data['variant'] = $str;
+
 
         if($str != null && $product->variant_product){
             $product_stock = $product->stocks->where('variant', $str)->first();
@@ -84,6 +90,7 @@ class CartController extends Controller
         $flash_deals = \App\Models\FlashDeal::where('status', 1)->get();
         $inFlashDeal = false;
         foreach ($flash_deals as $flash_deal) {
+
             if ($flash_deal != null && $flash_deal->status == 1  && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && \App\Models\FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first() != null) {
                 $flash_deal_product = \App\Models\FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $product->id)->first();
                 if($flash_deal_product->discount_type == 'percent'){
@@ -96,6 +103,8 @@ class CartController extends Controller
                 break;
             }
         }
+
+        // If it's not a flash deal, calculate product specific discount if exists!
         if (!$inFlashDeal) {
             if($product->discount_type == 'percent'){
                 $price -= ($price*$product->discount)/100;
@@ -114,8 +123,14 @@ class CartController extends Controller
             }
         }
 
+        $data['name'] = $product->name;
         $data['quantity'] = $request['quantity'];
-        $data['price'] = $price;
+        $data['price'] = [
+            'raw' => $price,
+            'display' => format_price(convert_price($price))
+        ];
+        $data['images'] = $product->images;
+        $data['permalink'] = $product->permalink;
         $data['tax'] = $tax;
         $data['shipping'] = 0;
         $data['product_referral_code'] = null;
@@ -130,18 +145,18 @@ class CartController extends Controller
             $data['product_referral_code'] = Cookie::get('product_referral_code');
         }
 
-        if($request->session()->has('cart')){
+        if($request->session()->has('cart')) {
             $foundInCart = false;
             $cart = collect();
 
-            foreach ($request->session()->get('cart') as $key => $cartItem){
+            foreach ($request->session()->get('cart') as $key => $cartItem) {
                 if($cartItem['id'] == $request->id){
                     if($str != null && $cartItem['variant'] == $str){
                         $product_stock = $product->stocks->where('variant', $str)->first();
                         $quantity = $product_stock->qty;
 
                         if($quantity < $cartItem['quantity'] + $request['quantity']){
-                            return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart')->render());
+                            return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
                         }
                         else{
                             $foundInCart = true;
@@ -149,7 +164,7 @@ class CartController extends Controller
                         }
                     }
                     elseif($product->current_stock < $cartItem['quantity'] + $request['quantity']){
-                        return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart')->render());
+                        return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
                     }
                     else{
                         $foundInCart = true;
@@ -162,9 +177,24 @@ class CartController extends Controller
             if (!$foundInCart) {
                 $cart->push($data);
             }
+
             $request->session()->put('cart', $cart);
         }
         else{
+            // Cart is empty.
+
+            // Still check if selected quantity is in stock!
+            if(!empty($str)) {
+                $product_stock = $product->stocks->where('variant', $str)->first();
+                $quantity = $product_stock->qty;
+
+                if($quantity < $data['quantity']){
+                    return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
+                }
+            } else if($product->current_stock < $data['quantity']){
+                return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
+            }
+
             $cart = collect([$data]);
             $request->session()->put('cart', $cart);
         }

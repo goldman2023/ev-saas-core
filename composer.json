@@ -14,7 +14,6 @@
         "awssat/laravel-visits": "^3.0",
         "barryvdh/laravel-snappy": "^0.4.8",
         "binarytorch/larecipe": "^2.4",
-        "buglinjo/laravel-webp": "^2.1",
         "cinetpay/cinetpay-php": "^1.9",
         "facade/ignition": "^2.10",
         "fideloper/proxy": "^4.0",
@@ -24,6 +23,7 @@
         "intervention/image": "^2.5",
         "iyzico/iyzipay-php": "^2.0.48",
         "laracasts/flash": "^3.0",
+        "laraform/laraform-laravel": "^1.2",
         "laravel/cashier": "^13.4",
         "laravel/framework": "8.*",
         "laravel/nova": "~3.0",
@@ -117,6 +117,10 @@
         {
             "type": "composer",
             "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "composer",
+            "url": "https://composer.laraform.io"
         }
     ]
 }

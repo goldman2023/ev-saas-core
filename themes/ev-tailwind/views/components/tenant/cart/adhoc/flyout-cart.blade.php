@@ -14,7 +14,7 @@
     x-show="open"
     x-ref="cart"
     @toggle-cart.window="open = !open"
-    @add-to-cart.window="open = true">
+    @added-to-cart.window="open = true">
 
     <div class="absolute inset-0 overflow-hidden">
         <!--
@@ -46,9 +46,7 @@
                 <div class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
                     <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                         <div class="flex items-start justify-between">
-                            <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
-                                Shopping cart
-                            </h2>
+                            <x-label tag="h2" class="text-lg font-medium text-gray-900" id="slide-over-title" :label="ev_dynamic_translate('Shopping cart', true)"></x-label>
                             <div class="ml-3 h-7 flex items-center">
                                 <button type="button" class="-m-2 p-2 text-gray-400 hover:text-gray-500"
                                     @click="open = false">
@@ -64,8 +62,7 @@
                         <div class="mt-8">
                             <div class="flow-root">
                                 <ul role="list" class="-my-6 divide-y divide-gray-200">
-
-                                    @if(!empty($items))
+                                    @if($items->isNotEmpty())
                                         @foreach ($items as $item)
                                             @php
                                                 $prices = home_discounted_base_price($item['id'], false, true);
@@ -84,16 +81,18 @@
                                                                 </a>
                                                             </h3>
                                                             <p class="ml-4">
-                                                                {{ $prices['display'] }}
+                                                                {{ $item['price']['display'] }}
                                                             </p>
                                                         </div>
-                                                        <p class="mt-1 text-sm text-gray-500">
-                                                            Salmon
-                                                        </p>
+                                                        @if(!empty($item['variant']))
+                                                            <p class="mt-1 text-sm text-gray-500">
+                                                                {{ $item['variant'] }}
+                                                            </p>
+                                                        @endif
                                                     </div>
                                                     <div class="flex-1 flex items-end justify-between text-sm">
                                                         <p class="text-gray-500">
-                                                            Qty 1
+                                                            Qty {{ $item['quantity'] }}
                                                         </p>
 
                                                         <div class="flex">
@@ -105,6 +104,11 @@
                                                 </div>
                                             </li>
                                         @endforeach
+
+                                    @else
+                                        <div class="pt-7 pb-5 px-4 text-center font-semibold text-16">
+                                            <x-label :label="ev_dynamic_translate('No items in cart.', true)"></x-label>
+                                        </div>
                                     @endif
 
                                 </ul>
@@ -114,16 +118,20 @@
 
                     <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
                         <div class="flex justify-between text-base font-medium text-gray-900">
-                            <p>Subtotal</p>
-                            <p>$262.00</p>
+                            <x-label :label="ev_dynamic_translate('Subtotal', true)">
+                            </x-label>
+                            <p>{{ $this->subtotal['display'] }}</p>
                         </div>
-                        <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                        <x-label :label="ev_dynamic_translate('Shipping and taxes calculated at checkout.', true)" class="mt-0.5 text-sm text-gray-500">
+                        </x-label>
                         <div class="mt-6">
-                            <a href="#" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">Checkout</a>
+                            <a href="{{ route('checkout.shipping_info') }}" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                                Checkout
+                            </a>
                         </div>
                         <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
                             <p>
-                                or <button type="button" class="text-indigo-600 font-medium hover:text-indigo-500">Continue Shopping<span aria-hidden="true"> &rarr;</span></button>
+                                or <button type="button" class="text-indigo-600 font-medium hover:text-indigo-500" @click="open = false">Continue Shopping<span aria-hidden="true"> &rarr;</span></button>
                             </p>
                         </div>
                     </div>

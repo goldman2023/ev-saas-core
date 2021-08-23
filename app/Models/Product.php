@@ -205,6 +205,13 @@ class Product extends Model
             foreach($photos as $photo) {
                 $url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
 
+                if(config('imgproxy.enabled') == true) {
+                    // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
+                    // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
+                    // TODO: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
+                    $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
+                }
+
                 if($photo->id == $this->thumbnail_img) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,

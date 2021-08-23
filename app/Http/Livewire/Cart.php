@@ -4,22 +4,34 @@ namespace App\Http\Livewire;
 
 use App\Models\Product;
 use Livewire\Component;
+use App\Facades\CartService;
+use Session;
 
 class Cart extends Component
 {
     public string $class;
     public $items;
+    public $subtotal;
     public string $template;
     protected $listeners = ['refreshCarts'];
 
     public function mount($template = '', $class = ''): void
     {
+        if(!Session::has('cart') || count(Session::get('cart')) <= 0) {
+            Session::put('cart', collect([]));
+        }
+
         $this->template = $template;
         $this->class = $class;
-        $this->items = collect([]);
+        $this->items = Session::get('cart');
+
+        $this->subtotal = [
+            'raw' => 0,
+            'display' => format_price(convert_price(0)),
+        ];
     }
 
-    public function initCart($ids = []) {
+    /*public function initCart($ids = []) {
         if($this->template == 'main') {
             $ids = is_string($ids) ? json_decode($ids) : $ids;
 
@@ -32,40 +44,73 @@ class Cart extends Component
                 }
 
                 // Fetch the items from the DB
-                $this->items = Product::findMany(array_values($ids))->toArray();
+                $this->items = collect(Product::findMany(array_values($ids))->toArray());
 
                 // Emit to all other carts
                 $this->emitTo('cart', 'refreshCarts', $this->items);
             }
         }
-    }
+    }*/
 
     public function refreshCarts($items)
     {
         if($this->template !== 'main') {
-            $this->items = $items;
+
+            //$this->items = collect($items);
+            /*$this->subtotal['raw'] = 0;
+
+            $this->items->each(function($item, $key) {
+                $this->subtotal['raw'] += home_discounted_base_price($item['id'], false);
+            });
+            $this->subtotal['display'] = format_price(convert_price($this->subtotal['raw']));*/
         }
     }
 
-    public function addToCart($id) {
-        // TODO: Create Facade for ProductController and use already existing classes for Cart manipulation here!
+    public function addToCart($params) {
         if($this->template == 'main') {
-            if(is_int($id) || ctype_digit($id)) {
-                // Check if item is already in cart
-                // TODO: Fix this depending on Quantity logic!
-                $in_cart = array_filter($this->items, function ($value, $key) use ($id) {
-                    return $value['id'] == (int) $id;
-                }, ARRAY_FILTER_USE_BOTH);
+            // id, quantity, has(color)
+            request()->request->add([
+                'id' => (int) $params['id'],
+                'quantity' => (int) $params['quantity'],
+            ]);
 
-                $this->items[] = Product::find($id)->first()->toArray();
-
-                // Emit to all other carts
-                $this->emitTo('cart', 'refreshCarts', $this->items);
-
-                // Send event to main to update the localStorage
-                $this->dispatchBrowserEvent('refresh-local-cart', json_encode(array_column($this->items, 'id')));
+            if(isset($params['color']) && !empty($params['color'])) {
+                request()->request->add([
+                    'color' => $params['color']
+                ]);
             }
+
+            $result = CartService::addToCart(request());
+
+            if($result['status'] === 0) {
+                $this->dispatchBrowserEvent('add-to-cart-errors', $result['view']);
+            } else if($result['status'] === 1) {
+                $this->dispatchBrowserEvent('added-to-cart');
+                $this->dispatchBrowserEvent('update-cart-items-count', count(Session::get('cart')));
+            }
+
+            // Emit to all other carts
+            //$this->emitTo('cart', 'refreshCarts', $this->items);
         }
+
+
+        // TODO: Create Facade for ProductController and use already existing classes for Cart manipulation here!
+        /*if(is_int($id) || ctype_digit($id)) {
+            // Check if item is already in cart
+            // TODO: Fix this depending on Quantity logic!
+            $in_cart = $this->items->filter(function ($value, $key) use ($id) {
+                return $value['id'] == (int) $id;
+            });
+
+            $this->items->push(Product::find($id)->first()->toArray());
+
+            // Emit to all other carts
+            $this->emitTo('cart', 'refreshCarts', $this->items);
+
+            // Send event to main to update the localStorage
+            $this->dispatchBrowserEvent('refresh-local-cart', $this->items->pluck('id')->toJson());
+        }*/
+
     }
 
     public function removeFromCart($id) {
@@ -75,19 +120,22 @@ class Cart extends Component
 
                 foreach($this->items as $key => $item) {
                     if($item['id'] == $id) {
-                        unset($this->items[$key]);
+                        $this->items->forget($key);
+                        break;
                     }
                 }
-
-                $this->items = array_values($this->items);
 
                 // Emit to all other carts
                 $this->emitTo('cart', 'refreshCarts', $this->items);
 
                 // Send event to main to update the localStorage
-                $this->dispatchBrowserEvent('refresh-local-cart', json_encode(array_column($this->items, 'id')));
+                $this->dispatchBrowserEvent('refresh-local-cart', $this->items->pluck('id')->toJson());
             }
         }
+    }
+
+    public function calculateSubtotal() {
+
     }
 
     public function render()

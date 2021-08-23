@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfc060f3b66fff917ab5a6114d836ba2",
+    "content-hash": "eefc3646fb0916b80dda487364812fbc",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -499,71 +499,6 @@
                 }
             ],
             "time": "2021-04-03T20:56:48+00:00"
-        },
-        {
-            "name": "buglinjo/laravel-webp",
-            "version": "2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/buglinjo/laravel-webp.git",
-                "reference": "a16aa528dc500e99817f3b314b48c5272614598d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/buglinjo/laravel-webp/zipball/a16aa528dc500e99817f3b314b48c5272614598d",
-                "reference": "a16aa528dc500e99817f3b314b48c5272614598d",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gd": "*",
-                "illuminate/support": "~5.1|~6.0|~7.0|~8.0",
-                "php": "~7.1|^8.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": ">=5.4.3",
-                "squizlabs/php_codesniffer": "^2.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Buglinjo\\LaravelWebp\\WebpServiceProvider"
-                    ],
-                    "aliases": {
-                        "Webp": "Buglinjo\\LaravelWebp\\Webp"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Buglinjo\\LaravelWebp\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Irakli Tchitadze",
-                    "email": "irakli.tchitadze@gmail.com",
-                    "homepage": "http://buglinjo.me",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Laravel 5 package for WebP image format",
-            "homepage": "https://github.com/buglinjo/laravel-webp",
-            "keywords": [
-                "Buglinjo",
-                "LaravelWebp",
-                "Webp",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/buglinjo/laravel-webp/issues",
-                "source": "https://github.com/buglinjo/laravel-webp/tree/2.1"
-            },
-            "time": "2021-04-01T00:15:54+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -2635,6 +2570,76 @@
             "time": "2021-04-26T09:17:50+00:00"
         },
         {
+            "name": "hashids/hashids",
+            "version": "4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vinkla/hashids.git",
+                "reference": "8cab111f78e0bd9c76953b082919fc9e251761be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vinkla/hashids/zipball/8cab111f78e0bd9c76953b082919fc9e251761be",
+                "reference": "8cab111f78e0bd9c76953b082919fc9e251761be",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0 || ^9.4",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "suggest": {
+                "ext-bcmath": "Required to use BC Math arbitrary precision mathematics (*).",
+                "ext-gmp": "Required to use GNU multiple precision mathematics (*)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hashids\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Akimov",
+                    "email": "ivan@barreleye.com"
+                },
+                {
+                    "name": "Vincent Klaiber",
+                    "email": "hello@doubledip.se"
+                }
+            ],
+            "description": "Generate short, unique, non-sequential ids (like YouTube and Bitly) from numbers",
+            "homepage": "https://hashids.org/php",
+            "keywords": [
+                "bitly",
+                "decode",
+                "encode",
+                "hash",
+                "hashid",
+                "hashids",
+                "ids",
+                "obfuscate",
+                "youtube"
+            ],
+            "support": {
+                "issues": "https://github.com/vinkla/hashids/issues",
+                "source": "https://github.com/vinkla/hashids/tree/4.1.0"
+            },
+            "time": "2020-11-26T19:24:33+00:00"
+        },
+        {
             "name": "http-interop/http-factory-guzzle",
             "version": "1.2.0",
             "source": {
@@ -3120,6 +3125,68 @@
                 "source": "https://github.com/laracasts/flash/tree/master"
             },
             "time": "2020-09-07T13:25:35+00:00"
+        },
+        {
+            "name": "laraform/laraform-laravel",
+            "version": "1.2.5",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:laraform/laraform-laravel-pro.git",
+                "reference": "a045298b46afb84929a1ad61c53b7a7559e7f91a"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "https://composer.laraform.io/dist/laraform/laraform-laravel/laraform-laraform-laravel-a045298b46afb84929a1ad61c53b7a7559e7f91a-zip-81835b.tar",
+                "reference": "a045298b46afb84929a1ad61c53b7a7559e7f91a",
+                "shasum": "c670b5e4958dcf08f52d4229eb37ecc85c44baa5"
+            },
+            "require": {
+                "hashids/hashids": "^3.0 || ^4.0",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.0",
+                "phpunit/phpunit": "^7.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Laraform\\LaraformServiceProvider"
+                    ],
+                    "aliases": {
+                        "Laraform": "Laraform\\Laraform"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laraform\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Berecz",
+                    "email": "adam@laraform.io"
+                }
+            ],
+            "description": "Laraform Laravel package",
+            "homepage": "https://laraform.io",
+            "keywords": [
+                "builder",
+                "form",
+                "generator",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/laraform/laraform/issues",
+                "docs": "https://laraform.io/docs",
+                "source": "https://github.com/laraform/laraform-laravel-pro/tree/1.2.5"
+            },
+            "time": "2021-06-16T12:15:17+00:00"
         },
         {
             "name": "laravel/cashier",

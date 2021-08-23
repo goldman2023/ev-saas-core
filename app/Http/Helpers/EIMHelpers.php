@@ -168,6 +168,25 @@ function get_theme_cart_templates($type = 'full')
 
 function ev_dynamic_translate($key, $global = false, $lang = null)
 {
+    $stringKey = ev_dynamic_translate_key($key, $global, $lang);
+
+    $dynamic_label = EVLabel::where('key', $stringKey)->get();
+
+    /*  TODO: Make sure to upgrade this for multilanguage support */
+    if (count($dynamic_label)) {
+        $dynamic_label = $dynamic_label[0];
+    } else {
+        $dynamic_label = new EVLabel();
+        $dynamic_label->key = $stringKey;
+        $dynamic_label->value = $key;
+
+        $dynamic_label->save();
+    }
+
+    return $dynamic_label;
+}
+
+function ev_dynamic_translate_key($key, $global = false, $lang = null) {
     $label_prefix =  Route::currentRouteName();
 
     if(Route::current()->parameters()) {
@@ -192,20 +211,5 @@ function ev_dynamic_translate($key, $global = false, $lang = null)
 
     $stringKey = $label_prefix . '.' . $key;
 
-    $dynamic_label = EVLabel::where('key', $stringKey)->get();
-
-    /*  TODO: Make sure to upgrade this for multilanguage support */
-    if (count($dynamic_label)) {
-        $dynamic_label = $dynamic_label[0];
-    } else {
-        $dynamic_label = new EVLabel();
-        $dynamic_label->key = $stringKey;
-        $dynamic_label->value = $key;
-
-        $dynamic_label->save();
-    }
-
-
-
-    return $dynamic_label->value;
+    return $stringKey;
 }

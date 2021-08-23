@@ -13,6 +13,8 @@
                     raw: {{ $prices['raw'] }},
                     display: '{{ $prices['display'] }}'
                 },
+                quantity: 1,
+                colors: null,
                 thumb: '{{  $product['images']['thumbnail']['url'] ?? '' }}',
                 link: '{{ route('product', $product['slug']) }}'
             }">

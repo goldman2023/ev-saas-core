@@ -27,28 +27,32 @@
 
     <form class="max-w-2xl mx-auto px-4">
         <ul role="list" class="divide-y divide-gray-200">
-            @if(!empty($items))
+            @if($items->isNotEmpty())
                 @foreach ($items as $item)
-                    @php
-                        $prices = home_discounted_base_price($item['id'], false, true);
-                    @endphp
                     <li class="py-6 flex items-center">
                         <img src="{{ $item['images']['thumbnail']['url'] ?? '' }}" alt="{{ $item['name'] }}" class="flex-none w-16 h-16 rounded-md border border-gray-200">
                         <div class="ml-4 flex-auto">
                             <h3 class="font-medium text-gray-900">
                                 <a href="{{ $item['permalink'] }}">{{ $item['name'] }}</a>
                             </h3>
-                            <p class="text-gray-500">Salmon</p>
+                            @if(!empty($item['variant']))
+                                <p class="text-gray-500"> {{ $item['variant'] }}</p>
+                            @endif
                         </div>
                     </li>
                 @endforeach
+            @else
+                <div class="pt-7 pb-5 px-4 text-center font-semibold text-16">
+                    <x-label :label="ev_dynamic_translate('No items in cart.', true)">
+                    </x-label>
+                </div>
             @endif
 
         </ul>
 
-        <button type="submit" class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
+        <a href="{{ route('checkout.shipping_info') }}" class="block w-full text-center bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
             {{ translate('Checkout') }}
-        </button>
+        </a>
 
         <p class="mt-6 text-center">
             <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">

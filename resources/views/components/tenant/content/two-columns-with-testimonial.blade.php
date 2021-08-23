@@ -18,45 +18,44 @@
     <div class="max-w-7xl mx-auto px-4 space-y-8 sm:px-6 lg:px-8">
         <div class="text-base max-w-prose mx-auto lg:max-w-none">
             <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">
-                <x-label>
-                    {{ ev_dynamic_translate('Page Description') }}
+                <x-label :label="ev_dynamic_translate('Page Description')">
                 </x-label>
 
             </h2>
             <h1 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                <x-label>
-                    {{ ev_dynamic_translate('Page Title') }}
+                <x-label :label="ev_dynamic_translate('Page Title')">
                 </x-label>
             </h1>
         </div>
         <div class="relative z-10 text-base max-w-prose mx-auto lg:max-w-5xl lg:mx-0 lg:pr-72">
             <p class="text-lg text-gray-500">
-                <x-label>
-                    {{ ev_dynamic_translate('Page Excerpt') }}
+
+
+                <x-label :label="ev_dynamic_translate('Page Excerpt')">
                 </x-label>
             </p>
         </div>
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
             <div class="relative z-10">
                 <div class="prose prose-indigo text-gray-500 mx-auto lg:max-w-none">
-                    <x-label>
-                        {!! ev_dynamic_translate('Page Content') !!}
+
+                    <x-label :label="ev_dynamic_translate('Page Content')">
                     </x-label>
                 </div>
                 <div class="mt-10 flex text-base max-w-prose mx-auto lg:max-w-none">
                     <div class="rounded-md shadow">
-                        <a href="{{ ev_dynamic_translate('#button1') }}"
+                        <a href="{{ ev_dynamic_translate('#button1')->value }}"
                             class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                            <x-label>
-                                {!! ev_dynamic_translate('Button 1') !!}
+
+                            <x-label :label="ev_dynamic_translate('Button 1')">
                             </x-label>
                         </a>
                     </div>
                     <div class="rounded-md shadow ml-4">
-                        <a href="{{ ev_dynamic_translate('#button2') }}"
+                        <a href="{{ ev_dynamic_translate('#button2')->value }}"
                             class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
-                            <x-label>
-                                {!! ev_dynamic_translate('Button 2') !!}
+
+                            <x-label :label="ev_dynamic_translate('Button 2')">
                             </x-label>
                         </a>
                     </div>
@@ -75,7 +74,7 @@
                 </svg>
                 <blockquote class="relative bg-white rounded-lg shadow-lg">
                     <div class="rounded-t-lg px-6 py-8 sm:px-10 sm:pt-10 sm:pb-8">
-                        <img src="{!! ev_dynamic_translate('#testimonial-logo', true) !!}" alt="Workcation" class="h-8">
+                        <img src="{!! ev_dynamic_translate('#testimonial-logo', true)->value !!}" alt="Workcation" class="h-8">
                         <div class="relative text-lg text-gray-700 font-medium mt-8">
                             <svg class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-gray-200"
                                 fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
@@ -83,8 +82,8 @@
                                     d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
                             </svg>
                             <p class="relative">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Testimonial Description', true) !!}
+
+                                <x-label :label="ev_dynamic_translate('Testimonial Description', true)">
                                 </x-label>
                             </p>
                         </div>
@@ -94,13 +93,17 @@
                         <div
                             class="relative rounded-full border-2 border-white sm:absolute sm:top-0 sm:transform sm:-translate-y-1/2">
                             <img class="w-12 h-12 sm:w-20 sm:h-20 rounded-full bg-indigo-300"
-                                src="{!! ev_dynamic_translate('#testimonial-img', true) !!}" alt="">
+                                src="{!! ev_dynamic_translate('#testimonial-img', true)->value !!}" alt="">
                         </div>
                         <span class="relative ml-4 text-indigo-300 font-semibold leading-6 sm:ml-24 sm:pl-1">
-                            <p class="text-white font-semibold sm:inline"> {!! ev_dynamic_translate('Testimonial Person', true) !!}</p>
+                            <p class="text-white font-semibold sm:inline">
+                                {{-- {!! ev_dynamic_translate('Testimonial Person', true) !!} --}}
+
+                                <x-label :label="ev_dynamic_translate('Testimonial Person', true)">
+                                </x-label>
+                            </p>
                             <p class="sm:inline">
-                                <x-label>
-                                    {!! ev_dynamic_translate('Testimonial Possition', true) !!}
+                                <x-label :label="ev_dynamic_translate('Testimonial Possition', true)">
                                 </x-label>
                             </p>
                         </span>
