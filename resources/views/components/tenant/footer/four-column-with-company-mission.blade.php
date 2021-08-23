@@ -5,9 +5,9 @@
         <div class="xl:grid xl:grid-cols-3 xl:gap-8">
             <div class="space-y-8 xl:col-span-1">
                 <a href="{{ route('home') }}" class="d-block">
-                    @if (get_setting('footer_logo') != null)
-                        <img class="h-10 lazyload" src="{{ static_asset('assets/img/logo.jpg') }}"
-                             data-src="{{ uploaded_asset(get_setting('footer_logo')) }}" alt="{{ get_site_name() }}"
+                    @if (get_setting('header_logo') != null)
+                        <img class="h-10 lazyload" src="{{ uploaded_asset(get_setting('header_logo')) }}"
+                             data-src="{{ uploaded_asset(get_setting('header_logo')) }}" alt="{{ get_site_name() }}"
                              height="44">
                     @else
                         <img class="h-10 lazyload"

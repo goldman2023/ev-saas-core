@@ -25,7 +25,7 @@
                         <span class="aiz-side-nav-text">{{translate('Dashboard')}}</span>
                     </a>
                 </li>
-                {{--                Categories --}}
+                {{-- Categories --}}
                 <li class="aiz-side-nav-item">
 
                     <a href="{{route('admin.categories.index')}}"
@@ -835,6 +835,7 @@
 
                     </ul>
                 </li>
+
                 <!-- Setup & Configurations -->
                 @if(auth()->user()->isAdmin() || in_array('14', json_decode(auth()->user()->staff->role->permissions)))
                     <li class="aiz-side-nav-item">
@@ -847,6 +848,12 @@
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('admin.general_setting.index')}}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{translate('General Settings')}}</span>
+                                </a>
+                            </li>
+
+                            <li class="aiz-side-nav-item">
+                                <a href="{{route('admin.checkout_flow.index')}}" class="aiz-side-nav-link">
+                                    <span class="aiz-side-nav-text">{{translate('Checkout Flow')}}</span>
                                 </a>
                             </li>
 
