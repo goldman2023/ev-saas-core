@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6b0af1869a5bb199db9c9553871a457",
+    "content-hash": "cfc060f3b66fff917ab5a6114d836ba2",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -499,6 +499,71 @@
                 }
             ],
             "time": "2021-04-03T20:56:48+00:00"
+        },
+        {
+            "name": "buglinjo/laravel-webp",
+            "version": "2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buglinjo/laravel-webp.git",
+                "reference": "a16aa528dc500e99817f3b314b48c5272614598d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buglinjo/laravel-webp/zipball/a16aa528dc500e99817f3b314b48c5272614598d",
+                "reference": "a16aa528dc500e99817f3b314b48c5272614598d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "illuminate/support": "~5.1|~6.0|~7.0|~8.0",
+                "php": "~7.1|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=5.4.3",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Buglinjo\\LaravelWebp\\WebpServiceProvider"
+                    ],
+                    "aliases": {
+                        "Webp": "Buglinjo\\LaravelWebp\\Webp"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Buglinjo\\LaravelWebp\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Irakli Tchitadze",
+                    "email": "irakli.tchitadze@gmail.com",
+                    "homepage": "http://buglinjo.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel 5 package for WebP image format",
+            "homepage": "https://github.com/buglinjo/laravel-webp",
+            "keywords": [
+                "Buglinjo",
+                "LaravelWebp",
+                "Webp",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/buglinjo/laravel-webp/issues",
+                "source": "https://github.com/buglinjo/laravel-webp/tree/2.1"
+            },
+            "time": "2021-04-01T00:15:54+00:00"
         },
         {
             "name": "cakephp/chronos",
@@ -15664,5 +15729,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
