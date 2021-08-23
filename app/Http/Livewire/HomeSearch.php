@@ -52,7 +52,7 @@ class HomeSearch extends Component
             $this->events = Event::where('title', 'like', '%' . $this->query . '%')->orWhere('description', 'like', '%' . $this->query . '%')->get()->take(3);
         }
 
-        if (sizeof($this->keywords) == 0 && sizeof($this->categories) == 0 && sizeof($this->products) == 0 && sizeof($this->shops) == 0) {
+        if (sizeof($this->keywords) == 0 && sizeof($this->categories) == 0 && sizeof($this->products) == 0 && sizeof($this->shops) == 0 && trim($this->query) != '') {
             $this->isEmpty = true;
         }
     }
