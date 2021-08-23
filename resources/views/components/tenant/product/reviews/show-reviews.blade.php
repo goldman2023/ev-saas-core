@@ -20,6 +20,6 @@
     </div>
 
     <div x-show="open">
-        <x-tenant.product.reviews.add-review-modal :product="$product"></x-tenant.product.reviews.add-review-modal>
+        @livewire('tenant.add-review', ['product_id'=>$product->id])
     </div>
 </div>

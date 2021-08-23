@@ -1,23 +1,21 @@
 <?php
 
-namespace App\View\Components\Tenant\Product\Reviews;
+namespace App\View\Components\Tenant\Cart\Mini;
 
-use App\Models\Product;
 use Illuminate\View\Component;
 
-class AddReviewModal extends Component
+class MiniCartSimple extends Component
 {
+    public string $class;
 
-    public Product $product;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(Product $product)
+    public function __construct($class = '')
     {
-        //
-        $this->product = $product;
+        $this->class = $class;
     }
 
     /**
@@ -27,6 +25,6 @@ class AddReviewModal extends Component
      */
     public function render()
     {
-        return view('components.tenant.product.reviews.add-review-modal');
+        return view('components.tenant.cart.mini.mini-cart-simple');
     }
 }

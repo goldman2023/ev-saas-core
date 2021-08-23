@@ -13,6 +13,7 @@
                 </div>
             </div>
             <x-tenant.product-list></x-tenant.product-list>
+            
             <x-tenant.product.reviews.show-reviews :product="$product"></x-tenant.product.reviews.show-reviews>
         </div>
     </div>

@@ -1,21 +1,22 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Tenant\Category\Previews;
 
 use Illuminate\View\Component;
 
-class JoinButton extends Component
+class HorizontalLinkCards extends Component
 {
-    public string $class;
-
+    public $categories;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($class = '')
+    public function __construct()
     {
-        $this->class = $class;
+        //
+        $this->categories = \App\Models\Category::where('level', 0)->get();
+
     }
 
     /**
@@ -25,6 +26,6 @@ class JoinButton extends Component
      */
     public function render()
     {
-        return view('components.join-button');
+        return view('components.tenant.category.previews.horizontal-link-cards');
     }
 }
