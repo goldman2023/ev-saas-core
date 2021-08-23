@@ -1,5 +1,5 @@
 <div x-data="searchForm()" class="my-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
-    <div class="relative">
+    <div class="relative" @click.outside="showResult = false; showLoader = false;">
         <!-- Seach input form -->
         <form action="/search" class="flex flex-wrap justify-between md:flex-row">
             <input 
@@ -7,7 +7,7 @@
                 type="search"
                 name="query"
                 x-ref="searchQuery"
-                @keyup="checkSearchQuery('keyup')"
+                @input.debounce.500ms="checkSearchQuery('input')"
                 @focus="checkSearchQuery('focus')"
                 placeholder="Search Companies Example: Wood mills" 
                 required="required" 
@@ -21,7 +21,7 @@
         <!-- End Seach input form -->
 
         <!-- Seach result container -->
-        <div :class="{ 'hidden': !showResult }" class="typed-search-box document-click-d-none hidden absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">    
+        <div :class="{ 'hidden': !showResult }" class="hidden absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">    
             <!-- Dot loader -->
             <div class="flex justify-center">
                 <div :class="{ 'hidden': !showLoader }" class="dot-loader hidden">
@@ -174,11 +174,4 @@
             }
         };
     }
-    window.onload = function() {
-        $(document).on('click', function (e) {
-            if (e.target.name != "query") {
-                $('.document-click-d-none').addClass('hidden');
-            }
-        });
-    };
 </script>
