@@ -3,7 +3,7 @@
         <!-- Seach input form -->
         <form action="/search" class="flex flex-wrap justify-between md:flex-row">
             <input 
-                wire:model="query"
+                wire:model.debounce.500ms="query"
                 type="search"
                 name="query"
                 x-ref="searchQuery"
