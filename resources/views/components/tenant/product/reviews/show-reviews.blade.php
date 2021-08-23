@@ -8,18 +8,28 @@
         <!-- End Review Result Section  -->
 
         <div class="mt-16 lg:mt-0 lg:col-start-6 lg:col-span-7">
-            <h3 class="sr-only">Recent reviews</h3>
+            <h3 class="sr-only">
+                Recent reviews
+            </h3>
             @if(count($product->reviews)>0)
             @foreach($product->reviews as $key => $review)
             <x-tenant.product.reviews.review-card :review="$review "></x-tenant.product.reviews.review-card>
             @endforeach
             @else
-            <p class="mt-5">No reviews</p>
+            <p class="mt-5">
+                {{-- Please use x-label with global parameter --}}
+                <x-label :label="ev_dynamic_translate('No reviews', true)">
+                </x-label>
+
+            </p>
             @endif
         </div>
     </div>
 
     <div x-show="open">
+        {{-- <x-modal> --}}
+            {{-- TODO: Work with @vukasin to figure out correct syntax --}}
+        {{-- </x-modal> --}}
         <x-tenant.product.reviews.add-review-modal :product="$product"></x-tenant.product.reviews.add-review-modal>
     </div>
 </div>
