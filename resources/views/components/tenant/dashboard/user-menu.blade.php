@@ -3,7 +3,7 @@
         <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300">
             <div class="pb-8 space-y-1">
                 <!-- Current: "bg-gray-200 text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
-                <a href="#"
+                <a href="{{ route('dashboard') }}"
                     class="bg-gray-200 text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
                     aria-current="page">
                     <!-- Heroicon name: outline/home -->
@@ -30,6 +30,9 @@
                     </svg>
                     <span class="truncate">
                         {{ translate('Orders') }}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            {{ App\Models\Order::count() }}
+                        </span>
                     </span>
                 </a>
 
@@ -44,6 +47,11 @@
                     </svg>
                     <span class="truncate">
                         {{ translate('Products') }}
+                        {{-- TODO: Make this badge component dynamic --}}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            {{-- TODO: Create helper fucntion to scope the things based on seller/admin/etc --}}
+                            {{ App\Models\Product::count() }}
+                        </span>
                     </span>
                 </a>
 
@@ -57,8 +65,11 @@
                             d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                     <span class="truncate">
-                        {{ translate('My viewed items') }}
-
+                        {{ translate('Categories') }}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            {{-- TODO: Create helper fucntion to scope the things based on seller/admin/etc --}}
+                            {{ App\Models\Category::count() }}
+                        </span>
                     </span>
                 </a>
             </div>

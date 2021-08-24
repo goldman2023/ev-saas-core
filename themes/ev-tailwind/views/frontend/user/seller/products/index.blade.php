@@ -17,6 +17,8 @@
 
                         <h1> {{ translate('Products') }} </h1>
                         <livewire:datatable model="App\Models\Product" :exclude="['video_link', 'description', 'user_id']"/>
+
+                        <livewire:product-table model="App\Models\Product" />
                     </div>
 
                     <!-- Right column -->
