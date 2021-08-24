@@ -48,6 +48,11 @@ This project uses Livewire DataTables package: https://github.com/mediconesystem
 Example Component usage:
 `<livewire:datatable model="App\Models\Product" :exclude="['video_link', 'description', 'user_id']"/>`
 
+
+#Components
+
+Please see Components.md file, for more information, right now we add any dynamic and component usage examples in Components.md file
+
 **Project URL:**
 
 https://app.ev-saas.com
