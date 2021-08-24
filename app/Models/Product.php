@@ -7,6 +7,7 @@ use App\Models\ProductTax;
 use App\Models\User;
 use App\Models\Wishlist;
 use Auth;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
@@ -115,6 +116,8 @@ class Product extends Model
         'attributes' => 'object'
     ];
 
+    protected $appends = ['images', 'permalink'];
+
     protected static function boot()
     {
         parent::boot();
@@ -174,6 +177,66 @@ class Product extends Model
 
     public function flash_deal_product() {
         return $this->hasOne(FlashDealProduct::class);
+    }
+
+    /**
+     * Get all images related to the product but properly structured in an assoc. array
+     * This function is used in frontend/themes etc.
+     *
+     * @return array*
+     */
+    public function getImagesAttribute() {
+        $photos_idx = explode(',', $this->photos);
+        $photos = [];
+        $data = [
+            'thumbnail' => [],
+            'gallery' => []
+        ];
+
+        if(!empty($this->thumbnail_img)) {
+            array_unshift($photos_idx, $this->thumbnail_img);
+        }
+
+        if(!empty($photos_idx)) {
+            $photos = get_images($photos_idx); // 1 SQL Query to rule them all...
+        }
+
+        if($photos) {
+            foreach($photos as $photo) {
+                $url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
+
+                if(config('imgproxy.enabled') == true) {
+                    // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
+                    // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
+                    // TODO: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
+                    $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
+                }
+
+                if($photo->id == $this->thumbnail_img) {
+                    $data['thumbnail'] = [
+                        'id' => $photo->id,
+                        'url' => $url
+                    ];
+                } else {
+                    $data['gallery'][] = [
+                        'id' => $photo->id,
+                        'url' => $url
+                    ];
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get all photos related to the product but properly structured in an assoc. array
+     * This function is used in frontend/themes etc.
+     *
+     * @return string $link
+     */
+    public function getPermalinkAttribute() {
+        return route('product', $this->slug);
     }
 
     protected function asJson($value)

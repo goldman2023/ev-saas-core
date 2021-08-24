@@ -19,6 +19,9 @@
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
 
+    @livewireStyles
+    @livewireScripts
+
     {{ seo()->render() }}
 
     <!-- Favicon -->
@@ -34,21 +37,25 @@
     @endauth
 </head>
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
-    <div class="min-h-screen">
-        <header>
-            @include('frontend.layouts.navigation')
-        </header>
-        <!-- Page Content -->
-        <main>
-            @yield('content')
-        </main>
+<div class="min-h-screen">
+    <header>
+        @include('frontend.layouts.navigation')
+    </header>
+    <!-- Page Content -->
+    <main>
+        @yield('content')
+    </main>
 
-        <footer>
-            <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
-        </footer>
+    <footer>
+        <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
+    </footer>
 
-    </div>
+    @if($cart_adhoc_template = get_setting('cart_adhoc_template'))
+        @php $name = 'adhoc.'.$cart_adhoc_template; @endphp
+        <livewire:cart :template="$name" />
+    @endif
 
-    @livewireScripts
+    <livewire:cart template="main"  />
+</div>
 </body>
 </html>

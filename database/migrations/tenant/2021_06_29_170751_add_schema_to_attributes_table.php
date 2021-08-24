@@ -26,7 +26,7 @@ class AddSchemaToAttributesTable extends Migration
     public function down()
     {
         Schema::table('attributes', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_schema');
         });
     }
 }

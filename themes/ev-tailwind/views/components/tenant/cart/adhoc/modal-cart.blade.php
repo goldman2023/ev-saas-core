@@ -8,7 +8,10 @@
 ?>
 
 <div class="fixed z-10 inset-0 overflow-y-auto" role="dialog" aria-modal="true"
-    x-data="{open:false}">
+     x-data="{open:false}"
+     x-show="open"
+     x-ref="cart"
+     @toggle-cart.window="open = !open">
     <div class="flex min-h-screen text-center sm:block sm:px-6 lg:px-8" style="font-size: 0;">
         <!--
           Background overlay, show/hide based on modal state.

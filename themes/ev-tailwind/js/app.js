@@ -23,6 +23,11 @@ Alpine.plugin(intersect);
 window.Alpine = Alpine;
 Alpine.start();
 
+/*import Vue from 'vue';
+import 'livewire-vue';
+
+window.Vue = Vue //this is important! Do not use require('vue')*/
+
 // LUXON
 let { DateTime } = require('luxon');
 window.DateTime = DateTime;
