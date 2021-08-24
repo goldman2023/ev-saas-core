@@ -35,6 +35,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1.31",
+        "mediconesystems/livewire-datatables": "^0.6.1",
         "nao-pon/flysystem-google-drive": "~1.1",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "osenco/mpesa": "^1.20",
