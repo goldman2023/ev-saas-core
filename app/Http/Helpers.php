@@ -901,14 +901,11 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-
         if(env('FORCE_HTTPS') == false) {
             return route('home');
         } else {
             return  secure_url('/');
         }
-
-
     }
 }
 

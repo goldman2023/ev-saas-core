@@ -23,7 +23,7 @@ class Cart extends Component
 
         $this->template = $template;
         $this->class = $class;
-        $this->items = Session::get('cart');
+        $this->items = collect(Session::get('cart'));
 
         $this->subtotal = [
             'raw' => 0,
@@ -52,9 +52,9 @@ class Cart extends Component
         }
     }*/
 
-    public function refreshCarts($items)
+    public function refreshCarts()
     {
-        if($this->template !== 'main') {
+            $this->items = collect(Session::get('cart'));
 
             //$this->items = collect($items);
             /*$this->subtotal['raw'] = 0;
@@ -63,7 +63,7 @@ class Cart extends Component
                 $this->subtotal['raw'] += home_discounted_base_price($item['id'], false);
             });
             $this->subtotal['display'] = format_price(convert_price($this->subtotal['raw']));*/
-        }
+
     }
 
     public function addToCart($params) {
@@ -85,6 +85,16 @@ class Cart extends Component
             if($result['status'] === 0) {
                 $this->dispatchBrowserEvent('add-to-cart-errors', $result['view']);
             } else if($result['status'] === 1) {
+                //$this->items = collect(Session::get('cart'));
+
+                // Refresh other livewire carts
+                // TODO: There is an issue with flyoutcart fingerprint, check the console and following git issue:
+                // https://github.com/livewire/livewire/issues/1726
+                // https://github.com/livewire/livewire/issues/1686
+                // Problem: After adding/removing the items, refreshCarts event is not sent to Flyout cart
+                $this->emitTo('cart', 'refreshCarts');
+
+                // Notify alpine components
                 $this->dispatchBrowserEvent('added-to-cart');
                 $this->dispatchBrowserEvent('update-cart-items-count', count(Session::get('cart')));
             }

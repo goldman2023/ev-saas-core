@@ -1,13 +1,3 @@
-<div class="modal-body p-4 added-to-cart">
-    <div class="text-center text-danger">
-        <h2>{{translate('oops..')}}</h2>
-        <h3>{{translate('This item is out of stock!')}}</h3>
-    </div>
-    <div class="text-center mt-5">
-        <button class="btn btn-outline-primary" data-dismiss="modal">{{translate('Back to shopping')}}</button>
-    </div>
-</div>
-
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="rounded-md bg-red-50 p-4 {{ $class ?? '' }}">
     <div class="flex">
@@ -19,10 +9,10 @@
         </div>
         <div class="ml-3">
             <h3 class="text-sm font-medium text-red-800">
-                {{ translate('oops..') }}
+                {{ translate('Item out of stock') }}
             </h3>
             <div class="mt-2 text-sm text-red-700">
-                <p>{{translate('This item is out of stock!')}}</p>
+                <p>{{translate('This item is out of stock! Current stock for selected item is: '.($current_stock ?? ''))}}</p>
             </div>
         </div>
     </div>

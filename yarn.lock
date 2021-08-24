@@ -4569,6 +4569,11 @@ listr2@^3.8.3:
     through "^2.3.8"
     wrap-ansi "^7.0.0"
 
+livewire-vue@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/livewire-vue/-/livewire-vue-0.3.1.tgz#897655acb292fecaf6cac5291623bffcb8d31ce4"
+  integrity sha512-R04O2zq86goM0Hw2MztDxK1cEVb196wCiGr3fFF6j4CTA2ocox1bLB4sF7qzyu+mnXmNSy1Wo3CZoY5BJNpl4w==
+
 load-script@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/load-script/-/load-script-1.0.0.tgz#0491939e0bee5643ee494a7e3da3d2bac70c6ca4"

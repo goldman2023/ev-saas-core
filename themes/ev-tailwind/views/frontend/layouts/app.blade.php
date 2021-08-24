@@ -49,7 +49,7 @@
         <livewire:cart :template="$name" />
     @endif
 
-    <livewire:cart template="main" />
+    <livewire:cart template="main"  />
 </div>
 </body>
 </html>

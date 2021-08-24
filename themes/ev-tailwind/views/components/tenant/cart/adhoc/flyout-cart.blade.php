@@ -9,10 +9,10 @@
  */
 ?>
 
-<div class="fixed inset-0 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true"
+<div wire:key="{{rand()}}" class="fixed inset-0 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true"
     x-data="{open:false}"
     x-show="open"
-    x-ref="cart"
+    x-ref="flyout_cart"
     @toggle-cart.window="open = !open"
     @added-to-cart.window="open = true">
 
@@ -65,6 +65,7 @@
                                     @if($items->isNotEmpty())
                                         @foreach ($items as $item)
                                             @php
+                                                var_dump($item);
                                                 $prices = home_discounted_base_price($item['id'], false, true);
                                             @endphp
                                             <li class="py-6 flex">

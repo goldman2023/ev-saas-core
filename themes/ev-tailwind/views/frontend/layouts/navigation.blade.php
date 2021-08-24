@@ -52,7 +52,7 @@
 
                         @if($cart_mini_template = get_setting('cart_mini_template'))
                             @php $name = 'mini.'.$cart_mini_template; @endphp
-                            <livewire:cart :template="$name" />
+                            <livewire:cart :template="$name"  />
                         @endif
                     </div>
 

@@ -137,7 +137,7 @@ class CartController extends Controller
         $data['cash_on_delivery'] = $product->cash_on_delivery;
         $data['digital'] = $product->digital;
 
-        if ($request['quantity'] == null){
+        if ($request['quantity'] == null) {
             $data['quantity'] = 1;
         }
 
@@ -145,18 +145,22 @@ class CartController extends Controller
             $data['product_referral_code'] = Cookie::get('product_referral_code');
         }
 
-        if($request->session()->has('cart')) {
+        $in_cart = $request->session()->has('cart') && collect($request->session()->get('cart'))->filter(function ($value, $key) use ($product) {
+            return $product->id === $value['id'];
+        })->count() == 1 ? true : false;
+
+        if($in_cart) {
             $foundInCart = false;
             $cart = collect();
 
             foreach ($request->session()->get('cart') as $key => $cartItem) {
-                if($cartItem['id'] == $request->id){
+                if($cartItem['id'] == $request->id) {
                     if($str != null && $cartItem['variant'] == $str){
                         $product_stock = $product->stocks->where('variant', $str)->first();
                         $quantity = $product_stock->qty;
 
                         if($quantity < $cartItem['quantity'] + $request['quantity']){
-                            return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
+                            return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['current_stock' => $product_stock, 'class' => 'mt-5'])->render());
                         }
                         else{
                             $foundInCart = true;
@@ -164,7 +168,7 @@ class CartController extends Controller
                         }
                     }
                     elseif($product->current_stock < $cartItem['quantity'] + $request['quantity']){
-                        return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
+                        return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['current_stock' => $product->current_stock, 'class' => 'mt-5'])->render());
                     }
                     else{
                         $foundInCart = true;
@@ -188,11 +192,11 @@ class CartController extends Controller
                 $product_stock = $product->stocks->where('variant', $str)->first();
                 $quantity = $product_stock->qty;
 
-                if($quantity < $data['quantity']){
-                    return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
+                if($quantity < $data['quantity']) {
+                    return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['current_stock' => $product_stock, 'class' => 'mt-5'])->render());
                 }
-            } else if($product->current_stock < $data['quantity']){
-                return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['class' => 'mt-5'])->render());
+            } else if($product->current_stock < $data['quantity']) {
+                return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['current_stock' => $product->current_stock, 'class' => 'mt-5'])->render());
             }
 
             $cart = collect([$data]);

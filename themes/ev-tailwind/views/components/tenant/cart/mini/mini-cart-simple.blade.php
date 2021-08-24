@@ -10,7 +10,7 @@
  */
 ?>
 
-<div class="absolute top-16 inset-x-0 mt-px pb-6 bg-white shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5 z-40 {{ $class }}"
+<div wire:key="{{rand()}}" class="absolute top-16 inset-x-0 mt-px pb-6 bg-white shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5 z-40 {{ $class }}"
      x-data="{open:false}"
      x-show="open"
      x-ref="mini_cart"
@@ -38,6 +38,11 @@
                             @if(!empty($item['variant']))
                                 <p class="text-gray-500"> {{ $item['variant'] }}</p>
                             @endif
+                            <div class="flex">
+                                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500"
+                                        @click="$dispatch('remove-from-cart', {{ $item['id'] }})"
+                                >Remove</button>
+                            </div>
                         </div>
                     </li>
                 @endforeach
