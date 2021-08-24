@@ -28,6 +28,9 @@
                                                     @endfor
                                         </div>
                                     </div>
+                                    @error('rating')
+                                    <div style="color: red; font-size: 12px">{{ $message }}</div>
+                                    @enderror
                                     <input type="hidden" name="rating" value="{{$this->rating}}">
                                 </div>
                             </div>
@@ -38,6 +41,9 @@
                                 {{ translate('Comment') }}
                             </label>
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                @error('comment')
+                                    <div style="color: red; font-size: 12px">{{ $message }}</div>
+                                @enderror
                                 <textarea wire:model.defer="comment" id="about" name="comment" rows="3" class="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
                                 <p class="mt-2 text-sm text-gray-500">Write a few sentences about yourself.</p>
                             </div>
