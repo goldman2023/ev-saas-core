@@ -120,7 +120,7 @@ Route::middleware([
     Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::post('/cart/nav-cart-items', [CartController::class, 'updateNavCart'])->name('cart.nav_cart');
     Route::post('/cart/show-cart-modal', [CartController::class, 'showCartModal'])->name('cart.showCartModal');
-    //Route::post('/cart/addtocart', [CartController::class, 'addToCart'])->name('cart.addToCart');
+    Route::post('/cart/addtocart', [CartController::class, 'addToCart'])->name('cart.addToCart');
     Route::post('/cart/removeFromCart', [CartController::class, 'removeFromCart'])->name('cart.removeFromCart');
     Route::post('/cart/updateQuantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 
