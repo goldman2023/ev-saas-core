@@ -24,6 +24,7 @@
         "intervention/image": "^2.5",
         "iyzico/iyzipay-php": "^2.0.48",
         "laracasts/flash": "^3.0",
+        "laraform/laraform-laravel": "^1.2",
         "laravel/cashier": "^13.4",
         "laravel/framework": "8.*",
         "laravel/nova": "~3.0",
@@ -117,6 +118,10 @@
         {
             "type": "composer",
             "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "composer",
+            "url": "https://composer.laraform.io"
         }
     ]
 }

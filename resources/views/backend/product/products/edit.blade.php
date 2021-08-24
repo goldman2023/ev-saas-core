@@ -48,9 +48,11 @@
                             <div class="col-lg-8">
                                 <select class="form-control aiz-selectpicker" name="brand_id" id="brand_id" data-live-search="true">
                                     <option value="">{{ ('Select Brand') }}</option>
-                                    @foreach (\App\Models\Brand::all() as $brand)
-                                    <option value="{{ $brand->id }}" @if($product->brand_id == $brand->id) selected @endif>{{ $brand->getTranslation('name') }}</option>
-                                    @endforeach
+                                    @if($brands = \App\Models\Brand::all())
+                                        @foreach ($brands as $brand)
+                                            <option value="{{ $brand->id }}" @if($product->brand_id == $brand->id) selected @endif>{{ $brand->getTranslation('name') }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -227,9 +229,11 @@
                             </div>
                             <div class="col-lg-8">
                                 <select name="choice_attributes[]" id="choice_attributes" data-selected-text-format="count" data-live-search="true" class="form-control aiz-selectpicker" multiple data-placeholder="{{ translate('Choose Attributes') }}">
-                                    @foreach (\App\Models\Attribute::all() as $key => $attribute)
-                                        <option value="{{ $attribute->id }}" @if(in_array($attribute->id, $product->attributes, true)) selected @endif>{{ $attribute->getTranslation('name') }}</option>
-                                    @endforeach
+                                    @if($attributes = \App\Models\Attribute::all())
+                                        @foreach ($attributes as $key => $attribute)
+                                            <option value="{{ $attribute->id }}" @if(in_array($attribute->id, $product->attributes, true)) selected @endif>{{ $attribute->getTranslation('name') }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -245,7 +249,7 @@
                                     <div class="form-group row">
                                         <div class="col-lg-3">
                                             <input type="hidden" name="choice_no[]" value="{{ $choice_option->attribute_id }}">
-                                            <input type="text" class="form-control" name="choice[]" value="{{ \App\Models\Attribute::find($choice_option->attribute_id)->getTranslation('name') }}" placeholder="{{ translate('Choice Title') }}" disabled>
+                                            <input type="text" class="form-control" name="choice[]" value="@if($value=\App\Models\Attribute::find($choice_option->attribute_id)) {{ $value->getTranslation('name') }}@endif" placeholder="{{ translate('Choice Title') }}" disabled>
                                         </div>
                                         <div class="col-lg-8">
                                             <input type="text" class="form-control aiz-tag-input" name="choice_options_{{ $choice_option->attribute_id }}[]" placeholder="{{ translate('Enter choice values') }}" value="{{ implode(',', $choice_option->values ?? []) }}" data-on-change="update_sku">

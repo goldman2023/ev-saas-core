@@ -211,7 +211,10 @@
                 </div>
             </fieldset>
         </div>
+
         <x-tenant.system.product-add-to-cart :product="$product"></x-tenant.system.product-add-to-cart>
+
+        <div class="w-full" x-data="{error:''}" @add-to-cart-errors.window="error = $event.detail" @added-to-cart.window="error = ''" x-html="error"></div>
     </form>
 
     <!-- Product details -->

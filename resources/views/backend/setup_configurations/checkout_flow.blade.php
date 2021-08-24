@@ -25,7 +25,7 @@
                             <select name="cart_full_template" class="col-sm-9 form-control aiz-selectpicker">
                                 @if($full_carts)
                                     @foreach($full_carts as $key => $title)
-                                        <option value="{{ $key }}" onchange="updateSettings(this, 'cart_full_template')" @php if(@\App\Models\BusinessSetting::where('type', 'cart_full_template')->first()->value === $key) echo "selected"; @endphp>
+                                        <option value="{{ $key }}" onchange="updateSettings(this, 'cart_full_template')" {{ get_setting('cart_full_template') === $key ? "selected":"" }}>
                                             {{ $title }}
                                         </option>
                                     @endforeach
@@ -41,7 +41,7 @@
                             <select name="cart_adhoc_template" class="col-sm-9 form-control aiz-selectpicker">
                                 @if($adhoc_carts)
                                     @foreach($adhoc_carts as $key => $title)
-                                        <option value="{{ $key }}" onchange="updateSettings(this, 'cart_adhoc_template')" @php if(@\App\Models\BusinessSetting::where('type', 'cart_adhoc_template')->first()->value === $key) echo "selected"; @endphp>
+                                        <option value="{{ $key }}" onchange="updateSettings(this, 'cart_adhoc_template')" {{ get_setting('cart_adhoc_template') === $key ? "selected":"" }}>
                                             {{ $title }}
                                         </option>
                                     @endforeach
@@ -58,7 +58,7 @@
                             <select name="cart_mini_template" class="col-sm-9 form-control aiz-selectpicker">
                                 @if($mini_carts)
                                     @foreach($mini_carts as $key => $title)
-                                        <option value="{{ $key }}" onchange="updateSettings(this, 'cart_mini_template')" @php if(@\App\Models\BusinessSetting::where('type', 'cart_mini_template')->first()->value === $key) echo "selected"; @endphp>
+                                        <option value="{{ $key }}" onchange="updateSettings(this, 'cart_mini_template')" {{ get_setting('cart_mini_template') === $key ? "selected":"" }}>
                                             {{ $title }}
                                         </option>
                                     @endforeach

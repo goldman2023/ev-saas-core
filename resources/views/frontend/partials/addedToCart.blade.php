@@ -16,7 +16,7 @@
                 <div class="col-sm-10">
                     <div class="h6 text-primary">
                         <strong>
-                            {{ single_price(($data['price']+$data['tax'])*$data['quantity']) }}
+                            {{ single_price(($data['price']['raw']+$data['tax'])*$data['quantity']) }}
                         </strong>
                     </div>
                 </div>

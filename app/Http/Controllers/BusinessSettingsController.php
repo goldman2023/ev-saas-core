@@ -305,7 +305,7 @@ class BusinessSettingsController extends Controller
             }
             else {
                 $business_settings = BusinessSetting::where('type', $type)->first();
-                $cache_key = 'settings_'.$type;
+                $cache_key = tenant('id').'_business_settings_'.$type;
                 $value = is_array($request[$type]) ? json_encode($request[$type]) : $request[$type];
 
                 if(empty($business_settings)) {
@@ -321,13 +321,20 @@ class BusinessSettingsController extends Controller
 
                 // Remove the cached setting
                 Cache::forget($cache_key);
-
                 // Store setting in cache
                 Cache::put($cache_key, $value);
             }
         }
         flash(translate("Settings updated successfully"))->success();
         return back();
+    }
+
+    public function get($type) {
+        if(empty($type)) {
+            return null;
+        }
+
+
     }
 
     public function updateActivationSettings(Request $request)

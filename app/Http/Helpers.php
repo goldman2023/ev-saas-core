@@ -431,7 +431,7 @@ if (!function_exists('home_discounted_price')) {
 
 //Shows Base Price
 if (!function_exists('home_base_price')) {
-    function home_base_price($id)
+    function home_base_price($id, $format = true)
     {
         $product = Product::findOrFail($id);
         $price = $product->unit_price;
@@ -440,13 +440,13 @@ if (!function_exists('home_base_price')) {
         } elseif ($product->tax_type == 'amount') {
             $price += $product->tax;
         }
-        return format_price(convert_price($price));
+        return $format ? format_price(convert_price($price)) : $price;
     }
 }
 
 //Shows Base Price with discount
 if (!function_exists('home_discounted_base_price')) {
-    function home_discounted_base_price($id)
+    function home_discounted_base_price($id, $format = true, $both_formats = false)
     {
         $product = Product::findOrFail($id);
         $price = $product->unit_price;
@@ -480,7 +480,14 @@ if (!function_exists('home_discounted_base_price')) {
             $price += $product->tax;
         }
 
-        return format_price(convert_price($price));
+        if($both_formats) {
+            return [
+                'raw' => $price,
+                'display' => format_price(convert_price($price))
+            ];
+        }
+
+        return $format ? format_price(convert_price($price)) : $price;
     }
 }
 
@@ -860,7 +867,7 @@ if (!function_exists('my_asset')) {
      */
     function my_asset($path, $secure = null)
     {
-        if (env('FILESYSTEM_DRIVER') == 's3') {
+        if (config('filesystems.default') === 's3') {
             return Storage::disk('s3')->url($path);
         } else {
             return app('url')->asset($path, $secure);
@@ -894,14 +901,11 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-
         if(env('FORCE_HTTPS') == false) {
             return route('home');
         } else {
             return  secure_url('/');
         }
-
-
     }
 }
 
@@ -909,7 +913,7 @@ if (!function_exists('getBaseURL')) {
 if (!function_exists('getFileBaseURL')) {
     function getFileBaseURL()
     {
-        if (env('FILESYSTEM_DRIVER') == 's3') {
+        if (config('filesystems.default') == 's3') {
             return env('DIGITALOCEAN_SPACES_ENDPOINT') . '/';
             /* TODO: Refactor this to support S3 AND Digital Ocean, right now digital ocean is used */
             return env('AWS_URL') . '/';
@@ -954,9 +958,23 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        $setting = BusinessSetting::where('type', $key)->first();
+        $cache_key = tenant('id').'_business_settings_'.$key;
+        $setting = Cache::get($cache_key, null);
 
-        return $setting == null ? $default : $setting->value;
+        // If cache is empty, get setting from DB and store it in cache if not null
+        if(empty($setting)) {
+            $setting = BusinessSetting::where('type', $key)->first();
+
+            // Cache the setting if it's found in DB
+            if(!empty($setting)) {
+                Cache::forget($cache_key);
+                Cache::put($cache_key, $setting->value);
+            }
+
+            return !empty($setting) ? $setting->value : $default;
+        }
+
+        return $setting;
     }
 }
 
