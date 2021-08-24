@@ -1,6 +1,6 @@
 <div class="flex-grow-1 front-header-search d-flex align-items-center bg-white">
     <div class="position-relative flex-grow-1">
-        <form action="{{ route('search') }}" method="GET" class="stop-propagation mb-0">
+        <form action="#" method="GET" class="stop-propagation mb-0">
             <div class="d-flex position-relative align-items-center">
                 <div class="d-none" data-toggle="class-toggle" data-target=".front-header-search">
                     <button class="btn px-2" type="button" aria-label="search-button"><i
