@@ -73,9 +73,7 @@
                             </li>
                         </ul>
                     </div>
-                </nav>
-
-                <livewire:home-search />
+                </nav>                
             </div>            
 
             <div class="bg-gray-50">

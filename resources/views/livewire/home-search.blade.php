@@ -1,4 +1,4 @@
-<div x-data="searchForm()" class="my-6 ml-8 bg-transparent border rounded-md dark:border-gray-700 lg:w-2/3 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
+<div x-data="searchForm()" class="bg-transparent border rounded-md dark:border-gray-700 focus-within:border-indigo-500 focus-within:ring focus-within:ring-indigo-600 dark:focus-within:border-indigo-500 focus-within:ring-opacity-40">
     <div class="relative" @click.outside="showResult = false; showLoader = false;">
         <!-- Seach input form -->
         <form action="/search" class="flex flex-wrap justify-between md:flex-row">
