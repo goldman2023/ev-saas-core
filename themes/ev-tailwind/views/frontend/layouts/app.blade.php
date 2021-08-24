@@ -42,7 +42,7 @@
         </header>
         <!-- Page Content -->
         <main>
-            @yield('content')F
+            @yield('content')
         </main>
 
         <footer>
@@ -51,6 +51,7 @@
 
     </div>
     @yield('script')
+
     @livewireScripts
 </body>
 
