@@ -12,7 +12,7 @@ A complete solution for E-commerce Business with exclusive features & super resp
 * Compiling webpack for both central and themes: `yarn dev` (not in watch mode)
 * Compiling for central: `npx mix --mix-config="webpack.mix.js` (from root directory)
 * Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
-* Compiling specific theme watch: `npx mix watch --mix-config="hemes/{theme-name}/webpack.mix.js"`
+* Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"`
 
 
 #local setup for assets

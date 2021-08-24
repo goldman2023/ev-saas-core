@@ -5,7 +5,7 @@ module.exports = {
     mode: 'jit',
     purge: [
         `${__dirname}/views/**/*.blade.php`, // absolute path
-        `./resources/views/components/tenant/**/*.blade.php`, // relative to root
+        `./resources/views/components/**/*.blade.php`, // relative to root
         `./resources/views/livewire/**/*.blade.php`, // relative to root
         `./resources/views/layouts/**/*.blade.php`, // relative to root
         `${__dirname}/js/**/*.vue`, // absolute path
@@ -50,6 +50,15 @@ module.exports = {
                 11: '11',
                 12: '12',
             },
+            keyframes: {
+                loader: {
+                    '0%, 80%, 100%': { transform: 'scale(0)', opacity: '0.2' },
+                    '40%': { transform: 'scale(1)', opacity: '0.8' }
+                }
+            },
+            animation: {
+                loader: 'loader 1.48s ease-in-out infinite both',
+            }
         },
     },
 

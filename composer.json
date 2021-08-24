@@ -14,6 +14,7 @@
         "awssat/laravel-visits": "^3.0",
         "barryvdh/laravel-snappy": "^0.4.8",
         "binarytorch/larecipe": "^2.4",
+        "blade-ui-kit/blade-icons": "^1.1",
         "cinetpay/cinetpay-php": "^1.9",
         "facade/ignition": "^2.10",
         "fideloper/proxy": "^4.0",

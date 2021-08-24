@@ -20,6 +20,9 @@
             <x-label :label="ev_dynamic_translate('Your Business Description')">
             </x-label>
         </p>
+
+        @livewire('home-search')
+
         <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
             <div class="rounded-md shadow">
                 <a href="{{ ev_dynamic_translate('#button-1')->value }}"

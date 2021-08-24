@@ -16,7 +16,7 @@ class ChangeValueTypeOnEvLabelsTable extends Migration
         //
         Schema::table('ev_labels', function (Blueprint $table) {
             $table->text('value')->change();
-        }
+        });
     }
 
     /**
