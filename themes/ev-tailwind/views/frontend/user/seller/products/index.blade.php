@@ -16,9 +16,7 @@
                     <div class="grid grid-cols-1 gap-4 lg:col-span-3">
 
                         <h1> {{ translate('Products') }} </h1>
-
                         <livewire:datatable model="App\Models\Product" :exclude="['video_link', 'description', 'user_id']"/>
-
                     </div>
 
                     <!-- Right column -->
