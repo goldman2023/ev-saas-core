@@ -4,7 +4,7 @@ namespace App\View\Components\Tenant\Product\Reviews;
 
 use Illuminate\View\Component;
 
-class ResultReviews extends Component
+class ReviewSummary extends Component
 {
     public $reviews;
     public $total_rating = 0;
@@ -41,6 +41,6 @@ class ResultReviews extends Component
      */
     public function render()
     {
-        return view('components.tenant.product.reviews.result-reviews');
+        return view('components.tenant.product.reviews.review-summary');
     }
 }
