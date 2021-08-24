@@ -6,23 +6,13 @@ use Illuminate\View\Component;
 
 class EVSearch extends Component
 {
-    public $header;
-    public $title;
-    public $description;
-    public $footer;
-    public $image;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($header, $title, $description, $footer, $image)
+    public function __construct()
     {
-        $this->header = $header;
-        $this->title = $title;
-        $this->description = $description;
-        $this->footer = $footer;
-        $this->image = $image;
     }
 
     /**
