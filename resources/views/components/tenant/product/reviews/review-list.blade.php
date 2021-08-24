@@ -1,6 +1,6 @@
 <div class="mt-16 lg:mt-0 lg:col-start-6 lg:col-span-7">
     <h3 class="sr-only">
-        Recent reviews
+        {{ev_dynamic_translate('No reviews', true)}}
     </h3>
     @if(count($reviews)>0)
         @foreach($reviews as $key => $review)

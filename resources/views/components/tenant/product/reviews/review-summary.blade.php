@@ -1,5 +1,5 @@
 <div class="lg:col-span-4">
-    <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Customer Reviews</h2>
+    <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">{{translate('Customer Reviews', true)}}</h2>
     <div class="mt-3 flex items-center">
         <div>
             <div class="flex items-center">
@@ -19,12 +19,14 @@
     </div>
 
     <div class="mt-6">
-        <h3 class="sr-only">Review data</h3>
+        <h3 class="sr-only"> {{ev_dynamic_translate('Review data', true)}} </h3>
 
         <dl class="space-y-3">
             @for($i=1 ; $i<6 ; $i++) <div class="flex items-center text-sm">
                 <dt class="flex-1 flex items-center">
-                    <p class="w-3 font-medium text-gray-900">{{$i}}<span class="sr-only"> star reviews</span></p>
+                    <p class="w-3 font-medium text-gray-900">{{$i}}<span class="sr-only"> 
+                        {{translate("reviews")}} 
+                    </span></p>
                     <div aria-hidden="true" class="ml-1 flex-1 flex items-center">
                         <!-- Heroicon name: solid/star -->
                         <svg class="flex-shrink-0 h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -56,7 +58,7 @@
 <div class="mt-10">
 
     <h3 class="text-lg font-medium text-gray-900">
-        Share your thoughts</h3>
+        {{ translate('Share your thoughts') }}</h3>
     <p class="mt-1 text-sm text-gray-600">If you’ve used this product, share your thoughts with other customers</p>
 
     <button @click="open = true" class="mt-6 inline-flex w-full bg-white border border-gray-300 rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full">Write a review</button>
