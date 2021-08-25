@@ -6,7 +6,7 @@ use Illuminate\View\Component;
 
 class Label extends Component
 {
-    public $tag;
+    public $tag = 'div';
     public $label;
     public $some;
     public $class;
