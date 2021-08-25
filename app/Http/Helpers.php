@@ -846,13 +846,25 @@ if (!function_exists('api_asset')) {
 if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)
     {
-        if (($asset = \App\Models\Upload::find($id)) != null) {
-            $data = my_asset($asset->file_name);
-            /* TODO: This is temporary fix */
+        /*  TODO: Fix this logic to unify images management */
+        if(is_numeric($id)) {
+            if (($asset = \App\Models\Upload::find($id)) != null) {
+                $data = my_asset($asset->file_name);
+                /* TODO: This is temporary fix */
 
-            $file = str_replace('tenancy/assets/', '', $data);
-            return $file;
+                $file = str_replace('tenancy/assets/', '', $data);
+
+                $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$file.'@webp';
+
+                return $proxy_image;
+            }
+        } else {
+            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$id.'@webp';
+
+            return $proxy_image;
         }
+
+
         return null;
     }
 }

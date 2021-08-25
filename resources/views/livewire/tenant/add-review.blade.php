@@ -9,9 +9,9 @@
                 <form class="form-default" wire:submit.prevent="store">
                     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                            <x-label for="rating" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                            <span for="rating" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Rating') }}
-                            </x-label>
+                            </span>
                             <div class="mt-2 sm:mt-2 sm:col-span-2">
                                 <div>
                                     <div class="flex items-center mt-0">

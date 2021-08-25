@@ -1,7 +1,7 @@
 [![buddy pipeline](https://app.buddy.works/b2bwood/b2bwood/pipelines/pipeline/323136/badge.svg?token=35b16afac4ba4dae4724876e550894984b5e2ac6eb9da98b094b339061ed9ad1 "buddy pipeline")](https://app.buddy.works/b2bwood/b2bwood/pipelines/pipeline/323136) \
 A complete solution for E-commerce Business with exclusive features & super responsive layout
 
-#Local setup
+# Local setup
 
 -   After checking out project from git
 -   Edit your `.env`
@@ -15,7 +15,7 @@ A complete solution for E-commerce Business with exclusive features & super resp
 -   Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
 -   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"`
 
-#local setup for assets
+# Local setup for assets
 In case you running into issues with wcompile permissions run
 `chmod 777 wcompile.sh`
 
@@ -34,24 +34,84 @@ And in `domains` table , you should see added domain details.
 -   You need to modify your hosts file by running `sudo nano /etc/hosts`
 -   You need to run another `php artisan serve --host=test.localhost` process with your desired domain name
 
-#Routing
+# Routing
 All tenant routes should be located in `routes/tenant.php`
 All Central app routes should be located in `routes/web.php`
 
-#Filesystem
+# Filesystem
 In config you need to define `FILESYSTEM_DRIVER` to `s3` , but it's actually using DigitalOcean Spaces
 Access Details can be found in `.env.example` file
 
-#Data tables
+# Dynamic Components for Label/Image/Button
+
+-   Labels
+
+Example usage
+
+```
+<x-ev.label :label="ev_dynamic_translate('Add New Category', true)">
+</x-ev.label>
+```
+
+-   Buttons and links
+
+Example usage
+
+```
+
+* Dynamic Images
+
+Example usage
+
+```
+<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
+:href="ev_dynamic_translate('#testimonial-logo-link', true)">
+</x-ev.dynamic-image>
+```
+
+<x-ev.link-button :href="ev_dynamic_translate('#button1')"
+:label="ev_dynamic_translate('Button 1')" class="ev-button">
+</x-ev.link-button>
+
+```
+
+# Data tables
 This project uses Livewire DataTables package: https://github.com/mediconesystems/livewire-datatables
 
 Example Component usage:
 `<livewire:datatable model="App\Models\Product" :exclude="['video_link', 'description', 'user_id']"/>`
 
-
-#Components
+# Components
 
 Please see Components.md file, for more information, right now we add any dynamic and component usage examples in Components.md file
+
+# Image Optimization and dynamic images
+
+For images optimization and resizing this project uses this library:
+https://imgproxy.net/
+
+All images sent via `images.ev-saas.com` will get resized and converted to desired formats (WEBP included)
+
+All urls that are passed via `uploaded_asset` function, will inherit image proxy for webp and reizing:
+
+```
+
+            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$id.'@webp';
+
+```
+
+Please Include these `.env` variables on your local instance:
+
+```
+
+IMGPROXY_ENABLED=true
+IMGPROXY_HOST=https://images.ev-saas.com
+IMGPROXY_KEY=6d1ac226357a834aa0ddda01e7697c0a93ce7dcc22b0620568efaadeb8681b5ddf1086b39ba358910e9009738efca8eced958b570149189c618688f4c6e9d290
+IMGPROXY_SALT=d6582e38a7bfe441518fa8c7ee3613563a47a37615acfe8640d19af38cc1e786f3141232cdd9117362c60077f382ef02473b3fe36c223a1cd2139c87322fcb87
+IMGPROXY_IGNORE_SSL_VERIFICATION=true
+IMGPROXY_ENABLE_WEBP_DETECTION=true
+
+```
 
 **Project URL:**
 
@@ -74,3 +134,4 @@ https://docs.ev-saas/
 **Seller**
 
 `seller@eim.solutions`/ `123456`
+```

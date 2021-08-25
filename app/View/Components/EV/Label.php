@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\EV;
 
 use Illuminate\View\Component;
 
 class Label extends Component
 {
-    public $tag;
+    public $tag = 'div';
     public $label;
     public $some;
     public $class;
@@ -32,6 +32,6 @@ class Label extends Component
      */
     public function render()
     {
-        return view('components.label');
+        return view('components.ev.label');
     }
 }

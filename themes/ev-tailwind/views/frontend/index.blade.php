@@ -13,6 +13,7 @@
 
     <div class="pb-3">
         <x-tenant.hero.simple-centered></x-tenant.hero.simple-centered>
+        <x-tenant.content.offset-square-grid></x-tenant.content.offset-square-grid>
     </div>
 
 
