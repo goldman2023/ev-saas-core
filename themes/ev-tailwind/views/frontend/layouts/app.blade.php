@@ -60,6 +60,8 @@
         @endif
 
         <livewire:cart template="main" />
+        @livewire('notification')
+
 
     </div>
     @yield('script')

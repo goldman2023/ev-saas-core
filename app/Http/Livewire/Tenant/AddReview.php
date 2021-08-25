@@ -90,6 +90,7 @@ class AddReview extends Component
         $review_relationship->save();
         $this->hideModal();
         $this->emit('postAdded');
+        $this->emit('success-notification', "Review successfully created!");
     }
 
     public function showModal () {
