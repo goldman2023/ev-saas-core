@@ -69,6 +69,9 @@ class AddReview extends Component
      */
     public function store()
     {
+        if(!auth()->user()){
+            return redirect('/login');
+        }
         if ($this->rating ==  0) {
             $this->ratingError = "The rating field is required";
             $this->validate();
