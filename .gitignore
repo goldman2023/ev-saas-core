@@ -50,6 +50,15 @@ public/themes/ev-saas-default/js/*
 public/themes/ev-tailwind/js/*
 public/themes/ev-tailwind/css/*
 
+resources/scss/dependencies/*.css
+resources/scss/dependencies/*.css.map
 resources/scss/dependencies/vendor/*.css
+resources/scss/dependencies/vendor/*.css.map
+resources/scss/pages/*.css
+resources/scss/styleguide/*.css
+resources/scss/styleguide/*.css.map
+themes/*/scss/*.css
+themes/*/scss/*.css.map
+resources/scss/pages/*.css.map
 .env
 .idea/modules.xml
