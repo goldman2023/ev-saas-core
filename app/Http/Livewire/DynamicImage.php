@@ -27,9 +27,14 @@ class DynamicImage extends Component
     }
 
 
+    /*  TODO: These could be moved to higher level component like Editable and extended  */
     public function editLabel()
     {
         $this->show_input_field = true;
+    }
+
+    public function closeEditing() {
+        $this->show_input_field = false;
     }
 
     public function updateLabel()
