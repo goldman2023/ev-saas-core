@@ -4,7 +4,7 @@
     </h3>
     @if(count($reviews)>0)
         @foreach($reviews as $key => $review)
-            <x-tenant.product.reviews.review-card :review="$review "></x-tenant.product.reviews.review-card>
+            @livewire('tenant.product.review-card', ['review'=>$review])
         @endforeach
     @else
         <p class="mt-5">

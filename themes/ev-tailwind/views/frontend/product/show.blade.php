@@ -18,7 +18,8 @@
             </div>
             <x-tenant.product-list></x-tenant.product-list>
             
-            <x-tenant.product.reviews.show-reviews :product="$product"></x-tenant.product.reviews.show-reviews>
+            @livewire('tenant.product.review', ['product_id'=>$product->id])
+
         </div>
     </div>
 @endsection

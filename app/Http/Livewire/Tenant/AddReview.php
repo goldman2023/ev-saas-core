@@ -86,5 +86,7 @@ class AddReview extends Component
         $review_relationship->reviewable()->associate($product);
         $review_relationship->creator()->associate(auth()->user());
         $review_relationship->save();
+        $this->emit('postAdded');
+
     }
 }
