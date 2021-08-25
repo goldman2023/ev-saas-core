@@ -20,8 +20,6 @@
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
 
-    @livewireStyles
-    @livewireScripts
 
     {{ seo()->render() }}
 
@@ -31,11 +29,9 @@
     echo get_setting('header_script');
     @endphp
 
-    @auth
     @livewireStyles
 
     @livewireScripts
-    @endauth
 </head>
 
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">

@@ -5,6 +5,12 @@
             {{ translate('Register') }}
             <i class="la la-angle-right "></i>
         </a>
+
+        <a href="{{ route('login') }}"
+        class="ml-3 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-gray-900 font-medium bg-white hover:bg-indigo-700 {{ $class }}">
+         {{ translate('Login') }}
+         <i class="la la-angle-right "></i>
+     </a>
     @else
         @if(Auth::user()->user_type == 'seller')
             <div x-data="{ expanded: false }" @click.away="expanded = false" class="ml-3 relative z-10">
