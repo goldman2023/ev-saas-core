@@ -100,12 +100,12 @@
                         </div>
                         <span class="relative ml-4 text-indigo-300 font-semibold leading-6 sm:ml-24 sm:pl-1">
                             <p class="text-white font-semibold sm:inline">
-                                <x-label :label="ev_dynamic_translate('Testimonial Person', true)">
-                                </x-label>
+                                <x-ev.label :label="ev_dynamic_translate('Testimonial Person', true)">
+                                <x-ev.label>
                             </p>
                             <p class="sm:inline">
-                                <x-label :label="ev_dynamic_translate('Testimonial Possition', true)">
-                                </x-label>
+                                <x-ev.label :label="ev_dynamic_translate('Testimonial Possition', true)">
+                                </x-ev.label>
                             </p>
                         </span>
                     </cite>

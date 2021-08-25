@@ -42,6 +42,11 @@ All Central app routes should be located in `routes/web.php`
 In config you need to define `FILESYSTEM_DRIVER` to `s3` , but it's actually using DigitalOcean Spaces
 Access Details can be found in `.env.example` file
 
+#Dynamic Components for
+
+* Labels
+``
+
 #Data tables
 This project uses Livewire DataTables package: https://github.com/mediconesystems/livewire-datatables
 

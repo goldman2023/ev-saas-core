@@ -1,14 +1,14 @@
 @guest
 
-    @if ($href->value)
+    @isset($href->value)
         <a href="{{ $href->value }}">
-    @endif
+    @endisset
 
-    <x-tenant.system.image :image="$src->value"></x-tenant.system.image>
+        <x-tenant.system.image :image="$src->value"></x-tenant.system.image>
 
-    @if ($href->value)
+    @isset($href->value)
         </a>
-    @endif
+    @endisset
 
 @else
 
