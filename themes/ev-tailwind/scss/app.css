@@ -1,0 +1,23 @@
+@import "vendor/line-awesome.min.css";
+@import 'swiper/swiper-bundle.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.dot-loader > div:nth-child(1) {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.dot-loader > div:nth-child(2) {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+/* EV Saas Class Shortenings */
+.ev-button-primary {
+  @apply rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md hover:bg-gray-50;
+}
+
+.ev-button-secondary {
+  @apply rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md hover:bg-gray-50;
+}/*# sourceMappingURL=app.css.map */

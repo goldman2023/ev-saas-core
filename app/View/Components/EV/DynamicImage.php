@@ -2,15 +2,13 @@
 
 namespace App\View\Components\EV;
 
-use App\Models\Models\EVLabel;
 use Illuminate\View\Component;
 
-class LinkButton extends Component
+class DynamicImage extends Component
 {
-    public EVLabel $label;
+    public $src;
+    public $show_input_field = false;
     public $href;
-    public $target;
-    public $type; // Avaialbe types are: button, link
 
 
     /**
@@ -18,9 +16,10 @@ class LinkButton extends Component
      *
      * @return void
      */
-    public function __construct(EVLabel $label, $href = '#', $type = 'link')
+    public function __construct($src, $href= "#")
     {
-        $this->label = $label;
+        //
+        $this->src = $src;
         $this->href = $href;
     }
 
@@ -31,6 +30,6 @@ class LinkButton extends Component
      */
     public function render()
     {
-        return view('components.e-v.link-button');
+        return view('components.e-v.dynamic-image');
     }
 }
