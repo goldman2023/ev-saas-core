@@ -87,13 +87,19 @@
                         class="relative flex items-center sm:items-start bg-indigo-600 rounded-b-lg not-italic py-5 px-6 sm:py-5 sm:pl-12 sm:pr-10 sm:mt-10">
                         <div
                             class="relative rounded-full border-2 border-white sm:absolute sm:top-0 sm:transform sm:-translate-y-1/2">
-                            <img class="w-12 h-12 sm:w-20 sm:h-20 rounded-full bg-indigo-300"
-                                src="{!! ev_dynamic_translate('#testimonial-img', true)->value !!}" alt="">
+
+                            {{-- New Version --}}
+                            <x-ev.dynamic-image alt="Any alt text"
+                                :href="ev_dynamic_translate('#testimonial-img-link', true)"
+                                :src="ev_dynamic_translate('#testimonial-img', true)">
+                            </x-ev.dynamic-image>
+
+                            {{-- Old Version --}}
+                            {{-- <img class="w-12 h-12 sm:w-20 sm:h-20 rounded-full bg-indigo-300"
+                                src="{!! ev_dynamic_translate('#testimonial-img', true)->value !!}" alt=""> --}}
                         </div>
                         <span class="relative ml-4 text-indigo-300 font-semibold leading-6 sm:ml-24 sm:pl-1">
                             <p class="text-white font-semibold sm:inline">
-                                {{-- {!! ev_dynamic_translate('Testimonial Person', true) !!} --}}
-
                                 <x-label :label="ev_dynamic_translate('Testimonial Person', true)">
                                 </x-label>
                             </p>
