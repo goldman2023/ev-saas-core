@@ -853,7 +853,10 @@ if (!function_exists('uploaded_asset')) {
                 /* TODO: This is temporary fix */
 
                 $file = str_replace('tenancy/assets/', '', $data);
-                return $file;
+
+                $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$file.'@webp';
+
+                return $proxy_image;
             }
         } else {
             $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$id.'@webp';
