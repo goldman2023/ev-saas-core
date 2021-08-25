@@ -17,8 +17,8 @@
 
 /* EV Saas Class Shortenings */
 
-.ev-button-primary {
-    @apply rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md hover:bg-gray-50;
+.ev-button {
+    @apply rounded-md shadow w-full flex items-center justify-center px-5 py-3 background-indigo-600 border border-transparent text-base font-medium rounded-md hover:bg-gray-50;
 }
 
 .ev-button-secondary {

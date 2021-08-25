@@ -43,13 +43,11 @@
                         <x-ev.link-button :href="ev_dynamic_translate('#button1')"
                             :label="ev_dynamic_translate('Button 1')" class="ev-button">
                         </x-ev.link-button>
-                        {{-- <a href="{{ ev_dynamic_translate('#button1')->value }}"
-                            class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        </a> --}}
+
                     </div>
-                    <div>
+                    <div class="ml-3">
                         <x-ev.link-button :href="ev_dynamic_translate('#button2')"
-                            :label="ev_dynamic_translate('Button 2')" type="link" class="ev-button">
+                            :label="ev_dynamic_translate('Button 2')" type="link" class="ev-button-secondary ml-4">
                             {{-- Icon can go here --}}
                         </x-ev.link-button>
                     </div>
@@ -94,14 +92,11 @@
                                 :src="ev_dynamic_translate('#testimonial-img', true)">
                             </x-ev.dynamic-image>
 
-                            {{-- Old Version --}}
-                            {{-- <img class="w-12 h-12 sm:w-20 sm:h-20 rounded-full bg-indigo-300"
-                                src="{!! ev_dynamic_translate('#testimonial-img', true)->value !!}" alt=""> --}}
                         </div>
                         <span class="relative ml-4 text-indigo-300 font-semibold leading-6 sm:ml-24 sm:pl-1">
                             <p class="text-white font-semibold sm:inline">
                                 <x-ev.label :label="ev_dynamic_translate('Testimonial Person', true)">
-                                <x-ev.label>
+                                </x-ev.label>
                             </p>
                             <p class="sm:inline">
                                 <x-ev.label :label="ev_dynamic_translate('Testimonial Possition', true)">

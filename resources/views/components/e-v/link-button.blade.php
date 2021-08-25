@@ -1,24 +1,21 @@
-    <a {{ $attributes }} href="{{ $href->value }}">
+@if ($label)
 
-        {{ $label->value }}
+    @guest
+        <a {{ $attributes }} href="{{ $href->value }}">
 
-    </a>
+            {{ $label->value }}
 
-
-
-    @if ($label)
-
-        @guest
-            {!! $label->value !!}
-        @else
-            {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
-            @livewire('dynamic-button',[
-                'href' => $href,
-                'label' => $label,
-                'target' => $target
-            ])
-
-        @endguest
+        </a>
 
     @else
-    @endif
+        {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
+        @livewire('dynamic-button',[
+        'href' => $href,
+        'label' => $label,
+        'target' => $target
+        ])
+
+    @endguest
+
+@else
+@endif
