@@ -1,5 +1,4 @@
-<x-app-layout>
-    <div class="container">
+@extends('frontend.layouts.app')    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
@@ -18,4 +17,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+    @extends('frontend.layouts.app')

@@ -62,3 +62,5 @@ themes/*/scss/*.css.map
 resources/scss/pages/*.css.map
 .env
 .idea/modules.xml
+resources/scss/themes/front/theme.css
+*.map

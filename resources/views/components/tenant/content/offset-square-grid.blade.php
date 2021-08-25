@@ -43,7 +43,6 @@
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-
                         <x-ev.label :label="ev_dynamic_translate('Item 1 Description')">
                         </x-ev.label>
                     </dd>
