@@ -1,4 +1,4 @@
-    <a {{ $attributes }} href="{{ $href }}">
+    <a {{ $attributes }} href="{{ $href->value }}">
 
         {{ $label->value }}
 
@@ -12,11 +12,12 @@
             {!! $label->value !!}
         @else
             {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
-            @livewire('dynamic-button', ['href' => $href, 'label' => $label])
-            {{-- TODO: Make nice icon and general styling --}}
-            <button wire:click.prevent="editLabel()" class="text-xs">
-                {{ translate('Edit') }}
-            </button>
+            @livewire('dynamic-button',[
+                'href' => $href,
+                'label' => $label,
+                'target' => $target
+            ])
+
         @endguest
 
     @else

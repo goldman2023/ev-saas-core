@@ -17,7 +17,7 @@
                 </label>
                 <div class="mt-1 flex rounded-md shadow-sm">
                     <div class="relative flex items-stretch flex-grow focus-within:z-10">
-                        <input wire:model="src.value" type="text" name="src" id="src" style="min-width: 300px;"
+                        <input wire:model.defer="src.value" type="text" name="src" id="src" style="min-width: 300px;"
                             class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ translate('Enter Text') }}">
 
@@ -35,7 +35,7 @@
                 </label>
                 <div class="mt-1 flex rounded-md shadow-sm">
                     <div class="relative flex items-stretch flex-grow focus-within:z-10">
-                        <input wire:model="href.value" type="text" name="href" id="image-link" style="min-width: 300px;"
+                        <input wire:model.defer="href.value" type="text" name="href" id="image-link" style="min-width: 300px;"
                             class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ translate('Enter Text') }}">
                     </div>

@@ -18,11 +18,11 @@
             <div class="mt-1 flex rounded-md shadow-sm">
                 <div class="relative flex items-stretch flex-grow focus-within:z-10">
                     @if ($type === 'text')
-                        <input wire:model="label.value" type="text" name="email" id="email"
+                        <input wire:model.defer="label.value" type="text" name="email" id="email"
                             class="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
                             placeholder="{{ translate('Enter Text') }}">
                     @elseif($type === 'textarea')
-                        <textarea wire:model="label.value">
+                        <textarea wire:model.defer="label.value">
                         </textarea>
                     @endif
                 </div>
