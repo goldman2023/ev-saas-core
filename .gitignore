@@ -49,3 +49,4 @@ public/themes/ev-saas-default/css/*
 public/themes/ev-saas-default/js/*
 public/themes/ev-tailwind/js/*
 public/themes/ev-tailwind/css/*
+resources/scss/themes/*
