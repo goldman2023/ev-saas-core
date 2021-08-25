@@ -10,7 +10,7 @@ class ReviewList extends Component
     public $reviews;
     public $test = "test";
 
-    protected $listeners = ['postAdded' => '$refresh'];
+    protected $listeners = ['review-stored' => '$refresh'];
     /**
      * Create a new component instance.
      *

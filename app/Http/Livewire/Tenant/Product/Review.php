@@ -13,7 +13,7 @@ class Review extends Component
     public $product_id;
     public $reviews;
 
-    protected $listeners = ['postAdded' => '$refresh'];
+    protected $listeners = ['review-stored' => '$refresh'];
     /**
      * Create a new component instance.
      *

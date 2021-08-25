@@ -89,7 +89,7 @@ class AddReview extends Component
         $review_relationship->creator()->associate(auth()->user());
         $review_relationship->save();
         $this->hideModal();
-        $this->emit('postAdded');
+        $this->emit('review-stored');
         $this->emit('success-notification', "Review successfully created!");
     }
 
