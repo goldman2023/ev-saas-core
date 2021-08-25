@@ -31,7 +31,6 @@
 
     @livewireStyles
 
-    @livewireScripts
 </head>
 
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
