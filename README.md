@@ -54,6 +54,11 @@ Please see Components.md file, for more information, right now we add any dynami
 
 #Image Optimization and dynamic images
 
+For images optimization and resizing this project uses this library:
+https://imgproxy.net/
+
+All images sent via `images.ev-saas.com` will get resized and converted to desired formats (WEBP included)
+
 All urls that are passed via `uploaded_asset` function, will inherit image proxy for webp and reizing:
 
 ```
