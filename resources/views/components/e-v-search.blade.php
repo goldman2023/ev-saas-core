@@ -6,7 +6,7 @@
         <x-ev.label :label="ev_dynamic_translate('EV Search Hero Sub Title')" class="text-6xl font-bold tracking-tighter">
         </x-ev.label>
         <x-ev.label :label="ev_dynamic_translate('EV Search Hero Description')"
-            class="mb-5 mt-8 text-gray-500 text-[20px]"></x-label>
+            class="mb-5 mt-8 text-gray-500 text-[20px]"></x-ev.label>
         <x-search.e-v-search-form class="mt-5 mb-8"></x-search.e-v-search-form>
         <x-ev.label :label="ev_dynamic_translate('EV Search Hero Footer Text')" class="font-semibold"></x-ev.label>
     </div>
