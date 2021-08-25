@@ -46,7 +46,7 @@
                 <div class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
                     <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                         <div class="flex items-start justify-between">
-                            <x-label tag="h2" class="text-lg font-medium text-gray-900" id="slide-over-title" :label="ev_dynamic_translate('Shopping cart', true)"></x-label>
+                            <x-ev.label tag="h2" class="text-lg font-medium text-gray-900" id="slide-over-title" :label="ev_dynamic_translate('Shopping cart', true)"></x-ev.label>
                             <div class="ml-3 h-7 flex items-center">
                                 <button type="button" class="-m-2 p-2 text-gray-400 hover:text-gray-500"
                                     @click="open = false">
@@ -108,7 +108,7 @@
 
                                     @else
                                         <div class="pt-7 pb-5 px-4 text-center font-semibold text-16">
-                                            <x-label :label="ev_dynamic_translate('No items in cart.', true)"></x-label>
+                                            <x-ev.label :label="ev_dynamic_translate('No items in cart.', true)"></x-ev.label>
                                         </div>
                                     @endif
 
@@ -119,12 +119,12 @@
 
                     <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
                         <div class="flex justify-between text-base font-medium text-gray-900">
-                            <x-label :label="ev_dynamic_translate('Subtotal', true)">
-                            </x-label>
+                            <x-ev.label :label="ev_dynamic_translate('Subtotal', true)">
+                            </x-ev.label>
                             <p>{{ $this->subtotal['display'] }}</p>
                         </div>
-                        <x-label :label="ev_dynamic_translate('Shipping and taxes calculated at checkout.', true)" class="mt-0.5 text-sm text-gray-500">
-                        </x-label>
+                        <x-ev.label :label="ev_dynamic_translate('Shipping and taxes calculated at checkout.', true)" class="mt-0.5 text-sm text-gray-500">
+                        </x-ev.label>
                         <div class="mt-6">
                             <a href="{{ route('checkout.shipping_info') }}" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                                 Checkout
