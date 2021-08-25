@@ -38,32 +38,26 @@
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
             <div class="relative z-10">
                 <div class="prose prose-indigo text-gray-500 mx-auto lg:max-w-none">
-
                     <x-label :label="ev_dynamic_translate('Page Content')">
                     </x-label>
                 </div>
                 <div class="mt-10 flex text-base max-w-prose mx-auto lg:max-w-none">
-                    <div class="rounded-md shadow">
-                        <x-ev.link-button
-                        href="{{ ev_dynamic_translate('#button1')->value }}"
-                        class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                        >
-                            <x-label :label="ev_dynamic_translate('Button 1')">
-                            </x-label>
+                    <div>
+                        <x-ev.link-button :href="ev_dynamic_translate('#button1')->value"
+                            :label="ev_dynamic_translate('Button 1')"
+                            class="rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         </x-ev.link-button>
-                        <a href="{{ ev_dynamic_translate('#button1')->value }}"
+                        {{-- <a href="{{ ev_dynamic_translate('#button1')->value }}"
                             class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
 
 
-                        </a>
+                        </a> --}}
                     </div>
-                    <div class="rounded-md shadow ml-4">
-                        <a href="{{ ev_dynamic_translate('#button2')->value }}"
-                            class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
-
-                            <x-label :label="ev_dynamic_translate('Button 2')">
-                            </x-label>
-                        </a>
+                    <div>
+                        <x-ev.link-button :href="ev_dynamic_translate('#button2')->value"
+                            :label="ev_dynamic_translate('Button 2')"
+                            class="rounded-md shadow ml-4 w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
+                        </x-ev.link-button>
                     </div>
                 </div>
             </div>
