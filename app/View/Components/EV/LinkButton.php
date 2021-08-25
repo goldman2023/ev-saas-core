@@ -32,6 +32,6 @@ class LinkButton extends Component
      */
     public function render()
     {
-        return view('components.e-v.link-button');
+        return view('components.ev.link-button');
     }
 }

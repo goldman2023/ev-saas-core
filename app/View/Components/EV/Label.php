@@ -32,6 +32,6 @@ class Label extends Component
      */
     public function render()
     {
-        return view('components.e-v.label');
+        return view('components.ev.label');
     }
 }

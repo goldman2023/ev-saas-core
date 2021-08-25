@@ -30,6 +30,6 @@ class DynamicImage extends Component
      */
     public function render()
     {
-        return view('components.e-v.dynamic-image');
+        return view('components.ev.dynamic-image');
     }
 }
