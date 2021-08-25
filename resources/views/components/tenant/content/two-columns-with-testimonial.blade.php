@@ -44,11 +44,17 @@
                 </div>
                 <div class="mt-10 flex text-base max-w-prose mx-auto lg:max-w-none">
                     <div class="rounded-md shadow">
+                        <x-ev.link-button
+                        href="{{ ev_dynamic_translate('#button1')->value }}"
+                        class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                        >
+                            <x-label :label="ev_dynamic_translate('Button 1')">
+                            </x-label>
+                        </x-ev.link-button>
                         <a href="{{ ev_dynamic_translate('#button1')->value }}"
                             class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
 
-                            <x-label :label="ev_dynamic_translate('Button 1')">
-                            </x-label>
+
                         </a>
                     </div>
                     <div class="rounded-md shadow ml-4">
