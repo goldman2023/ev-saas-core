@@ -38,26 +38,26 @@
         <div class="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
             <div class="relative z-10">
                 <div class="prose prose-indigo text-gray-500 mx-auto lg:max-w-none">
-
                     <x-label :label="ev_dynamic_translate('Page Content')">
                     </x-label>
                 </div>
                 <div class="mt-10 flex text-base max-w-prose mx-auto lg:max-w-none">
-                    <div class="rounded-md shadow">
-                        <a href="{{ ev_dynamic_translate('#button1')->value }}"
+                    <div>
+                        <x-ev.link-button :href="ev_dynamic_translate('#button1')->value"
+                            :label="ev_dynamic_translate('Button 1')"
+                            class="rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        </x-ev.link-button>
+                        {{-- <a href="{{ ev_dynamic_translate('#button1')->value }}"
                             class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-
-                            <x-label :label="ev_dynamic_translate('Button 1')">
-                            </x-label>
-                        </a>
+                        </a> --}}
                     </div>
-                    <div class="rounded-md shadow ml-4">
-                        <a href="{{ ev_dynamic_translate('#button2')->value }}"
-                            class="w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
-
-                            <x-label :label="ev_dynamic_translate('Button 2')">
-                            </x-label>
-                        </a>
+                    <div>
+                        <x-ev.link-button :href="ev_dynamic_translate('#button2')->value"
+                            :label="ev_dynamic_translate('Button 2')"
+                            type="link"
+                            class="ev-button">
+                            {{-- Icon can go here --}}
+                        </x-ev.link-button>
                     </div>
                 </div>
             </div>
@@ -74,7 +74,12 @@
                 </svg>
                 <blockquote class="relative bg-white rounded-lg shadow-lg">
                     <div class="rounded-t-lg px-6 py-8 sm:px-10 sm:pt-10 sm:pb-8">
-                        <img src="{!! ev_dynamic_translate('#testimonial-logo', true)->value !!}" alt="Workcation" class="h-8">
+                        <x-ev.dynamic-image
+                        :src="ev_dynamic_translate('#testimonial-logo', true)"
+                        alt="Any alt text"
+                        :href="ev_dynamic_translate('#testimonial-logo-link', true)"
+                        >
+                        </x-ev.dynamic-image>
                         <div class="relative text-lg text-gray-700 font-medium mt-8">
                             <svg class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-gray-200"
                                 fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
