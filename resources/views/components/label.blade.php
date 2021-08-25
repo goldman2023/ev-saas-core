@@ -1,8 +1,7 @@
-<div {{ $attributes }}>
+<{{ $tag }} {{ $attributes }} class="{{ $class }}">
     <!-- Walk as if you are kissing the Earth with your feet. - Thich Nhat Hanh -->
 
     @if ($label)
-
 
         @guest
             {!! $label->value !!}
@@ -16,10 +15,4 @@
 
     @endif
 
-
-
-
-
-
-
-</div>
+</{{ $tag }}>

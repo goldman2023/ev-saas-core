@@ -166,13 +166,10 @@ class AizUploadController extends Controller
                 }
 
                 /* TODO: Figure out the s3 and DO for tenants */
-                if (env('FILESYSTEM_DRIVER') == 's3') {
+                if (config('filesystems.default') == 's3') {
                     $file_path = file_get_contents(base_path('public/').$path);
 
                     $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path), 'public');
-
-
-
 
                     unlink(base_path('public/').$path);
                 }
@@ -224,7 +221,7 @@ class AizUploadController extends Controller
     public function destroy(Request $request,$id)
     {
         try{
-            if(env('FILESYSTEM_DRIVER') == 's3'){
+            if(config('filesystems.default') == 's3'){
                 Storage::disk('s3')->delete(Upload::where('id', $id)->first()->file_name);
             }
             else{

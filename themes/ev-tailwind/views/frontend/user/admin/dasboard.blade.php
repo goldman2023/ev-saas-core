@@ -2,34 +2,34 @@
 
 @section('content')
     <!--
-                                          This example requires Tailwind CSS v2.0+
+                                              This example requires Tailwind CSS v2.0+
 
-                                          This example requires some changes to your config:
+                                              This example requires some changes to your config:
 
-                                          ```
-                                          // tailwind.config.js
-                                          const colors = require('tailwindcss/colors')
+                                              ```
+                                              // tailwind.config.js
+                                              const colors = require('tailwindcss/colors')
 
-                                          module.exports = {
-                                            // ...
-                                            theme: {
-                                              extend: {
-                                                colors: {
-                                                  sky: colors.sky,
-                                                  teal: colors.teal,
-                                                  cyan: colors.cyan,
-                                                  rose: colors.rose,
+                                              module.exports = {
+                                                // ...
+                                                theme: {
+                                                  extend: {
+                                                    colors: {
+                                                      sky: colors.sky,
+                                                      teal: colors.teal,
+                                                      cyan: colors.cyan,
+                                                      rose: colors.rose,
+                                                    },
+                                                  },
                                                 },
-                                              },
-                                            },
-                                            plugins: [
-                                              // ...
-                                              require('@tailwindcss/forms'),
-                                              require('@tailwindcss/line-clamp'),
-                                            ],
-                                          }
-                                          ```
-                                        -->
+                                                plugins: [
+                                                  // ...
+                                                  require('@tailwindcss/forms'),
+                                                  require('@tailwindcss/line-clamp'),
+                                                ],
+                                              }
+                                              ```
+                                            -->
     <div class="relative min-h-screen bg-gray-100">
         <main class="pt-10 pb-8">
             <div class="max-w-xl"></div>
@@ -74,18 +74,20 @@
                                 <div
                                     class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
                                     <div class="px-6 py-5 text-sm font-medium text-center">
-                                        <span class="text-gray-900">12</span>
-                                        <span class="text-gray-600">Vacation days left</span>
+                                        <a href="{{ route('ev-products.index') }}">
+                                            <span class="text-gray-900"> {{ App\Models\Product::count() }}</span>
+                                            <span class="text-gray-600">{{ translate('Products') }}</span>
+                                        </a>
                                     </div>
 
                                     <div class="px-6 py-5 text-sm font-medium text-center">
-                                        <span class="text-gray-900">4</span>
-                                        <span class="text-gray-600">Sick days left</span>
+                                        <span class="text-gray-900">{{ App\Models\Brand::count() }}</span>
+                                        <span class="text-gray-600">{{ translate('Brands') }}</span>
                                     </div>
 
                                     <div class="px-6 py-5 text-sm font-medium text-center">
-                                        <span class="text-gray-900">2</span>
-                                        <span class="text-gray-600">Personal days left</span>
+                                        <span class="text-gray-900">{{ App\Models\Category::count() }}</span>
+                                        <span class="text-gray-600">{{ translate('Category') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -109,9 +111,11 @@
                                     </x-slot>
 
                                     <x-slot name="icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                                          </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                        </svg>
                                     </x-slot>
                                     <a href="{{ route('admin.dashboard') }}">
                                         {{ translate('Go To Admin Panel') }}
@@ -122,16 +126,22 @@
                                 <x-tenant.dashboard.dashboard-card
                                     class="rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
                                     <x-slot name="title">
-                                        {{ translate('Add Product') }}
+                                        <a href="{{ route('ev-products.index') }}">
+                                            {{ translate('Add Product') }}
+                                        </a>
                                     </x-slot>
 
                                     <x-slot name="icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                          </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                        </svg>
                                     </x-slot>
                                     {{ translate('Update your Products and Catalog') }}
-
+                                    <a href="{{ route('ev-products.index') }}">
+                                        {{ translate('Go To Admin Panel') }}
+                                    </a>
                                 </x-tenant.dashboard.dashboard-card>
 
                                 <x-tenant.dashboard.dashboard-card
@@ -171,9 +181,11 @@
                                     </x-slot>
 
                                     <x-slot name="icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
-                                          </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                                        </svg>
                                     </x-slot>
                                     <a href="{{ get_setting('website_email_url') }}">
                                         {{ translate('Go To Website Email Login') }}

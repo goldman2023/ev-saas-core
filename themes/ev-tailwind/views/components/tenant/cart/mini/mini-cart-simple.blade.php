@@ -10,7 +10,7 @@
  */
 ?>
 
-<div class="absolute top-16 inset-x-0 mt-px pb-6 bg-white shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5 z-40 {{ $class }}"
+<div wire:key="{{rand()}}" class="absolute top-16 inset-x-0 mt-px pb-6 bg-white shadow-lg sm:px-2 lg:top-full lg:left-auto lg:right-0 lg:-mr-1.5 lg:w-80 lg:rounded-lg lg:ring-1 lg:ring-black lg:ring-opacity-5 z-40 {{ $class }}"
      x-data="{open:false}"
      x-show="open"
      x-ref="mini_cart"
@@ -23,36 +23,41 @@
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0">
 
-    <h2 class="sr-only">Shopping Cart</h2>
+    <h2 class="sr-only">{{ translate('Shopping Cart') }}</h2>
 
     <form class="max-w-2xl mx-auto px-4">
         <ul role="list" class="divide-y divide-gray-200">
-            <li class="py-6 flex items-center">
-                <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="flex-none w-16 h-16 rounded-md border border-gray-200">
-                <div class="ml-4 flex-auto">
-                    <h3 class="font-medium text-gray-900">
-                        <a href="#">Throwback Hip Bag</a>
-                    </h3>
-                    <p class="text-gray-500">Salmon</p>
+            @if($items->isNotEmpty())
+                @foreach ($items as $item)
+                    <li class="py-6 flex items-center">
+                        <img src="{{ $item['images']['thumbnail']['url'] ?? '' }}" alt="{{ $item['name'] }}" class="flex-none w-16 h-16 rounded-md border border-gray-200">
+                        <div class="ml-4 flex-auto">
+                            <h3 class="font-medium text-gray-900">
+                                <a href="{{ $item['permalink'] }}">{{ $item['name'] }}</a>
+                            </h3>
+                            @if(!empty($item['variant']))
+                                <p class="text-gray-500"> {{ $item['variant'] }}</p>
+                            @endif
+                            <div class="flex">
+                                <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500"
+                                        @click="$dispatch('remove-from-cart', {{ $item['id'] }})"
+                                >Remove</button>
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+            @else
+                <div class="pt-7 pb-5 px-4 text-center font-semibold text-16">
+                    <x-label :label="ev_dynamic_translate('No items in cart.', true)">
+                    </x-label>
                 </div>
-            </li>
+            @endif
 
-            <li class="py-6 flex items-center">
-                <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg" alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." class="flex-none w-16 h-16 rounded-md border border-gray-200">
-                <div class="ml-4 flex-auto">
-                    <h3 class="font-medium text-gray-900">
-                        <a href="#">Medium Stuff Satchel</a>
-                    </h3>
-                    <p class="text-gray-500">Blue</p>
-                </div>
-            </li>
-
-            <!-- More products... -->
         </ul>
 
-        <button type="submit" class="w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
+        <a href="{{ route('checkout.shipping_info') }}" class="block w-full text-center bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">
             {{ translate('Checkout') }}
-        </button>
+        </a>
 
         <p class="mt-6 text-center">
             <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">

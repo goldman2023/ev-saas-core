@@ -11,6 +11,7 @@ use App\Http\Controllers\CompareController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
@@ -208,6 +209,9 @@ Route::middleware([
     });
 
     Route::group(['middleware' => ['auth']], function () {
+
+        Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
+
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');
         Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
@@ -344,7 +348,7 @@ Route::middleware([
 
     Route::get('/page/{slug}', 'PageController@show_static_page')->name('page.static_page');
 
-// Get Stream Integration routes
+    // Get Stream Integration routes
     Route::get('/feed/all', 'Integrations\GetStreamControler@index');
 
 

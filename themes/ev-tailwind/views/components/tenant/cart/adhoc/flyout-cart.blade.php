@@ -9,11 +9,12 @@
  */
 ?>
 
-<div class="fixed inset-0 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true"
+<div wire:key="{{rand()}}" class="fixed inset-0 overflow-hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true"
     x-data="{open:false}"
     x-show="open"
-    x-ref="cart"
-    @toggle-cart.window="open = !open">
+    x-ref="flyout_cart"
+    @toggle-cart.window="open = !open"
+    @added-to-cart.window="open = true">
 
     <div class="absolute inset-0 overflow-hidden">
         <!--
@@ -34,6 +35,7 @@
             -->
             <div class="w-screen max-w-md"
                  x-show="open"
+                 @click.away="open = false"
                  x-transition:enter="transform ease-in-out duration-500 sm:duration-700"
                  x-transition:enter-start="translate-x-full"
                  x-transition:enter-end="translate-x-0"
@@ -44,12 +46,10 @@
                 <div class="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
                     <div class="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                         <div class="flex items-start justify-between">
-                            <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">
-                                Shopping cart
-                            </h2>
+                            <x-label tag="h2" class="text-lg font-medium text-gray-900" id="slide-over-title" :label="ev_dynamic_translate('Shopping cart', true)"></x-label>
                             <div class="ml-3 h-7 flex items-center">
                                 <button type="button" class="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                                    @click="$dispatch('toggle-cart')">
+                                    @click="open = false">
                                     <span class="sr-only">Close panel</span>
                                     <!-- Heroicon name: outline/x -->
                                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -62,73 +62,56 @@
                         <div class="mt-8">
                             <div class="flow-root">
                                 <ul role="list" class="-my-6 divide-y divide-gray-200">
-                                    <li class="py-6 flex">
-                                        <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                            <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="w-full h-full object-center object-cover">
-                                        </div>
-
-                                        <div class="ml-4 flex-1 flex flex-col">
-                                            <div>
-                                                <div class="flex justify-between text-base font-medium text-gray-900">
-                                                    <h3>
-                                                        <a href="#">
-                                                            Throwback Hip Bag
-                                                        </a>
-                                                    </h3>
-                                                    <p class="ml-4">
-                                                        $90.00
-                                                    </p>
+                                    @if($items->isNotEmpty())
+                                        @foreach ($items as $item)
+                                            @php
+                                                var_dump($item);
+                                                $prices = home_discounted_base_price($item['id'], false, true);
+                                            @endphp
+                                            <li class="py-6 flex">
+                                                <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                                                    <img src="{{ $item['images']['thumbnail']['url'] ?? '' }}" alt="{{ $item['name'] }}" class="w-full h-full object-center object-cover">
                                                 </div>
-                                                <p class="mt-1 text-sm text-gray-500">
-                                                    Salmon
-                                                </p>
-                                            </div>
-                                            <div class="flex-1 flex items-end justify-between text-sm">
-                                                <p class="text-gray-500">
-                                                    Qty 1
-                                                </p>
 
-                                                <div class="flex">
-                                                    <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+                                                <div class="ml-4 flex-1 flex flex-col">
+                                                    <div>
+                                                        <div class="flex justify-between text-base font-medium text-gray-900">
+                                                            <h3>
+                                                                <a href="{{ $item['permalink'] }}">
+                                                                    {{ $item['name'] }}
+                                                                </a>
+                                                            </h3>
+                                                            <p class="ml-4">
+                                                                {{ $item['price']['display'] }}
+                                                            </p>
+                                                        </div>
+                                                        @if(!empty($item['variant']))
+                                                            <p class="mt-1 text-sm text-gray-500">
+                                                                {{ $item['variant'] }}
+                                                            </p>
+                                                        @endif
+                                                    </div>
+                                                    <div class="flex-1 flex items-end justify-between text-sm">
+                                                        <p class="text-gray-500">
+                                                            Qty {{ $item['quantity'] }}
+                                                        </p>
+
+                                                        <div class="flex">
+                                                            <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500"
+                                                                    @click="$dispatch('remove-from-cart', {{ $item['id'] }})"
+                                                            >Remove</button>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </li>
+                                        @endforeach
+
+                                    @else
+                                        <div class="pt-7 pb-5 px-4 text-center font-semibold text-16">
+                                            <x-label :label="ev_dynamic_translate('No items in cart.', true)"></x-label>
                                         </div>
-                                    </li>
+                                    @endif
 
-                                    <li class="py-6 flex">
-                                        <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
-                                            <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg" alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." class="w-full h-full object-center object-cover">
-                                        </div>
-
-                                        <div class="ml-4 flex-1 flex flex-col">
-                                            <div>
-                                                <div class="flex justify-between text-base font-medium text-gray-900">
-                                                    <h3>
-                                                        <a href="#">
-                                                            Medium Stuff Satchel
-                                                        </a>
-                                                    </h3>
-                                                    <p class="ml-4">
-                                                        $32.00
-                                                    </p>
-                                                </div>
-                                                <p class="mt-1 text-sm text-gray-500">
-                                                    Blue
-                                                </p>
-                                            </div>
-                                            <div class="flex-1 flex items-end justify-between text-sm">
-                                                <p class="text-gray-500">
-                                                    Qty 1
-                                                </p>
-
-                                                <div class="flex">
-                                                    <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <!-- More products... -->
                                 </ul>
                             </div>
                         </div>
@@ -136,16 +119,20 @@
 
                     <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
                         <div class="flex justify-between text-base font-medium text-gray-900">
-                            <p>Subtotal</p>
-                            <p>$262.00</p>
+                            <x-label :label="ev_dynamic_translate('Subtotal', true)">
+                            </x-label>
+                            <p>{{ $this->subtotal['display'] }}</p>
                         </div>
-                        <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                        <x-label :label="ev_dynamic_translate('Shipping and taxes calculated at checkout.', true)" class="mt-0.5 text-sm text-gray-500">
+                        </x-label>
                         <div class="mt-6">
-                            <a href="#" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">Checkout</a>
+                            <a href="{{ route('checkout.shipping_info') }}" class="flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                                Checkout
+                            </a>
                         </div>
                         <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
                             <p>
-                                or <button type="button" class="text-indigo-600 font-medium hover:text-indigo-500">Continue Shopping<span aria-hidden="true"> &rarr;</span></button>
+                                or <button type="button" class="text-indigo-600 font-medium hover:text-indigo-500" @click="open = false">Continue Shopping<span aria-hidden="true"> &rarr;</span></button>
                             </p>
                         </div>
                     </div>

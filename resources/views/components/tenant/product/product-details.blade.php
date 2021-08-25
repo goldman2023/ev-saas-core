@@ -1,7 +1,6 @@
 <div class="lg:col-start-8 lg:col-span-5">
     <div class="flex justify-between">
         <h1 class="text-3xl font-medium text-gray-900">
-
             {{ $product->getTranslation('name') }}
         </h1>
         <p class="text-xl font-medium text-gray-900">

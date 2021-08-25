@@ -1,4 +1,5 @@
 <?php
+
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 
 return [
@@ -73,6 +74,7 @@ return [
         'universal',
         InitializeTenancyByDomain::class, // or whatever tenancy middleware you use
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Livewire Temporary File Uploads Endpoint Configuration

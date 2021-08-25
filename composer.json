@@ -24,9 +24,9 @@
         "intervention/image": "^2.5",
         "iyzico/iyzipay-php": "^2.0.48",
         "laracasts/flash": "^3.0",
+        "laraform/laraform-laravel": "^1.2",
         "laravel/cashier": "^13.4",
         "laravel/framework": "8.*",
-        "laravel/nova": "~3.0",
         "laravel/passport": "^10.1",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/socialite": "^5.2",
@@ -34,6 +34,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1.31",
+        "mediconesystems/livewire-datatables": "^0.6.1",
         "nao-pon/flysystem-google-drive": "~1.1",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "osenco/mpesa": "^1.20",
@@ -116,7 +117,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://nova.laravel.com"
+            "url": "https://composer.laraform.io"
         }
     ]
 }
