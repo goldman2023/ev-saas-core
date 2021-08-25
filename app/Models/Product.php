@@ -6,6 +6,7 @@ use App\Models\FlashDealProduct;
 use App\Models\ProductTax;
 use App\Models\User;
 use App\Models\Wishlist;
+use App\Traits\AttributeTrait;
 use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
@@ -106,6 +107,7 @@ use App;
 class Product extends Model
 {
     use ReviewTrait;
+    use AttributeTrait;
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'variations', 'num_of_sale', 'thumbnail_img'];

@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\FlashDealProduct;
 use App\Models\ProductTax;
 use App\Models\Language;
+use App\Models\Attribute;
 use Auth;
 use App\Models\SubSubCategory;
 use Session;
@@ -402,7 +403,8 @@ class ProductController extends Controller
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang'));
+        $product_attributes = Attribute::where('content_type', 'App\Models\Product')->orderBy('created_at', 'desc')->get();
+        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));
     }
 
     /**
