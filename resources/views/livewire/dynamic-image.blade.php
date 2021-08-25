@@ -51,6 +51,12 @@
                     <!-- Heroicon name: solid/sort-ascending -->
                     <span>{{ translate('Save') }} </span>
                 </button>
+
+                <button type="button" wire:click.prevent="closeEditing()"
+                    class="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                    <!-- Heroicon name: solid/sort-ascending -->
+                    <span>{{ translate('X') }} </span>
+                </button>
             </div>
         </div>
 
