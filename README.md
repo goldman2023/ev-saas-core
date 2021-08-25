@@ -48,10 +48,27 @@ This project uses Livewire DataTables package: https://github.com/mediconesystem
 Example Component usage:
 `<livewire:datatable model="App\Models\Product" :exclude="['video_link', 'description', 'user_id']"/>`
 
-
 #Components
 
 Please see Components.md file, for more information, right now we add any dynamic and component usage examples in Components.md file
+
+#Image Optimization and dynamic images
+
+All urls that are passed via `uploaded_asset` function, will inherit image proxy for webp and reizing:
+
+```
+            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$id.'@webp';
+```
+
+Please Include these `.env` variables on your local instance:
+```
+IMGPROXY_ENABLED=true
+IMGPROXY_HOST=https://images.ev-saas.com
+IMGPROXY_KEY=6d1ac226357a834aa0ddda01e7697c0a93ce7dcc22b0620568efaadeb8681b5ddf1086b39ba358910e9009738efca8eced958b570149189c618688f4c6e9d290
+IMGPROXY_SALT=d6582e38a7bfe441518fa8c7ee3613563a47a37615acfe8640d19af38cc1e786f3141232cdd9117362c60077f382ef02473b3fe36c223a1cd2139c87322fcb87
+IMGPROXY_IGNORE_SSL_VERIFICATION=true
+IMGPROXY_ENABLE_WEBP_DETECTION=true
+```
 
 **Project URL:**
 
