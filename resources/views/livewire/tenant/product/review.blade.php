@@ -5,7 +5,5 @@
         @livewire('tenant.product.review-list', ['reviews'=>$reviews])
     </div>
 
-    <div x-show="open">
         @livewire('tenant.add-review', ['product_id'=>$product_id])
-    </div>
 </div>

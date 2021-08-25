@@ -61,7 +61,7 @@
         {{ translate('Share your thoughts') }}</h3>
     <p class="mt-1 text-sm text-gray-600">If you’ve used this product, share your thoughts with other customers</p>
 
-    <button @click="open = true" class="mt-6 inline-flex w-full bg-white border border-gray-300 rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full">Write a review</button>
+    <button @click="$wire.emit('show-modal')" class="mt-6 inline-flex w-full bg-white border border-gray-300 rounded-md py-2 px-8 items-center justify-center text-sm font-medium text-gray-900 hover:bg-gray-50 sm:w-auto lg:w-full">Write a review</button>
 </div>
 
 </div>

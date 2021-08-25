@@ -14,6 +14,7 @@ class AddReview extends Component
     public $content_type = 'App\Models\Product';
     public $product_id;
     public $ratingError = null;
+    public $open = false;
 
 
     protected $rules = [
@@ -21,6 +22,7 @@ class AddReview extends Component
         'rating' => 'required|min:1'
     ];
 
+    protected $listeners = ['show-modal' => 'showModal','hide-modal' => 'hideModal' ];
     /**
      * Create a new component instance.
      *
@@ -86,7 +88,17 @@ class AddReview extends Component
         $review_relationship->reviewable()->associate($product);
         $review_relationship->creator()->associate(auth()->user());
         $review_relationship->save();
+        $this->hideModal();
         $this->emit('postAdded');
+    }
 
+    public function showModal () {
+        $this->open = true;
+    }
+
+    public function hideModal () {
+        $this->open = false;
+        $this->comment = null;
+        $this->rating = 0;
     }
 }
