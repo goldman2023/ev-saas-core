@@ -2,7 +2,7 @@
 
 @section('company_profile')
 
-
+{{-- TODO: make this dynamic, like users can add their own news articles, postings --}}
     <x-company-tabs :seller="$seller" type="news"></x-company-tabs>
 
     <div class="row">
@@ -58,7 +58,7 @@
                     </div>
 
                     <p class="font-size-1 text-body mb-0">
-                    {{ translate('We are happy to announce, that ') }} {{ $seller->user->shop->name }} {{ translate(" joined B2BWood Club and became a member of global truested timber industry companies community") }}
+                    {{ translate('We are happy to announce, that ') }} {{ $seller->user->shop->name }} {{ translate("Joined the") }} {{ get_site_name() }}
                     </p>
 
                 </div>
