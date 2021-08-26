@@ -4,12 +4,6 @@ $class_col_body_1 = 'col-md-7';
 $class_top_level = '';
 $class_col_body_2 = 'col-md-5';
 
-if ($new) {
-    $class_media = 'd-block b2b-new-company';
-    $class_col_body_1 = 'col-md-12';
-    $class_col_body_2 = 'col-md-12';
-    $class_top_level = 'h-100';
-}
 
 @endphp
 
@@ -28,7 +22,7 @@ if ($new) {
                                 {{ $company->name }}
                             </a>
 
-                            <x-company-star-rating :company="$company"></x-company-star-rating>
+                            <x-company.company-star-rating :company="$company"></x-company.company-star-rating>
 
 
                         </h6>
@@ -44,14 +38,11 @@ if ($new) {
                                     {{ $company->name }}
                                 </a>
                                 {{-- TODO: Create company avatar component, because we need to use it in separate places --}}
-                                {{-- <x-company-avatar :company="$company"> </x-company-avatar> --}}
-                                <x-company-star-rating :company="$company"></x-company-star-rating>
+                                {{-- <x-company.company-avatar :company="$company"> </x-company.company-avatar> --}}
+                                <x-company.company-star-rating :company="$company"></x-company.company-star-rating>
                             </h3>
                             <div class="d-none d-sm-inline-block">
-                                @if (!$new)
-                                    <x-company-industries :company="$company->user->shop">
-                                    </x-company-industries>
-                                @endif
+
                             </div>
 
                         </div>

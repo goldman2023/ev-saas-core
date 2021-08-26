@@ -3,7 +3,7 @@
 @section('company_profile')
 
 {{-- TODO: make this dynamic, like users can add their own news articles, postings --}}
-    <x-company-tabs :seller="$seller" type="news"></x-company-tabs>
+    <x-company.company-tabs :seller="$seller" type="news"></x-company.company-tabs>
 
     <div class="row">
         <div class="col-12 mb-3">

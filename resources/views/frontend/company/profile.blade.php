@@ -3,7 +3,7 @@
 @section('company_profile')
 
 
-    <x-company-tabs :seller="$seller" type="overview"></x-company-tabs>
+    <x-company.company-tabs :seller="$seller" type="overview"></x-company.company-tabs>
     {{-- TODO: Show the announcement only for free users when they are viewing their profile --}}
     {{-- TODO: add advertisment banner for free company profiles when viewed by any other user/ no addvertisment for paid members --}}
     @auth
@@ -14,11 +14,11 @@
 
     <div class="row">
         <div class="col-sm-6 mb-3">
-            <x-company-financials-card :company="$seller"></x-company-financials-card>
+            <x-company.company-financials-card :company="$seller"></x-company.company-financials-card>
         </div>
 
         <div class="col-sm-6 mb-3">
-            <x-company-operational-info-card :company="$seller"></x-company-operational-info-card>
+            <x-company.company-operational-info-card :company="$seller"></x-company.company-operational-info-card>
         </div>
     </div>
 

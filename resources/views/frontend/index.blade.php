@@ -2,13 +2,15 @@
 
 @section('content')
 
-<section>
-    <x-default.hero.product-hero></x-default.hero.product-hero>
-</section>
+    <section>
+        <x-default.hero.product-hero></x-default.hero.product-hero>
+        <x-default.promo.countdown>
+        </x-default.promo.countdown>
+    </section>
 
-<section>
-    <x-default.forms.contact-form></x-default.forms.contact-form>
-</section>
+    <section>
+        <x-default.forms.contact-form></x-default.forms.contact-form>
+    </section>
 
     <section id="archive-hero">
         {{-- <x-companies-archive-hero></x-companies-archive-hero> --}}
@@ -16,10 +18,10 @@
 
     <section>
         @php
-        $categories = App\Models\Category::where('level', 0)
-            ->orderBy('order_level', 'desc')
-            ->get();
-    @endphp
+            $categories = App\Models\Category::where('level', 0)
+                ->orderBy('order_level', 'desc')
+                ->get();
+        @endphp
         <x-default.categories.category-list :categories="$categories"> </x-default.categories.category-list>
     </section>
 

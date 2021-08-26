@@ -13,18 +13,18 @@
         <div class="col-12">
             {{-- TODO: add custom CTA and Text and Image options --}}
             <x-free-member-notification> </x-free-member-notification>
-            <x-company-onboarding-box> </x-company-onboarding-box>
+            <x-company.company-onboarding-box> </x-company.company-onboarding-box>
         </div>
 
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <h3> {{ translate('Company Profile Preview') }}</h3>
-                    <x-company-card :company="auth()->user()->shop"> </x-company-card>
+                    <x-company.company-card :company="auth()->user()->shop"> </x-company.company-card>
                 </div>
             </div>
         </div>
-        <x-company-dashboard-stats></x-company-dashboard-stats>
+        <x-company.company-dashboard-stats></x-company.company-dashboard-stats>
 
 
 
@@ -34,7 +34,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <x-company-subscription-package></x-company-subscription-package>
+            <x-company.company-subscription-package></x-company.company-subscription-package>
         </div>
 
         <div class="col-md-6">
@@ -48,7 +48,7 @@
         </div>
 
         <div class="col-md-6 d-none">
-            <x-company-onboarding-wizard></x-company-onboarding-wizard>
+            <x-company.company-onboarding-wizard></x-company.company-onboarding-wizard>
 
             <div class="bg-white mt-4 p-5 text-center card">
                 <div class="mb-3">

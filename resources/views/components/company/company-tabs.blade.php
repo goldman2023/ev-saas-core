@@ -5,7 +5,7 @@
             <h1 style="font-size: 18px;" class="pl-4 d-none d-sm-block">
                 {{ $seller->user->shop->name }}
 
-                <x-company-star-rating :company="$seller->user->shop"></x-company-star-rating>
+                <x-company.company-star-rating :company="$seller->user->shop"></x-company.company-star-rating>
             </h1>
         </div>
         @auth

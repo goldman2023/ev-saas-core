@@ -258,7 +258,7 @@
                                 @if($company_count > 0)
                                     <div class="mt-2">
                                         @foreach ($shops as $key => $shop)
-                                            <x-company-card :company="$shop"></x-company-card>
+                                            <x-company.company-card :company="$shop"></x-company.company-card>
                                         @endforeach
                                     </div>
                                     @if ($content == 'company' || isset($category_id))

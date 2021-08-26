@@ -1,8 +1,8 @@
 @extends('frontend.layouts.company-profile-layout')
 
 @section('company_profile')
-    <x-company-tabs :seller="$seller" type="gallery"></x-company-tabs>
-    
+    <x-company.company-tabs :seller="$seller" type="gallery"></x-company.company-tabs>
+
     {{-- TODO: Create an empty state component like in frontend/company/sub-pages/reviews.blade.php --}}
-    <x-company-gallery :company="$seller"></x-company-gallery>
+    <x-company.company-gallery :company="$seller"></x-company.company-gallery>
 @endsection

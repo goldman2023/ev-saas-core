@@ -587,7 +587,7 @@
                     <div class="row">
                     <div class="col-12">
                     <h3> {{ translate('Product Sold By:') }} </h3>
-                    <x-company-card :company="$detailedProduct->user->shop"></x-company-card>
+                    <x-company.company-card :company="$detailedProduct->user->shop"></x-company.company-card>
                     </div>
                     </div>
                     <div class="bg-white rounded shadow-sm d-none">

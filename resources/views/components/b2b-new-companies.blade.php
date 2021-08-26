@@ -19,7 +19,7 @@ $companies = App\Models\Shop::whereIn('user_id', verified_sellers_id())
 
     @foreach ($companies as $key => $company)
         <div class="col-lg-4 mb-3">
-            <x-company-card :company="$company" new="true"></x-company-card>
+            <x-company.company-card :company="$company" new="true"></x-company.company-card>
         </div>
     @endforeach
 </div>

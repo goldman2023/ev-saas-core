@@ -47,10 +47,7 @@
 
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-            <link rel="stylesheet" href="https://htmlstream.com/front/assets/css/theme.min.css?v=1.0">
-            {{-- <link rel="stylesheet" href="{{ global_asset('ev-assets/front/css/snippets.min.css') }}"> --}}
-            <!-- Front Icon Set CSS Files -->
-            {{-- <link rel="stylesheet" href="{{ global_asset('front/icon-set/style.css') }}"> --}}
+            <link rel="stylesheet" href="{{ global_asset('css/ev-saas.css') }}">
 
             <script>
                 var AIZ = AIZ || {};
@@ -148,9 +145,7 @@
 
             <div class="position-relative">
             @include('frontend.inc.nav')
-
                 <x-default.headers.header>
-
                 </x-default.headers.header>
             </div>
 

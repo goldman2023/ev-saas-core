@@ -41,7 +41,7 @@
                                 <dt class="col-sm-12 text-dark">{{ translate('Website') }}</dt>
                                 {{-- TODO: make this info dynamic from company attributes --}}
                                 <dd class="col-sm-12 text-body b2b-company-website-link">
-                                    <x-company-website-link :company="$seller->user->shop"> </x-company-website-link>
+                                    <x-company.company-website-link :company="$seller->user->shop"> </x-company.company-website-link>
 
                                 </dd>
                             </dl>
@@ -50,8 +50,8 @@
                                     <dt class="col-sm-12 text-dark">{{ translate('Industries') }}</dt>
                                     {{-- TODO: make this info dynamic from company attributes --}}
                                     <dd class="col-sm-12 text-body">
-                                        <x-company-industries :company="$seller->user->shop">
-                                        </x-company-industries>
+                                        <x-company.company-industries :company="$seller->user->shop">
+                                        </x-company.company-industries>
                                     </dd>
                                 </dl>
                                 <dl class="row font-size-1">
@@ -139,10 +139,10 @@
                         </div>
                         <div class="display-4 text-center fw-400 mb-3">
 
-                            <x-company-social-links :company="$seller->user->shop"> </x-company-social-links>
+                            <x-company.company-social-links :company="$seller->user->shop"> </x-company.company-social-links>
                         </div>
                     </div>
-                    {{-- <x-company-onboarding-wizard></x-company-onboarding-wizard> --}}
+                    {{-- <x-company.company-onboarding-wizard></x-company.company-onboarding-wizard> --}}
 
                     <!-- Credit Report Box -->
                     <!-- End Credit Report Box -->

@@ -61,7 +61,7 @@
             <div class="col-lg-6 d-flex justify-content-center align-items-center min-vh-lg-100">
                 <div class="w-100 pt-10 pt-lg-7 pb-7">
                     <!-- Form -->
-                    <x-company-registration-form> </x-company-registration-form>
+                    <x-company.company-registration-form> </x-company.company-registration-form>
                     <!-- End Form -->
                 </div>
             </div>

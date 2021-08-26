@@ -69,7 +69,7 @@ if (empty($banner3->refer_url)) {
 
                                 <x-categories-sidebar :categoryId="$category_id" type="companies"></x-categories-sidebar>
 
-                                <x-company-attributes :items="$attributes" :selected="$filters"></x-company-attributes>
+                                <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
 
                                 <div class="mb-3 mt-3">
                                     {{-- <x-affiliate-single-banner :banner="$banner2"> </x-affiliate-single-banner> --}}
@@ -103,7 +103,7 @@ if (empty($banner3->refer_url)) {
                                     </div>
 
                                 @endif
-                                <x-company-card :company="$shop"></x-company-card>
+                                <x-company.company-card :company="$shop"></x-company.company-card>
                             @endforeach
                         @else
                             <x-empty-state-company-archive> </x-empty-state-company-archive>
