@@ -27,7 +27,7 @@ class ThemeMiddleware
 
             if($domain) {
                 // Set active theme
-                Theme::set($domain->theme, 'ev-tailwind');
+                Theme::set($domain->theme);
 
             }
 
