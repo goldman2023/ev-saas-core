@@ -1,6 +1,6 @@
 <!-- Hero Section -->
 <div class="gradient-x-overlay-sm-indigo position-relative overflow-hidden">
-    <div class="container space-top-3 space-top-lg-4 space-bottom-2">
+    <div class="container space-top-3 space-top-lg-3 space-bottom-2">
       <div class="w-lg-60 text-center mx-lg-auto">
         <div class="mb-5">
             <x-ev.label 
@@ -35,7 +35,7 @@
     <div class="container space-2">
       <div class="position-relative w-lg-75 text-center mx-lg-auto">
         <div class="position-relative shadow-lg z-index-2 rounded-lg" data-aos="fade-up" data-aos-offset="-50">
-            <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/592827608?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;h=a7002e843e" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="begimas su kliutimis LRT pataisyta"></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
+          <iframe width="100%" height="500" src="https://www.youtube-nocookie.com/embed/mgnTOjIyt_M?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
   
         <figure class="max-w-15rem w-100 position-absolute top-0 right-0" data-aos="fade-up" data-aos-delay="100" data-aos-offset="-50">
@@ -53,13 +53,13 @@
     <!-- End Mockup -->
   
     <!-- SVG Background Shape -->
-    <figure class="w-35 position-absolute top-0 right-0 z-index-n1 mt-n11 mr-n11">
-      <img class="img-fluid" src="../../assets/svg/components/half-circle-1.svg" alt="Image Description">
+    {{-- <figure class="w-35 position-absolute top-0 right-0 z-index-n1 mt-n11 mr-n11">
+      <img class="img-fluid" src="/assets/svg/components/half-circle-1.svg" alt="Image Description">
     </figure>
   
     <figure class="w-25 position-absolute bottom-0 left-0 z-index-n1 mb-n11 ml-n11">
-      <img class="img-fluid" src="../../assets/svg/components/half-circle-2.svg" alt="Image Description">
-    </figure>
+      <img class="img-fluid" src="/assets/svg/components/half-circle-2.svg" alt="Image Description">
+    </figure> --}}
     <!-- End SVG Background Shape -->
   </div>
   <!-- End Hero Section -->

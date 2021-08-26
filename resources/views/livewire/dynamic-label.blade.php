@@ -1,12 +1,8 @@
 <div class="relative">
     {!! $label->value !!}
 
-
-    {{-- TODO: Make nice icon and general styling --}}
-    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
-        {{ translate('Edit') }}
-    </button>
-
+    
+    
     {{-- <x-ev.dynamic-components.edit-dropdown>
     </x-ev.dynamic-components.edit-dropdown> --}}
 
@@ -40,4 +36,10 @@
 
 
     @endif
+
+    {{-- TODO: Make nice icon and general styling --}}
+    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
+        {{ translate('Edit') }} {{ $info }}
+    </button>
+
 </div>

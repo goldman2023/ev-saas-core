@@ -19,6 +19,7 @@
             <meta name="robots" content="index, follow">
             <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
             <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+            
             @yield('meta')
 
             @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
@@ -73,16 +74,19 @@
         </head>
         <body>
         <!-- aiz-main-wrapper -->
-        <div class="aiz-main-wrapper d-flex flex-column">
+        <div class="">
 
-            @include('frontend.inc.nav')
-                {{-- <x-default.headers.header>
-                </x-default.headers.header> --}}
+            {{-- @include('frontend.inc.nav') --}}
+                <x-default.headers.header>
+                </x-default.headers.header>
 
 
             @yield('content')
 
-            @include('frontend.inc.footer')
+            {{-- @include('frontend.inc.footer') --}}
+
+            <x-default.footers.footer>
+            </x-default.footers.footer>
 
         </div>
 

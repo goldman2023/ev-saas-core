@@ -44,7 +44,7 @@
             $(el).on('mouseover', function () {
                 if (!$(el).find('.sub-cat-menu').hasClass('loaded')) {
                     $.post('{{ route('category.elements') }}', {
-                        _token: AIZ.data.csrf,
+                        _token: $('meta[name="csrf-token"]').attr('content'),
                         id: $(el).data('id')
                     }, function (data) {
                         $(el).find('.sub-cat-menu').addClass('loaded').html(data);
@@ -119,7 +119,7 @@
 
             $('.typed-search-box').removeClass('d-none');
             $('.search-preloader').removeClass('d-none');
-            $.post('{{ route('search.ajax') }}', {_token: AIZ.data.csrf, search: searchKey}, function (data) {
+            $.post('{{ route('search.ajax') }}', {_token: $('meta[name="csrf-token"]').attr('content'), search: searchKey}, function (data) {
                 if (data == '0') {
                     // $('.typed-search-box').addClass('d-none');
                     $('#search-content').html(null);

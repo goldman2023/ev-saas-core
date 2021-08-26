@@ -139,7 +139,7 @@
             $('#info-modal-content').html('<div class="c-preloader text-center absolute-center"><i class="las la-spinner la-spin la-3x opacity-70"></i></div>');
 			var id = $(e).data('id')
 			$('#info-modal').modal('show');
-			$.post('{{ route('admin.uploaded-files.info') }}', {_token: AIZ.data.csrf, id:id}, function(data){
+			$.post('{{ route('admin.uploaded-files.info') }}', {_token: $('meta[name="csrf-token"]').attr('content'), id:id}, function(data){
                 $('#info-modal-content').html(data);
 				// console.log(data);
 			});

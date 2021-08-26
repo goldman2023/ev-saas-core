@@ -1,21 +1,19 @@
 <?php
 
-namespace App\View\Components\Default\Headers;
+namespace App\View\Components\Default\Footers;
 
 use Illuminate\View\Component;
 
-class Header extends Component
+class Default extends Component
 {
-    public $style;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($style = 'default')
+    public function __construct()
     {
         //
-        $this->style = $style;
     }
 
     /**
@@ -25,6 +23,6 @@ class Header extends Component
      */
     public function render()
     {
-        return view('components.default.headers.' . $this->style);
+        return view('components.default.footers.default');
     }
 }

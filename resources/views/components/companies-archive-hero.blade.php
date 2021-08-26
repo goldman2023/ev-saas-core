@@ -5,38 +5,12 @@
             <div class="col-lg-6">
                 <!-- Title -->
                 <div class="w-lg-80 text-center text-lg-left mb-5 mb-lg-7">
-                    <h1 class="display-4">
-                        @php
-                            $image = asset('assets/img/hero-images/b2bwood-homepage-banner.jpg');
-
-                            if ($category) {
-                                $categoryTitle = $category->tile;
-                                $categoryTitle = $category->name;
-                            }
-
-                            //$country = 'Germany';
-
-                        @endphp
-                        @if ($categoryTitle)
-                            {{ translate('Find ') }} <span class="">{{ $categoryTitle }}</span>
-                            {{ translate('companies') }}
-                            <br><span class="text-primary text-highlight-warning">{{ translate('in') }}</span>
-
-                            @if ($country)
-                                {{ $country }}
-                                <img src="{{ static_asset('assets/img/flags/de.png') }}" height="20" class="mr-1">
-                            @else
-                                {{ get_site_name() }}
-                            @endif
-
-                    </h1>
-                @else
+                    <h1 class="display-4"> 
                     {{ translate('Welcome to your new digital home') }}
                     <br><span class="text-primary text-highlight-warning">
                             {{ translate('Go ahead look around and make yourself comfortable...') }}
                         </span>
                     </h1>
-                    @endif
 
                 </div>
                 <!-- End Title -->
