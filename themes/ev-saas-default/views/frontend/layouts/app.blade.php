@@ -81,7 +81,7 @@
                 }
 
                 :root {
-                    --primary: {{ get_setting('base_color', '#e62d04') }};
+                    --primary: red;
                     --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
                     --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
                 }

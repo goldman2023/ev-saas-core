@@ -22,37 +22,13 @@
             @yield('meta')
 
             @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
-            <!-- Schema.org markup for Google+ -->
-                <meta itemprop="name" content="{{ get_setting('meta_title') }}">
-                <meta itemprop="description" content="{{ get_setting('meta_description') }}">
-                <meta itemprop="image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
-
-                <!-- Twitter Card data -->
-                <meta name="twitter:card" content="product">
-                <meta name="twitter:site" content="@publisher_handle">
-                <meta name="twitter:title" content="{{ get_setting('meta_title') }}">
-                <meta name="twitter:description" content="{{ get_setting('meta_description') }}">
-                <meta name="twitter:creator" content="@author_handle">
-                <meta name="twitter:image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
-
-                <!-- Open Graph data -->
-                <meta property="og:title" content="{{ get_setting('meta_title') }}"/>
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="{{ route('home') }}"/>
-                <meta property="og:image" content="{{ uploaded_asset(get_setting('meta_image')) }}"/>
-                <meta property="og:description" content="{{ get_setting('meta_description') }}"/>
-                <meta property="og:site_name" content="{{ env('APP_NAME') }}"/>
-                <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
+                <x-default.system.og-meta>
+                </x-default.system.og-meta>
             @endif
-        <!-- Favicon -->
+
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-            <!-- Google Fonts -->
-            {{-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> --}}
-        <!-- CSS Files -->
-            <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
-            <!-- Front Icon Set CSS Files -->
-            <link rel="stylesheet" href="{{ global_asset('front/icon-set/style.css') }}">
+            <link rel="stylesheet" href="{{ global_asset('css/ev-saas.css') }}">
 
             <script>
                 var AIZ = AIZ || {};
@@ -86,7 +62,7 @@
                 }
 
                 :root {
-                    --primary: {{ get_setting('base_color', '#e62d04') }};
+                    --primary: red;
                     --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
                     --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
                 }
@@ -148,8 +124,12 @@
         <!-- aiz-main-wrapper -->
         <div class="aiz-main-wrapper d-flex flex-column">
 
-            <!-- Header -->
+            <div class="position-relative">
             @include('frontend.inc.nav')
+                <x-default.headers.header>
+                </x-default.headers.header>
+            </div>
+
 
             @yield('content')
 
@@ -194,26 +174,24 @@
 
         @yield('modal')
 
-        <!-- SCRIPTS -->
-        <script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
-        <script src="/assets/js/vendors.js"></script>
+
+
 
         <!-- JS Front -->
-        <script src="{{ static_asset('front/js/hs-add-field.min.js') }}"></script>
-        <script src="{{ static_asset('front/js/hs-unfold.min.js') }}"></script>
+        <script src="https://htmlstream.com/front/assets/js/vendor.min.js"></script>
+        <script src="https://htmlstream.com/front/assets/js/theme.min.js"></script>
 
         @include('frontend.layouts.partials.app-js')
 
         @yield('script')
 
+        @stack('footer_scripts')
+
         @php
             echo get_setting('footer_script');
         @endphp
 
-        @livewireStyles
-        @livewireScripts
+@livewireStyles
+@livewireScripts
         </body>
         </html>

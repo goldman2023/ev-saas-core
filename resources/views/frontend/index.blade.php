@@ -4,8 +4,7 @@
 
     <section>
         <x-default.hero.product-hero></x-default.hero.product-hero>
-        <x-default.promo.countdown>
-        </x-default.promo.countdown>
+        {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
     </section>
 
     <section>
