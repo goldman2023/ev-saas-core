@@ -26,7 +26,7 @@
         </p>
 
         <a class="btn btn-primary px-3" href="{{ route('shops.create') }}">
-            {{ translate('Join B2BWood Club') }}
+            {{ translate('Join') }}
         </a>
     </div>
 

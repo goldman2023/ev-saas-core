@@ -16,14 +16,14 @@
                 <div class="col-md-4 px-md-2 mb-3 mb-md-0">
                     <div class="position-relative">
                         <img class="img-fluid w-100 rounded-lg"
-                            src="{{ asset('assets/img/press-releases/b2b-wood-logo-pr.png') }}" alt="Company Joined B2BWood Club">
+                            src="{{ asset('assets/img/press-releases/b2b-wood-logo-pr.png') }}" alt="Company Joined">
 
                         <div class="position-absolute top-0 left-0 mt-3 ml-3">
                             <small
                                 class="btn btn-xs btn-success btn-pill text-white text-uppercase shadow-soft py-1 px-2 mb-3">{{ translate('New Member!') }}</small>
                         </div>
 
-                        
+
                     </div>
                 </div>
 
@@ -32,7 +32,7 @@
                         <div class="media-body mr-7">
                             <h3 class="text-hover-primary">
                                 <a href="#">
-                                    {{ $seller->user->shop->name }} {{ translate('Joined B2BWood Club') }}
+                                    {{ $seller->user->shop->name }} {{ translate('Joined') }} {{ get_site_name() }}
                                 </a>
                             </h3>
                         </div>
@@ -47,7 +47,7 @@
                     <div class="d-flex justify-content-start align-items-center small text-muted mb-2">
 
                         <div class="">
-                            
+
                         </div>
                         {{-- <span class="text-muted mx-2">|</span> --}}
                         <div class="d-inline-block">

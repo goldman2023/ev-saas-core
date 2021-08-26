@@ -1,6 +1,6 @@
 @if ($company->get_company_website_url())
     @if($company->get_company_website_url()["href"]!='No Data')
-        <a href="{{ qs_url($company->get_company_website_url()['href'],['utm_source' => 'b2bwood']) }}"
+        <a href="{{ qs_url($company->get_company_website_url()['href'],['utm_source' => get_site_name()]) }}"
            data-company-website="{{ route('website_clicks.track', encrypt($company->id)) }}" target="_blank">
             {{ $company->get_company_website_url()['href'] }}
         </a>

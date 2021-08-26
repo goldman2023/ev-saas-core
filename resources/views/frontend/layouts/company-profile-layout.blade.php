@@ -145,7 +145,6 @@
                     {{-- <x-company-onboarding-wizard></x-company-onboarding-wizard> --}}
 
                     <!-- Credit Report Box -->
-                     <x-credit-report-box :company="$seller"></x-credit-report-box>
                     <!-- End Credit Report Box -->
                 </div>
 

@@ -2,10 +2,10 @@
     <!-- Header -->
     <div class="card-header">
         <h4 class="card-header-title">
-            {{ translate('B2BWood Club Members') }}
+            {{ get_site_name() }} {{ translate('Members') }}
         </h4>
 
-      
+
     </div>
     <!-- End Header -->
 
@@ -18,7 +18,7 @@
                     <i class="tio-user-big-outlined tio-xl text-primary mr-3"></i>
 
                     <div class="media-body">
-                        <span class="d-block font-size-xs b2b-stat-label">{{ translate('B2BWood Club Members') }}</span>
+                        <span class="d-block font-size-xs b2b-stat-label">{{ get_site_name() }} {{ translate('Members') }}</span>
                         <div class="d-flex align-items-center">
                             <h3 class="mb-0">{{ App\Models\Stats::total_companies() }}</h3>
                             {{-- <span class="badge badge-soft-success ml-2 w-auto">
@@ -862,7 +862,7 @@
                     </g>
                     <g></g>
                 </svg>
-               
+
                 <div class="jvectormap-legend-cnt jvectormap-legend-cnt-h"></div>
                 <div class="jvectormap-legend-cnt jvectormap-legend-cnt-v"></div>
             </div>

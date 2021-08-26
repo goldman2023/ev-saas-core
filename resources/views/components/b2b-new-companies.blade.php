@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-8">
         <h3>
-            {{ translate('New B2BWood Club Companies') }}
+            {{ translate('New Members') }}
         </h3>
     </div>
     <div class="col-4 text-right">
-    <a href="{{ route('sellers') }}">{{ translate('Explore All Companies >') }}</a>
+    <a href="{{ route('sellers') }}">{{ translate('Explore All Members >') }}</a>
     </div>
 </div>
 

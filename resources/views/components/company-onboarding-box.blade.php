@@ -1,7 +1,11 @@
 <div class="card mb-3 mb-lg-5">
     <!-- Header -->
     <div class="card-header">
-        <h4 class="card-header-title">{{ translate('Welcome to B2BWood Club!') }}</h4>
+        <x-ev.label
+        tag="h4"
+        class="card-header-title"
+        :label="ev_dynamic_translate('Welcome to Dashboard', true)">
+        </x-ev.label>
 
 
     </div>

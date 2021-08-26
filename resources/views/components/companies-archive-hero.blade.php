@@ -26,7 +26,7 @@
                                 {{ $country }}
                                 <img src="{{ static_asset('assets/img/flags/de.png') }}" height="20" class="mr-1">
                             @else
-                                {{ translate('B2BWood Club') }}
+                                {{ get_site_name() }}
                             @endif
 
                     </h1>
@@ -86,7 +86,7 @@
 
         <div class="d-none d-lg-block col-lg-6 position-absolute top-0 right-0">
             {{-- <img class="img-fluid rounded-lg" src="{{ $image }}" alt="Image Description"> --}}
-            <x-ev.dynamic-image 
+            <x-ev.dynamic-image
             class="z-index-5"
             :src="ev_dynamic_translate('#hero-image')" alt="Any alt text"
             >

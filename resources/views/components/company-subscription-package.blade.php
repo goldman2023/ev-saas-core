@@ -2,7 +2,7 @@
 
      <div class="card">
          <div class="card-header">
-             <h6 class="mb-0">{{ translate('Your B2BWood Club Membership') }}</h6>
+             <h6 class="mb-0">{{ translate('Your ' . get_site_name() .' Membership') }}</h6>
          </div>
          @php
              $seller_package = \App\Models\SellerPackage::find(auth()->user()->seller->seller_package_id);

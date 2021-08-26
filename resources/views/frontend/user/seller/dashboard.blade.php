@@ -70,7 +70,6 @@
         <div class="col-sm-6">
 
             <!-- Body -->
-            {{-- <x-credit-report-box></x-credit-report-box> --}}
             <!-- End Body -->
         </div>
     </div>

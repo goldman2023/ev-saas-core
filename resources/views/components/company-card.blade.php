@@ -78,7 +78,7 @@ if ($new) {
                         <div class="{{ $class_col_body_2 }} mt-3 mt-md-0">
                             <span class="d-block font-size-1  small text-body mb-1 d-none">
                                 {{-- TODO: make this dynamic --}}
-                                {{ translate('B2BWood Club member: ') }}
+                                {{ translate('Member Since: ') }}
                                 {{ $company->created_at->diffForHumans() }}
                             </span>
                             <x-verified-company-badge :company="$company"></x-verified-company-badge>
@@ -102,7 +102,7 @@ if ($new) {
             {{-- TODO: This should be shown only for sellers with active --}}
             @php
                 $seller_package = \App\Models\SellerPackage::find($company->user->seller->seller_package_id);
-                
+
             @endphp
             @if ($seller_package != null)
                 <span class="badge badge-soft-success w-auto">
