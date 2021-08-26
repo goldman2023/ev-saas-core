@@ -208,6 +208,8 @@
 
         @yield('script')
 
+        @stack('footer_scripts')
+
         @php
             echo get_setting('footer_script');
         @endphp

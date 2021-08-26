@@ -1,22 +1,19 @@
 <?php
 
-namespace App\View\Components\Default\Categories;
+namespace App\View\Components\Default\Forms;
 
 use Illuminate\View\Component;
 
-class CategoryList extends Component
+class ContactForm extends Component
 {
-
-    public $categories;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($categories)
+    public function __construct()
     {
         //
-        $this->categories = $categories;
     }
 
     /**
@@ -26,6 +23,6 @@ class CategoryList extends Component
      */
     public function render()
     {
-        return view('components.default.categories.category-list');
+        return view('components.default.forms.contact-form');
     }
 }
