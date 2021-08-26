@@ -13,7 +13,7 @@
 
                     <div class="mb-5">
                         <h2 class="display-4 text-center text-lg-left">
-                            {{ translate('Become a B2BWood Club Member') }}
+                            {{ translate('Become a Member') }}
                         </h2>
                     </div>
 
@@ -38,7 +38,7 @@
                                 {{ translate('Get Verified') }}
                             </span>
 
-                            {{ translate('Evaluate and show your company performance and reputation with analyst data from B2BWood') }}
+                            {{ translate('Evaluate and show your company performance and reputation with analyst data') }}
 
                         </li>
                     </ul>
@@ -46,7 +46,7 @@
                      <div class="text-center mb-5">
                         <img class="img-fluid"
                             src="{{ asset('assets/img/promo/b2b-company-profile.png') }}"
-                            alt="B2BWood Company Profile" style="width:100%">
+                            alt="Company Profile" style="width:100%">
                     </div>
                     <!-- End List Checked -->
 

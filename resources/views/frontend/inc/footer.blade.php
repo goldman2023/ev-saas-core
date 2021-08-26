@@ -137,7 +137,7 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="pt-3 pb-7 pb-xl-3 text-light" id="b2bwood-footer">
+<footer class="pt-3 pb-7 pb-xl-3 text-light" id="ev-saas-footer">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-4">

@@ -393,7 +393,6 @@
                 @endif
             </div>
 
-            <x-credit-report-box :company="auth()->user()->shop"></x-credit-report-box>
         @endif
 
     </div>

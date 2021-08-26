@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <!-- 
+    <!--
         Taken From: https://htmlstream.com/front/snippets/ecommerce.html
         Cart Section -->
     <div class="container space-2">
@@ -10,7 +10,7 @@
             <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
             <div class="mb-5">
                 <h1 class="h2">
-                {{ translate('You have succesfully joined B2BWood Club') }}
+                {{ translate('You have succesfully joined') }} {{ get_site_name() }}
                 </h1>
                 <p>Thank you for your order! Your order is being processed and will be completed within 3-6 hours. You will
                     receive an email confirmation when your order is completed.</p>

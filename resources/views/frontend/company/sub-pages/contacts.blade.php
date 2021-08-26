@@ -98,7 +98,7 @@
                         <div class="card-body p-4 p-md-2" style="position: relative;">
                             @guest
                                 <x-card-overlay :extraButtonsEnabled="false"
-                                    text="{{ translate('Please Join B2BWood To Contact this company') }}"></x-card-overlay>
+                                    text="{{ translate('Please Join To Contact this company') }}"></x-card-overlay>
                             @endguest
                             <x-company-contact-form :seller="$seller"> </x-company-contact-form>
 
