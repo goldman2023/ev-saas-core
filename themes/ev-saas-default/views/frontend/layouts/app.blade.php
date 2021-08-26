@@ -200,6 +200,7 @@
         <!-- SCRIPTS -->
 
         <!-- JS Front -->
+        <script src="/front/js/hs.core.js"></script>
         <script src="/front/js/hs-add-field.min.js"></script>
         <script src="/front/js/hs-unfold.min.js"></script>
 

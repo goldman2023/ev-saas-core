@@ -1,0 +1,248 @@
+<!-- Hero Section -->
+@php
+$photos = explode(',', $product->photos);
+
+@endphp
+<div class="container space-2">
+    <div class="row">
+        <div class="col-lg-7 mb-7 mb-lg-0">
+            <div class="pr-lg-4">
+                <div class="position-relative">
+                    <!-- Main Slider -->
+                    <div id="heroSlider" class="js-slick-carousel slick border rounded-lg"
+                        data-hs-slick-carousel-options='{
+                   "fade": true,
+                   "infinite": true,
+                   "autoplay": true,
+                   "autoplaySpeed": 7000,
+                   "asNavFor": "#heroSliderNav"
+                 }'>
+
+                        @foreach ($photos as $photo)
+                            <div class="js-slide">
+                                <x-tenant.system.image class="img-fluid w-100 rounded-lg" :image="$photo">
+                                </x-tenant.system.image>
+                            </div>
+                        @endforeach
+
+                    </div>
+                    <!-- End Main Slider -->
+
+                    <!-- Slider Nav -->
+                    <div class="position-absolute bottom-0 right-0 left-0 px-4 py-3">
+                        <div id="heroSliderNav"
+                            class="js-slick-carousel slick slick-gutters-1 slick-transform-off max-w-27rem mx-auto"
+                            data-hs-slick-carousel-options='{
+                     "infinite": true,
+                     "autoplaySpeed": 7000,
+                     "slidesToShow": 3,
+                     "isThumbs": true,
+                     "isThumbsProgress": true,
+                     "thumbsProgressOptions": {
+                       "color": "#377dff",
+                       "width": 8
+                     },
+                     "thumbsProgressContainer": ".js-slick-thumb-progress",
+                     "asNavFor": "#heroSlider"
+                   }'>
+                            @foreach ($photos as $photo)
+                                <div class="js-slide p-1">
+                                    <a class="js-slick-thumb-progress d-block avatar avatar-circle border p-1"
+                                        href="javascript:;">
+                                        <x-tenant.system.image class="avatar-img" :image="$photo">
+                                        </x-tenant.system.image>
+                                    </a>
+
+                                </div>
+
+                            @endforeach
+
+
+                        </div>
+                    </div>
+                    <!-- End Slider Nav -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Description -->
+        <div class="col-lg-5">
+            <!-- Rating -->
+            <div class="d-flex align-items-center small mb-2">
+                <div class="text-warning mr-2">
+                    <i class="la la-star"></i>
+                    <i class="la la-star"></i>
+                    <i class="la la-star"></i>
+                    <i class="la la-star"></i>
+                    <i class="la la-star"></i>
+                </div>
+                <a class="link-underline" href="#reviewSection">Read all 287 reviews</a>
+            </div>
+            <!-- End Rating -->
+
+            <!-- Title -->
+            <div class="mb-5">
+                <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
+                <p>American label New Era manufacturing baseball hats for teams since the 1930s.</p>
+            </div>
+            <!-- End Title -->
+
+            <!-- Price -->
+            <div class="mb-5">
+                <h2 class="font-size-1 text-body mb-0">Total price:</h2>
+                <span class="text-dark font-size-2 font-weight-bold">$159.99</span>
+                <span class="text-body ml-2"><del>$179.99</del></span>
+            </div>
+            <!-- End Price -->
+
+            <!-- Quantity -->
+            <div class="border rounded-lg py-2 px-3 mb-3">
+                <div class="js-quantity-counter row align-items-center">
+                    <div class="col-7">
+                        <small class="d-block text-body font-weight-bold">Select quantity</small>
+                        <input class="js-result form-control h-auto border-0 rounded-lg p-0" type="text" value="1">
+                    </div>
+                    <div class="col-5 text-right">
+                        <a class="js-minus btn btn-xs btn-icon btn-outline-secondary rounded-circle"
+                            href="javascript:;">
+                            <i class="la la-minus"></i>
+                        </a>
+                        <a class="js-plus btn btn-xs btn-icon btn-outline-secondary rounded-circle" href="javascript:;">
+                            <i class="la la-plus"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- End Quantity -->
+
+            <!-- Accordion -->
+            <div id="shopCartAccordionExample2" class="accordion mb-5">
+                <!-- Card -->
+                <div class="card card-bordered shadow-none">
+                    <div class="card-body card-collapse" id="shopCardHeadingOne">
+                        <a class="btn btn-link btn-block card-btn collapsed" href="javascript:;" role="button"
+                            data-toggle="collapse" data-target="#shopCardOne" aria-expanded="false"
+                            aria-controls="shopCardOne">
+                            <span class="row align-items-center">
+                                <span class="col-9">
+                                    <span class="media align-items-center">
+                                        <span class="w-100 max-w-6rem mr-3">
+                                            <img class="img-fluid"
+                                                src="https://htmlstream.com/front/assets/svg/icons/icon-65.svg"
+                                                alt="SVG">
+                                        </span>
+                                        <span class="media-body">
+                                            <span class="d-block font-size-1 font-weight-bold">Free shipping</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span class="col-3 text-right">
+                                    <span class="card-btn-toggle">
+                                        <span class="card-btn-toggle-default">+</span>
+                                        <span class="card-btn-toggle-active">−</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div id="shopCardOne" class="collapse" aria-labelledby="shopCardHeadingOne"
+                        data-parent="#shopCartAccordionExample2">
+                        <div class="card-body">
+                            <p class="small mb-0">We offer free shipping anywhere in the U.S. A skilled delivery team
+                                will
+                                bring the boxes into your office.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Card -->
+
+                <!-- Card -->
+                <div class="card card-bordered shadow-none">
+                    <div class="card-body card-collapse" id="shopCardHeadingTwo">
+                        <a class="btn btn-link btn-block card-btn collapsed" href="javascript:;" role="button"
+                            data-toggle="collapse" data-target="#shopCardTwo" aria-expanded="false"
+                            aria-controls="shopCardTwo">
+                            <span class="row align-items-center">
+                                <span class="col-9">
+                                    <span class="media align-items-center">
+                                        <span class="w-100 max-w-6rem mr-3">
+                                            <img class="img-fluid"
+                                                src="https://htmlstream.com/front/assets/svg/icons/icon-64.svg"
+                                                alt="SVG">
+                                        </span>
+                                        <span class="media-body">
+                                            <span class="d-block font-size-1 font-weight-bold">30 Days return</span>
+                                        </span>
+                                    </span>
+                                </span>
+                                <span class="col-3 text-right">
+                                    <span class="card-btn-toggle">
+                                        <span class="card-btn-toggle-default">+</span>
+                                        <span class="card-btn-toggle-active">−</span>
+                                    </span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div id="shopCardTwo" class="collapse" aria-labelledby="shopCardHeadingTwo"
+                        data-parent="#shopCartAccordionExample2">
+                        <div class="card-body">
+                            <p class="small mb-0">If you're not satisfied, return it for a full refund. We'll take care
+                                of
+                                disassembly and return shipping.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- End Accordion -->
+
+            <div class="mb-4">
+                <button type="button" class="btn btn-block btn-primary btn-pill transition-3d-hover">Add to
+                    Cart</button>
+            </div>
+
+            <!-- Help Link -->
+            <div class="media align-items-center">
+                <span class="w-100 max-w-6rem mr-2">
+                    <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-4.svg" alt="SVG">
+                </span>
+                <div class="media-body text-body small">
+                    <span class="font-weight-bold mr-1">Need Help?</span>
+                    <a class="link-underline" href="#">Chat now</a>
+                </div>
+            </div>
+            <!-- End Help Link -->
+        </div>
+        <!-- End Product Description -->
+    </div>
+</div>
+<!-- End Hero Section -->
+
+@push('footer_scripts')
+
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" rel="stylesheet"> --}}
+
+    <!-- JS Implementing Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+    <!-- JS Front -->
+    <script src="/front/js/hs.slick-carousel.js"></script>
+
+    <!-- JS Plugins Init. -->
+    <script>
+        $(document).on('ready', function() {
+            alert("labas");
+            console.log("dddd");
+            // INITIALIZATION OF SLICK CAROUSEL
+            // =======================================================
+            $('.js-slick-carousel').each(function() {
+                alert("jeee");
+                var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
+            });
+
+
+
+        });
+    </script>
+@endpush

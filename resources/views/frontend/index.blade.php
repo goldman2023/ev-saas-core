@@ -31,11 +31,11 @@
 
 
 
-    <section id="b2b-new-products">
+    <section>
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <x-latest-products></x-latest-products>
+                    {{-- <x-latest-products></x-latest-products> --}}
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
     @include('frontend.components.benefits')
 
     {{-- TODO: Refactor this to blade components --}}
-    @include('frontend.components.news')
+    {{-- @include('frontend.components.news') --}}
 @endsection
 
 @section('script')

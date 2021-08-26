@@ -35,6 +35,13 @@
 @endsection
 
 @section('content')
+<section class="">
+    @php
+        $product = $detailedProduct;
+    @endphp
+    <x-default.products.single.product-details :product="$product">
+    </x-default.products.single.product-details>
+</section>
     <section class="mb-4 pt-3">
         <div class="container">
             <div class="bg-white shadow-sm rounded p-3">
@@ -240,61 +247,8 @@
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $detailedProduct->id }}">
 
-                                @if ($detailedProduct->choice_options != null)
-                                    @foreach (json_decode($detailedProduct->choice_options) as $key => $choice)
 
-                                        <div class="row no-gutters">
-                                            <div class="col-sm-2">
-                                                {{--                                            <div class="opacity-50 my-2">{{ \App\Attribute::find($choice->attribute_id)->getTranslation('name') }}:</div>--}}
-                                            </div>
-                                            <div class="col-sm-10">
-                                                <div class="aiz-radio-inline">
-                                                    @foreach ($choice->values as $key => $value)
-                                                        <label class="aiz-megabox pl-0 mr-2">
-                                                            <input
-                                                                type="radio"
-                                                                name="attribute_id_{{ $choice->attribute_id }}"
-                                                                value="{{ $value }}"
-                                                                @if($key == 0) checked @endif
-                                                            >
-                                                            <span class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
-                                                        {{ $value }}
-                                                    </span>
-                                                        </label>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                    @endforeach
-                                @endif
-
-                                @if (count(json_decode($detailedProduct->colors)) > 0)
-                                    <div class="row no-gutters">
-                                        <div class="col-sm-2">
-                                            <div class="opacity-50 my-2">{{ translate('Color')}}:</div>
-                                        </div>
-                                        <div class="col-sm-10">
-                                            <div class="aiz-radio-inline">
-                                                @foreach (json_decode($detailedProduct->colors) as $key => $color)
-                                                    <label class="aiz-megabox pl-0 mr-2" data-toggle="tooltip" data-title="{{ \App\Models\Color::where('code', $color)->first()->name }}">
-                                                        <input
-                                                            type="radio"
-                                                            name="color"
-                                                            value="{{ \App\Models\Color::where('code', $color)->first()->name }}"
-                                                            @if($key == 0) checked @endif
-                                                        >
-                                                        <span class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center p-1 mb-2">
-                                                        <span class="size-30px d-inline-block rounded" style="background: {{ $color }};"></span>
-                                                    </span>
-                                                    </label>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <hr>
-                            @endif
 
                             <!-- Quantity + Add to cart -->
                                 <div class="row no-gutters">
