@@ -198,7 +198,6 @@
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
             crossorigin="anonymous"></script>
         <!-- SCRIPTS -->
-        <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
 
         <!-- JS Front -->
         <script src="/front/js/hs-add-field.min.js"></script>
