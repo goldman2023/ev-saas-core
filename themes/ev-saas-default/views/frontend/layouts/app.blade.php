@@ -147,6 +147,8 @@
         <div class="aiz-main-wrapper d-flex flex-column">
 
             <div class="position-relative">
+            @include('frontend.inc.nav')
+
                 <x-default.headers.header>
 
                 </x-default.headers.header>
