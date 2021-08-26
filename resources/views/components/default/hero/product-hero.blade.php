@@ -1,18 +1,3 @@
-<style>
-    .hero-v1 {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 40%;
-        height: 100%;
-        z-index: 1;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top center;
-    }
-
-</style>
-
 <div class="position-relative">
     <div class="container space-lg-3 position-relative z-index-2">
         <div class="row align-items-center">
@@ -20,11 +5,9 @@
                 <div class="w-md-60 mb-7">
                     <x-ev.label tag="h2" class="h1" :label="ev_dynamic_translate('Product Heading')">
                     </x-ev.label>
-
                     <p>
                         <x-ev.label :label="ev_dynamic_translate('Product Description')">
                         </x-ev.label>
-
                     </p>
                 </div>
 

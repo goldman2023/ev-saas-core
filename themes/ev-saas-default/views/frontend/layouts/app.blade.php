@@ -47,9 +47,10 @@
 
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-            <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
+            <link rel="stylesheet" href="https://htmlstream.com/front/assets/css/theme.min.css?v=1.0">
+            {{-- <link rel="stylesheet" href="{{ global_asset('ev-assets/front/css/snippets.min.css') }}"> --}}
             <!-- Front Icon Set CSS Files -->
-            <link rel="stylesheet" href="{{ global_asset('front/icon-set/style.css') }}">
+            {{-- <link rel="stylesheet" href="{{ global_asset('front/icon-set/style.css') }}"> --}}
 
             <script>
                 var AIZ = AIZ || {};
@@ -145,8 +146,12 @@
         <!-- aiz-main-wrapper -->
         <div class="aiz-main-wrapper d-flex flex-column">
 
-            <!-- Header -->
-            @include('frontend.inc.nav')
+            <div class="position-relative">
+                <x-default.headers.header>
+
+                </x-default.headers.header>
+            </div>
+
 
             @yield('content')
 
@@ -192,17 +197,11 @@
         @yield('modal')
 
 
-            <!-- SCRIPTS -->
-            <script
-            src="https://code.jquery.com/jquery-3.6.0.min.js"
-            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-            crossorigin="anonymous"></script>
-        <!-- SCRIPTS -->
+
 
         <!-- JS Front -->
-        <script src="/front/js/hs.core.js"></script>
-        <script src="/front/js/hs-add-field.min.js"></script>
-        <script src="/front/js/hs-unfold.min.js"></script>
+        <script src="https://htmlstream.com/front/assets/js/vendor.min.js"></script>
+        <script src="https://htmlstream.com/front/assets/js/theme.min.js"></script>
 
         @include('frontend.layouts.partials.app-js')
 

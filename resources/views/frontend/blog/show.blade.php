@@ -87,5 +87,8 @@
         <!-- End Share -->
             <x-blog.news-article-author :blog="$blog"></x-blog.news-article-author>
         </div>
+
+        <x-default.comments.comments-list>
+        </x-default.comments.comments-list>
     </div>
 @endsection

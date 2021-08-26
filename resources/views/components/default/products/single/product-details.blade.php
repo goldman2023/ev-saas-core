@@ -220,28 +220,20 @@ $photos = explode(',', $product->photos);
 <!-- End Hero Section -->
 
 @push('footer_scripts')
-
-    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" rel="stylesheet"> --}}
-
-    <!-- JS Implementing Plugins -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
-    <!-- JS Front -->
-    <script src="/front/js/hs.slick-carousel.js"></script>
-
     <!-- JS Plugins Init. -->
     <script>
         $(document).on('ready', function() {
-            alert("labas");
-            console.log("dddd");
             // INITIALIZATION OF SLICK CAROUSEL
             // =======================================================
             $('.js-slick-carousel').each(function() {
-                alert("jeee");
                 var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
             });
 
-
+            // INITIALIZATION OF QUANTITY COUNTER
+            // =======================================================
+            $('.js-quantity-counter').each(function() {
+                var quantityCounter = new HSQuantityCounter($(this)).init();
+            });
 
         });
     </script>
