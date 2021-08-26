@@ -56,11 +56,6 @@
             </script>
 
             <style>
-                body {
-                    font-family: 'Open Sans', sans-serif;
-                    font-weight: 400;
-                }
-
                 :root {
                     --primary: red;
                     --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
@@ -68,52 +63,8 @@
                 }
             </style>
 
-            @if (\App\Models\BusinessSetting::where('type', 'google_analytics')->first()->value == 1)
-            <!-- Global site tag (gtag.js) - Google Analytics -->
-                <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('TRACKING_ID') }}"></script>
-
-                <script>
-                    window.dataLayer = window.dataLayer || [];
-
-                    function gtag() {
-                        dataLayer.push(arguments);
-                    }
-
-                    gtag('js', new Date());
-                    gtag('config', '{{ env('TRACKING_ID') }}');
-                </script>
-            @endif
-
-            @if (\App\Models\BusinessSetting::where('type', 'facebook_pixel')->first()->value == 1)
-            <!-- Facebook Pixel Code -->
-                <script>
-                    !function (f, b, e, v, n, t, s) {
-                        if (f.fbq) return;
-                        n = f.fbq = function () {
-                            n.callMethod ?
-                                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                        };
-                        if (!f._fbq) f._fbq = n;
-                        n.push = n;
-                        n.loaded = !0;
-                        n.version = '2.0';
-                        n.queue = [];
-                        t = b.createElement(e);
-                        t.async = !0;
-                        t.src = v;
-                        s = b.getElementsByTagName(e)[0];
-                        s.parentNode.insertBefore(t, s)
-                    }(window, document, 'script',
-                        'https://connect.facebook.net/en_US/fbevents.js');
-                    fbq('init', '{{ env('FACEBOOK_PIXEL_ID') }}');
-                    fbq('track', 'PageView');
-                </script>
-                <noscript>
-                    <img height="1" width="1" style="display:none"
-                         src="https://www.facebook.com/tr?id={{ env('FACEBOOK_PIXEL_ID') }}&ev=PageView&noscript=1"/>
-                </noscript>
-                <!-- End Facebook Pixel Code -->
-            @endif
+            <x-default.system.tracking-pixels>
+            </x-default.system.tracking-pixels>
 
             @php
                 echo get_setting('header_script');
@@ -124,11 +75,9 @@
         <!-- aiz-main-wrapper -->
         <div class="aiz-main-wrapper d-flex flex-column">
 
-            <div class="position-relative">
             @include('frontend.inc.nav')
-                <x-default.headers.header>
-                </x-default.headers.header>
-            </div>
+                {{-- <x-default.headers.header>
+                </x-default.headers.header> --}}
 
 
             @yield('content')
@@ -137,20 +86,7 @@
 
         </div>
 
-        @if (get_setting('show_cookies_agreement') == 'on')
-            <div class="aiz-cookie-alert shadow-xl">
-                <div class="p-3 bg-dark rounded">
-                    <div class="text-white mb-3">
-                        @php
-                            echo get_setting('cookies_agreement_text');
-                        @endphp
-                    </div>
-                    <button class="btn btn-primary aiz-cookie-accepet">
-                        {{ translate('Ok. I Understood') }}
-                    </button>
-                </div>
-            </div>
-        @endif
+        <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
         @include('frontend.partials.modal')
 
@@ -191,7 +127,7 @@
             echo get_setting('footer_script');
         @endphp
 
-@livewireStyles
-@livewireScripts
+            @livewireStyles
+            @livewireScripts
         </body>
         </html>

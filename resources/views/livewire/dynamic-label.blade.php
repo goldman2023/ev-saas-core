@@ -3,16 +3,16 @@
 
 
     {{-- TODO: Make nice icon and general styling --}}
-   {{--  <button wire:click.prevent="editLabel()" class="text-xs">
+    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
         {{ translate('Edit') }}
-    </button> --}}
+    </button>
 
-    <x-ev.dynamic-components.edit-dropdown>
-    </x-ev.dynamic-components.edit-dropdown>
+    {{-- <x-ev.dynamic-components.edit-dropdown>
+    </x-ev.dynamic-components.edit-dropdown> --}}
 
     @if ($show_input_field)
         {{-- TODO: Improve UX and UI of this element --}}
-        <div class="absolute top-0 bg-white p-3 rounded-md shadow-xl z-90" style="z-index: 99999">
+        <div class="position-absolute bottom-100 left-0 bg-white" style="z-index: 99999">
 
 
             <label for="email" class="block text-sm font-medium text-gray-700">

@@ -1,4 +1,4 @@
-<div class="relative">
+<div class="position-absolute">
 
 
     {{-- TODO: Make nice icon and general styling --}}
