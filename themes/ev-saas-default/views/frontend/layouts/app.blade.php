@@ -46,7 +46,6 @@
             @endif
 
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
-            <link rel="stylesheet" href="https://htmlstream.com/front/assets/css/theme.min.css?v=1.0">
 
             <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
             <!-- Front Icon Set CSS Files -->
