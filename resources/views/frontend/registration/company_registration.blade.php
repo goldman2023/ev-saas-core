@@ -7,9 +7,9 @@
             <!-- Cover -->
             <div
                 class="col-lg-6 d-flex justify-content-center align-items-start pt-10 min-vh-lg-100 position-relative bg-light px-0">
-                
+
                 <div style="max-width: 33rem;" class="pl-3">
-                   
+
 
                     <div class="mb-5">
                         <h2 class="display-4 text-center text-lg-left">
@@ -24,8 +24,7 @@
                                 {{ translate('Present your business online') }}
                             </span>
 
-                            {{ translate('Get your free company profile and stay on top of global wood
-                            industry trends with B2BWood Club Membership') }}
+                            {{ translate('Benefit 1') }}
 
                         </li>
 

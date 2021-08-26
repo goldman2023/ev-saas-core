@@ -90,7 +90,7 @@
                                 </dl>
 
                                 <dl class="row font-size-1">
-                                    <dt class="col-sm-12 text-dark">{{ translate('B2BWood Member') }}</dt>
+                                    <dt class="col-sm-12 text-dark">{{ get_site_name() }} {{ translate('Member') }}</dt>
                                     <dd class="col-sm-12 text-body">{{ translate('Since') }}
                                         {{ $seller->created_at->diffForHumans() }}</dd>
                                 </dl>
