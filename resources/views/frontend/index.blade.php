@@ -5,6 +5,14 @@
         <x-companies-archive-hero></x-companies-archive-hero>
     </section>
 
+    <section>
+        <x-default.categories.category-list> </x-default.categories.category-list>
+    </section>
+
+    <section>
+        <x-default.reviews.reviews-list-detailed> </x-default.reviews.reviews-list-detailed>
+    </section>
+
     <section id="homepage-stats">
         {{-- <x-homepage-stats></x-homepage-stats> --}}
     </section>

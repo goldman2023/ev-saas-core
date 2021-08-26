@@ -44,12 +44,9 @@
                 <meta property="og:site_name" content="{{ env('APP_NAME') }}"/>
                 <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
             @endif
-        <!-- Favicon -->
+
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-            <!-- Google Fonts -->
-            {{-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> --}}
-        <!-- CSS Files -->
             <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
             <!-- Front Icon Set CSS Files -->
             <link rel="stylesheet" href="{{ global_asset('front/icon-set/style.css') }}">
