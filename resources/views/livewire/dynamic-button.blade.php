@@ -2,9 +2,8 @@
 
 
     {{-- TODO: Make nice icon and general styling --}}
-    <button wire:click.prevent="editLabel()" class="text-xs">
-        {{ translate('Edit') }}
-    </button>
+    <x-ev.dynamic-components.edit-dropdown>
+    </x-ev.dynamic-components.edit-dropdown>
 
     @if ($show_input_field)
         {{-- TODO: Improve UX and UI of this element --}}

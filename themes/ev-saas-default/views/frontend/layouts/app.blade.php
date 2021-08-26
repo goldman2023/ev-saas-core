@@ -194,12 +194,18 @@
 
         @yield('modal')
 
+
+            <!-- SCRIPTS -->
+            <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous"></script>
         <!-- SCRIPTS -->
         <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
 
         <!-- JS Front -->
-        <script src="{{ static_asset('front/js/hs-add-field.min.js') }}"></script>
-        <script src="{{ static_asset('front/js/hs-unfold.min.js') }}"></script>
+        <script src="/front/js/hs-add-field.min.js"></script>
+        <script src="/front/js/hs-unfold.min.js"></script>
 
         @include('frontend.layouts.partials.app-js')
 
@@ -208,5 +214,8 @@
         @php
             echo get_setting('footer_script');
         @endphp
+
+@livewireStyles
+@livewireScripts
         </body>
         </html>
