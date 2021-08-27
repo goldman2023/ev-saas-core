@@ -70,11 +70,7 @@ $photos = explode(',', $product->photos);
             <!-- Rating -->
             <div class="d-flex align-items-center small mb-2">
                 <div class="text-warning mr-2">
-                    <i class="la la-star"></i>
-                    <i class="la la-star"></i>
-                    <i class="la la-star"></i>
-                    <i class="la la-star"></i>
-                    <i class="la la-star"></i>
+                    @svg('heroicon-s-star')
                 </div>
                 <a class="link-underline" href="#reviewSection">Read all 287 reviews</a>
             </div>
@@ -85,14 +81,24 @@ $photos = explode(',', $product->photos);
                 <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
                 <p>American label New Era manufacturing baseball hats for teams since the 1930s.</p>
             </div>
-            
+
             <!-- End Title -->
 
             <!-- Price -->
             <div class="mb-5">
-                <h2 class="font-size-1 text-body mb-0">Total price:</h2>
-                <span class="text-dark font-size-2 font-weight-bold">$159.99</span>
-                <span class="text-body ml-2"><del>$179.99</del></span>
+                <h2 class="font-size-1 text-body mb-0">{{ translate('Price:') }}</h2>
+
+                <span class="text-dark font-size-2 font-weight-bold">
+                    {{ home_discounted_price($product->id) }}
+                    @if($product->unit != null)
+                    <span class="opacity-70">/
+                        {{ $product->getTranslation('unit') }}
+                    </span>
+                @endif
+            </span>
+            @if(home_price($product->id) != home_discounted_price($product->id))
+                <span class="text-body ml-2"><del>{{ home_price($product->id) }}</del></span>
+                @endif
             </div>
             <!-- End Price -->
 
@@ -100,35 +106,40 @@ $photos = explode(',', $product->photos);
             <div class="mb-5">
                 <div class="row">
                     <div class="col-sm-6">
-                        <small class="mr-2 opacity-50">{{ translate('Sold by')}}: </small><br>
-                @if ($product->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
-                    <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">{{ $product->user->shop->name }}</a>
-                @else
-                    {{  translate('Inhouse product') }}
-                @endif
+                        <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small><br>
+                        @if ($product->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                            <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">
+                                {{ $product->user->shop->name }}
+                            </a>
+                        @else
+                            {{ translate('Inhouse product') }}
+                        @endif
 
-                @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
-                    <button class="ml-3 btn btn-sm btn-soft-primary" onclick="show_chat_modal()">{{ translate('Message Seller')}}</button>
-                @endif
+                        @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
+                            <button class="mt-2 btn btn-sm btn-soft-primary" onclick="show_chat_modal()">
+                                {{ translate('Message Seller') }}
+                            </button>
+                        @endif
                     </div>
                     <div class="col-sm-6">
-                        <small class="mr-2 opacity-50">{{ translate('Manufacturer:')}} </small><br>
+                        <small class="mr-2 opacity-50">{{ translate('Manufacturer:') }} </small><br>
 
-                @if ($product->brand != null)
-                                        <a href="{{ route('products.brand',$product->brand->slug) }}">
-                                            <img src="{{ uploaded_asset($product->brand->logo) }}" alt="{{ $product->brand->getTranslation('name') }}" height="30">
-                                        </a>
-                                @endif
+                        @if ($product->brand != null)
+                            <a href="{{ route('products.brand', $product->brand->slug) }}">
+                                <img src="{{ uploaded_asset($product->brand->logo) }}"
+                                    alt="{{ $product->brand->getTranslation('name') }}" height="30">
+                            </a>
+                        @endif
                     </div>
                 </div>
-                
+
             </div>
 
             {{-- Seller Info --}}
             <div class="mb-5">
-                
+
             </div>
-                       
+
             {{-- End Seller Info --}}
             {{-- End Brand --}}
 
