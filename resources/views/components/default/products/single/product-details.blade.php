@@ -85,6 +85,7 @@ $photos = explode(',', $product->photos);
                 <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
                 <p>American label New Era manufacturing baseball hats for teams since the 1930s.</p>
             </div>
+            
             <!-- End Title -->
 
             <!-- Price -->
@@ -94,6 +95,42 @@ $photos = explode(',', $product->photos);
                 <span class="text-body ml-2"><del>$179.99</del></span>
             </div>
             <!-- End Price -->
+
+            {{-- Brand --}}
+            <div class="mb-5">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <small class="mr-2 opacity-50">{{ translate('Sold by')}}: </small><br>
+                @if ($product->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                    <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">{{ $product->user->shop->name }}</a>
+                @else
+                    {{  translate('Inhouse product') }}
+                @endif
+
+                @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
+                    <button class="ml-3 btn btn-sm btn-soft-primary" onclick="show_chat_modal()">{{ translate('Message Seller')}}</button>
+                @endif
+                    </div>
+                    <div class="col-sm-6">
+                        <small class="mr-2 opacity-50">{{ translate('Manufacturer:')}} </small><br>
+
+                @if ($product->brand != null)
+                                        <a href="{{ route('products.brand',$product->brand->slug) }}">
+                                            <img src="{{ uploaded_asset($product->brand->logo) }}" alt="{{ $product->brand->getTranslation('name') }}" height="30">
+                                        </a>
+                                @endif
+                    </div>
+                </div>
+                
+            </div>
+
+            {{-- Seller Info --}}
+            <div class="mb-5">
+                
+            </div>
+                       
+            {{-- End Seller Info --}}
+            {{-- End Brand --}}
 
             <!-- Quantity -->
             <div class="border rounded-lg py-2 px-3 mb-3">

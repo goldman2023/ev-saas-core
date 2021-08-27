@@ -14,49 +14,23 @@
                 <div class="row">
                     <div class="col-md-4 mb-3 mb-md-0">
                         <!-- Card -->
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <figure class="max-w-8rem mb-3">
-                                    <img class="img-fluid"
-                                        src="https://htmlstream.com/front/assets/svg/icons/icon-13.svg" alt="SVG">
-                                </figure>
-                                <h4>Find homes for sale</h4>
-                                <p>Over 1 million+ homes for sale available on the website.</p>
-                                <a href="#">Properties for sale <i class="fas fa-angle-right align-middle ml-1"></i></a>
-                            </div>
-                        </div>
+                       <x-default.cards.hero-benefit-card id="benefit-card-1">
+                       </x-default.cards.hero-benefit-card>
                         <!-- End Card -->
                     </div>
 
                     <div class="col-md-4 mb-3 mb-md-0">
                         <!-- Card -->
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <figure class="max-w-8rem mb-3">
-                                    <img class="img-fluid"
-                                        src="https://htmlstream.com/front/assets/svg/icons/icon-1.svg" alt="SVG">
-                                </figure>
-                                <h4>Find rental properties</h4>
-                                <p>Fina a home or apartment with 35+ filters and custom keyword search.</p>
-                                <a href="#">Properties for rent <i class="fas fa-angle-right align-middle ml-1"></i></a>
-                            </div>
-                        </div>
+                        <x-default.cards.hero-benefit-card id="benefit-card-2">
+                        </x-default.cards.hero-benefit-card>
                         <!-- End Card -->
                     </div>
 
                     <div class="col-md-4">
                         <!-- Card -->
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <figure class="max-w-8rem mb-3">
-                                    <img class="img-fluid"
-                                        src="https://htmlstream.com/front/assets/svg/icons/icon-31.svg" alt="SVG">
-                                </figure>
-                                <h4>Sell properties</h4>
-                                <p>Wanting to find a sold property price or see what sold on the weekend?</p>
-                                <a href="#">Sell properties <i class="fas fa-angle-right align-middle ml-1"></i></a>
-                            </div>
-                        </div>
+                        <x-default.cards.hero-benefit-card id="benefit-card-3">
+
+                        </x-default.cards.hero-benefit-card>
                         <!-- End Card -->
                     </div>
                 </div>
@@ -67,5 +41,10 @@
     </div>
 
     <div class="hero-v1 d-none d-md-block"
-        style="background-image: url(https://www.montanstahl.com/wp-content/uploads/2018/01/Assy1.jpg);"></div>
+        style="background-image: url({{ ev_dynamic_translate('#product-hero-image')->value }});">
+        <x-ev.dynamic-image 
+        :src="ev_dynamic_translate('#product-hero-image')" alt="Product Hero"
+        >
+        </x-ev.dynamic-image>
+    </div>
 </div>

@@ -8,8 +8,11 @@
     </section>
 
     <section>
-        <x-default.forms.contact-form></x-default.forms.contact-form>
+        <x-default.products.product-list>
+        </x-default.products.product-list>
     </section>
+
+
 
     <section id="archive-hero">
         {{-- <x-companies-archive-hero></x-companies-archive-hero> --}}
@@ -36,7 +39,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    {{-- <x-latest-products></x-latest-products> --}}
+                    <x-latest-products></x-latest-products>
                 </div>
             </div>
         </div>
@@ -45,7 +48,9 @@
 
     {{-- TODO: Refactor this to blade components --}}
     @include('frontend.components.benefits')
-
+    <section>
+        <x-default.forms.contact-form></x-default.forms.contact-form>
+    </section>
     {{-- TODO: Refactor this to blade components --}}
     {{-- @include('frontend.components.news') --}}
 @endsection
