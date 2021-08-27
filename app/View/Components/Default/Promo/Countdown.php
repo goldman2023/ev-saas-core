@@ -6,14 +6,16 @@ use Illuminate\View\Component;
 
 class Countdown extends Component
 {
+    public $date;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($date = '2021/09/04')
     {
         //
+        $this->date = $date;
     }
 
     /**

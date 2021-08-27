@@ -1,4 +1,6 @@
 <!-- ========== FOOTER ========== -->
+<x-footer-bottom-links></x-footer-bottom-links>
+
 <footer class="container space-1">
     <div class="row align-items-md-center text-center">
       <div class="col-md-3 mb-4 mb-md-0">
@@ -14,7 +16,7 @@
         @endif
         </a>
       </div>
-  
+
       <div class="col-sm-7 col-md-6 mb-4 mb-sm-0">
         <!-- Nav List -->
         <ul class="nav nav-sm nav-x-0 justify-content-center text-md-center">
@@ -30,7 +32,7 @@
         </ul>
         <!-- End Nav List -->
       </div>
-  
+
       <div class="col-sm-5 col-md-3 text-sm-right">
         <!-- Social Networks -->
         <ul class="list-inline mb-0">
