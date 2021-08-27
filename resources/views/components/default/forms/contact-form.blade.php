@@ -5,27 +5,40 @@
             <div class="col-lg-5 mb-7 mb-lg-0">
                 <!-- Info -->
                 <div class="mb-5">
-                    <h2>Thousands of experts around the world ready to help you.</h2>
-                    <p>See why leading organizations choose Front Course for Business as their destination for employee
-                        learning.</p>
+                    <x-ev.label
+                    tag="h2"
+                    :label="ev_dynamic_translate('Contact Section Title', true)">
+                    </x-ev.label>
+                    <p>
+                        <x-ev.label
+                    :label="ev_dynamic_translate('Contact Section Description', true)">
+                    </x-ev.label>
+                    </p>
                 </div>
 
-                <h4>Learn more about:</h4>
+                <x-ev.label
+                tag="h4"
+                :label="ev_dynamic_translate('Contact Section Benefits', true)">
+                </x-ev.label>
 
                 <div class="media text-body mb-3">
-                    <i class="la la-check-circle text-success mt-1 mr-2"></i>
+                        <x-heroicon-s-badge-check class="mt-1 mr-2 text-success" style="max-width:30px" />
+
+
                     <div class="media-body">
                         Unlimited access to the top 3,500+ courses
                     </div>
                 </div>
                 <div class="media text-body mb-3">
-                    <i class="la la-check-circle text-success mt-1 mr-2"></i>
+                    <x-heroicon-s-badge-check class="mt-1  mr-2 text-success" style="max-width:30px" />
+
                     <div class="media-body">
                         Fresh content taught by 1,300+ experts – for any learning style
                     </div>
                 </div>
                 <div class="media text-body mb-3">
-                    <i class="la la-check-circle text-success mt-1 mr-2"></i>
+                    <x-heroicon-s-badge-check class="text-success mr-2" style="max-width:30px" />
+
                     <div class="media-body">
                         Actionable learning insights <span
                             class="badge badge-warning badge-pill ml-1 w-auto">Beta</span>
@@ -38,7 +51,12 @@
                 <!-- Signup Form -->
                 <form class="js-validate card card-bordered w-md-85 w-lg-100 mx-md-auto">
                     <div class="card-header bg-primary text-white text-center py-4 px-5 px-md-6">
-                        <h4 class="text-white mb-0">Try it free for 7 days starting at $59</h4>
+
+                        <x-ev.label
+                        tag="h4"
+                        class="text-white mb-0"
+                        :label="ev_dynamic_translate('Contact form hero title', true)">
+                        </x-ev.label>
                     </div>
 
                     <div class="card-body p-md-6">
