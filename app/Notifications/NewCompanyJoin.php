@@ -92,6 +92,6 @@ class NewCompanyJoin extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-                    ->content($this->user->shop->name . " has been joined to B2BWood Club.");
+                    ->content($this->user->shop->name . " has been joined to" . get_site_name());
     }
 }

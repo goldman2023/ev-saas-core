@@ -76,15 +76,13 @@
                     <h4 class="fs-16 fw-600 text-white">
                         {{ translate('What We Do') }}
                     </h4>
+                    {{-- TODO: Make this dynamic --}}
                     <ul class="list-unstyled">
                         <li class="mb-2">
                             <a class="text-white"  href="{{ route('shops.create') }}">
                                 {{ translate('Become a club member') }} </a>
                         </li>
-                        <li class="mb-2">
-                            <a class="text-white" rel="noopener" target="_blank" href="https://events.b2bwood.com">
-                                {{ translate('Events') }} </a>
-                        </li>
+
                         <li class="mb-2">
                             <a class="text-white" href="/page/pricing/">
                                 {{ translate('Pricing and Club Memberships') }} </a>
@@ -139,7 +137,7 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="pt-3 pb-7 pb-xl-3 text-light" id="b2bwood-footer">
+<footer class="pt-3 pb-7 pb-xl-3 text-light" id="ev-saas-footer">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-4">
@@ -268,7 +266,7 @@
                     <img alt="user avatar" src="{{ static_asset('assets/img/promo/b2b-wood-logo-bg.jpeg') }}">
                 </span>
                 <div class="fs-12">
-                    {{ translate('Join B2BWood') }}
+                    {{ translate('Join') }} {{ get_site_name() }}
                 </div>
             </a>
         @endif

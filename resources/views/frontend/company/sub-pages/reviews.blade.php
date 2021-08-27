@@ -3,9 +3,9 @@
 @section('company_profile')
 
 
-        <x-company-tabs :seller="$seller" type="reviews"></x-company-tabs>
+        <x-company.company-tabs :seller="$seller" type="reviews"></x-company.company-tabs>
         @php
-   
+
             if (!isset($sort)) $sort = "desc";
             $review_relationships = $shop->reviews()->orderBy('created_at', $sort)->paginate(5);
             if ($review_relationships->count() > 0) {
@@ -188,15 +188,15 @@
                             </div>
                             <!-- End Reviewer -->
 
-                          
+
                         </div>
                         @endforeach
                         <!-- End Review -->
 
-                      
+
                         <!-- End Review -->
 
-                      
+
 
                         <div class="d-sm-flex justify-content-sm-end">
                             <div class="aiz-pagination mr-4 mt-2">
@@ -212,7 +212,7 @@
                 </div>
             </div>
             @else
-            <x-company-reviews-empty-state :shop="$shop"></x-company-reviews-empty-state>
+            <x-company.company-reviews-empty-state :shop="$shop"></x-company.company-reviews-empty-state>
             @endif
         </div>
         <!-- End Review Section -->

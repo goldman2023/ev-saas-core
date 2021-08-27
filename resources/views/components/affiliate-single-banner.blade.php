@@ -2,7 +2,7 @@
     {{-- TODO: Intercept this click with javascript function, like in example on line 25 --}}
     @isset($banner)
         <a href="{{ qs_url($banner->refer_url, [
-        'utm_source' => 'b2bwood',
+        'utm_source' => get_site_name(),
         'utm_campaign' => $banner->campaign,
         'utm_medium' => 'cpc',
         'utm_content' => $banner->title,
@@ -13,7 +13,7 @@
             alt="{{ $banner->title }}" class="img-fluid lazyloaded">
     </a>
     @endisset
-    
+
 </div>
 @section('script')
     <script>

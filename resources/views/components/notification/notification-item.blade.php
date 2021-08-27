@@ -19,7 +19,7 @@
                 <span class="card-title h5">{{ $user->shop->name }}</span>
                 @switch($notification->type)
                     @case('App\Models\Notifications\NewCompanyJoin')
-                    <p class="card-text font-size-sm">{{ translate('has been joined to B2BWood Club.') }}</p>
+                    <p class="card-text font-size-sm">{{ translate('has been joined') }} {{ get_site_name() }}</p>
                     @break
                     @case('App\Models\Notifications\CompanyVisit')
                     <p class="card-text font-size-sm">{{ translate('visited your company profile.') }}</p>

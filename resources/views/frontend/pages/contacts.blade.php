@@ -122,14 +122,4 @@
 </div>
 <!-- End Contact Form Section -->
 
-
-    @php
-    $button_text = 'Try it out';
-    $image_source = 'assets/img/img1.jpg';
-    $heading = 'Register to B2BWood';
-    $body = "Building brands people can't live without is how our clients grow.";
-    @endphp
-    <x-promo-banner :heading="$heading" :body="$body" :buttonText="$button_text" :imageSource="$image_source">
-    </x-promo-banner>
-    <!-- End Team Section -->
 @endsection

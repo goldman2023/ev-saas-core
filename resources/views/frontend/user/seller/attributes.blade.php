@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <x-company-categories-management :categories="$categories" :user="$user"> </x-company-categories-management>
+    <x-company.company-categories-management :categories="$categories" :user="$user"> </x-company.company-categories-management>
 
 
     <x-subsidiary-companies-management> </x-subsidiary-companies-management>

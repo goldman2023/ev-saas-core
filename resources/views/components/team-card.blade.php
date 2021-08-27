@@ -4,7 +4,7 @@
                         <div class="card-body">
                             <div class="avatar avatar-lg avatar-circle mb-4">
                                 <img class="avatar-img" src="{{ $item['photo'] }}"
-                                    alt="Giedrius Balbierius">
+                                    alt="">
                             </div>
 
                             <span

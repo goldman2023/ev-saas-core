@@ -64,3 +64,4 @@ resources/scss/pages/*.css.map
 .idea/modules.xml
 resources/scss/themes/front/theme.css
 *.map
+public/ev-assets/front/svg/*
