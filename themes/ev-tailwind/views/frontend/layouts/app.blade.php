@@ -26,12 +26,16 @@
     <!-- Favicon -->
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
     @php
-        echo get_setting('header_script');
+    echo get_setting('header_script');
     @endphp
+
+    @livewireStyles
 
 </head>
 
 <body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
+
+
     <div class="min-h-screen">
         <header>
             @include('frontend.layouts.navigation')
@@ -45,15 +49,17 @@
             <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
         </footer>
 
-        @if ($cart_adhoc_template = get_setting('cart_adhoc_template'))
-            @php $name = 'adhoc.'.$cart_adhoc_template; @endphp
-            <livewire:cart :template="$name" />
+        @if($cart_adhoc_template = get_setting('cart_adhoc_template'))
+        @php $name = 'adhoc.'.$cart_adhoc_template; @endphp
+        <livewire:cart :template="$name" />
         @endif
 
         <livewire:cart template="main" />
-    </div>
+        @livewire('notification')
 
-    @livewireStyles
+
+    </div>
+    @yield('script')
 
     @livewireScripts
 </body>
