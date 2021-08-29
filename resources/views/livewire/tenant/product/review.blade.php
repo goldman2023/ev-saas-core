@@ -13,8 +13,8 @@
             @endforeach
             @else
             <p class="mt-5">
-                <x-ev.label :label="ev_dynamic_translate('No reviews', true)">
-                </x-ev.label>
+                <x-ev::label :label="ev_dynamic_translate('No reviews', true)">
+                </x-ev::label>
             </p>
             @endif
         </div>

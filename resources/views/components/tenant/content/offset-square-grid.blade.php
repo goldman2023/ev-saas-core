@@ -15,8 +15,8 @@
         <div class="relative lg:grid lg:grid-cols-3 lg:gap-x-8">
             <div class="lg:col-span-1">
                 <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-                    <x-ev.label :label="ev_dynamic_translate('Grid Title')">
-                    </x-ev.label>
+                    <x-ev::label :label="ev_dynamic_translate('Grid Title')">
+                    </x-ev::label>
                 </h2>
             </div>
             <dl
@@ -35,16 +35,16 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-1')->value !!}">
-                                <x-ev.label :label="ev_dynamic_translate('Item 1')">
-                                </x-ev.label>
+                                <x-ev::label :label="ev_dynamic_translate('Item 1')">
+                                </x-ev::label>
                             </a>
 
 
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-ev.label :label="ev_dynamic_translate('Item 1 Description')">
-                        </x-ev.label>
+                        <x-ev::label :label="ev_dynamic_translate('Item 1 Description')">
+                        </x-ev::label>
                     </dd>
                 </div>
 
@@ -61,15 +61,15 @@
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-2')->value !!}">
 
-                                <x-ev.label :label="ev_dynamic_translate('Item 2')">
-                                </x-ev.label>
+                                <x-ev::label :label="ev_dynamic_translate('Item 2')">
+                                </x-ev::label>
                             </a>
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
 
-                        <x-ev.label :label="ev_dynamic_translate('Item 2 Description')">
-                        </x-ev.label>
+                        <x-ev::label :label="ev_dynamic_translate('Item 2 Description')">
+                        </x-ev::label>
                     </dd>
                 </div>
 
@@ -85,15 +85,15 @@
                         </div>
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-3')->value !!}">
-                                <x-ev.label :label="ev_dynamic_translate('Item 3')">
-                                </x-ev.label>
+                                <x-ev::label :label="ev_dynamic_translate('Item 3')">
+                                </x-ev::label>
                             </a>
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
 
-                        <x-ev.label :label="ev_dynamic_translate('Item 3 Description')">
-                        </x-ev.label>
+                        <x-ev::label :label="ev_dynamic_translate('Item 3 Description')">
+                        </x-ev::label>
                     </dd>
                 </div>
 
@@ -110,16 +110,16 @@
                         <p class="mt-5 text-lg leading-6 font-medium text-gray-900">
                             <a href="{!! ev_dynamic_translate('#item-4')->value !!}">
 
-                                <x-ev.label :label="ev_dynamic_translate('Item 4')">
-                                </x-ev.label>
+                                <x-ev::label :label="ev_dynamic_translate('Item 4')">
+                                </x-ev::label>
 
                             </a>
 
                         </p>
                     </dt>
                     <dd class="mt-2 text-base text-gray-500">
-                        <x-ev.label :label="ev_dynamic_translate('Item 4 Description')">
-                        </x-ev.label>
+                        <x-ev::label :label="ev_dynamic_translate('Item 4 Description')">
+                        </x-ev::label>
                     </dd>
                 </div>
             </dl>

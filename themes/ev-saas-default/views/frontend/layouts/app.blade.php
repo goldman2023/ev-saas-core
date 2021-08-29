@@ -31,6 +31,11 @@
 
             <link rel="stylesheet" href="{{ global_asset('css/ev-saas.css') }}">
 
+            <!-- Scripts -->
+            <script src="https://htmlstream.com/front/assets/js/vendor.min.js"></script>
+            <script src="https://htmlstream.com/front/assets/js/theme.min.js"></script>
+            <!--<script src="{{ mix('js/app.js', 'themes/ev-saas-default') }}" defer></script>-->
+
             <script>
                 var AIZ = AIZ || {};
                 AIZ.local = {
@@ -112,14 +117,13 @@
             </div>
         </div>
 
+        <!-- Print SignUp Modal Component -->
+        <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
+
         @yield('modal')
 
 
 
-
-        <!-- JS Front -->
-        <script src="https://htmlstream.com/front/assets/js/vendor.min.js"></script>
-        <script src="https://htmlstream.com/front/assets/js/theme.min.js"></script>
 
         @include('frontend.layouts.partials.app-js')
 

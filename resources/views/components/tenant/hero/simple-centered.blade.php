@@ -6,19 +6,19 @@
             <span class="block xl:inline">
 
 
-                <x-ev.label :label="ev_dynamic_translate('Welcome to your new Digital Home')">
-                </x-ev.label>
+                <x-ev::label :label="ev_dynamic_translate('Welcome to your new Digital Home')">
+                </x-ev::label>
             </span>
             <br>
             <span class="block text-3xl text-indigo-600 xl:inline">
-                <x-ev.label :label="ev_dynamic_translate('Get Started By Adding your Information')">
-                </x-ev.label>
+                <x-ev::label :label="ev_dynamic_translate('Get Started By Adding your Information')">
+                </x-ev::label>
 
             </span>
         </h1>
         <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-            <x-ev.label :label="ev_dynamic_translate('Your Business Description')">
-            </x-ev.label>
+            <x-ev::label :label="ev_dynamic_translate('Your Business Description')">
+            </x-ev::label>
         </p>
 
         @livewire('home-search')
@@ -27,15 +27,15 @@
             <div class="rounded-md shadow">
                 <a href="{{ ev_dynamic_translate('#button-1')->value }}"
                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                    <x-ev.label :label="ev_dynamic_translate('Button 1')">
-                    </x-ev.label>
+                    <x-ev::label :label="ev_dynamic_translate('Button 1')">
+                    </x-ev::label>
                 </a>
             </div>
             <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
                 <a href="{{ ev_dynamic_translate('#button-2')->value }}" target="_blank"
                     class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                    <x-ev.label :label="ev_dynamic_translate('Button 2')">
-                    </x-ev.label>
+                    <x-ev::label :label="ev_dynamic_translate('Button 2')">
+                    </x-ev::label>
                 </a>
             </div>
         </div>

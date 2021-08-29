@@ -180,6 +180,7 @@ return [
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
         // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        App\Providers\EVServiceProvider::class,
 
         /*
          * Package Service Providers...

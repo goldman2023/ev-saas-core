@@ -18,7 +18,7 @@
     <div class="card-body pt-4 px-4 pb-0">
       <div class="mb-2">
         <a class="d-inline-block text-body small font-weight-bold mb-1" href="{{ route('product', $product->slug) }}">
-          {{ $product->brand->name }}
+          {{ $product->brand->name ?? '' }}
         </a>
         <span class="d-block font-size-1">
           <a class="text-inherit" href="{{ route('product', $product->slug) }}">
@@ -26,7 +26,7 @@
           </a>
         </span>
         <div class="d-block">
-          
+
           <span class="text-dark font-weight-bold">
             @if (home_base_price($product->id) != home_discounted_base_price($product->id))
             <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
@@ -42,9 +42,9 @@
         <a class="d-inline-flex align-items-center small" href="#">
           <div class="text-warning mr-2">
             <a class="d-inline-block text-body small font-weight-bold mb-1" href="{{ route('product', $product->slug) }}">
-              {{ $product->brand->name }} 
+              {{ $product->brand->name ?? '' }}
 
-              <x-tenant.system.image :image='uploaded_asset($product->brand->logo)'>
+              <x-tenant.system.image :image='uploaded_asset($product->brand->logo ?? "")'>
               </x-tenant.system.image>
             </a>
           </div>
