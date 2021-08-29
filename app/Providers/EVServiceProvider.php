@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Blade;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
+use App\Http\Services\EVService;
+use Blade;
 
 class EVServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,11 @@ class EVServiceProvider extends ServiceProvider
     {
         // Add EV dynamic components to EV namespace
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
+
+        // Register EV Facade
+        \App::bind('ev', function() {
+            return new EVService();
+        });
     }
 
     /**

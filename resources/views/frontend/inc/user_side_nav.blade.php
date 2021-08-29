@@ -41,121 +41,28 @@
                 {{-- TODO: Add role-dependent menu items for Sellers(multi-vendor). --}}
                 {{-- IMPORTANT: Do not add admin-dependent menu items, like global SaaS settings and all sellers CRUD etc. We already have this in Admin panel! --}}
 
-                <h6 class="text-cap small">{{ translate('General') }}</h6>
+                @if($menu = \EV::getVendorMenu())
+                    @foreach($menu as $section)
+                        @if($section['label'] === 'hr')
+                            <div class="dropdown-divider"></div>
+                        @else
+                            <h6 class="text-cap small">{{ $section['label'] }}</h6>
+                        @endif
 
-                <!-- List -->
-                <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 mb-4">
-                    <li class="nav-item">
-                        <a class="nav-link {{ areActiveRoutes(['dashboard']) }}" href="{{ route('dashboard') }}">
-                            @svg('heroicon-o-presentation-chart-bar', ['class' => 'nav-icon'])
-                            {{ translate('Dashboard') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">
-                            @svg('heroicon-o-upload', ['class' => 'nav-icon'])
-                            {{ translate('Uploaded Media') }}
-                        </a>
-                    </li>
-                </ul>
-
-                <h6 class="text-cap small">{{ translate('Business') }}</h6>
-
-                <!-- List -->
-                <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 mb-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('ev-products.index') }}">
-                            @svg('heroicon-o-shopping-cart', ['class' => 'nav-icon'])
-                            {{ translate('Products') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login-and-security.html">
-                            @svg('heroicon-o-ticket', ['class' => 'nav-icon'])
-                            {{ translate('Events') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="notifications.html">
-                            @svg('heroicon-o-briefcase', ['class' => 'nav-icon'])
-                            {{ translate('Jobs') }}
-                            <!--<span class="badge badge-soft-dark badge-pill nav-link-badge">1</span>-->
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="preferences.html">
-                            @svg('heroicon-o-document-text', ['class' => 'nav-icon'])
-                            {{ translate('Orders') }}
-                        </a>
-                    </li>
-                </ul>
-                <!-- End List -->
-
-                <h6 class="text-cap small">{{ translate('CRM') }}</h6>
-
-                <!-- List -->
-                <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 mb-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="billing.html">
-                            @svg('heroicon-o-user-group', ['class' => 'nav-icon'])
-                            {{ translate('Customers') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="address.html">
-                            @svg('heroicon-o-star', ['class' => 'nav-icon'])
-                            {{ translate('Reviews') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="teams.html">
-                            @svg('heroicon-o-support', ['class' => 'nav-icon'])
-                            {{ translate('Support') }}
-                        </a>
-                    </li>
-                </ul>
-                <!-- End List -->
-
-                <h6 class="text-cap small">{{ translate('Settings') }}</h6>
-
-                <!-- List -->
-                <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.html">
-                            @svg('heroicon-o-cog', ['class' => 'nav-icon'])
-                            {{ translate('Account settings') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.html">
-                            @svg('heroicon-o-truck', ['class' => 'nav-icon'])
-                            {{ translate('Shipping settings') }}
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.html">
-                            @svg('heroicon-o-receipt-tax', ['class' => 'nav-icon'])
-                            {{ translate('Tax settings') }}
-                        </a>
-                    </li>
-                </ul>
-                <!-- End List -->
-
-
-                <div class="">
-                    <div class="dropdown-divider"></div>
-
-                    <!-- List -->
-                    <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('logout') }}">
-                                @svg('heroicon-o-logout', ['class' => 'nav-icon'])
-                                {{ translate('Log out') }}
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- End List -->
-                </div>
+                        @if(!empty($section['items']))
+                            <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 mb-4">
+                                @foreach($section['items'] as $item)
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ $item['is_active'] }}" href="{{ $item['route'] }}">
+                                            @svg($item['icon'], ['class' => 'nav-icon'])
+                                            {{ $item['label'] }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    @endforeach
+                @endif
             </div>
         </div>
         <!-- End Card -->

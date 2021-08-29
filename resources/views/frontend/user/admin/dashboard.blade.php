@@ -1,6 +1,22 @@
 @extends('frontend.layouts.user_panel')
 
 @section('panel_content')
+    <div class="card mb-3 mb-lg-5">
+        <div class="card-header">
+            <h5 class="card-title">{{ translate('Dashboard') }}</h5>
+        </div>
+        <div class="card-body">
+
+        </div>
+        <!--<div class="card-footer d-flex justify-content-end">
+            <a class="btn btn-white" href="javascript:;">{{ translate('Cancel') }}</a>
+            <span class="mx-2"></span>
+            <a class="btn btn-primary" href="javascript:;">{{ translate('Save') }}</a>
+        </div>-->
+    </div>
+
+
+
     {{-- <div class="aiz-titlebar mt-2 mb-4">
         <div class="row align-items-center">
             <div class="col-md-6">
@@ -9,23 +25,23 @@
         </div>
     </div> --}}
 
-    <div class="row">
+    {{--<div class="row">
         <div class="col-12">
             {{-- TODO: add custom CTA and Text and Image options --}}
             {{-- <x-free-member-notification> </x-free-member-notification> --}}
             {{-- <x-company.company-onboarding-box> </x-company.company-onboarding-box> --}}
-        </div>
+    {{--</div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <h3> {{ translate('Website Admin Panel') }}</h3>
-                    {{-- <x-company.company-card :company="auth()->user()->shop"> </x-company.company-card> --}}
-                </div>
-            </div>
-        </div>
-        {{-- <x-company.company-dashboard-stats></x-company.company-dashboard-stats> --}}
-    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3> {{ translate('Website Admin Panel') }}</h3>
+                {{-- <x-company.company-card :company="auth()->user()->shop"> </x-company.company-card> --}}
+    {{--</div>
+</div>
+</div>
+{{-- <x-company.company-dashboard-stats></x-company.company-dashboard-stats> --}}
+    {{--</div>--}}
 
 
 

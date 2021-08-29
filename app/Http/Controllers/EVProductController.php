@@ -11,6 +11,6 @@ class EVProductController extends Controller
 
     public function index() {
 
-        return view('frontend.user.seller.products.index');
+        return view('frontend.user.crud.products.index');
     }
 }
