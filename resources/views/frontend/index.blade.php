@@ -1,9 +1,9 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<section class="space-1">
+{{-- <section class="space-1">
     <x-default.brands.brands-list></x-default.brands.brands-list>
-</section>
+</section> --}}
     <section class="overflow-hidden">
         <x-default.hero.product-hero></x-default.hero.product-hero>
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}

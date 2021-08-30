@@ -15,7 +15,7 @@ class ProductList extends Component
      *
      * @return void
      */
-    public function __construct($items = 8, $slider = true)
+    public function __construct($items = 8, $slider = false)
     {
         //
         $products = Product::paginate($items);

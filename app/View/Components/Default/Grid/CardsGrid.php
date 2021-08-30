@@ -1,22 +1,19 @@
 <?php
 
-namespace App\View\Components\Default\Companies\Cards;
+namespace App\View\Components\Default\Grid;
 
-use App\Models\Shop;
 use Illuminate\View\Component;
 
-class CompanyCard extends Component
+class CardsGrid extends Component
 {
-    public Shop $company;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(Shop $company)
+    public function __construct()
     {
         //
-        $this->company = $company;
     }
 
     /**
@@ -26,6 +23,6 @@ class CompanyCard extends Component
      */
     public function render()
     {
-        return view('components.default.companies.cards.company-card');
+        return view('components.default.grid.cards-grid');
     }
 }

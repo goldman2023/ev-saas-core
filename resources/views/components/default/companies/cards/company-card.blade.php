@@ -1,12 +1,18 @@
 <div class="card h-100 transition-3d-hover">
     <div class="card-body">
-      <div class="avatar avatar-lg avatar-circle mb-4">
-        <img class="avatar-img" src="../assets/img/100x100/img1.jpg" alt="Image Description">
+      <div class="mb-4">
+        {{-- TODO: Move this to separate css file for company card styles --}}
+        <img class="avatar avatar-xxl" style="object-fit:contain; margin-bottom: 10px;"
+        src="{{ $company->get_company_logo() }}" alt="{{ $company->name }}">
       </div>
 
       <span class="d-block small font-weight-bold text-cap mb-1">Founder / CEO</span>
-      <h4 class="text-lh-sm">Christina Kray</h4>
-      <p class="font-size-1">I am an ambitious workaholic, but apart from that, pretty simple person.</p>
+      <h4 class="text-lh-sm">
+        <a class="" href="{{ route('shop.visit', $company->slug) }}">
+            {{ $company->name }}
+        </a>
+    </h4>
+      <p class="font-size-1">{{ $company->description }}</p>
     </div>
 
     <div class="card-footer border-0 pt-0">
