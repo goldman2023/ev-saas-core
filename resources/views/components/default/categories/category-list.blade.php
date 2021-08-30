@@ -5,11 +5,11 @@
     <div class="container space-2 position-relative">
         <!-- Title -->
         <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-5 mb-md-9">
-            <x-ev.label
+            <x-ev::label
             tag="h2"
             class="h1"
             :label="ev_dynamic_translate('Categories Title', true)">
-            </x-ev.label>
+            </x-ev::label>
         </div>
         <!-- End Title -->
         <div class="row mb-2">
@@ -54,9 +54,9 @@
 
         <div class="text-center">
             <p class="small">
-                <x-ev.label
+                <x-ev::label
                 :label="ev_dynamic_translate('Categories List Footer Text', true)">
-                </x-ev.label>
+                </x-ev::label>
             </p>
         </div>
     </div>

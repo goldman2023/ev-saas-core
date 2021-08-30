@@ -6,28 +6,28 @@
                 <img src="https://tailwindui.com/img/ecommerce/icons/icon-delivery-light.svg" alt=""
                     class="h-24 w-auto">
                 <h3 class="mt-6 text-sm font-medium text-gray-900">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate('Free Shipping') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </h3>
                 <p class="mt-2 text-sm text-gray-500">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate('Benefit Description 1') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </p>
             </div>
 
             <div>
                 <img src="https://tailwindui.com/img/ecommerce/icons/icon-chat-light.svg" alt="" class="h-24 w-auto">
                 <h3 class="mt-6 text-sm font-medium text-gray-900">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate(' 24/7 Customer Support') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </h3>
                 <p class="mt-2 text-sm text-gray-500">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate('Benefit Description 2') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </p>
             </div>
 
@@ -39,9 +39,9 @@
                     {{ translate(' Fast Shopping Cart') }}
                 </h3>
                 <p class="mt-2 text-sm text-gray-500">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate('Benefit Description 3') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </p>
             </div>
 
@@ -49,14 +49,14 @@
                 <img src="https://tailwindui.com/img/ecommerce/icons/icon-gift-card-light.svg" alt=""
                     class="h-24 w-auto">
                 <h3 class="mt-6 text-sm font-medium text-gray-900">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate('Gift Cards') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </h3>
                 <p class="mt-2 text-sm text-gray-500">
-                    <x-ev.label>
+                    <x-ev::label>
                         {{ translate('Benefit Description 4') }}
-                    </x-ev.label>
+                    </x-ev::label>
                 </p>
             </div>
         </div>

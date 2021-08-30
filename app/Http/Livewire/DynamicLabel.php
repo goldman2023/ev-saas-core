@@ -53,7 +53,6 @@ class DynamicLabel extends Component
 
     public function render()
     {
-
         return view('livewire.dynamic-label', [
             'label' => $this->label
         ]);

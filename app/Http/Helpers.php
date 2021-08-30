@@ -13,6 +13,7 @@ use App\Models\City;
 use App\Utility\TranslationUtility;
 use App\Utility\CategoryUtility;
 use App\Utility\MimoUtility;
+use Qirolab\Theme\Theme;
 use Twilio\Rest\Client;
 use App\Models\Attribute;
 use App\Models\Country;
@@ -895,8 +896,11 @@ if (!function_exists('static_asset')) {
      * @param  bool|null  $secure
      * @return string
      */
-    function static_asset($path, $secure = null)
+    function static_asset($path, $secure = null, $theme = false)
     {
+        if($theme) {
+            return app('url')->asset('themes/'.Theme::active().'/'.$path, $secure);
+        }
         return app('url')->asset($path, $secure);
     }
 }

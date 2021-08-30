@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4dfaebf6be509641e829fc402a9dc788",
+    "content-hash": "0ef00a714d1cd3d04f3aa103c44d06d3",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -846,6 +846,77 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.1"
             },
             "time": "2021-08-13T13:06:58+00:00"
+        },
+        {
+            "name": "diglactic/laravel-breadcrumbs",
+            "version": "v7.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/diglactic/laravel-breadcrumbs.git",
+                "reference": "994808137d69672473f7f4df9b96d731c7e2ed74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/diglactic/laravel-breadcrumbs/zipball/994808137d69672473f7f4df9b96d731c7e2ed74",
+                "reference": "994808137d69672473f7f4df9b96d731c7e2ed74",
+                "shasum": ""
+            },
+            "require": {
+                "facade/ignition-contracts": "^1.0",
+                "laravel/framework": "^6.0 || ^7.0 || ^8.0",
+                "php": "^7.2 || ^8.0"
+            },
+            "conflict": {
+                "davejamesmiller/laravel-breadcrumbs": "*"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^4.10 || ^5.9 || ^6.4",
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8.5 || ^9.4",
+                "spatie/phpunit-snapshot-assertions": "^2.2 || ^4.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Diglactic\\Breadcrumbs\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Breadcrumbs": "Diglactic\\Breadcrumbs\\Breadcrumbs"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Diglactic\\Breadcrumbs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sheng Slogar",
+                    "email": "sheng@diglactic.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Dave James Miller",
+                    "email": "dave@davejamesmiller.com",
+                    "role": "Original Creator"
+                }
+            ],
+            "description": "A simple Laravel-style way to create breadcrumbs.",
+            "homepage": "https://github.com/diglactic/laravel-breadcrumbs",
+            "keywords": [
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/diglactic/laravel-breadcrumbs/issues",
+                "source": "https://github.com/diglactic/laravel-breadcrumbs/tree/v7.0.0"
+            },
+            "time": "2021-05-23T16:43:52+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -15589,5 +15660,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

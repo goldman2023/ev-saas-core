@@ -18,11 +18,12 @@ class LinkButton extends Component
      *
      * @return void
      */
-    public function __construct(EVLabel $label, $href = '#', $type = 'link', $target = '')
+    public function __construct(EVLabel $label, $href = '#', $type = 'link', $target = '_self')
     {
         $this->label = $label;
         $this->target = $target;
         $this->href = $href;
+        $this->type = $type;
     }
 
     /**
