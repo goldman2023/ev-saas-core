@@ -1,19 +1,12 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
+<section class="space-1">
+    <x-default.brands.brands-list></x-default.brands.brands-list>
+</section>
     <section class="overflow-hidden">
         <x-default.hero.product-hero></x-default.hero.product-hero>
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
-    </section>
-
-
-    <section>
-        <x-default.companies.companies-list></x-default.companies.companies-list>
-    </section>
-
-    <section>
-        <x-default.brands.brands-list></x-default.brands.brands-list>
     </section>
 
     <section>
@@ -21,6 +14,10 @@
         </x-default.products.product-list>
     </section>
 
+
+    <section>
+        <x-default.companies.companies-list></x-default.companies.companies-list>
+    </section>
 
 
     <section id="archive-hero">

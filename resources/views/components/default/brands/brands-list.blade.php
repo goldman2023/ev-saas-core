@@ -1,7 +1,7 @@
-<div class="container p-sm-0">
+<div class="container">
 
     <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3">
-        <x-ev.label tag="h2" :label="ev_dynamic_translate('Brands List Title', true)">
+        <x-ev.label tag="h3" :label="ev_dynamic_translate('Brands List Title', true)">
         </x-ev.label>
     </div>
 
@@ -14,7 +14,7 @@
                 @foreach ($brands as $brand)
                     <div class="text-center swiper-slide">
                         <a href="{{ route('products.brand', $brand->slug) }}"
-                            class="d-block p-3 mb-3 border border-light rounded hov-shadow-md">
+                            class="d-block border border-light rounded hov-shadow-md">
                             <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100"
                                 alt="{{ $brand->getTranslation('name') }}">
                         </a>
@@ -35,6 +35,15 @@
             background: white;
             object-fit: contain;
             border: 3px solid red;
+
+        }
+
+        @media(max-width: 768px) {
+            .ev-brands-slider img {
+                width: 65px;
+                height: 65px;
+                padding: 3px;
+            }
         }
 
         .swiper.ev-brands-swiper {
@@ -54,8 +63,9 @@
                     },
 
                     // when window width is >= 320px
-                    500: {
-                        slidesPerView: 2,
+                    300: {
+                        freeMode: true,
+                        slidesPerView: 4,
                         spaceBetween: 20
                     },
                 }
