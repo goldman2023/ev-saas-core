@@ -9,31 +9,37 @@
  | xs: 0, sm: 640px, md: 768px, lg: 1024px, xl: 1280px, xxl: 1536px
  |
  */
-@import "~line-awesome/dist/line-awesome/css/line-awesome.min";
-@import 'dependencies/aiz-core'; // Active Commerce Custom Code
-
-
+// Bootstrap 4's main theme file
 @import "ev-saas";
 
 
+.underline {
+    border-bottom: 0.0625rem dashed #97a4af;
+}
 
-@import "~bootstrap-select/dist/css/bootstrap-select.min";
-@import "dependencies/vendor/slick";
-@import "dependencies/vendor/js-social";
-@import "~metismenu/dist/metisMenu.min";
-@import "~@yaireo/tagify/dist/tagify";
-@import "dependencies/description-editor";
-@import "dependencies/datetime-picker";
-@import "dependencies/vendor/nouislider";
-@import "dependencies/vendor/uppy";
-/* Custom Css for Components and Pages  */
-@import 'global';
-@import 'custom/index';
-// @import 'components/index';
-@import 'pages/index';
-// if we comment this one we will be facing some overlay between fields container and dropdowns selection
-// also header banner "banner-placeholder-900x198.png" would throw net::ERR_SSL_PROTOCOL_ERROR
-// along side some side effects
-//@import "dependencies/vendors";
-@import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
-@import "~datatables.net-buttons-bs4/css/buttons.bootstrap4.css";
+.ev-dynamic-edit-button {
+    position: absolute;
+    right: -20px;
+    top: 0;
+    min-width: 50px;
+}
+
+.ev-dynamic-label-container {
+    position: relative;
+    background: white;
+    padding: 20px;
+    z-index: 999999;
+
+    .ev-dynamic-input-field {
+        position: absolute;
+        left: 0;
+        bottom: 100%;
+        z-index: 999999;
+        background: gray;
+        padding: 20px;
+
+    }
+
+
+
+}

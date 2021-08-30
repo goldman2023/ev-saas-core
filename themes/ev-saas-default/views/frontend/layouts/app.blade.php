@@ -29,7 +29,7 @@
 
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-            <link rel="stylesheet" href="{{ global_asset('css/ev-saas.css') }}">
+            <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
 
             <script>
                 var AIZ = AIZ || {};
