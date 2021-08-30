@@ -13,6 +13,10 @@
     </section>
 
     <section>
+        <x-default.brands.brands-list></x-default.brands.brands-list>
+    </section>
+
+    <section>
         <x-default.products.product-list>
         </x-default.products.product-list>
     </section>

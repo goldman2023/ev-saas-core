@@ -1,23 +1,32 @@
 <!-- Products Section -->
-<div class="container space-2">
+<div class="container space-2 " style="padding: 0;">
     <!-- Title -->
     <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-5 mb-md-9">
-        <x-ev::label tag="h2" :label="ev_dynamic_translate('Products List Title', true)">
-        </x-ev::label>
+        <x-ev.label tag="h2" :label="ev_dynamic_translate('Products List Title', true)">
+        </x-ev.label>
     </div>
     <!-- End Title -->
 
     <!-- Products -->
-    <div class="row d-block mx-n2 mx-sm-n3 mb-3 @if ($slider) ev-slick @endif">
-        <!-- Product -->
-        @foreach ($products as $product)
-            <div class="col-md-4 px-2 px-sm-3 mb-3 mb-sm-5">
-                <x-default.products.cards.product-card :product="$product" style="product-card">
-                </x-default.products.cards.product-card>
-            </div>
-        @endforeach
-        <!-- End Product -->
+    <div class="swiper">
+        <div class="ev-slider">
+            <div class="swiper-wrapper">
+                <!-- Product -->
+                @foreach ($products as $product)
+                    <div class="swiper-slide">
+                        <x-default.products.cards.product-card :product="$product" style="product-card">
+                        </x-default.products.cards.product-card>
+                    </div>
+                @endforeach
 
+
+                <!-- End Product -->
+
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
     </div>
     <!-- End Products -->
 
@@ -30,27 +39,55 @@
 <!-- End Products Section -->
 
 @push('footer_scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script>
         $(document).ready(function() {
-            $('.ev-slick').slick({
-                infinite: false,
-                slidesToShow: 3,
-                slidesToScroll: 1,
-                arrows: true,
-                responsive: [{
-                    breakpoint: 1024,
-                    settings: {
-                        centerMode: true,
-                        centerPadding: '60px',
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                        infinite: true,
-                        dots: true
-                    }
-                }],
+
+            if(window.innerWidth < 768) {
+                var swiper = new Swiper(".ev-slider", {
+                spaceBetween: 20,
+                effect: "cards",
+                slidesPerView: 1,
+                grabCursor: true,
+                autoplay: {
+                    delay: 2500,
+                    disableOnInteraction: true,
+
+                },
+
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
             });
+            } else {
+                var swiper = new Swiper(".ev-slider", {
+                spaceBetween: 20,
+                slidesPerView: 3,
+                grabCursor: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+            });
+            }
+
+
         });
     </script>
+
+    <style>
+        .card-img-top,
+        .card-img-bottom {
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .swiper {
+            padding: 50px;
+        }
+
+    </style>
 @endpush

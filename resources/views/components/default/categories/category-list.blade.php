@@ -63,16 +63,5 @@
 </div>
 
 @push('footer_scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" rel="stylesheet">
-    <script>
-        // $(document).ready(function() {
-        //     $('.ev-slick').slick({
-        //         infinite: false,
-        //         slidesToShow: 3,
-        //         slidesToScroll: 1,
-        //         arrows: true
-        //     });
-        // });
-    </script>
+
 @endpush
