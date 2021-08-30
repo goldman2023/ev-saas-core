@@ -7,7 +7,7 @@
             <div class="row align-items-center">
                 <div class="col">
                     <div class="d-none d-lg-block">
-                        <h1 class="h2 text-white">{{ translate('Dashboard') }}</h1>
+                        <h1 class="h2 text-white">@yield('page_title')</h1>
                     </div>
 
                     <!-- Breadcrumb -->

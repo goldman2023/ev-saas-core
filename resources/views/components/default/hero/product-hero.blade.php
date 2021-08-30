@@ -42,9 +42,9 @@
 
     <div class="hero-v1 d-none d-md-block"
         style="background-image: url({{ ev_dynamic_translate('#product-hero-image')->value }});">
-        <x-ev.dynamic-image
+        <x-ev::dynamic-image
         :src="ev_dynamic_translate('#product-hero-image')" alt="Product Hero"
         >
-        </x-ev.dynamic-image>
+        </x-ev::dynamic-image>
     </div>
 </div>

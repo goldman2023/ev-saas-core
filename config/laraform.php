@@ -53,7 +53,7 @@ return [
     | Rate limit
     |--------------------------------------------------------------------------
     |
-    | Rate limit for `unique` and `exists` validator rules. 
+    | Rate limit for `unique` and `exists` validator rules.
     |
     */
     'throttle' => '60,1',
@@ -66,7 +66,7 @@ return [
     | Default theme.
     |
     */
-    'theme' => 'default',
+    'theme' => 'bs4',
 
     /*
     |--------------------------------------------------------------------------
@@ -108,7 +108,7 @@ return [
     |
     */
     'enableStepsOnLoad' => true,
-    
+
     'completeStepsOnLoad' => true,
 
     /*
@@ -197,8 +197,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | When user inputs should be validated.
-    | 
-    | Possible values: 
+    |
+    | Possible values:
     |   submit: upon form submission
     |   change: instantly upon user input
     |   step: before moving to the next step when using Wizard

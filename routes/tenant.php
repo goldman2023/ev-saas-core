@@ -212,6 +212,7 @@ Route::middleware([
     Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
+        Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');

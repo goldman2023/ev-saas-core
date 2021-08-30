@@ -50,6 +50,13 @@ class EVService
                         'is_active' => areActiveRoutes(['']),
                         'roles' => ['admin','seller'],
                     ],
+                    [
+                        'label' => translate('Blog'),
+                        'icon' => 'heroicon-o-newspaper',
+                        'route' => '',
+                        'is_active' => areActiveRoutes(['']),
+                        'roles' => ['admin','seller'],
+                    ]
                 ]
             ],
             [

@@ -11,7 +11,7 @@
         <x-ev::label :label="ev_dynamic_translate('EV Search Hero Footer Text')" class="font-semibold"></x-ev::label>
     </div>
     <div class="flex flex-col">
-        <x-ev.dynamic-image alt="Any alt text" :src="ev_dynamic_translate('#home-search-image')">
-        </x-ev.dynamic-image>
+        <x-ev::dynamic-image alt="Any alt text" :src="ev_dynamic_translate('#home-search-image')">
+        </x-ev::dynamic-image>
     </div>
 </div>

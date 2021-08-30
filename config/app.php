@@ -264,6 +264,7 @@ return [
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'CartService' => App\Facades\CartService::class,
         'EV' => App\Facades\EV::class,
+        'Theme' => Qirolab\Theme\Theme::class,
     ],
 
 ];

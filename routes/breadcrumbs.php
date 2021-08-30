@@ -11,5 +11,11 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 // User Products Index
 Breadcrumbs::for('ev-products.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push(translate('All Products'), route('ev-products.index'));
+    $trail->push(translate('Products'), route('ev-products.index'));
+});
+
+// User Products Index
+Breadcrumbs::for('ev-products.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('ev-products.index');
+    $trail->push(translate('Add New Product'), route('ev-products.create'));
 });

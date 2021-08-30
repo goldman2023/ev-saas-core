@@ -1,12 +1,14 @@
 @extends('frontend.layouts.user_panel')
 
+@section('page_title', translate('All Products'))
+
 @section('panel_content')
     <!-- Card -->
     <div class="card">
         <!-- Header -->
         <div class="card-header">
             <h5 class="card-header-title">{{ translate('All products') }}</h5>
-            <a href="#" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
+            <a href="{{ route('ev-products.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
         </div>
         <!-- End Header -->
 

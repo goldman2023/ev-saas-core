@@ -211,6 +211,8 @@
 </header>
 <!-- ========== END HEADER ========== -->
 <!-- JS Plugins Init. -->
+<script src="{{ static_asset('vendor/hs-header/dist/hs-header.min.js', false, true) }}"></script>
+<script src="{{ static_asset('vendor/hs-show-animation/dist/hs-show-animation.min.js', false, true) }}"></script>
 <script>
     $(document).on('ready', function () {
         // INITIALIZATION OF HEADER
