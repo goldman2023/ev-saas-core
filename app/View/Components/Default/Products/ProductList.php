@@ -9,16 +9,18 @@ class ProductList extends Component
 {
     public $products;
     public $items;
+    public bool $slider;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($items = 8)
+    public function __construct($items = 8, $slider = true)
     {
         //
         $products = Product::paginate($items);
         $this->products = $products;
+        $this->slider = $slider;
     }
 
     /**

@@ -2,19 +2,22 @@
 
 namespace App\View\Components\Default\Products\Cards;
 
+use App\Models\Product;
 use Illuminate\View\Component;
 
 class ProductCard extends Component
 {
-    public $product;
+    public Product $product;
+    public string $style; // Available styles now: product-card / product-card-detailed
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($product)
+    public function __construct(Product $product, string $style = 'product-card')
     {
         //
+        $this->style = $style;
         $this->product = $product;
     }
 
@@ -25,6 +28,6 @@ class ProductCard extends Component
      */
     public function render()
     {
-        return view('components.default.products.cards.product-card');
+        return view('components.default.products.cards.' . $this->style);
     }
 }

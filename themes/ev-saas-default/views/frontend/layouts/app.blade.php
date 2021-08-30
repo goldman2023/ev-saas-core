@@ -34,6 +34,14 @@
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
 
+    <style>
+        :root {
+            --primary: yellow;
+            --secondary: green;
+            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
+        }
+    </style>
+    <link rel="stylesheet" href="/css/app.css">
 
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
@@ -69,13 +77,7 @@
         }
     </script>
 
-    <style>
-        :root {
-            --primary: red;
-            --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
-            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
-        }
-    </style>
+
 
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>

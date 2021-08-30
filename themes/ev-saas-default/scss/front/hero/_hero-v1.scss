@@ -10,7 +10,7 @@
   height: 100%;
   z-index: -1;
   @include background-cover(cover, no-repeat, top, center);
-  
+
   &::before {
     position: absolute;
     top: 50%;

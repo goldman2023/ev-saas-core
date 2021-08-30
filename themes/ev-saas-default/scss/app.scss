@@ -1,3 +1,8 @@
+:root {
+    --primary: pink;
+    --secondary: blue;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 // Bootstrap setup
@@ -13,6 +18,7 @@
 // Bootstrap core
 @import '~bootstrap/scss/bootstrap';
 
+
 /*----------------------------------------------------------------------
   * Front - Responsive Website Template version v3.3.0
   * Copyright 2018 Htmlstream
@@ -23,6 +29,3 @@
 
 // Custom core
 @import 'user';
-
-// Laraforms
-@import "laraform/laraform-bs4";

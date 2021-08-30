@@ -1,10 +1,12 @@
 <div class="relative">
 
+    <div class="text-right">
 
     {{-- TODO: Make nice icon and general styling --}}
     <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
         {{ translate('Edit') }}
     </button>
+    </div>
 
     @if ($show_input_field)
         {{-- TODO: Improve UX and UI of this element --}}

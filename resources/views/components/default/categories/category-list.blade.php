@@ -5,15 +5,14 @@
     <div class="container space-2 position-relative">
         <!-- Title -->
         <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-5 mb-md-9">
-            <x-ev::label
+            <x-ev.label
             tag="h2"
             class="h1"
             :label="ev_dynamic_translate('Categories Title', true)">
-            </x-ev::label>
+            </x-ev.label>
         </div>
         <!-- End Title -->
-        <div class="row mb-2">
-
+        <div class="row mb-2 @if($slider) ev-slick @endif">
             @foreach ($categories as $category)
                 <div class="col-md-4 mb-3">
                     <!-- Card -->
@@ -54,11 +53,26 @@
 
         <div class="text-center">
             <p class="small">
-                <x-ev::label
+                <x-ev.label
                 :label="ev_dynamic_translate('Categories List Footer Text', true)">
-                </x-ev::label>
+                </x-ev.label>
             </p>
         </div>
     </div>
     <!-- End Categories Section -->
 </div>
+
+@push('footer_scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" rel="stylesheet">
+    <script>
+        // $(document).ready(function() {
+        //     $('.ev-slick').slick({
+        //         infinite: false,
+        //         slidesToShow: 3,
+        //         slidesToScroll: 1,
+        //         arrows: true
+        //     });
+        // });
+    </script>
+@endpush

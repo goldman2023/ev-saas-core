@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <section>
+    <section class="overflow-hidden">
         <x-default.hero.product-hero></x-default.hero.product-hero>
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
     </section>
@@ -29,7 +29,7 @@
                 ->orderBy('order_level', 'desc')
                 ->get();
         @endphp
-        <x-default.categories.category-list :categories="$categories"> </x-default.categories.category-list>
+        <x-default.categories.category-list :categories="$categories" slider="true"> </x-default.categories.category-list>
     </section>
 
 
