@@ -1,12 +1,8 @@
 @guest
-
-<p>guest</p>
     @isset($href->value)
         <a href="{{ $href->value }}">
     @endisset
-
-    {{$dataSrcSet}}
-            <x-tenant.system.image :image="$src->value" :dataSrcSet="$dataSrcSet" ></x-tenant.system.image>
+        <x-tenant.system.image :image="$src->value" :dataSrcSet="$dataSrcSet" ></x-tenant.system.image>
     @isset($href->value)
         </a>
     @endisset
