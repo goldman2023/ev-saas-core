@@ -844,7 +844,7 @@ if (!function_exists('api_asset')) {
 
 //return file uploaded via uploader
 if (!function_exists('uploaded_asset')) {
-    function uploaded_asset($id)
+    function uploaded_asset($id, $width =0 )
     {
         /*  TODO: Fix this logic to unify images management */
         if(is_numeric($id)) {
@@ -854,12 +854,12 @@ if (!function_exists('uploaded_asset')) {
 
                 $file = str_replace('tenancy/assets/', '', $data);
 
-                $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$file.'@webp';
+                $proxy_image = config('imgproxy.host').'/insecure/fill/'.$width.'/0/ce/0/plain/'.$file.'@webp';
 
                 return $proxy_image;
             }
         } else {
-            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$id.'@webp';
+            $proxy_image = config('imgproxy.host').'insecure/fill/'.$width.'/0/ce/0/plain/'.$id.'@webp';
 
             return $proxy_image;
         }
