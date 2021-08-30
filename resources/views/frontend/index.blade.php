@@ -7,6 +7,11 @@
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
     </section>
 
+
+    <section>
+        <x-default.companies.companies-list></x-default.companies.companies-list>
+    </section>
+
     <section>
         <x-default.products.product-list>
         </x-default.products.product-list>
