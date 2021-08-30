@@ -2,7 +2,7 @@
 
 
     {{-- TODO: Make nice icon and general styling --}}
-    <button wire:click.prevent="editLabel()" class="text-xs">
+    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
         {{ translate('Edit') }}
     </button>
 

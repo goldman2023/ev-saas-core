@@ -4,7 +4,7 @@
 
 
 
-    <x-company-tabs :seller="$seller" type="contacts"></x-company-tabs>
+    <x-company.company-tabs :seller="$seller" type="contacts"></x-company.company-tabs>
     @php
     $reviews = false;
     @endphp
@@ -34,7 +34,7 @@
                         <div class="mb-3 text-left">
                             <span class="d-block h5 mb-1">{{ translate('Social Media') }}</span>
 
-                            <x-company-social-links align="left" :company="$seller->user->shop"> </x-company-social-links>
+                            <x-company.company-social-links align="left" :company="$seller->user->shop"> </x-company.company-social-links>
 
                         </div>
 
@@ -53,7 +53,7 @@
                         <div class="mb-3 text-left">
                             <span class="d-block h5 mb-1">{{ translate('Website') }}</span>
                             {{-- TODO: add dynamic page url --}}
-                            <x-company-website-link :company="$seller->user->shop"> </x-company-website-link>
+                            <x-company.company-website-link :company="$seller->user->shop"> </x-company.company-website-link>
 
 
                         </div>
@@ -98,9 +98,9 @@
                         <div class="card-body p-4 p-md-2" style="position: relative;">
                             @guest
                                 <x-card-overlay :extraButtonsEnabled="false"
-                                    text="{{ translate('Please Join B2BWood To Contact this company') }}"></x-card-overlay>
+                                    text="{{ translate('Please Join To Contact this company') }}"></x-card-overlay>
                             @endguest
-                            <x-company-contact-form :seller="$seller"> </x-company-contact-form>
+                            <x-company.company-contact-form :seller="$seller"> </x-company.company-contact-form>
 
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 <div class="aiz-user-sidenav-wrap pt-4 position-relative z-1 shadow-sm">
     <div class="absolute-top-right d-xl-none">
         <button class="btn btn-sm p-2" data-toggle="class-toggle" data-target=".aiz-mobile-side-nav"
-                data-same=".mobile-side-nav-thumb">
+            data-same=".mobile-side-nav-thumb">
             <i class="las la-times la-2x"></i>
         </button>
     </div>
@@ -13,13 +13,15 @@
     <div class="aiz-user-sidenav rounded overflow-hidden  c-scrollbar-light">
         <div class="px-4 text-center mb-4">
             <span class="avatar avatar-md mb-3">
-                <img class="img-fluid" src="{{ auth()->user()->shop->get_company_logo() }}"
-                     alt="{{ auth()->user()->shop->name }}">
+                @isset(auth()->user()->shop)
+                    <img class="img-fluid" src="{{ auth()->user()->shop->get_company_logo() }}"
+                        alt="{{ auth()->user()->shop->name }}">
+                @endisset
             </span>
 
             @if (auth()->user()->isCustomer())
                 <h4 class="h5 fw-600">{{ auth()->user()->seller->shop->name }}</h4>
-            @else
+            @elseif(auth()->user()->isSeller())
                 <h4 class="h5 fw-600">{{ auth()->user()->shop->name }}
                     <span class="ml-2">
                         @if (auth()->user()->seller->verification_status == 1)
@@ -37,7 +39,7 @@
 
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('dashboard') }}"
-                       class="aiz-side-nav-link {{ areActiveRoutes(['dashboard']) }}">
+                        class="aiz-side-nav-link {{ areActiveRoutes(['dashboard']) }}">
                         <i class="las la-home aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Dashboard') }}</span>
                     </a>
@@ -118,27 +120,27 @@
                         </li> --}}
                     @endif
 
-                        @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
-                            @php
-                                $conversation = \App\Models\Conversation::where('sender_id', Auth::user()->id)
-                                    ->where('sender_viewed', 0)
-                                    ->get();
-                            @endphp
-                            <li class="aiz-side-nav-item">
-                                <a href="{{ route('conversations.index') }}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['conversations.index', 'conversations.show']) }}">
-                                    <i class="las la-comment aiz-side-nav-icon"></i>
-                                    <span class="aiz-side-nav-text">{{ translate('Messages') }}</span>
-                                    @if (count($conversation) > 0)
-                                        <span class="badge badge-success">({{ count($conversation) }})</span>
-                                    @endif
-                                </a>
-                            </li>
-                        @endif
+                    @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
+                        @php
+                            $conversation = \App\Models\Conversation::where('sender_id', Auth::user()->id)
+                                ->where('sender_viewed', 0)
+                                ->get();
+                        @endphp
+                        <li class="aiz-side-nav-item">
+                            <a href="{{ route('conversations.index') }}"
+                                class="aiz-side-nav-link {{ areActiveRoutes(['conversations.index', 'conversations.show']) }}">
+                                <i class="las la-comment aiz-side-nav-icon"></i>
+                                <span class="aiz-side-nav-text">{{ translate('Messages') }}</span>
+                                @if (count($conversation) > 0)
+                                    <span class="badge badge-success">({{ count($conversation) }})</span>
+                                @endif
+                            </a>
+                        </li>
+                    @endif
 
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('shops.index') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['shops.index']) }}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['shops.index']) }}">
                             <i class="las la-cog aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Company Data') }}</span>
                         </a>
@@ -147,7 +149,7 @@
                     @if (auth()->user()->isSeller())
                         <li class="aiz-side-nav-item">
                             <a href="{{ route('attributes') }}"
-                               class="aiz-side-nav-link {{ areActiveRoutes(['attributes']) }}">
+                                class="aiz-side-nav-link {{ areActiveRoutes(['attributes']) }}">
                                 <i class="las la-user aiz-side-nav-icon"></i>
                                 <span class="aiz-side-nav-text">
                                     {{ translate('Business Profile') }}
@@ -174,7 +176,7 @@
 
 
                 @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
-                    {{--    @php
+                    {{-- @php
                            $conversation = \App\Models\Conversation::where('sender_id', auth()->user()->id)
                                ->where('sender_viewed', 0)
                                ->get();
@@ -188,8 +190,7 @@
                                    <span class="badge badge-success">({{ count($conversation) }})</span>
                                @endif
                            </a>
-                       </li>
-                       --}}
+                       </li> --}}
                 @endif
 
 
@@ -263,7 +264,7 @@
                 @if (auth()->user()->isSeller())
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('documentgallery.index') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['documentgallery.index']) }}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['documentgallery.index']) }}">
                             <i class="las la-user aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Company Gallery') }}</span>
                         </a>
@@ -272,42 +273,47 @@
 
                 <li class="aiz-side-nav-item d-none">
                     <a href="{{ route('payments.index') }}"
-                       class="aiz-side-nav-link {{ areActiveRoutes(['payments.index']) }}">
+                        class="aiz-side-nav-link {{ areActiveRoutes(['payments.index']) }}">
                         <i class="las la-history aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Invoices') }}</span>
                     </a>
                 </li>
 
+                @if((auth()->user()->isSeller()))
+
                 @php
-                    $review_count = auth()->user()->seller->reviews->count();
+                    $review_count = auth()
+                        ->user()
+                        ->seller->reviews->count();
                 @endphp
                 <li class="aiz-side-nav-item d-none">
                     <a href="{{ route('reviews.seller') }}"
-                       class="aiz-side-nav-link {{ areActiveRoutes(['reviews.seller']) }}">
+                        class="aiz-side-nav-link {{ areActiveRoutes(['reviews.seller']) }}">
                         <i class="las la-star-half-alt aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Reviews') }}</span>
                         @if ($review_count > 0)<span
-                            class="badge badge-inline badge-success">{{ $review_count }}</span>@endif
+                                class="badge badge-inline badge-success">{{ $review_count }}</span>@endif
                     </a>
                 </li>
+                @endif
                 @if (auth()->user()->isSeller())
                     <li class="aiz-side-nav-item d-none">
                         <a href="{{ route('seller.products') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.products.edit']) }}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.products.edit']) }}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Products') }}</span>
                         </a>
                     </li>
                     <li class="aiz-side-nav-item d-none">
                         <a href="{{ route('product_bulk_upload.index') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['product_bulk_upload.index']) }}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['product_bulk_upload.index']) }}">
                             <i class="las la-upload aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Product Bulk Upload') }}</span>
                         </a>
                     </li>
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.digitalproducts') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.upload', 'seller.digitalproducts.edit']) }}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.upload', 'seller.digitalproducts.edit']) }}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Products') }}</span>
                         </a>
@@ -315,14 +321,15 @@
 
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('orders.index') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['orders.index'])}}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['orders.index']) }}">
                             <i class="las la-money-bill aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Orders') }}</span>
                         </a>
                     </li>
 
                     <li class="aiz-side-nav-item">
-                        <a href="{{ route('seller.events') }}" class="aiz-side-nav-link {{ areActiveRoutes(['seller.events', 'seller.events.create', 'seller.events.edit']) }}">
+                        <a href="{{ route('seller.events') }}"
+                            class="aiz-side-nav-link {{ areActiveRoutes(['seller.events', 'seller.events.create', 'seller.events.edit']) }}">
                             <i class="las la-tachometer-alt aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Events') }}</span>
                         </a>
@@ -339,17 +346,17 @@
                 <hr>
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('purchase_history.index') }}"
-                       class="aiz-side-nav-link {{ areActiveRoutes(['purchase_history.index'])}}">
+                        class="aiz-side-nav-link {{ areActiveRoutes(['purchase_history.index']) }}">
                         <i class="las la-file-alt aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Purchase History') }}</span>
                         @if ($delivery_viewed > 0 || $payment_status_viewed > 0)<span
-                            class="badge badge-inline badge-success">{{ translate('New') }}</span>@endif
+                                class="badge badge-inline badge-success">{{ translate('New') }}</span>@endif
                     </a>
                 </li>
 
                 <li class="aiz-side-nav-item">
                     <a href="{{ route('digital_purchase_history.index') }}"
-                       class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index'])}}">
+                        class="aiz-side-nav-link {{ areActiveRoutes(['digital_purchase_history.index']) }}">
                         <i class="las la-download aiz-side-nav-icon"></i>
                         <span class="aiz-side-nav-text">{{ translate('Downloads') }}</span>
                     </a>
@@ -358,7 +365,7 @@
                 @if (get_setting('wallet_system') == 1)
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('wallet.index') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['wallet.index']) }}">
+                            class="aiz-side-nav-link {{ areActiveRoutes(['wallet.index']) }}">
                             <i class="las la-dollar-sign aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('My Wallet') }}</span>
                         </a>
@@ -367,7 +374,8 @@
 
             </ul>
         </div>
-        @if (\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1 && auth()->user()->isCustomer())
+        @if (\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1 &&
+    auth()->user()->isCustomer())
             <div>
                 <a href="{{ route('shops.create') }}" class="btn btn-block btn-soft-primary rounded-0">
                     </i>{{ translate('Register your company') }}
@@ -385,7 +393,6 @@
                 @endif
             </div>
 
-            <x-credit-report-box :company="auth()->user()->shop"></x-credit-report-box>
         @endif
 
     </div>

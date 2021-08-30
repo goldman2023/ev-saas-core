@@ -136,7 +136,7 @@ class HomeController extends Controller
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
         } else {
-            return view('frontend.user.admin.dasboard');
+            return view('frontend.user.admin.dashboard');
         }
     }
 

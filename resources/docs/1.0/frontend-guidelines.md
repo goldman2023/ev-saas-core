@@ -30,7 +30,7 @@ All of the new components should be created as blade components.
 https://laravel.com/docs/8.x/blade#components
 
 ```html
-<x-company-card :company="$company"></x-company-card>
+<x-company.company-card :company="$company"></x-company.company-card>
 ```
 
 This component should accept Company Object (Not ID!)

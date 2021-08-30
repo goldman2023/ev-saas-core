@@ -3,7 +3,7 @@
 @section('company_profile')
 
 
-    <x-company-tabs :seller="$seller" type="products"></x-company-tabs>
+    <x-company.company-tabs :seller="$seller" type="products"></x-company.company-tabs>
 
     <div class="row">
         <div class="col-12 mb-3">

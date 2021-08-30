@@ -8,8 +8,10 @@
                 <div class="col-lg-12 text-center text-lg-left">
                     <!-- Title -->
                     <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-5 mb-md-9 mt-10">
-                        <h2 class="h1">{{ translate('Premium Forestry Industry News')}}</h2>
-                        <p>{{ __('Stay informed of what is going on in the forestry and wood sector in a global market')}}</p>
+                        <x-ev.label tag="h2" class="h1" :label="ev_dynamic_translate('Blog Title')"></x-ev.label>
+                        <p>
+                            <x-ev.label :label="ev_dynamic_translate('Blog Description')"></x-ev.label>
+                        </p>
                     </div>
                     <!-- End Title -->
                 </div>
@@ -62,16 +64,6 @@
 
         </div>
 
-        @guest
-            @php
-                $button_text = 'Try it out';
-                $image_source = 'assets/img/img1.jpg';
-                $heading = 'Register to B2BWood';
-                $body = "Present your business online with beautifull company profile and stay on top of global wood industry trends with B2BWood Club Membership";
-            @endphp
-            <x-promo-banner :heading="$heading" :body="$body" :buttonText="$button_text" :imageSource="$image_source">
-            </x-promo-banner>
+
     </section>
-    @else
-    @endguest
 @endsection

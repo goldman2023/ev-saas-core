@@ -63,7 +63,7 @@ if (empty($banner3->refer_url)) {
 
                                 <x-categories-sidebar :categoryId="$category_id" type="events"></x-categories-sidebar>
 
-                                <x-company-attributes :items="$attributes" :selected="$filters"></x-company-attributes>
+                                <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
 
                                 <div class="mb-3">
                                     <x-affiliate-single-banner :banner="$banner2"> </x-affiliate-single-banner>

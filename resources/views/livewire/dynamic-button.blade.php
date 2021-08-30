@@ -1,8 +1,7 @@
-<div class="relative">
-
-
+<div class="position-absolute" style="z-index:9999">
     {{-- TODO: Make nice icon and general styling --}}
-    <button wire:click.prevent="editLabel()" class="text-xs">
+    {{-- TODO: Make nice icon and general styling --}}
+    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
         {{ translate('Edit') }}
     </button>
 
@@ -53,7 +52,5 @@
                 </button>
             </div>
         </div>
-
-
     @endif
 </div>

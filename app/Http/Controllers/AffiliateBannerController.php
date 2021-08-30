@@ -157,7 +157,7 @@ class AffiliateBannerController extends Controller
         $affiliate_banner->clicks++;
         if($affiliate_banner){
             $utm_query = [
-                'utm_source' => 'b2bwood',
+                'utm_source' => get_site_name(),
                 'utm_campaign' => $affiliate_banner->campaign,
                 'utm_medium' => 'cpc',
                 'utm_content' => $affiliate_banner->title

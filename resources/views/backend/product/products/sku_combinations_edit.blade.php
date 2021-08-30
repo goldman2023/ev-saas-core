@@ -1,3 +1,4 @@
+@if(count($combinations) > 0)
 @if(count($combinations[0]) > 0)
 <table class="table table-bordered aiz-table">
 	<thead>
@@ -114,4 +115,6 @@
 
 	</tbody>
 </table>
+@endif
+
 @endif

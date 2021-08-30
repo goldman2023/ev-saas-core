@@ -5,13 +5,15 @@
     @guest
         <{{ $tag }} {{ $attributes }} class="{{ $class }}">
             {!! $label->value !!}
-        </{{ $tag }}>
+            </{{ $tag }}>
         @else
-            {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
-            @livewire('dynamic-label', ['label' => $label])
+            <{{ $tag }} {{ $attributes }} class="{{ $class }}">
+                {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
+                @livewire('dynamic-label', ['label' => $label])
+                </{{ $tag }}>
 
-        @endguest
+            @endguest
 
-    @else
+        @else
 
 @endif
