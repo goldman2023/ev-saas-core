@@ -113,6 +113,21 @@ IMGPROXY_ENABLE_WEBP_DETECTION=true
 
 ```
 
+
+## Model Caching
+Some models like `App\Models\Translation`, `Product`, `EV_Label` are using cachable trait from this package:
+https://github.com/GeneaLabs/laravel-model-caching
+
+```
+It has some compatability issues, so please check if you're not using package in the list of these packages:
+grimzy/laravel-mysql-spatial
+fico7489/laravel-pivot
+chelout/laravel-relationship-events
+spatie/laravel-query-builder
+dwightwatson/rememberable
+kalnoy/nestedset
+```
+
 **Project URL:**
 
 https://app.ev-saas.com
