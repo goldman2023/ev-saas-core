@@ -149,7 +149,7 @@ class ProductController extends Controller
 //        dd($request->all());
         $refund_request_addon = \App\Models\Addon::where('unique_identifier', 'refund_request')->first();
 
-        $product = new Product;
+        $product = new Product();
         $product->name = $request->name;
         $product->added_by = $request->added_by;
         if (auth()->user()->isSeller()) {

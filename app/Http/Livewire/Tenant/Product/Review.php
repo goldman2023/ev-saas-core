@@ -7,8 +7,6 @@ use Livewire\Component;
 
 class Review extends Component
 {
-
-
     public Product $product;
     public $product_id;
     public $reviews;
