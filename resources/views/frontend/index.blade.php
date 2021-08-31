@@ -30,6 +30,15 @@
                 ->orderBy('order_level', 'desc')
                 ->get();
         @endphp
+        <x-default.categories.category-tabs-with-products :categories="$categories"> </x-default.categories.category-tabs-with-products>
+    </section>
+
+    <section>
+        @php
+            $categories = App\Models\Category::has('products')->where('level', 0)
+                ->orderBy('order_level', 'desc')
+                ->get();
+        @endphp
         <x-default.categories.category-list :categories="$categories" slider="true"> </x-default.categories.category-list>
     </section>
 
