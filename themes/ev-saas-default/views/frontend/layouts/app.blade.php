@@ -28,12 +28,8 @@
 
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-
-    <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
+    <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
-
-
 
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
@@ -42,6 +38,9 @@
     <script src="https://htmlstream.com/front/assets/js/theme.min.js"></script>-->
     <script src="{{ mix('js/app.js', 'themes/'.Theme::active()) }}"></script>
 
+    <!-- Vendor Scripts -->
+    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
 
     <script>

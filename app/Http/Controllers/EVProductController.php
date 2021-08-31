@@ -15,6 +15,6 @@ class EVProductController extends Controller
     }
 
     public function create(Request $request) {
-        return view('frontend.user.crud.products.create')->with('form', app('App\Forms\Products\ProductForm'));
+        return view('frontend.user.crud.products.create');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Services;
 
+use App\Models\Brand;
+use App\Models\Category;
+
 class EVService
 {
     public function getVendorMenu(): array
@@ -174,6 +177,64 @@ class EVService
                     ],
                 ]
             ]
+        ];
+    }
+
+
+    public function getMappedCategories() {
+        $categories = Category::where('parent_id', 0)
+            ->where('digital', 0)
+            ->with('childrenCategories')
+            ->get();
+
+        $mapped = [];
+
+        $recursion = function($child_category) use (&$recursion, &$mapped) {
+            $value = str_repeat('--', $child_category->level);
+
+            $mapped[$child_category->id] = $value." ".$child_category->getTranslation('name');
+
+            if($child_category->categories) {
+                foreach ($child_category->categories as $childCategory) {
+                    $recursion($childCategory);
+                }
+            }
+        };
+
+        if($categories->isNotEmpty()) {
+            foreach($categories as $category) {
+                $mapped[$category->id] = $category->getTranslation('name');
+
+                if($category->childrenCategories) {
+                    foreach($category->childrenCategories as $childCategory) {
+                        $recursion($childCategory);
+                    }
+                }
+            }
+        }
+
+        return $mapped;
+    }
+
+    public function getMappedBrands() {
+        $brands = Brand::all();
+        $mapped = [];
+
+        if($brands->isNotEmpty()) {
+            foreach (\App\Models\Brand::all() as $brand) {
+                $mapped[$brand->id] = $brand->getTranslation('name');
+            }
+        }
+
+        return $mapped;
+    }
+
+    public function getMappedUnits() {
+        return [
+            'pc' => 'Pc',
+            'kg' => 'kg',
+            'l' => 'litre',
+            'oz' => 'oz'
         ];
     }
 }
