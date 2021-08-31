@@ -31,7 +31,7 @@ class ThemeMiddleware
                 if(str_contains($domain->theme, 'tailwind')) {
                     Theme::set($domain->theme, 'ev-tailwind');
                 } else {
-                    Theme::set($domain->theme);
+                    Theme::set($domain->theme, 'ev-saas-default');
                 }
 
             }

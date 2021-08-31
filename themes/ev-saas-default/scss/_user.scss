@@ -1,0 +1,27 @@
+/*------------------------------------
+  File for your custom SCSS style
+------------------------------------*/
+
+img {
+    max-width: 100%;
+}
+
+.ev-brand-image-small {
+    max-height: 25px;
+    width: auto;
+    max-width: 80%;
+}
+
+
+.ev-product-card {
+    &__img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+}
+
+/* Fix For Equal height columns while ussing swiper option: autoHeight: true, */
+.swiper-autoheight, .swiper-autoheight .swiper-slide {
+    height: 100% !important;
+}

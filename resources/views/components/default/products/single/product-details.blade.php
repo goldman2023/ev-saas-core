@@ -126,7 +126,7 @@ $photos = explode(',', $product->photos);
 
                         @if ($product->brand != null)
                             <a href="{{ route('products.brand', $product->brand->slug) }}">
-                                <img src="{{ uploaded_asset($product->brand->logo) }}"
+                                <img src="{{ uploaded_asset($product->brand->logo ?? '') }}"
                                     alt="{{ $product->brand->getTranslation('name') }}" height="30">
                             </a>
                         @endif

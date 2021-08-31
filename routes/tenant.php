@@ -37,16 +37,18 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 |
 */
 
-Route::get('/ev', [EVSaasController::class, 'index']);
-Route::get('/ev-tenant/create', [EVSaaSController::class, 'create']);
-
 Route::middleware([
     'web',
     'universal',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->namespace('App\Http\Controllers')->group(function () {
+
+    /* This is experimental, adding it here for now */
+    Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
     Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
+
+
     //Home Page
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -212,6 +214,7 @@ Route::middleware([
     Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
+        Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');

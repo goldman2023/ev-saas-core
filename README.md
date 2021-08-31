@@ -49,8 +49,8 @@ Access Details can be found in `.env.example` file
 Example usage
 
 ```
-<x-ev.label :label="ev_dynamic_translate('Add New Category', true)">
-</x-ev.label>
+<x-ev::label :label="ev_dynamic_translate('Add New Category', true)">
+</x-ev::label>
 ```
 
 -   Buttons and links
@@ -64,14 +64,14 @@ Example usage
 Example usage
 
 ```
-<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
+<x-ev::dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
 :href="ev_dynamic_translate('#testimonial-logo-link', true)">
-</x-ev.dynamic-image>
+</x-ev::dynamic-image>
 ```
 
-<x-ev.link-button :href="ev_dynamic_translate('#button1')"
+<x-ev::link-button :href="ev_dynamic_translate('#button1')"
 :label="ev_dynamic_translate('Button 1')" class="ev-button">
-</x-ev.link-button>
+</x-ev::link-button>
 
 ```
 

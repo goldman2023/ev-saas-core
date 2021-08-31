@@ -2,16 +2,16 @@
 <div class="py-16 sm:py-24 xl:max-w-7xl xl:mx-auto xl:px-8">
     <div class="px-4 sm:px-6 sm:flex sm:items-center sm:justify-between lg:px-8 xl:px-0">
         <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">
-            <x-ev.label>
+            <x-ev::label>
                 {{ translate('Shop by Category') }}
-            </x-ev.label>
+            </x-ev::label>
         </h2>
         <a href="{{ route('categories.all') }}"
             class="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
 
-            <x-ev.label :label="ev_dynamic_translate('Browse all categories', true)">
+            <x-ev::label :label="ev_dynamic_translate('Browse all categories', true)">
                 <span aria-hidden="true"> &rarr;</span>
-            </x-ev.label>
+            </x-ev::label>
 
         </a>
 

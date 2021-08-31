@@ -5,21 +5,21 @@
             <div class="col-lg-5 mb-7 mb-lg-0">
                 <!-- Info -->
                 <div class="mb-5">
-                    <x-ev.label
+                    <x-ev::label
                     tag="h2"
                     :label="ev_dynamic_translate('Contact Section Title', true)">
-                    </x-ev.label>
+                    </x-ev::label>
                     <p>
-                        <x-ev.label
+                        <x-ev::label
                     :label="ev_dynamic_translate('Contact Section Description', true)">
-                    </x-ev.label>
+                    </x-ev::label>
                     </p>
                 </div>
 
-                <x-ev.label
+                <x-ev::label
                 tag="h4"
                 :label="ev_dynamic_translate('Contact Section Benefits', true)">
-                </x-ev.label>
+                </x-ev::label>
 
                 <div class="media text-body mb-3">
                         <x-heroicon-s-badge-check class="mt-1 mr-2 text-success" style="max-width:30px" />
@@ -52,11 +52,11 @@
                 <form class="js-validate card card-bordered w-md-85 w-lg-100 mx-md-auto">
                     <div class="card-header bg-primary text-white text-center py-4 px-5 px-md-6">
 
-                        <x-ev.label
+                        <x-ev::label
                         tag="h4"
                         class="text-white mb-0"
                         :label="ev_dynamic_translate('Contact form hero title', true)">
-                        </x-ev.label>
+                        </x-ev::label>
                     </div>
 
                     <div class="card-body p-md-6">

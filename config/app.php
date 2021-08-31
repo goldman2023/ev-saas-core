@@ -180,6 +180,7 @@ return [
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
         // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        App\Providers\EVServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -261,7 +262,9 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
-        'Cart' => App\Facades\Cart::class,
+        'CartService' => App\Facades\CartService::class,
+        'EV' => App\Facades\EV::class,
+        'Theme' => Qirolab\Theme\Theme::class,
     ],
 
 ];

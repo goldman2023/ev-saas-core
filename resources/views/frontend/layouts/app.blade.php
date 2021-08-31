@@ -19,7 +19,7 @@
             <meta name="robots" content="index, follow">
             <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
             <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
-            
+
             @yield('meta')
 
             @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
@@ -29,7 +29,6 @@
 
             <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-            <link rel="stylesheet" href="{{ global_asset('css/ev-saas.css') }}">
 
             <script>
                 var AIZ = AIZ || {};
@@ -58,7 +57,7 @@
 
             <style>
                 :root {
-                    --primary: red;
+                    --primary: green;
                     --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
                     --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
                 }

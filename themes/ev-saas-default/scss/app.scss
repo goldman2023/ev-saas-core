@@ -1,8 +1,31 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+:root {
+    --primary: pink;
+    --secondary: blue;
+}
 
-// Variables
-@import 'variables';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-// Bootstrap
+// Bootstrap setup
+@import '~bootstrap/scss/functions';
+
+// Front setup
+@import 'themes/default';
+
+@import 'user-variables';
+
+@import 'front/variables';
+
+// Bootstrap core
 @import '~bootstrap/scss/bootstrap';
+
+
+/*----------------------------------------------------------------------
+  * Front - Responsive Website Template version v3.3.0
+  * Copyright 2018 Htmlstream
+  * Licensed under Bootstrap Themes (https://themes.getbootstrap.com/licenses/)
+------------------------------------------------------------------------*/
+
+@import 'front/front';
+
+// Custom core
+@import 'user';
