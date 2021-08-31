@@ -35,7 +35,8 @@
                 <!-- Product -->
                 @foreach ($products as $product)
                     <div class="col-sm-3">
-                        <x-default.products.cards.product-card :product="$product" style="{{ ev_dynamic_translate('product-card', true)->value }}">
+                        <x-default.products.cards.product-card :product="$product"
+                            style="product-card-detailed">
                         </x-default.products.cards.product-card>
                     </div>
                 @endforeach
@@ -51,7 +52,8 @@
     <div class="text-center">
 
         <x-ev::link-button :href="ev_dynamic_translate('#product-grid-link', true)"
-        :label="ev_dynamic_translate('Product Grid Button', true)" class="btn btn-primary btn-pill transition-3d-hover px-5">
+            :label="ev_dynamic_translate('Product Grid Button', true)"
+            class="btn btn-primary btn-pill transition-3d-hover px-5">
         </x-ev::link-button>
     </div>
     </div>
@@ -101,7 +103,6 @@
             </script>
 
             <style>
-
                 .swiper {
                     padding: 50px;
                 }

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+
 /**
  * App\Models\FlashDeal
  *
@@ -28,6 +30,8 @@ use App;
  */
 class FlashDeal extends Model
 {
+    use Cachable;
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $flash_deal_translation = $this->hasMany(FlashDealTranslation::class)->where('lang', $lang)->first();
@@ -41,7 +45,7 @@ class FlashDeal extends Model
     {
         return $this->hasMany(FlashDealProduct::class);
     }
-    
+
     public function flash_deal_products()
     {
         return $this->hasMany(FlashDealProduct::class);

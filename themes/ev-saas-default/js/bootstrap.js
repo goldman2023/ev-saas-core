@@ -7,10 +7,14 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('@popperjs/core');
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+    require('jquery-mask-plugin')
+    require('select2');
+    require('slick-carousel');
+    window.Quill = require('quill');
+
+    require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
 } catch (e) {}
 
 /**
