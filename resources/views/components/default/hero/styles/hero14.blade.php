@@ -5,24 +5,24 @@ style="background: url('https://ev-saas.fra1.digitaloceanspaces.com/uploads/demo
     <div class="container space-top-3 space-top-lg-3 space-bottom-2">
       <div class="w-lg-60 text-center mx-lg-auto">
         <div class="mb-5">
-            <x-ev::label
+            <x-ev.label
             tag="h1"
             class="display-4 mb-3 text-white"
             :label="ev_dynamic_translate('Hero 14 Title')">
-            </x-ev::label>
+            </x-ev.label>
           <p class="lead text-white">
-            <x-ev::label
+            <x-ev.label
             :label="ev_dynamic_translate('Hero 14 Description')">
-            </x-ev::label>
+            </x-ev.label>
             </p>
         </div>
 
         <div class="card bg-white p-3 mb-3">
 
-            <x-ev::label
+            <x-ev.label
             class="mb-3"
             :label="ev_dynamic_translate('Countdown Title')">
-            </x-ev::label>
+            </x-ev.label>
 
 
             <x-default.promo.countdown>

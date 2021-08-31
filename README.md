@@ -49,8 +49,8 @@ Access Details can be found in `.env.example` file
 Example usage
 
 ```
-<x-ev::label :label="ev_dynamic_translate('Add New Category', true)">
-</x-ev::label>
+<x-ev.label :label="ev_dynamic_translate('Add New Category', true)">
+</x-ev.label>
 ```
 
 -   Buttons and links

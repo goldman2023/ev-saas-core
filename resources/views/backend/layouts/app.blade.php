@@ -23,11 +23,12 @@
 
     <!-- aiz core css -->
 {{--    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">--}}
-    <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ global_asset('css/admin/app.css') }}">
     @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
         <link rel="stylesheet" href="{{ global_asset('css/bootstrap-rtl.min.css') }}">
     @endif
-{{--    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">--}}
+    <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
+    <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css">
 
 
     <style>

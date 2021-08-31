@@ -8,7 +8,7 @@
     </svg>
     <span class="mt-2 block text-sm font-medium text-gray-900">
 
-        <x-ev::label :label="ev_dynamic_translate('Add New Category', true)">
-        </x-ev::label>
+        <x-ev.label :label="ev_dynamic_translate('Add New Category', true)">
+        </x-ev.label>
     </span>
 </a>

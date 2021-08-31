@@ -8,15 +8,17 @@ class CategoryList extends Component
 {
 
     public $categories;
+    public bool $slider;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($categories)
+    public function __construct($categories, $slider = false)
     {
         //
         $this->categories = $categories;
+        $this->slider = $slider;
     }
 
     /**
