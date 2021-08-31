@@ -6,7 +6,7 @@
                     <x-ev.label tag="h2" class="h1" :label="ev_dynamic_translate('Product Heading')">
                     </x-ev.label>
                     <p>
-                        <x-ev.label class="div" :label="ev_dynamic_translate('Product Description')">
+                        <x-ev.label class="div h4" :label="ev_dynamic_translate('Product Description')">
                         </x-ev.label>
                     </p>
                 </div>
