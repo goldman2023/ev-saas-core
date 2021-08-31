@@ -64,6 +64,8 @@
                 </li>
 
                 <li class="list-inline-item">
+                    @svg('bi-building', 'w-6')
+
                     <div class="hs-unfold">
                         <x-ev.label :label="ev_dynamic_translate('Company Address', true)"></x-ev.label>
                     </div>

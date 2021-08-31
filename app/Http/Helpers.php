@@ -855,7 +855,7 @@ if (!function_exists('uploaded_asset')) {
 
                 $file = str_replace('tenancy/assets/', '', $data);
 
-                $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$file.'@webp';
+                $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$file;
 
                 return $proxy_image;
             }

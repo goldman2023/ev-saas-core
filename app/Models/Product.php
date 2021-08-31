@@ -229,6 +229,11 @@ class Product extends Model
         return $data;
     }
 
+    /* TODO: Implement product condition in backend: new/used/refurbished */
+    public function getCondition() {
+        return translate("New");
+    }
+
     /**
      * Get all photos related to the product but properly structured in an assoc. array
      * This function is used in frontend/themes etc.

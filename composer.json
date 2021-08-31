@@ -18,6 +18,7 @@
         "blade-ui-kit/blade-icons": "^1.1",
         "cinetpay/cinetpay-php": "^1.9",
         "codeat3/blade-line-awesome-icons": "^1.0",
+        "davidhsianturi/blade-bootstrap-icons": "^1.1",
         "diglactic/laravel-breadcrumbs": "^7.0",
         "facade/ignition": "^2.10",
         "fideloper/proxy": "^4.0",

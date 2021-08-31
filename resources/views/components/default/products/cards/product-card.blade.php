@@ -1,8 +1,8 @@
-<div class="card card-bordered shadow-none text-center h-100">
+<div class="ev-product-card card card-bordered shadow-none text-center h-100">
     <div class="position-relative">
 
       <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
-        class="card-img-top"
+        class="card-img-top ev-product-card__img"
         :image="$product->thumbnail_img"></x-tenant.system.image>
 
       <div class="position-absolute top-0 left-0 pt-3 pl-3">
@@ -15,12 +15,13 @@
       </div>
     </div>
 
-    <div class="card-body pt-4 px-4 pb-0">
+    <div class="card-body pt-3 px-3 pb-0">
       <div class="mb-2">
         <a class="d-inline-block text-body small font-weight-bold mb-1" href="{{ route('product', $product->slug) }}">
-          {{ $product->brand->name ?? '' }}
+          {{ $product->getCondition() ?? '' }}
+
         </a>
-        <span class="d-block font-size-1">
+        <span class="d-block h4 font-weight-bold">
           <a class="text-inherit" href="{{ route('product', $product->slug) }}">
             {{ $product->getTranslation('name') }}
           </a>
@@ -42,16 +43,26 @@
         <a class="d-inline-flex align-items-center small" href="#">
           <div class="text-warning mr-2">
             <a class="d-inline-block text-body small font-weight-bold mb-1" href="{{ route('product', $product->slug) }}">
+
+              <x-tenant.system.image
+              class="ev-brand-image-small mb-2"
+              :image='uploaded_asset($product->brand->logo ?? "")'>
+              </x-tenant.system.image>
+            <br>
               {{ $product->brand->name ?? '' }}
 
-              <x-tenant.system.image :image='uploaded_asset($product->brand->logo ?? "")'>
-              </x-tenant.system.image>
             </a>
           </div>
         </a>
       </div>
-      <a href="{{ route('product', $product->slug) }}" type="button" class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
+
+      {{-- TODO: Make an option to manage what buttons are visible --}}
+      {{-- <a href="{{ route('product', $product->slug) }}" type="button" class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
         {{ translate('Add to Cart') }}
+      </a> --}}
+
+      <a href="{{ route('product', $product->slug) }}" type="button" class="ml-1 btn btn-sm btn-primary btn-pill transition-3d-hover">
+        {{ translate('View Product') }}
       </a>
     </div>
   </div>

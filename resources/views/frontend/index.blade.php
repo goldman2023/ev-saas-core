@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-{{-- <section class="space-1">
+    {{-- <section class="space-1">
     <x-default.brands.brands-list></x-default.brands.brands-list>
 </section> --}}
     <section class="overflow-hidden">
@@ -10,7 +10,7 @@
     </section>
 
     <section>
-        <x-default.products.product-list>
+        <x-default.products.product-list slider="true">
         </x-default.products.product-list>
     </section>
 
@@ -26,7 +26,7 @@
 
     <section>
         @php
-            $categories = App\Models\Category::where('level', 0)
+            $categories = App\Models\Category::has('products')->where('level', 0)
                 ->orderBy('order_level', 'desc')
                 ->get();
         @endphp
@@ -45,7 +45,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <x-latest-products></x-latest-products>
+                    {{-- <x-latest-products></x-latest-products> --}}
                 </div>
             </div>
         </div>
@@ -54,9 +54,12 @@
 
     {{-- TODO: Refactor this to blade components --}}
     @include('frontend.components.benefits')
-    <section>
-        <x-default.forms.contact-form></x-default.forms.contact-form>
-    </section>
+
+    @guest
+        <section>
+            <x-default.forms.contact-form></x-default.forms.contact-form>
+        </section>
+    @endguest
     {{-- TODO: Refactor this to blade components --}}
     {{-- @include('frontend.components.news') --}}
 @endsection
