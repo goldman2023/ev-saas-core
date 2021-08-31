@@ -1,6 +1,6 @@
 <div class="form-group {{ $class }}">
     <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
-    <select @if($id) id="{{ $id }}" @endif class="js-select2-custom custom-select" name="{{ $name }}" size="1" style="opacity: 0;"
+    <select @if($id) id="{{ $id }}" @endif class="js-select2-custom custom-select @error($name) is-invalid @enderror" name="{{ $name }}" size="1" style="opacity: 0;"
             @if($multiple) multiple @endif
             data-hs-select2-options='@json($options)'>
         @if($placeholder || ($items->isEmpty() && $tags)) <option label="empty"></option> @endif
@@ -12,4 +12,8 @@
         @endif
     </select>
     {!! $slot !!}
+
+    @error($name)
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>

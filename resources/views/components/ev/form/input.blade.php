@@ -10,8 +10,8 @@
             </div>
         @endif
 
-        <label for="{{ $id }}" class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
-        <input type="{{ $type }}" class="form-control {{ $class }}" name="{{ $name }}" id="{{ $id }}" placeholder="{{ $placeholder }}" aria-label="{{ $label }}">
+            <label for="{{ $id }}" class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+            <input type="{{ $type }}" class="form-control {{ $class }} @error($name) is-invalid @enderror" name="{{ $name }}" id="{{ $id }}" placeholder="{{ $placeholder }}" aria-label="{{ $label }}">
 
         @if($icon && $icon_placement === 'append')
             <div class="input-group-append">
@@ -23,4 +23,8 @@
     @if($icon)
         </div>
     @endif
+
+    @error($name)
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
 </div>
