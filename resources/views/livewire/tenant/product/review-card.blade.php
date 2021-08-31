@@ -19,8 +19,8 @@
                     </div>
                     <div class="flex">
                         <span class="mr-2">{{$review->review->rating}}</span>
-                        <x-ev::label :label="ev_dynamic_translate('out of 5 stars', true)">
-                        </x-ev::label>
+                        <x-ev.label :label="ev_dynamic_translate('out of 5 stars', true)">
+                        </x-ev.label>
                     </div>
                 </div>
             </div>
