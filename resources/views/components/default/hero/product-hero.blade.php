@@ -3,11 +3,11 @@
         <div class="row align-items-center">
             <div class="col-12 col-lg-9 mb-7 mt-7 mt-md-0 mb-md-0">
                 <div class="w-md-60 mb-7">
-                    <x-ev::label tag="h2" class="h1" :label="ev_dynamic_translate('Product Heading')">
-                    </x-ev::label>
+                    <x-ev.label tag="h2" class="h1" :label="ev_dynamic_translate('Product Heading')">
+                    </x-ev.label>
                     <p>
-                        <x-ev::label class="div" :label="ev_dynamic_translate('Product Description')">
-                        </x-ev::label>
+                        <x-ev.label class="div" :label="ev_dynamic_translate('Product Description')">
+                        </x-ev.label>
                     </p>
                 </div>
 

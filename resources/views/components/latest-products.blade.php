@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-8">
-        <x-ev::label class="h3" :label="ev_dynamic_translate('Latest Products', true)"></x-ev::label>
+        <x-ev.label class="h3" :label="ev_dynamic_translate('Latest Products', true)"></x-ev.label>
     </div>
     <div class="col-4 text-right">
         <a href="{{ route('search', ['content' => 'product']) }}">{{ translate('Explore All products >') }}</a>

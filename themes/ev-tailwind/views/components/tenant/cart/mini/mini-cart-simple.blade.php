@@ -48,8 +48,8 @@
                 @endforeach
             @else
                 <div class="pt-7 pb-5 px-4 text-center font-semibold text-16">
-                    <x-ev::label :label="ev_dynamic_translate('No items in cart.', true)">
-                    </x-ev::label>
+                    <x-ev.label :label="ev_dynamic_translate('No items in cart.', true)">
+                    </x-ev.label>
                 </div>
             @endif
 

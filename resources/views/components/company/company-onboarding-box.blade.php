@@ -1,11 +1,11 @@
 <div class="card mb-3 mb-lg-5">
     <!-- Header -->
     <div class="card-header">
-        <x-ev::label
+        <x-ev.label
         tag="h4"
         class="card-header-title"
         :label="ev_dynamic_translate('Welcome to Dashboard', true)">
-        </x-ev::label>
+        </x-ev.label>
 
 
     </div>

@@ -2,11 +2,11 @@
     <div class="w-lg-75 mx-lg-auto">
       <div class="text-center mb-4">
 
-        <x-ev::label
+        <x-ev.label
         tag="h2"
         class="divider divider-text"
         :label="ev_dynamic_translate('Clients List Title')">
-        </x-ev::label>
+        </x-ev.label>
       </div>
 
       <div class="row justify-content-between text-center">
