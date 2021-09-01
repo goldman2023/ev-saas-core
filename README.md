@@ -63,10 +63,11 @@ Example usage
 
 Example usage
 
+
 ```
-<x-ev::dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
-:href="ev_dynamic_translate('#testimonial-logo-link', true)">
-</x-ev::dynamic-image>
+<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+</x-ev.dynamic-image>
+
 ```
 
 <x-ev::link-button :href="ev_dynamic_translate('#button1')"
