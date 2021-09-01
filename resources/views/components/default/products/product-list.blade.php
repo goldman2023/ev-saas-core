@@ -1,7 +1,7 @@
     <!-- Products Section -->
-    <div class="container space-2 " style="padding: 0;">
+    <div class="container" style="padding: 0;">
         <!-- Title -->
-        <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-5 mb-md-9">
+        <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3">
             <x-ev.label tag="h2" :label="ev_dynamic_translate('Products List Title', true)">
             </x-ev.label>
         </div>
@@ -26,8 +26,6 @@
 
                     </div>
                 </div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination"></div>
             </div>
         @else

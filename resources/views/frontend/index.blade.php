@@ -1,15 +1,20 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    {{-- <section class="space-1">
-    <x-default.brands.brands-list></x-default.brands.brands-list>
-</section> --}}
+
+    @php
+    $categories = App\Models\Category::has('products')
+        ->orderBy('order_level', 'desc')
+        ->take(6)
+        ->get();
+    @endphp
+
     <section class="overflow-hidden">
         <x-default.hero.product-hero></x-default.hero.product-hero>
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
     </section>
 
-    <section>
+    <section class="space-1">
         <x-default.products.product-list slider="true">
         </x-default.products.product-list>
     </section>
@@ -19,23 +24,29 @@
         <x-default.companies.companies-list></x-default.companies.companies-list>
     </section>
 
+    <section class="space-2">
+
+        <x-default.products.product-list.with-category-icons :categories="$categories">
+        </x-default.products.product-list.with-category-icons>
+    </section>
+
+
+
 
     <section id="archive-hero">
         {{-- <x-companies-archive-hero></x-companies-archive-hero> --}}
     </section>
 
     <section>
-        @php
-            $categories = App\Models\Category::has('products')->where('level', 0)
-                ->orderBy('order_level', 'desc')
-                ->get();
-        @endphp
-        <x-default.categories.category-tabs-with-products :categories="$categories"> </x-default.categories.category-tabs-with-products>
+
+        <x-default.categories.category-tabs-with-products :categories="$categories">
+        </x-default.categories.category-tabs-with-products>
     </section>
 
     <section>
         @php
-            $categories = App\Models\Category::has('products')->where('level', 0)
+            $categories = App\Models\Category::has('products')
+                ->where('level', 0)
                 ->orderBy('order_level', 'desc')
                 ->get();
         @endphp
