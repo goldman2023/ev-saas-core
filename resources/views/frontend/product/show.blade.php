@@ -61,7 +61,7 @@
                                         <circle style="fill:#FBD303;" cx="143.8" cy="143.8" r="143.8" />
                                         <circle style="fill:#F8B517;" cx="143.8" cy="143.8" r="93.6" />
                                         <polygon style="fill:#FCFCFD;" points="143.8,55.9 163.4,116.6 227.5,116.6 175.6,154.3 195.6,215.3 143.8,177.7 91.9,215.3 111.9,154.3
-                                                            60,116.6 124.1,116.6 " />
+                                                                    60,116.6 124.1,116.6 " />
                                     </svg>
                                 </div>
                             @endif
@@ -146,23 +146,18 @@
                         </div>
 
                         <div class="p-3">
-                            <ul class="list-group list-group-flush">
-                                <div>
-                                    @php
-                                    /* TODO: Move this logic and this whole component to separate blade component logic */
-                                        $top_products = filter_products(\App\Models\Product::where('user_id', $detailedProduct->user_id)->orderBy('num_of_sale', 'desc'))
-                                            ->limit(6)
-                                            ->get();
-                                    @endphp
-                                    @foreach ($top_products as $key => $top_product)
-                                        <div class="mb-3">
-                                            <x-default.products.cards.product-card style="product-card"
-                                                :product="$top_product">
-                                            </x-default.products.cards.product-card>
-                                        </div>
-                                    @endforeach
-                                    <div>
-                            </ul>
+                            @php
+                                /* TODO: Move this logic and this whole component to separate blade component logic */
+                                $top_products = filter_products(\App\Models\Product::where('user_id', $detailedProduct->user_id)->orderBy('num_of_sale', 'desc'))
+                                    ->limit(6)
+                                    ->get();
+                            @endphp
+                            <section>
+                                <section class="space-1">
+                                    <x-default.products.product-list style="top-products-slider" slider="true">
+                                    </x-default.products.product-list>
+                                </section>
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -357,59 +352,28 @@
 
                         </div>
                     </div>
-                    <div class="bg-white rounded shadow-sm d-none">
+                    <div class="bg-white rounded shadow-sm">
                         <div class="border-bottom p-3">
                             <h3 class="fs-16 fw-600 mb-0">
                                 <span class="mr-4">{{ translate('Related products') }}</span>
                             </h3>
+
+
+
                         </div>
                         <div class="p-3">
+                            <section>
+                                @php
+                                    $relatedProducts = filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get();
+                                    $relatedProducts = null;
+                                @endphp
+
+                                <x-default.products.product-list :products="$relatedProducts" style="products-slider" slider="true">
+                                </x-default.products.product-list>
+                            </section>
                             <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3"
                                 data-lg-items="4" data-md-items="3" data-sm-items="2" data-xs-items="2" data-arrows='true'
                                 data-infinite='true'>
-                                @foreach (filter_products(\App\Models\Product::where('category_id', $detailedProduct->category_id)->where('id', '!=', $detailedProduct->id))->limit(10)->get()
-        as $key => $related_product)
-                                    <div class="carousel-box">
-                                        <div
-                                            class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
-                                            <div class="___class_+?96___">
-                                                <a href="{{ route('product', $related_product->slug) }}"
-                                                    class="d-block">
-                                                    <img class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                        data-src="{{ uploaded_asset($related_product->thumbnail_img) }}"
-                                                        alt="{{ $related_product->getTranslation('name') }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
-                                                </a>
-                                            </div>
-                                            <div class="p-md-3 p-2 text-left">
-                                                <div class="fs-15">
-                                                    @if (home_base_price($related_product->id) != home_discounted_base_price($related_product->id))
-                                                        <del
-                                                            class="fw-600 opacity-50 mr-1">{{ home_base_price($related_product->id) }}</del>
-                                                    @endif
-                                                    <span
-                                                        class="fw-700 text-primary">{{ home_discounted_base_price($related_product->id) }}</span>
-                                                </div>
-                                                <div class="rating rating-sm mt-1">
-                                                    {{ renderStarRating($related_product->rating) }}
-                                                </div>
-                                                <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                                    <a href="{{ route('product', $related_product->slug) }}"
-                                                        class="d-block text-reset">{{ $related_product->getTranslation('name') }}</a>
-                                                </h3>
-                                                @if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated)
-                                                    <div
-                                                        class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
-                                                        {{ translate('Club Point') }}:
-                                                        <span
-                                                            class="fw-700 float-right">{{ $related_product->earn_point }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
                         </div>
                     </div>

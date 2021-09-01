@@ -231,9 +231,7 @@
 
 @push('footer_scripts')
 
-    <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}">
-
-    </script>
+    <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
     <!-- JS Plugins Init. -->

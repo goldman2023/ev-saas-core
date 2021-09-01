@@ -19,6 +19,24 @@ img {
         object-fit: cover;
     }
 
+    .hover-only {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        opacity: 0;
+        transition: .2s ease-in-out;
+        background: white;
+    }
+
+    &:hover {
+
+        .hover-only {
+            opacity: 1;
+        }
+    }
+
 }
 
 .section-title:after {

@@ -3,7 +3,7 @@
     src="{{ uploaded_asset($image) }}"
     data-src="{{ uploaded_asset($image) }}"
     data-srcset="{{ $dataSrcSet }}"
-    onerror="this.onerror=null;this.src='{{ static_asset('asset/img/placeholder.jpg') }}';"
+    onerror="this.onerror=null;this.src='{{ static_asset('img/placeholder.jpg') }}';"
     class="lazyload"
 >
 <!-- With a request we send what proportion image was requested. We show original (webp converted maybe) version
