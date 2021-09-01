@@ -50,7 +50,7 @@
 
             // INITIALIZATION OF STEP FORM
             // =======================================================
-            var stepForm = new HSStepForm($('.js-step-form-1'), {
+            window.stepForm = new HSStepForm($('.js-step-form-1'), {
                 finish: function() {
                     $("#postJobStepFormProgress").hide();
                     $("#postJobStepFormContent").hide();
@@ -64,7 +64,8 @@
                 onPrevStep: function() {
                     scrollToTop()
                 }
-            }).init();
+            });
+            window.stepForm.init();
 
             function scrollToTop(el = '.js-step-form-1') {
                 $('html, body').animate({
@@ -114,10 +115,57 @@
             $('.js-go-to').each(function () {
                 var goTo = new HSGoTo($(this)).init();
             });
+
+
+            // If select2 is of TAGS type and these tags can be dynamically created, populate options on dehydrate, otherwise added tags will vanish because new component is rendered!
+            // =======================================================
+            const selects = document.querySelectorAll(".lw-form .custom-select");
+            for (const select of selects) {
+                if($(select).is('[dynamic-items]')) {
+                    let name = select.getAttribute('name');
+                    let data = Livewire.find($(select).closest('form').attr('wire:id')).get('tags'); // get tags property from livewire form component instance
+
+                    try {
+                        let select2options = $(select).is('[data-hs-select2-options]') ? JSON.parse($(select).attr('data-hs-select2-options')) : null;
+                        if(select2options.tags) {
+                            // Create a DOM Option and pre-select by default
+                            data.forEach(function(value, key) {
+                                $(select).append(new Option(value, value, true, true)).trigger('change');
+                            });
+                        }
+                    } catch(error) {}
+                }
+            }
+
         }
 
         $(window).on('load', window.EVProductFormInit);
         $(window).on('initProductForm', window.EVProductFormInit);
+
+
+        document.addEventListener('next-step', async function (event) {
+            console.log(event.detail);
+        });
+
+        document.addEventListener('validate-step', async function (event) {
+            window.formy = event.detail.component;
+            let component = event.detail.component;
+            let method = event.detail.method;
+            let params = event.detail.params;
+
+            const selects = document.querySelectorAll(".lw-form .custom-select");
+            for (const select of selects) {
+                let name = select.getAttribute('name');
+                if(name) {
+                    let data = $(select).val();
+                    component.set(select.getAttribute('name'), $(select).val()); // set livewire
+                }
+            }
+
+            component.validateSpecificSet(...params);
+        });
+
+
     </script>
    <!-- <script src="{{ static_asset('js/vue.js', false, true) }}"></script>-->
 @endpush

@@ -50,9 +50,9 @@
 
     <div class="text-center">
 
-        <x-ev::link-button :href="ev_dynamic_translate('#product-grid-link', true)"
+        <x-ev.link-button :href="ev_dynamic_translate('#product-grid-link', true)"
         :label="ev_dynamic_translate('Product Grid Button', true)" class="btn btn-primary btn-pill transition-3d-hover px-5">
-        </x-ev::link-button>
+        </x-ev.link-button>
     </div>
     </div>
     <!-- End Products Section -->
