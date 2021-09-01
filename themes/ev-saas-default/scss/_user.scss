@@ -19,6 +19,34 @@ img {
         object-fit: cover;
     }
 
+    .hover-only {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        opacity: 0;
+        transition: .2s ease-in-out;
+        background: white;
+    }
+
+    &:hover {
+
+        .hover-only {
+            opacity: 1;
+        }
+    }
+
+}
+
+.section-title:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 50px;
+    border-bottom: 2px solid var(--color-primary);
+    border-bottom: 2px solid #0068e1;
 }
 
 /* Fix For Equal height columns while ussing swiper option: autoHeight: true, */

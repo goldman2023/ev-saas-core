@@ -1,26 +1,19 @@
 <?php
 
-namespace App\View\Components\EV;
+namespace App\View\Components\Default\Products\ProductList;
 
 use Illuminate\View\Component;
 
-class DynamicImage extends Component
+class TopProductsSlider extends Component
 {
-    public $src;
-    public $show_input_field = false;
-    public $href;
-
-
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($src, $href= "#")
+    public function __construct()
     {
         //
-        $this->src = $src;
-        $this->href = $href;
     }
 
     /**
@@ -30,6 +23,6 @@ class DynamicImage extends Component
      */
     public function render()
     {
-        return view('components.ev.dynamic-image');
+        return view('components.default.products.product-list.top-products-slider');
     }
 }

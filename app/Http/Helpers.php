@@ -854,7 +854,7 @@ if (!function_exists('api_asset')) {
 
 //return file uploaded via uploader
 if (!function_exists('uploaded_asset')) {
-    function uploaded_asset($id)
+    function uploaded_asset($id, $width =0 )
     {
         /*  TODO: Fix this logic to unify images management */
         if (is_numeric($id)) {

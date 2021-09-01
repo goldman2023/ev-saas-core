@@ -44,7 +44,10 @@
         </div>
     </div>
     <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+        <x-ev.dynamic-image :src="ev_dynamic_translate('#home-image-1', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+        </x-ev.dynamic-image>
+{{--         
         <img class="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-            src="https://media.winefolly.com/blue-apron-wine-club-review-winefolly.jpg" alt="">
+            src="https://media.winefolly.com/blue-apron-wine-club-review-winefolly.jpg" alt=""> --}}
     </div>
 </div>

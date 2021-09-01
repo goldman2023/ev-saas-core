@@ -13,11 +13,11 @@
         :label="ev_dynamic_translate($attributes['id'] . ' Description', true)">
         </x-ev.label>
         </p>
-        <x-ev::link-button :href="ev_dynamic_translate('#button-'. $attributes['id'])"
+        <x-ev.link-button :href="ev_dynamic_translate('#button-'. $attributes['id'])"
                         :label="ev_dynamic_translate($attributes['id'] . 'Button 1')"
                         class="ev-button">
         <i class="fas fa-angle-right align-middle ml-1"></i>
-        </x-ev::link-button>
+        </x-ev.link-button>
 
     </div>
 </div>

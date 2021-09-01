@@ -1,25 +1,19 @@
 <?php
 
-namespace App\View\Components\Tenant\System;
+namespace App\View\Components\Default\Products\ProductList;
 
 use Illuminate\View\Component;
 
-class Image extends Component
+class ProductsSlider extends Component
 {
-
-    public $image;
-    public $dataSrcSet;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($image, $dataSrcSet= null)
+    public function __construct()
     {
         //
-
-        $this->image = $image;
-        $this->dataSrcSet = $dataSrcSet;
     }
 
     /**
@@ -29,6 +23,6 @@ class Image extends Component
      */
     public function render()
     {
-        return view('components.tenant.system.image');
+        return view('components.default.products.product-list.products-slider');
     }
 }

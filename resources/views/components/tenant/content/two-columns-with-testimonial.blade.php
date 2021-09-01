@@ -40,16 +40,16 @@
                 </div>
                 <div class="mt-10 flex text-base max-w-prose mx-auto lg:max-w-none">
                     <div>
-                        <x-ev::link-button :href="ev_dynamic_translate('#button1')"
+                        <x-ev.link-button :href="ev_dynamic_translate('#button1')"
                             :label="ev_dynamic_translate('Button 1')" class="ev-button">
-                        </x-ev::link-button>
+                        </x-ev.link-button>
 
                     </div>
                     <div class="ml-3">
-                        <x-ev::link-button :href="ev_dynamic_translate('#button2')"
+                        <x-ev.link-button :href="ev_dynamic_translate('#button2')"
                             :label="ev_dynamic_translate('Button 2')" type="link" class="ev-button-secondary ml-4">
                             {{-- Icon can go here --}}
-                        </x-ev::link-button>
+                        </x-ev.link-button>
                     </div>
                 </div>
             </div>
@@ -66,9 +66,9 @@
                 </svg>
                 <blockquote class="relative bg-white rounded-lg shadow-lg">
                     <div class="rounded-t-lg px-6 py-8 sm:px-10 sm:pt-10 sm:pb-8">
-                        <x-ev::dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
+                        <x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
                             :href="ev_dynamic_translate('#testimonial-logo-link', true)">
-                        </x-ev::dynamic-image>
+                        </x-ev.dynamic-image>
                         <div class="relative text-lg text-gray-700 font-medium mt-8">
                             <svg class="absolute top-0 left-0 transform -translate-x-3 -translate-y-2 h-8 w-8 text-gray-200"
                                 fill="currentColor" viewBox="0 0 32 32" aria-hidden="true">
@@ -87,10 +87,10 @@
                             class="relative rounded-full border-2 border-white sm:absolute sm:top-0 sm:transform sm:-translate-y-1/2">
 
                             {{-- New Version --}}
-                            <x-ev::dynamic-image alt="Any alt text"
+                            <x-ev.dynamic-image alt="Any alt text"
                                 :href="ev_dynamic_translate('#testimonial-img-link', true)"
                                 :src="ev_dynamic_translate('#testimonial-img', true)">
-                            </x-ev::dynamic-image>
+                            </x-ev.dynamic-image>
 
                         </div>
                         <span class="relative ml-4 text-indigo-300 font-semibold leading-6 sm:ml-24 sm:pl-1">

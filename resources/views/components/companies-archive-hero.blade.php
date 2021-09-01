@@ -60,11 +60,11 @@
 
         <div class="d-none d-lg-block col-lg-6 position-absolute top-0 right-0">
             {{-- <img class="img-fluid rounded-lg" src="{{ $image }}" alt="Image Description"> --}}
-            <x-ev::dynamic-image
+            <x-ev.dynamic-image
             class="z-index-5"
             :src="ev_dynamic_translate('#hero-image')" alt="Any alt text"
             >
-        </x-ev::dynamic-image>
+        </x-ev.dynamic-image>
             {{-- <figure class="max-w-15rem w-100 position-absolute top-0 left-0 z-index-n1">
                 <div class="mt-n6 ml-n5">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 335.2 335.2" width="100"

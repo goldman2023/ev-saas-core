@@ -10,17 +10,23 @@ class ProductList extends Component
     public $products;
     public $items;
     public bool $slider;
+    public $sliderOptions;
+    public $style = 'product-list'; // Available styles products-list/ top-products-slider / products-slider
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($items = 8, $slider = false)
+    public function __construct($items = 8, $slider = false, $products = null, $style = 'product-list')
     {
-        //
-        $products = Product::paginate($items);
+        if($products != null) {
+            $this->products = $products;
+        } else {
+            $products = Product::paginate($items);
+        }
         $this->products = $products;
         $this->slider = $slider;
+        $this->style = $style;
     }
 
     /**
@@ -30,6 +36,6 @@ class ProductList extends Component
      */
     public function render()
     {
-        return view('components.default.products.product-list');
+        return view('components.default.products.product-list.' . $this->style);
     }
 }
