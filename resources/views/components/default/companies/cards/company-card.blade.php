@@ -6,7 +6,11 @@
         src="{{ $company->get_company_logo() }}" alt="{{ $company->name }}">
       </div>
 
-      <span class="d-block small font-weight-bold text-cap mb-1">Founder / CEO</span>
+      <span class="d-block small font-weight-bold text-cap mb-1">
+
+          {{ translate('Products: ')}} 5
+
+      </span>
       <h4 class="text-lh-sm">
         <a class="" href="{{ route('shop.visit', $company->slug) }}">
             {{ $company->name }}
@@ -16,24 +20,12 @@
     </div>
 
     <div class="card-footer border-0 pt-0">
+        {{-- <x-company.company-star-rating :company="$company"></x-company.company-star-rating> --}}
       <!-- Social Networks -->
-      <ul class="list-inline mb-0">
-        <li class="list-inline-item">
-          <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" href="#">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" href="#">
-            <i class="fab fa-google"></i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn btn-xs btn-icon btn-soft-secondary rounded-lg" href="#">
-            <i class="fab fa-twitter"></i>
-          </a>
-        </li>
-      </ul>
+      <ul class="list-inline list-separator small text-body">
+        <li class="list-inline-item">{{ translate('Est.') }} 2021</li>
+        <li class="list-inline-item">{{ country_name_by_code('LT')  }}</li>
+    </ul>
       <!-- End Social Networks -->
     </div>
   </div>
