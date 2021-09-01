@@ -1,46 +1,12 @@
 <!-- Hero Section -->
-@php
-$photos = explode(',', $product->photos);
 
-@endphp
 <div class="container space-2">
     <div class="row">
         <div class="col-lg-7 mb-7 mb-lg-0">
             <div class="pr-lg-4">
                 <div class="position-relative">
-                    <!-- Main Slider -->
-                    <div id="heroSlider" class="border rounded-lg">
-                        carousel
-                        <div class="js-slick-carousel slick">
-                            @foreach ($photos as $photo)
-                                <div class="ev-product-image js-slide">
-                                    <x-tenant.system.image class="img-fluid w-100 rounded-lg" :image="$photo">
-                                    </x-tenant.system.image>
-                                </div>
-                            @endforeach
-                        </div>
-
-                    </div>
-                    <!-- End Main Slider -->
-
-                    <!-- Slider Nav -->
-                    <div class="position-absolute bottom-0 right-0 left-0 px-4 py-3">
-                        <div id="heroSliderNav"
-                            class="js-slick-carousel slick slick-gutters-1 slick-transform-off max-w-27rem mx-auto">
-                            @foreach ($photos as $photo)
-                                <div class=" p-1">
-                                    <a class="d-block avatar avatar-circle border p-1" href="javascript:;">
-                                        <x-tenant.system.image class="avatar-img" :image="$photo">
-                                        </x-tenant.system.image>
-                                    </a>
-
-                                </div>
-
-                            @endforeach
-
-
-                        </div>
-                    </div>
+                    <x-default.products.single.product-slider :product="$product">
+                    </x-default.products.single.product-slider>
                     <!-- End Slider Nav -->
                 </div>
             </div>
@@ -263,11 +229,17 @@ $photos = explode(',', $product->photos);
 </div>
 <!-- End Hero Section -->
 
-@section('scripts')
+@push('footer_scripts')
 
+    <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}">
+
+    </script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
     <!-- JS Plugins Init. -->
     <script>
-        $(document).on('ready', function() {
+        $(function() {
+
             // INITIALIZATION OF SLICK CAROUSEL
             // =======================================================
             $('.js-slick-carousel').each(function() {
@@ -277,8 +249,8 @@ $photos = explode(',', $product->photos);
             // INITIALIZATION OF QUANTITY COUNTER
             // =======================================================
             $('.js-quantity-counter').each(function() {
-                var quantityCounter = new HSQuantityCounter($(this)).init();
+                // var quantityCounter = new HSQuantityCounter($(this)).init();
             });
         });
     </script>
-@endsection
+@endpush
