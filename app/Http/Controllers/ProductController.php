@@ -811,7 +811,7 @@ class ProductController extends Controller
             }
         }
 
-        //$combinations = Combinations::makeCombinations($options);
+        $combinations = [];
         return view('backend.product.products.sku_combinations', compact('combinations', 'unit_price', 'colors_active', 'product_name'));
     }
 

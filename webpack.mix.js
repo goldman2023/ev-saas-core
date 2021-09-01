@@ -26,8 +26,9 @@ mix.scripts([
 ], 'public/assets/js/vendors-guest.js');
 
 mix.setPublicPath("public")
-    .js('resources/js/app.js', 'public/js').vue().version()
+    .js('resources/js/app.js', 'public/js').version()
     .sass('resources/scss/app.scss', 'public/css').version()
+    .sass('resources/scss/admin/admin.scss', 'public/ev-assets/admin/css').version()
     // .sass('resources/scss/app.scss', 'public/ev-assets/css').version()
     /* Minimal dependency requirements for public parts of the CENTRAL EV-SAAS app AND Tenants Dashboards! */
     .scripts([

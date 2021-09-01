@@ -2,8 +2,11 @@
 <div class="container space-2">
     <!-- Title -->
     <div class="w-md-80 w-lg-60 text-center mx-md-auto mb-5 mb-md-9">
-        <span class="d-block small font-weight-bold text-cap mb-2">Our team</span>
-        <h2>Creative mind by people like you</h2>
+        <span >Our team</span>
+        <x-ev.label tag="span"  class="d-block small font-weight-bold text-cap mb-2" :label="ev_dynamic_translate('Companies List Sub-Title', true)">
+        </x-ev.label>
+        <x-ev.label tag="h2" :label="ev_dynamic_translate('Companies List Title', true)">
+        </x-ev.label>
     </div>
     <!-- End Title -->
 
