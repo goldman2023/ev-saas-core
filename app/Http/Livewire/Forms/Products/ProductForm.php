@@ -12,14 +12,16 @@ class ProductForm extends Component
     public $brand_id;
     public $unit;
     public $tags;
+    public $params;
+    public $rulesSets;
 
-    protected $rules = [
+    /*protected $rules = [
         'name' => 'required|min:6',
         'category_id' => 'required|exists:App\Models\Category,id',
         'brand_id' => 'nullable|exists:App\Models\Brand,id',
         'unit' => 'nullable|required', // TODO: make Units table or something like that
         'tags' => 'nullable|array',
-    ];
+    ];*/
 
     /**
      * Create a new component instance.
@@ -28,15 +30,24 @@ class ProductForm extends Component
      */
     public function mount()
     {
-
+        // Define rules sets
+        $this->rulesSets['general'] = [
+            'name' => 'required|min:6',
+            'category_id' => 'required|exists:App\Models\Category,id',
+            'brand_id' => 'nullable|exists:App\Models\Brand,id',
+            'unit' => 'nullable|required', // TODO: make Units table or something like that
+            'tags' => 'nullable|array',
+        ];
     }
 
-    public function validateSpecific($properties)
+    public function validateSpecificSet($set, $params)
     {
-        if($properties) {
-            foreach($properties as $prop) {
-                $this->validateOnly($prop);
-            }
+        if($set) {
+            $params = json_decode(base64_decode($params), true);
+            $this->validate($this->rulesSets[$set]);
+
+            // After validation, go to next step
+            $this->dispatchBrowserEvent('next-step', $params);
         }
     }
 

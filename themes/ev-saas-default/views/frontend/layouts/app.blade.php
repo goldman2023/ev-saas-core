@@ -31,6 +31,13 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
+    <style>
+        :root {
+            --primary: yellow;
+            --secondary: green;
+            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
+        }
+    </style>
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
 

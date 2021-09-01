@@ -31,18 +31,18 @@ style="background: url('https://ev-saas.fra1.digitaloceanspaces.com/uploads/demo
 
 
 
-        <x-ev::link-button :href="ev_dynamic_translate('#hero-14-button-link')"
+        <x-ev.link-button :href="ev_dynamic_translate('#hero-14-button-link')"
         :label="ev_dynamic_translate('Button Hero 14')" class="btn btn-soft-indigo transition-3d-hover">
-        </x-ev::link-button>
+        </x-ev.link-button>
 
         <small class="text-muted my-3 my-sm-0 mx-2 mx-sm-3">
             {{ translate('or') }}
         </small>
 
-        <x-ev::link-button :href="ev_dynamic_translate('#hero-14-button-link-2')"
+        <x-ev.link-button :href="ev_dynamic_translate('#hero-14-button-link-2')"
         :label="ev_dynamic_translate('Button 2 Hero 14')" class="btn btn-primary transition-3d-hover">
         <i class="fas fa-angle-right ml-1"></i>
-        </x-ev::link-button>
+        </x-ev.link-button>
       </div>
     </div>
 
