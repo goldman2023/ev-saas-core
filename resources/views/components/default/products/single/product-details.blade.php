@@ -9,21 +9,16 @@ $photos = explode(',', $product->photos);
             <div class="pr-lg-4">
                 <div class="position-relative">
                     <!-- Main Slider -->
-                    <div id="heroSlider" class="js-slick-carousel slick border rounded-lg"
-                        data-hs-slick-carousel-options='{
-                   "fade": true,
-                   "infinite": true,
-                   "autoplay": true,
-                   "autoplaySpeed": 7000,
-                   "asNavFor": "#heroSliderNav"
-                 }'>
-
-                        @foreach ($photos as $photo)
-                            <div class="js-slide">
-                                <x-tenant.system.image class="img-fluid w-100 rounded-lg" :image="$photo">
-                                </x-tenant.system.image>
-                            </div>
-                        @endforeach
+                    <div id="heroSlider" class="border rounded-lg">
+                        carousel
+                        <div class="js-slick-carousel slick">
+                            @foreach ($photos as $photo)
+                                <div class="ev-product-image js-slide">
+                                    <x-tenant.system.image class="img-fluid w-100 rounded-lg" :image="$photo">
+                                    </x-tenant.system.image>
+                                </div>
+                            @endforeach
+                        </div>
 
                     </div>
                     <!-- End Main Slider -->
@@ -31,24 +26,10 @@ $photos = explode(',', $product->photos);
                     <!-- Slider Nav -->
                     <div class="position-absolute bottom-0 right-0 left-0 px-4 py-3">
                         <div id="heroSliderNav"
-                            class="js-slick-carousel slick slick-gutters-1 slick-transform-off max-w-27rem mx-auto"
-                            data-hs-slick-carousel-options='{
-                     "infinite": true,
-                     "autoplaySpeed": 7000,
-                     "slidesToShow": 3,
-                     "isThumbs": true,
-                     "isThumbsProgress": true,
-                     "thumbsProgressOptions": {
-                       "color": "#377dff",
-                       "width": 8
-                     },
-                     "thumbsProgressContainer": ".js-slick-thumb-progress",
-                     "asNavFor": "#heroSlider"
-                   }'>
+                            class="js-slick-carousel slick slick-gutters-1 slick-transform-off max-w-27rem mx-auto">
                             @foreach ($photos as $photo)
-                                <div class="js-slide p-1">
-                                    <a class="js-slick-thumb-progress d-block avatar avatar-circle border p-1"
-                                        href="javascript:;">
+                                <div class=" p-1">
+                                    <a class="d-block avatar avatar-circle border p-1" href="javascript:;">
                                         <x-tenant.system.image class="avatar-img" :image="$photo">
                                         </x-tenant.system.image>
                                     </a>
@@ -70,16 +51,22 @@ $photos = explode(',', $product->photos);
             <!-- Rating -->
             <div class="d-flex align-items-center small mb-2">
                 <div class="text-warning mr-2">
-                    @svg('heroicon-s-star')
+                    @for ($i = 0; $i < 5; $i++)
+                        @svg('heroicon-s-star', ['style' => 'width: 16px;'])
+                    @endfor
                 </div>
-                <a class="link-underline" href="#reviewSection">Read all 287 reviews</a>
+                <a class="link-underline" href="#reviewSection">
+                    {{ translate('Read all') }} {{ $product->reviews()->count() }} {{ translate('reviews') }}
+                </a>
             </div>
             <!-- End Rating -->
 
             <!-- Title -->
             <div class="mb-5">
                 <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
-                <p>American label New Era manufacturing baseball hats for teams since the 1930s.</p>
+                <p>
+                    {!! $product->short_description !!}
+                </p>
             </div>
 
             <!-- End Title -->
@@ -90,14 +77,14 @@ $photos = explode(',', $product->photos);
 
                 <span class="text-dark font-size-2 font-weight-bold">
                     {{ home_discounted_price($product->id) }}
-                    @if($product->unit != null)
-                    <span class="opacity-70">/
-                        {{ $product->getTranslation('unit') }}
-                    </span>
-                @endif
-            </span>
-            @if(home_price($product->id) != home_discounted_price($product->id))
-                <span class="text-body ml-2"><del>{{ home_price($product->id) }}</del></span>
+                    @if ($product->unit != null)
+                        <span class="opacity-70">/
+                            {{ $product->getTranslation('unit') }}
+                        </span>
+                    @endif
+                </span>
+                @if (home_price($product->id) != home_discounted_price($product->id))
+                    <span class="text-body ml-2"><del>{{ home_price($product->id) }}</del></span>
                 @endif
             </div>
             <!-- End Price -->
@@ -112,7 +99,9 @@ $photos = explode(',', $product->photos);
                                 {{ $product->user->shop->name }}
                             </a>
                         @else
-                            {{ translate('Inhouse product') }}
+                            {{-- {{ translate('Inhouse product') }} --}}
+                            {{ get_site_name() }}
+                            <br>
                         @endif
 
                         @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
@@ -126,8 +115,8 @@ $photos = explode(',', $product->photos);
 
                         @if ($product->brand != null)
                             <a href="{{ route('products.brand', $product->brand->slug) }}">
-                                <img src="{{ uploaded_asset($product->brand->logo ?? '') }}"
-                                    alt="{{ $product->brand->getTranslation('name') }}" height="30">
+                                <img class="mt-3" src="{{ uploaded_asset($product->brand->logo ?? '') }}"
+                                    alt="{{ $product->brand->getTranslation('name') }}" height="60">
                             </a>
                         @endif
                     </div>
@@ -147,16 +136,20 @@ $photos = explode(',', $product->photos);
             <div class="border rounded-lg py-2 px-3 mb-3">
                 <div class="js-quantity-counter row align-items-center">
                     <div class="col-7">
-                        <small class="d-block text-body font-weight-bold">Select quantity</small>
+                        <small class="d-block text-body font-weight-bold">
+                            {{ translate('Select quantity') }}
+                        </small>
                         <input class="js-result form-control h-auto border-0 rounded-lg p-0" type="text" value="1">
                     </div>
                     <div class="col-5 text-right">
                         <a class="js-minus btn btn-xs btn-icon btn-outline-secondary rounded-circle"
                             href="javascript:;">
-                            <i class="la la-minus"></i>
+                            <span class="card-btn-toggle-active">+</span>
                         </a>
                         <a class="js-plus btn btn-xs btn-icon btn-outline-secondary rounded-circle" href="javascript:;">
                             <i class="la la-plus"></i>
+                            <span class="card-btn-toggle-active">−</span>
+
                         </a>
                     </div>
                 </div>
@@ -196,7 +189,8 @@ $photos = explode(',', $product->photos);
                     <div id="shopCardOne" class="collapse" aria-labelledby="shopCardHeadingOne"
                         data-parent="#shopCartAccordionExample2">
                         <div class="card-body">
-                            <p class="small mb-0">We offer free shipping anywhere in the U.S. A skilled delivery team
+                            <p class="small mb-0">We offer free shipping anywhere in the U.S. A skilled delivery
+                                team
                                 will
                                 bring the boxes into your office.</p>
                         </div>
@@ -235,7 +229,8 @@ $photos = explode(',', $product->photos);
                     <div id="shopCardTwo" class="collapse" aria-labelledby="shopCardHeadingTwo"
                         data-parent="#shopCartAccordionExample2">
                         <div class="card-body">
-                            <p class="small mb-0">If you're not satisfied, return it for a full refund. We'll take care
+                            <p class="small mb-0">If you're not satisfied, return it for a full refund. We'll take
+                                care
                                 of
                                 disassembly and return shipping.</p>
                         </div>
@@ -253,7 +248,8 @@ $photos = explode(',', $product->photos);
             <!-- Help Link -->
             <div class="media align-items-center">
                 <span class="w-100 max-w-6rem mr-2">
-                    <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-4.svg" alt="SVG">
+                    <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-4.svg"
+                        alt="SVG">
                 </span>
                 <div class="media-body text-body small">
                     <span class="font-weight-bold mr-1">Need Help?</span>
@@ -267,7 +263,8 @@ $photos = explode(',', $product->photos);
 </div>
 <!-- End Hero Section -->
 
-@push('footer_scripts')
+@section('scripts')
+
     <!-- JS Plugins Init. -->
     <script>
         $(document).on('ready', function() {
@@ -282,7 +279,6 @@ $photos = explode(',', $product->photos);
             $('.js-quantity-counter').each(function() {
                 var quantityCounter = new HSQuantityCounter($(this)).init();
             });
-
         });
     </script>
-@endpush
+@endsection

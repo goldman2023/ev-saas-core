@@ -21,6 +21,16 @@ img {
 
 }
 
+.section-title:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 50px;
+    border-bottom: 2px solid var(--color-primary);
+    border-bottom: 2px solid #0068e1;
+}
+
 /* Fix For Equal height columns while ussing swiper option: autoHeight: true, */
 .swiper-autoheight, .swiper-autoheight .swiper-slide {
     height: 100% !important;
