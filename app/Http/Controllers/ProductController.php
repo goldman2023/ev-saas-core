@@ -10,6 +10,9 @@ use App\Models\Category;
 use App\Models\FlashDealProduct;
 use App\Models\ProductTax;
 use App\Models\Language;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
+use App\Models\AttributeRelationship;
 use Auth;
 use App\Models\SubSubCategory;
 use Session;
@@ -402,7 +405,8 @@ class ProductController extends Controller
             ->where('digital', 0)
             ->with('childrenCategories')
             ->get();
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang'));
+        $product_attributes = Attribute::where('content_type', 'App\Models\Product')->orderBy('created_at', 'desc')->get();
+        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));
     }
 
     /**
@@ -432,6 +436,79 @@ class ProductController extends Controller
 
         $refund_request_addon = \App\Models\Addon::where('unique_identifier', 'refund_request')->first();
         $product = Product::findOrFail($id);
+
+        // Product Attribute Update
+        $updated_attributes = $request->except([
+            '_method', '_token', 'id', 'lang', 'name',
+            'category_id', 'brand_id', 'unit', 'min_qty', 'tags',
+            'photos', 'thumbnail_img', 'video_provider', 'video_link', 'colors',
+            'colors_active', 'unit_price', 'purchase_price', 'discount', 'discount_type',
+            'current_stock', 'description', 'pdf', 'meta_title', 'meta_description',
+            'meta_img', 'slug', 'shipping_type', 'flat_shipping_cost', 'low_stock_quantity',
+            'stock_visibility_state', 'cash_on_delivery', 'featured', 'todays_deal', 'flash_deal_id',
+            'flash_discount', 'flash_discount_type', 'est_shipping_days', 'button'
+        ]);
+
+        foreach($updated_attributes as $key => $value) {
+            $attribute_relationship = $product->attributes()->where('attribute_id', $key)->first();
+
+            $attribute = Attribute::find($key);
+
+            if(empty($attribute)) {
+                continue;
+            }
+
+            if ($value != null) {
+                $relationship_id = $value;
+                if ($attribute->type != "dropdown" && $attribute->type != "checkbox") {
+                    if ($attribute_relationship == null) {
+                        $attribute_value = new AttributeValue;
+                        $attribute_value->attribute_id = $attribute->id;
+                    }else {
+                        $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
+                    }
+                    $attribute_value->values = $value;
+                    $attribute_value->save();
+                    $relationship_id = $attribute_value->id;
+                }
+
+                if ($attribute->type != "checkbox") {
+                    if ($attribute_relationship == null) {
+                        $attribute_relationship = new AttributeRelationship;
+                        $attribute_relationship->subject_type = "App\Models\Product";
+                        $attribute_relationship->subject_id = $id;
+                        $attribute_relationship->attribute_id = $key;
+                    }
+                    $attribute_relationship->attribute_value_id = $relationship_id;
+                    $attribute_relationship->save();
+                }else {
+                    foreach($product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value) as $relation) {
+                        $relation->delete();
+                    }
+                    foreach($value as $index => $option) {
+                        if (count($product->attributes()->where('attribute_id', $key)->where('attribute_value_id', $option)) == 0) {
+                            $attribute_relationship = new AttributeRelationship;
+                            $attribute_relationship->subject_type = "App\Models\Product";
+                            $attribute_relationship->subject_id = $id;
+                            $attribute_relationship->attribute_id = $key;
+                            $attribute_relationship->attribute_value_id = $option;
+                            $attribute_relationship->save();
+                        }
+                    }
+                }
+            }else {
+                if ($attribute->type == "checkbox") {
+                    foreach($product->attributes()->where('attribute_id', $key) as $relation) {
+                        $relation->delete();
+                    }
+                }else if ($attribute_relationship != null){
+                    $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
+                    $attribute_relationship->delete();
+                    $attribute_value->delete();
+                }
+            }
+        }
+
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->current_stock = $request->current_stock;
