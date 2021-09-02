@@ -24,7 +24,12 @@
     </section>
 @endsection
 
+@section('modal')
+    <x-ev.media-manager></x-ev.media-manager>
+@endsection
+
 @push('footer_scripts')
+    <script src="{{ static_asset('js/aiz-core.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-step-form/dist/hs-step-form.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-sticky-block/dist/hs-sticky-block.min.js', false, true) }}"></script>
@@ -145,10 +150,10 @@
 
         document.addEventListener('next-step', async function (event) {
             console.log(event.detail);
+            $(event.detail.selector).click();
         });
 
         document.addEventListener('validate-step', async function (event) {
-            window.formy = event.detail.component;
             let component = event.detail.component;
             let method = event.detail.method;
             let params = event.detail.params;
@@ -167,5 +172,4 @@
 
 
     </script>
-   <!-- <script src="{{ static_asset('js/vue.js', false, true) }}"></script>-->
 @endpush

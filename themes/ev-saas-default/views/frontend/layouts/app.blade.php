@@ -10,6 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
     <meta name="file-base-url" content="{{ getFileBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
@@ -51,8 +52,8 @@
 
 
     <script>
-        var AIZ = AIZ || {};
-        AIZ.local = {
+        window.AIZ = window.AIZ || {};
+        window.AIZ.local = {
             nothing_found: '{{ translate('Nothing found') }}',
             choose_file: '{{ translate('Choose file') }}',
             file_selected: '{{ translate('File selected') }}',
@@ -130,9 +131,6 @@
 <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
 @yield('modal')
-
-
-
 
 @include('frontend.layouts.partials.app-js')
 
