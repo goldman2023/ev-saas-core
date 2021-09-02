@@ -24,7 +24,7 @@ mix.setPublicPath(`public/themes/${theme}`)
     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).options({
         processCssUrls: false
     }).version()
-    .postCss(`${__dirname}/scss/app.scss`, 'public/css')
+    // .postCss(`${__dirname}/scss/app.scss`, 'public/css')
     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
     .copyDirectory(`${__dirname}/vendor`, `public/themes/${theme}/vendor`)
     .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)
