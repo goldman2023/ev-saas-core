@@ -2,10 +2,14 @@
 
 @section('content')
 
+    <section>
+        <x-default.brands.brands-list>
+        </x-default.brands.brands-list>
+    </section>
+
     @php
-    $categories = App\Models\Category::has('products')
+    $categories = App\Models\Category::where('level', 0)
         ->orderBy('order_level', 'desc')
-        ->take(6)
         ->get();
     @endphp
 
@@ -45,8 +49,8 @@
 
     <section>
         @php
-            $categories = App\Models\Category::has('products')
-                ->where('level', 0)
+            $categories = App\Models\Category
+                ::where('level', 0)
                 ->orderBy('order_level', 'desc')
                 ->get();
         @endphp

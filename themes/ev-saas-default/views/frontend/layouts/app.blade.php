@@ -135,7 +135,27 @@
 @include('frontend.layouts.partials.app-js')
 
 @yield('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
+<!-- JS Plugins Init. -->
+<script>
+    $(function() {
+        // INITIALIZATION OF SLICK CAROUSEL
+        // =======================================================
+        $('.js-slick-carousel').each(function() {
+            console.log(this);
+        console.log($.HSCore.components);
+
+            var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
+        });
+
+        console.log($.HSCore.components);
+
+    });
+</script>
 @stack('footer_scripts')
 
 @php

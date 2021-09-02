@@ -139,7 +139,9 @@
                                                 alt="SVG">
                                         </span>
                                         <span class="media-body">
-                                            <span class="d-block font-size-1 font-weight-bold">Free shipping</span>
+                                            <span class="d-block font-size-1 font-weight-bold">
+                                                {{ translate('Convenient Shipping') }}
+                                            </span>
                                         </span>
                                     </span>
                                 </span>
@@ -152,13 +154,26 @@
                             </span>
                         </a>
                     </div>
-                    <div id="shopCardOne" class="collapse" aria-labelledby="shopCardHeadingOne"
+                    <div id="shopCardOne" class="collapse show" aria-labelledby="shopCardHeadingOne"
                         data-parent="#shopCartAccordionExample2">
                         <div class="card-body">
-                            <p class="small mb-0">We offer free shipping anywhere in the U.S. A skilled delivery
-                                team
-                                will
-                                bring the boxes into your office.</p>
+                            @guest
+                            <p>
+                                {{ translate('Create free account and see shipping costs to your country') }}
+                            </p>
+                            <x-ev.link-button :href="ev_dynamic_translate('#hero-cta-button')"
+                            :label="ev_dynamic_translate('Join GunOB', true)"
+                            class="ev-button btn btn-primary mr-3">
+                            </x-ev.link-button>
+
+                            <p>
+                                <span> {{ translate('*Secure and fast delivery options available') }} </span>
+                            </p>
+                            @else
+                            <p>
+                                TODO: Add shipping estimate by country
+                            </p>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -231,19 +246,10 @@
 
 @push('footer_scripts')
 
-    <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
     <!-- JS Plugins Init. -->
     <script>
         $(function() {
-
-            // INITIALIZATION OF SLICK CAROUSEL
-            // =======================================================
-            $('.js-slick-carousel').each(function() {
-                var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
-            });
-
             // INITIALIZATION OF QUANTITY COUNTER
             // =======================================================
             $('.js-quantity-counter').each(function() {

@@ -9,6 +9,18 @@
                         <x-ev.label class="div h4" :label="ev_dynamic_translate('Product Description')">
                         </x-ev.label>
                     </p>
+
+                    <div>
+                        <x-ev.link-button :href="ev_dynamic_translate('#hero-cta-button')"
+                        :label="ev_dynamic_translate('Get Started')"
+                        class="ev-button btn btn-primary mr-3">
+                        </x-ev.link-button>
+
+                        <x-ev.link-button :href="ev_dynamic_translate('#hero-shop-button')"
+                        :label="ev_dynamic_translate('Explore our Catalogue')"
+                        class="ev-button btn btn-outline-primary">
+                        </x-ev.link-button>
+                    </div>
                 </div>
 
                 <div class="row">
