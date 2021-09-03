@@ -13,16 +13,18 @@ class Input extends Component
     public $type;
     public $required;
     public $placeholder;
-    public $icon_placement;
+    public $placement;
     public $icon;
+    public $text;
     public $merge;
+    public $groupclass;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type = 'text', $name = '', $label = '', $required = false,  $class = '', $id = '', $placeholder = '', $icon_placement = 'prepend', $icon = null, $merge = false)
+    public function __construct($type = 'text', $name = '', $label = '',  $required = false,  $class = '', $groupclass = '', $id = '', $placeholder = '', $placement = 'prepend', $icon = null, $text = null, $merge = false)
     {
         $this->type = $type;
         $this->label = $label;
@@ -30,10 +32,12 @@ class Input extends Component
         $this->required = $required;
         $this->placeholder = $placeholder;
         $this->class = $class;
+        $this->groupclass = $groupclass;
         $this->id = $id;
         $this->merge = $merge;
-        $this->icon_placement = $icon_placement;
+        $this->placement = $placement;
         $this->icon = $icon;
+        $this->text = $text;
     }
 
 

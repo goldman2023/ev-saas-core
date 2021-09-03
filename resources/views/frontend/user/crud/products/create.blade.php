@@ -18,14 +18,10 @@
 
             <!-- Body -->
             <div class="card-body">
-                <livewire:forms.products.product-form />
+                <livewire:forms.products.product-form page="general" />
             </div>
         </div>
     </section>
-@endsection
-
-@section('modal')
-    <x-ev.media-manager></x-ev.media-manager>
 @endsection
 
 @push('footer_scripts')
@@ -146,12 +142,6 @@
 
         $(window).on('load', window.EVProductFormInit);
         $(window).on('initProductForm', window.EVProductFormInit);
-
-
-        document.addEventListener('next-step', async function (event) {
-            console.log(event.detail);
-            $(event.detail.selector).click();
-        });
 
         document.addEventListener('validate-step', async function (event) {
             let component = event.detail.component;

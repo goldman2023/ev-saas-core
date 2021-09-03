@@ -11,13 +11,16 @@
 
         @if($items)
             @foreach($items as $key => $item)
-                <option value="{{ is_object($item) ? ($item->{$value_property}??'') : $key }}">{{ is_object($item) ? ($item->{$label_property}??'') : $item }}</option>
+                <option value="{{ is_object($item) ? ($item->{$value_property}??'') : $key }}"
+                        @if(empty($placeholder) && $key === 0) selected @endif>
+                    {{ is_object($item) ? ($item->{$label_property}??'') : $item }}
+                </option>
             @endforeach
         @endif
     </select>
     {!! $slot !!}
 
     @error($name)
-        <div class="invalid-feedback">{{ $message }}</div>
+        <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 </div>

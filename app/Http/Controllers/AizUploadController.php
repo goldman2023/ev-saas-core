@@ -55,7 +55,7 @@ class AizUploadController extends Controller
 
 
     public function show_uploader(Request $request){
-        return view('uploader.aiz-uploader');
+        return view('components.ev.media-manager'); // was 'uploader.aiz-uploader'
     }
 
     public function upload(Request $request){

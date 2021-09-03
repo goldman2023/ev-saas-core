@@ -237,4 +237,30 @@ class EVService
             'oz' => 'oz'
         ];
     }
+
+    public function getMappedVideoProviders() {
+        return [
+            'youtube' => 'Youtube',
+            'vimeo' => 'Vimeo',
+            'dailymotion' => 'Dailymotion',
+        ];
+    }
+
+    public function getMappedStockVisibilityOptions() {
+        return [
+            'quantity' => translate('Show stock quantity'),
+            'text' => translate('Show stock with text only'),
+            'hide' => translate('Hide stock'),
+        ];
+    }
+
+    public function getMappedShippingTypePerProduct() {
+        return [
+            'free' => translate('Free shipping'),
+            'flat_rate' => translate('Flat rate'),
+            'product_wise' => translate('Product wise shipping'),
+        ];
+    }
+
+
 }

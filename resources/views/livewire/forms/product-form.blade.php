@@ -19,11 +19,12 @@
                                          }'>
                     <!-- Step -->
                     <ul id="productStepFormProgress" class="js-step-progress step step-icon-xs step-border-last-0 mt-2">
-                        <li class="step-item">
+                        <li class="step-item {{ $page === 'general' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
                                data-hs-step-form-next-options='{
                                                       "targetSelector": "#productStepGeneral"
-                                                    }'>
+                                                    }'
+                                wire:click="$set('page', 'general')">
                                 <span class="step-icon step-icon-soft-dark">1</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('General') }}</span>
@@ -32,11 +33,12 @@
                             </a>
                         </li>
 
-                        <li class="step-item">
+                        <li class="step-item {{ $page === 'content' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
                                data-hs-step-form-next-options='{
                                                       "targetSelector": "#productStepContent"
-                                                   }'>
+                                                   }'
+                               wire:click="$set('page', 'content')">
                                 <span class="step-icon step-icon-soft-dark">2</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Content') }}</span>
@@ -45,15 +47,16 @@
                             </a>
                         </li>
 
-                        <li class="step-item">
+                        <li class="step-item {{ $page === 'price_stock_shipping' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
                                data-hs-step-form-next-options='{
-                      "targetSelector": "#uploadResumeStepWork"
-                    }'>
+                                  "targetSelector": "#productStepPriceStockShipping"
+                                }'
+                               wire:click="$set('page', 'price_stock_shipping')">
                                 <span class="step-icon step-icon-soft-dark">3</span>
                                 <div class="step-content">
-                                    <span class="step-title">Work experience</span>
-                                    <span class="step-title-description step-text font-size-1">Add work experience</span>
+                                    <span class="step-title">{{ translate('Price, stock and shipping') }}</span>
+                                    <span class="step-title-description step-text font-size-1">{{ translate('Price, stock and shipping details') }}</span>
                                 </div>
                             </a>
                         </li>
@@ -93,11 +96,11 @@
                 <!-- Content Step Form -->
                 <div id="productStepFormContent">
                     <!-- Card -->
-                    <div id="productStepGeneral" class="active">
+                    <div id="productStepGeneral" class="{{ $page === 'general' ? 'active':'' }}" style="{{ $page !== 'general' ? "display: none;" : "" }}">
                         <!-- Header -->
                         <div class="border-bottom pb-2 mb-3">
                             <div class="flex-grow-1">
-                                <span class="d-lg-none">Step 1 of 5</span>
+                                <span class="d-lg-none">{{ translate('Step 1 of 5') }}</span>
                                 <h3 class="card-header-title">{{ translate('General') }}</h3>
                             </div>
                         </div>
@@ -123,24 +126,21 @@
                         <div class="">
                             <div class="d-flex justify-content-end align-items-center">
                                 <button type="button" class="btn btn-primary"
-                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', '{{ base64_encode(json_encode(['selector' => '#continue-productStepGeneral'])) }}']}}))"
+                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', 'content']}}))"
                                         >
                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                 </button>
-                                <button type="button" class="d-none" id="continue-productStepGeneral" data-hs-step-form-next-options='{
-                                    "targetSelector": "#productStepContent"
-                                }'></button>
                             </div>
                         </div>
                         <!-- End Footer -->
                     </div>
                     <!-- End Card -->
 
-                    <div id="productStepContent" class="" style="display: none;">
+                    <div id="productStepContent" class="{{ $page === 'content' ? 'active':'' }}" style="{{ $page !== 'content' ? "display: none;" : "" }}">
                         <!-- Header -->
                         <div class="border-bottom pb-2 mb-3">
                             <div class="flex-grow-1">
-                                <span class="d-lg-none">Step 2 of 5</span>
+                                <span class="d-lg-none">{{ translate('Step 2 of 5') }}</span>
                                 <h3 class="card-header-title">{{ translate('Content') }}</h3>
                             </div>
                         </div>
@@ -148,7 +148,20 @@
 
                         <!-- Body -->
                         <div class="">
-                            <x-ev.form.file-selector name="photos" label="Gallery Images <small>(600x600)</small>" :multiple="true" data_type="image" placeholder="Choose files..."></x-ev.form.file-selector>
+                            <!-- Images -->
+                            <x-ev.form.file-selector name="thumbnail_img" label="Thumbnail image" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
+                            <x-ev.form.file-selector name="photos" label="Gallery images" :multiple="true" data_type="image" placeholder="Choose files..."></x-ev.form.file-selector>
+
+                            <!-- Video -->
+                            <x-ev.form.select name="video_provider" :items="EV::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
+                            <x-ev.form.input name="video_link" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
+                                <small class="text-muted">{{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}</small>
+                            </x-ev.form.input>
+
+                            <!-- PDF Specification -->
+                            <x-ev.form.file-selector name="pdf" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="Choose file..."></x-ev.form.file-selector>
+
+                            <x-ev.form.wysiwyg name="description" label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
                         </div>
                         <!-- End Body -->
 
@@ -164,11 +177,86 @@
 
                                 <div class="ml-auto">
                                     <button type="button" class="btn btn-primary"
-                                            data-hs-step-form-next-options='{
-                                "targetSelector": "#uploadResumeStepWork"
-                              }'>
-                                        Save and continue <i class="fas fa-angle-right ml-1"></i>
+                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['content', 'price_stock_shipping']}}))"
+                                    >
+                                        {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Footer -->
+                    </div>
+
+                    <div id="productStepPriceStockShipping" class="{{ $page === 'price_stock_shipping' ? 'active':'' }}" style="{{ $page !== 'price_stock_shipping' ? "display: none;" : "" }}" >
+                        <!-- Header -->
+                        <div class="border-bottom pb-2 mb-3">
+                            <div class="flex-grow-1">
+                                <span class="d-lg-none">{{ translate('Step 3 of 5') }}</span>
+                                <h3 class="card-header-title">{{ translate('Price, stock and shipping') }}</h3>
+                            </div>
+                        </div>
+                        <!-- End Header -->
+
+                        <!-- Body -->
+                        <div class="">
+                            <x-ev.form.input name="min_qty" type="number" label="{{ translate('Minimum quantity') }}" :required="true" value="1" min="1" step="1">
+                                <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
+                            </x-ev.form.input>
+                            <x-ev.form.input name="current_stock" type="number" label="{{ translate('Stock quantity') }}" :required="true" value="0" min="0" step="1">
+                                <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
+                            </x-ev.form.input>
+                            <x-ev.form.input name="low_stock_quantity" type="number" label="{{ translate('Low stock quantity warning') }}" value="1" min="0" step="1">
+                            </x-ev.form.input>
+
+                            <x-ev.form.input name="unit_price" type="number" label="{{ translate('Unit price') }}" :required="true" value="0" min="0" step="0.01">
+
+                            </x-ev.form.input>
+                            <x-ev.form.input name="purchase_price" type="number" label="{{ translate('Purchase price') }}" :required="true" value="0" min="0" step="0.01">
+
+                            </x-ev.form.input>
+
+                            <div class="row">
+                                <div class="col-12 col-md-8">
+                                    <x-ev.form.input name="discount" type="number" label="{{ translate('Discount') }}" :required="true" value="0" min="0" step="0.01"></x-ev.form.input>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <x-ev.form.select name="discount_type" :items="['amount'=>translate('Flat'),'percent'=>translate('Percent')]" label="{{ translate('Discount type') }}" :required="true"/>
+                                </div>
+                            </div>
+
+                            <x-ev.form.radio name="stock_visibility_state" :items="EV::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}"></x-ev.form.radio>
+
+                            <x-ev.form.radio name="shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping configuration') }}">
+                                <x-slot name="flat_rate">
+                                    <x-ev.form.input name="flat_shipping_cost" groupclass="d-none" type="number"  placeholder="{{ translate('Shipping cost') }}" value="0" min="0" step="0.01"></x-ev.form.input>
+                                </x-slot>
+                            </x-ev.form.radio>
+
+                            <x-ev.form.checkbox name="is_quantity_multiplied" :items="['1' => translate('Multiply shipping by product quantity')]" value="1" label="{{ translate('Quantity multiple') }}"></x-ev.form.checkbox>
+
+                            <x-ev.form.input name="set_shipping_days" type="number" label="{{ translate('Estimate shipping time') }}" placement="append" text="{{ translate('Days') }}" min="1" step="1"></x-ev.form.input>
+                        </div>
+                        <!-- End Body -->
+
+                        <!-- Footer -->
+                        <div class="card-footer">
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-ghost-secondary"
+                                        data-hs-step-form-prev-options='{
+                         "targetSelector": "#uploadResumeStepBasics"
+                       }'>
+                                    <i class="fas fa-angle-left mr-1"></i> Previous step
+                                </button>
+
+                                <div class="ml-auto">
+                                    <button type="button" class="btn btn-primary"
+                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['content', '{{ base64_encode(json_encode(['selector' => '#continue-productStepPriceStockShipping'])) }}']}}))"
+                                    >
+                                        {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
+                                    </button>
+                                    <button type="button" class="d-none" id="continue-productStepPriceStockShipping" data-hs-step-form-next-options='{
+                                    "targetSelector": "#productStepContent"
+                                }'></button>
                                 </div>
                             </div>
                         </div>

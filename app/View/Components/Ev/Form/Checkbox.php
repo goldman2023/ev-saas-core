@@ -4,38 +4,36 @@ namespace App\View\Components\EV\Form;
 
 use Illuminate\View\Component;
 
-class FileSelector extends Component
+class Checkbox extends Component
 {
     public $class;
     public $id;
     public $name;
     public $label;
-    public $datatype;
     public $required;
-    public $multiple;
-    public $placeholder;
-    public $icon_placement;
+    public $items;
     public $icon;
     public $merge;
+    public $style;
+    public $value;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false)
+    public function __construct($items = [], $style = 'vanilla', $value = '', $name = '', $label = '',  $required = false,  $class = '', $id = '', $icon = null, $merge = false)
     {
-        $this->datatype = $datatype;
+        $this->items = $items;
         $this->label = $label;
         $this->name = $name;
         $this->required = $required;
-        $this->multiple = $multiple;
-        $this->placeholder = $placeholder;
         $this->class = $class;
         $this->id = $id;
         $this->merge = $merge;
-        $this->icon_placement = $icon_placement;
         $this->icon = $icon;
+        $this->style = $style;
+        $this->value = $value;
     }
 
 
@@ -46,6 +44,6 @@ class FileSelector extends Component
      */
     public function render()
     {
-        return view('components.ev.form.file-selector');
+        return view('components.ev.form.checkbox');
     }
 }

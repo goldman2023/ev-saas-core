@@ -534,7 +534,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                     "</div>" +
                                     '<div class="remove">' +
                                     '<button class="btn btn-sm btn-link remove-attachment" type="button">' +
-                                    '<i class="la la-close"></i>' +
+                                    '<i class="fas fa-close"></i>' +
                                     "</button>" +
                                     "</div>" +
                                     "</div>";
@@ -721,6 +721,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         "click",
                         function () {
                             if (from === "input") {
+                                console.log(elem);
                                 window.AIZ.uploader.inputSelectPreviewGenerate(elem);
                             } else if (from === "direct") {
                                 callback(window.AIZ.uploader.data.selectedFiles);
