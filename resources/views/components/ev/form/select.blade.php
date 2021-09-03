@@ -21,14 +21,3 @@
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
-
-@push('footer_scripts')
-    <script>
-        /*$(function () {
-            // This is necessary if we want select2 to work with livewire (wire:modal)
-            $('select[name="{{ $name }}"]').closest().on('change', function (e) {
-                @this.set('{{ $name }}', $(this).val());
-            });
-        });*/
-    </script>
-@endpush

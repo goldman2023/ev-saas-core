@@ -74,6 +74,7 @@
         "tailwindcss": "^2.1.2",
         "tailwindcss-pseudo-elements": "^2.0.0",
         "typed.js": "^2.0.11",
+        "uppy": "^2.1.0",
         "vue-loader": "^15.9.5",
         "vue-template-compiler": "^2.6.12",
         "vue2": "npm:vue@^2.6.*",

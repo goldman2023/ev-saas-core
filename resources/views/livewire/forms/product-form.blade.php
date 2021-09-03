@@ -123,10 +123,13 @@
                         <div class="">
                             <div class="d-flex justify-content-end align-items-center">
                                 <button type="button" class="btn btn-primary"
-                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', '{{ base64_encode(json_encode(['targetSelector' => '#productStepContent'])) }}']}}))"
+                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', '{{ base64_encode(json_encode(['selector' => '#continue-productStepGeneral'])) }}']}}))"
                                         >
                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                 </button>
+                                <button type="button" class="d-none" id="continue-productStepGeneral" data-hs-step-form-next-options='{
+                                    "targetSelector": "#productStepContent"
+                                }'></button>
                             </div>
                         </div>
                         <!-- End Footer -->
@@ -145,7 +148,7 @@
 
                         <!-- Body -->
                         <div class="">
-
+                            <x-ev.form.file-selector name="photos" label="Gallery Images <small>(600x600)</small>" :multiple="true" data_type="image" placeholder="Choose files..."></x-ev.form.file-selector>
                         </div>
                         <!-- End Body -->
 

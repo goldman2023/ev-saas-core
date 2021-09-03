@@ -15,6 +15,8 @@
 
 @import 'front/variables';
 
+
+
 // Bootstrap core
 @import '~bootstrap/scss/bootstrap';
 
@@ -31,5 +33,9 @@
 @import 'user';
 
 // VENDOR
-@import "~select2/dist/css/select2.min.css";
-@import "~quill/dist/quill.snow.css";
+
+@import "~select2/src/scss/core.scss";
+@import "~quill/dist/quill.snow.css"; // this will be moved to the beginning of the compiled file, cuz it's css, check: https://github.com/laravel-mix/laravel-mix/issues/429
+@import "~uppy/src/style.scss";
+// @import "vendor/aiz-core.scss";
+

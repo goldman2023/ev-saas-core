@@ -939,9 +939,11 @@ if (!function_exists('getFileBaseURL')) {
     function getFileBaseURL()
     {
         if (config('filesystems.default') == 's3') {
-            return env('DIGITALOCEAN_SPACES_ENDPOINT') . '/';
+            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.config('filesystems.disks.s3.subdomain_endpoint'). '/';
+
+            return $proxy_image;
             /* TODO: Refactor this to support S3 AND Digital Ocean, right now digital ocean is used */
-            return env('AWS_URL') . '/';
+            return config('AWS_URL') . '/';
         } else {
             return getBaseURL();
         }
@@ -949,9 +951,11 @@ if (!function_exists('getFileBaseURL')) {
 }
 
 if (!function_exists('getBucketBaseURL')) {
-    function getBucketBaseURL()
-    {
-        if (env('FILESYSTEM_DRIVER') == 's3') {
+    function getBucketBaseURL() {
+        if (config('filesystems.default') == 's3') {
+            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.config('filesystems.disks.s3.subdomain_endpoint'). '/';
+
+            return $proxy_image;
             return env('AWS_URL') . '/';
         } else {
             return getBaseURL();

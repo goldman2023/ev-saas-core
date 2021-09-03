@@ -57,6 +57,7 @@ class AizUploadController extends Controller
     public function show_uploader(Request $request){
         return view('uploader.aiz-uploader');
     }
+
     public function upload(Request $request){
         $type = array(
             "jpg"=>"image",
@@ -112,70 +113,30 @@ class AizUploadController extends Controller
                 }
 
 
-                $tenant_path = 'all';
+                $tenant_path = 'uploads/all';
 
                 if(tenant('id')) {
                     $data = tenant('id');
-//                    return response()->json($data, 200);
+//                  return response()->json($data, 200);
 
-                    $tenant_path = tenant('id');
+                    $tenant_path = 'uploads/'.tenant('id');
                 }
 
-                $uploads_path = public_path('uploads/');
-
-
-                // Check if uploads folder exist
-                if(!File::isDirectory($uploads_path)){
-                    File::makeDirectory($uploads_path, 0777, true, true);
+                // Check if tenant uploads folder exists an create it if not
+                if(!Storage::exists($tenant_path)){
+                    // Create Tenant folder on DO if it doesn't exist
+                    Storage::makeDirectory($tenant_path, 0775, true, true);
                 }
 
-                // Check if tenant uploads folder exists an create it
-                $path = public_path('uploads/' . $tenant_path);
+                $file = $request->file('aiz_file');
+                $name = time() . '_' . $file->getClientOriginalName();
+                $filepath = $tenant_path.'/'.$name;
+                Storage::disk('s3')->put($filepath, file_get_contents($file), 'public');
 
-                if(!File::isDirectory($path)){
-                    File::makeDirectory($path, 0777, true, true);
-                }
-                $response = Storage::makeDirectory('public/uploads/' .$tenant_path);
-                $path = $request->file('aiz_file')->store('uploads/' . $tenant_path, 'local');
-
-
-                $size = $request->file('aiz_file')->getSize();
-
-                if($type[$extension] == 'image' && get_setting('disable_image_optimization') != 1){
-                    try {
-                        $img = Image::make($request->file('aiz_file')->getRealPath())->encode();
-                        $height = $img->height();
-                        $width = $img->width();
-                        if($width > $height && $width > 1500){
-                            $img->resize(1500, null, function ($constraint) {
-                                $constraint->aspectRatio();
-                            });
-                        }elseif ($height > 1500) {
-                            $img->resize(null, 800, function ($constraint) {
-                                $constraint->aspectRatio();
-                            });
-                        }
-                        $img->save(base_path('public/').$path);
-                        clearstatcache();
-                        $size = $img->filesize();
-
-
-                    } catch (\Exception $e) {
-                        //dd($e);
-                    }
-                }
-
-                /* TODO: Figure out the s3 and DO for tenants */
-                if (config('filesystems.default') == 's3') {
-                    $file_path = file_get_contents(base_path('public/').$path);
-
-                    $remoteFile = Storage::disk('s3')->put($path, file_get_contents(base_path('public/').$path), 'public');
-
-                    unlink(base_path('public/').$path);
-                }
+                $size = $file->getSize();
 
                 $upload->extension = $extension;
-                $upload->file_name = $path;
+                $upload->file_name = $filepath;
                 $upload->user_id = auth()->user()->id;
                 $upload->type = $type[$upload->extension];
                 $upload->file_size = $size;

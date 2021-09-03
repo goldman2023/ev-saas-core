@@ -9,34 +9,8 @@
 
         <!-- Products -->
         <div class="ev-slider">
-            <div class="ev-slider-wrapper @if ($slider) js-slick-carousel slick-equal-height slick-gutters-2 slick-center-mode-right slick-center-mode-right-offset @endif" data-hs-slick-carousel-options='
-            {
-                "slidesToShow": 4,
-                "infinite": false,
-                "responsive": [{
-                  "breakpoint": 1200,
-                    "settings": {
-                      "slidesToShow": 4
-                    }
-                  }, {
-                  "breakpoint": 992,
-                    "settings": {
-                      "slidesToShow": 3
-                    }
-                  }, {
-                  "breakpoint": 768,
-                  "settings": {
-                    "centerMode": true,
-                    "slidesToShow": 2
-                  }
-                  }, {
-                  "breakpoint": 554,
-                  "settings": {
-                    "slidesToShow": 1
-                  }
-                }]
-              }
-          '>
+            <div class="ev-slider-wrapper @if ($slider) js-slick-carousel @endif"
+          >
 
                 <!-- Product -->
                 @foreach ($products as $product)
@@ -71,21 +45,7 @@
 
             @push('footer_scripts')
 
-                <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
 
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
-                <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
-                <!-- JS Plugins Init. -->
-                <script>
-                    $(function() {
-
-                        // INITIALIZATION OF SLICK CAROUSEL
-                        // =======================================================
-                        $('.js-slick-carousel').each(function() {
-                            var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
-                        });
-                    });
-                </script>
             @endpush
         @endif
     @endpush

@@ -19,10 +19,12 @@ let theme = 'ev-saas-default';
 //console.log(path.resolve(`resources/js/components/ProductForm`)); return;
 mix.setPublicPath(`public/themes/${theme}`)
     .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
+    .js(`${__dirname}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
     .js(`${__dirname}/js/vue.js`, `public/themes/${theme}/js`).vue({ version: 2 }).version() // Uses Vue v2
     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).options({
         processCssUrls: false
     }).version()
+    // .postCss(`${__dirname}/scss/app.scss`, 'public/css')
     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
     .copyDirectory(`${__dirname}/vendor`, `public/themes/${theme}/vendor`)
     .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)

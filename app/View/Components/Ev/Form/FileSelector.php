@@ -4,14 +4,15 @@ namespace App\View\Components\EV\Form;
 
 use Illuminate\View\Component;
 
-class Input extends Component
+class FileSelector extends Component
 {
     public $class;
     public $id;
     public $name;
     public $label;
-    public $type;
+    public $data_type;
     public $required;
+    public $multiple;
     public $placeholder;
     public $icon_placement;
     public $icon;
@@ -22,12 +23,13 @@ class Input extends Component
      *
      * @return void
      */
-    public function __construct($type = 'text', $name = '', $label = '', $required = false,  $class = '', $id = '', $placeholder = '', $icon_placement = 'prepend', $icon = null, $merge = false)
+    public function __construct($data_type = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false)
     {
-        $this->type = $type;
+        $this->data_type = $data_type;
         $this->label = $label;
         $this->name = $name;
         $this->required = $required;
+        $this->multiple = $multiple;
         $this->placeholder = $placeholder;
         $this->class = $class;
         $this->id = $id;
@@ -44,6 +46,6 @@ class Input extends Component
      */
     public function render()
     {
-        return view('components.ev.form.input');
+        return view('components.ev.form.file-selector');
     }
 }
