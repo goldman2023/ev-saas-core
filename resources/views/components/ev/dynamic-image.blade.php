@@ -1,11 +1,8 @@
 @guest
-
     @isset($href->value)
         <a href="{{ $href->value }}">
     @endisset
-
-        <x-tenant.system.image :image="$src->value"></x-tenant.system.image>
-
+        <x-tenant.system.image :image="$src->value" :dataSrcSet="$dataSrcSet" ></x-tenant.system.image>
     @isset($href->value)
         </a>
     @endisset
@@ -17,8 +14,6 @@
     'href' => $href
     ])
 
-    <img {{ $attributes->merge(['class' => 'lazyload ']) }} src="{{ $src->value }}"
-        onerror="this.onerror=null;this.src='{{ static_asset('img/placeholder.jpg') }}';">
-
-
-    @endif
+    <img {{ $attributes->merge(['class' => 'lazyload ']) }} data-srcset="{{ $dataSrcSet }}"
+        data-src="{{ uploaded_asset($src->value) }}" class="lazyload" onerror="this.onerror=null;this.src='{{ static_asset('img/placeholder.jpg') }}';">
+@endif

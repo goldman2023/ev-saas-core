@@ -5,7 +5,7 @@ use App\Models\Category;
 use App\Models\User;
 use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
-
+use Illuminate\Support\Facades\Cache;
 
 function shorten_string($string, $wordsreturned)
 {
@@ -168,9 +168,13 @@ function get_theme_cart_templates($type = 'full')
 
 function ev_dynamic_translate($key, $global = false, $lang = null)
 {
+    $ttl = 60;
     $stringKey = ev_dynamic_translate_key($key, $global, $lang);
+    $dynamic_label = Cache::remember($stringKey, $ttl, function () use($stringKey) {
+        return EVLabel::where('key', $stringKey)->get();
+    });
 
-    $dynamic_label = EVLabel::where('key', $stringKey)->get();
+
 
     /*  TODO: Make sure to upgrade this for multilanguage support */
     if (count($dynamic_label)) {

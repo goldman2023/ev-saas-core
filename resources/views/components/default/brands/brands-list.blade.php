@@ -1,18 +1,24 @@
-<div class="container">
+<div class="container space-1">
 
-    <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3">
+    <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3 d-none">
         <x-ev.label tag="h3" :label="ev_dynamic_translate('Brands List Title', true)">
         </x-ev.label>
     </div>
 
-    <div class="swiper ev-brands-swiper">
+    <div class="ev-brands-swiper">
         <div class="ev-brands-slider">
-            <div class="swiper-wrapper">
+            <div class="js-slick-carousel" data-hs-slick-carousel-options='{
+                "slidesToShow" : 4,
+                "fade": false,
+                "infinite": false,
+                "autoplay": true,
+                "autoplaySpeed": 7000
+                }'>
                 <!-- Product -->
 
 
                 @foreach ($brands as $brand)
-                    <div class="text-center swiper-slide">
+                    <div class="text-center slick-slide">
                         <a href="{{ route('products.brand', $brand->slug) }}"
                             class="d-block border border-light rounded hov-shadow-md">
                             <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100"
@@ -46,30 +52,6 @@
             }
         }
 
-        .swiper.ev-brands-swiper {
-            padding: 0 !important;
-        }
-
     </style>
-    <script>
-        $(document).ready(function() {
 
-            var swiper = new Swiper(".ev-brands-slider", {
-                breakpoints: {
-                    // when window width is >= 320px
-                    768: {
-                        slidesPerView: 6,
-                        spaceBetween: 20
-                    },
-
-                    // when window width is >= 320px
-                    300: {
-                        freeMode: true,
-                        slidesPerView: 4,
-                        spaceBetween: 20
-                    },
-                }
-            });
-        });
-    </script>
 @endpush

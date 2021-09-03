@@ -222,41 +222,127 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <div class="col-lg-3">
-                                <input type="text" class="form-control" value="{{translate('Attributes')}}" disabled>
-                            </div>
-                            <div class="col-lg-8">
-                                <select name="choice_attributes[]" id="choice_attributes" data-selected-text-format="count" data-live-search="true" class="form-control aiz-selectpicker" multiple data-placeholder="{{ translate('Choose Attributes') }}">
-                                    @if($attributes = \App\Models\Attribute::all())
-                                        @foreach ($attributes as $key => $attribute)
-                                            <option value="{{ $attribute->id }}" @if(in_array($attribute->id, $product->attributes, true)) selected @endif>{{ $attribute->getTranslation('name') }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="">
-                            <p>{{ translate('Choose the attributes of this product and then input values of each attribute') }}</p>
-                            <br>
-                        </div>
-
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0 h6">{{ translate('Product Data') }}</h5>
+                    </div>
+                    <div class="card-body">
                         <div class="customer_choice_options" id="customer_choice_options">
-                            @if($product->choice_options)
-                                @foreach ($product->choice_options as $key => $choice_option)
-                                    <div class="form-group row">
-                                        <div class="col-lg-3">
-                                            <input type="hidden" name="choice_no[]" value="{{ $choice_option->attribute_id }}">
-                                            <input type="text" class="form-control" name="choice[]" value="@if($value=\App\Models\Attribute::find($choice_option->attribute_id)) {{ $value->getTranslation('name') }}@endif" placeholder="{{ translate('Choice Title') }}" disabled>
+                            @foreach ($product_attributes as $attribute)
+                                <div class="form-group row">
+                                    @if ($attribute->type == 'number')
+                                        @php
+                                            $value = '';
+                                            if ($product->attributes()->where('attribute_id', $attribute->id)->first() != null) {
+                                                $value = $product->attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
+                                            }
+
+                                            if ($attribute->custom_properties === null) {
+                                            }
+                                            $custom_properties = json_decode($attribute->custom_properties);
+                                            // TODO: Remove this is only a fallback quick-fix because of old attributes that do not have min/max values
+                                            // Related to: https://app.usersnap.com/#/2f2a6b9f-d137-4d9c-b748-1c7228f02147/list
+                                            /* if (empty($custom_properties->min_value)) {
+                                                $custom_properties->min_value = 0;
+                                            }
+
+                                            if (empty($custom_properties->max_value)) {
+                                                $custom_properties->max_value = 1000000000;
+                                            } */
+                                        @endphp
+
+                                        @isset($custom_properties->min_value)
+                                            <label
+                                                class="col-lg-3 col-from-label">{{ $attribute->name . ' (' . $custom_properties->min_value . ' - ' . $custom_properties->max_value . ')' }}</label>
+                                        @else
+                                            <label class="col-lg-3 col-from-label">{{ $attribute->name }}</label>
+
+                                        @endif
+                                    @else
+                                        <label class="col-lg-3 col-from-label">{{ $attribute->name }}</label>
+                                @endif
+                                <div class="col-lg-8">
+                                    @if ($attribute->type == 'dropdown')
+                                        <select name="{{ $attribute->id }}" id="{{ 'dropdown_' . $attribute->id }}"
+                                            class="form-control aiz-selectpicker" data-selected-text-format="count"
+                                            data-live-search="true" data-placeholder="{{ translate('Choose Attributes') }}">
+                                            @foreach ($attribute->attribute_values as $option)
+                                                <option value="{{ $option->id }}" @if (in_array($option->id, $product->attributes()->pluck('attribute_value_id')->toArray())) selected @endif>
+                                                    {{ $option->getTranslation('name') }}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                    @if ($attribute->type == 'checkbox')
+                                        <input type="hidden" name="{{ $attribute->id }}" />
+                                        <div class="aiz-checkbox-list">
+                                            @foreach ($attribute->attribute_values as $option)
+                                                <label class="aiz-checkbox">
+                                                    <input type="checkbox" name="{{ $attribute->id }}[]"
+                                                        value="{{ $option->id }}"
+                                                        @if (in_array($option->id, $product->attributes()->where('attribute_id', $attribute->id)->pluck('attribute_value_id')->toArray())) checked @endif>
+                                                    <span class="aiz-square-check"></span>
+                                                    <span>{{ $option->values }}</span>
+                                                </label>
+                                            @endforeach
                                         </div>
-                                        <div class="col-lg-8">
-                                            <input type="text" class="form-control aiz-tag-input" name="choice_options_{{ $choice_option->attribute_id }}[]" placeholder="{{ translate('Enter choice values') }}" value="{{ implode(',', $choice_option->values ?? []) }}" data-on-change="update_sku">
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @endif
+                                    @endif
+                                    @if ($attribute->type == 'plain_text' || $attribute->type == 'date')
+                                        @php
+                                            $value = '';
+                                            if ($product->attributes()->where('attribute_id', $attribute->id)->first() != null) {
+                                                $value = $product->attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
+                                            }
+                                        @endphp
+                                        @if ($attribute->type == 'plain_text')
+                                            <input type="text" placeholder="{{ translate('Default Value') }}"
+                                                id="{{ 'plain_text_' . $attribute->id }}" name="{{ $attribute->id }}"
+                                                class="form-control" value="{{ $value }}">
+                                        @else
+                                            <input
+                                                id="{{ 'date_' . $attribute->id }}"
+                                                type="text"
+                                                class="form-control aiz-date-range"
+                                                value="{{ $value }}" name="{{ $attribute->id }}"
+                                                aria-describedby="date_range"
+                                                placeholder="Select Date" data-time-picker="true" data-format="DD-MM-Y HH:mm"
+                                                autocomplete="off" data-single="true">
+                                        @endif
+                                    @endif
+                                    @if ($attribute->type == 'number')
+                                        @isset($custom_properties->min_value)
+                                            <div class="input-group">
+                                                <input type="number" placeholder="0.00" id="{{ 'plain_text_' . $attribute->id }}"
+                                                    name="{{ $attribute->id }}" class="form-control" value="{{ $value }}"
+                                                    step="0.01" min="{{ $custom_properties->min_value }}"
+                                                    max="{{ $custom_properties->max_value }}">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">{{ $custom_properties->unit }}</span>
+                                                </div>
+                                            </div>
+
+                                        @endisset
+                                    @endif
+                                    @if ($attribute->type == 'country')
+                                        @php
+                                            $countries = App\Models\Country::where('status', 1)->get();
+                                            $country_code = '';
+                                            if ($product->attributes()->where('attribute_id', $attribute->id)->first() != null) {
+                                                $country_code = $product->attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
+                                            }
+                                        @endphp
+                                        <select class="select2 form-control aiz-selectpicker" name="{{ $attribute->id }}"
+                                            data-toggle="select2" data-placeholder="Choose Country ..." data-live-search="true">
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->code }}" @if ($country->code == $country_code) selected @endif>
+                                                    {{ $country->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

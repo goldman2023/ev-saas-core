@@ -63,10 +63,11 @@ Example usage
 
 Example usage
 
+
 ```
-<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text"
-:href="ev_dynamic_translate('#testimonial-logo-link', true)">
+<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
 </x-ev.dynamic-image>
+
 ```
 
 <x-ev.link-button :href="ev_dynamic_translate('#button1')"
@@ -111,6 +112,21 @@ IMGPROXY_SALT=d6582e38a7bfe441518fa8c7ee3613563a47a37615acfe8640d19af38cc1e786f3
 IMGPROXY_IGNORE_SSL_VERIFICATION=true
 IMGPROXY_ENABLE_WEBP_DETECTION=true
 
+```
+
+
+## Model Caching
+Some models like `App\Models\Translation`, `Product`, `EV_Label` are using cachable trait from this package:
+https://github.com/GeneaLabs/laravel-model-caching
+
+```
+It has some compatability issues, so please check if you're not using package in the list of these packages:
+grimzy/laravel-mysql-spatial
+fico7489/laravel-pivot
+chelout/laravel-relationship-events
+spatie/laravel-query-builder
+dwightwatson/rememberable
+kalnoy/nestedset
 ```
 
 **Project URL:**

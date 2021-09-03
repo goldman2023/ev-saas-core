@@ -23,6 +23,7 @@
         "facade/ignition": "^2.10",
         "fideloper/proxy": "^4.0",
         "gabrielbull/ups-api": "^2.0.1",
+        "genealabs/laravel-model-caching": "^0.11.3",
         "guzzlehttp/guzzle": "^6.5",
         "instamojo/instamojo-php": "^0.4.0",
         "intervention/image": "^2.5",

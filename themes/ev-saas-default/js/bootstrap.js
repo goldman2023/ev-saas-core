@@ -11,7 +11,7 @@ try {
 
     require('jquery-mask-plugin')
     require('select2');
-    require('slick-carousel');
+    // require('slick-carousel');
 
     window.Quill = require('quill');
 

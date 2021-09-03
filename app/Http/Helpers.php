@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
+
 include('Helpers/EIMHelpers.php');
 
 //highlights the selected navigation on admin panel
@@ -289,7 +290,12 @@ if (!function_exists('convert_price')) {
             $price = floatval($price) / floatval($currency->exchange_rate);
         }
 
-        $code = \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        $code = Cache::remember('system_default_currency', env('ttl_redis_cache', 60), function () {
+            return \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        });
+
+
+
         if (Session::has('currency_code')) {
             $currency = Currency::where('code', Session::get('currency_code', $code))->first();
         } else {
@@ -481,7 +487,7 @@ if (!function_exists('home_discounted_base_price')) {
             $price += $product->tax;
         }
 
-        if($both_formats) {
+        if ($both_formats) {
             return [
                 'raw' => $price,
                 'display' => format_price(convert_price($price))
@@ -495,7 +501,10 @@ if (!function_exists('home_discounted_base_price')) {
 if (!function_exists('currency_symbol')) {
     function currency_symbol()
     {
-        $code = \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        $code = Cache::remember('system_default_currency', env('ttl_redis_cache', 60), function () {
+            return \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        });
+
         if (Session::has('currency_code')) {
 
 
@@ -845,22 +854,22 @@ if (!function_exists('api_asset')) {
 
 //return file uploaded via uploader
 if (!function_exists('uploaded_asset')) {
-    function uploaded_asset($id)
+    function uploaded_asset($id, $width =0 )
     {
         /*  TODO: Fix this logic to unify images management */
-        if(is_numeric($id)) {
+        if (is_numeric($id)) {
             if (($asset = \App\Models\Upload::find($id)) != null) {
                 $data = my_asset($asset->file_name);
                 /* TODO: This is temporary fix */
 
                 $file = str_replace('tenancy/assets/', '', $data);
 
-                $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$file;
+                $proxy_image = config('imgproxy.host') . '/insecure/fill/0/0/ce/0/plain/' . $file;
 
                 return $proxy_image;
             }
         } else {
-            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$id.'@webp';
+            $proxy_image = config('imgproxy.host') . '/insecure/fill/0/0/ce/0/plain/' . $id . '@webp';
 
             return $proxy_image;
         }
@@ -898,8 +907,8 @@ if (!function_exists('static_asset')) {
      */
     function static_asset($path, $secure = null, $theme = false)
     {
-        if($theme) {
-            return app('url')->asset('themes/'.Theme::active().'/'.$path, $secure);
+        if ($theme) {
+            return app('url')->asset('themes/' . Theme::active() . '/' . $path, $secure);
         }
         return app('url')->asset($path, $secure);
     }
@@ -917,7 +926,7 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-        if(env('FORCE_HTTPS') == false) {
+        if (env('FORCE_HTTPS') == false) {
             return route('home');
         } else {
             return  secure_url('/');
@@ -979,15 +988,15 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        $cache_key = tenant('id').'_business_settings_'.$key;
+        $cache_key = tenant('id') . '_business_settings_' . $key;
         $setting = Cache::get($cache_key, null);
 
         // If cache is empty, get setting from DB and store it in cache if not null
-        if(empty($setting)) {
+        if (empty($setting)) {
             $setting = BusinessSetting::where('type', $key)->first();
 
             // Cache the setting if it's found in DB
-            if(!empty($setting)) {
+            if (!empty($setting)) {
                 Cache::forget($cache_key);
                 Cache::put($cache_key, $setting->value);
             }
@@ -1246,7 +1255,8 @@ if (!function_exists('default_schema_attributes')) {
 }
 
 
-function get_pricing_plans_array() {
+function get_pricing_plans_array()
+{
     $pricing_plans = [];
     // Prospect
     $pricing_plans[] = [
@@ -1278,9 +1288,10 @@ function get_pricing_plans_array() {
     return $pricing_plans;
 }
 
-function country_name_by_code($code) {
+function country_name_by_code($code)
+{
     $country = Country::where('code', '=', $code)->first();
-    if($country == null) {
+    if ($country == null) {
         return $code;
     }
 

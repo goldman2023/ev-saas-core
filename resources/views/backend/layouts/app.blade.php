@@ -19,16 +19,13 @@
 	<title>{{ get_setting('website_name').' | '.get_setting('site_motto') }}</title>
 
 	<!-- google font -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
 
     <!-- aiz core css -->
-{{--    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">--}}
-    <link rel="stylesheet" href="{{ global_asset('css/admin/app.css') }}">
     @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
         <link rel="stylesheet" href="{{ global_asset('css/bootstrap-rtl.min.css') }}">
     @endif
-    <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/vendors.css">
-    <link rel="stylesheet" href="https://demo.activeitzone.com/ecommerce/public/assets/css/aiz-core.css">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{{ global_asset('ev-assets/admin/css/admin.css') }}">
 
 
     <style>
