@@ -16,8 +16,8 @@ class Select extends Component
     public $icon;
     public $merge;
     public $items;
-    public $value_property;
-    public $label_property;
+    public $valueProperty;
+    public $labelProperty;
     public $search;
     public $multiple;
     public $tags;
@@ -28,13 +28,13 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($type = 'text', $name = '', $label = '', $items = [], $value_property = null, $label_property = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false)
+    public function __construct($type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false)
     {
         $this->type = $type;
         $this->label = $label;
         $this->items = collect($items);
-        $this->value_property = $value_property;
-        $this->label_property = $label_property;
+        $this->valueProperty = $valueProperty;
+        $this->labelProperty = $labelProperty;
         $this->search = $search;
         $this->name = $name;
         $this->required = $required;

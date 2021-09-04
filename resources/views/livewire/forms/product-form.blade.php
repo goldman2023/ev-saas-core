@@ -61,15 +61,16 @@
                             </a>
                         </li>
 
-                        <li class="step-item">
+                        <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
                                data-hs-step-form-next-options='{
-                      "targetSelector": "#uploadResumeStepJobSkills"
-                    }'>
+                                  "targetSelector": "#productStepAttributesVariations"
+                                }'
+                               wire:click="$set('page', 'attributes_variations')">
                                 <span class="step-icon step-icon-soft-dark">4</span>
                                 <div class="step-content">
-                                    <span class="step-title">Skills</span>
-                                    <span class="step-title-description step-text font-size-1">Add skills</span>
+                                    <span class="step-title">{{ translate('Attributes & variations') }}</span>
+                                    <span class="step-title-description step-text font-size-1">{{ translate('Add product attributes and variations') }}</span>
                                 </div>
                             </a>
                         </li>
@@ -275,42 +276,37 @@
 
                         <!-- Body -->
                         <div class="">
-                            <x-ev.form.input name="product.min_qty" type="number" label="{{ translate('Minimum quantity') }}" :required="true" min="1" step="1">
-                                <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
-                            </x-ev.form.input>
-                            <x-ev.form.input name="product.current_stock" type="number" label="{{ translate('Stock quantity') }}" :required="true"  min="0" step="1">
-                                <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
-                            </x-ev.form.input>
-                            <x-ev.form.input name="product.low_stock_quantity" type="number" label="{{ translate('Low stock quantity warning') }}"  min="0" step="1">
-                            </x-ev.form.input>
+                            <div class="full-width product-attributes-wrapper">
+                                <x-ev.form.select name="attributes" :items="$attributes" value-property="id" label-property="name" :tags="true" label="{{ translate('Attributes') }}" :multiple="true" placeholder="{{ translate('Search available attributes...') }}">
+                                    <small class="text-muted">{{ translate('Choose the attributes of this product and then input values of each attribute.') }}</small>
+                                </x-ev.form.select>
 
-                            <x-ev.form.input name="product.unit_price" type="number" label="{{ translate('Unit price') }}" :required="true"  min="0" step="0.01">
+                                @if($attributes)
+                                    @foreach($attributes as $attribute)
+                                        @php //print_r($attribute); @endphp
+                                    @endforeach
+                                @endif
 
-                            </x-ev.form.input>
-                            <x-ev.form.input name="product.purchase_price" type="number" label="{{ translate('Purchase price') }}" :required="true"  min="0" step="0.01">
-
-                            </x-ev.form.input>
-
-                            <div class="row">
-                                <div class="col-12 col-md-8">
-                                    <x-ev.form.input name="product.discount" type="number" label="{{ translate('Discount') }}" :required="true" min="0" step="0.01"></x-ev.form.input>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <x-ev.form.select name="product.discount_type" :items="['amount'=>translate('Flat'),'percent'=>translate('Percent')]" label="{{ translate('Discount type') }}" :required="true"/>
-                                </div>
                             </div>
 
-                            <x-ev.form.radio name="product.stock_visibility_state" :items="EV::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}"></x-ev.form.radio>
 
-                            <x-ev.form.radio name="product.shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping configuration') }}">
-                                <x-slot name="flat_rate">
-                                    <x-ev.form.input name="product.flat_shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
-                                </x-slot>
-                            </x-ev.form.radio>
+                            <script>
+                                $(function() {
+                                    $('select[name="attributes"]').on('change', function() {
+                                        let $att_idx = $(this).val().map(x => parseInt(x, 10));
+                                        let $atts = @this.get('attributes');
 
-                            <x-ev.form.checkbox name="product.is_quantity_multiplied" :items="['1' => translate('Multiply shipping by product quantity')]"  label="{{ translate('Quantity multiple') }}"></x-ev.form.checkbox>
-
-                            <x-ev.form.input name="product.set_shipping_days" type="number" label="{{ translate('Estimate shipping time') }}" placement="append" text="{{ translate('Days') }}" min="1" step="1"></x-ev.form.input>
+                                        for (const index in $atts) {
+                                            if($att_idx.indexOf($atts[index].id) === -1) {
+                                                console.log($atts[index]);
+                                                @this.set('attributes.'+$atts[index].id+'.selected', true);
+                                            } else {
+                                                @this.set('attributes.'+$atts[index].id+'.selected', false);
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
                         </div>
                         <!-- End Body -->
 
@@ -319,7 +315,7 @@
                             <div class="d-flex align-items-center">
                                 <button type="button" class="btn btn-ghost-secondary d-flex align-item-scenter"
                                         data-hs-step-form-prev-options='{
-                                         "targetSelector": "#productStepContent"
+                                         "targetSelector": "#productStepPriceStockShipping"
                                        }'>
                                     @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                     {{ translate('Previous step') }}
@@ -327,7 +323,7 @@
 
                                 <div class="ml-auto">
                                     <button type="button" class="btn btn-primary"
-                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes_variations']}}))"
+                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'seo']}}))"
                                     >
                                         {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                     </button>

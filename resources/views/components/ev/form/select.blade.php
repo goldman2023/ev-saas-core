@@ -11,10 +11,13 @@
 
         @if($items)
             @foreach($items as $key => $item)
-                <option value="{{ is_object($item) ? ($item->{$value_property}??'') : $key }}"
-                        @if(empty($placeholder) && $key === 0) selected @endif>
-                    {{ is_object($item) ? ($item->{$label_property}??'') : $item }}
+                <option value="{{ is_object($item) ? ($item->{$valueProperty}??'') : (is_array($item) ? ($item[$valueProperty]??'') : $key) }}"
+                        {!! is_object($item) && !empty($item->attributes) ? $item->attributes : "" !!}
+                        @if(($item->selected ?? false) || (empty($placeholder) && $key === 0)) selected @endif>
+                    @php var_dump( $item->selected ?? ''); @endphp
+                    {{ is_object($item) ? ($item->{$labelProperty}??'') : (is_array($item) ? ($item[$labelProperty]??'') : $item) }}
                 </option>
+
             @endforeach
         @endif
     </select>

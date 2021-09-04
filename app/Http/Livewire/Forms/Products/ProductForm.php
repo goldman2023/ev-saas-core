@@ -2,9 +2,13 @@
 
 namespace App\Http\Livewire\Forms\Products;
 
+use App\Models\Attribute;
+use App\Models\AttributeRelationship;
+use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\Upload;
 use App\Rules\EVModelsExist;
+use EV;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 
@@ -14,6 +18,7 @@ class ProductForm extends Component
     public $page;
 
     public Product $product;
+    public array $attributes;
 
     /*public $name;
     public $category_id;
@@ -92,6 +97,7 @@ class ProductForm extends Component
     public function mount($page = '')
     {
         $this->page = $page;
+        $this->attributes = EV::getMappedAttributes('App\Models\Product');
 
         // Set default params
         $this->product = new Product();

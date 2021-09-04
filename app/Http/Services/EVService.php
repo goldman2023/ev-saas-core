@@ -2,8 +2,11 @@
 
 namespace App\Http\Services;
 
+use App\Models\Attribute;
+use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
+use Illuminate\View\ComponentAttributeBag;
 
 class EVService
 {
@@ -262,5 +265,31 @@ class EVService
         ];
     }
 
+    public function getMappedAttributes($content_type) {
+        // Get mapped attributes to display them in form select element for specific content type
+        $attrs = Attribute::select('id','name','type')->where('content_type', $content_type)->get();
+        $mapped = [];
 
+        if($attrs->isNotEmpty()) {
+            foreach ($attrs as $att) {
+                /*$att_values = AttributeValue::select('id', 'values as value')->where('attribute_id', $att->id)->get();
+                $mapped_values = [];
+
+                if($att_values->isNotEmpty()) {
+                    foreach($att_values as $value) {
+                        $mapped_values = (object) [
+                            'id' => $value->id,
+                            'value' => $value->getTranslation('name')
+                        ];
+                    }
+                }*/
+
+                $mapped[$att->id] = (object) array_merge($att->toArray(), [
+                    'selected' => false,
+                ]);
+            }
+        }
+
+        return $mapped;
+    }
 }
