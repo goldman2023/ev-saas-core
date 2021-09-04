@@ -11,7 +11,7 @@
            }
           }'>
     </div>
-    <textarea name="{{ $name }}" style="display: none !important;" wire:model.defer="{{ $name }}"></textarea>
+    <input type="text" data-textarea name="{{ $name }}" style="display: none !important;" wire:model.delay="{{ $name }}"/>
 
     @error($name)
         <div class="invalid-feedback d-block">{{ $message }}</div>

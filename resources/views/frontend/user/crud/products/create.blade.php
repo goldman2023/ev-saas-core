@@ -138,6 +138,19 @@
                 }
             }
 
+
+            /* Init file managers */
+            $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
+                let selected_files = $.map($(element).find(".selected-files").val().split(','), function(value){
+                    let id = parseInt(value, 10);
+                    if(id) {
+                        return id;
+                    }
+                });
+
+                window.AIZ.uploader.inputSelectPreviewGenerate($(element), selected_files, true);
+            });
+
         }
 
         $(window).on('load', window.EVProductFormInit);
@@ -148,6 +161,7 @@
             let method = event.detail.method;
             let params = event.detail.params;
 
+            /* Set selects */
             const selects = document.querySelectorAll(".lw-form .custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
@@ -156,6 +170,18 @@
                     component.set(select.getAttribute('name'), $(select).val()); // set livewire
                 }
             }
+
+            /* Set Quill */
+            $(".lw-form .quill-custom").each(function(index, element) {
+                let input = $(element).find('input[data-textarea]');
+                component.set(input.attr('name'), $(input).val()); // set livewire
+            });
+
+            /* Set file manager */
+            $(".lw-form .custom-file-manager").each(function(index, element) {
+                let input = $(element).find('input.selected-files');
+                component.set(input.attr('name'), $(input).val()); // set livewire
+            });
 
             component.validateSpecificSet(...params);
         });
