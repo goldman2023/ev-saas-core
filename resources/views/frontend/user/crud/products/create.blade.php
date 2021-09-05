@@ -35,6 +35,7 @@
     <script src="{{ static_asset('vendor/hs.mask.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs.sortable.js', false, true) }}"></script>
 
     <script>
         window.EVProductFormInit = function(event) {
@@ -162,6 +163,12 @@
                 });
 
                 window.AIZ.uploader.inputSelectPreviewGenerate($(element), selected_files, true);
+            });
+
+            // INITIALIZATION OF SORTABLE
+            // =======================================================
+            $('.js-sortable').each(function () {
+                var sortable = $.HSCore.components.HSSortable.init($(this));
             });
 
         }

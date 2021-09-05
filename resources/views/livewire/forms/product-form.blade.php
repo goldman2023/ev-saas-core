@@ -7,16 +7,18 @@
         }'>
         <div class="row">
             <div id="stickyBlockStartPoint" class="col-lg-4">
-                <!-- Sticky Block -->
-                <div class="js-sticky-block"
-                     data-hs-sticky-block-options='{
-                                           "parentSelector": "#stickyBlockStartPoint",
-                                           "breakpoint": "lg",
-                                           "startPoint": "#stickyBlockStartPoint",
-                                           "endPoint": "#stickyBlockEndPoint",
-                                           "stickyOffsetTop": 20,
-                                           "stickyOffsetBottom": 0
-                                         }'>
+                <!-- Sticky Block
+                   .js-sticky-block
+                    data-hs-sticky-block-options='{
+                       "parentSelector": "#stickyBlockStartPoint",
+                       "breakpoint": "lg",
+                       "startPoint": "#stickyBlockStartPoint",
+                       "endPoint": "#stickyBlockEndPoint",
+                       "stickyOffsetTop": 20,
+                       "stickyOffsetBottom": 0
+                     }'
+                -->
+                <div class="">
                     <!-- Step -->
                     <ul id="productStepFormProgress" class="js-step-progress step step-icon-xs step-border-last-0 mt-2">
                         <li class="step-item {{ $page === 'general' ? 'active':'' }}">
@@ -101,7 +103,7 @@
 
                             <x-ev.form.select name="product.brand_id" :items="EV::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
-                            <x-ev.form.select name="product.unit" :items="EV::getMappedUnits()" label="{{ translate('Unit') }}" placeholder="{{ translate('Choose the product unit...') }}" />
+                            <x-ev.form.select name="product.unit" :items="EV::getMappedUnits()" label="{{ translate('Unit') }}" :required="true" placeholder="{{ translate('Choose the product unit...') }}" />
 
                             <x-ev.form.select name="product.tags" :tags="true" label="{{ translate('Tags') }}" :multiple="true" placeholder="{{ translate('Type and hit enter to add a tag...') }}">
                                 <small class="text-muted">{{ translate('This is used for search. Input relevant words by which customer can find this product.') }}</small>
@@ -136,8 +138,11 @@
                         <!-- Body -->
                         <div class="pb-4">
                             <!-- Images -->
-                            <x-ev.form.file-selector name="product.thumbnail_img" label="{{ translate('Thumbnail image') }}" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
-                            <x-ev.form.file-selector name="product.photos" label="Gallery images" :multiple="true" data_type="image" placeholder="Choose files..."></x-ev.form.file-selector>
+                            <x-ev.form.file-selector name="product.thumbnail_img" label="{{ translate('Thumbnail image') }}" data_type="image" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
+                            <x-ev.form.file-selector name="product.photos" label="{{ translate('Gallery image') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
+                                                     :sortable="true"
+                                                     :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
+                                                     ></x-ev.form.file-selector>
 
                             <!-- Video -->
                             <x-ev.form.select name="product.video_provider" :items="EV::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
@@ -146,7 +151,7 @@
                             </x-ev.form.input>
 
                             <!-- PDF Specification -->
-                            <x-ev.form.file-selector name="product.pdf" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="Choose file..."></x-ev.form.file-selector>
+                            <x-ev.form.file-selector name="product.pdf" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
 
                             <x-ev.form.wysiwyg name="product.description" label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
                         </div>
