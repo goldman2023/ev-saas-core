@@ -6,7 +6,8 @@
             wire:model.defer="{{ $name }}"
             @if($multiple) multiple @endif
             data-hs-select2-options='@json($options)'
-            @if($items->isEmpty() && $tags) dynamic-items @endif>
+            @if($items->isEmpty() && $tags) dynamic-items @endif
+            {{ $attributes }}>
         @if($placeholder || ($items->isEmpty() && $tags)) <option label="empty"></option> @endif
 
         @if($items)
@@ -20,7 +21,7 @@
             @endforeach
         @endif
     </select>
-    
+
     {!! $slot !!}
 
     @error($name)

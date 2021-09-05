@@ -21,10 +21,7 @@
                     <ul id="productStepFormProgress" class="js-step-progress step step-icon-xs step-border-last-0 mt-2">
                         <li class="step-item {{ $page === 'general' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                                      "targetSelector": "#productStepGeneral"
-                                                    }'
-                                wire:click="$set('page', 'general')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', 'general']}}))">
                                 <span class="step-icon step-icon-soft-dark">1</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('General') }}</span>
@@ -35,10 +32,7 @@
 
                         <li class="step-item {{ $page === 'content' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                                      "targetSelector": "#productStepContent"
-                                                   }'
-                               wire:click="$set('page', 'content')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['content', 'content']}}))">
                                 <span class="step-icon step-icon-soft-dark">2</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Content') }}</span>
@@ -49,10 +43,7 @@
 
                         <li class="step-item {{ $page === 'price_stock_shipping' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                  "targetSelector": "#productStepPriceStockShipping"
-                                }'
-                               wire:click="$set('page', 'price_stock_shipping')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'price_stock_shipping']}}))">
                                 <span class="step-icon step-icon-soft-dark">3</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Price, stock and shipping') }}</span>
@@ -63,10 +54,7 @@
 
                         <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                  "targetSelector": "#productStepAttributesVariations"
-                                }'
-                               wire:click="$set('page', 'attributes_variations')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))">
                                 <span class="step-icon step-icon-soft-dark">4</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Attributes & variations') }}</span>
@@ -75,15 +63,13 @@
                             </a>
                         </li>
 
-                        <li class="step-item">
+                        <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                      "targetSelector": "#uploadResumeStepTypeOfJob"
-                    }'>
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo']}}))">
                                 <span class="step-icon step-icon-soft-dark">5</span>
                                 <div class="step-content">
-                                    <span class="step-title">Job type</span>
-                                    <span class="step-title-description step-text font-size-1">The type of job you are looking for</span>
+                                    <span class="step-title">{{ translate('SEO') }}</span>
+                                    <span class="step-title-description step-text font-size-1">{{ translate('Edit product SEO settings') }}</span>
                                 </div>
                             </a>
                         </li>
@@ -150,7 +136,7 @@
                         <!-- Body -->
                         <div class="pb-4">
                             <!-- Images -->
-                            <x-ev.form.file-selector name="product.thumbnail_img" label="Thumbnail image" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
+                            <x-ev.form.file-selector name="product.thumbnail_img" label="{{ translate('Thumbnail image') }}" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
                             <x-ev.form.file-selector name="product.photos" label="Gallery images" :multiple="true" data_type="image" placeholder="Choose files..."></x-ev.form.file-selector>
 
                             <!-- Video -->
@@ -284,7 +270,7 @@
                                 @if($attributes)
                                     @foreach($attributes as $attribute)
                                         @php $attribute = (object) $attribute; @endphp
-                                        @if($attribute->selected)
+                                        @if($attribute->selected ?? null)
                                             <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
                                                               label="{{ $attribute->name }}"
                                                               :items="$attribute->attribute_values"
@@ -292,7 +278,8 @@
                                                               label-property="values"
                                                               :tags="true"
                                                               :multiple="true"
-                                                              placeholder="{{ translate('Search or add values...') }}">
+                                                              placeholder="{{ translate('Search or add values...') }}"
+                                                              data-attribute-id="{{ $attribute->id }}">
                                                 <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
                                                                   class="mt-2 mb-2"
                                                                   append-text="{{ translate('Used for variations') }}"
@@ -323,6 +310,25 @@
                                             }
                                         }
                                     });
+
+                                    $('select[name$=".attribute_values"]').on('change', function(e, data) {
+                                        if(data && data.init) return;
+
+                                        let $att_id = $(this).data('attribute-id');
+
+                                        let $att_values_idx = $(this).val().map(x => parseInt(x, 10));
+                                        let $att_values = @this.get('attributes.'+$att_id+'.attribute_values');
+
+                                        // TODO: Check if new custom value is added and add it to the DB
+
+                                        for (const index in $att_values) {
+                                            if($att_values_idx.indexOf($att_values[index].id) === -1) {
+                                                @this.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
+                                            } else {
+                                                @this.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', true);
+                                            }
+                                        }
+                                    });
                                 });
                             </script>
                         </div>
@@ -331,7 +337,7 @@
                         <!-- Footer -->
                         <div class="border-top pt-3">
                             <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-ghost-secondary d-flex align-item-scenter"
+                                <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                         data-hs-step-form-prev-options='{
                                          "targetSelector": "#productStepPriceStockShipping"
                                        }'>
@@ -350,6 +356,57 @@
                         </div>
                         <!-- End Footer -->
                     </div>
+
+                    <div id="productStepSEO" class="{{ $page === 'seo' ? 'active':'' }}" style="{{ $page !== 'seo' ? "display: none;" : "" }}">
+                        <!-- Header -->
+                        <div class="border-bottom pb-2 mb-3">
+                            <div class="flex-grow-1">
+                                <span class="d-lg-none">{{ translate('Step 5 of 5') }}</span>
+                                <h3 class="card-header-title">{{ translate('SEO') }}</h3>
+                            </div>
+                        </div>
+                        <!-- End Header -->
+
+                        <!-- Body -->
+                        <div class="pb-4">
+                            <!-- SEO Meta Title -->
+                            <x-ev.form.input name="product.meta_title" type="text" label="{{ translate('Meta Title') }}" placeholder="{{ translate('Meta title is used for Meta, OpenGraph, Twitter...') }}" >
+                                <small class="text-muted">{{ translate('This title will be used for SEO and Social. Real product title will be used as fallback if this is empty.') }}</small>
+                            </x-ev.form.input>
+
+                            <!-- SEO Meta Description -->
+                            <x-ev.form.textarea name="product.meta_description" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
+                                <small class="text-muted">{{ translate('Have in mind that description should be between 70 and max 200 characters. Facebook up to 200 chars, Twitter up to 150 chars max.') }}</small>
+                            </x-ev.form.textarea>
+
+                            <!-- SEO Meta Image -->
+                            <x-ev.form.file-selector name="product.meta_img" label="{{ translate('Meta image') }}" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
+                        </div>
+                        <!-- End Body -->
+
+                        <!-- Footer -->
+                        <div class="border-top pt-3">
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
+                                        data-hs-step-form-prev-options='{
+                                             "targetSelector": "#productStepAttributesVariations"
+                                           }'>
+                                    @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
+                                    {{ translate('Previous step') }}
+                                </button>
+
+                                <div class="ml-auto">
+                                    <button type="button" class="btn btn-primary"
+                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['content', 'price_stock_shipping']}}))"
+                                    >
+                                        {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Footer -->
+                    </div>
+
                 </div>
 
                 <!-- Message Body -->
