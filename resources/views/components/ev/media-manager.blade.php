@@ -13,7 +13,7 @@
                     </ul>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
+                    @svg('heroicon-o-x')
                 </button>
             </div>
             <div class="modal-body">

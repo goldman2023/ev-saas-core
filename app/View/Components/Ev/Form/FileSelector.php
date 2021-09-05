@@ -10,7 +10,7 @@ class FileSelector extends Component
     public $id;
     public $name;
     public $label;
-    public $data_type;
+    public $datatype;
     public $required;
     public $multiple;
     public $placeholder;
@@ -23,9 +23,9 @@ class FileSelector extends Component
      *
      * @return void
      */
-    public function __construct($data_type = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false)
+    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false)
     {
-        $this->data_type = $data_type;
+        $this->datatype = $datatype;
         $this->label = $label;
         $this->name = $name;
         $this->required = $required;

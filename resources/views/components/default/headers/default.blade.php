@@ -16,11 +16,11 @@
                     <div class="hs-unfold">
                         <a class="js-hs-unfold-invoker dropdown-nav-link dropdown-toggle d-flex align-items-center" href="javascript:;"
                            data-hs-unfold-options='{
-                  "target": "#languageDropdown",
-                  "type": "css-animation",
-                  "event": "hover",
-                  "hideOnScroll": "true"
-                 }'>
+                              "target": "#languageDropdown",
+                              "type": "css-animation",
+                              "event": "hover",
+                              "hideOnScroll": "true"
+                             }'>
                             <img class="dropdown-item-icon mr-2" src="{{ global_asset('assets/img/flags/' . $locale . '.png') }}" alt="SVG">
                             <span class="d-inline-block d-sm-none">{{ $locale }}</span>
                             <span class="d-none d-sm-inline-block">{{ $locale }}</span>

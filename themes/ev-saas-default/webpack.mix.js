@@ -16,7 +16,7 @@ const path = require("path");
 // NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
 let theme = 'ev-saas-default';
-//console.log(path.resolve(`resources/js/components/ProductForm`)); return;
+
 mix.setPublicPath(`public/themes/${theme}`)
     .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
     .js(`${__dirname}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
@@ -24,7 +24,6 @@ mix.setPublicPath(`public/themes/${theme}`)
     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).options({
         processCssUrls: false
     }).version()
-    // .postCss(`${__dirname}/scss/app.scss`, 'public/css')
     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
     .copyDirectory(`${__dirname}/vendor`, `public/themes/${theme}/vendor`)
     .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)

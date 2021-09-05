@@ -1104,9 +1104,14 @@ if (!function_exists('ceiling')) {
 if (!function_exists('get_images')) {
     function get_images($given_ids, $with_trashed = false)
     {
+        $given_ids = array_filter($given_ids);
+
         $ids = is_array($given_ids)
             ? $given_ids
             : (is_null($given_ids) ? [] : explode(",", $given_ids));
+
+        if(empty($ids))
+            return collect([]);
 
         return $with_trashed
             ? Upload::withTrashed()->whereIn('id', $ids)->get()

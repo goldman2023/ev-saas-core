@@ -245,6 +245,9 @@ class Product extends Model
      * @return string $link
      */
     public function getPermalinkAttribute() {
+        if(empty($this->slug))
+            return "#";
+
         return route('product', $this->slug);
     }
 
