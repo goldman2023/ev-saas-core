@@ -17,13 +17,15 @@ class FileSelector extends Component
     public $icon_placement;
     public $icon;
     public $merge;
+    public $sortable;
+    public $sortableOptions;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false)
+    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [])
     {
         $this->datatype = $datatype;
         $this->label = $label;
@@ -36,6 +38,8 @@ class FileSelector extends Component
         $this->merge = $merge;
         $this->icon_placement = $icon_placement;
         $this->icon = $icon;
+        $this->sortable = $sortable;
+        $this->sortableOptions = $sortableOptions;
     }
 
 

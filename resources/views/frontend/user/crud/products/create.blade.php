@@ -9,18 +9,7 @@
 @section('panel_content')
     <section id="app">
         {{-- $form->render() --}}
-        <div class="card mb-3 mb-lg-5">
-            <!-- Header -->
-            <div class="card-header">
-                <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="card-body">
-                <livewire:forms.products.product-form page="general" />
-            </div>
-        </div>
+        <livewire:forms.products.product-form page="general" />
     </section>
 @endsection
 
@@ -35,6 +24,7 @@
     <script src="{{ static_asset('vendor/hs.mask.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs.sortable.js', false, true) }}"></script>
 
     <script>
         window.EVProductFormInit = function(event) {
@@ -130,7 +120,7 @@
             const selects = document.querySelectorAll(".lw-form select.custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
-                let data = Livewire.find($(select).closest('form').attr('wire:id')).get(name); // get tags property from livewire form component instance
+                let data = Livewire.find($(select).closest('.lw-form').attr('wire:id')).get(name); // get tags property from livewire form component instance
 
                 if($(select).is('[dynamic-items]')) {
                     try {
@@ -143,13 +133,52 @@
                         }
                     } catch(error) {}
                 } else {
-                    if(name === 'attributes' || name.match(/attributes\.[0-9]+\.attribute_values/g)) {
+                    if(name === 'attributes' || name.match(/attributes\.[0-9]+/g)) {
                         // get only selected attributes
                         $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
                     }
 
                 }
             }
+
+            // Update livewire data when attributes are changed
+            $('select[name="attributes"]').off().on('change', function(e, data) {
+                if(data && data.init) return;
+
+                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+
+                let $att_idx = $(this).val().map(x => parseInt(x, 10));
+                let $atts = component.get('attributes');
+
+                for (const index in $atts) {
+                    if($att_idx.indexOf($atts[index].id) === -1) {
+                        component.set('attributes.'+$atts[index].id+'.selected', false);
+                    } else {
+                        component.set('attributes.'+$atts[index].id+'.selected', true);
+                    }
+                }
+            });
+
+            // Update livewire data when attribute values change
+            $('select[name^="attributes."]').off().on('change', function(e, data) {
+                if(data && data.init) return;
+
+                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+                let $att_id = $(this).data('attribute-id');
+
+                let $att_values_idx = $(this).val().map(x => parseInt(x, 10));
+                let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
+
+                // TODO: Check if new custom value is added and add it to the DB
+
+                for (const index in $att_values) {
+                    if($att_values_idx.indexOf($att_values[index].id) === -1) {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
+                    } else {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', true);
+                    }
+                }
+            });
 
 
             /* Init file managers */
@@ -162,6 +191,12 @@
                 });
 
                 window.AIZ.uploader.inputSelectPreviewGenerate($(element), selected_files, true);
+            });
+
+            // INITIALIZATION OF SORTABLE
+            // =======================================================
+            $('.js-sortable').each(function () {
+                var sortable = $.HSCore.components.HSSortable.init($(this));
             });
 
         }
@@ -178,9 +213,12 @@
             const selects = document.querySelectorAll(".lw-form .custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
-                if(name) {
+
+                if(name && !$(select).is('[name^="attributes"]')) {
                     let data = $(select).val();
                     component.set(select.getAttribute('name'), $(select).val()); // set livewire
+                } else if($(select).is('[name^="attributes."]')) {
+                    console.log($(select).val());
                 }
             }
 
