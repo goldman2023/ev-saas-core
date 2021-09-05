@@ -141,6 +141,45 @@
                 }
             }
 
+            // Update livewire data when attributes are changed
+            $('select[name="attributes"]').on('change', function(e, data) {
+                if(data && data.init) return;
+
+                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+
+                let $att_idx = $(this).val().map(x => parseInt(x, 10));
+                let $atts = component.get('attributes');
+
+                for (const index in $atts) {
+                    if($att_idx.indexOf($atts[index].id) === -1) {
+                        component.set('attributes.'+$atts[index].id+'.selected', false);
+                    } else {
+                        component.set('attributes.'+$atts[index].id+'.selected', true);
+                    }
+                }
+            });
+
+            // Update livewire data when attribute values change
+            $('select[name$=".attribute_values"]').on('change', function(e, data) {
+                if(data && data.init) return;
+
+                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+                let $att_id = $(this).data('attribute-id');
+
+                let $att_values_idx = $(this).val().map(x => parseInt(x, 10));
+                let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
+
+                // TODO: Check if new custom value is added and add it to the DB
+
+                for (const index in $att_values) {
+                    if($att_values_idx.indexOf($att_values[index].id) === -1) {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
+                    } else {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', true);
+                    }
+                }
+            });
+
 
             /* Init file managers */
             $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
@@ -174,7 +213,7 @@
             const selects = document.querySelectorAll(".lw-form .custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
-                if(name) {
+                if(name && !$(select).is('[name^="attributes"]')) {
                     let data = $(select).val();
                     component.set(select.getAttribute('name'), $(select).val()); // set livewire
                 }

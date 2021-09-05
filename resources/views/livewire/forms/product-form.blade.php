@@ -1,19 +1,20 @@
-<div class="card mb-3 mb-lg-5 lw-form">
-    <!-- Header -->
-    <div class="card-header">
-        <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
-    </div>
-    <!-- End Header -->
+<div class="lw-form">
+    <div class="card mb-3 mb-lg-5">
+        <!-- Header -->
+        <div class="card-header">
+            <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
+        </div>
+        <!-- End Header -->
 
-    <!-- Body -->
-    <div class="card-body">
-        <form class="js-step-form-1"
-              data-hs-step-form-options='{
-                  "progressSelector": "#productStepFormProgress",
-                  "stepsSelector": "#productStepFormContent",
-                  "endSelector": "#uploadResumeFinishBtn",
-                  "isValidate": false
-                }'>
+        <!-- Body -->
+        <div class="card-body">
+            <form class=" js-step-form-1"
+                  data-hs-step-form-options='{
+                      "progressSelector": "#productStepFormProgress",
+                      "stepsSelector": "#productStepFormContent",
+                      "endSelector": "#uploadResumeFinishBtn",
+                      "isValidate": false
+                    }'>
                 <div class="row">
                     <div id="stickyBlockStartPoint" class="col-lg-4">
                         <!-- Sticky Block
@@ -65,7 +66,8 @@
 
                                 <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
                                     <a class="step-content-wrapper" href="javascript:;"
-                                       onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))">
+                                       wire:click="$set('page', 'attributes_variations')"
+                                    ><!-- onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))"-->
                                         <span class="step-icon step-icon-soft-dark">4</span>
                                         <div class="step-content">
                                             <span class="step-title">{{ translate('Attributes & variations') }}</span>
@@ -125,7 +127,7 @@
                                     <div class="d-flex justify-content-end align-items-center">
                                         <button type="button" class="btn btn-primary"
                                                 onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', 'content']}}))"
-                                                >
+                                        >
                                             {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                         </button>
                                     </div>
@@ -151,7 +153,7 @@
                                     <x-ev.form.file-selector name="product.photos" label="{{ translate('Gallery image') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
                                                              :sortable="true"
                                                              :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
-                                                             ></x-ev.form.file-selector>
+                                    ></x-ev.form.file-selector>
 
                                     <!-- Video -->
                                     <x-ev.form.select name="product.video_provider" :items="EV::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
@@ -171,8 +173,8 @@
                                     <div class="d-flex align-items-center">
                                         <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                                 data-hs-step-form-prev-options='{
-                                                     "targetSelector": "#productStepGeneral"
-                                                   }'>
+                                             "targetSelector": "#productStepGeneral"
+                                           }'>
                                             @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                             {{ translate('Previous step') }}
                                         </button>
@@ -245,8 +247,8 @@
                                     <div class="d-flex align-items-center">
                                         <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                                 data-hs-step-form-prev-options='{
-                                                 "targetSelector": "#productStepContent"
-                                               }'>
+                                         "targetSelector": "#productStepContent"
+                                       }'>
                                             @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                             {{ translate('Previous step') }}
                                         </button>
@@ -306,45 +308,6 @@
                                         @endif
 
                                     </div>
-
-
-                                    <script>
-                                        $(function() {
-                                            $('select[name="attributes"]').on('change', function(e, data) {
-                                                if(data && data.init) return;
-
-                                                let $att_idx = $(this).val().map(x => parseInt(x, 10));
-                                                let $atts = @this.get('attributes');
-
-                                                for (const index in $atts) {
-                                                    if($att_idx.indexOf($atts[index].id) === -1) {
-                                                        @this.set('attributes.'+$atts[index].id+'.selected', false);
-                                                    } else {
-                                                        @this.set('attributes.'+$atts[index].id+'.selected', true);
-                                                    }
-                                                }
-                                            });
-
-                                            $('select[name$=".attribute_values"]').on('change', function(e, data) {
-                                                if(data && data.init) return;
-
-                                                let $att_id = $(this).data('attribute-id');
-
-                                                let $att_values_idx = $(this).val().map(x => parseInt(x, 10));
-                                                let $att_values = @this.get('attributes.'+$att_id+'.attribute_values');
-
-                                                // TODO: Check if new custom value is added and add it to the DB
-
-                                                for (const index in $att_values) {
-                                                    if($att_values_idx.indexOf($att_values[index].id) === -1) {
-                                                        @this.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
-                                                    } else {
-                                                        @this.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', true);
-                                                    }
-                                                }
-                                            });
-                                        });
-                                    </script>
                                 </div>
                                 <!-- End Body -->
 
@@ -353,8 +316,8 @@
                                     <div class="d-flex align-items-center">
                                         <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                                 data-hs-step-form-prev-options='{
-                                                 "targetSelector": "#productStepPriceStockShipping"
-                                               }'>
+                                         "targetSelector": "#productStepPriceStockShipping"
+                                       }'>
                                             @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                             {{ translate('Previous step') }}
                                         </button>
@@ -403,8 +366,8 @@
                                     <div class="d-flex align-items-center">
                                         <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                                 data-hs-step-form-prev-options='{
-                                                     "targetSelector": "#productStepAttributesVariations"
-                                                   }'>
+                                             "targetSelector": "#productStepAttributesVariations"
+                                           }'>
                                             @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                             {{ translate('Previous step') }}
                                         </button>
@@ -428,6 +391,16 @@
                     </div>
                 </div>
                 <!-- End Row -->
-        </form>
+            </form>
+        </div>
     </div>
+
+    <!-- Message Body -->
+    <x-ev.alert id="successMessageContent" class="d-none" type="success" title="{{ translate('Product successfully created!') }}">
+        {{ translate('You have successfully create a new product! Click the following link to update it:') }}
+        <a href="{{ $product->permalink }}">{{ $product->permalink }}</a>
+    </x-ev.alert>
+    <!-- End Message Body -->
 </div>
+
+

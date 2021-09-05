@@ -496,6 +496,14 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         elem.next(".file-preview").html(null);
 
                         if (data.length > 0) {
+
+                            // Sort if sortable
+                            if(elem.data('is-sortable')) {
+                                data.sort(function (a, b) {
+                                    return selected_files.indexOf(a.id) - selected_files.indexOf(b.id);
+                                });
+                            }
+
                             elem.find(".file-amount").html(
                                 window.AIZ.uploader.updateFileHtml(data)
                             );
