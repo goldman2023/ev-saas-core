@@ -285,7 +285,8 @@ class EVService
                 }*/
 
                 $mapped[$att->id] = (object) array_merge($att->toArray(), [
-                    'selected' => false,
+                    'selected' => true, // TODO: Change value if editing the product
+                    'for_variations' => false, // TODO: Change value if editing the product
                 ]);
             }
         }

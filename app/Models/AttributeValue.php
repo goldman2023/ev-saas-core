@@ -10,6 +10,8 @@ class AttributeValue extends Model
 {
     use HasFactory;
 
+    protected $appends = ['selected'];
+
     public static function boot() {
         parent::boot();
 
@@ -32,9 +34,13 @@ class AttributeValue extends Model
         return $this->hasMany(AttributeRelationship::class, 'attribute_value_id', 'id');
     }
 
-    public function getTranslation($field = '', $lang = false){
+    public function getTranslation($field = '', $lang = false) {
         $lang = $lang == false ? App::getLocale() : $lang;
         $attribute_translation = $this->hasMany(AttributeValueTranslation::class)->where('lang', $lang)->first();
         return $attribute_translation != null ? $attribute_translation->$field : $this->values;
-      }
+    }
+
+    public function getSelectedAttribute() {
+        return false;
+    }
 }

@@ -283,7 +283,21 @@
 
                                 @if($attributes)
                                     @foreach($attributes as $attribute)
-                                        @php //print_r($attribute); @endphp
+                                        @php $attribute = (object) $attribute; @endphp
+                                        <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
+                                                          label="{{ $attribute->name }}"
+                                                          :items="$attribute->attribute_values"
+                                                          value-property="id"
+                                                          label-property="values"
+                                                          :tags="true"
+                                                          :multiple="true"
+                                                          placeholder="{{ translate('Search or add values...') }}">
+                                            <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
+                                                              class="mt-2 mb-2"
+                                                              append-text="{{ translate('Used for variations') }}"
+                                                              :selected="$attribute->for_variations ?? false">
+                                            </x-ev.form.toggle>
+                                        </x-ev.form.select>
                                     @endforeach
                                 @endif
 
@@ -292,16 +306,17 @@
 
                             <script>
                                 $(function() {
-                                    $('select[name="attributes"]').on('change', function() {
+                                    $('select[name="attributes"]').on('change', function(e, data) {
+                                        if(data && data.init) return;
+
                                         let $att_idx = $(this).val().map(x => parseInt(x, 10));
                                         let $atts = @this.get('attributes');
 
                                         for (const index in $atts) {
                                             if($att_idx.indexOf($atts[index].id) === -1) {
-                                                console.log($atts[index]);
-                                                @this.set('attributes.'+$atts[index].id+'.selected', true);
-                                            } else {
                                                 @this.set('attributes.'+$atts[index].id+'.selected', false);
+                                            } else {
+                                                @this.set('attributes.'+$atts[index].id+'.selected', true);
                                             }
                                         }
                                     });
