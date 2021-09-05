@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use App\Models\FlashDealProduct;
 use App\Models\ProductTax;
 use App\Models\User;
@@ -110,6 +112,8 @@ class Product extends Model
 {
     use ReviewTrait;
     use AttributeTrait;
+    use HasSlug;
+
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'variations', 'num_of_sale', 'thumbnail_img'];
@@ -134,6 +138,26 @@ class Product extends Model
                 $builder->where('published', 1);
             });
         }
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function getTranslation($field = '', $lang = false) {
