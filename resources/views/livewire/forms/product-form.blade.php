@@ -21,10 +21,7 @@
                     <ul id="productStepFormProgress" class="js-step-progress step step-icon-xs step-border-last-0 mt-2">
                         <li class="step-item {{ $page === 'general' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                                      "targetSelector": "#productStepGeneral"
-                                                    }'
-                                wire:click="$set('page', 'general')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['general', 'general']}}))">
                                 <span class="step-icon step-icon-soft-dark">1</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('General') }}</span>
@@ -35,10 +32,7 @@
 
                         <li class="step-item {{ $page === 'content' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                                      "targetSelector": "#productStepContent"
-                                                   }'
-                               wire:click="$set('page', 'content')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['content', 'content']}}))">
                                 <span class="step-icon step-icon-soft-dark">2</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Content') }}</span>
@@ -49,10 +43,7 @@
 
                         <li class="step-item {{ $page === 'price_stock_shipping' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                  "targetSelector": "#productStepPriceStockShipping"
-                                }'
-                               wire:click="$set('page', 'price_stock_shipping')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'price_stock_shipping']}}))">
                                 <span class="step-icon step-icon-soft-dark">3</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Price, stock and shipping') }}</span>
@@ -63,10 +54,7 @@
 
                         <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                  "targetSelector": "#productStepAttributesVariations"
-                                }'
-                               wire:click="$set('page', 'attributes_variations')">
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))">
                                 <span class="step-icon step-icon-soft-dark">4</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('Attributes & variations') }}</span>
@@ -77,9 +65,7 @@
 
                         <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                             <a class="step-content-wrapper" href="javascript:;"
-                               data-hs-step-form-next-options='{
-                                  "targetSelector": "#productStepSEO"
-                                }'>
+                               onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo']}}))">
                                 <span class="step-icon step-icon-soft-dark">5</span>
                                 <div class="step-content">
                                     <span class="step-title">{{ translate('SEO') }}</span>
