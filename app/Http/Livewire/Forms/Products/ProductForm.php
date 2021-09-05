@@ -127,7 +127,7 @@ class ProductForm extends Component
         if($set_name) {
             foreach($this->rulesSets as $key => $set) {
                 $this->page = $key; // set page
-                $this->validate($this->rulesSets[$set_name]); // validate page
+                $this->validate($set); // validate page
 
                 if($set_name == $key) {
                     break;
