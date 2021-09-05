@@ -284,20 +284,23 @@
                                 @if($attributes)
                                     @foreach($attributes as $attribute)
                                         @php $attribute = (object) $attribute; @endphp
-                                        <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
-                                                          label="{{ $attribute->name }}"
-                                                          :items="$attribute->attribute_values"
-                                                          value-property="id"
-                                                          label-property="values"
-                                                          :tags="true"
-                                                          :multiple="true"
-                                                          placeholder="{{ translate('Search or add values...') }}">
-                                            <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
-                                                              class="mt-2 mb-2"
-                                                              append-text="{{ translate('Used for variations') }}"
-                                                              :selected="$attribute->for_variations ?? false">
-                                            </x-ev.form.toggle>
-                                        </x-ev.form.select>
+                                        @if($attribute->selected)
+                                            <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
+                                                              label="{{ $attribute->name }}"
+                                                              :items="$attribute->attribute_values"
+                                                              value-property="id"
+                                                              label-property="values"
+                                                              :tags="true"
+                                                              :multiple="true"
+                                                              placeholder="{{ translate('Search or add values...') }}">
+                                                <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
+                                                                  class="mt-2 mb-2"
+                                                                  append-text="{{ translate('Used for variations') }}"
+                                                                  :selected="$attribute->for_variations ?? false">
+                                                </x-ev.form.toggle>
+                                            </x-ev.form.select>
+                                        @endif
+
                                     @endforeach
                                 @endif
 
