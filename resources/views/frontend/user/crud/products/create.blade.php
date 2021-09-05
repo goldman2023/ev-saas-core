@@ -143,7 +143,7 @@
                         }
                     } catch(error) {}
                 } else {
-                    if(name === 'attributes') {
+                    if(name === 'attributes' || name.match(/attributes\.[0-9]+\.attribute_values/g)) {
                         // get only selected attributes
                         $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
                     }
