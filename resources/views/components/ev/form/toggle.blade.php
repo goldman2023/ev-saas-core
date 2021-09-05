@@ -6,7 +6,7 @@
         <label class="toggle-switch mr-2" @if($id) for="{{ $id }}" @endif>
             <input type="checkbox"
                    name="{{ $name }}"
-                   wire:model.defer="{{ $name }}"
+                   wire:model="{{ $name }}"
                    class="js-toggle-switch toggle-switch-input"
                    @if($id) id="{{ $id }}" @endif
                    @if($selected) selected @endif
