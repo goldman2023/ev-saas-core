@@ -29,6 +29,7 @@
     <script src="{{ static_asset('vendor/hs-step-form/dist/hs-step-form.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-sticky-block/dist/hs-sticky-block.min.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-sticky-block/dist/hs-toggle-switch.min.js', false, true) }}"></script>
 
     <!-- JS Front -->
     <script src="{{ static_asset('vendor/hs.mask.js', false, true) }}"></script>
@@ -81,6 +82,12 @@
                 var mask = $.HSCore.components.HSMask.init($(this));
             });
 
+            // INITIALIZATION OF TOGGLE SWITCH
+            // =======================================================
+            $('.js-toggle-switch').each(function () {
+                var toggleSwitch = new HSToggleSwitch($(this)).init();
+            });
+
 
             // INITIALIZATION OF ADD INPUT FILED
             // =======================================================
@@ -120,12 +127,12 @@
 
             // If select2 is of TAGS type and these tags can be dynamically created, populate options on dehydrate, otherwise added tags will vanish because new component is rendered!
             // =======================================================
-            const selects = document.querySelectorAll(".lw-form .custom-select");
+            const selects = document.querySelectorAll(".lw-form select.custom-select");
             for (const select of selects) {
-                if($(select).is('[dynamic-items]')) {
-                    let name = select.getAttribute('name');
-                    let data = Livewire.find($(select).closest('form').attr('wire:id')).get('tags'); // get tags property from livewire form component instance
+                let name = select.getAttribute('name');
+                let data = Livewire.find($(select).closest('form').attr('wire:id')).get(name); // get tags property from livewire form component instance
 
+                if($(select).is('[dynamic-items]')) {
                     try {
                         let select2options = $(select).is('[data-hs-select2-options]') ? JSON.parse($(select).attr('data-hs-select2-options')) : null;
                         if(select2options.tags) {
@@ -135,8 +142,27 @@
                             });
                         }
                     } catch(error) {}
+                } else {
+                    if(name === 'attributes') {
+                        // get only selected attributes
+                        $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
+                    }
+
                 }
             }
+
+
+            /* Init file managers */
+            $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
+                let selected_files = $.map($(element).find(".selected-files").val().split(','), function(value){
+                    let id = parseInt(value, 10);
+                    if(id) {
+                        return id;
+                    }
+                });
+
+                window.AIZ.uploader.inputSelectPreviewGenerate($(element), selected_files, true);
+            });
 
         }
 
@@ -148,6 +174,7 @@
             let method = event.detail.method;
             let params = event.detail.params;
 
+            /* Set selects */
             const selects = document.querySelectorAll(".lw-form .custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
@@ -156,6 +183,18 @@
                     component.set(select.getAttribute('name'), $(select).val()); // set livewire
                 }
             }
+
+            /* Set Quill */
+            $(".lw-form .quill-custom").each(function(index, element) {
+                let input = $(element).find('input[data-textarea]');
+                component.set(input.attr('name'), $(input).val()); // set livewire
+            });
+
+            /* Set file manager */
+            $(".lw-form .custom-file-manager").each(function(index, element) {
+                let input = $(element).find('input.selected-files');
+                component.set(input.attr('name'), $(input).val()); // set livewire
+            });
 
             component.validateSpecificSet(...params);
         });

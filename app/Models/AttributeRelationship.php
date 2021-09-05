@@ -9,6 +9,11 @@ use OwenIt\Auditing\Auditable;
 class AttributeRelationship extends Model implements \OwenIt\Auditing\Contracts\Auditable
 {
     use HasFactory, Auditable;
+
+    protected $casts = [
+        'for_variations' => 'boolean'
+    ];
+
     public function attributable()
     {
         return $this->morphTo("subject");

@@ -474,15 +474,23 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 window.AIZ.uploader.deleteUploaderFile();
             }, 300);
         },
-        inputSelectPreviewGenerate: function (elem) {
-            elem.find(".selected-files").val(window.AIZ.uploader.data.selectedFiles);
+        inputSelectPreviewGenerate: function (elem, selected_files = [], only_passed = false) {
+            // IMPORTANT NOTE:
+            // If selected files are not passed AND only_passed flag is false, use global: window.AIZ.uploader.data.selectedFiles;
+            // with this, we preserve old uplaoder behavior needed in admin dashboard.
+            // By adding selected_files and only_passed flag, we are able to generate previews when livewire component is dehydrated (generated)
+
+            if(selected_files.length <= 0 && !only_passed) {
+                selected_files = window.AIZ.uploader.data.selectedFiles;
+                elem.find(".selected-files").val(selected_files);
+            }
+
             elem.next(".file-preview").html(null);
 
-            if (window.AIZ.uploader.data.selectedFiles.length > 0) {
-
+            if (selected_files.length > 0) {
                 $.post(
                     window.AIZ.data.appUrl + "/aiz-uploader/get_file_by_ids",
-                    { _token: window.AIZ.data.csrf, ids: window.AIZ.uploader.data.selectedFiles.toString() },
+                    { _token: window.AIZ.data.csrf, ids: selected_files.toString() },
                     function (data) {
 
                         elem.next(".file-preview").html(null);
