@@ -243,7 +243,7 @@
                         <!-- Footer -->
                         <div class="border-top pt-3">
                             <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-ghost-secondary d-flex align-item-scenter"
+                                <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                         data-hs-step-form-prev-options='{
                                          "targetSelector": "#productStepContent"
                                        }'>
