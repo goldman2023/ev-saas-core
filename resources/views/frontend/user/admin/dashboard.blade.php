@@ -15,7 +15,7 @@
                 {{-- TODO : make this company name dynamic --}}
                 <div class="h5 fw-600">{{ translate('Products') }} </div>
                 <p>{{ translate('Manage & organize your inventory and products') }}</p>
-                <a href="/admin" class="btn btn-soft-primary">{{ translate('Manage Products') }}</a>
+                <a href="{{ route('ev-products.index') }}" class="btn btn-soft-primary">{{ translate('Manage Products') }}</a>
             </div>
         </div>
 
