@@ -272,18 +272,6 @@ class EVService
 
         if($attrs->isNotEmpty()) {
             foreach ($attrs as $att) {
-                /*$att_values = AttributeValue::select('id', 'values as value')->where('attribute_id', $att->id)->get();
-                $mapped_values = [];
-
-                if($att_values->isNotEmpty()) {
-                    foreach($att_values as $value) {
-                        $mapped_values = (object) [
-                            'id' => $value->id,
-                            'value' => $value->getTranslation('name')
-                        ];
-                    }
-                }*/
-
                 $mapped[$att->id] = (object) array_merge($att->toArray(), [
                     'selected' => true, // TODO: Change value if editing the product
                     'for_variations' => false, // TODO: Change value if editing the product

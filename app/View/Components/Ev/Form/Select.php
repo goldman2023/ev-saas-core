@@ -22,13 +22,14 @@ class Select extends Component
     public $multiple;
     public $tags;
     public $options;
+    public $errorBagName;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false)
+    public function __construct($type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null)
     {
         $this->type = $type;
         $this->label = $label;
@@ -45,6 +46,7 @@ class Select extends Component
         $this->tags = $tags;
         $this->class = $class;
         $this->id = $id;
+        $this->errorBagName = $errorBagName ?: $name;
 
         $this->options = [
             'customClass' => 'custom-select',

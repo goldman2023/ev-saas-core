@@ -7,6 +7,7 @@ use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\Upload;
+use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use EV;
 use Spatie\ValidationRules\Rules\ModelsExist;
@@ -82,7 +83,7 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['attributes_variations'] = [
-
+            'attributes.*' => [ new AttributeValuesSelected() ]
         ];
 
         $this->rulesSets['seo'] = [
