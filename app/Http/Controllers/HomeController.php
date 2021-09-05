@@ -131,12 +131,13 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
+        return view('frontend.user.admin.dashboard');
+
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
         } else {
-            return view('frontend.user.admin.dashboard');
         }
     }
 
