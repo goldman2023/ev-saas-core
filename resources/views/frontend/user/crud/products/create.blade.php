@@ -133,7 +133,7 @@
                         }
                     } catch(error) {}
                 } else {
-                    if(name === 'attributes' || name.match(/attributes\.[0-9]+\.attribute_values/g)) {
+                    if(name === 'attributes' || name.match(/attributes\.[0-9]+/g)) {
                         // get only selected attributes
                         $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
                     }
@@ -142,7 +142,7 @@
             }
 
             // Update livewire data when attributes are changed
-            $('select[name="attributes"]').on('change', function(e, data) {
+            $('select[name="attributes"]').off().on('change', function(e, data) {
                 if(data && data.init) return;
 
                 let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
@@ -160,7 +160,7 @@
             });
 
             // Update livewire data when attribute values change
-            $('select[name$=".attribute_values"]').on('change', function(e, data) {
+            $('select[name^="attributes."]').off().on('change', function(e, data) {
                 if(data && data.init) return;
 
                 let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
@@ -213,9 +213,12 @@
             const selects = document.querySelectorAll(".lw-form .custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
+
                 if(name && !$(select).is('[name^="attributes"]')) {
                     let data = $(select).val();
                     component.set(select.getAttribute('name'), $(select).val()); // set livewire
+                } else if($(select).is('[name^="attributes."]')) {
+                    console.log($(select).val());
                 }
             }
 

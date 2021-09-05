@@ -288,6 +288,7 @@
                                                 @php $attribute = (object) $attribute; @endphp
                                                 @if($attribute->selected ?? null)
                                                     <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                      error-bag-name="attributes.{{ $attribute->id }}"
                                                                       label="{{ $attribute->name }}"
                                                                       :items="$attribute->attribute_values"
                                                                       value-property="id"

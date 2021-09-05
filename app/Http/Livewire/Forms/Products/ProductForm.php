@@ -7,6 +7,7 @@ use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\Upload;
+use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use EV;
 use Spatie\ValidationRules\Rules\ModelsExist;
@@ -82,7 +83,7 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['attributes_variations'] = [
-
+            'attributes.*' => [ new AttributeValuesSelected() ]
         ];
 
         $this->rulesSets['seo'] = [
@@ -126,7 +127,7 @@ class ProductForm extends Component
         if($set_name) {
             foreach($this->rulesSets as $key => $set) {
                 $this->page = $key; // set page
-                $this->validate($set); // validate page
+                $this->validate($this->rulesSets[$set_name]); // validate page
 
                 if($set_name == $key) {
                     break;
