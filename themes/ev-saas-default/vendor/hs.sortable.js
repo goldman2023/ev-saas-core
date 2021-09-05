@@ -24,22 +24,19 @@
 			settings = $.extend(true, defaults, settings, dataSettings, options);
 
 			/* Start : Init */
-            console.log(settings);
             settings['onSort'] = function(evt) {
                 let preview_wrapper = $(evt.from);
                 let parent = preview_wrapper.parent();
                 let ordered = [];
                 let selected = preview_wrapper.find('> div').each(function(index, element) {
                     let id = Number($(element).data('id'));
-
                     if(Number.isInteger(id)) {
                         ordered.push(id);
                     }
                 });
                 $(parent).find('.selected-files').val(ordered.join(','));
             };
-			var newSortable = new Sortable(el[0], settings);
-
+            var newSortable = new Sortable(el[0], settings);
 			/* End : Init */
 
 			return newSortable;

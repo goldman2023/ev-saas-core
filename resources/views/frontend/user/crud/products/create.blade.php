@@ -9,18 +9,7 @@
 @section('panel_content')
     <section id="app">
         {{-- $form->render() --}}
-        <div class="card mb-3 mb-lg-5">
-            <!-- Header -->
-            <div class="card-header">
-                <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
-            </div>
-            <!-- End Header -->
-
-            <!-- Body -->
-            <div class="card-body">
-                <livewire:forms.products.product-form page="general" />
-            </div>
-        </div>
+        <livewire:forms.products.product-form page="general" />
     </section>
 @endsection
 
@@ -131,7 +120,7 @@
             const selects = document.querySelectorAll(".lw-form select.custom-select");
             for (const select of selects) {
                 let name = select.getAttribute('name');
-                let data = Livewire.find($(select).closest('form').attr('wire:id')).get(name); // get tags property from livewire form component instance
+                let data = Livewire.find($(select).closest('.lw-form').attr('wire:id')).get(name); // get tags property from livewire form component instance
 
                 if($(select).is('[dynamic-items]')) {
                     try {
