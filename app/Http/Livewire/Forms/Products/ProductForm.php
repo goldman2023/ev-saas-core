@@ -81,6 +81,16 @@ class ProductForm extends Component
             'product.set_shipping_days' => 'nullable|numeric'
         ];
 
+        $this->rulesSets['attributes_variations'] = [
+
+        ];
+
+        $this->rulesSets['seo'] = [
+            'product.meta_title' => 'nullable',
+            'product.meta_description' => 'nullable',
+            'product.meta_img' => 'nullable',
+        ];
+
         $rules = [];
         foreach($this->rulesSets as $key => $items) {
             $rules = array_merge($rules, $items);
