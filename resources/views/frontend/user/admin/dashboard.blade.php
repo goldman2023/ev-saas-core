@@ -1,53 +1,22 @@
 @extends('frontend.layouts.user_panel')
 
 @section('panel_content')
-    <div class="card mb-3 mb-lg-5">
-        <div class="card-header">
-            <h5 class="card-title">{{ translate('Dashboard') }}</h5>
-        </div>
-        <div class="card-body">
 
-        </div>
-        <!--<div class="card-footer d-flex justify-content-end">
-            <a class="btn btn-white" href="javascript:;">{{ translate('Cancel') }}</a>
-            <span class="mx-2"></span>
-            <a class="btn btn-primary" href="javascript:;">{{ translate('Save') }}</a>
-        </div>-->
+    <div class="bg-white">
+        <x-free-member-notification> </x-free-member-notification>
     </div>
 
-
-
-    {{-- <div class="aiz-titlebar mt-2 mb-4">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="h3">{{ translate('Dashboard') }}</h1>
-            </div>
-        </div>
-    </div> --}}
-
-    {{--<div class="row">
-        <div class="col-12">
-            {{-- TODO: add custom CTA and Text and Image options --}}
-            {{-- <x-free-member-notification> </x-free-member-notification> --}}
-            {{-- <x-company.company-onboarding-box> </x-company.company-onboarding-box> --}}
-    {{--</div>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h3> {{ translate('Website Admin Panel') }}</h3>
-                {{-- <x-company.company-card :company="auth()->user()->shop"> </x-company.company-card> --}}
-    {{--</div>
-</div>
-</div>
-{{-- <x-company.company-dashboard-stats></x-company.company-dashboard-stats> --}}
-    {{--</div>--}}
-
-
+    <x-default.dashboard.dashboard-summary.admin>
+    </x-default.dashboard.dashboard-summary.admin>
 
     <div class="row">
         <div class="col-md-6">
-            {{-- <x-company.company-subscription-package></x-company.company-subscription-package> --}}
+            <div class="card bg-white p-4 text-center">
+                {{-- TODO : make this company name dynamic --}}
+                <div class="h5 fw-600">{{ translate('Products') }} </div>
+                <p>{{ translate('Manage & organize your inventory and products') }}</p>
+                <a href="{{ route('ev-products.index') }}" class="btn btn-soft-primary">{{ translate('Manage Products') }}</a>
+            </div>
         </div>
 
         <div class="col-md-6">
@@ -55,25 +24,12 @@
                 {{-- TODO : make this company name dynamic --}}
                 <div class="h5 fw-600">{{ translate('Your Website Admin Panel') }} </div>
                 <p>{{ translate('Manage & organize your website settings') }}</p>
-                <a href="/admin"
-                    class="btn btn-soft-primary">{{ translate('Manage your website') }}</a>
+                <a href="/admin" class="btn btn-soft-primary">{{ translate('Manage your website') }}</a>
             </div>
         </div>
 
-        <div class="col-md-6 d-none">
-            <x-company.company-onboarding-wizard></x-company.company-onboarding-wizard>
-
-            <div class="bg-white mt-4 p-5 text-center card">
-                <div class="mb-3">
-                        <img loading="lazy" src="{{ static_asset('assets/img/verified.png') }}" alt="" width="130">
-                </div>
-                <a href="{{ route('shop.verify') }}" class="btn btn-primary">
-                    {{ translate('Admin Panel') }}
-                </a>
-                <span class="text-sm text-center">
-                    {{ translate('Get detailed report and verification about your company') }}
-                </span>
-            </div>
+        <div class="col-md-6">
+            {{-- <x-company.company-onboarding-wizard></x-company.company-onboarding-wizard> --}}
         </div>
 
         <div class="col-sm-6">

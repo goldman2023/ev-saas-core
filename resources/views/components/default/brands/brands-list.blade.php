@@ -8,7 +8,7 @@
     <div class="ev-brands-swiper">
         <div class="ev-brands-slider">
             <div class="js-slick-carousel" data-hs-slick-carousel-options='{
-                "slidesToShow" : 4,
+                "slidesToShow" : 6,
                 "fade": false,
                 "infinite": false,
                 "autoplay": true,
