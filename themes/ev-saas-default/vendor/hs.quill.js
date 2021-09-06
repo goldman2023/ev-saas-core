@@ -5,44 +5,52 @@
  * @version 2.0
  *
  */
-;(function ($) {
-	'use strict';
+; (function ($) {
+    'use strict';
 
-	$.HSCore.components.HSQuill = {
-		__proto__: $.fn.quill,
+    $.HSCore.components.HSQuill = {
+        __proto__: $.fn.quill,
 
-		defaults: {
+        defaults: {
             theme: "snow"
-		},
+        },
 
-		init: function (el, options) {
+        init: function (el, options) {
             if (!$(el).length) {
-              return;
+                return;
             }
 
             var context = this;
 
-            $(el).each(function(index, element) {
+            $(el).each(function (index, element) {
                 let $el = $(element),
                     defaults = Object.assign({}, context.defaults),
                     dataSettings = $el.attr('data-hs-quill-options') ? JSON.parse($el.attr('data-hs-quill-options')) : {},
                     settings = {},
                     $input = $(element).closest('.quill-custom').find('> input');
-
+                console.log($input);
                 settings = Object.assign({}, defaults, settings, dataSettings, options);
 
                 /* Start : Init */
                 let newQuill = new Quill(element, settings);
+
+                const value = $input.val();
+                const delta = newQuill.clipboard.convert(value)
+
+                newQuill.setContents(delta, 'silent');
+
+                /*  add initial content if there is any */
+                console.log(newQuill);
                 /* End : Init */
 
 
 
                 /* On change, populate hidden element */
-                newQuill.on('text-change', function(delta, oldDelta, source) {
+                newQuill.on('text-change', function (delta, oldDelta, source) {
                     $input.val(newQuill.root.innerHTML); // change value
                 });
             });
         }
-	};
+    };
 
 })(jQuery);
