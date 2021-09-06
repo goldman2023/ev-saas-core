@@ -1,3 +1,5 @@
+import Sortable from 'sortablejs';
+
 window._ = require('lodash');
 
 /**
@@ -11,9 +13,9 @@ try {
 
     require('jquery-mask-plugin')
     require('select2');
-    // require('slick-carousel');
-
+    window.Sortable = Sortable;
     window.Quill = require('quill');
+    // require('slick-carousel');
 
     require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
 } catch (e) {}
