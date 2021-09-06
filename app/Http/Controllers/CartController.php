@@ -157,7 +157,18 @@ class CartController extends Controller
                 if($cartItem['id'] == $request->id) {
                     if($str != null && $cartItem['variant'] == $str){
                         $product_stock = $product->stocks->where('variant', $str)->first();
-                        $quantity = $product_stock->qty;
+
+
+                        /* TODO: Fix this, this is just a workaround for now
+                        originaly there is no isset check
+                        */
+                        if(isset($product_stock->qty)) {
+                            $quantity = $product_stock->qty;
+
+                        } else {
+                            $quantity = 10;
+
+                        }
 
                         if($quantity < $cartItem['quantity'] + $request['quantity']){
                             return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['current_stock' => $product_stock, 'class' => 'mt-5'])->render());
@@ -190,7 +201,14 @@ class CartController extends Controller
             // Still check if selected quantity is in stock!
             if(!empty($str)) {
                 $product_stock = $product->stocks->where('variant', $str)->first();
-                $quantity = $product_stock->qty;
+                if(isset($product_stock->qty)) {
+                    $quantity = $product_stock->qty;
+
+                } else {
+                    /* TODO: Fix this, this is just a workaround for now  */
+                    $quantity = 1;
+
+                }
 
                 if($quantity < $data['quantity']) {
                     return array('status' => 0, 'view' => view('frontend.partials.outOfStockCart', ['current_stock' => $product_stock, 'class' => 'mt-5'])->render());
