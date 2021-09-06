@@ -899,7 +899,7 @@ class ProductController extends Controller
                     if ($attribute_relationship == null) {
                         $attribute_relationship = new AttributeRelationship;
                         $attribute_relationship->subject_type = "App\Models\Product";
-                        $attribute_relationship->subject_id = $id;
+                        $attribute_relationship->subject_id = $product->id;
                         $attribute_relationship->attribute_id = $key;
                     }
                     $attribute_relationship->attribute_value_id = $relationship_id;
