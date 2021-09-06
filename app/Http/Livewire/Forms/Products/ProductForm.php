@@ -233,6 +233,7 @@ class ProductForm extends Component
                     }
 
                     // CREATE: Main & Variations Product Stocks
+                    // TODO: Create proper product stocks for variations!
                     $product_stock = new ProductStock();
                     $product_stock->product_id = $this->product->id;
                     $product_stock->price = $this->product->unit_price;
