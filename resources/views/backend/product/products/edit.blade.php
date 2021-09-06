@@ -344,7 +344,9 @@
                                         class="las la-language text-danger"
                                         title="{{ translate('Translatable') }}"></i></label>
                                 <div class="col-lg-9">
-                                    <x-ev.form.wysiwyg name="description" label="{{ translate('Product Description') }}"
+                                    <x-ev.form.wysiwyg name="description"
+                                    value="{{ $product->description }}"
+                                    label="{{ translate('Product Description') }}"
                                         placeholder="">
                                     </x-ev.form.wysiwyg>
                                 </div>
