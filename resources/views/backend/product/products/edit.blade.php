@@ -5,8 +5,8 @@
         <h1 class="mb-0 h6">{{ translate('Edit Product') }}</h5>
     </div>
     <div class="___class_+?2___">
-        <form class="form form-horizontal mar-top" action="{{ route('products.update', $product->id) }}" method="POST"
-            enctype="multipart/form-data" id="choice_form">
+        <form class="form form-horizontal mar-top" id="product-form" action="{{ route('products.update', $product->id) }}"
+            method="POST" enctype="multipart/form-data" id="choice_form">
             <div class="row gutters-5">
                 <div class="col-lg-8">
                     <input name="_method" type="hidden" value="POST">
@@ -148,7 +148,8 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-md-3 col-form-label"
-                                    for="signinSrEmail">{{ translate('Thumbnail Image') }} <small>(290x300)</small></label>
+                                    for="signinSrEmail">{{ translate('Thumbnail Image') }}
+                                    <small>(290x300)</small></label>
                                 <div class="col-md-8">
                                     <div class="input-group" data-toggle="aizuploader" data-type="image">
                                         <div class="input-group-prepend">
@@ -287,21 +288,21 @@
                                 </div>
                             </div>
                             <!--                        <div class="form-group row">
-                                <label class="col-lg-3 col-from-label">{{ translate('Tax') }}</label>
-                                <div class="col-lg-6">
-                                    <input type="number" lang="en" min="0" step="0.01" placeholder="{{ translate('tax') }}" name="tax" class="form-control" value="{{ $product->tax }}" required>
-                                </div>
-                                <div class="col-lg-3">
-                                    <select class="form-control aiz-selectpicker" name="tax_type" required>
-                                        <option value="amount" <?php if ($product->tax_type == 'amount') {
+                                    <label class="col-lg-3 col-from-label">{{ translate('Tax') }}</label>
+                                    <div class="col-lg-6">
+                                        <input type="number" lang="en" min="0" step="0.01" placeholder="{{ translate('tax') }}" name="tax" class="form-control" value="{{ $product->tax }}" required>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <select class="form-control aiz-selectpicker" name="tax_type" required>
+                                            <option value="amount" <?php if ($product->tax_type == 'amount') {
     echo 'selected';
 } ?> >{{ translate('Flat') }}</option>
-                                        <option value="percent" <?php if ($product->tax_type == 'percent') {
+                                            <option value="percent" <?php if ($product->tax_type == 'percent') {
     echo 'selected';
 } ?> >{{ translate('Percent') }}</option>
-                                    </select>
-                                </div>
-                            </div>-->
+                                        </select>
+                                    </div>
+                                </div>-->
                             <div class="form-group row">
                                 <label class="col-lg-3 col-from-label">{{ translate('Discount') }}</label>
                                 <div class="col-lg-6">
@@ -344,10 +345,11 @@
                                         class="las la-language text-danger"
                                         title="{{ translate('Translatable') }}"></i></label>
                                 <div class="col-lg-9">
-                                    <x-ev.form.wysiwyg name="description"
-                                    value="{{ $product->description }}"
-                                    label="{{ translate('Product Description') }}"
-                                        placeholder="">
+                                    <x-ev.form.wysiwyg
+                                    name="description" label="{{ translate('Product Description') }}"
+                                        placeholder=""
+                                        value="{{ $product->description }}"
+                                        >
                                     </x-ev.form.wysiwyg>
                                 </div>
                             </div>
@@ -355,13 +357,13 @@
                     </div>
 
                     <!--                <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0 h6">{{ translate('Product Shipping Cost') }}</h5>
-                        </div>
-                        <div class="card-body">
+                            <div class="card-header">
+                                <h5 class="mb-0 h6">{{ translate('Product Shipping Cost') }}</h5>
+                            </div>
+                            <div class="card-body">
 
-                        </div>
-                    </div>-->
+                            </div>
+                        </div>-->
 
                     <div class="card">
                         <div class="card-header">
@@ -396,7 +398,8 @@
                                 <label class="col-lg-3 col-from-label">{{ translate('Meta Title') }}</label>
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control" name="meta_title"
-                                        value="{{ $product->meta_title }}" placeholder="{{ translate('Meta Title') }}">
+                                        value="{{ $product->meta_title }}"
+                                        placeholder="{{ translate('Meta Title') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -530,7 +533,8 @@
                                     {{ translate('Product wise shipping cost is disable. Shipping cost is configured from here') }}
                                     <a href="{{ route('admin.shipping_configuration.index') }}"
                                         class="aiz-side-nav-link {{ areActiveRoutes(['admin.shipping_configuration.index', 'admin.shipping_configuration.edit', 'admin.shipping_configuration.update']) }}">
-                                        <span class="aiz-side-nav-text">{{ translate('Shipping Configuration') }}</span>
+                                        <span
+                                            class="aiz-side-nav-text">{{ translate('Shipping Configuration') }}</span>
                                     </a>
                                 </p>
                             @endif
@@ -623,7 +627,8 @@
                                     {{ translate('Cash On Delivery option is disabled. Activate this feature from here') }}
                                     <a href="{{ route('admin.activation.index') }}"
                                         class="aiz-side-nav-link {{ areActiveRoutes(['admin.shipping_configuration.index', 'admin.shipping_configuration.edit', 'admin.shipping_configuration.update']) }}">
-                                        <span class="aiz-side-nav-text">{{ translate('Cash Payment Activation') }}</span>
+                                        <span
+                                            class="aiz-side-nav-text">{{ translate('Cash Payment Activation') }}</span>
                                     </a>
                                 </p>
                             @endif
@@ -922,8 +927,23 @@
     <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
     <script>
+
         // INITIALIZATION OF QUILLJS EDITOR
         // =======================================================
+
+
+        var form = document.getElementById("product-form"); // get form by ID
+        form.onsubmit = function() { // onsubmit do this first
+            var description = document.querySelector('input[name=description]'); // set name input var
+            name.description = JSON.stringify(quill.getContents()); // populate name input with quill data
+            return true; // submit form
+        }
+
+        $(document).ready(function() {
+
         var quill = $.HSCore.components.HSQuill.init('.js-quill');
+
+
+        })
     </script>
 @endpush
