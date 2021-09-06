@@ -1,6 +1,6 @@
 {
-    "/js/app.js": "/js/app.js?id=0ff53aa97a2b11dd3751",
-    "/js/aiz-core.js": "/js/aiz-core.js?id=013135622be4bb049270",
+    "/js/app.js": "/js/app.js?id=9f72e417463f73900bb4",
+    "/js/aiz-core.js": "/js/aiz-core.js?id=83e2942f8720d3eb7e91",
     "/js/vue.js": "/js/vue.js?id=1b1a325ab99d4df64a29",
     "/css/app.css": "/css/app.css?id=3bda3a8448d1ed5d7bd9",
     "/vendor/hs.autocomplete-local-search.js": "/vendor/hs.autocomplete-local-search.js?id=d6efbadfe0a506f78ff9",
@@ -16,9 +16,10 @@
     "/vendor/hs.ion-range-slider.js": "/vendor/hs.ion-range-slider.js?id=208a50ac2d8da6069bee",
     "/vendor/hs.leaflet.js": "/vendor/hs.leaflet.js?id=e644966235f9f9225f54",
     "/vendor/hs.mask.js": "/vendor/hs.mask.js?id=8d2349408d207fcad822",
-    "/vendor/hs.quill.js": "/vendor/hs.quill.js?id=cf4cb03b8ec1fc478158",
+    "/vendor/hs.quill.js": "/vendor/hs.quill.js?id=ee85b786f638fb922ff9",
     "/vendor/hs.select2.js": "/vendor/hs.select2.js?id=8a139d38e99b56f8dc64",
     "/vendor/hs.slick-carousel.js": "/vendor/hs.slick-carousel.js?id=fe10d5a96f4f7c388275",
+    "/vendor/hs.sortable.js": "/vendor/hs.sortable.js?id=98f9e6d92136b2ec923c",
     "/vendor/hs.tagify.js": "/vendor/hs.tagify.js?id=0c7a05165a6bda77fbfe",
     "/vendor/hs.typed.js": "/vendor/hs.typed.js?id=4a40f50dfbcbf494a534",
     "/vendor/hs.validation.js": "/vendor/hs.validation.js?id=8d14b64b36585c44997a"

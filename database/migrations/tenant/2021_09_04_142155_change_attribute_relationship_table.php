@@ -18,7 +18,7 @@ class ChangeAttributeRelationshipTable extends Migration
         });
 
         Schema::table('attributes', function (Blueprint $table) {
-            $table->index('content_type');
+         //   $table->index('content_type');
         });
     }
 
