@@ -27,6 +27,12 @@
     <script src="{{ static_asset('vendor/hs.sortable.js', false, true) }}"></script>
 
     <script>
+        function scrollToTop(el = '.js-step-form-1') {
+            $('html, body').animate({
+                scrollTop: $(el).offset().top - 60
+            }, 500)
+        }
+
         window.EVProductFormInit = function(event) {
             // INITIALIZATION OF UNFOLD
             // =======================================================
@@ -58,12 +64,6 @@
                 }
             });
             window.stepForm.init();
-
-            function scrollToTop(el = '.js-step-form-1') {
-                $('html, body').animate({
-                    scrollTop: $(el).offset().top - 60
-                }, 500)
-            }
 
 
             // INITIALIZATION OF MASKED INPUT
@@ -237,6 +237,8 @@
             component.validateSpecificSet(...params);
         });
 
-
+        document.addEventListener('goToTop', function (event) {
+            scrollToTop('.lw-form');
+        });
     </script>
 @endpush
