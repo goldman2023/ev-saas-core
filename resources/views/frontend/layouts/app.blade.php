@@ -124,9 +124,6 @@
         $('.js-slick-carousel').each(function() {
             var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
         });
-
-        console.log($.HSCore.components);
-
     });
 </script>
 
