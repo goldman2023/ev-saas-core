@@ -134,6 +134,7 @@
 			}
         }
     </script>
+    @stack("footer_scripts")
 
 </body>
 </html>

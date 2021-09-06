@@ -35,9 +35,7 @@
                 let newQuill = new Quill(element, settings);
                 /* End : Init */
 
-                // Set content from livewire, if any
-                let content = Livewire.find($(element).closest('.lw-form').attr('wire:id')).get($input.attr('name')); // get tags property from livewire form component instance
-                newQuill.root.innerHTML = content;
+
 
                 /* On change, populate hidden element */
                 newQuill.on('text-change', function(delta, oldDelta, source) {

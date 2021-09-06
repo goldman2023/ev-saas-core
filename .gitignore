@@ -65,3 +65,4 @@ resources/scss/pages/*.css.map
 resources/scss/themes/front/theme.css
 *.map
 public/ev-assets/front/svg/*
+public/assets/admin/*
