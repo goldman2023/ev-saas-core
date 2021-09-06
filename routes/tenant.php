@@ -69,10 +69,10 @@ Route::middleware([
     Route::get('/aiz-uploader/get_uploaded_files', [AizUploadController::class, 'get_uploaded_files']);
     Route::post('/aiz-uploader/get_file_by_ids', [AizUploadController::class, 'get_preview_files']);
     Route::get('/aiz-uploader/download/{id}', [AizUploadController::class, 'attachment_download'])->name('download_attachment');
-// Tracking
+    // Tracking
     Route::get('/aff{id}', [AffiliateBannerController::class, 'track'])->name('affiliate_banner.track');
     Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
-// Tracking - END
+    // Tracking - END
 
 
     Route::resource('shops', 'ShopController');
@@ -132,7 +132,7 @@ Route::middleware([
     Route::any('/stripe/payment/callback', [StripePaymentController::class, 'callback'])->name('stripe.callback');
     Route::get('/stripe/success', [StripePaymentController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
-//Stripe END
+    //Stripe END
 
 
     Route::get('/compare', [CompareController::class, 'index'])->name('compare');
@@ -161,7 +161,7 @@ Route::middleware([
             'purchase_history' => 'id',
         ]);
         Route::post('/purchase_history/details', 'PurchaseHistoryController@purchase_history_details')->name('purchase_history.details');
-//    Route::get('/purchase_history/destroy/{id}', 'PurchaseHistoryController@destroy')->name('purchase_history.destroy');
+        //    Route::get('/purchase_history/destroy/{id}', 'PurchaseHistoryController@destroy')->name('purchase_history.destroy');
 
         Route::resource('wishlists', 'WishlistController');
         Route::post('/wishlists/remove', 'WishlistController@destroy')->name('wishlists.remove');
@@ -249,7 +249,7 @@ Route::middleware([
         Route::resource('conversations', 'ConversationController')->parameters([
             'conversations' => 'id',
         ]);
-//    Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
+        //    Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
         Route::post('conversations/refresh', 'ConversationController@refresh')->name('conversations.refresh');
         Route::post('conversations/save', 'ConversationController@saveConversation')->name('conversations.save');
 
@@ -272,7 +272,7 @@ Route::middleware([
         Route::resource('digitalproducts', 'DigitalProductController')->parameters([
             'digitalproducts' => 'id',
         ])->except(['destroy']);
-//    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
+        //    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
         Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
         Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
 
@@ -283,8 +283,8 @@ Route::middleware([
         Route::resource('documentgallery', 'DocumentGalleryController')->parameters([
             'documentgallery' => 'id',
         ])->except(['destroy']);
-//    Route::get('/documentgallery/edit/{id}', 'DocumentGalleryController@edit')->name('documentgallery.edit');
-//    Route::post('/documentgallery/update/{id}', 'DocumentGalleryController@update')->name('documentgallery.update');
+        //    Route::get('/documentgallery/edit/{id}', 'DocumentGalleryController@edit')->name('documentgallery.edit');
+        //    Route::post('/documentgallery/update/{id}', 'DocumentGalleryController@update')->name('documentgallery.update');
         Route::get('/documentgallery/destroy/{id}', 'DocumentGalleryController@destroy')->name('documentgallery.destroy');
 
         //Notifications
@@ -299,7 +299,7 @@ Route::middleware([
         Route::get('/events', 'EventController@all_events')->name('events');
         Route::get('/events/{slug}', 'EventController@show')->name('event.show');
         Route::get('/events/category/{category_slug}', 'EventController@listingByCategory')->name('events.category');
-//    Route::post('/events/update/{id}', 'EventController@update')->name('event.update');
+        //    Route::post('/events/update/{id}', 'EventController@update')->name('event.update');
         Route::get('/events/destroy/{id}', 'EventController@destroy')->name('event.destroy');
 
 
@@ -307,10 +307,9 @@ Route::middleware([
         Route::resource('jobs', 'JobController')->parameters([
             'jobs' => 'id',
         ])->except(['destroy']);
-//    Route::post('/jobs/store', 'JobController@store')->name('jobs.store');
-//    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
+        //    Route::post('/jobs/store', 'JobController@store')->name('jobs.store');
+        //    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
         Route::get('/jobs/destroy/{id}', 'JobController@destroy')->name('jobs.destroy');
-
     });
 
 
@@ -330,23 +329,21 @@ Route::middleware([
     Route::get('/companies/category/{category_slug}', 'CompanyController@listingByCategory')->name('companies.category');
 
 
-//Blog Section
+    //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
     Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
     Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
 
-// Chat
+    // Chat
     Route::get('/styleguide', 'PageController@styleguide')->name('styleguide.index');
 
     Route::get('/chat', 'ChatController@index')->name('chat.index');
     Route::get('/early-bird', 'PageController@early_bird')->name('landing.early-bird');
     Route::get('/pricing', 'PageController@pricing')->name('landing.pricing');
 
-//Custom page
-    Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
 
 
-// Mailchimp subscriptions routes
+    // Mailchimp subscriptions routes
     Route::post('/subscribe/{type}', 'Integrations\MailchimpController@subscribe')
         ->name('mailchimp.subscribe');
 
@@ -380,4 +377,8 @@ Route::middleware([
         Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
         Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
+
+
+    //Custom page
+    Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
 });

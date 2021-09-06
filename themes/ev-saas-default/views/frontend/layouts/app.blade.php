@@ -41,43 +41,7 @@
     </style>
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
-    <!-- Scripts
-    <script src="https://htmlstream.com/front/assets/js/vendor.min.js"></script>
-    <script src="https://htmlstream.com/front/assets/js/theme.min.js"></script>-->
-    <script src="{{ mix('js/app.js', 'themes/'.Theme::active()) }}"></script>
-
-    <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
-
-
-    <script>
-        window.AIZ = window.AIZ || {};
-        window.AIZ.local = {
-            nothing_found: '{{ translate('Nothing found') }}',
-            choose_file: '{{ translate('Choose file') }}',
-            file_selected: '{{ translate('File selected') }}',
-            files_selected: '{{ translate('Files selected') }}',
-            add_more_files: '{{ translate('Add more files') }}',
-            adding_more_files: '{{ translate('Adding more files') }}',
-            drop_files_here_paste_or: '{{ translate('Drop files here, paste or') }}',
-            browse: '{{ translate('Browse') }}',
-            upload_complete: '{{ translate('Upload complete') }}',
-            upload_paused: '{{ translate('Upload paused') }}',
-            resume_upload: '{{ translate('Resume upload') }}',
-            pause_upload: '{{ translate('Pause upload') }}',
-            retry_upload: '{{ translate('Retry upload') }}',
-            cancel_upload: '{{ translate('Cancel upload') }}',
-            uploading: '{{ translate('Uploading') }}',
-            processing: '{{ translate('Processing') }}',
-            complete: '{{ translate('Complete') }}',
-            file: '{{ translate('File') }}',
-            files: '{{ translate('Files') }}',
-        }
-    </script>
-
-
-
+    
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>
 
@@ -132,23 +96,32 @@
 
 @yield('modal')
 
-@include('frontend.layouts.partials.app-js')
+<script src="{{ mix('js/app.js', 'themes/'.Theme::parent()) }}"></script>
+
+    <!-- Vendor Scripts -->
+    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
+
+
 
 @yield('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
 
+{{-- TODO: Include this propertly --}}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
+
+@stack('footer_scripts')
+
+@include('frontend.layouts.partials.app-js')
+
+<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
+
 <!-- JS Plugins Init. -->
 <script>
     $(function() {
         // INITIALIZATION OF SLICK CAROUSEL
         // =======================================================
         $('.js-slick-carousel').each(function() {
-            console.log(this);
-        console.log($.HSCore.components);
-
             var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
         });
 
@@ -156,7 +129,8 @@
 
     });
 </script>
-@stack('footer_scripts')
+
+
 
 @php
     echo get_setting('footer_script');
