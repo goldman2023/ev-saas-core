@@ -356,6 +356,9 @@ class HomeController extends Controller
         $detailedProduct  = Product::where('slug', $slug)->first();
         $product  = $detailedProduct;
 
+        $this->log($product,"User viewed this product");
+
+
         if ($detailedProduct != null && $detailedProduct->published) {
             //updateCartSetup();
             if (
