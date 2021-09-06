@@ -103,15 +103,19 @@
     <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
 
-@include('frontend.layouts.partials.app-js')
 
 @yield('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
 
 {{-- TODO: Include this propertly --}}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
+
+@stack('footer_scripts')
+
+@include('frontend.layouts.partials.app-js')
+
+<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
+
 <!-- JS Plugins Init. -->
 <script>
     $(function() {
@@ -125,7 +129,8 @@
 
     });
 </script>
-@stack('footer_scripts')
+
+
 
 @php
     echo get_setting('footer_script');

@@ -1,4 +1,11 @@
 <script>
+    AIZ.data = {
+        csrf: $('meta[name="csrf-token"]').attr("content"),
+        appUrl: $('meta[name="app-url"]').attr("content"),
+        fileBaseUrl: $('meta[name="file-bucket-url"]').attr("content"),
+    };
+    </script>
+<script>
     window.AIZ = window.AIZ || {};
     window.AIZ.local = {
         nothing_found: '{{ translate('Nothing found') }}',
@@ -299,8 +306,9 @@
             $('.c-preloader').show();
             $.ajax({
                 type: "POST",
-                url: '{{ route('cart.addToCart') }}',
+                url: '{{ route('cart.addToCart') }}?_token={{ csrf_token() }}',
                 data: $('#option-choice-form').serializeArray(),
+                
                 success: function (data) {
                     if (data.status == 1) {
                         updateNavCart();
@@ -312,6 +320,9 @@
                         $('#modal-size').removeClass('modal-lg');
                         $('#addToCart-modal-body').html(data.view);
                     }
+                },
+                error: function(e) {
+                    $('#addToCart-modal-body').html(e);
                 }
             });
         } else {
