@@ -16,13 +16,18 @@
             </div>
         @endif
     @endif
-            <input wire:model.defer="{{ $name }}"
+            @php $value = is_array($value) ? (object) $value : $value; @endphp
+            <input wire:model.{{ $wireType }}="{{ $name }}"
                    type="{{ $type }}"
-                   class="form-control {{ $class }}
-                   @error($name) is-invalid @enderror"
+                   class="form-control {{ $class }} @error($errorBagName) is-invalid @enderror"
                    name="{{ $name }}"
                    @if($id) id="{{ $id }}" @endif
                    @if($placeholder) placeholder="{{ $placeholder }}" @endif
+                   @if(is_object($value) && isset($value->{$valueProperty}))
+                        value="{{ $value->{$valueProperty} ?? '' }}"
+                   @else
+                        value="{{ $value }}"
+                   @endif
                    aria-label="{{ $label }}"
                    {{ $attributes }}
             >
@@ -44,7 +49,7 @@
 
     {!! $slot !!}
 
-    @error($name)
+    @error($errorBagName)
         <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 </div>

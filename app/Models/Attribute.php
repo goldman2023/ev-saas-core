@@ -10,6 +10,10 @@ class Attribute extends Model
 {
     protected $with = ['attribute_values', 'attributes_relationship'];
 
+    protected $casts = [
+        'custom_properties' => 'object'
+    ];
+
     public static function boot()
     {
         parent::boot();

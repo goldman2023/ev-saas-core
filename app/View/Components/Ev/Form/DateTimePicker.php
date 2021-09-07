@@ -4,34 +4,33 @@ namespace App\View\Components\EV\Form;
 
 use Illuminate\View\Component;
 
-class Input extends Component
+class DateTimePicker extends Component
 {
+    public $groupclass;
     public $class;
     public $id;
+    public $options;
     public $name;
     public $value;
     public $label;
-    public $type;
     public $required;
     public $placeholder;
     public $placement;
     public $icon;
-    public $text;
     public $merge;
-    public $groupclass;
     public $errorBagName;
     public $valueProperty;
     public $labelProperty;
-    public $wireType;
+
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($type = 'text', $name = '', $label = '', $value = '', $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $placeholder = '', $placement = 'prepend', $icon = null, $text = null, $merge = false, $errorBagName = null, $wireType = 'defer')
+    public function __construct($options = ['dateFormat' => 'd/m/Y'], $name = '', $label = '',  $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $value = null, $placeholder = '', $placement = 'prepend', $icon = null, $merge = false, $errorBagName = null)
     {
-        $this->type = $type;
+        $this->options = $options;
         $this->label = $label;
         $this->name = $name;
         $this->value = $value;
@@ -42,12 +41,15 @@ class Input extends Component
         $this->class = $class;
         $this->groupclass = $groupclass;
         $this->id = $id;
-        $this->merge = $merge;
         $this->placement = $placement;
+        $this->merge = $merge;
         $this->icon = $icon;
-        $this->text = $text;
-        $this->wireType = $wireType;
         $this->errorBagName = $errorBagName ?: $name;
+
+        if(!empty($this->icon)) {
+            $this->options['appendTo'] = '#'.$this->id;
+            $this->options['wrap'] = true;
+        }
     }
 
 
@@ -58,6 +60,6 @@ class Input extends Component
      */
     public function render()
     {
-        return view('components.ev.form.input');
+        return view('components.ev.form.date-time-picker');
     }
 }

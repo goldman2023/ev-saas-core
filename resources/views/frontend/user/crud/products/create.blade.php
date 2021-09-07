@@ -25,6 +25,7 @@
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.sortable.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs.flatpickr.js', false, true) }}"></script>
 
     <script>
         function scrollToTop(el = '.js-step-form-1') {
@@ -164,9 +165,9 @@
                 if(data && data.init) return;
 
                 let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
-                let $att_id = $(this).data('attribute-id');
 
-                let $att_values_idx = $(this).val().map(x => parseInt(x, 10));
+                let $att_id = $(this).data('attribute-id');
+                let $att_values_idx = Array.isArray($(this).val()) ? $(this).val().map(x => parseInt(x, 10)) : $(this).val();
                 let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
 
                 // TODO: Check if new custom value is added and add it to the DB
@@ -179,6 +180,8 @@
                     }
                 }
             });
+
+
 
 
             /* Init file managers */
@@ -197,6 +200,13 @@
             // =======================================================
             $('.js-sortable').each(function () {
                 var sortable = $.HSCore.components.HSSortable.init($(this));
+            });
+
+
+            // INITIALIZATION OF FLATPICKR
+            // =======================================================
+            $('.js-flatpickr').each(function () {
+                $.HSCore.components.HSFlatpickr.init($(this));
             });
 
         }

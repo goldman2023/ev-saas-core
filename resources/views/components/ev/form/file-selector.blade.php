@@ -1,6 +1,6 @@
 <div class="form-group custom-file-manager" id="file-manager-{{ $name }}" >
     <label class="input-label" for="signinSrEmail">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
-    <div class="input-group" data-toggle="aizuploader" data-type="{{ $datatype }}"
+    <div class="input-group @error($errorBagName) is-invalid @enderror" data-toggle="aizuploader" data-type="{{ $datatype }}"
          @if($multiple) data-multiple="true" @endif
          data-is-sortable="{{ $sortable ? 'true': 'false' }}">
         <div class="input-group-prepend">
@@ -17,7 +17,7 @@
 
     </div>
 
-    @error($name)
+    @error($errorBagName)
         <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 </div>

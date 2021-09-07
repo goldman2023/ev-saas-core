@@ -1,0 +1,45 @@
+@elseif($attribute->type === 'plain_text')
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                             type="text"
+                                                                             label="{{ $attribute->name }}"
+                                                                             data-attribute-id="{{ $attribute->id }}"
+                                                                             error-bag-name="attributes.{{ $attribute->id }}"
+                                                                             value-property="id"
+                                                                             label-property="values"
+                                                            ></x-ev.form.input>
+                                                        @elseif($attribute->type === 'number')
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                             type="number"
+                                                                             label="{{ $attribute->name }}"
+                                                                             @if(!empty($custom_properties->unit ?? null))
+                                                                             placement="append"
+                                                                             text="{{ $custom_properties->unit }}"
+                                                                             @endif
+                                                                             data-attribute-id="{{ $attribute->id }}"
+                                                                             error-bag-name="attributes.{{ $attribute->id }}"
+                                                                             value-property="id"
+                                                                             label-property="values"
+                                                                             @if(isset($custom_properties->min_value))
+                                                                             min="{{ $custom_properties->min_value }}"
+                                                                             @endif
+                                                                             @if(isset($custom_properties->max_value))
+                                                                             max="{{ $custom_properties->max_value }}"
+                                                                @endif
+                                                            ></x-ev.form.input>
+                                                        @elseif($attribute->type === 'date')
+                                                            @php
+                                                                $options = [
+                                                                    'dateFormat' => ($custom_properties->with_time ?? false) ? 'd.m.Y H:i' : 'd.m.Y',
+                                                                    'enableTime' => (bool) ($custom_properties->with_time ?? false),
+                                                                ];
+                                                            @endphp
+                                                            <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                                        label="{{ $attribute->name }}"
+                                                                                        placeholder="{{ translate('Choose Date(s)...') }}"
+                                                                                        error-bag-name="attributes.{{ $attribute->id }}"
+                                                                                        data-attribute-id="{{ $attribute->id }}"
+                                                                                        value-property="id"
+                                                                                        label-property="values"
+                                                                                        :options="$options"
+                                                                                        icon="heroicon-o-calendar"
+                                                            ></x-ev.form.date-time-picker>

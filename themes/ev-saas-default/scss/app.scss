@@ -20,8 +20,11 @@
 
 // VENDOR
 @import "~quill/dist/quill.snow.css"; // this will be moved to the beginning of the compiled file, cuz it's css, check: https://github.com/laravel-mix/laravel-mix/issues/429
+@import "~flatpickr/dist/flatpickr.min.css"; // this will be moved to the beginning of the compiled file, cuz it's css, check: https://github.com/laravel-mix/laravel-mix/issues/429
 @import "~uppy/src/style.scss";
 @import "~select2/src/scss/core.scss";
+@import "vendor/flatpickr";
+@import "vendor/fullcalendar";
 
 /*----------------------------------------------------------------------
   * Front - Responsive Website Template version v3.3.0

@@ -38,7 +38,7 @@
 
 			/* Start : Init */
 
-			var newFlatpickr = el.flatpickr(settings);
+			var newFlatpickr = window.flatpickr(el, settings);
 
 			/* End : Init */
 

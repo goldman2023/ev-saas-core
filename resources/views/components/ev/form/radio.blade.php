@@ -7,18 +7,25 @@
 
     @if($items)
         @php $i = 0; @endphp
-        @foreach($items as $key => $label)
+        @foreach($items as $key => $item)
+            @php
+                $item = is_array($item) ? (object) $item : $item;
+                $id = 'radio-'.$key.'-'.Str::slug((is_object($item) ? ($item->{$labelProperty}??'') : $item),'-');
+            @endphp
             @if($style === 'vanilla')
                 <div class="form-control mb-2">
                     <div class="custom-control custom-radio">
                         <input wire:model.defer="{{ $name }}"
                                type="radio"
-                               class="custom-control-input"
+                               class="custom-control-input @error($errorBagName) is-invalid @enderror"
                                name="{{ $name }}"
-                               id="radio-{{ $key }}-{{ Str::slug($label,'-') }}"
-                               @if($key === $value || (empty($value) && $i === 0)) checked @endif
-                               value="{{ $key }}">
-                        <label class="custom-control-label" for="radio-{{ $key }}-{{ Str::slug($label,'-') }}">{{ $label }}</label>
+                               id="{{ $id }}"
+                               value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}"
+                               @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
+                        >
+                        <label class="custom-control-label" for="{{ $id }}">
+                            {{ is_object($item) ? ($item->{$labelProperty}??'') : $item }}
+                        </label>
                     </div>
                 </div>
                 @if(isset(${$key}) && !empty(${$key}))
@@ -34,13 +41,13 @@
 
     {!! $slot !!}
 
-    @error($name)
+    @error($errorBagName)
         <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 
     <script>
         $(function() {
-            $('[data-component-name="{{ $name }}"] [type="radio"]').change(function(event) {
+            $('[data-component-name="{{ $name }}"] [type="radio"]').off().on('change', function(event) {
                 if($(this).is(':checked')) {
                     // hide all other
                     $('[data-component-name="{{ $name }}"] [type="radio"]').each(function(index, radio) {

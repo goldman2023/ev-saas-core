@@ -12,13 +12,14 @@ class Wysiwyg extends Component
     public $required;
     public $placeholder;
     public $toolbar_items;
+    public $errorBagName;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name = '', $label = '', $required = false,  $class = '', $placeholder = 'Type your description...', $toolbar_items = [])
+    public function __construct($name = '', $label = '', $required = false,  $class = '', $placeholder = 'Type your description...', $toolbar_items = [], $errorBagName = null)
     {
         $this->name = $name;
         $this->label = $label;
@@ -26,6 +27,7 @@ class Wysiwyg extends Component
         $this->placeholder = $placeholder;
         $this->class = $class;
         $this->toolbar_items = array_merge(["bold", "italic", "underline", "strike", "link", "blockquote", "code", ["list"=> "bullet"]], $toolbar_items);
+        $this->errorBagName = $errorBagName ?: $name;
     }
 
 

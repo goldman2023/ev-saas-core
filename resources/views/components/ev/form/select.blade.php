@@ -1,6 +1,7 @@
 <div class="form-group {{ $class }}">
     <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
-    <select @if($id) id="{{ $id }}" @endif class="js-select2-custom custom-select @error($name) is-invalid @enderror"
+    <select @if($id) id="{{ $id }}" @endif
+            class="js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
             name="{{ $name }}"
             size="1" style="opacity: 0;"
             wire:model.defer="{{ $name }}"

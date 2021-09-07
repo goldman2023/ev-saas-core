@@ -125,6 +125,9 @@ class ProductForm extends Component
         $this->product->low_stock_quantity = 1;
         $this->product->min_qty = 1;
         $this->product->brand_id = null;
+
+        // Set default attributes
+        
     }
 
     public function validateSpecificSet($set_name, $next_page, $is_last = false)

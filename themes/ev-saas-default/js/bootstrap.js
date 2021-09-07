@@ -1,4 +1,5 @@
 import Sortable from 'sortablejs';
+import flatpickr from "flatpickr";
 
 window._ = require('lodash');
 
@@ -13,6 +14,7 @@ try {
 
     require('jquery-mask-plugin')
     require('select2');
+    window.flatpickr = flatpickr;
     window.Sortable = Sortable;
     window.Quill = require('quill');
     require('slick-carousel');
