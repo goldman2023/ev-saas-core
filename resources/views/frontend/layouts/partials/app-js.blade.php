@@ -82,7 +82,6 @@
                 }
             });
         });
-<<<<<<< HEAD
 
         if ($('#languageDropdown').length > 0) {
             $('#languageDropdown .dropdown-item').each(function () {
@@ -105,18 +104,6 @@
                     var $this = $(this);
                     var currency_code = $this.data('flag');
                     $.post('{{ route('currency.change') }}', {_token: $('meta[name="csrf-token"]').attr('content'), currency_code: currency_code}, function (data) {
-=======
-        if ($('#lang-change').length > 0) {
-            $('#lang-change .dropdown-menu a').each(function() {
-                $(this).on('click', function(e) {
-                    e.preventDefault();
-                    var $this = $(this);
-                    var locale = $this.data('flag');
-                    $.post('{{ route('language.change') }}', {
-                        _token: AIZ.data.csrf,
-                        locale: locale
-                    }, function(data) {
->>>>>>> 4547b80d02e801808072923fdab57bdbec28e26e
                         location.reload();
                     });
 
