@@ -48,10 +48,10 @@
                     {{-- Currency --}}
                     @if (get_setting('show_currency_switcher') == 'on')
                         @php
-                            if (Session::has('currency')) {
-                                $locale = Session::get('currency', Config::get('app.currency'));
+                            if (Session::has('currency_code')) {
+                                $currency_code = Session::get('currency_code', Config::get('app.currency_code'));
                             } else {
-                                $locale = 'USD';
+                                $currency_code = 'USD';
                             }
                         @endphp
                         <div class="hs-unfold">
@@ -62,14 +62,14 @@
                               "event": "hover",
                               "hideOnScroll": "true"
                              }'>
-                                <span class="d-inline-block d-sm-none">{{ $locale }}</span>
-                                <span class="d-none d-sm-inline-block">{{ $locale }}</span>
+                                <span class="d-inline-block d-sm-none">{{ $currency_code }}</span>
+                                <span class="d-none d-sm-inline-block">{{ $currency_code }}</span>
                             </a>
 
                             <div id="currencyDropdown" class="hs-unfold-content dropdown-menu">
                                 @foreach (\App\Models\Currency::all() as $key => $currency)
                                     <a href="javascript:void(0)" data-flag="{{ $currency->code }}"
-                                        class="dropdown-item d-flex justify-content-between @if ($locale == $currency) active @endif">
+                                        class="dropdown-item d-flex justify-content-between @if ($currency_code == $currency) active @endif">
                                         <div class="mr-3">{{ $currency->name }}</div>
                                         <div>{{ $currency->symbol }}</div>
                                     </a>
