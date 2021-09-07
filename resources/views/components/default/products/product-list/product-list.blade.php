@@ -8,12 +8,24 @@
         <!-- End Title -->
 
         <!-- Products -->
-        <div class="ev-slider">
+        <div class="ev-slider mb-3">
             <div class="ev-slider-wrapper @if ($slider) js-slick-carousel @endif"
+
+            data-hs-slick-carousel-options='{
+                "slidesToShow": 4,
+                "responsive": [{
+                  "breakpoint": 768,
+                  "settings": {
+                    "arrows": false
+                  }
+                }]
+              }'
           >
 
                 <!-- Product -->
+
                 @foreach ($products as $product)
+                <div class="col-sm-4">
                     <div class="ev-slider-slide slick-slide">
                         <div class="w-100">
                             <x-default.products.cards.product-card :product="$product"
@@ -21,6 +33,8 @@
                             </x-default.products.cards.product-card>
                         </div>
                     </div>
+                </div>
+
                 @endforeach
                 <!-- End Product -->
             </div>

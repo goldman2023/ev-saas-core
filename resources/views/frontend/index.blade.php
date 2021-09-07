@@ -19,7 +19,7 @@
     </section>
 
     <section class="space-1">
-        <x-default.products.product-list slider="true">
+        <x-default.products.product-list slider="false">
         </x-default.products.product-list>
     </section>
 

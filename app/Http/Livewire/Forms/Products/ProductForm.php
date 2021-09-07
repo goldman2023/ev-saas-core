@@ -6,9 +6,12 @@ use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use App\Models\Product;
+use App\Models\ProductStock;
+use App\Models\ProductTranslation;
 use App\Models\Upload;
 use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
+use DB;
 use EV;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
@@ -17,6 +20,7 @@ class ProductForm extends Component
 {
     protected $rulesSets;
     public $page;
+    public $insert_success = false;
 
     public Product $product;
     public array $attributes;
@@ -72,18 +76,18 @@ class ProductForm extends Component
             'product.current_stock' => 'required|numeric|min:1', //  new ModelsExist(Upload::class)
             'product.low_stock_quantity' => 'required|numeric|min:1',
             'product.unit_price' => 'required|numeric',
-            'product.purchase_price' => 'required|numeric',
+            'product.purchase_price' => 'nullable|numeric',
             'product.discount' => 'required|numeric',
             'product.discount_type' => 'required|in:amount,percent',
             'product.stock_visibility_state' => 'required|in:quantity,text,hide',
-            'product.shipping_type' => 'required|in:flat,product_wise,free',
-            'product.flat_shipping_cost' => 'required_if:product.shipping_type,flat',
+            'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
+            'product.flat_shipping_cost' => 'required_if:product.shipping_type,flat_rate',
             'product.is_quantity_multiplied' => 'required|boolean',
-            'product.set_shipping_days' => 'nullable|numeric'
+            'product.est_shipping_days' => 'nullable|numeric'
         ];
 
         $this->rulesSets['attributes_variations'] = [
-            'attributes.*' => [ new AttributeValuesSelected() ]
+            'attributes.*' => 'required', //[ new AttributeValuesSelected() ]
         ];
 
         $this->rulesSets['seo'] = [
@@ -120,9 +124,10 @@ class ProductForm extends Component
         $this->product->discount = 0;
         $this->product->low_stock_quantity = 1;
         $this->product->min_qty = 1;
+        $this->product->brand_id = null;
     }
 
-    public function validateSpecificSet($set_name, $next_page)
+    public function validateSpecificSet($set_name, $next_page, $is_last = false)
     {
         if($set_name) {
             foreach($this->rulesSets as $key => $set) {
@@ -134,9 +139,119 @@ class ProductForm extends Component
                 }
             }
 
-            $this->page = $next_page;
-            // After validation, go to next step
-            //$this->dispatchBrowserEvent('next-step', $params);
+            if($is_last) {
+
+                DB::beginTransaction();
+
+                try {
+                    if(empty($this->product->brand_id)) {
+                        $this->product->brand_id = null;
+                    }
+
+                    // Create new product!
+                    if (auth()->user()->isSeller()) {
+                        $this->product->user_id = auth()->user()->id;
+                        $this->product->added_by = 'seller';
+                    } else {
+                        $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
+                        $this->product->added_by = 'admin';
+                    }
+
+                    $this->product->tags = implode(',', $this->product->tags);
+
+                    if ($this->product->shipping_type === 'free') {
+                        $this->product->shipping_cost = 0;
+                    } elseif ($this->product->shipping_type === 'flat_rate') {
+                        $this->product->shipping_cost = $this->product->flat_shipping_cost;
+                        unset($this->product->flat_shipping_cost);
+                    } elseif ($this->product->shipping_type === 'product_wise') {
+                        $this->product->shipping_cost = json_encode([]);
+                    }
+
+                    if (empty($this->product->meta_img)) {
+                        $this->product->meta_img = $this->product->thumbnail_img;
+                    }
+
+                    if (empty($this->product->meta_title)) {
+                        $this->product->meta_img = $this->product->name;
+                    }
+
+                    if (empty(trim($this->product->meta_description))) {
+                        $this->product->meta_description = trim(strip_tags($this->product->description));
+                    }
+
+                    // TODO: Add Featured, Cash on delivery, Todays deal to the form
+                    $this->product->cash_on_delivery = 0;
+                    $this->product->featured = 0;
+                    $this->product->todays_deal = 0;
+
+                    // TODO: Add Product status option to the form - published, draft
+                    $this->product->published = 1;
+
+                    // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
+                    // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
+
+                    // Save product
+                    $this->product->save();
+
+                    // CREATE: Product Translations
+                    $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
+                    $product_translation->name = $this->product->name;
+                    $product_translation->unit = $this->product->unit;
+                    $product_translation->description = $this->product->description;
+                    $product_translation->save();
+
+                    // TODO: VAT & TAX, Flash Deals
+
+                    // CREATE: Attribute relationships
+                    $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
+                        $att = (object) $att;
+                        return $att->selected === true;
+                    });
+
+                    if($selected_attributes) {
+                        foreach($selected_attributes as $att) {
+                            $att = (object) $att;
+                            $att_values = $att->attribute_values;
+
+                            if($att_values) {
+                                foreach($att_values as $att_value) {
+                                    $att_value = (object) $att_value;
+                                    if($att_value->selected ?? null) {
+                                        // Create product-attribute relationship
+                                        $att_rel = new AttributeRelationship();
+                                        $att_rel->subject_type = 'App\Models\Product';
+                                        $att_rel->subject_id = $this->product->id;
+                                        $att_rel->attribute_id = $att->id;
+                                        $att_rel->attribute_value_id = $att_value->id;
+                                        $att_rel->for_variations = $att->for_variations;
+                                        $att_rel->save();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // CREATE: Main & Variations Product Stocks
+                    $product_stock = new ProductStock();
+                    $product_stock->product_id = $this->product->id;
+                    $product_stock->price = $this->product->unit_price;
+                    $product_stock->qty = $this->product->current_stock;
+                    $product_stock->save();
+
+                    DB::commit();
+
+                    $this->insert_success = true;
+
+                    $this->dispatchBrowserEvent('goToTop');
+                } catch(\Exception $e) {
+                    DB::rollBack();
+                    dd($e->getMessage());
+                }
+            } else {
+                // After validation, go to next step
+                $this->page = $next_page;
+            }
         }
     }
 

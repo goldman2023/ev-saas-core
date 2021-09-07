@@ -908,7 +908,7 @@ if (!function_exists('static_asset')) {
     function static_asset($path, $secure = null, $theme = false)
     {
         if ($theme) {
-            return app('url')->asset('themes/' . Theme::active() . '/' . $path, $secure);
+            return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure);
         }
         return app('url')->asset($path, $secure);
     }

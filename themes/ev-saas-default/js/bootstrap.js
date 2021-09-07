@@ -15,7 +15,7 @@ try {
     require('select2');
     window.Sortable = Sortable;
     window.Quill = require('quill');
-    // require('slick-carousel');
+    require('slick-carousel');
 
     require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
 } catch (e) {}
