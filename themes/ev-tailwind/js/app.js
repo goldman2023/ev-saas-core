@@ -40,12 +40,12 @@ if (process.env.NODE_ENV === 'production') {
     flare.light('your-project-key');
 }*/
 
-import lazySizes from 'lazysizes';
-import 'lazysizes/plugins/native-loading/ls.native-loading';
+// import lazySizes from 'lazysizes';
+// import 'lazysizes/plugins/native-loading/ls.native-loading';
 
-lazySizes.cfg.nativeLoading = {
-	setLoadingAttribute: true,
-	disableListeners: {
-		scroll: true
-	},
-};
+// lazySizes.cfg.nativeLoading = {
+// 	setLoadingAttribute: true,
+// 	disableListeners: {
+// 		scroll: true
+// 	},
+// };
