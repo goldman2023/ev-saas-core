@@ -21,6 +21,7 @@ class DateTimePicker extends Component
     public $errorBagName;
     public $valueProperty;
     public $labelProperty;
+    public $wireType;
 
 
     /**
@@ -28,7 +29,7 @@ class DateTimePicker extends Component
      *
      * @return void
      */
-    public function __construct($options = ['dateFormat' => 'd/m/Y'], $name = '', $label = '',  $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $value = null, $placeholder = '', $placement = 'prepend', $icon = null, $merge = false, $errorBagName = null)
+    public function __construct($options = ['dateFormat' => 'd/m/Y'], $name = '', $label = '',  $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $value = null, $placeholder = '', $placement = 'prepend', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
     {
         $this->options = $options;
         $this->label = $label;
@@ -44,6 +45,7 @@ class DateTimePicker extends Component
         $this->placement = $placement;
         $this->merge = $merge;
         $this->icon = $icon;
+        $this->wireType = $wireType;
         $this->errorBagName = $errorBagName ?: $name;
 
         if(!empty($this->icon)) {

@@ -37,7 +37,15 @@
 			}, options);
 
 			/* Start : Init */
-
+            let input = $(el).find('input[data-type="date"]').length > 0 ? $(el).find('input[data-type="date"]') : $(el);
+            if(input.data('type') === 'date') {
+                settings.onClose = function(selectedDates, dateStr, instance) {
+                    try {
+                        let component = Livewire.find($(input).closest('.lw-form').attr('wire:id'));
+                        component.set(input.attr('name'), input.val());
+                    } catch(error) {console.log(error);}
+                }
+            }
 			var newFlatpickr = window.flatpickr(el, settings);
 
 			/* End : Init */

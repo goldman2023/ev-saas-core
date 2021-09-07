@@ -15,13 +15,15 @@
             @if($style === 'vanilla')
                 <div class="form-control mb-2">
                     <div class="custom-control custom-checkbox">
-                        <input wire:model.defer="{{ $name }}"
+                        <input wire:model.{{ $wireType }}="{{ $name.($appendToName ? '.'.$key.'.'.$valueProperty : '') }}"
                                type="checkbox"
                                id="{{ $id }}"
+                               data-key="{{ $key }}"
                                class="custom-control-input @error($errorBagName) is-invalid @enderror"
                                name="{{ $name }}@if(count($items) > 1)[]@endif"
-                               value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}"
-                               @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif>
+                               @if(!empty($value) || !empty($valueProperty)) value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}" @endif
+                               @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
+                               {{ $attributes }}>
 
                         <label class="custom-control-label" for="{{ $id }}">
                             {{ is_object($item) ? ($item->{$labelProperty}??'') : $item }}

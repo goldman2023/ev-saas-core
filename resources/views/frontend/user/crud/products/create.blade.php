@@ -171,7 +171,6 @@
                 let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
 
                 // TODO: Check if new custom value is added and add it to the DB
-
                 for (const index in $att_values) {
                     if($att_values_idx.indexOf($att_values[index].id) === -1) {
                         component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
@@ -181,8 +180,20 @@
                 }
             });
 
-
-
+            $('input[name^="attributes."][type="radio"]').off().on('change', function(e, data) {
+                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+                let $att_id = $(this).data('attribute-id');
+                let $att_name = $(this).attr('name');
+                console.log($att_id);
+                $('input[name="'+$att_name+'"]').each(function(index, radio) {
+                    let key = $(radio).data('key');
+                    if($(radio).is(':checked')) {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+key+'.selected', true);
+                    } else {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+key+'.selected', false);
+                    }
+                });
+            });
 
             /* Init file managers */
             $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {

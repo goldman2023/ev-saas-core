@@ -18,10 +18,12 @@
                         <input wire:model.defer="{{ $name }}"
                                type="radio"
                                class="custom-control-input @error($errorBagName) is-invalid @enderror"
-                               name="{{ $name }}"
+                               name="{{ $name }}@if(count($items) > 1)[]@endif"
                                id="{{ $id }}"
+                               data-key="{{ $key }}"
                                value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}"
                                @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
+                               {{ $attributes }}
                         >
                         <label class="custom-control-label" for="{{ $id }}">
                             {{ is_object($item) ? ($item->{$labelProperty}??'') : $item }}

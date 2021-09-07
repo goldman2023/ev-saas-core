@@ -127,7 +127,19 @@ class ProductForm extends Component
         $this->product->brand_id = null;
 
         // Set default attributes
-        
+        foreach($this->attributes as $key => $attribute) {
+            if(empty($this->attributes[$key]->attribute_values)) {
+                if($attribute->type !== 'select' && $attribute->type !== 'radio' && $attribute->type !== 'checkbox') {
+                    $this->attributes[$key]->attribute_values[] = [
+                        "id" => null,
+                        "attribute_id" => $attribute->id,
+                        "values" => '',
+                        "selected" => true,
+                    ];
+                }
+            }
+        }
+        //dd($this->attributes);
     }
 
     public function validateSpecificSet($set_name, $next_page, $is_last = false)

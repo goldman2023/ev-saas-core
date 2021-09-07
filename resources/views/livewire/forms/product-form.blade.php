@@ -304,14 +304,16 @@
                                                                               placeholder="{{ translate('Search or add values...') }}"
                                                                               data-attribute-id="{{ $attribute->id }}"
                                                                               data-type="{{ $attribute->type }}">
-                                                                <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
-                                                                                  class="mt-2 mb-2"
-                                                                                  append-text="{{ translate('Used for variations') }}"
-                                                                                  :selected="$attribute->for_variations ?? false">
-                                                                </x-ev.form.toggle>
+                                                                @if($custom_properties->multiple ?? null)
+                                                                    <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
+                                                                                      class="mt-2 mb-2"
+                                                                                      append-text="{{ translate('Used for variations') }}"
+                                                                                      :selected="$attribute->for_variations ?? false">
+                                                                    </x-ev.form.toggle>
+                                                                @endif
                                                             </x-ev.form.select>
                                                         @elseif($attribute->type === 'plain_text')
-                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values"
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
                                                                              type="text"
                                                                              label="{{ $attribute->name }}"
                                                                              data-attribute-id="{{ $attribute->id }}"
@@ -322,7 +324,7 @@
                                                                              wireType="lazy">
                                                             </x-ev.form.input>
                                                         @elseif($attribute->type === 'number')
-                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values"
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
                                                                              type="number"
                                                                              label="{{ $attribute->name }}"
                                                                              :placement="!empty($custom_properties->unit ?? null) ? 'append' : 'prepend'"
@@ -333,7 +335,8 @@
                                                                              value="$attribute->attribute_values[0] ?? []"
                                                                              :min="isset($custom_properties->min_value) ? $custom_properties->min_value : 0"
                                                                              :max="isset($custom_properties->max_value) ? $custom_properties->max_value : 999999999999999999999"
-                                                                             data-type="{{ $attribute->type }}">
+                                                                             data-type="{{ $attribute->type }}"
+                                                                             wireType="lazy">
                                                             </x-ev.form.input>
                                                         @elseif($attribute->type === 'date')
                                                             @php
@@ -343,7 +346,7 @@
                                                                     'mode' => ($custom_properties->range ?? false) ? 'range' : 'single',
                                                                 ];
                                                             @endphp
-                                                            <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values"
+                                                            <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values.0.values"
                                                                                         id="{{ 'date_' . $attribute->id }}"
                                                                                         label="{{ $attribute->name }}"
                                                                                         placeholder="{{ translate('Choose Date(s)...') }}"
@@ -353,17 +356,20 @@
                                                                                         value="$attribute->attribute_values[0] ?? []"
                                                                                         :options="$options"
                                                                                         icon="heroicon-o-calendar"
-                                                                                        data-type="{{ $attribute->type }}">
+                                                                                        data-type="{{ $attribute->type }}"
+                                                                                        wireType="defer">
                                                             </x-ev.form.date-time-picker>
                                                         @elseif($attribute->type === 'checkbox')
                                                             <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                                :append-to-name="true"
                                                                                 :items="$attribute->attribute_values"
                                                                                 error-bag-name="attributes.{{ $attribute->id }}"
                                                                                 data-attribute-id="{{ $attribute->id }}"
-                                                                                value-property="id"
+                                                                                value-property="selected"
                                                                                 label-property="values"
                                                                                 label="{{ $attribute->name }}"
-                                                                                data-type="{{ $attribute->type }}">
+                                                                                data-type="{{ $attribute->type }}"
+                                                                                wireType="lazy">
                                                             </x-ev.form.checkbox>
                                                         @elseif($attribute->type === 'radio')
                                                             <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
@@ -373,7 +379,8 @@
                                                                                 value-property="id"
                                                                                 label-property="values"
                                                                                 label="{{ $attribute->name }}"
-                                                                                data-type="{{ $attribute->type }}">
+                                                                                data-type="{{ $attribute->type }}"
+                                                                                wireType="defer">
                                                             </x-ev.form.radio>
                                                         @endif
                                                     @endif

@@ -17,7 +17,8 @@
         @endif
     @endif
             @php $value = is_array($value) ? (object) $value : $value; @endphp
-            <input name="{{ $name }}"
+            <input wire:model.{{ $wireType }}="{{ $name }}"
+                   name="{{ $name }}"
                    type="text"
                    class="@if(empty($icon)) js-flatpickr form-control flatpickr-custom @else flatpickr-custom-form-control form-control @endif @error($errorBagName) is-invalid @enderror"
                    @if(empty($icon) && $id) id="{{ $id }}" @endif
