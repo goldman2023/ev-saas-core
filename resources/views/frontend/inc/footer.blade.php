@@ -261,7 +261,7 @@
                     @endif
             @endif
         @else
-            <a href="{{ route('user.login') }}" class="text-reset flex-grow-1 text-center py-2">
+            <a href="{{ route('business.login') }}" class="text-reset flex-grow-1 text-center py-2">
                 <span class="avatar avatar-sm d-block mx-auto">
                     <img alt="user avatar" src="{{ static_asset('assets/img/promo/b2b-wood-logo-bg.jpeg') }}">
                 </span>

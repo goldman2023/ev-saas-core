@@ -91,9 +91,9 @@ Route::middleware([
 
     Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
-    Route::get('/users/login', [HomeController::class, 'login'])->name('user.login');
+    Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
     Route::get('/users/registration', [HomeController::class, 'registration'])->name('user.registration');
-    Route::post('/users/login', [HomeController::class, 'user_login'])->name('user.login.submit');
+    Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
 
 

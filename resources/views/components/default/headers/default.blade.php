@@ -105,14 +105,14 @@
                         <li class="list-inline-item">
                             <div class="hs-unfold">
                                 <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary"
-                                   href="{{ route('user.login') }}"> <!--data-toggle="modal" data-target="#signupModal">-->
+                                   href="{{ route('business.login') }}"> <!--data-toggle="modal" data-target="#signupModal">-->
                                     @svg('heroicon-s-user-circle', ['style' => 'width:16px;'])
                                 </a>
                             </div>
                         </li>
 
                         <!--<li class="list-inline-item">
-                            <a href="{{ route('user.login') }}"
+                            <a href="{{ route('business.login') }}"
                                data-test="header.login">
                                 {{ translate('Login') }}
                             </a>

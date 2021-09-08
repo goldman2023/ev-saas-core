@@ -31,7 +31,7 @@
                         </div>
                     </form>
                     <div class="mt-3">
-                        <a href="{{route('user.login')}}" class="text-reset opacity-60">{{translate('Back to Login')}}</a>
+                        <a href="{{route('business.login')}}" class="text-reset opacity-60">{{translate('Back to Login')}}</a>
                     </div>
                 </div>
             </div>

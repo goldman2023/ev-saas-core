@@ -15,7 +15,7 @@ class IsUnbanned
             if(auth()->user()->isAdmin() || auth()->user()->isStaff()){
                 $redirect_to = "login";
             }else{
-                $redirect_to = "user.login";
+                $redirect_to = "business.login";
             }
 
             auth()->logout();
