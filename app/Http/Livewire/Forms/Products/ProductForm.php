@@ -128,9 +128,13 @@ class ProductForm extends Component
 
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
+            if($attribute->type === 'dropdown' || $attribute->type === 'radio' || $attribute->type === 'checkbox') {
+                $attribute->selcted_values = '';
+            }
+
             if(empty($this->attributes[$key]->attribute_values)) {
-                if($attribute->type !== 'select' && $attribute->type !== 'radio' && $attribute->type !== 'checkbox') {
-                    $this->attributes[$key]->attribute_values[] = [
+                if($attribute->type !== 'dropdown' && $attribute->type !== 'radio' && $attribute->type !== 'checkbox') {
+                    $this->attributes[$key]->attribute_values = [
                         "id" => null,
                         "attribute_id" => $attribute->id,
                         "values" => '',
@@ -178,10 +182,11 @@ class ProductForm extends Component
                         $this->product->shipping_cost = 0;
                     } elseif ($this->product->shipping_type === 'flat_rate') {
                         $this->product->shipping_cost = $this->product->flat_shipping_cost;
-                        unset($this->product->flat_shipping_cost);
                     } elseif ($this->product->shipping_type === 'product_wise') {
                         $this->product->shipping_cost = json_encode([]);
                     }
+
+                    unset($this->product->flat_shipping_cost);
 
                     if (empty($this->product->meta_img)) {
                         $this->product->meta_img = $this->product->thumbnail_img;
@@ -230,6 +235,18 @@ class ProductForm extends Component
                             $att_values = $att->attribute_values;
 
                             if($att_values) {
+                                if(isset($att_values['values'])) {
+                                    // Create the value first
+                                    $att_val = new AttributeValue();
+                                    $att_val->attribute_id = $att->id;
+                                    $att_val->values = $att_values['values'];
+                                    $att_val->save();
+
+                                    $att_values['id'] = $att_val->id;
+
+                                    $att_values = [$att_values];
+                                }
+
                                 foreach($att_values as $att_value) {
                                     $att_value = (object) $att_value;
                                     if($att_value->selected ?? null) {
@@ -243,10 +260,11 @@ class ProductForm extends Component
                                         $att_rel->save();
                                     }
                                 }
+
                             }
                         }
                     }
-
+                    
                     // CREATE: Main & Variations Product Stocks
                     // TODO: Create proper product stocks for variations!
                     $product_stock = new ProductStock();

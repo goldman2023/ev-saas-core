@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
+    public $isWired;
     public $class;
     public $id;
     public $name;
@@ -29,8 +30,9 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null)
+    public function __construct($isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null)
     {
+        $this->isWired = $isWired;
         $this->type = $type;
         $this->label = $label;
         $this->items = collect($items);
@@ -48,9 +50,9 @@ class Select extends Component
         $this->id = $id;
         $this->errorBagName = $errorBagName ?: $name;
 
-        $this->options = [
+        /*$this->options = [
             'customClass' => 'custom-select',
-        ];
+        ];*/
         if(!$search) {
             $this->options['minimumResultsForSearch'] = 'Infinity';
         } else {
