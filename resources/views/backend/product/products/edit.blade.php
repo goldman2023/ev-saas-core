@@ -345,12 +345,8 @@
                                         class="las la-language text-danger"
                                         title="{{ translate('Translatable') }}"></i></label>
                                 <div class="col-lg-9">
-                                    <x-ev.form.wysiwyg
-                                    name="description" label="{{ translate('Product Description') }}"
-                                        placeholder=""
-                                        value="{{ $product->description }}"
-                                        >
-                                    </x-ev.form.wysiwyg>
+                                    <textarea name="description" rows="8" class="form-control"></textarea>
+
                                 </div>
                             </div>
                         </div>

@@ -255,9 +255,8 @@
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">{{ translate('Description') }}</label>
                                 <div class="col-md-8">
-                                    <x-ev.form.wysiwyg name="description"
-                                        label="{{ translate('Product Description') }}" placeholder="">
-                                    </x-ev.form.wysiwyg>
+                                    <textarea name="description" rows="8" class="form-control"></textarea>
+
 
                                     {{-- <textarea class="___class_+?135___" name="description"></textarea> --}}
                                 </div>
