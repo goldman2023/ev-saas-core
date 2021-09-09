@@ -167,7 +167,7 @@
                             <a href="#tab_product_details" data-toggle="tab"
                                 class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Product Specification') }}</a>
                             <a href="#tab_default_1" data-toggle="tab"
-                                class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description') }}</a>
+                                class="p-3 fs-16 fw-600 text-reset">{{ translate('Description') }}</a>
                             @if ($detailedProduct->video_link != null)
                                 <a href="#tab_default_2" data-toggle="tab"
                                     class="p-3 fs-16 fw-600 text-reset">{{ translate('Video') }}</a>
