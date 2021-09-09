@@ -36,6 +36,9 @@
             </div>
 
             <!-- End Title -->
+            <div class="product-description mb-3">
+                {{ $product->getTranslation('description'); }}
+            </div>
 
             <!-- Price -->
             <div class="mb-5">
@@ -222,10 +225,10 @@
             <!-- End Accordion -->
 
             <div class="mb-4">
-                <button type="button" 
+                <button type="button"
                 onClick="buyNow()"
                 class="btn btn-block btn-primary btn-pill transition-3d-hover">
-                    
+
                     Add to
                     Cart</button>
             </div>
