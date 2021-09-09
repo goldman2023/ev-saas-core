@@ -346,7 +346,6 @@
                                         title="{{ translate('Translatable') }}"></i></label>
                                 <div class="col-lg-9">
                                     <textarea name="description" rows="8" class="form-control"></textarea>
-
                                 </div>
                             </div>
                         </div>
