@@ -883,7 +883,7 @@ class ProductController extends Controller
 
             if ($value != null) {
                 $relationship_id = $value;
-                if ($attribute->type != "dropdown" && $attribute->type != "checkbox") {
+                if ($attribute->type != "dropdown" && $attribute->type != "checkbox" && $attribute->type != "radio") {
                     if ($attribute_relationship == null) {
                         $attribute_value = new AttributeValue;
                         $attribute_value->attribute_id = $attribute->id;
@@ -895,7 +895,7 @@ class ProductController extends Controller
                     $relationship_id = $attribute_value->id;
                 }
 
-                if ($attribute->type != "checkbox") {
+                if ($attribute->type != "checkbox" && $attribute->type != "radio") {
                     if ($attribute_relationship == null) {
                         $attribute_relationship = new AttributeRelationship;
                         $attribute_relationship->subject_type = "App\Models\Product";
@@ -904,12 +904,16 @@ class ProductController extends Controller
                     }
                     $attribute_relationship->attribute_value_id = $relationship_id;
                     $attribute_relationship->save();
-                }else {
-                    foreach($product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value) as $relation) {
+                } else {
+                    $relations = $product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value)->get();
+
+                    // Delete previous relations
+                    foreach($relations as $relation) {
                         $relation->delete();
                     }
+
                     foreach($value as $index => $option) {
-                        if (count($product->attributes()->where('attribute_id', $key)->where('attribute_value_id', $option)->get()) == 0) {
+                        if (count($relations) === 0) {
                             $attribute_relationship = new AttributeRelationship;
                             $attribute_relationship->subject_type = "App\Models\Product";
                             $attribute_relationship->subject_id = $product->id;
@@ -919,12 +923,12 @@ class ProductController extends Controller
                         }
                     }
                 }
-            }else {
-                if ($attribute->type == "checkbox") {
+            } else {
+                if ($attribute->type === "checkbox" || $attribute->type === "radio") {
                     foreach($product->attributes()->where('attribute_id', $key) as $relation) {
                         $relation->delete();
                     }
-                }else if ($attribute_relationship != null){
+                } else if ($attribute_relationship != null){
                     $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
                     $attribute_relationship->delete();
                     $attribute_value->delete();

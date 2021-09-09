@@ -2,7 +2,7 @@
     <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
     <textarea name="{{ $name }}"
               wire:model.defer="{{ $name }}"
-              class="form-control"
+              class="form-control @error($errorBagName) is-invalid @enderror"
               @if($id) id="{{ $id }}" @endif
               @if($placeholder) placeholder="{{ $placeholder }}" @endif
               {{ $attributes }}>
@@ -10,7 +10,7 @@
 
     {!! $slot !!}
 
-    @error($name)
+    @error($errorBagName)
         <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
 </div>

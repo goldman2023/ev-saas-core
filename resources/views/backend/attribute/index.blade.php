@@ -72,9 +72,9 @@
 									<option value="date">{{ translate('Date') }}</option>
 									<option value="plain_text">{{ translate('Plain Text') }}</option>
 									<option value="checkbox">{{ translate('CheckBox') }}</option>
+                                    <option value="radio">{{ translate('Radio') }}</option>
 									<option value="country">{{ translate('Country') }}</option>
 									<option value="number">{{ translate('Number') }}</option>
-									<option value="date">{{ translate('Date') }}</option>
 								</select>
 							</div>
 

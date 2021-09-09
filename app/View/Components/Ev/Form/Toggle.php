@@ -13,13 +13,14 @@ class Toggle extends Component
     public $appendText;
     public $options;
     public $selected;
+    public $errorBagName;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name = '', $id = null, $prependText = null, $appendText = null, $options = [], $selected = false, $class = '')
+    public function __construct($name = '', $id = null, $prependText = null, $appendText = null, $options = [], $selected = false, $class = '', $errorBagName = null)
     {
         $this->name = $name;
         $this->class = $class;
@@ -28,6 +29,7 @@ class Toggle extends Component
         $this->prependText = $prependText;
         $this->appendText = $appendText;
         $this->options = $options;
+        $this->errorBagName = $errorBagName;
     }
 
 

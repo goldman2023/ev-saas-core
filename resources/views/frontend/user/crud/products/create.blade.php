@@ -25,6 +25,7 @@
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.sortable.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs.flatpickr.js', false, true) }}"></script>
 
     <script>
         function scrollToTop(el = '.js-step-form-1') {
@@ -164,13 +165,12 @@
                 if(data && data.init) return;
 
                 let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
-                let $att_id = $(this).data('attribute-id');
 
-                let $att_values_idx = $(this).val().map(x => parseInt(x, 10));
+                let $att_id = $(this).data('attribute-id');
+                let $att_values_idx = Array.isArray($(this).val()) ? $(this).val().map(x => parseInt(x, 10)) : $(this).val();
                 let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
 
                 // TODO: Check if new custom value is added and add it to the DB
-
                 for (const index in $att_values) {
                     if($att_values_idx.indexOf($att_values[index].id) === -1) {
                         component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
@@ -180,6 +180,20 @@
                 }
             });
 
+            $('input[name^="attributes."][type="radio"]').off().on('change', function(e, data) {
+                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+                let $att_id = $(this).data('attribute-id');
+                let $att_name = $(this).attr('name');
+                console.log($att_id);
+                $('input[name="'+$att_name+'"]').each(function(index, radio) {
+                    let key = $(radio).data('key');
+                    if($(radio).is(':checked')) {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+key+'.selected', true);
+                    } else {
+                        component.set('attributes.'+$att_id+'.attribute_values.'+key+'.selected', false);
+                    }
+                });
+            });
 
             /* Init file managers */
             $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
@@ -197,6 +211,13 @@
             // =======================================================
             $('.js-sortable').each(function () {
                 var sortable = $.HSCore.components.HSSortable.init($(this));
+            });
+
+
+            // INITIALIZATION OF FLATPICKR
+            // =======================================================
+            $('.js-flatpickr').each(function () {
+                $.HSCore.components.HSFlatpickr.init($(this));
             });
 
         }

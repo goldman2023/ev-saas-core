@@ -69,8 +69,11 @@ class AttributeController extends Controller
     {
         // Create new Attribute
         $attribute = new Attribute;
+        $custom_properties = [];
+
         $attribute->name = $request->name;
         $attribute->type = $request->type;
+
         if ($request->filterable) {
             $attribute->filterable = 1;
         }
@@ -82,14 +85,23 @@ class AttributeController extends Controller
             $attribute->schema_key = $request->schema_key;
             $attribute->schema_value = $request->schema_value;
         }
-        if ($request->type == "number") {
-            $custom_properties = array();
+
+        if ($request->type === "number") {
             $custom_properties["min_value"] = '';
             $custom_properties["max_value"] = '';
             $custom_properties["unit"] = '';
 
-            $attribute->custom_properties = json_encode($custom_properties, JSON_UNESCAPED_UNICODE);
+            $attribute->custom_properties = $custom_properties;
+        }  else if($attribute->type === "dropdown") {
+            $custom_properties["multiple"] = false;
+            $attribute->custom_properties = $custom_properties;
+        } else if($attribute->type === "date") {
+            $custom_properties["with_time"] = false;
+            $custom_properties["range"] = false;
+            $custom_properties["historic"] = false;
+            $attribute->custom_properties = $custom_properties;
         }
+
         $attribute->content_type = $request->content_type;
         $attribute->save();
 
@@ -124,7 +136,8 @@ class AttributeController extends Controller
     {
         $lang = $request->lang;
         $attribute = Attribute::findOrFail($id);
-        return view('backend.attribute.edit', compact('attribute', 'lang'));
+        $custom_properties = $attribute->custom_properties;
+        return view('backend.attribute.edit', compact('attribute', 'custom_properties', 'lang'));
     }
 
     /**
@@ -136,29 +149,44 @@ class AttributeController extends Controller
      */
     public function update(UpdateAttributeRequest $request, $id)
     {
+
         $attribute = Attribute::findOrFail($id);
         if ($request->lang == config('app.locale')) {
             $attribute->name = $request->name;
         }
-        if ($attribute->type == "number") {
-            $custom_properties = array();
-            $custom_properties["min_value"] = $request->min_value;
-            $custom_properties["max_value"] = $request->max_value;
-            $custom_properties["unit"] = $request->unit;
 
-            $attribute->custom_properties = json_encode($custom_properties, JSON_UNESCAPED_UNICODE);
-        }
         $attribute->filterable = $request->filterable == "on" ? true : false;
         $attribute->is_admin = $request->is_admin == "on" ? true : false;
+
         if ($request->is_schema == "on") {
             $attribute->is_schema = 1;
             $attribute->schema_key = $request->schema_key;
             $attribute->schema_value = $request->schema_value;
-        }else {
+        } else {
             $attribute->is_schema = 0;
             $attribute->schema_key = null;
             $attribute->schema_value = null;
         }
+
+
+        if ($attribute->type === "number") {
+            $custom_properties = array();
+            $custom_properties["min_value"] = $request->min_value;
+            $custom_properties["max_value"] = $request->max_value;
+            $custom_properties["unit"] = $request->unit ?? '';
+
+            $attribute->custom_properties = $custom_properties;
+        } else if($attribute->type === "dropdown") {
+            $custom_properties["multiple"] = !empty($request->multiple);
+            $attribute->custom_properties = $custom_properties;
+        } else if($attribute->type === "date") {
+            $custom_properties["with_time"] = !empty($request->with_time);
+            $custom_properties["range"] = !empty($request->range);
+            $custom_properties["historic"] = !empty($request->historic);
+            $attribute->custom_properties = $custom_properties;
+        }
+
+
         $attribute->save();
 
         $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $request->lang, 'attribute_id' => $attribute->id]);
