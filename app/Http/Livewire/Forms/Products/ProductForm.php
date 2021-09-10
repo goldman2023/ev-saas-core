@@ -297,7 +297,7 @@ class ProductForm extends Component
     public function dehydrate()
     {
         $this->dispatchBrowserEvent('initProductForm');
-        $this->dispatchBrowserEvent('goToTop');
+        //$this->dispatchBrowserEvent('goToTop');
     }
 
     public function render()
