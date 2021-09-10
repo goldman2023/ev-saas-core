@@ -92,10 +92,12 @@ Route::middleware([
     Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
     Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
+    Route::get('/users/login', [HomeController::class, 'login'])->name('users.login');
     Route::get('/users/registration', [HomeController::class, 'registration'])->name('user.registration');
-    Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
+    Route::post('/business/login', [HomeController::class, 'business_login'])->name('login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
     Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
     Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_products.category');
