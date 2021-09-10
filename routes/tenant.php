@@ -95,7 +95,7 @@ Route::middleware([
     Route::get('/users/registration', [HomeController::class, 'registration'])->name('user.registration');
     Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
-
+    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
     Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_products.category');

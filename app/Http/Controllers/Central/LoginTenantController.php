@@ -10,6 +10,7 @@ class LoginTenantController extends Controller
 {
     public function show()
     {
+        dd("show");
         return view('central.tenants.login');
     }
 
