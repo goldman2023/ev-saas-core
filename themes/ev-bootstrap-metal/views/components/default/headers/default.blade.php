@@ -72,7 +72,7 @@
                 </li>
 
                 <li class="list-inline-item">
-                    <a href="{{ route('user.login') }}"
+                    <a href="{{ route('business.login') }}"
                        data-test="header.login">
                         {{ translate('Client Area') }}
                     </a>

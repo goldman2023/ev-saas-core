@@ -92,7 +92,7 @@
                         </li>
                     @else
                         <li class="list-inline-item mr-3">
-                            <a href="{{ route('user.login') }}"
+                            <a href="{{ route('business.login') }}"
                                 class="text-reset py-2 d-inline-block opacity-60" data-test="header.login">{{ translate('Login') }}</a>
                         </li>
                         <li class="list-inline-item">

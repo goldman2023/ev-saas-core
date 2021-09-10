@@ -44,10 +44,18 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.user_login');
+        return view('frontend.business_login');
     }
 
-    public function user_login(LoginRequest $request)
+    public function login_users()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+        return view('frontend.users_login');
+    }
+
+    public function business_login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
