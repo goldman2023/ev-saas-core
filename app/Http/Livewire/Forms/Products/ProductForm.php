@@ -109,13 +109,17 @@ class ProductForm extends Component
      *
      * @return void
      */
-    public function mount($page = '')
+    public function mount($page = '', $product = null)
     {
         $this->page = $page;
-        $this->attributes = EV::getMappedAttributes('App\Models\Product');
+        $this->attributes = EV::getMappedAttributes('App\Models\Product', $product);
 
         // Set default params
-        $this->product = new Product();
+        if($product) {
+            $this->product = $product;
+        } else {
+            $this->product = new Product();
+        }
         $this->product->slug = '';
         $this->product->is_quantity_multiplied = 1;
         $this->product->shipping_type = 'product_wise';
@@ -134,7 +138,7 @@ class ProductForm extends Component
 
             if(empty($this->attributes[$key]->attribute_values)) {
                 if($attribute->type !== 'dropdown' && $attribute->type !== 'radio' && $attribute->type !== 'checkbox') {
-                    $this->attributes[$key]->attribute_values = [
+                    $this->attributes[$key]->attribute_values[] = [
                         "id" => null,
                         "attribute_id" => $attribute->id,
                         "values" => '',
@@ -159,139 +163,141 @@ class ProductForm extends Component
             }
 
             if($is_last) {
+                $this->insert();
+            } else {
+                $this->page = $next_page;
+            }
+        }
+    }
 
-                DB::beginTransaction();
+    protected function insert() {
+        DB::beginTransaction();
 
-                try {
-                    if(empty($this->product->brand_id)) {
-                        $this->product->brand_id = null;
-                    }
+        try {
+            if(empty($this->product->brand_id)) {
+                $this->product->brand_id = null;
+            }
 
-                    // Create new product!
-                    if (auth()->user()->isSeller()) {
-                        $this->product->user_id = auth()->user()->id;
-                        $this->product->added_by = 'seller';
-                    } else {
-                        $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
-                        $this->product->added_by = 'admin';
-                    }
+            // Create new product!
+            if (auth()->user()->isSeller()) {
+                $this->product->user_id = auth()->user()->id;
+                $this->product->added_by = 'seller';
+            } else {
+                $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
+                $this->product->added_by = 'admin';
+            }
 
-                    $this->product->tags = implode(',', $this->product->tags);
+            $this->product->tags = implode(',', $this->product->tags);
 
-                    if ($this->product->shipping_type === 'free') {
-                        $this->product->shipping_cost = 0;
-                    } elseif ($this->product->shipping_type === 'flat_rate') {
-                        $this->product->shipping_cost = $this->product->flat_shipping_cost;
-                    } elseif ($this->product->shipping_type === 'product_wise') {
-                        $this->product->shipping_cost = json_encode([]);
-                    }
+            if ($this->product->shipping_type === 'free') {
+                $this->product->shipping_cost = 0;
+            } elseif ($this->product->shipping_type === 'flat_rate') {
+                $this->product->shipping_cost = $this->product->flat_shipping_cost;
+            } elseif ($this->product->shipping_type === 'product_wise') {
+                $this->product->shipping_cost = json_encode([]);
+            }
 
-                    unset($this->product->flat_shipping_cost);
+            unset($this->product->flat_shipping_cost);
 
-                    if (empty($this->product->meta_img)) {
-                        $this->product->meta_img = $this->product->thumbnail_img;
-                    }
+            if (empty($this->product->meta_img)) {
+                $this->product->meta_img = $this->product->thumbnail_img;
+            }
 
-                    if (empty($this->product->meta_title)) {
-                        $this->product->meta_img = $this->product->name;
-                    }
+            if (empty($this->product->meta_title)) {
+                $this->product->meta_img = $this->product->name;
+            }
 
-                    if (empty(trim($this->product->meta_description))) {
-                        $this->product->meta_description = trim(strip_tags($this->product->description));
-                    }
+            if (empty(trim($this->product->meta_description))) {
+                $this->product->meta_description = trim(strip_tags($this->product->description));
+            }
 
-                    // TODO: Add Featured, Cash on delivery, Todays deal to the form
-                    $this->product->cash_on_delivery = 0;
-                    $this->product->featured = 0;
-                    $this->product->todays_deal = 0;
+            // TODO: Add Featured, Cash on delivery, Todays deal to the form
+            $this->product->cash_on_delivery = 0;
+            $this->product->featured = 0;
+            $this->product->todays_deal = 0;
 
-                    // TODO: Add Product status option to the form - published, draft
-                    $this->product->published = 1;
+            // TODO: Add Product status option to the form - published, draft
+            $this->product->published = 1;
 
-                    // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
-                    // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
+            // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
+            // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
 
-                    // Save product
-                    $this->product->save();
+            // Save product
+            $this->product->save();
 
-                    // CREATE: Product Translations
-                    $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
-                    $product_translation->name = $this->product->name;
-                    $product_translation->unit = $this->product->unit;
-                    $product_translation->description = $this->product->description;
-                    $product_translation->save();
+            // CREATE: Product Translations
+            $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
+            $product_translation->name = $this->product->name;
+            $product_translation->unit = $this->product->unit;
+            $product_translation->description = $this->product->description;
+            $product_translation->save();
 
-                    // TODO: VAT & TAX, Flash Deals
+            // TODO: VAT & TAX, Flash Deals
 
-                    // CREATE: Attribute relationships
-                    $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
-                        $att = (object) $att;
-                        return $att->selected === true;
-                    });
+            // CREATE: Attribute relationships
+            $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
+                $att = (object) $att;
+                return $att->selected === true;
+            });
 
-                    if($selected_attributes) {
-                        foreach($selected_attributes as $att) {
-                            $att = (object) $att;
-                            $att_values = $att->attribute_values;
+            if($selected_attributes) {
+                foreach($selected_attributes as $att) {
+                    $att = (object) $att;
+                    $att_values = $att->attribute_values;
 
-                            if($att_values) {
-                                if(isset($att_values['values'])) {
-                                    // Create the value first
-                                    $att_val = new AttributeValue();
-                                    $att_val->attribute_id = $att->id;
-                                    $att_val->values = $att_values['values'];
-                                    $att_val->save();
+                    if($att_values) {
+                        if(isset($att_values['values'])) {
+                            // Create the value first
+                            $att_val = new AttributeValue();
+                            $att_val->attribute_id = $att->id;
+                            $att_val->values = $att_values['values'];
+                            $att_val->save();
 
-                                    $att_values['id'] = $att_val->id;
+                            $att_values['id'] = $att_val->id;
 
-                                    $att_values = [$att_values];
-                                }
+                            $att_values = [$att_values];
+                        }
 
-                                foreach($att_values as $att_value) {
-                                    $att_value = (object) $att_value;
-                                    if($att_value->selected ?? null) {
-                                        // Create product-attribute relationship
-                                        $att_rel = new AttributeRelationship();
-                                        $att_rel->subject_type = 'App\Models\Product';
-                                        $att_rel->subject_id = $this->product->id;
-                                        $att_rel->attribute_id = $att->id;
-                                        $att_rel->attribute_value_id = $att_value->id;
-                                        $att_rel->for_variations = $att->for_variations;
-                                        $att_rel->save();
-                                    }
-                                }
-
+                        foreach($att_values as $att_value) {
+                            $att_value = (object) $att_value;
+                            if($att_value->selected ?? null) {
+                                // Create product-attribute relationship
+                                $att_rel = new AttributeRelationship();
+                                $att_rel->subject_type = 'App\Models\Product';
+                                $att_rel->subject_id = $this->product->id;
+                                $att_rel->attribute_id = $att->id;
+                                $att_rel->attribute_value_id = $att_value->id;
+                                $att_rel->for_variations = $att->for_variations;
+                                $att_rel->save();
                             }
                         }
                     }
-                    
-                    // CREATE: Main & Variations Product Stocks
-                    // TODO: Create proper product stocks for variations!
-                    $product_stock = new ProductStock();
-                    $product_stock->product_id = $this->product->id;
-                    $product_stock->price = $this->product->unit_price;
-                    $product_stock->qty = $this->product->current_stock;
-                    $product_stock->save();
-
-                    DB::commit();
-
-                    $this->insert_success = true;
-
-                    $this->dispatchBrowserEvent('goToTop');
-                } catch(\Exception $e) {
-                    DB::rollBack();
-                    dd($e->getMessage());
                 }
-            } else {
-                // After validation, go to next step
-                $this->page = $next_page;
             }
+
+            // CREATE: Main & Variations Product Stocks
+            // TODO: Create proper product stocks for variations!
+            $product_stock = new ProductStock();
+            $product_stock->product_id = $this->product->id;
+            $product_stock->price = $this->product->unit_price;
+            $product_stock->qty = $this->product->current_stock;
+            $product_stock->save();
+
+            DB::commit();
+
+            $this->insert_success = true;
+
+            $this->dispatchBrowserEvent('goToTop');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
         }
     }
 
     public function dehydrate()
     {
         $this->dispatchBrowserEvent('initProductForm');
+        $this->dispatchBrowserEvent('goToTop');
     }
 
     public function render()

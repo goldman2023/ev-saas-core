@@ -8,14 +8,20 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
     $trail->push(translate('Account'), route('dashboard'));
 });
 
-// User Products Index
+// EV Products Index
 Breadcrumbs::for('ev-products.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push(translate('Products'), route('ev-products.index'));
 });
 
-// User Products Index
+// EV Products Create
 Breadcrumbs::for('ev-products.create', function (BreadcrumbTrail $trail) {
     $trail->parent('ev-products.index');
     $trail->push(translate('Add New Product'), route('ev-products.create'));
+});
+
+// EV Products Edit
+Breadcrumbs::for('ev-products.edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('ev-products.index');
+    $trail->push(translate('Edit Product'), '');
 });

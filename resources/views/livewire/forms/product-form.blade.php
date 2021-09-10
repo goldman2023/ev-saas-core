@@ -313,17 +313,17 @@
                                                                 @endif
                                                             </x-ev.form.select>
                                                         @elseif($attribute->type === 'plain_text')
-                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.values"
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
                                                                              type="text"
                                                                              label="{{ $attribute->name }}"
                                                                              data-attribute-id="{{ $attribute->id }}"
                                                                              error-bag-name="attributes.{{ $attribute->id }}"
-                                                                             value="$attribute->attribute_values->values ?? ''"
+                                                                             :value="$attribute->attribute_values->values ?? ''"
                                                                              data-type="{{ $attribute->type }}"
                                                                              wireType="defer">
                                                             </x-ev.form.input>
                                                         @elseif($attribute->type === 'number')
-                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.values"
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
                                                                              type="number"
                                                                              label="{{ $attribute->name }}"
                                                                              :placement="!empty($custom_properties->unit ?? null) ? 'append' : 'prepend'"
@@ -344,7 +344,7 @@
                                                                     'mode' => ($custom_properties->range ?? false) ? 'range' : 'single',
                                                                 ];
                                                             @endphp
-                                                            <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values.values"
+                                                            <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values.0.values"
                                                                                         id="{{ 'date_' . $attribute->id }}"
                                                                                         label="{{ $attribute->name }}"
                                                                                         placeholder="{{ translate('Choose Date(s)...') }}"
@@ -480,8 +480,8 @@
     <x-ev.alert id="successMessageContent" class="{{ !$insert_success ? 'd-none':'' }}" content-class="flex flex-column" type="success" title="{{ translate('Product successfully created!') }}">
         <span class="d-block">{{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}</span>
         <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white mr-3" href="{{ $product->permalink }}">{{ translate('Preview') }}</a>
-            <a class="btn btn-white mr-3" href="{{ route('ev-products.create') }}">{{ translate('Edit') }}</a>
+            <a class="btn btn-white mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            <a class="btn btn-white mr-3" href="{{ route('ev-products.create') }}" target="_blank">{{ translate('Edit') }}</a>
             <!-- TODO: ^^^ Change route for edit to actually be ev-product edit route, not create! This is just for testing. ^^^ -->
         </div>
     </x-ev.alert>
