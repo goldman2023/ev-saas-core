@@ -77,6 +77,8 @@ Route::middleware([
 
     Route::resource('shops', 'ShopController');
 
+    Route::get('/business/register', 'ShopController@create')->name('business.register');
+
 
     Auth::routes(['verify' => true]);
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -92,8 +94,8 @@ Route::middleware([
     Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
     Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
-    Route::get('/users/login', [HomeController::class, 'login'])->name('users.login');
-    Route::get('/users/registration', [HomeController::class, 'registration'])->name('user.registration');
+    Route::get('/users/login', [HomeController::class, 'login_users'])->name('users.login');
+    Route::get('/users/register', [HomeController::class, 'registration'])->name('user.registration');
     Route::post('/business/login', [HomeController::class, 'business_login'])->name('login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
     Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('login');

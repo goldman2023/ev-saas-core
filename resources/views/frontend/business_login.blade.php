@@ -124,7 +124,7 @@
                                     @endif
                                     <div class="text-center">
                                         <span class="small text-muted">Do not have an account?</span>
-                                        <a class="js-animation-link small font-weight-bold" href="{{ route('user.registration') }}"
+                                        <a class="js-animation-link small font-weight-bold" href="{{ route('business.register') }}"
                                             data-hs-show-animation-options='{
                                                  "targetSelector": "#signup",
                                                  "groupName": "idForm",
