@@ -125,6 +125,21 @@ class ProductForm extends Component
         $this->product->low_stock_quantity = 1;
         $this->product->min_qty = 1;
         $this->product->brand_id = null;
+
+        // Set default attributes
+        foreach($this->attributes as $key => $attribute) {
+            if(empty($this->attributes[$key]->attribute_values)) {
+                if($attribute->type !== 'select' && $attribute->type !== 'radio' && $attribute->type !== 'checkbox') {
+                    $this->attributes[$key]->attribute_values[] = [
+                        "id" => null,
+                        "attribute_id" => $attribute->id,
+                        "values" => '',
+                        "selected" => true,
+                    ];
+                }
+            }
+        }
+        //dd($this->attributes);
     }
 
     public function validateSpecificSet($set_name, $next_page, $is_last = false)
@@ -233,6 +248,7 @@ class ProductForm extends Component
                     }
 
                     // CREATE: Main & Variations Product Stocks
+                    // TODO: Create proper product stocks for variations!
                     $product_stock = new ProductStock();
                     $product_stock->product_id = $this->product->id;
                     $product_stock->price = $this->product->unit_price;

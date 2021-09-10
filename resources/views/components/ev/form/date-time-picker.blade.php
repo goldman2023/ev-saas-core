@@ -1,16 +1,16 @@
 <div class="form-group {{ $groupclass }}">
     <label @if($id) for="{{ $id }}" @endif class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
 
-    @if(!empty($icon) || !empty($text))
-        <div class="input-group @if($merge) input-group-merge @endif">
+    @if(!empty($icon))
+        <div @if($id) id="{{ $id }}" @endif
+             class="js-flatpickr flatpickr-custom input-group input-group-merge"
+             data-hs-flatpickr-options='@if(is_string($options)) {!! $options !!} @else @json($options) @endif'>
 
         @if($placement === 'prepend')
-            <div class="input-group-prepend">
+            <div class="input-group-prepend" data-toggle>
                 <span class="input-group-text">
                     @if($icon)
-                        @svg($icon, ['class' => ''])
-                    @elseif($text)
-                        {{ $text }}
+                        @svg($icon, ['style' => 'width:16px;'])
                     @endif
                 </span>
             </div>
@@ -18,32 +18,21 @@
     @endif
             @php $value = is_array($value) ? (object) $value : $value; @endphp
             <input wire:model.{{ $wireType }}="{{ $name }}"
-                   type="{{ $type }}"
-                   class="form-control {{ $class }} @error($errorBagName) is-invalid @enderror"
                    name="{{ $name }}"
-                   @if($id) id="{{ $id }}" @endif
+                   type="text"
+                   class="@if(empty($icon)) js-flatpickr form-control flatpickr-custom @else flatpickr-custom-form-control form-control @endif @error($errorBagName) is-invalid @enderror"
+                   @if(empty($icon) && $id) id="{{ $id }}" @endif
                    @if($placeholder) placeholder="{{ $placeholder }}" @endif
+                   @if(empty($icon)) data-hs-flatpickr-options='@if(is_string($options)) {!! $options !!} @else @json($options) @endif' @endif
                    @if(is_object($value) && isset($value->{$valueProperty}))
                         value="{{ $value->{$valueProperty} ?? '' }}"
                    @else
                         value="{{ $value }}"
                    @endif
-                   aria-label="{{ $label }}"
-                   {{ $attributes }}
-            >
-    @if(!empty($icon) || !empty($text))
-        @if($placement === 'append')
-            <div class="input-group-append">
-                <span class="input-group-text">
-                  @if($icon)
-                     @svg($icon, ['class' => ''])
-                  @elseif($text)
-                     {{ $text }}
-                  @endif
-                </span>
-            </div>
-        @endif
+                   data-input
+                   {{ $attributes }}>
 
+    @if(!empty($icon))
         </div>
     @endif
 

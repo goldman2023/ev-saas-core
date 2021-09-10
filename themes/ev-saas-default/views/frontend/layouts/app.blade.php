@@ -29,6 +29,31 @@
 
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
+    <script>
+        var AIZ = AIZ || {};
+        AIZ.local = {
+            nothing_found: '{{ translate('Nothing found') }}',
+            choose_file: '{{ translate('Choose file') }}',
+            file_selected: '{{ translate('File selected') }}',
+            files_selected: '{{ translate('Files selected') }}',
+            add_more_files: '{{ translate('Add more files') }}',
+            adding_more_files: '{{ translate('Adding more files') }}',
+            drop_files_here_paste_or: '{{ translate('Drop files here, paste or') }}',
+            browse: '{{ translate('Browse') }}',
+            upload_complete: '{{ translate('Upload complete') }}',
+            upload_paused: '{{ translate('Upload paused') }}',
+            resume_upload: '{{ translate('Resume upload') }}',
+            pause_upload: '{{ translate('Pause upload') }}',
+            retry_upload: '{{ translate('Retry upload') }}',
+            cancel_upload: '{{ translate('Cancel upload') }}',
+            uploading: '{{ translate('Uploading') }}',
+            processing: '{{ translate('Processing') }}',
+            complete: '{{ translate('Complete') }}',
+            file: '{{ translate('File') }}',
+            files: '{{ translate('Files') }}',
+        }
+    </script>
+
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
@@ -41,7 +66,13 @@
     </style>
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
-    
+
+    <script src="{{ mix('js/app.js', 'themes/'.Theme::parent()) }}"></script>
+    <!-- Vendor Scripts -->
+    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
+
+
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>
 
@@ -96,11 +127,7 @@
 
 @yield('modal')
 
-<script src="{{ mix('js/app.js', 'themes/'.Theme::parent()) }}"></script>
 
-    <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
 
 

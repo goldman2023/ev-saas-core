@@ -345,12 +345,7 @@
                                         class="las la-language text-danger"
                                         title="{{ translate('Translatable') }}"></i></label>
                                 <div class="col-lg-9">
-                                    <x-ev.form.wysiwyg
-                                    name="description" label="{{ translate('Product Description') }}"
-                                        placeholder=""
-                                        value="{{ $product->description }}"
-                                        >
-                                    </x-ev.form.wysiwyg>
+                                    <textarea name="description" rows="8" class="form-control">{{ $product->description }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -934,9 +929,9 @@
 
         var form = document.getElementById("product-form"); // get form by ID
         form.onsubmit = function() { // onsubmit do this first
-            var description = document.querySelector('input[name=description]'); // set name input var
-            name.description = JSON.stringify(quill.getContents()); // populate name input with quill data
-            return true; // submit form
+            // var description = document.querySelector('input[name=description]'); // set name input var
+            // name.description = JSON.stringify(quill.getContents()); // populate name input with quill data
+            // return true; // submit form
         }
 
         $(document).ready(function() {

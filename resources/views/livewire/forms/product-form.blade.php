@@ -287,26 +287,103 @@
 
                                             @if($attributes)
                                                 @foreach($attributes as $attribute)
-                                                    @php $attribute = (object) $attribute; @endphp
+                                                    @php
+                                                        $attribute = (object) $attribute; // NOTE: Retard doesn't work properly without a cast, even though it is an object in livewire component (facepalm)
+                                                        $custom_properties = (object) $attribute->custom_properties;
+                                                    @endphp
                                                     @if($attribute->selected ?? null)
-                                                        <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
-                                                                          error-bag-name="attributes.{{ $attribute->id }}"
-                                                                          label="{{ $attribute->name }}"
-                                                                          :items="$attribute->attribute_values"
-                                                                          value-property="id"
-                                                                          label-property="values"
-                                                                          :tags="true"
-                                                                          :multiple="true"
-                                                                          placeholder="{{ translate('Search or add values...') }}"
-                                                                          data-attribute-id="{{ $attribute->id }}">
-                                                            <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
-                                                                              class="mt-2 mb-2"
-                                                                              append-text="{{ translate('Used for variations') }}"
-                                                                              :selected="$attribute->for_variations ?? false">
-                                                            </x-ev.form.toggle>
-                                                        </x-ev.form.select>
+                                                        @if($attribute->type === 'dropdown')
+                                                            <x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                              error-bag-name="attributes.{{ $attribute->id }}"
+                                                                              label="{{ $attribute->name }}"
+                                                                              :items="$attribute->attribute_values"
+                                                                              value-property="id"
+                                                                              label-property="values"
+                                                                              :tags="true"
+                                                                              :multiple="($custom_properties->multiple ?? null) ? true : false"
+                                                                              placeholder="{{ translate('Search or add values...') }}"
+                                                                              data-attribute-id="{{ $attribute->id }}"
+                                                                              data-type="{{ $attribute->type }}">
+                                                                @if($custom_properties->multiple ?? null)
+                                                                    <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
+                                                                                      class="mt-2 mb-2"
+                                                                                      append-text="{{ translate('Used for variations') }}"
+                                                                                      :selected="$attribute->for_variations ?? false">
+                                                                    </x-ev.form.toggle>
+                                                                @endif
+                                                            </x-ev.form.select>
+                                                        @elseif($attribute->type === 'plain_text')
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
+                                                                             type="text"
+                                                                             label="{{ $attribute->name }}"
+                                                                             data-attribute-id="{{ $attribute->id }}"
+                                                                             error-bag-name="attributes.{{ $attribute->id }}"
+                                                                             value-property="values"
+                                                                             value="$attribute->attribute_values[0] ?? []"
+                                                                             data-type="{{ $attribute->type }}"
+                                                                             wireType="lazy">
+                                                            </x-ev.form.input>
+                                                        @elseif($attribute->type === 'number')
+                                                            <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
+                                                                             type="number"
+                                                                             label="{{ $attribute->name }}"
+                                                                             :placement="!empty($custom_properties->unit ?? null) ? 'append' : 'prepend'"
+                                                                             :text="!empty($custom_properties->unit ?? null) ? $custom_properties->unit : ''"
+                                                                             data-attribute-id="{{ $attribute->id }}"
+                                                                             error-bag-name="attributes.{{ $attribute->id }}"
+                                                                             value-property="values"
+                                                                             value="$attribute->attribute_values[0] ?? []"
+                                                                             :min="isset($custom_properties->min_value) ? $custom_properties->min_value : 0"
+                                                                             :max="isset($custom_properties->max_value) ? $custom_properties->max_value : 999999999999999999999"
+                                                                             data-type="{{ $attribute->type }}"
+                                                                             wireType="lazy">
+                                                            </x-ev.form.input>
+                                                        @elseif($attribute->type === 'date')
+                                                            @php
+                                                                $options = [
+                                                                    'dateFormat' => ($custom_properties->with_time ?? false) ? 'd.m.Y H:i' : 'd.m.Y',
+                                                                    'enableTime' => (bool) ($custom_properties->with_time ?? false),
+                                                                    'mode' => ($custom_properties->range ?? false) ? 'range' : 'single',
+                                                                ];
+                                                            @endphp
+                                                            <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values.0.values"
+                                                                                        id="{{ 'date_' . $attribute->id }}"
+                                                                                        label="{{ $attribute->name }}"
+                                                                                        placeholder="{{ translate('Choose Date(s)...') }}"
+                                                                                        error-bag-name="attributes.{{ $attribute->id }}"
+                                                                                        data-attribute-id="{{ $attribute->id }}"
+                                                                                        value-property="values"
+                                                                                        value="$attribute->attribute_values[0] ?? []"
+                                                                                        :options="$options"
+                                                                                        icon="heroicon-o-calendar"
+                                                                                        data-type="{{ $attribute->type }}"
+                                                                                        wireType="defer">
+                                                            </x-ev.form.date-time-picker>
+                                                        @elseif($attribute->type === 'checkbox')
+                                                            <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                                :append-to-name="true"
+                                                                                :items="$attribute->attribute_values"
+                                                                                error-bag-name="attributes.{{ $attribute->id }}"
+                                                                                data-attribute-id="{{ $attribute->id }}"
+                                                                                value-property="selected"
+                                                                                label-property="values"
+                                                                                label="{{ $attribute->name }}"
+                                                                                data-type="{{ $attribute->type }}"
+                                                                                wireType="lazy">
+                                                            </x-ev.form.checkbox>
+                                                        @elseif($attribute->type === 'radio')
+                                                            <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                                :items="$attribute->attribute_values"
+                                                                                error-bag-name="attributes.{{ $attribute->id }}"
+                                                                                data-attribute-id="{{ $attribute->id }}"
+                                                                                value-property="id"
+                                                                                label-property="values"
+                                                                                label="{{ $attribute->name }}"
+                                                                                data-type="{{ $attribute->type }}"
+                                                                                wireType="defer">
+                                                            </x-ev.form.radio>
+                                                        @endif
                                                     @endif
-
                                                 @endforeach
                                             @endif
 
@@ -314,13 +391,14 @@
                                     </div>
                                     <!-- End Body -->
 
+
                                     <!-- Footer -->
                                     <div class="border-top pt-3">
                                         <div class="d-flex align-items-center">
                                             <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                                     data-hs-step-form-prev-options='{
-                                         "targetSelector": "#productStepPriceStockShipping"
-                                       }'>
+                                                     "targetSelector": "#productStepPriceStockShipping"
+                                                   }'>
                                                 @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                                 {{ translate('Previous step') }}
                                             </button>

@@ -600,7 +600,8 @@ $navbar-dark-hover-color:                                   $white !default;
 // Paddings
 $navbar-toggler-padding-y:                                  .75rem !default;
 
-
+// Z-index
+$navbar-z-index:                                            99 !default;
 
 // Header
 // =========================================================
@@ -2284,3 +2285,257 @@ $quill-tooltip-input-focus-box-shadow:                      $input-focus-box-sha
 // Transitions
 $quill-tooltip-input-transition:                            $transition-timing !default;
 $quill-btn-transition:                                      $transition-timing !default;
+
+
+// Flatpickr
+// =========================================================
+
+// Colors
+$flatpickr-day-color:                                       $headings-color !default;
+$flatpickr-form-control-color:                              $primary !default;
+$flatpickr-selected-end-start-range-color:                  $white !default;
+$flatpickr-weekday-color:                                   $gray-500 !default;
+$flatpickr-day-hover-color:                                 $link-color !default;
+$flatpickr-day-today-color:                                 $white !default;
+$flatpickr-day-inrange-color:                               $flatpickr-day-today-color !default;
+$flatpickr-day-prev-and-next-month-day-color:               $gray-300 !default;
+$flatpickr-day-prev-and-next-month-day-hover-color:         $gray-400 !default;
+$flatpickr-day-disabled-color:                              $disabled-color !default;
+$flatpickr-day-disabled-hover-color:                        $flatpickr-day-disabled-color !default;
+$flatpickr-day-in-range-selected-days-hover-color:          $white !default;
+$flatpickr-prev-next-btn-icon-color:                        $body-color !default;
+$flatpickr-prev-next-btn-icon-hover-color:                  $link-color !default;
+
+// Backgrounds
+$flatpickr-selected-end-start-range-bg-color:               $active-bg-color !default;
+$flatpickr-month-dropdown-hover-bg-color:                   transparent !default;
+$flatpickr-day-hover-bg-color:                              $secondary-hover-bg-color !default;
+$flatpickr-day-inrange-bg-color:                            $active-bg-color !default;
+$flatpickr-day-today-bg-color:                              $active-bg-color !default;
+$flatpickr-day-prev-and-next-month-day-hover-bg-color:      $light-bg-color !default;
+$flatpickr-day-disabled-hover-bg-color:                     $light-bg-color !default;
+$flatpickr-day-in-range-selected-days-hover-bg-color:       $flatpickr-day-inrange-bg-color !default;
+$flatpickr-numinput-wrapper-hover-bg-color:                 transparent !default;
+$flatpickr-prev-next-btn-icon-bg-color:                     $btn-ghost-bg-color !default;
+$flatpickr-prev-next-btn-icon-hover-bg-color:               $secondary-hover-bg-color !default;
+
+// Borders
+$flatpickr-border-radius:                                   $card-border-radius !default;
+$flatpickr-selected-end-start-range-border-color:           $flatpickr-selected-end-start-range-bg-color !default;
+$flatpickr-pseudo-border-width:                             .5rem !default;
+$flatpickr-pseudo-border-color:                             $white !default;
+$flatpickr-day-today-border-color:                          transparent;
+$flatpickr-day-prev-and-next-month-day-hover-border-color:  $border-color !default;
+$flatpickr-day-disabled-hover-border-color:                 $border-color !default;
+$flatpickr-day-in-range-selected-days-hover-border-color:   $flatpickr-day-in-range-selected-days-hover-bg-color !default;
+$flatpickr-prev-next-btn-icon-border-radius:                $border-radius-rounded !default;
+
+// Width & Height
+$flatpickr-width:                                           21.125rem !default;
+$flatpickr-custom-min-width:                                6.5rem !default;
+$flatpickr-prev-next-btn-icon-width:                        $btn-icon-width-sm !default;
+$flatpickr-prev-next-btn-icon-height:                       $flatpickr-prev-next-btn-icon-width !default;
+
+// Positions
+$flatpickr-pseudo-left-offset:                              1rem !default;
+
+// Type
+$flatpickr-weekday-font-weight:                             $font-weight-bold !default;
+$flatpickr-month-dropdown-font-size:                        $font-size-base !default;
+$flatpickr-months-dropdown-font-weight:                     $font-weight-bold !default;
+$flatpickr-months-and-year-font-weight:                     $flatpickr-months-dropdown-font-weight !default;
+$flatpickr-months-and-year-font-size:                       $flatpickr-month-dropdown-font-size !default;
+$flatpickr-prev-next-btn-icon-line-height:                  $flatpickr-prev-next-btn-icon-height !default;
+
+// Shadows
+$flatpickr-box-shadow:                                      $dropdown-box-shadow !default;
+$flatpickr-day-inrange-box-shadow:                          -.35rem 0 0 $flatpickr-day-inrange-bg-color, .35rem 0 0 $flatpickr-day-inrange-bg-color !default;
+
+// Padding
+$flatpickr-padding-y:                                       1rem !default;
+$flatpickr-padding-x:                                       1rem !default;
+
+// Margin
+$flatpickr-day-rangeMode-margin-top-offset:                 .25rem !default;
+$flatpickr-months-margin-y:                                 .75rem !default;
+
+// Transitions
+$flatpickr-active-open-animation:                           fadeInUp 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
+
+
+// Daterangepicker
+// =========================================================
+
+// Colors
+$daterangepicker-available-date-hover-color:                $flatpickr-day-hover-color !default;
+$daterangepicker-active-date-color:                         $flatpickr-day-today-color !default;
+$daterangepicker-in-range-color:                            $flatpickr-day-inrange-color !default;
+$daterangepicker-week-color:                                $flatpickr-weekday-color !default;
+$daterangepicker-off-date-color:                            $flatpickr-day-prev-and-next-month-day-color !default;
+$daterangepicker-select-color:                              $headings-color !default;
+$daterangepicker-selected-color:                            $secondary !default;
+$daterangepicker-prev-next-btn-icon-color:                  $flatpickr-prev-next-btn-icon-color !default;
+$daterangepicker-prev-next-btn-icon-hover-color:            $flatpickr-prev-next-btn-icon-hover-color !default;
+$daterangepicker-ranges-item-color:                         $secondary !default;
+$daterangepicker-ranges-item-active-color:                  $active-color !default;
+$daterangepicker-ranges-item-hover-color:                   $link-hover-color !default;
+$daterangepicker-select-hover-color:                        $link-hover-color !default;
+
+// Background Colors
+$daterangepicker-active-date-bg-color:                      $flatpickr-day-today-bg-color !default;
+$daterangepicker-available-date-hover-bg-color:             $flatpickr-day-hover-bg-color !default;
+$daterangepicker-in-range-bg-color:                         $flatpickr-day-inrange-bg-color !default;
+$daterangepicker-prev-next-btn-icon-hover-bg-color:         $secondary-hover-bg-color !default;
+$daterangepicker-ranges-item-active-bg-color:               $secondary-active-bg-color !default;
+$daterangepicker-ranges-item-hover-bg-color:                transparent !default;
+$daterangepicker-select-bg-color:                           transparent !default;
+
+// Borders
+$daterangepicker-border-radius:                             $flatpickr-border-radius !default;
+$daterangepicker-border-color:                              $border-color !default;
+$daterangepicker-pseudo-border-color:                       $flatpickr-pseudo-border-color !default;
+$daterangepicker-pseudo-border-width:                       $flatpickr-pseudo-border-width !default;
+$daterangepicker-calendar-table-border-spacing:             $flatpickr-day-rangeMode-margin-top-offset !default;
+$daterangepicker-available-date-border-radius:              $border-radius-rounded !default;
+$daterangepicker-prev-next-btn-border-radius:               $flatpickr-prev-next-btn-icon-border-radius !default;
+$daterangepicker-start-date-border-right-radius:            $border-radius-pill !default;
+$daterangepicker-end-date-border-right-radius:              $daterangepicker-start-date-border-right-radius !default;
+$daterangepicker-select-border-radius:                      $border-radius !default;
+$daterangepicker-select-border-color:                       $border-color !default;
+
+// Position
+$daterangepicker-pseudo-top-offset:                         $daterangepicker-pseudo-border-width !default;
+$daterangepicker-pseudo-left-offset:                        $flatpickr-pseudo-left-offset !default;
+
+// Shadows
+$daterangepicker-box-shadow:                                $flatpickr-box-shadow !default;
+
+// Width & Height
+$daterangepicker-calendar-max-width:                        18.75rem !default;
+$daterangepicker-day-width:                                 $btn-icon-width-sm !default;
+$daterangepicker-day-height:                                $btn-icon-height-sm !default;
+$daterangepicker-ranges-min-width:                          10rem !default;
+$daterangepicker-prev-next-btn-icon-width:                  $flatpickr-prev-next-btn-icon-width !default;
+$daterangepicker-prev-next-btn-icon-height:                 $daterangepicker-prev-next-btn-icon-width !default;
+$daterangepicker-select-width:                              3.5rem !default;
+
+// Z-index
+$daterangepicker-z-index:                                   $navbar-z-index - 1 !default;
+
+// Type
+$daterangepicker-prev-next-btn-icon-font-size:              $font-size-base !default;
+$daterangepicker-font-family:                               $font-family-base !default;
+$daterangepicker-week-font-weight:                          $flatpickr-weekday-font-weight !default;
+$daterangepicker-day-line-height:                           $daterangepicker-day-height - .25rem !default;
+$daterangepicker-month-font-size:                           $flatpickr-month-dropdown-font-size !default;
+$daterangepicker-month-font-weight:                         $flatpickr-months-and-year-font-weight !default;
+$daterangepicker-day-font-size:                             $font-size-base !default;
+$daterangepicker-buttons-btn-font-weight:                   $btn-font-weight !default;
+$daterangepicker-ranges-item-font-size:                     $font-size-base !default;
+$daterangepicker-select-font-size:                          $font-size-sm !default;
+
+// Padding
+$daterangepicker-padding-y:                                 $flatpickr-padding-y !default;
+$daterangepicker-padding-x:                                 $flatpickr-padding-x !default;
+$daterangepicker-ranges-padding-y:                          $dropdown-padding-y !default;
+$daterangepicker-ranges-item-padding-y:                     $dropdown-item-padding-y !default;
+$daterangepicker-ranges-item-padding-x:                     $dropdown-item-padding-x !default;
+$daterangepicker-select-padding-y:                          .25rem !default;
+$daterangepicker-select-padding-x:                          $daterangepicker-select-padding-y !default;
+
+// Margins
+$daterangepicker-selected-margin-y:                         .5rem !default;
+$daterangepicker-margin-y:                                  $daterangepicker-pseudo-top-offset !default;
+
+// Fullcalendar
+// =========================================================
+
+// Colors
+$fullcalendar-cell-cushion-color:                           $flatpickr-weekday-color !default;
+$fullcalendar-daygrid-day-number-color:                     $dark !default;
+$fullcalendar-daygrid-day-number-active-color:              $flatpickr-day-today-color !default;
+$fullcalendar-daygrid-day-number-disabled-color:            $flatpickr-day-prev-and-next-month-day-color !default;
+$fullcalendar-btn-color:                                    $body-color !default;
+$fullcalendar-btn-hover-color:                              $btn-white-hover-color !default;
+$fullcalendar-btn-active-color:                             $white !default;
+$fullcalendar-event-color:                                  $headings-color !default;
+$fullcalendar-daygrid-block-event-color:                    $fullcalendar-event-color !default;
+$fullcalendar-event-hover-color:                            $primary !default;
+$fullcalendar-timeline-cell-cushion-hover-color:            $link-hover-color !default;
+$fullcalendar-header-cell-cushion-active-color:             $active-color !default;
+$fullcalendar-popover-close-hover-color:                    $link-hover-color !default;
+$fullcalendar-list-day-color:                               $headings-color !default;
+$fullcalendar-list-day-side-color:                          $body-color !default;
+
+// Backgrounds
+$fullcalendar-btn-bg-color:                                 transparent !default;
+$fullcalendar-btn-active-bg-color:                          $primary !default;
+$fullcalendar-daygrid-day-number-bg-color:                  $primary !default;
+$fullcalendar-daygrid-day-number-bg-active-color:           $flatpickr-day-today-bg-color !default;
+$fullcalendar-highlight-bg-color:                           rgba($primary, .1) !default;
+$fullcalendar-disabled-bg-color:                            $disabled-bg-color !default;
+$fullcalendar-event-bg-color:                               rgba($primary, .1) !default;
+$fullcalendar-week-view-event-bg-color:                     $white !default;
+$fullcalendar-event-popover-header-bg-color:                $gray-200 !default;
+$fullcalendar-event-hs-team-bg-color:                       $primary !default;
+$fullcalendar-event-reminders-bg-color:                     $danger !default;
+$fullcalendar-event-tasks-bg-color:                         $warning !default;
+$fullcalendar-event-holidays-bg-color:                      $info !default;
+$fullcalendar-daygrid-event-dot-bg-color:                   $active-bg-color !default;
+$fullcalendar-header-cell-cushion-active-bg-color:          rgba($primary, .1) !default;
+$fullcalendar-timegrid-now-indicator-arrow-bg-color:        $danger !default;
+$fullcalendar-list-event-hover-bg-color:                    transparent !default;
+$fullcalendar-list-empty-bg-color:                          $gray-200 !default;
+
+// Borders
+$fullcalendar-btn-border-color:                             $btn-white-border-color !default;
+$fullcalendar-btn-active-border-color:                      $primary !default;
+$fullcalendar-border-color:                                 $input-border-color !default;
+$fullcalendar-daygrid-day-number-border-radius:             $border-radius-rounded !default;
+$fullcalendar-daygrid-block-event-border-radius:            $border-radius !default;
+$fullcalendar-event-border-radius:                          $border-radius !default;
+$fullcalendar-timegrid-now-indicator-line-border-color:     $fullcalendar-timegrid-now-indicator-arrow-bg-color !default;
+$fullcalendar-timegrid-now-indicator-arrow-border-radius:   $border-radius-rounded !default;
+$fullcalendar-header-cell-cushion-border-radius:            $border-radius !default;
+$fullcalendar-popover-border-color:                         $card-border-color !default;
+$fullcalendar-popover-border-radius:                        $card-border-radius !default;
+
+// Width & Heights
+$fullcalendar-daygrid-day-height:                           10rem !default;
+$fullcalendar-daygrid-day-number-width:                     $icon-width-sm !default;
+$fullcalendar-daygrid-day-number-height:                    $fullcalendar-daygrid-day-number-width !default;
+$fullcalendar-event-max-width-in-day-view:                  15rem !default;
+$fullcalendar-event-popover-width:                          25rem !default;
+$fullcalendar-timegrid-now-indicator-arrow-width:           .5rem !default;
+$fullcalendar-timegrid-now-indicator-arrow-height:          $fullcalendar-timegrid-now-indicator-arrow-width !default;
+$fullcalendar-timeline-event-height:                        5rem !default;
+
+// Type
+$fullcalendar-btn-font-size:                                $font-size-base !default;
+$fullcalendar-toolbar-title-font-size:                      $h3-font-size !default;
+$fullcalendar-cell-cushion-font-size:                       $h6-font-size !default;
+$fullcalendar-event-font-weight:                            $font-weight-bold !default;
+$fullcalendar-event-time-font-size:                         $font-size-xs !default;
+$fullcalendar-event-time-sticky-font-size:                  $font-size-sm !default;
+$fullcalendar-list-font-weight:                             $font-weight-normal !default;
+
+// Box Shadows
+$fullcalendar-btn-box-shadow-hover:                         $btn-white-box-shadow-hover !default;
+$fullcalendar-popover-box-shadow:                           $card-box-shadow !default;
+
+// Paddings
+$fullcalendar-padding-y:                                    .5rem !default;
+$fullcalendar-padding-x:                                    .5rem !default;
+$fullcalendar-btn-padding-y:                                $input-btn-padding-y-sm !default;
+$fullcalendar-btn-padding-x:                                $input-btn-padding-x-sm !default;
+$fullcalendar-daygrid-day-frame-padding:                    .25rem !default;
+$fullcalendar-daygrid-event-title-padding-y:                .125rem !default;
+$fullcalendar-event-padding-y:                              .3125rem !default;
+$fullcalendar-event-padding-x:                              $fullcalendar-event-padding-y !default;
+$fullcalendar-timeline-event-padding:                       .3125rem !default;
+$fullcalendar-popover-padding-y:                            .5rem !default;
+$fullcalendar-popover-padding-x:                            .75rem !default;
+
+// Margins
+$fullcalendar-daygrid-day-top-margin-y:                     .125rem !default;
+$fullcalendar-event-margin-y:                               .125rem !default;

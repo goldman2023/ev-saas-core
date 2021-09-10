@@ -164,8 +164,10 @@
                 <div class="col-xl-9 order-0 order-xl-1">
                     <div class="bg-white mb-3 shadow-sm rounded">
                         <div class="nav border-bottom aiz-nav-tabs">
+                            <a href="#tab_product_details" data-toggle="tab"
+                                class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Product Specification') }}</a>
                             <a href="#tab_default_1" data-toggle="tab"
-                                class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description') }}</a>
+                                class="p-3 fs-16 fw-600 text-reset">{{ translate('Description') }}</a>
                             @if ($detailedProduct->video_link != null)
                                 <a href="#tab_default_2" data-toggle="tab"
                                     class="p-3 fs-16 fw-600 text-reset">{{ translate('Video') }}</a>
@@ -179,7 +181,17 @@
                         </div>
 
                         <div class="tab-content pt-0">
-                            <div class="tab-pane fade active show" id="tab_default_1">
+
+                            <div class="tab-pane fade active show" id="tab_product_details">
+                                <div class="p-4">
+                                    <div class="mw-100 overflow-hidden text-left">
+                                        <x-default.products.single.product-specification-table :product="$product">
+                                        </x-default.products.single.product-specification-table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="tab_default_1">
                                 <div class="p-4">
                                     <div class="mw-100 overflow-hidden text-left">
                                         <?php echo $detailedProduct->getTranslation('description'); ?>

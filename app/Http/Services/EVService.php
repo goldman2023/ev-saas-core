@@ -265,17 +265,25 @@ class EVService
         ];
     }
 
-    public function getMappedAttributes($content_type) {
+    public function getMappedAttributes($content_type, $return_object = true) {
         // Get mapped attributes to display them in form select element for specific content type
-        $attrs = Attribute::select('id','name','type')->where('content_type', $content_type)->get();
+        $attrs = Attribute::select('id','name','type','custom_properties')->where('content_type', $content_type)->get();
         $mapped = [];
 
         if($attrs->isNotEmpty()) {
             foreach ($attrs as $att) {
-                $mapped[$att->id] = (object) array_merge($att->toArray(), [
-                    'selected' => true, // TODO: Change value if editing the product
-                    'for_variations' => false, // TODO: Change value if editing the product
-                ]);
+                $att_object = $return_object ? (object) $att->toArray() : $att->toArray();
+
+                if($return_object) {
+                    $att_object->selected = true; // TODO: Change value if editing the product
+                    $att_object->for_variations = false; // TODO: Change value if editing the product
+                    $mapped[$att->id] = $att_object;
+                } else {
+                    $mapped[$att->id] = (object) array_merge($att_object, [
+                        'selected' => true, // TODO: Change value if editing the product
+                        'for_variations' => false, // TODO: Change value if editing the product
+                    ]);
+                }
             }
         }
 
