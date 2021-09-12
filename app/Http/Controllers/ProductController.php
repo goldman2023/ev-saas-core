@@ -482,11 +482,11 @@ class ProductController extends Controller
                     $attribute_relationship->attribute_value_id = $relationship_id;
                     $attribute_relationship->save();
                 }else {
-                    foreach($product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value) as $relation) {
+                    foreach($product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value)->get() as $relation) {
                         $relation->delete();
                     }
                     foreach($value as $index => $option) {
-                        if (count($product->attributes()->where('attribute_id', $key)->where('attribute_value_id', $option)) == 0) {
+                        if (count($product->attributes()->where('attribute_id', $key)->where('attribute_value_id', $option)->get()) == 0) {
                             $attribute_relationship = new AttributeRelationship;
                             $attribute_relationship->subject_type = "App\Models\Product";
                             $attribute_relationship->subject_id = $id;
