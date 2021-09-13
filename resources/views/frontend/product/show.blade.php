@@ -31,7 +31,7 @@
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
     <meta property="og:price:amount" content="{{ single_price($detailedProduct->unit_price) }}" />
     <meta property="product:price:currency"
-        content="{{ \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code }}" />
+        content="{{ \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code }}" />
     <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
 @endsection
 
@@ -51,7 +51,7 @@
                 <div class="col-xl-3 order-1 order-xl-0">
                     <div class="bg-white shadow-sm mb-3">
                         <div class="position-relative p-3 text-left">
-                            @if ($detailedProduct->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1 && $detailedProduct->user->seller->verification_status == 1)
+                            @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1 && $detailedProduct->user->seller->verification_status == 1)
                                 <div class="absolute-top-right p-2 bg-white z-1">
                                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                         xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
@@ -66,7 +66,7 @@
                                 </div>
                             @endif
                             <div class="opacity-50 fs-12 border-bottom">{{ translate('Sold By') }}</div>
-                            @if ($detailedProduct->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                            @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
                                 <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}"
                                     class="text-reset d-block fw-600">
                                     {{ $detailedProduct->user->shop->name }}
@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($detailedProduct->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                        @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
                             <div class="row no-gutters align-items-center border-top">
                                 <div class="col">
                                     <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}"
@@ -495,12 +495,12 @@
                             <p class="text-muted mb-0">{{ translate('Dont have an account?') }}</p>
                             <a href="{{ route('user.registration') }}">{{ translate('Register Now') }}</a>
                         </div>
-                        @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
+                        @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
                             <div class="separator mb-3">
                                 <span class="bg-white px-3 opacity-60">{{ translate('Or Login With') }}</span>
                             </div>
                             <ul class="list-inline social colored text-center mb-5">
-                                @if (\App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1)
+                                @if (get_setting('facebook_login') == 1)
                                     <li class="list-inline-item">
                                         <a href="{{ route('social.login', ['provider' => 'facebook']) }}"
                                             class="facebook">
@@ -508,7 +508,7 @@
                                         </a>
                                     </li>
                                 @endif
-                                @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1)
+                                @if (get_setting('google_login') == 1)
                                     <li class="list-inline-item">
                                         <a href="{{ route('social.login', ['provider' => 'google']) }}"
                                             class="google">
@@ -516,7 +516,7 @@
                                         </a>
                                     </li>
                                 @endif
-                                @if (\App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
+                                @if (get_setting('twitter_login') == 1)
                                     <li class="list-inline-item">
                                         <a href="{{ route('social.login', ['provider' => 'twitter']) }}"
                                             class="twitter">

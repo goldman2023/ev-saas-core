@@ -1,4 +1,4 @@
-@if (\App\Models\BusinessSetting::where('type', 'google_analytics')->first()->value == 1)
+@if (get_setting('google_analytics') == 1)
 <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('TRACKING_ID') }}"></script>
 
@@ -14,7 +14,7 @@
     </script>
 @endif
 
-@if (\App\Models\BusinessSetting::where('type', 'facebook_pixel')->first()->value == 1)
+@if (get_setting('facebook_pixel') == 1)
 <!-- Facebook Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) {

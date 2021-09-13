@@ -25,7 +25,7 @@ class VoguePayController extends Controller
 
     public function paymentSuccess($id)
     {
-        if (BusinessSetting::where('type', 'voguepay_sandbox')->first()->value == 1) {
+        if (get_setting('voguepay_sandbox') == 1) {
             $url = '//voguepay.com/?v_transaction_id='.$id.'&type=json&demo=true';
         }
         else {

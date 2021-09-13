@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="google_recaptcha" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'google_recaptcha')->first()->value == 1)
+                                    <input value="1" name="google_recaptcha" type="checkbox" @if (get_setting('google_recaptcha') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>

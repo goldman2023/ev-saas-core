@@ -1,5 +1,5 @@
 
-@if (\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+@if (get_setting('vendor_system_activation') == 1)
     @php
         $array = array();
         foreach (\App\Models\Seller::where('verification_status', 1)->get() as $key => $seller) {

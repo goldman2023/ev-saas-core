@@ -63,7 +63,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small><br>
-                        @if ($product->added_by == 'seller' && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                        @if ($product->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
                             <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">
                                 {{ $product->user->shop->name }}
                             </a>
@@ -73,7 +73,7 @@
                             <br>
                         @endif
 
-                        @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
+                        @if (get_setting('conversation_system') == 1)
                             <button class="mt-2 btn btn-sm btn-soft-primary" onclick="show_chat_modal()">
                                 {{ translate('Message Seller') }}
                             </button>

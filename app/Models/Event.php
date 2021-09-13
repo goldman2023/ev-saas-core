@@ -142,7 +142,7 @@ class Event extends Model
         $offers = Schema::offer();
         $offers->url('https://www.example.com/event_offer/12345_201803180430');
         if (isset($default_properties["Price"])) $offers->price($default_properties["Price"]);
-        $offers->priceCurrency(\App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code);
+        $offers->priceCurrency(\App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code);
         $schema->offers($offers);
 
         // performer schema attributes

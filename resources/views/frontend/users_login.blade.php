@@ -89,27 +89,27 @@
                                         <span class="divider divider-text">OR</span>
                                     </div>
 
-                                    @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
-                                        <ul class="list-inline social colored text-center mb-5">
+                                    @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
+                                        <ul class="list-inline social colored text-center mb-4">
 
-                                            @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1)
-                                                <a class="rounded-pill btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
+                                            @if (get_setting('google_login') == 1)
+                                                <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
                                                         Sign In with Google
                                                     </span>
                                                 </a>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1)
-                                                <a class="rounded-pill btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
+                                            @if (get_setting('facebook_login') == 1)
+                                                <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
                                                         Sign In with Facebook
                                                     </span>
                                                 </a>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
-                                                <a class="rounded-pill btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
+                                            @if (get_setting('twitter_login') == 1)
+                                                <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
                                                         Sign In with Twitter

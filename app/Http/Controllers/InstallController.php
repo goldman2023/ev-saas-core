@@ -51,11 +51,11 @@ class InstallController extends Controller
     }
 
     public function system_settings(Request $request) {
-        $businessSetting = BusinessSetting::where('type', 'system_default_currency')->first();
+        $businessSetting = get_setting('system_default_currency')->first();
         $businessSetting->value = $request->system_default_currency;
         $businessSetting->save();
 
-        $businessSetting = BusinessSetting::where('type', 'home_default_currency')->first();
+        $businessSetting = get_setting('home_default_currency')->first();
         $businessSetting->value = $request->system_default_currency;
         $businessSetting->save();
 

@@ -28,7 +28,7 @@
                 {{ translate('Verification info')}}
             </div>
             @php
-                $verification_form = \App\Models\BusinessSetting::where('type', 'verification_form')->first()->value;
+                $verification_form = get_setting('verification_form');
             @endphp
             <div class="form-box-content p-3">
                 @foreach (json_decode($verification_form) as $key => $element)

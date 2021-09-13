@@ -111,50 +111,50 @@
                           <div class="col-md-8">
                               <div class="mb-3">
                                   <select class="form-control selectpicker" data-minimum-results-for-search="Infinity" name="payment_option" data-live-search="true">
-                                      @if (\App\Models\BusinessSetting::where('type', 'paypal_payment')->first()->value == 1)
+                                      @if (get_setting( 'paypal_payment') == 1)
                                           <option value="paypal">{{ translate('Paypal')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'stripe_payment')->first()->value == 1)
+                                      @if (get_setting( 'stripe_payment') == 1)
                                           <option value="stripe">{{ translate('Stripe')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'sslcommerz_payment')->first()->value == 1)
+                                      @if (get_setting( 'sslcommerz_payment') == 1)
                                           <option value="sslcommerz">{{ translate('SSLCommerz')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'instamojo_payment')->first()->value == 1)
+                                      @if (get_setting( 'instamojo_payment') == 1)
                                           <option value="instamojo">{{ translate('Instamojo')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'paystack')->first()->value == 1)
+                                      @if (get_setting( 'paystack') == 1)
                                           <option value="paystack">{{ translate('Paystack')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'voguepay')->first()->value == 1)
+                                      @if (get_setting( 'voguepay') == 1)
                                           <option value="voguepay">{{ translate('VoguePay')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'payhere')->first()->value == 1)
+                                      @if (get_setting( 'payhere') == 1)
                                           <option value="payhere">{{ translate('Payhere')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'ngenius')->first()->value == 1)
+                                      @if (get_setting( 'ngenius') == 1)
                                           <option value="ngenius">{{ translate('Ngenius')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'razorpay')->first()->value == 1)
+                                      @if (get_setting( 'razorpay') == 1)
                                           <option value="razorpay">{{ translate('Razorpay')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'iyzico')->first()->value == 1)
+                                      @if (get_setting( 'iyzico') == 1)
                                           <option value="iyzico">{{ translate('Iyzico')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'bkash')->first()->value == 1)
+                                      @if (get_setting( 'bkash') == 1)
                                           <option value="bkash">{{ translate('Bkash')}}</option>
                                       @endif
-                                      @if (\App\Models\BusinessSetting::where('type', 'nagad')->first()->value == 1)
+                                      @if (get_setting( 'nagad') == 1)
                                           <option value="nagad">{{ translate('Nagad')}}</option>
                                       @endif
                                       @if(\App\Models\Addon::where('unique_identifier', 'african_pg')->first() != null && \App\Models\Addon::where('unique_identifier', 'african_pg')->first()->activated)
-                                          @if (\App\Models\BusinessSetting::where('type', 'mpesa')->first()->value == 1)
+                                          @if (get_setting( 'mpesa') == 1)
                                               <option value="mpesa">{{ translate('Mpesa')}}</option>
                                           @endif
-                                          @if (\App\Models\BusinessSetting::where('type', 'flutterwave')->first()->value == 1)
+                                          @if (get_setting( 'flutterwave') == 1)
                                               <option value="flutterwave">{{ translate('Flutterwave')}}</option>
                                           @endif
-                                          @if (\App\Models\BusinessSetting::where('type', 'payfast')->first()->value == 1)
+                                          @if (get_setting( 'payfast') == 1)
                                               <option value="payfast">{{ translate('PayFast')}}</option>
                                           @endif
                                       @endif

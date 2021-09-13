@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Forms\Products;
 use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
+use App\Facades\BusinessSettings;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductTranslation;

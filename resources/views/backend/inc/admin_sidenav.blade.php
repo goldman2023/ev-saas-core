@@ -91,7 +91,7 @@
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
                             </li>
-                            @if(\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                            @if(get_setting('vendor_system_activation') == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('admin.products.seller')}}"
                                        class="aiz-side-nav-link {{ areActiveRoutes(['admin.products.seller', 'admin.products.seller.edit']) }}">
@@ -240,7 +240,7 @@
                                     <span class="aiz-side-nav-text">{{ translate('Customer list') }}</span>
                                 </a>
                             </li>
-                            @if(\App\Models\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
+                            @if(get_setting('classified_product') == 1)
                                 <li class="aiz-side-nav-item">
                                     <a href="{{route('admin.classified_products')}}" class="aiz-side-nav-link">
                                         <span class="aiz-side-nav-text">{{translate('Classified Products')}}</span>
@@ -258,7 +258,7 @@
                 @endif
 
             <!-- Sellers -->
-                @if((auth()->user()->isAdmin() || in_array('9', json_decode(auth()->user()->staff->role->permissions))) && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                @if((auth()->user()->isAdmin() || in_array('9', json_decode(auth()->user()->staff->role->permissions))) && get_setting('vendor_system_activation') == 1)
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-user aiz-side-nav-icon"></i>
@@ -320,7 +320,7 @@
                 @endif
 
                 {{-- Events --}}
-                @if((auth()->user()->isAdmin() || in_array('9', json_decode(auth()->user()->staff->role->permissions))) && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                @if((auth()->user()->isAdmin() || in_array('9', json_decode(auth()->user()->staff->role->permissions))) && get_setting('vendor_system_activation') == 1)
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-tachometer-alt aiz-side-nav-icon"></i>
@@ -349,7 +349,7 @@
                 @endif
 
                 {{-- Jobs --}}
-                @if((auth()->user()->isAdmin() || in_array('9', json_decode(auth()->user()->staff->role->permissions))) && \App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+                @if((auth()->user()->isAdmin() || in_array('9', json_decode(auth()->user()->staff->role->permissions))) && get_setting('vendor_system_activation') == 1)
                     <li class="aiz-side-nav-item">
                         <a href="#" class="aiz-side-nav-link">
                             <i class="las la-tachometer-alt aiz-side-nav-icon"></i>
@@ -638,7 +638,7 @@
                                         <span class="aiz-side-nav-text">{{translate('Offline Wallet Recharge')}}</span>
                                     </a>
                                 </li>
-                                @if(\App\Models\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
+                                @if(get_setting('classified_product') == 1)
                                     <li class="aiz-side-nav-item">
                                         <a href="{{ route('admin.offline_customer_package_payment_request.index') }}"
                                            class="aiz-side-nav-link">
