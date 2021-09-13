@@ -203,7 +203,7 @@ if (!function_exists('default_language')) {
 if (!function_exists('convert_to_usd')) {
     function convert_to_usd($amount)
     {
-        $business_settings = get_setting('system_default_currency')->first();
+        $business_settings = get_setting('system_default_currency');
         if ($business_settings != null) {
             $currency = Currency::find($business_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'USD')->first()->exchange_rate;
@@ -214,7 +214,7 @@ if (!function_exists('convert_to_usd')) {
 if (!function_exists('convert_to_kes')) {
     function convert_to_kes($amount)
     {
-        $business_settings = get_setting('system_default_currency')->first();
+        $business_settings = get_setting('system_default_currency');
         if ($business_settings != null) {
             $currency = Currency::find($business_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'KES')->first()->exchange_rate;
@@ -281,7 +281,7 @@ if (!function_exists('convert_price')) {
     function convert_price($price)
     {
         $business_settings = Cache::remember('system_default_currency_cache', 86400, function () {
-            return get_setting('system_default_currency')->first();
+            return get_setting('system_default_currency');
         });
 
 
