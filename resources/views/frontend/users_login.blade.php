@@ -86,7 +86,7 @@
                                     </div>
 
                                     <div class="text-center mb-3">
-                                        <span class="divider divider-text">OR</span>
+                                        <span class="divider divider-text">{{ translate('OR') }}</span>
                                     </div>
 
                                     @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
@@ -96,7 +96,7 @@
                                                 <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Google
+                                                        {{ translate('Sign In with Google') }}
                                                     </span>
                                                 </a>
                                             @endif
@@ -104,7 +104,7 @@
                                                 <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Facebook
+                                                        {{ translate('Sign In with Facebook') }}
                                                     </span>
                                                 </a>
                                             @endif
@@ -112,7 +112,7 @@
                                                 <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Twitter
+                                                        {{ translate('Sign In with Twitter') }}
                                                     </span>
                                                 </a>
                                             @endif
@@ -127,7 +127,8 @@
                                                  "animationType": "css-animation",
                                                  "animationIn": "slideInUp",
                                                  "duration": 400
-                                               }'>Sign Up
+                                               }'>
+                                            {{ translate('Sign Up') }}
                                         </a>
                                     </div>
                                 </div>

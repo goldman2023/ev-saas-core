@@ -280,22 +280,16 @@ if (!function_exists('verified_sellers_id')) {
 if (!function_exists('convert_price')) {
     function convert_price($price)
     {
-        $business_settings = Cache::remember('system_default_currency_cache', 86400, function () {
-            return get_setting('system_default_currency');
-        });
+        $system_default_currency = get_setting('system_default_currency');
 
-
-
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        if ($system_default_currency != null) {
+            $currency = Currency::find($system_default_currency);
             $price = (float) $price / (float) $currency->exchange_rate;
         }
 
-        $code = Cache::remember('system_default_currency', env('ttl_redis_cache', 60), function () {
+        $code = Cache::remember(tenant('id').'_system_default_currency', config('cache.stores.redis.ttl_redis_cache', 60), function () {
             return \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
         });
-
-
 
         if (Session::has('currency_code')) {
             $currency = Currency::where('code', Session::get('currency_code', $code))->first();
@@ -502,7 +496,7 @@ if (!function_exists('home_discounted_base_price')) {
 if (!function_exists('currency_symbol')) {
     function currency_symbol()
     {
-        $code = Cache::remember('system_default_currency', env('ttl_redis_cache', 60), function () {
+        $code = Cache::remember('system_default_currency',  config('cache.stores.redis.ttl_redis_cache', 60), function () {
             return \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
         });
 
