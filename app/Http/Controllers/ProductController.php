@@ -149,10 +149,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
         $refund_request_addon = \App\Models\Addon::where('unique_identifier', 'refund_request')->first();
 
-        $product = new Product;
+        $product = new Product();
         $product->name = $request->name;
         $product->added_by = $request->added_by;
         if (auth()->user()->isSeller()) {
@@ -188,7 +187,6 @@ class ProductController extends Controller
                     array_push($tags, $tag->value);
                 }
             }
-
         }
         $product->tags = implode(',', $tags);
 
@@ -197,12 +195,15 @@ class ProductController extends Controller
         $product->video_link = $request->video_link;
         $product->unit_price = $request->unit_price;
         $product->purchase_price = $request->purchase_price;
-//        $product->tax = $request->tax;
-//        $product->tax_type = $request->tax_type;
+        //        $product->tax = $request->tax;
+        //        $product->tax_type = $request->tax_type;
         $product->discount = $request->discount;
         $product->discount_type = $request->discount_type;
         $product->shipping_type = $request->shipping_type;
         $product->est_shipping_days = $request->est_shipping_days;
+
+
+
 
         if ($request->has('shipping_type')) {
             if ($request->shipping_type == 'free') {
@@ -299,6 +300,8 @@ class ProductController extends Controller
 
         $product->save();
 
+        $this->store_attributes_updates($request, $product);
+
         //VAT & Tax
         if ($request->tax_id) {
             foreach ($request->tax_id as $key => $val) {
@@ -343,7 +346,6 @@ class ProductController extends Controller
         $combinations = null;
 
         if (1 > 2) {
-
         } else {
             $product_stock = new ProductStock;
             $product_stock->product_id = $product->id;
@@ -508,6 +510,7 @@ class ProductController extends Controller
                 }
             }
         }
+        $this->store_attributes_updates($request, $product);
 
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
@@ -527,12 +530,10 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->lang == config('app.locale')) {
-            $product->name = $request->name;
-            $product->unit = $request->unit;
-            $product->description = $request->description;
-            $product->slug = strtolower($request->slug);
-        }
+        $product->name = $request->name;
+        $product->unit = $request->unit;
+        $product->description = $request->description;
+        $product->slug = strtolower($request->slug);
 
         $product->photos = $request->photos;
         $product->thumbnail_img = $request->thumbnail_img;
@@ -549,7 +550,6 @@ class ProductController extends Controller
                     array_push($tags, $tag->value);
                 }
             }
-
         }
 
         $product->tags = implode(',', $tags);
@@ -558,8 +558,8 @@ class ProductController extends Controller
         $product->video_link = $request->video_link;
         $product->unit_price = $request->unit_price;
         $product->purchase_price = $request->purchase_price;
-//        $product->tax            = $request->tax;
-//        $product->tax_type       = $request->tax_type;
+        //        $product->tax            = $request->tax;
+        //        $product->tax_type       = $request->tax_type;
         $product->discount = $request->discount;
         $product->shipping_type = $request->shipping_type;
         $product->est_shipping_days = $request->est_shipping_days;
@@ -720,7 +720,6 @@ class ProductController extends Controller
             $flash_deal_product->discount = $request->flash_discount;
             $flash_deal_product->discount_type = $request->flash_discount_type;
             $flash_deal_product->save();
-//            dd($flash_deal_product);
         }
 
         //VAT & Tax
@@ -888,7 +887,7 @@ class ProductController extends Controller
             }
         }
 
-        //$combinations = Combinations::makeCombinations($options);
+        $combinations = [];
         return view('backend.product.products.sku_combinations', compact('combinations', 'unit_price', 'colors_active', 'product_name'));
     }
 
@@ -919,8 +918,87 @@ class ProductController extends Controller
         }
 
         //$combinations = Combinations::makeCombinations($options);
-        $combination = null;
+        $combinations = [];
         return view('backend.product.products.sku_combinations_edit', compact('combinations', 'unit_price', 'colors_active', 'product_name', 'product'));
     }
 
+
+    public function store_attributes_updates(Request $request, Product $product)
+    {
+        // Product Attribute Update
+        $updated_attributes = $request->except([
+            '_method', '_token', 'id', 'lang', 'name',
+            'category_id', 'brand_id', 'unit', 'min_qty', 'tags',
+            'photos', 'thumbnail_img', 'video_provider', 'video_link', 'colors',
+            'colors_active', 'unit_price', 'purchase_price', 'discount', 'discount_type',
+            'current_stock', 'description', 'pdf', 'meta_title', 'meta_description',
+            'meta_img', 'slug', 'shipping_type', 'flat_shipping_cost', 'low_stock_quantity',
+            'stock_visibility_state', 'cash_on_delivery', 'featured', 'todays_deal', 'flash_deal_id',
+            'flash_discount', 'flash_discount_type', 'est_shipping_days', 'button'
+        ]);
+
+        foreach ($updated_attributes as $key => $value) {
+            $attribute_relationship = $product->attributes()->where('attribute_id', $key)->first();
+
+            $attribute = Attribute::find($key);
+
+            if (empty($attribute)) {
+                continue;
+            }
+
+            if ($value != null) {
+                $relationship_id = $value;
+                if ($attribute->type != "dropdown" && $attribute->type != "checkbox" && $attribute->type != "radio") {
+                    if ($attribute_relationship == null) {
+                        $attribute_value = new AttributeValue;
+                        $attribute_value->attribute_id = $attribute->id;
+                    } else {
+                        $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
+                    }
+                    $attribute_value->values = $value;
+                    $attribute_value->save();
+                    $relationship_id = $attribute_value->id;
+                }
+
+                if ($attribute->type != "checkbox" && $attribute->type != "radio") {
+                    if ($attribute_relationship == null) {
+                        $attribute_relationship = new AttributeRelationship;
+                        $attribute_relationship->subject_type = "App\Models\Product";
+                        $attribute_relationship->subject_id = $product->id;
+                        $attribute_relationship->attribute_id = $key;
+                    }
+                    $attribute_relationship->attribute_value_id = $relationship_id;
+                    $attribute_relationship->save();
+                } else {
+                    $relations = $product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value)->get();
+
+                    // Delete previous relations
+                    foreach ($relations as $relation) {
+                        $relation->delete();
+                    }
+
+                    foreach ($value as $index => $option) {
+                        if (count($relations) === 0) {
+                            $attribute_relationship = new AttributeRelationship;
+                            $attribute_relationship->subject_type = "App\Models\Product";
+                            $attribute_relationship->subject_id = $product->id;
+                            $attribute_relationship->attribute_id = $key;
+                            $attribute_relationship->attribute_value_id = $option;
+                            $attribute_relationship->save();
+                        }
+                    }
+                }
+            } else {
+                if ($attribute->type === "checkbox" || $attribute->type === "radio") {
+                    foreach ($product->attributes()->where('attribute_id', $key) as $relation) {
+                        $relation->delete();
+                    }
+                } else if ($attribute_relationship != null) {
+                    $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
+                    $attribute_relationship->delete();
+                    $attribute_value->delete();
+                }
+            }
+        }
+    }
 }

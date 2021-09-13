@@ -2,7 +2,7 @@
     <div class="col-sm-6">
         <div class="text-center text-sm-right mr-sm-4 mb-5 mb-sm-0">
             <img class="w-60 w-sm-100 mx-auto" src="{{ asset('assets/svg/illustrations/think.svg') }}"
-                alt="B2BWood Nothing Found" style="max-width: 15rem;">
+                alt="Nothing Found" style="max-width: 15rem;">
         </div>
     </div>
 

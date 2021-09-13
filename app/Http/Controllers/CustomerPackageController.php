@@ -226,7 +226,7 @@ class CustomerPackageController extends Controller
         $user->remaining_uploads += $customer_package->product_upload;
         $user->save();
 
-        flash(translate('You have succesfuly joined B2BWood Club'))->primary();
+        flash(translate('You have succesfuly joined '. get_site_name() .' Club'))->primary();
         return redirect()->route('company.thank-you');
     }
 

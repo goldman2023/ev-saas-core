@@ -1,212 +1,139 @@
 <!DOCTYPE html>
 @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
     <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    @else
-        <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-        @endif
-        <head>
+@else
+    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@endif
+<head>
+    {{ seo()->render() }}
 
-            {{ seo()->render() }}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="app-url" content="{{ getBaseURL() }}">
+    <meta name="file-base-url" content="{{ getFileBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
 
-            <meta name="csrf-token" content="{{ csrf_token() }}">
-            <meta name="app-url" content="{{ getBaseURL() }}">
-            <meta name="file-base-url" content="{{ getFileBaseURL() }}">
+    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
-            <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
+    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
 
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta name="robots" content="index, follow">
-            <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
-            <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
-            @yield('meta')
+    @yield('meta')
 
-            @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
-            <!-- Schema.org markup for Google+ -->
-                <meta itemprop="name" content="{{ get_setting('meta_title') }}">
-                <meta itemprop="description" content="{{ get_setting('meta_description') }}">
-                <meta itemprop="image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
+    @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
+        <x-default.system.og-meta>
+        </x-default.system.og-meta>
+    @endif
 
-                <!-- Twitter Card data -->
-                <meta name="twitter:card" content="product">
-                <meta name="twitter:site" content="@publisher_handle">
-                <meta name="twitter:title" content="{{ get_setting('meta_title') }}">
-                <meta name="twitter:description" content="{{ get_setting('meta_description') }}">
-                <meta name="twitter:creator" content="@author_handle">
-                <meta name="twitter:image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
+    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
-                <!-- Open Graph data -->
-                <meta property="og:title" content="{{ get_setting('meta_title') }}"/>
-                <meta property="og:type" content="website"/>
-                <meta property="og:url" content="{{ route('home') }}"/>
-                <meta property="og:image" content="{{ uploaded_asset(get_setting('meta_image')) }}"/>
-                <meta property="og:description" content="{{ get_setting('meta_description') }}"/>
-                <meta property="og:site_name" content="{{ env('APP_NAME') }}"/>
-                <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
-            @endif
-        <!-- Favicon -->
-            <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
+    <!-- Vendor Styles -->
+    <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
-            <!-- Google Fonts -->
-            {{-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> --}}
-        <!-- CSS Files -->
-            <link rel="stylesheet" href="{{ global_asset('css/app.css') }}">
-            <!-- Front Icon Set CSS Files -->
-            <link rel="stylesheet" href="{{ global_asset('front/icon-set/style.css') }}">
+    <style>
+        :root {
+            --primary: yellow;
+            --secondary: green;
+            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
+        }
+    </style>
+    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
-            <script>
-                var AIZ = AIZ || {};
-                AIZ.local = {
-                    nothing_found: '{{ translate('Nothing found') }}',
-                    choose_file: '{{ translate('Choose file') }}',
-                    file_selected: '{{ translate('File selected') }}',
-                    files_selected: '{{ translate('Files selected') }}',
-                    add_more_files: '{{ translate('Add more files') }}',
-                    adding_more_files: '{{ translate('Adding more files') }}',
-                    drop_files_here_paste_or: '{{ translate('Drop files here, paste or') }}',
-                    browse: '{{ translate('Browse') }}',
-                    upload_complete: '{{ translate('Upload complete') }}',
-                    upload_paused: '{{ translate('Upload paused') }}',
-                    resume_upload: '{{ translate('Resume upload') }}',
-                    pause_upload: '{{ translate('Pause upload') }}',
-                    retry_upload: '{{ translate('Retry upload') }}',
-                    cancel_upload: '{{ translate('Cancel upload') }}',
-                    uploading: '{{ translate('Uploading') }}',
-                    processing: '{{ translate('Processing') }}',
-                    complete: '{{ translate('Complete') }}',
-                    file: '{{ translate('File') }}',
-                    files: '{{ translate('Files') }}',
-                }
-            </script>
 
-            <style>
-                body {
-                    font-family: 'Open Sans', sans-serif;
-                    font-weight: 400;
-                }
+    <x-default.system.tracking-pixels>
+    </x-default.system.tracking-pixels>
 
-                :root {
-                    --primary: {{ get_setting('base_color', '#e62d04') }};
-                    --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
-                    --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
-                }
-            </style>
+    @php
+        echo get_setting('header_script');
+    @endphp
 
-            @if (\App\Models\BusinessSetting::where('type', 'google_analytics')->first()->value == 1)
-            <!-- Global site tag (gtag.js) - Google Analytics -->
-                <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('TRACKING_ID') }}"></script>
+    @stack('head_scripts')
+</head>
+<body>
+<!-- aiz-main-wrapper -->
+<div class="">
 
-                <script>
-                    window.dataLayer = window.dataLayer || [];
+    {{-- @include('frontend.inc.nav') --}}
+        <x-default.headers.header>
+        </x-default.headers.header>
 
-                    function gtag() {
-                        dataLayer.push(arguments);
-                    }
 
-                    gtag('js', new Date());
-                    gtag('config', '{{ env('TRACKING_ID') }}');
-                </script>
-            @endif
+    @yield('content')
 
-            @if (\App\Models\BusinessSetting::where('type', 'facebook_pixel')->first()->value == 1)
-            <!-- Facebook Pixel Code -->
-                <script>
-                    !function (f, b, e, v, n, t, s) {
-                        if (f.fbq) return;
-                        n = f.fbq = function () {
-                            n.callMethod ?
-                                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                        };
-                        if (!f._fbq) f._fbq = n;
-                        n.push = n;
-                        n.loaded = !0;
-                        n.version = '2.0';
-                        n.queue = [];
-                        t = b.createElement(e);
-                        t.async = !0;
-                        t.src = v;
-                        s = b.getElementsByTagName(e)[0];
-                        s.parentNode.insertBefore(t, s)
-                    }(window, document, 'script',
-                        'https://connect.facebook.net/en_US/fbevents.js');
-                    fbq('init', '{{ env('FACEBOOK_PIXEL_ID') }}');
-                    fbq('track', 'PageView');
-                </script>
-                <noscript>
-                    <img height="1" width="1" style="display:none"
-                         src="https://www.facebook.com/tr?id={{ env('FACEBOOK_PIXEL_ID') }}&ev=PageView&noscript=1"/>
-                </noscript>
-                <!-- End Facebook Pixel Code -->
-            @endif
+    {{-- @include('frontend.inc.footer') --}}
 
-            @php
-                echo get_setting('header_script');
-            @endphp
+    <x-default.footers.footer>
+    </x-default.footers.footer>
 
-        </head>
-        <body>
-        <!-- aiz-main-wrapper -->
-        <div class="aiz-main-wrapper d-flex flex-column">
+</div>
 
-            <!-- Header -->
-            @include('frontend.inc.nav')
+<x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
-            @yield('content')
+@include('frontend.partials.modal')
 
-            @include('frontend.inc.footer')
-
-        </div>
-
-        @if (get_setting('show_cookies_agreement') == 'on')
-            <div class="aiz-cookie-alert shadow-xl">
-                <div class="p-3 bg-dark rounded">
-                    <div class="text-white mb-3">
-                        @php
-                            echo get_setting('cookies_agreement_text');
-                        @endphp
-                    </div>
-                    <button class="btn btn-primary aiz-cookie-accepet">
-                        {{ translate('Ok. I Understood') }}
-                    </button>
-                </div>
+<div class="modal fade" id="addToCart">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size"
+         role="document">
+        <div class="modal-content position-relative">
+            <div class="c-preloader text-center p-3">
+                <i class="las la-spinner la-spin la-3x"></i>
             </div>
-        @endif
+            <button type="button" class="close absolute-top-right btn-icon close z-1" data-dismiss="modal"
+                    aria-label="Close">
+                <span aria-hidden="true" class="la-2x">&times;</span>
+            </button>
+            <div id="addToCart-modal-body">
 
-        @include('frontend.partials.modal')
-
-        <div class="modal fade" id="addToCart">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size"
-                 role="document">
-                <div class="modal-content position-relative">
-                    <div class="c-preloader text-center p-3">
-                        <i class="las la-spinner la-spin la-3x"></i>
-                    </div>
-                    <button type="button" class="close absolute-top-right btn-icon close z-1" data-dismiss="modal"
-                            aria-label="Close">
-                        <span aria-hidden="true" class="la-2x">&times;</span>
-                    </button>
-                    <div id="addToCart-modal-body">
-
-                    </div>
-                </div>
             </div>
         </div>
+    </div>
+</div>
 
-        @yield('modal')
+<!-- Print SignUp Modal Component -->
+<x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
-        <!-- SCRIPTS -->
-        <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
+@yield('modal')
 
-        <!-- JS Front -->
-        <script src="{{ static_asset('front/js/hs-add-field.min.js') }}"></script>
-        <script src="{{ static_asset('front/js/hs-unfold.min.js') }}"></script>
+<script src="{{ mix('js/app.js', 'themes/'.Theme::parent()) }}"></script>
 
-        @include('frontend.layouts.partials.app-js')
+    <!-- Vendor Scripts -->
+    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
-        @yield('script')
 
-        @php
-            echo get_setting('footer_script');
-        @endphp
-        </body>
-        </html>
+
+@yield('script')
+
+{{-- TODO: Include this propertly --}}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
+
+@stack('footer_scripts')
+
+@include('frontend.layouts.partials.app-js')
+
+<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
+
+<!-- JS Plugins Init. -->
+<script>
+    $(function() {
+        // INITIALIZATION OF SLICK CAROUSEL
+        // =======================================================
+        $('.js-slick-carousel').each(function() {
+            var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
+        });
+    });
+</script>
+
+
+
+@php
+    echo get_setting('footer_script');
+@endphp
+
+    @livewireStyles
+    @livewireScripts
+</body>
+</html>

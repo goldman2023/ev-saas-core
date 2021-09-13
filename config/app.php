@@ -180,6 +180,7 @@ return [
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
         // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        App\Providers\EVServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -196,7 +197,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
-
         Laravel\Passport\PassportServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Yajra\DataTables\ButtonsServiceProvider::class,
@@ -262,7 +262,9 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
-        'Cart' => App\Facades\Cart::class,
+        'CartService' => App\Facades\CartService::class,
+        'EV' => App\Facades\EV::class,
+        'Theme' => Qirolab\Theme\Theme::class,
     ],
 
 ];

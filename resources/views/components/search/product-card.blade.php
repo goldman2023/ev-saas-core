@@ -7,7 +7,7 @@
                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
                     data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                     alt="{{  $product->getTranslation('name')  }}"
-                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                    onerror="this.onerror=null;this.src='/assets/img/placeholder.jpg';"
                 >
             </a>
             <div class="absolute-top-right aiz-p-hov-icon">

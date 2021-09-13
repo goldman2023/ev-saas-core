@@ -60,7 +60,7 @@ class LoginController extends Controller
             }
         } catch (\Exception $e) {
             flash("Something Went wrong. Please try again.")->error();
-            return redirect()->route('user.login');
+            return redirect()->route('business.login');
         }
 
         // check if they're an existing user

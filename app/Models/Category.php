@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+
 /**
  * App\Models\Category
  *
@@ -33,6 +35,8 @@ use App;
 
 class Category extends Model
 {
+    use Cachable;
+
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $category_translation = $this->hasMany(CategoryTranslation::class)->where('lang', $lang)->first();

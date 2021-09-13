@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Currency extends Model
 {
+    use Cachable;
     protected static function boot()
     {
         parent::boot();

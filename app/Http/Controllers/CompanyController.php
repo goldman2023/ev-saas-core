@@ -205,7 +205,7 @@ class CompanyController extends Controller
         $company = Shop::findOrFail($id);
         if($company){
             $utm_query = [
-                'utm_source' => 'b2bwood',
+                'utm_source' => get_site_name(),
             ];
             visits($company,'website_click')->increment();
             if(auth()->user())

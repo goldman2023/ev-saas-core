@@ -122,7 +122,7 @@ class ShopController extends Controller
 
                 /* TODO: ADD user to mailchimp for welcome email: */
 
-                return redirect()->route('seller_packages_list');
+                return redirect()->route('dashboard');
             } else {
                 $seller->delete();
                 $user->user_type == 'customer';

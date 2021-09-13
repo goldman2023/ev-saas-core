@@ -27,7 +27,12 @@ class ThemeMiddleware
 
             if($domain) {
                 // Set active theme
-                Theme::set($domain->theme, 'ev-tailwind');
+                /* Set parent theme for tailwind child themes */
+                if(str_contains($domain->theme, 'tailwind')) {
+                    Theme::set($domain->theme, 'ev-tailwind');
+                } else {
+                    Theme::set($domain->theme, 'ev-saas-default');
+                }
 
             }
 
