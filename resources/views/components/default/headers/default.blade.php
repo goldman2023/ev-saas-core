@@ -153,7 +153,7 @@
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="{{ route('user.login') }}"
+                            <a href="{{ route('users.login') }}"
                                data-test="header.login">
                                 {{ translate('Login') }}
                             </a>
