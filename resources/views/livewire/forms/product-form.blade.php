@@ -4,13 +4,25 @@
         <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
-                <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
+                <h4 class="card-header-title">
+                    @if(!empty($product->id))
+                        {{ translate('Edit Product') }}
+                    @else
+                        {{ translate('Add New Product') }}
+                    @endif
+                </h4>
             </div>
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="card-body">
-                <form class=" js-step-form-1"
+            <div class="card-body position-relative">
+                <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+                                      wire:target="validateSpecificSet"
+                                      wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+
+                <form class="js-step-form-1"
+                      wire:loading.class="opacity-3"
+                      wire:target="validateSpecificSet"
                       data-hs-step-form-options='{
                       "progressSelector": "#productStepFormProgress",
                       "stepsSelector": "#productStepFormContent",
@@ -68,8 +80,8 @@
 
                                     <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           wire:click="$set('page', 'attributes_variations')"
-                                        ><!-- onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))"-->
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))"
+                                        ><!-- wire:click="$set('page', 'attributes_variations')" -->
                                             <span class="step-icon step-icon-soft-dark">4</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('Attributes & variations') }}</span>
@@ -431,7 +443,7 @@
                                         </x-ev.form.input>
 
                                         <!-- SEO Meta Description -->
-                                        <x-ev.form.textarea name="product.meta_description" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
+                                        <x-ev.form.textarea name="product.meta_description" rows="5" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
                                             <small class="text-muted">{{ translate('Have in mind that description should be between 70 and max 200 characters. Facebook up to 200 chars, Twitter up to 150 chars max.') }}</small>
                                         </x-ev.form.textarea>
 
@@ -455,7 +467,13 @@
                                                 <button type="button" class="btn btn-primary"
                                                         onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', '', true]}}))"
                                                 >
-                                                    {{ translate('Add Product') }} <i class="fas fa-angle-right ml-1"></i>
+                                                    @if(!empty($product->id))
+                                                        {{ translate('Update Product') }}
+                                                    @else
+                                                        {{ translate('Add Product') }}
+                                                    @endif
+
+                                                    <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
                                             </div>
                                         </div>

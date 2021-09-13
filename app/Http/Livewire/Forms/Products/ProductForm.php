@@ -18,9 +18,10 @@ use Livewire\Component;
 
 class ProductForm extends Component
 {
-    protected $rulesSets;
-    public $page;
-    public $insert_success = false;
+    protected array $rulesSets;
+    public string $page;
+    public bool $insert_success = false;
+    public bool $update_success = false;
 
     public Product $product;
     public array $attributes;
@@ -163,7 +164,11 @@ class ProductForm extends Component
             }
 
             if($is_last) {
-                $this->insert();
+                if(empty($this->product->id)) {
+                    $this->insert();
+                } else {
+                    $this->update();
+                }
             } else {
                 $this->page = $next_page;
             }
@@ -225,12 +230,8 @@ class ProductForm extends Component
             // Save product
             $this->product->save();
 
-            // CREATE: Product Translations
-            $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
-            $product_translation->name = $this->product->name;
-            $product_translation->unit = $this->product->unit;
-            $product_translation->description = $this->product->description;
-            $product_translation->save();
+            // SET: Product Translations
+            $this->setProductTranslation();
 
             // TODO: VAT & TAX, Flash Deals
 
@@ -275,13 +276,8 @@ class ProductForm extends Component
                 }
             }
 
-            // CREATE: Main & Variations Product Stocks
-            // TODO: Create proper product stocks for variations!
-            $product_stock = new ProductStock();
-            $product_stock->product_id = $this->product->id;
-            $product_stock->price = $this->product->unit_price;
-            $product_stock->qty = $this->product->current_stock;
-            $product_stock->save();
+            // SET: Main & Variations Product Stocks
+            $this->setProductStocks();
 
             DB::commit();
 
@@ -292,6 +288,84 @@ class ProductForm extends Component
             DB::rollBack();
             dd($e->getMessage());
         }
+    }
+
+    protected function update() {
+        DB::beginTransaction();
+
+        try {
+            if(empty($this->product->brand_id)) {
+                $this->product->brand_id = null;
+            }
+
+            $this->product->tags = implode(',', $this->product->tags);
+
+            if ($this->product->shipping_type === 'free') {
+                $this->product->shipping_cost = 0;
+            } elseif ($this->product->shipping_type === 'flat_rate') {
+                $this->product->shipping_cost = $this->product->flat_shipping_cost;
+            } elseif ($this->product->shipping_type === 'product_wise') {
+                $this->product->shipping_cost = json_encode([]);
+            }
+
+            unset($this->product->flat_shipping_cost);
+
+            if (empty($this->product->meta_img)) {
+                $this->product->meta_img = $this->product->thumbnail_img;
+            }
+
+            if (empty($this->product->meta_title)) {
+                $this->product->meta_img = $this->product->name;
+            }
+
+            if (empty(trim($this->product->meta_description))) {
+                $this->product->meta_description = trim(strip_tags($this->product->description));
+            }
+
+            // TODO: Add Featured, Cash on delivery, Todays deal to the form
+            $this->product->cash_on_delivery = 0;
+            $this->product->featured = 0;
+            $this->product->todays_deal = 0;
+
+            // TODO: Add Product status option to the form - published, draft
+            $this->product->published = 1;
+
+            // Save product
+            $this->product->save();
+
+            // SET: Product Translations
+            $this->setProductTranslation();
+
+
+
+            // SET: Main & Variations Product Stocks
+            $this->setProductStocks();
+
+            DB::commit();
+
+            $this->update_success = true;
+
+            $this->dispatchBrowserEvent('goToTop');
+        } catch(\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+        }
+    }
+
+    protected function setProductTranslation() {
+        $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
+        $product_translation->name = $this->product->name;
+        $product_translation->unit = $this->product->unit;
+        $product_translation->description = $this->product->description;
+        $product_translation->save();
+    }
+
+    protected function setProductStocks() {
+        // TODO: Create proper product stocks for variations!
+        $product_stock = ProductStock::firstOrNew(['product_id' => $this->product->id]);
+        $product_stock->price = $this->product->unit_price;
+        $product_stock->qty = $this->product->current_stock;
+        $product_stock->save();
     }
 
     public function dehydrate()
