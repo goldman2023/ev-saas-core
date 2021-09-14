@@ -10,13 +10,6 @@
                 </p>
             </div>
 
-            <!-- Leaflet -->
-            <div id="" class="min-h-300rem mb-5">
-                <x-ev.dynamic-image :src="ev_dynamic_translate('#get-in-touch-image', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
-                </x-ev.dynamic-image>
-            </div>
-            <!-- End Leaflet -->
-
             <div class="row">
                 <div class="col-sm-6">
                     <div class="mb-3">
@@ -55,6 +48,26 @@
                     </div>
                 </div>
             </div>
+            <!-- Leaflet -->
+            <div id="" class="min-h-300rem mb-5">
+                <x-ev.dynamic-image :src="ev_dynamic_translate('#get-in-touch-image', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+                </x-ev.dynamic-image>
+            </div>
+            <!-- End Leaflet -->
+
+            @if($map)
+            <iframe
+  width="600"
+  height="450"
+  style="border:0"
+  loading="lazy"
+  allowfullscreen
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBLQOzlf945klIbLyJ796I2hgv-nMHjt_o
+    &q={{ $address }}">
+</iframe>
+@endif
+
+
         </div>
 
         <div class="col-lg-6">
