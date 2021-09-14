@@ -2,7 +2,8 @@
 <header id="header" class="header">
     <div class="header-section">
         <!-- Topbar -->
-        <div class="container header-hide-content pt-2">
+       <div class="bg-primary text-white">
+        <div class="container header-hide-content pt-1 pb-sm-0">
             <div class="d-flex align-items-center">
                 <!-- Language -->
                 @if (get_setting('show_language_switcher') == 'on')
@@ -81,19 +82,20 @@
                 </ul>
             </div>
         </div>
+       </div>
         <!-- End Topbar -->
         <div id="logoAndNav" class="container">
             <!-- Nav -->
             <nav class="navbar navbar-expand-lg">
                 <!-- Logo -->
-                <a class="navbar-brand" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
+                <a class="navbar-brand"  href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
                     @php
                         $header_logo = get_setting('header_logo');
                     @endphp
                     @if ($header_logo != null)
-                        <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
+                        <img style="width: 200px; max-width: none;" src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
                     @else
-                        <img src="{{ static_asset('img/logo.png') }}" alt="{{ env('APP_NAME') }}">
+                        <img style="width: 200px; max-width: none;" src="{{ static_asset('img/logo.png') }}" alt="{{ env('APP_NAME') }}">
                     @endif
                 </a>
                 <!-- End Logo -->

@@ -1,4 +1,7 @@
+@if(get_setting('enable_footer_bottom_links')== 'on')
 <x-footer-bottom-links></x-footer-bottom-links>
+@endif
+
 
 <section class="bg-dark py-5 text-light footer-widget">
     <div class="container">
