@@ -46,4 +46,21 @@
         {{ svg('heroicon-o-pencil-alt') }}
     </button>
 
+    <div class="hs-unfold ml-auto">
+        <a class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle" href="javascript:;" data-hs-unfold-options="{
+             &quot;target&quot;: &quot;#folderDropdown1&quot;,
+             &quot;type&quot;: &quot;css-animation&quot;
+           }" data-hs-unfold-target="#folderDropdown1" data-hs-unfold-invoker="">
+          <i class="tio-more-vertical"></i>
+        </a>
+
+        <div id="folderDropdown1" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right hs-unfold-hidden hs-unfold-content-initialized hs-unfold-css-animation animated hs-unfold-reverse-y" style="min-width: 13rem; animation-duration: 300ms;" data-hs-target-height="306" data-hs-unfold-content="" data-hs-unfold-content-animation-in="slideInUp" data-hs-unfold-content-animation-out="fadeOut">
+          <span class="dropdown-header">Settings</span>
+
+          <a class="dropdown-item" href="#">
+            <i class="tio-delete-outlined dropdown-item-icon"></i> Delete
+          </a>
+        </div>
+      </div>
+
 </div>

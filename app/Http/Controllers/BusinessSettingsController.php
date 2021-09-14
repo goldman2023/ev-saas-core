@@ -313,6 +313,10 @@ class BusinessSettingsController extends Controller
                     $business_settings = new BusinessSetting;
                 }
 
+                if(is_string($business_settings)) {
+                    $business_settings = new BusinessSetting;
+                }
+
                 $business_settings->type = $type;
                 $business_settings->value = $value;
 
