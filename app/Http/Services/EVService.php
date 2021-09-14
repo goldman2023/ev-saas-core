@@ -298,7 +298,7 @@ class EVService
 
             // 4. Fetch ONLY attribute values for dropdown, checkbox, radio attribute types
             $relevant_attrs_idx = collect($attrs)->filter(function ($value, $key) {
-                return $value['type'] === 'dropdown' || $value['type'] === 'checkbox' || $value['type'] === 'radio';
+                return $value['is_predefined'];
             })->pluck('id')->all();
             $predefined_attrs_values = collect(AttributeValue::whereIn('attribute_id', $relevant_attrs_idx)->select('id', 'attribute_id', 'values')->get()->toArray())->groupBy('attribute_id')->transform(function($item, $key) {
                 return $item->keyBy('id')->toArray();
@@ -331,7 +331,7 @@ class EVService
             // 2. DO NOT fetch attribute relationships and attribute_values
             $attrs = Attribute::without('attributes_relationship', 'attribute_values')->select('id','name','type','custom_properties')->where('content_type', $content_type)->get()->toArray();
             $relevant_attrs_idx = collect($attrs)->filter(function ($value, $key) {
-                return $value['type'] === 'dropdown' || $value['type'] === 'checkbox' || $value['type'] === 'radio';
+                return $value['is_predefined'];
             })->pluck('id')->all();
 
             // 3. Fetch ONLY attribute values for dropdown, checkbox, radio attribute types
@@ -354,12 +354,12 @@ class EVService
 
                 if($return_object) {
                     $att_object->selected = true; // All attributes are selected by default
-                    $att_object->for_variations = !empty($subject->id ) ? $att_object->for_variations : false; // false if create, stays the same as previously defined on edit
+                    $att_object->for_variations = !empty($subject->id ) ? ($att_object->for_variations ?? false) : false; // false if create, stays the same as previously defined on edit
                     $mapped[$att_object->id] = $att_object;
                 } else {
                     $mapped[$att->id] = (object) array_merge($att_object, [
                         'selected' => true, // All attributes are selected by default
-                        'for_variations' => !empty($subject->id) ? $att_object['for_variations'] : false,  // false if create, stays the same as previously defined on edit
+                        'for_variations' => !empty($subject->id) ? ($att_object['for_variations'] ?? false) : false,  // false if create, stays the same as previously defined on edit
                     ]);
                 }
             }
