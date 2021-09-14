@@ -1,5 +1,7 @@
 <!-- ========== FOOTER ========== -->
+@if(get_setting('enable_footer_bottom_links')== 'on')
 <x-footer-bottom-links></x-footer-bottom-links>
+@endif
 
 <footer class="container space-1">
     <div class="row align-items-md-center text-center">
@@ -19,16 +21,33 @@
 
       <div class="col-sm-7 col-md-6 mb-4 mb-sm-0">
         <!-- Nav List -->
-        <ul class="nav nav-sm nav-x-0 justify-content-center text-md-center">
-          <li class="nav-item px-3">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item px-3">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item px-3">
-            <a class="nav-link" href="#">Our work</a>
-          </li>
+        <ul class="nav nav-sm justify-content-center text-md-center">
+            <!-- Home -->
+            @if (get_setting('header_menu_labels') != null)
+
+
+                @foreach (get_setting('header_menu_labels') as $key => $value)
+                    @php
+                        $target = '_self';
+
+                    @endphp
+                    <li class="position-static">
+
+                        <a id="homeMegaMenu" class="nav-link" target="{{ $target }}"
+                            href="{{ get_setting('header_menu_links')[$key] }}">
+                            {{ $value }}
+                        </a>
+                    </li>
+                @endforeach
+
+            @endif
+
+
+            <!-- End Home -->
+
+            <!-- End Docs -->
+
+
         </ul>
         <!-- End Nav List -->
       </div>

@@ -43,6 +43,9 @@
                                         @php echo get_setting('about_us_description'); @endphp
                                     </textarea>
     							</div>
+
+
+
     							<div class="text-right">
     								<button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
     							</div>
@@ -175,6 +178,20 @@
                               @php echo get_setting('frontend_copyright_text'); @endphp
                           </textarea>
                   			</div>
+                    </div>
+                </div>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-from-label">{{translate('Show Footer bottom links?')}}</label>
+                            <div class="col-md-9">
+                              <label class="aiz-switch aiz-switch-success mb-0">
+                                <input type="hidden" name="types[]" value="enable_footer_bottom_links">
+                                <input type="checkbox" name="enable_footer_bottom_links" @if( get_setting('enable_footer_bottom_links') == 'on') checked @endif>
+                                <span></span>
+                              </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card shadow-none bg-light">
