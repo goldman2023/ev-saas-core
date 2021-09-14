@@ -31,6 +31,10 @@ class DynamicButton extends Component
         $this->show_input_field = true;
     }
 
+    public function close() {
+        $this->show_input_field = false;
+    }
+
     public function updateLabel()
     {
         $this->validate();

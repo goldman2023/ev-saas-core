@@ -151,7 +151,7 @@
             $('.js-slick-carousel').each(function() {
                 var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
             });
-
+            var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
             console.log($.HSCore.components);
 
         });
