@@ -289,4 +289,30 @@ class EVService
 
         return $mapped;
     }
+
+    public static function buildCategoriesTree($data, $pidKey, $idKey = "parent_id",) {
+        
+        $tree = function ($elements, $parentId = -1) use (&$tree, $pidKey, $idKey) {
+            if($parentId < 0) $parentId = $pidKey;
+            $branch = array();
+            foreach ($elements as $element) {
+    
+                if ($element[$idKey] == $parentId) {
+    
+                    $children = $tree($elements, $element['id']);
+                    if ($children) {
+                        $element['children'] = $children;
+                    }  else {
+                        $element['children'] = [];
+                    }
+                    $branch[] = $element;
+                }
+    
+            }
+            return $branch;
+        };
+    
+        $tree = $tree($data);
+    
+    }
 }
