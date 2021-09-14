@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\App;
+use Illuminate\Container\Container;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Services\EVService;
+use App\Http\Services\BusinessSettingsService;
 use Blade;
 
 class EVServiceProvider extends ServiceProvider
@@ -20,8 +21,13 @@ class EVServiceProvider extends ServiceProvider
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
 
         // Register EV Facade
-        \App::bind('ev', function() {
-            return new EVService();
+        $this->app->singleton('ev', function($app) {
+            return new EVService($app);
+        });
+
+        // Register BusinessSetting Service Singleton
+        $this->app->singleton('business_settings', function() {
+            return new BusinessSettingsService(fn () => Container::getInstance());
         });
     }
 

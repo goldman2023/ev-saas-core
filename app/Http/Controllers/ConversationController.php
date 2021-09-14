@@ -21,7 +21,7 @@ class ConversationController extends Controller
      */
     public function index()
     {
-        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
+        if (get_setting('conversation_system') == 1) {
             $conversations = Conversation::where('sender_id', auth()->user()->id)->orWhere('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(5);
             return view('frontend.user.conversations.index', compact('conversations'));
         }
@@ -38,7 +38,7 @@ class ConversationController extends Controller
      */
     public function admin_index()
     {
-        if (BusinessSetting::where('type', 'conversation_system')->first()->value == 1) {
+        if (get_setting('conversation_system') == 1) {
             $conversations = Conversation::orderBy('created_at', 'desc')->get();
             return view('backend.support.conversations.index', compact('conversations'));
         }

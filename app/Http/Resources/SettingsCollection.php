@@ -21,10 +21,10 @@ class SettingsCollection extends ResourceCollection
                     'youtube' => $data->youtube,
                     'google_plus' => $data->google_plus,
                     'currency' => [
-                        'name' => Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)->name,
-                        'symbol' => Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)->symbol,
-                        'exchange_rate' => (double) $this->exchangeRate(Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)),
-                        'code' => Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)->code
+                        'name' => Currency::findOrFail(get_setting('system_default_currency'))->name,
+                        'symbol' => Currency::findOrFail(get_setting('system_default_currency'))->symbol,
+                        'exchange_rate' => (double) $this->exchangeRate(Currency::findOrFail(get_setting('system_default_currency'))),
+                        'code' => Currency::findOrFail(get_setting('system_default_currency'))->code
                     ],
                     'currency_format' => $data->currency_format
                 ];
@@ -41,7 +41,7 @@ class SettingsCollection extends ResourceCollection
     }
 
     public function exchangeRate($currency){
-        $base_currency = Currency::find(BusinessSetting::where('type', 'system_default_currency')->first()->value);
+        $base_currency = Currency::find(get_setting('system_default_currency'));
         return $currency->exchange_rate/$base_currency->exchange_rate;
     }
 }

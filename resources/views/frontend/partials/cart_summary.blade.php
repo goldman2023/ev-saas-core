@@ -174,7 +174,7 @@
             @endif
         @endif
 
-        @if (Auth::check() && \App\Models\BusinessSetting::where('type', 'coupon_system')->first()->value == 1)
+        @if (Auth::check() && get_setting('coupon_system') == 1)
             @if (Session::has('coupon_discount'))
                 <div class="mt-3">
                     <form class="" action="{{ route('checkout.remove_coupon_code') }}" method="POST" enctype="multipart/form-data">

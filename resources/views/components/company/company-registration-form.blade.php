@@ -109,7 +109,7 @@
     @endif
 
 
-    @if (\App\Models\BusinessSetting::where('type', 'google_recaptcha')->first()->value == 1)
+    @if (get_setting('google_recaptcha') == 1)
         <div class="form-group mt-2 mx-auto row">
             <div class="g-recaptcha" data-sitekey="{{ env('CAPTCHA_KEY') }}"></div>
         </div>

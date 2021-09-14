@@ -24,7 +24,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'maintenance_mode')" <?php if(\App\Models\BusinessSetting::where('type', 'maintenance_mode')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'maintenance_mode')" <?php if(get_setting('maintenance_mode') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'vendor_system_activation')" <?php if(\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'vendor_system_activation')" <?php if(get_setting('vendor_system_activation') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -68,7 +68,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'classified_product')" <?php if(\App\Models\BusinessSetting::where('type', 'classified_product')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'classified_product')" <?php if(get_setting('classified_product') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -81,7 +81,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'wallet_system')" <?php if(\App\Models\BusinessSetting::where('type', 'wallet_system')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'wallet_system')" <?php if(get_setting('wallet_system') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -94,7 +94,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'coupon_system')" <?php if(\App\Models\BusinessSetting::where('type', 'coupon_system')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'coupon_system')" <?php if(get_setting('coupon_system') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -107,7 +107,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'pickup_point')" <?php if(\App\Models\BusinessSetting::where('type', 'pickup_point')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'pickup_point')" <?php if(get_setting('pickup_point') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -120,7 +120,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'conversation_system')" <?php if(\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'conversation_system')" <?php if(get_setting('conversation_system') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -134,8 +134,7 @@
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
                     <input type="checkbox" onchange="updateSettings(this, 'product_manage_by_admin')"
-                        <?php if(\App\Models\BusinessSetting::where('type', 'product_manage_by_admin')->first() &&
-                                \App\Models\BusinessSetting::where('type', 'product_manage_by_admin')->first()->value == 1) echo "checked";?>>
+                        <?php if(get_setting('product_manage_by_admin') && get_setting('product_manage_by_admin') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
                 <div class="alert" style="color: #004085;background-color: #cce5ff;border-color: #b8daff;margin-bottom:0;margin-top:10px;">
@@ -151,7 +150,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'category_wise_commission')" <?php if(\App\Models\BusinessSetting::where('type', 'category_wise_commission')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'category_wise_commission')" <?php if(get_setting('category_wise_commission') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
                 <div class="alert" style="color: #004085;background-color: #cce5ff;border-color: #b8daff;margin-bottom:0;margin-top:10px;">
@@ -167,7 +166,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'email_verification')" <?php if(\App\Models\BusinessSetting::where('type', 'email_verification')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'email_verification')" <?php if(get_setting('email_verification') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
                 <div class="alert" style="color: #004085;background-color: #cce5ff;border-color: #b8daff;margin-bottom:0;margin-top:10px;">
@@ -189,7 +188,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/paypal.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'paypal_payment')" <?php if(\App\Models\BusinessSetting::where('type', 'paypal_payment')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'paypal_payment')" <?php if(get_setting('paypal_payment') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -208,7 +207,7 @@
                 <div class="clearfix">
                     <img   class="float-left" src="{{ static_asset('assets/img/cards/stripe.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'stripe_payment')" <?php if(\App\Models\BusinessSetting::where('type', 'stripe_payment')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'stripe_payment')" <?php if(get_setting('stripe_payment') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -227,7 +226,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/sslcommerz.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'sslcommerz_payment')" <?php if(\App\Models\BusinessSetting::where('type', 'sslcommerz_payment')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'sslcommerz_payment')" <?php if(get_setting('sslcommerz_payment') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -248,7 +247,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/instamojo.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'instamojo_payment')" <?php if(\App\Models\BusinessSetting::where('type', 'instamojo_payment')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'instamojo_payment')" <?php if(get_setting('instamojo_payment') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -267,7 +266,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/rozarpay.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'razorpay')" <?php if(\App\Models\BusinessSetting::where('type', 'razorpay')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'razorpay')" <?php if(get_setting('razorpay') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -287,7 +286,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/paystack.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'paystack')" <?php if(\App\Models\BusinessSetting::where('type', 'paystack')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'paystack')" <?php if(get_setting('paystack') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -308,7 +307,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/vogue.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'voguepay')" <?php if(\App\Models\BusinessSetting::where('type', 'voguepay')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'voguepay')" <?php if(get_setting('voguepay') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -327,7 +326,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/payhere.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'payhere')" <?php if(\App\Models\BusinessSetting::where('type', 'payhere')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'payhere')" <?php if(get_setting('payhere') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -347,7 +346,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/ngenius.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'ngenius')" <?php if(\App\Models\BusinessSetting::where('type', 'ngenius')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'ngenius')" <?php if(get_setting('ngenius') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -367,7 +366,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/iyzico.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'iyzico')" <?php if(\App\Models\BusinessSetting::where('type', 'iyzico')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'iyzico')" <?php if(get_setting('iyzico') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -387,7 +386,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/bkash.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'bkash')" <?php if(\App\Models\BusinessSetting::where('type', 'bkash')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'bkash')" <?php if(get_setting('bkash') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -407,7 +406,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/nagad.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'nagad')" <?php if(\App\Models\BusinessSetting::where('type', 'nagad')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'nagad')" <?php if(get_setting('nagad') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -427,7 +426,7 @@
                 <div class="clearfix">
                     <img class="float-left" src="{{ static_asset('assets/img/cards/cod.png') }}" height="30">
                     <label class="aiz-switch aiz-switch-success mb-0 float-right">
-                        <input type="checkbox" onchange="updateSettings(this, 'cash_payment')" <?php if(\App\Models\BusinessSetting::where('type', 'cash_payment')->first()->value == 1) echo "checked";?>>
+                        <input type="checkbox" onchange="updateSettings(this, 'cash_payment')" <?php if(get_setting('cash_payment') == 1) echo "checked";?>>
                         <span class="slider round"></span>
                     </label>
                 </div>
@@ -445,7 +444,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'facebook_login')" <?php if(\App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'facebook_login')" <?php if(get_setting('facebook_login') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
                 <div class="alert" style="color: #004085;background-color: #cce5ff;border-color: #b8daff;margin-bottom:0;margin-top:10px;">
@@ -461,7 +460,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'google_login')" <?php if(\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'google_login')" <?php if(get_setting('google_login') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
                 <div class="alert" style="color: #004085;background-color: #cce5ff;border-color: #b8daff;margin-bottom:0;margin-top:10px;">
@@ -477,7 +476,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'twitter_login')" <?php if(\App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1) echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'twitter_login')" <?php if(get_setting('twitter_login') == 1) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
                 <div class="alert" style="color: #004085;background-color: #cce5ff;border-color: #b8daff;margin-bottom:0;margin-top:10px;">
@@ -500,7 +499,7 @@
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
                     @php
-                        $jobs_activated = \App\Models\BusinessSetting::where('type', 'jobs_module')->first();
+                        $jobs_activated = get_setting('jobs_module')->first();
                         if($jobs_activated != null) {
 
                         } else {
@@ -525,7 +524,7 @@
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
                     @php
-                        $events_activated = \App\Models\BusinessSetting::where('type', 'events_module')->first();
+                        $events_activated = get_setting('events_module')->first();
                         if($events_activated != null) {
 
                         } else {

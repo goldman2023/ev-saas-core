@@ -22,7 +22,7 @@
 							<input type="hidden" name="types[]" value="home_slider_images">
 							<input type="hidden" name="types[]" value="home_slider_links">
 							@if (get_setting('home_slider_images') != null)
-								@foreach (json_decode(get_setting('home_slider_images'), true) as $key => $value)
+								@foreach (get_setting('home_slider_images') as $key => $value)
 									<div class="row gutters-5">
 										<div class="col-md-5">
 											<div class="form-group">
@@ -32,7 +32,7 @@
 					                                </div>
 					                                <div class="form-control file-amount">{{ translate('Choose File') }}</div>
 													<input type="hidden" name="types[]" value="home_slider_images">
-					                                <input type="hidden" name="home_slider_images[]" class="selected-files" value="{{ json_decode(get_setting('home_slider_images'), true)[$key] }}">
+					                                <input type="hidden" name="home_slider_images[]" class="selected-files" value="{{ get_setting('home_slider_images')[$key] }}">
 					                            </div>
 					                            <div class="file-preview box sm">
 					                            </div>
@@ -41,7 +41,7 @@
 										<div class="col-md">
 											<div class="form-group">
 												<input type="hidden" name="types[]" value="home_slider_links">
-												<input type="text" class="form-control" placeholder="http://" name="home_slider_links[]" value="{{ json_decode(get_setting('home_slider_links'), true)[$key] }}">
+												<input type="text" class="form-control" placeholder="http://" name="home_slider_links[]" value="{{ get_setting('home_slider_links')[$key] }}">
 											</div>
 										</div>
 										<div class="col-md-auto">
@@ -114,7 +114,7 @@
 							<input type="hidden" name="types[]" value="home_banner1_images">
 							<input type="hidden" name="types[]" value="home_banner1_links">
 							@if (get_setting('home_banner1_images') != null)
-								@foreach (json_decode(get_setting('home_banner1_images'), true) as $key => $value)
+								@foreach (get_setting('home_banner1_images') as $key => $value)
 									<div class="row gutters-5">
 										<div class="col-md-5">
 											<div class="form-group">
@@ -124,7 +124,7 @@
 					                                </div>
 					                                <div class="form-control file-amount">{{ translate('Choose File') }}</div>
 													<input type="hidden" name="types[]" value="home_banner1_images">
-					                                <input type="hidden" name="home_banner1_images[]" class="selected-files" value="{{ json_decode(get_setting('home_banner1_images'), true)[$key] }}">
+					                                <input type="hidden" name="home_banner1_images[]" class="selected-files" value="{{ get_setting('home_banner1_images')[$key] }}">
 					                            </div>
 					                            <div class="file-preview box sm">
 					                            </div>
@@ -133,7 +133,7 @@
 										<div class="col-md">
 											<div class="form-group">
 												<input type="hidden" name="types[]" value="home_banner1_links">
-												<input type="text" class="form-control" placeholder="http://" name="home_banner1_links[]" value="{{ json_decode(get_setting('home_banner1_links'), true)[$key] }}">
+												<input type="text" class="form-control" placeholder="http://" name="home_banner1_links[]" value="{{ get_setting('home_banner1_links')[$key] }}">
 											</div>
 										</div>
 										<div class="col-md-auto">
@@ -206,7 +206,7 @@
 							<input type="hidden" name="types[]" value="home_banner2_images">
 							<input type="hidden" name="types[]" value="home_banner2_links">
 							@if (get_setting('home_banner2_images') != null)
-								@foreach (json_decode(get_setting('home_banner2_images'), true) as $key => $value)
+								@foreach (get_setting('home_banner2_images') as $key => $value)
 									<div class="row gutters-5">
 										<div class="col-md-5">
 											<div class="form-group">
@@ -216,7 +216,7 @@
 					                                </div>
 					                                <div class="form-control file-amount">{{ translate('Choose File') }}</div>
 													<input type="hidden" name="types[]" value="home_banner2_images">
-					                                <input type="hidden" name="home_banner2_images[]" class="selected-files" value="{{ json_decode(get_setting('home_banner2_images'), true)[$key] }}">
+					                                <input type="hidden" name="home_banner2_images[]" class="selected-files" value="{{ get_setting('home_banner2_images')[$key] }}">
 					                            </div>
 					                            <div class="file-preview box sm">
 					                            </div>
@@ -225,7 +225,7 @@
 										<div class="col-md">
 											<div class="form-group">
 												<input type="hidden" name="types[]" value="home_banner2_links">
-												<input type="text" class="form-control" placeholder="http://" name="home_banner2_links[]" value="{{ json_decode(get_setting('home_banner2_links'), true)[$key] }}">
+												<input type="text" class="form-control" placeholder="http://" name="home_banner2_links[]" value="{{ get_setting('home_banner2_links')[$key] }}">
 											</div>
 										</div>
 										<div class="col-md-auto">
@@ -297,7 +297,7 @@
 						<div class="home-categories-target">
 							<input type="hidden" name="types[]" value="home_categories">
 							@if (get_setting('home_categories') != null)
-								@foreach (json_decode(get_setting('home_categories'), true) as $key => $value)
+								@foreach (get_setting('home_categories') as $key => $value)
 									<div class="row gutters-5">
 										<div class="col">
 											<div class="form-group">
@@ -366,7 +366,7 @@
 							<input type="hidden" name="types[]" value="home_banner3_images">
 							<input type="hidden" name="types[]" value="home_banner3_links">
 							@if (get_setting('home_banner3_images') != null)
-								@foreach (json_decode(get_setting('home_banner3_images'), true) as $key => $value)
+								@foreach (get_setting('home_banner3_images') as $key => $value)
 									<div class="row gutters-5">
 										<div class="col-md-5">
 											<div class="form-group">
@@ -376,7 +376,7 @@
 					                                </div>
 					                                <div class="form-control file-amount">{{ translate('Choose File') }}</div>
 													<input type="hidden" name="types[]" value="home_banner3_images">
-					                                <input type="hidden" name="home_banner3_images[]" class="selected-files" value="{{ json_decode(get_setting('home_banner3_images'), true)[$key] }}">
+					                                <input type="hidden" name="home_banner3_images[]" class="selected-files" value="{{ get_setting('home_banner3_images')[$key] }}">
 					                            </div>
 					                            <div class="file-preview box sm">
 					                            </div>
@@ -385,7 +385,7 @@
 										<div class="col-md">
 											<div class="form-group">
 												<input type="hidden" name="types[]" value="home_banner3_links">
-												<input type="text" class="form-control" placeholder="http://" name="home_banner3_links[]" value="{{ json_decode(get_setting('home_banner3_links'), true)[$key] }}">
+												<input type="text" class="form-control" placeholder="http://" name="home_banner3_links[]" value="{{ get_setting('home_banner3_links')[$key] }}">
 											</div>
 										</div>
 										<div class="col-md-auto">
@@ -472,7 +472,7 @@
 							<input type="hidden" name="types[]" value="top10_brands">
 							<select name="top10_brands[]" class="form-control aiz-selectpicker" multiple data-max-options="10" data-live-search="true" required>
 								@foreach (\App\Models\Brand::all() as $key => $brand)
-									<option value="{{ $brand->id }}" @if(in_array($brand->id, json_decode(get_setting('top10_brands')))) selected @endif>{{ $brand->getTranslation('name') }}</option>
+									<option value="{{ $brand->id }}" @if(in_array($brand->id, get_setting('top10_brands'))) selected @endif>{{ $brand->getTranslation('name') }}</option>
 								@endforeach
 							</select>
 						</div>

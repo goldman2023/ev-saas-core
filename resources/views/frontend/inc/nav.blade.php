@@ -45,7 +45,7 @@
                                 if (Session::has('currency_code')) {
                                     $currency_code = Session::get('currency_code');
                                 } else {
-                                    $currency_code = \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+                                    $currency_code = \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
                                 }
                             @endphp
                             <a href="javascript:void(0)" class="dropdown-toggle text-reset py-2 opacity-60"
@@ -205,13 +205,13 @@
         <div class="bg-white border-top border-gray-200 py-1" id="b2b-main-menu">
             <div class="container">
                 <ul class="list-inline mb-0 pl-0 mobile-hor-swipe text-center">
-                    @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                    @foreach (get_setting('header_menu_labels') as $key => $value)
                         @php
                             $target = "_self";
 
                         @endphp
                         <li class="list-inline-item mr-0">
-                            <a href="{{ json_decode(get_setting('header_menu_links'), true)[$key] }}"
+                            <a href="{{ get_setting('header_menu_links')[$key] }}"
                                 class="opacity-100 fs-14 px-3 py-2 d-inline-block fw-600 hov-opacity-60 text-reset"
                                 target="{{$target}}">
                                 {{ translate($value) }}

@@ -19,7 +19,7 @@
                         <div class="col-lg-6">
                             <select class="form-control aiz-selectpicker" name="system_default_currency" data-live-search="true">
                                 @foreach ($active_currencies as $key => $currency)
-                                    <option value="{{ $currency->id }}" <?php if(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value == $currency->id) echo 'selected'?> >{{ $currency->name }}</option>
+                                    <option value="{{ $currency->id }}" <?php if(get_setting('system_default_currency') == $currency->id) echo 'selected'?> >{{ $currency->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -48,8 +48,8 @@
                         </div>
                         <div class="col-lg-6">
                             <select class="form-control aiz-selectpicker" name="symbol_format">
-                                <option value="1" @if(\App\Models\BusinessSetting::where('type', 'symbol_format')->first()->value == 1) selected @endif>[Symbol] [Amount]</option>
-                                <option value="2" @if(\App\Models\BusinessSetting::where('type', 'symbol_format')->first()->value == 2) selected @endif>[Amount] [Symbol]</option>
+                                <option value="1" @if(get_setting('symbol_format') == 1 ) selected @endif>[Symbol] [Amount]</option>
+                                <option value="2" @if(get_setting('symbol_format') == 2) selected @endif>[Amount] [Symbol]</option>
                             </select>
                         </div>
                     </div>
@@ -60,8 +60,8 @@
                         </div>
                         <div class="col-lg-6">
                             <select class="form-control aiz-selectpicker" name="decimal_separator">
-                                <option value="1" @if(\App\Models\BusinessSetting::where('type', 'decimal_separator')->first()->value == 1) selected @endif>1,23,456.70</option>
-                                <option value="2" @if(\App\Models\BusinessSetting::where('type', 'decimal_separator')->first()->value == 2) selected @endif>1.23.456,70</option>
+                                <option value="1" @if(get_setting('decimal_separator') == 1) selected @endif>1,23,456.70</option>
+                                <option value="2" @if(get_setting('decimal_separator') == 2) selected @endif>1.23.456,70</option>
                             </select>
                         </div>
                     </div>
@@ -72,10 +72,10 @@
                         </div>
                         <div class="col-lg-6">
                             <select class="form-control aiz-selectpicker" name="no_of_decimals">
-                                <option value="0" @if(\App\Models\BusinessSetting::where('type', 'no_of_decimals')->first()->value == 0) selected @endif>12345</option>
-                                <option value="1" @if(\App\Models\BusinessSetting::where('type', 'no_of_decimals')->first()->value == 1) selected @endif>1234.5</option>
-                                <option value="2" @if(\App\Models\BusinessSetting::where('type', 'no_of_decimals')->first()->value == 2) selected @endif>123.45</option>
-                                <option value="3" @if(\App\Models\BusinessSetting::where('type', 'no_of_decimals')->first()->value == 3) selected @endif>12.345</option>
+                                <option value="0" @if(get_setting('no_of_decimals') == 0) selected @endif>12345</option>
+                                <option value="1" @if(get_setting('no_of_decimals') == 1) selected @endif>1234.5</option>
+                                <option value="2" @if(get_setting('no_of_decimals') == 2) selected @endif>123.45</option>
+                                <option value="3" @if(get_setting('no_of_decimals') == 3) selected @endif>12.345</option>
                             </select>
                         </div>
                     </div>

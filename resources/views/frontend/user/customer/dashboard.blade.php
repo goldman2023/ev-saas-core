@@ -85,7 +85,7 @@
 				</div>
 			</div>
 		</div>
-        @if (\App\Models\BusinessSetting::where('type', 'classified_product')->first()->value)
+        @if (get_setting('classified_product'))
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">

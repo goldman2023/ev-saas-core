@@ -440,7 +440,7 @@ class OrderController extends Controller
                 }
             }
 
-            if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated && \App\Models\OtpConfiguration::where('type', 'otp_for_order')->first()->value){
+            if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated && \App\Models\OtpConfiguration::where('type', 'otp_for_order')){
                 try {
                     $otpController = new OTPVerificationController;
                     $otpController->send_order_code($order);
@@ -699,7 +699,7 @@ class OrderController extends Controller
                         $orderDetail->save();
                         $commission_percentage = 0;
                         if (get_setting('category_wise_commission') != 1) {
-                            $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+                            $commission_percentage = get_setting('vendor_commission');
                         } else if($orderDetail->product->user->user_type == 'seller'){
                             $commission_percentage = $orderDetail->product->category->commision_rate;
                         }

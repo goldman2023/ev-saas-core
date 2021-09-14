@@ -81,7 +81,7 @@ class AddonController extends Controller
 
                 //dd($random_dir, $json);
 
-                if (BusinessSetting::where('type', 'current_version')->first()->value >= $json['minimum_item_version']) {
+                if (get_setting('current_version') >= $json['minimum_item_version']) {
                     if (count(Addon::where('unique_identifier', $json['unique_identifier'])->get()) == 0) {
                         $addon = new Addon;
                         $addon->name = $json['name'];

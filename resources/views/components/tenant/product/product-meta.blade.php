@@ -22,5 +22,5 @@
 <meta property="og:description" content="{{ $detailedProduct->meta_description }}" />
 <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
 <meta property="og:price:amount" content="{{ single_price($detailedProduct->unit_price) }}" />
-<meta property="product:price:currency" content="{{ \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code }}" />
+<meta property="product:price:currency" content="{{ \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code }}" />
 <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">

@@ -25,7 +25,24 @@ use Illuminate\Database\Eloquent\Model;
  */
 class BusinessSetting extends Model
 {
-
     use Cachable;
 
+    public function getValueAttribute($value) {
+        $decoded = json_decode($value, true);
+
+        if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            return $decoded;
+        } else if(ctype_digit($value)) {
+            $int = (int) $value;
+            $float = (float) $value;
+
+            if($int == $float) {
+                return $int;
+            }
+
+            return $float;
+        }
+
+        return $value;
+    }
 }

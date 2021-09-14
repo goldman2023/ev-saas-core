@@ -57,7 +57,7 @@
                             <div class="row">
                                 <div class="col-xxl-8 col-xl-10 mx-auto">
                                     <div class="row gutters-10">
-                                        @if(\App\Models\BusinessSetting::where('type', 'paypal_payment')->first()->value == 1)
+                                        @if(get_setting('paypal_payment') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="paypal" class="online_payment" type="radio" name="payment_option" checked>
@@ -70,7 +70,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'stripe_payment')->first()->value == 1)
+                                        @if(get_setting('stripe_payment') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="stripe" class="online_payment" type="radio" name="payment_option" checked>
@@ -83,7 +83,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'sslcommerz_payment')->first()->value == 1)
+                                        @if(get_setting('sslcommerz_payment') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="sslcommerz" class="online_payment" type="radio" name="payment_option" checked>
@@ -96,7 +96,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'instamojo_payment')->first()->value == 1)
+                                        @if(get_setting('instamojo_payment') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="instamojo" class="online_payment" type="radio" name="payment_option" checked>
@@ -109,7 +109,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'razorpay')->first()->value == 1)
+                                        @if(get_setting('razorpay') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="razorpay" class="online_payment" type="radio" name="payment_option" checked>
@@ -122,7 +122,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'paystack')->first()->value == 1)
+                                        @if(get_setting('paystack') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="paystack" class="online_payment" type="radio" name="payment_option" checked>
@@ -135,7 +135,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'voguepay')->first()->value == 1)
+                                        @if(get_setting('voguepay') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="voguepay" class="online_payment" type="radio" name="payment_option" checked>
@@ -148,7 +148,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'payhere')->first()->value == 1)
+                                        @if(get_setting('payhere') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="payhere" class="online_payment" type="radio" name="payment_option" checked>
@@ -161,7 +161,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'ngenius')->first()->value == 1)
+                                        @if(get_setting('ngenius') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="ngenius" class="online_payment" type="radio" name="payment_option" checked>
@@ -174,7 +174,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'iyzico')->first()->value == 1)
+                                        @if(get_setting('iyzico') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="iyzico" class="online_payment" type="radio" name="payment_option" checked>
@@ -187,7 +187,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'nagad')->first()->value == 1)
+                                        @if(get_setting('nagad') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="nagad" class="online_payment" type="radio" name="payment_option" checked>
@@ -200,7 +200,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'bkash')->first()->value == 1)
+                                        @if(get_setting('bkash') == 1)
                                             <div class="col-6 col-md-4">
                                                 <label class="aiz-megabox d-block mb-3">
                                                     <input value="bkash" class="online_payment" type="radio" name="payment_option" checked>
@@ -214,7 +214,7 @@
                                             </div>
                                         @endif
                                         @if(\App\Models\Addon::where('unique_identifier', 'african_pg')->first() != null && \App\Models\Addon::where('unique_identifier', 'african_pg')->first()->activated)
-                                            @if(\App\Models\BusinessSetting::where('type', 'mpesa')->first()->value == 1)
+                                            @if(get_setting('mpesa') == 1)
                                                 <div class="col-6 col-md-4">
                                                     <label class="aiz-megabox d-block mb-3">
                                                         <input value="mpesa" class="online_payment" type="radio" name="payment_option" checked>
@@ -227,7 +227,7 @@
                                                     </label>
                                                 </div>
                                             @endif
-                                            @if(\App\Models\BusinessSetting::where('type', 'flutterwave')->first()->value == 1)
+                                            @if(get_setting('flutterwave') == 1)
                                                 <div class="col-6 col-md-4">
                                                     <label class="aiz-megabox d-block mb-3">
                                                         <input value="flutterwave" class="online_payment" type="radio" name="payment_option" checked>
@@ -240,7 +240,7 @@
                                                     </label>
                                                 </div>
                                             @endif
-                                            @if(\App\Models\BusinessSetting::where('type', 'payfast')->first()->value == 1)
+                                            @if(get_setting('payfast') == 1)
                                                 <div class="col-6 col-md-4">
                                                     <label class="aiz-megabox d-block mb-3">
                                                         <input value="payfast" class="online_payment" type="radio" name="payment_option" checked>
@@ -267,7 +267,7 @@
                                                 </label>
                                             </div>
                                         @endif
-                                        @if(\App\Models\BusinessSetting::where('type', 'cash_payment')->first()->value == 1)
+                                        @if(get_setting('cash_payment') == 1)
                                             @php
                                                 $digital = 0;
                                                 $cod_on = 1;
@@ -335,7 +335,7 @@
                                     </div>
                                 </div>
                             @endif
-                            @if (Auth::check() && \App\Models\BusinessSetting::where('type', 'wallet_system')->first()->value == 1)
+                            @if (Auth::check() && get_setting('wallet_system') == 1)
                                 <div class="separator mb-3">
                                     <span class="bg-white px-3">
                                         <span class="opacity-60">{{ translate('Or')}}</span>

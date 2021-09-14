@@ -22,7 +22,7 @@ class IyzicoController extends Controller
         $options->setApiKey(env('IYZICO_API_KEY'));
         $options->setSecretKey(env('IYZICO_SECRET_KEY'));
 
-        if(BusinessSetting::where('type', 'iyzico_sandbox')->first()->value == 1) {
+        if(get_setting('iyzico_sandbox') == 1) {
             $options->setBaseUrl("https://sandbox-api.iyzipay.com");
         } else {
             $options->setBaseUrl("https://api.iyzipay.com");
@@ -190,7 +190,7 @@ class IyzicoController extends Controller
         $options->setApiKey(env('IYZICO_API_KEY'));
         $options->setSecretKey(env('IYZICO_SECRET_KEY'));
 
-        if(BusinessSetting::where('type', 'iyzico_sandbox')->first()->value == 1) {
+        if(get_setting('iyzico_sandbox') == 1) {
             $options->setBaseUrl("https://sandbox-api.iyzipay.com");
         } else {
             $options->setBaseUrl("https://api.iyzipay.com");

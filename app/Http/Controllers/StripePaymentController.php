@@ -50,7 +50,7 @@ class StripePaymentController extends Controller
             'line_items' => [
                 [
                     'price_data' => [
-                    'currency' => \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code,
+                    'currency' => \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code,
                     'product_data' => [
                         'name' => "Payment"
                     ],

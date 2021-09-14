@@ -363,7 +363,7 @@
                 </div>
 
                 <div class="card-body">
-                    @if (\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value ==
+                    @if (get_setting( 'shipping_type') ==
                     'product_wise_shipping')
                     <div class="form-group row">
                         <label class="col-md-6 col-from-label">{{translate('Free Shipping')}}</label>

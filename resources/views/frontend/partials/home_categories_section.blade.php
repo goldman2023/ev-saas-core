@@ -1,4 +1,4 @@
-@php $home_categories = json_decode(get_setting('home_categories')); @endphp
+@php $home_categories = get_setting('home_categories'); @endphp
 @foreach ($home_categories as $key => $value)
     @php $category = \App\Models\Category::find($value); @endphp
     <section class="mb-4">

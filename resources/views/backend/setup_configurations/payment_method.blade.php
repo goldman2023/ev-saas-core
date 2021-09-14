@@ -36,7 +36,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="paypal_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'paypal_sandbox')->first()->value == 1)
+                                    <input value="1" name="paypal_sandbox" type="checkbox" @if (get_setting('paypal_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -137,7 +137,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="bkash_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'bkash_sandbox')->first()->value == 1)
+                                    <input value="1" name="bkash_sandbox" type="checkbox" @if (get_setting('bkash_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -247,7 +247,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="sslcommerz_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'sslcommerz_sandbox')->first()->value == 1)
+                                    <input value="1" name="sslcommerz_sandbox" type="checkbox" @if (get_setting('sslcommerz_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -330,7 +330,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="instamojo_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'instamojo_sandbox')->first()->value == 1)
+                                    <input value="1" name="instamojo_sandbox" type="checkbox" @if (get_setting('instamojo_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -440,7 +440,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="payhere_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'payhere_sandbox')->first()->value == 1)
+                                    <input value="1" name="payhere_sandbox" type="checkbox" @if (get_setting('payhere_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -527,7 +527,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="voguepay_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'voguepay_sandbox')->first()->value == 1)
+                                    <input value="1" name="voguepay_sandbox" type="checkbox" @if (get_setting('voguepay_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -576,7 +576,7 @@
                             </div>
                             <div class="col-md-8">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="iyzico_sandbox" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'iyzico_sandbox')->first()->value == 1)
+                                    <input value="1" name="iyzico_sandbox" type="checkbox" @if (get_setting('iyzico_sandbox') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>

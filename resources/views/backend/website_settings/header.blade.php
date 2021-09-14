@@ -69,11 +69,11 @@
 							<input type="hidden" name="types[]" value="header_menu_links">
 							<input type="hidden" name="types[]" value="header_menu_targets">
 							@if (get_setting('header_menu_labels') != null)
-								@foreach (json_decode( get_setting('header_menu_labels'), true) as $key => $value)
+								@foreach ( get_setting('header_menu_labels') as $key => $value)
 									@php
 										$target = "_self";
 										if (get_setting('header_menu_targets') != null) {
-											$target = json_decode(get_setting('header_menu_targets'), true)[$key] ?? '_self';
+											$target = get_setting('header_menu_targets')[$key] ?? '_self';
 										}
 									@endphp
 									<div class="row gutters-5">
@@ -84,7 +84,7 @@
 										</div>
 										<div class="col">
 											<div class="form-group">
-												<input type="text" class="form-control" placeholder="{{ translate('Link with') }} http:// {{ translate('or') }} https://" name="header_menu_links[]" value="{{ json_decode(App\Models\BusinessSetting::where('type', 'header_menu_links')->first()->value, true)[$key] }}">
+												<input type="text" class="form-control" placeholder="{{ translate('Link with') }} http:// {{ translate('or') }} https://" name="header_menu_links[]" value="{{ get_setting('header_menu_links'), true)[$key] }}">
 											</div>
 										</div>
 										<div class="col-2">

@@ -89,14 +89,14 @@
                                         <span class="divider divider-text">OR</span>
                                     </div>
 
-                                    @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
+                                    @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
                                         <div class="separator mb-3">
                                             <span
                                                 class="bg-white px-3 opacity-60">{{ translate('Or Login With') }}</span>
                                         </div>
                                         <ul class="list-inline social colored text-center mb-5">
 
-                                            @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1)
+                                            @if (get_setting('google_login') == 1)
                                                 <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
@@ -104,7 +104,7 @@
                                                     </span>
                                                 </a>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1)
+                                            @if (get_setting('facebook_login') == 1)
                                                 <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
@@ -112,7 +112,7 @@
                                                     </span>
                                                 </a>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
+                                            @if (get_setting('twitter_login') == 1)
                                                 <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
