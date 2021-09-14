@@ -20,7 +20,7 @@
                                id="{{ $id }}"
                                data-key="{{ $key }}"
                                class="custom-control-input @error($errorBagName) is-invalid @enderror"
-                               name="{{ $name }}@if(count($items) > 1)[]@endif"
+                               name="{{ $name }}"
                                @if(!empty($value) || !empty($valueProperty)) value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}" @endif
                                @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
                                {{ $attributes }}>
@@ -49,7 +49,7 @@
             $('[data-component-name="{{ $name }}"] [type="checkbox"]').off().on('change', function(event) {
                 if($(this).is(':checked')) {
                     // hide all other
-                    $('[data-component-name="{{ $name }}"] [type="radio"]').each(function(index, radio) {
+                    $('[data-component-name="{{ $name }}"] [type="checkbox"]').each(function(index, radio) {
                         $('div[data-slot-name="'+$(radio).val()+'"]').children().first().addClass('d-none');
                     });
 

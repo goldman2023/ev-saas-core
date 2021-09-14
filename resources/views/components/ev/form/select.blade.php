@@ -1,10 +1,10 @@
 <div class="form-group {{ $class }}">
     <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
-    <select @if($id) id="{{ $id }}" @endif
+    <select wire:model.defer="{{ $name }}"
+            @if($id) id="{{ $id }}" @endif
             class="js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
             name="{{ $name }}"
             size="1" style="opacity: 0;"
-            wire:model.defer="{{ $name }}"
             @if($multiple) multiple @endif
             data-hs-select2-options='@json($options)'
             @if($items->isEmpty() && $tags) dynamic-items @endif

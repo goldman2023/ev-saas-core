@@ -22,7 +22,7 @@ class SSLCommerz
         if(Session::has('payment_type')){
             if(Session::get('payment_type') == 'cart_payment' || Session::get('payment_type') == 'wallet_payment'){
                 # IF SANDBOX TRUE, THEN IT WILL CONNECT WITH SSLCOMMERZ SANDBOX (TEST) SYSTEM
-                if(BusinessSetting::where('type', 'sslcommerz_sandbox')->first()->value == 1){
+                if(get_setting('sslcommerz_sandbox') == 1){
                     define("SSLCZ_IS_SANDBOX", true);
                 }
                 else{

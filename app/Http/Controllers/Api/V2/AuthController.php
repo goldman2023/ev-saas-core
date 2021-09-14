@@ -40,7 +40,7 @@ class AuthController extends Controller
             ]);
         }
 
-        if (BusinessSetting::where('type', 'email_verification')->first()->value != 1) {
+        if (get_setting('email_verification') != 1) {
             $user->email_verified_at = date('Y-m-d H:m:s');
         } elseif ($request->register_by == 'email') {
             $user->notify(new EmailVerificationNotification());

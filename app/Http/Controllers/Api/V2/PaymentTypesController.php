@@ -11,7 +11,7 @@ class PaymentTypesController
     {
         $payment_types = array();
 
-        if (\App\Models\BusinessSetting::where('type', 'paypal_payment')->first()->value == 1) {
+        if (get_setting('paypal_payment') == 1) {
             $payment_type = array();
             $payment_type['payment_type'] = 'paypal_payment';
             $payment_type['payment_type_key'] = 'paypal';
@@ -22,7 +22,7 @@ class PaymentTypesController
             $payment_types[] = $payment_type;
         }
 
-        if (\App\Models\BusinessSetting::where('type', 'stripe_payment')->first()->value == 1) {
+        if (get_setting('stripe_payment') == 1) {
             $payment_type = array();
             $payment_type['payment_type'] = 'stripe_payment';
             $payment_type['payment_type_key'] = 'stripe';
@@ -33,7 +33,7 @@ class PaymentTypesController
             $payment_types[] = $payment_type;
         }
 
-        if (\App\Models\BusinessSetting::where('type', 'wallet_system')->first()->value == 1) {
+        if (get_setting('wallet_system') == 1) {
             $payment_type = array();
             $payment_type['payment_type'] = 'wallet_system';
             $payment_type['payment_type_key'] = 'wallet';
@@ -44,7 +44,7 @@ class PaymentTypesController
             $payment_types[] = $payment_type;
         }
 
-        if (\App\Models\BusinessSetting::where('type', 'cash_payment')->first()->value == 1) {
+        if (get_setting('cash_payment') == 1) {
             $payment_type = array();
             $payment_type['payment_type'] = 'cash_payment';
             $payment_type['payment_type_key'] = 'cash_on_delivery';

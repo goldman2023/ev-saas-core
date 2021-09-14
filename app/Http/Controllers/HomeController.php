@@ -44,10 +44,18 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.user_login');
+        return view('frontend.business_login');
     }
 
-    public function user_login(LoginRequest $request)
+    public function login_users()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+        return view('frontend.users_login');
+    }
+
+    public function business_login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -147,6 +155,8 @@ class HomeController extends Controller
             return view('frontend.user.customer.profile');
         } elseif (auth()->user()->isSeller()) {
             return view('frontend.user.seller.profile');
+        } else {
+            return view('frontend.user.customer.profile');
         }
     }
 
@@ -778,7 +788,7 @@ class HomeController extends Controller
     {
         if (\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Models\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             if (auth()->user()->seller->remaining_digital_uploads > 0) {
-                $business_settings = BusinessSetting::where('type', 'digital_product_upload')->first();
+                $business_settings = get_setting('digital_product_upload')->first();
                 $categories = Category::where('digital', 1)->get();
                 return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
             } else {
@@ -787,7 +797,7 @@ class HomeController extends Controller
             }
         }
 
-        $business_settings = BusinessSetting::where('type', 'digital_product_upload')->first();
+        $business_settings = get_setting('digital_product_upload')->first();
         $categories = Category::get();
         return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
     }

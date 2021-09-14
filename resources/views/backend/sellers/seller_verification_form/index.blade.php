@@ -13,7 +13,7 @@
 					@csrf
 					<div class="row">
 						<div class="col-lg-8 form-horizontal" id="form">
-							@foreach (json_decode(\App\Models\BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element)
+							@foreach (get_setting('verification_form') as $key => $element)
 								@if ($element->type == 'text' || $element->type == 'file')
 									<div class="form-group row" style="background:rgba(0,0,0,0.1);padding:10px 0;">
 									    <input type="hidden" name="type[]" value="{{ $element->type }}">

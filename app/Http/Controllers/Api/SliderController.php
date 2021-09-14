@@ -8,6 +8,6 @@ class SliderController extends Controller
 {
     public function index()
     {
-        return new SliderCollection(json_decode(get_setting('home_slider_images'), true));
+        return new SliderCollection(get_setting('home_slider_images'));
     }
 }

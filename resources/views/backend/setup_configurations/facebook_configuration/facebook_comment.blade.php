@@ -17,7 +17,7 @@
                             <div class="col-md-7">
                                 <label class="aiz-switch aiz-switch-success mb-0">
                                     @php
-                                        $facebook_comment_data = \App\Models\BusinessSetting::where('type', 'facebook_comment')->first();
+                                        $facebook_comment_data = get_setting('facebook_comment')->first();
                                     @endphp
                                     <input value="1" name="facebook_comment" type="checkbox" @if ($facebook_comment_data && $facebook_comment_data->value == 1) checked @endif>
                                     <span class="slider round"></span>

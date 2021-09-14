@@ -12,7 +12,7 @@
         location.href = '{{ env('APP_URL') }}'+'/vogue-pay/failure/'+transaction_id
     }
 </script>
-@if (\App\Models\BusinessSetting::where('type', 'voguepay_sandbox')->first()->value == 1)
+@if (get_setting('voguepay_sandbox') == 1)
     <input type="hidden" id="merchant_id" name="v_merchant_id" value="demo">
 @else
     <input type="hidden" id="merchant_id" name="v_merchant_id" value="{{ env('VOGUE_MERCHANT_ID') }}">
@@ -28,7 +28,7 @@
          Voguepay.init({
              v_merchant_id: document.getElementById("merchant_id").value,
              total: '{{\App\Models\Order::findOrFail(Session::get('order_id'))->grand_total}}',
-             cur: '{{\App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code}}',
+             cur: '{{\App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code}}',
              merchant_ref: 'ref123',
              memo: 'Payment for shirt',
              developer_code: '5a61be72ab323',

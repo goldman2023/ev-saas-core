@@ -24,14 +24,14 @@ class CategoryController extends Controller
 
     public function home()
     {
-        $homepageCategories = BusinessSetting::where('type', 'home_categories')->first();
+        $homepageCategories = get_setting('home_categories')->first();
         $homepageCategories = json_decode($homepageCategories->value);
         return new CategoryCollection(Category::whereIn('id', $homepageCategories)->get());
     }
 
     public function top()
     {
-        $homepageCategories = BusinessSetting::where('type', 'home_categories')->first();
+        $homepageCategories = get_setting('home_categories')->first();
         $homepageCategories = json_decode($homepageCategories->value);
         return new CategoryCollection(Category::whereIn('id', $homepageCategories)->limit(20)->get());
     }

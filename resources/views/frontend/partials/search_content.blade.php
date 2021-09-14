@@ -82,7 +82,7 @@
         </ul>
     @endif
 </div>
-@if(\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1)
+@if(get_setting('vendor_system_activation') == 1)
     <div class="">
         @if (count($shops) > 0)
             <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Shops')}}</div>

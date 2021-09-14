@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-7">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="facebook_chat" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'facebook_chat')->first()->value == 1)
+                                    <input value="1" name="facebook_chat" type="checkbox" @if (get_setting('facebook_chat') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>

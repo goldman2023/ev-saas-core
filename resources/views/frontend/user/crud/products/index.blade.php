@@ -32,11 +32,11 @@
                     @foreach($products as $product)
                         <tr>
                             <td>
-                                <a href="#">
+                                <a href="{{ route('ev-products.edit', $product->slug) }}">
                                     <img class="avatar avatar-sm avatar-circle mr-3" src="{{ $product->images['thumbnail']['url'] ?? '' }}" alt="{{ $product->name }}">
                                 </a>
                             </td>
-                            <td><span>{{ $product->name }}</span></td>
+                            <td><a href="{{ route('ev-products.edit', $product->slug) }}">{{ $product->name }}</a></td>
                             <td>{{ $product->category()->name ?? '' }}</td>
                             <td>{{ single_price($product->unit_price) }}</td>
                             <td>
@@ -48,7 +48,7 @@
                                 </label>
                             </td>
                             <td>
-                                <a class="btn btn-soft-info btn-icon btn-circle btn-xs" href="#">
+                                <a class="btn btn-soft-info btn-icon btn-circle btn-xs" href="{{ route('ev-products.edit', $product->slug) }}">
                                     @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;'])
                                 </a>
                                 <a class="btn btn-soft-danger btn-icon btn-circle btn-xs confirm-delete" href="javascript:void(0)">

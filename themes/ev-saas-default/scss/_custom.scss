@@ -1,0 +1,21 @@
+/* Generate opacity classes */
+@for $o from 1 through 9 {
+    .opacity-#{$o} {
+        opacity: $o / 10;
+    }
+}
+
+/* Generate z-index classes */
+@for $zi from 10 through 100 {
+    .z-#{$zi} {
+        z-index: $zi;
+    }
+}
+
+/* Absolute horizontal/vertical centering */
+.absolute-center {
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}

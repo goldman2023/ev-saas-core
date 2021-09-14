@@ -17,4 +17,10 @@ class EVProductController extends Controller
     public function create(Request $request) {
         return view('frontend.user.crud.products.create');
     }
+
+    public function edit(Request $request, $slug) {
+        $product = Auth::user()->products()->where('slug', $slug)->first();
+
+        return view('frontend.user.crud.products.edit')->with('product', $product);
+    }
 }

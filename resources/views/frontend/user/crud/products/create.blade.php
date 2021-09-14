@@ -142,58 +142,14 @@
                 }
             }
 
-            // Update livewire data when attributes are changed
-            $('select[name="attributes"]').off().on('change', function(e, data) {
-                if(data && data.init) return;
+            /* Select multiple attributes change */
+            window.EV.form.select.setOnAttributeChange();
 
-                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
+            /* Radio Attributes values change */
+            window.EV.form.radio.setOnAttributeValueChange();
 
-                let $att_idx = $(this).val().map(x => parseInt(x, 10));
-                let $atts = component.get('attributes');
-
-                for (const index in $atts) {
-                    if($att_idx.indexOf($atts[index].id) === -1) {
-                        component.set('attributes.'+$atts[index].id+'.selected', false);
-                    } else {
-                        component.set('attributes.'+$atts[index].id+'.selected', true);
-                    }
-                }
-            });
-
-            // Update livewire data when attribute values change
-            $('select[name^="attributes."]').off().on('change', function(e, data) {
-                if(data && data.init) return;
-
-                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
-
-                let $att_id = $(this).data('attribute-id');
-                let $att_values_idx = Array.isArray($(this).val()) ? $(this).val().map(x => parseInt(x, 10)) : $(this).val();
-                let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
-
-                // TODO: Check if new custom value is added and add it to the DB
-                for (const index in $att_values) {
-                    if($att_values_idx.indexOf($att_values[index].id) === -1) {
-                        component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
-                    } else {
-                        component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', true);
-                    }
-                }
-            });
-
-            $('input[name^="attributes."][type="radio"]').off().on('change', function(e, data) {
-                let component = Livewire.find($(this).closest('.lw-form').attr('wire:id'));
-                let $att_id = $(this).data('attribute-id');
-                let $att_name = $(this).attr('name');
-                console.log($att_id);
-                $('input[name="'+$att_name+'"]').each(function(index, radio) {
-                    let key = $(radio).data('key');
-                    if($(radio).is(':checked')) {
-                        component.set('attributes.'+$att_id+'.attribute_values.'+key+'.selected', true);
-                    } else {
-                        component.set('attributes.'+$att_id+'.attribute_values.'+key+'.selected', false);
-                    }
-                });
-            });
+            /* Select Attributes values change */
+            window.EV.form.select.setOnAttributeValueChange();
 
             /* Init file managers */
             $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
@@ -239,7 +195,22 @@
                     let data = $(select).val();
                     component.set(select.getAttribute('name'), $(select).val()); // set livewire
                 } else if($(select).is('[name^="attributes."]')) {
-                    console.log($(select).val());
+                    let $att_id = $(select).data('attribute-id');
+                    let $att_values_idx = Array.isArray($(select).val()) ? $(select).val().map(x => parseInt(x, 10)) : $(select).val();
+
+                    if($att_values_idx != null) {
+                        let $att_values = component.get('attributes.'+$att_id+'.attribute_values');
+
+                        // TODO: Check if new custom value is added and add it to the DB
+                        for (const index in $att_values) {
+                            if($att_values_idx.indexOf($att_values[index].id) === -1) {
+                                component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', false);
+                            } else {
+                                component.set('attributes.'+$att_id+'.attribute_values.'+index+'.selected', true);
+                            }
+                        }
+                    }
+
                 }
             }
 

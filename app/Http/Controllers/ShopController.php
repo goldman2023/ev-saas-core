@@ -111,7 +111,7 @@ class ShopController extends Controller
 
             if ($shop->save()) {
                 auth()->login($user, false);
-                if (BusinessSetting::where('type', 'email_verification')->first()->value != 1) {
+                if (get_setting('email_verification') != 1) {
                     $user->email_verified_at = date('Y-m-d H:m:s');
                     $user->save();
                     Notification::send(User::where('id', '!=', $user->id)->get(), new NewCompanyJoin($user));
@@ -122,7 +122,7 @@ class ShopController extends Controller
 
                 /* TODO: ADD user to mailchimp for welcome email: */
 
-                return redirect()->route('seller_packages_list');
+                return redirect()->route('dashboard');
             } else {
                 $seller->delete();
                 $user->user_type == 'customer';
@@ -227,7 +227,7 @@ class ShopController extends Controller
     {
         $data = array();
         $i = 0;
-        foreach (json_decode(BusinessSetting::where('type', 'verification_form')->first()->value) as $key => $element) {
+        foreach (get_setting('verification_form') as $key => $element) {
             $item = array();
             if ($element->type == 'text') {
                 $item['type'] = 'text';

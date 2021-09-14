@@ -5,12 +5,12 @@
 
 
             @if (get_setting('header_menu_labels') != null)
-                @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                @foreach (get_setting('header_menu_labels') as $key => $value)
                     @php
                         $target = '_self';
                     @endphp
                     <div class="px-5 py-2">
-                        <a href="{{ json_decode(get_setting('header_menu_links'), true)[$key] }}"
+                        <a href="{{ get_setting('header_menu_links')[$key] }}"
                             class="text-base text-gray-500 hover:text-gray-900">
                             {{ translate($value) }}
                         </a>

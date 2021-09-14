@@ -72,7 +72,7 @@
                 </li>
 
                 <li class="list-inline-item">
-                    <a href="{{ route('user.login') }}"
+                    <a href="{{ route('business.login') }}"
                        data-test="header.login">
                         {{ translate('Client Area') }}
                     </a>
@@ -126,7 +126,7 @@
                         @if (get_setting('header_menu_labels') != null)
 
 
-                            @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                            @foreach (get_setting('header_menu_labels') as $key => $value)
                                 @php
                                     $target = "_self";
 
@@ -135,7 +135,7 @@
 
                                     <a id="homeMegaMenu" class="nav-link"
                                        target="{{$target}}"
-                                       href="{{ json_decode(get_setting('header_menu_links'), true)[$key] }}">
+                                       href="{{ get_setting('header_menu_links')[$key] }}">
                                         {{ $value }}
                                     </a>
                                 </li>

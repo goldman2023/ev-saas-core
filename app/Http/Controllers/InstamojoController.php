@@ -23,7 +23,7 @@ class InstamojoController extends Controller
    public function pay($request){
        if(Session::has('payment_type')){
 
-           if(BusinessSetting::where('type', 'instamojo_sandbox')->first()->value == 1){
+           if(get_setting('instamojo_sandbox') == 1){
                // testing_url
                $endPoint = 'https://test.instamojo.com/api/1.1/';
            }
@@ -123,7 +123,7 @@ class InstamojoController extends Controller
 // success response method.
  public function success(Request $request){
      try {
-         if(BusinessSetting::where('type', 'instamojo_sandbox')->first()->value == 1){
+         if(get_setting('instamojo_sandbox') == 1){
              $endPoint = 'https://test.instamojo.com/api/1.1/';
          }
          else{

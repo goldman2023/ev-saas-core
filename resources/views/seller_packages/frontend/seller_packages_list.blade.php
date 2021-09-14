@@ -112,25 +112,25 @@
                                         @endif
                                         <select class="form-control aiz-selectpicker d-none" data-live-search="true"
                                                 name="payment_option">
-                                            @if (\App\Models\BusinessSetting::where('type', 'paypal_payment')->first()->value == 1)
+                                            @if (get_setting('paypal_payment') == 1)
                                                 <option value="paypal">{{ translate('Paypal') }}</option>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'stripe_payment')->first()->value == 1)
+                                            @if (get_setting('stripe_payment') == 1)
                                                 <option value="stripe">{{ translate('Stripe') }}</option>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'sslcommerz_payment')->first()->value == 1)
+                                            @if (get_setting('sslcommerz_payment') == 1)
                                                 <option value="sslcommerz">{{ translate('sslcommerz') }}</option>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'instamojo_payment')->first()->value == 1)
+                                            @if (get_setting('instamojo_payment') == 1)
                                                 <option value="instamojo">{{ translate('Instamojo') }}</option>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'razorpay')->first()->value == 1)
+                                            @if (get_setting('razorpay') == 1)
                                                 <option value="razorpay">{{ translate('RazorPay') }}</option>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'paystack')->first()->value == 1)
+                                            @if (get_setting('paystack') == 1)
                                                 <option value="paystack">{{ translate('PayStack') }}</option>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'voguepay')->first()->value == 1)
+                                            @if (get_setting('voguepay') == 1)
                                                 <option value="voguepay">{{ translate('Voguepay') }}</option>
                                         @endif
 
