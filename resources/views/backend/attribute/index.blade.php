@@ -132,7 +132,7 @@
 @endsection
 
 @push('footer_scripts')
-	<script src="{{ static_asset('assets/admin/js/ev-saas.js') }}" > </script>
+	
     <!-- JS Front -->
 	<script src="{{ global_asset('front/js/hs.core.js') }}"></script>
     <script src="{{ global_asset('front/js/hs.select2.js') }}"></script>

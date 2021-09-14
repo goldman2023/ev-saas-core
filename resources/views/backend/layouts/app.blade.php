@@ -79,6 +79,7 @@
     @yield('modal')
 
 
+    <script src="{{ static_asset('assets/admin/js/ev-saas.js') }}" > </script>
 	<script src="{{ global_asset('js/vendors.js') }}" ></script>
 
 	@include('backend.layouts.partials.app-js')
