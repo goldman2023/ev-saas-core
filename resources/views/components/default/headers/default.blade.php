@@ -266,9 +266,6 @@
             var megaMenu = new HSMegaMenu($('.js-mega-menu')).init();
 
 
-            // INITIALIZATION OF UNFOLD
-            // =======================================================
-            var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
 
 
             // INITIALIZATION OF FORM VALIDATION

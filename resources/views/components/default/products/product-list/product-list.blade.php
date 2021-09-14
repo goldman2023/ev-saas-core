@@ -25,7 +25,6 @@
                 <!-- Product -->
 
                 @foreach ($products as $product)
-                <div class="col-sm-4">
                     <div class="ev-slider-slide slick-slide">
                         <div class="w-100">
                             <x-default.products.cards.product-card :product="$product"
@@ -33,7 +32,6 @@
                             </x-default.products.cards.product-card>
                         </div>
                     </div>
-                </div>
 
                 @endforeach
                 <!-- End Product -->
