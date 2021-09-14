@@ -14,11 +14,10 @@ $central_domains = [
 ];
 
 
-if (env('APP_ENV') != 'local') {
+if (env('APP_ENV') !== 'local') {
     $central_domains[] = 'app.ev-saas.com';
 } else {
     $central_domains[] = '127.0.0.1';
-
 }
 
 return [

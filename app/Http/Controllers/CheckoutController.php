@@ -205,8 +205,8 @@ class CheckoutController extends Controller
 
             }
 
-//            if (BusinessSetting::where('type', 'category_wise_commission')->first()->value != 1) {
-//                $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+//            if (get_setting('category_wise_commission') != 1) {
+//                $commission_percentage = get_setting('vendor_commission');
 //                foreach ($order->orderDetails as $key => $orderDetail) {
 //
 //                    if ($orderDetail->product->user->user_type == 'seller') {

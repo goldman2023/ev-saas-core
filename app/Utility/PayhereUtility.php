@@ -13,7 +13,7 @@ class PayhereUtility
     // 'sandbox' or 'live' | default live
     public static function get_action_url()
     {
-        if(\App\Models\BusinessSetting::where('type', 'payhere_sandbox')->first()->value == 1){
+        if(get_setting('payhere_sandbox') == 1){
             $sandbox = 1;
         }
         else {

@@ -357,39 +357,39 @@ class DemoController extends Controller
         //     }
         // }
 
-        // $business_setting = BusinessSetting::where('type', 'home_slider_images')->first();
+        // $business_setting = get_setting('home_slider_images')->first();
         // $business_setting->value = json_encode(Slider::pluck('photo')->toArray());
         // $business_setting->save();
         //
-        // $business_setting = BusinessSetting::where('type', 'home_slider_links')->first();
+        // $business_setting = get_setting('home_slider_links')->first();
         // $business_setting->value = json_encode(Slider::pluck('link')->toArray());
         // $business_setting->save();
 
-        // $business_setting = BusinessSetting::where('type', 'home_banner1_images')->first();
+        // $business_setting = get_setting('home_banner1_images')->first();
         // $business_setting->value = json_encode(Banner::where('position', 1)->pluck('photo')->toArray());
         // $business_setting->save();
         //
-        // $business_setting = BusinessSetting::where('type', 'home_banner1_links')->first();
+        // $business_setting = get_setting('home_banner1_links')->first();
         // $business_setting->value = json_encode(Banner::where('position', 1)->pluck('url')->toArray());
         // $business_setting->save();
 
-        // $business_setting = BusinessSetting::where('type', 'home_banner2_images')->first();
+        // $business_setting = get_setting('home_banner2_images')->first();
         // $business_setting->value = json_encode(Banner::where('position', 2)->pluck('photo')->toArray());
         // $business_setting->save();
         //
-        // $business_setting = BusinessSetting::where('type', 'home_banner2_links')->first();
+        // $business_setting = get_setting('home_banner2_links')->first();
         // $business_setting->value = json_encode(Banner::where('position', 2)->pluck('url')->toArray());
         // $business_setting->save();
 
-        // $business_setting = BusinessSetting::where('type', 'home_categories')->first();
+        // $business_setting = get_setting('home_categories')->first();
         // $business_setting->value = json_encode(HomeCategory::pluck('category_id')->toArray());
         // $business_setting->save();
 
-        // $business_setting = BusinessSetting::where('type', 'top10_categories')->first();
+        // $business_setting = get_setting('top10_categories')->first();
         // $business_setting->value = json_encode(Category::where('top', 1)->pluck('id')->toArray());
         // $business_setting->save();
         //
-        // $business_setting = BusinessSetting::where('type', 'top10_brands')->first();
+        // $business_setting = get_setting('top10_brands')->first();
         // $business_setting->value = json_encode(Brand::where('top', 1)->pluck('id')->toArray());
         // $business_setting->save();
 

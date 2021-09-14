@@ -15,11 +15,11 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     @if (get_setting('header_menu_labels') != null)
-                        @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                        @foreach (get_setting('header_menu_labels') as $key => $value)
                             @php
                                 $target = "_self";
                             @endphp
-                            <a href="{{ json_decode(get_setting('header_menu_links'), true)[$key] }}"
+                            <a href="{{ get_setting('header_menu_links')[$key] }}"
                                class="inline-flex items-center px-1 pt-1  focus:outline-none"
                                target="{{$target}}">
                                 {{ translate($value) }}
@@ -101,9 +101,9 @@
                         <div class="mt-6">
                             <nav class="grid gap-6">
                                 @if (get_setting('header_menu_labels') != null)
-                                    @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                                    @foreach (get_setting('header_menu_labels') as $key => $value)
                                         @php
-                                            $url = json_decode(get_setting('header_menu_links'), true)[$key];
+                                            $url = get_setting('header_menu_links')[$key];
                                             $target = "_self";
                                         @endphp
                                         <a href="{{ $url }}" class="-m-3 p-3 flex items-center rounded-lg hover:bg-gray-50" target="{{ $target }}">

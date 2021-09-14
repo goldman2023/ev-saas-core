@@ -1,4 +1,4 @@
-@if (\App\Models\BusinessSetting::where('type', 'best_selling')->first()->value == 1)
+@if (get_setting('best_selling') == 1)
     <section class="mb-4">
         <div class="container">
             <div class="px-2 py-4 px-md-4 py-md-3 bg-white shadow-sm rounded">

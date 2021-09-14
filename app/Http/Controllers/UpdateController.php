@@ -77,13 +77,13 @@ class UpdateController extends Controller
     }
 
     public function step1() {
-        if(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '4.2'){
+        if(get_setting('current_version')->first() != null && get_setting('current_version') == '4.2'){
             $sql_path = base_path('sqlupdates/v43.sql');
             DB::unprepared(file_get_contents($sql_path));
 
             return redirect()->route('update.step2');
         }
-        elseif(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '4.1'){
+        elseif(get_setting('current_version')->first() != null && get_setting('current_version') == '4.1'){
             $sql_path = base_path('sqlupdates/v42.sql');
             DB::unprepared(file_get_contents($sql_path));
 
@@ -92,7 +92,7 @@ class UpdateController extends Controller
 
             return redirect()->route('update.step2');
         }
-        elseif(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '4.0'){
+        elseif(get_setting('current_version')->first() != null && get_setting('current_version') == '4.0'){
             $sql_path = base_path('sqlupdates/v41.sql');
             DB::unprepared(file_get_contents($sql_path));
 
@@ -104,7 +104,7 @@ class UpdateController extends Controller
 
             return redirect()->route('update.step2');
         }
-        elseif(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '3.9'){
+        elseif(get_setting('current_version')->first() != null && get_setting('current_version') == '3.9'){
             $sql_path = base_path('sqlupdates/v40.sql');
             DB::unprepared(file_get_contents($sql_path));
 
@@ -119,7 +119,7 @@ class UpdateController extends Controller
 
             return redirect()->route('update.step2');
         }
-        elseif(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '3.8'){
+        elseif(get_setting('current_version')->first() != null && get_setting('current_version') == '3.8'){
             $sql_path = base_path('sqlupdates/v39.sql');
             DB::unprepared(file_get_contents($sql_path));
 
@@ -137,7 +137,7 @@ class UpdateController extends Controller
 
             return redirect()->route('update.step2');
         }
-        elseif(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '3.7'){
+        elseif(get_setting('current_version')->first() != null && get_setting('current_version') == '3.7'){
             $sql_path = base_path('sqlupdates/v38.sql');
             DB::unprepared(file_get_contents($sql_path));
 
@@ -158,7 +158,7 @@ class UpdateController extends Controller
 
             return redirect()->route('update.step2');
         }
-        elseif(BusinessSetting::where('type', 'current_version')->first() != null && BusinessSetting::where('type', 'current_version')->first()->value == '3.6'){
+        elseif(get_setting('current_version')->first() != null && get_setting('current_version') == '3.6'){
             $sql_path = base_path('sqlupdates/v37.sql');
             DB::unprepared(file_get_contents($sql_path));
 

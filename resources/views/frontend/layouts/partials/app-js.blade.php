@@ -113,16 +113,28 @@
                 }
             });
         });
-        if ($('#lang-change').length > 0) {
-            $('#lang-change .dropdown-menu a').each(function() {
-                $(this).on('click', function(e) {
+
+        if ($('#languageDropdown').length > 0) {
+            $('#languageDropdown .dropdown-item').each(function () {
+                $(this).on('click', function (e) {
                     e.preventDefault();
                     var $this = $(this);
                     var locale = $this.data('flag');
-                    $.post('{{ route('language.change') }}', {
-                        _token: AIZ.data.csrf,
-                        locale: locale
-                    }, function(data) {
+                    $.post('{{ route('language.change') }}', {_token: $('meta[name="csrf-token"]').attr('content'), locale: locale}, function (data) {
+                        location.reload();
+                    });
+
+                });
+            });
+        }
+
+        if ($('#currencyDropdown').length > 0) {
+            $('#currencyDropdown .dropdown-item').each(function () {
+                $(this).on('click', function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    var currency_code = $this.data('flag');
+                    $.post('{{ route('currency.change') }}', {_token: $('meta[name="csrf-token"]').attr('content'), currency_code: currency_code}, function (data) {
                         location.reload();
                     });
 

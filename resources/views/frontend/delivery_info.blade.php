@@ -92,7 +92,7 @@
                                 </li>
                                 @endforeach
                             </ul>
-                            @if (\App\Models\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
+                            @if (get_setting('pickup_point') == 1)
                             <div class="row border-top pt-3">
                                 <div class="col-md-6">
                                     <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
@@ -189,7 +189,7 @@
                                         </li>
                                         @endforeach
                                     </ul>
-                                    @if (\App\Models\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
+                                    @if (get_setting('pickup_point') == 1)
                                         <div class="row border-top pt-3">
                                             <div class="col-md-6">
                                                 <h6 class="fs-15 fw-600">{{ translate('Choose Delivery Type') }}</h6>
@@ -230,7 +230,7 @@
                                                     </div>
                                                     @endif
                                                 </div>
-                                                @if (\App\Models\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
+                                                @if (get_setting('pickup_point') == 1)
                                                     @if (is_array(json_decode(\App\Models\Shop::where('user_id', $key)->first()->pick_up_point_id)))
                                                     <div class="mt-4 pickup_point_id_{{ $key }} d-none">
                                                         <select

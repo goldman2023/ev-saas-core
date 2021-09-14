@@ -1,16 +1,13 @@
 @extends('frontend.layouts.user_panel')
+@section('page_title', translate('Manage Profile'))
 
 @section('panel_content')
-    <div class="aiz-titlebar mt-2 mb-4">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-            <h1 class="h3">{{ translate('Manage Profile') }}</h1>
-        </div>
-      </div>
-    </div>
+
+
+
 
     <!-- Basic Info-->
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">
             <h5 class="mb-0 h6">{{ translate('Basic Info')}}</h5>
         </div>
@@ -65,9 +62,9 @@
     </div>
 
     <!-- Address -->
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">
-            <h5 class="mb-0 h6">{{ translate('Subsidiary Companies and Representatives')}}</h5>
+            <h5 class="mb-0 h6">{{ translate('Your Delivery Address')}}</h5>
         </div>
         <div class="card-body">
             <div class="row gutters-10">
@@ -119,7 +116,7 @@
                 <div class="col-lg-6 mx-auto" onclick="add_new_address()">
                     <div class="border p-3 rounded mb-3 c-pointer text-center bg-light">
                         <i class="la la-plus la-2x"></i>
-                        <div class="alpha-7">{{ translate('Add New Subsidiary Company or Representative') }}</div>
+                        <div class="alpha-7">{{ translate('Add New Delivery Address') }}</div>
                     </div>
                 </div>
             </div>

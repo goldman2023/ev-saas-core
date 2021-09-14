@@ -79,7 +79,7 @@
 
 
 
-                @if (\App\Models\BusinessSetting::where('type', 'classified_product')->first()->value == 1)
+                @if (get_setting( 'classified_product') == 1)
                     {{-- <li class="aiz-side-nav-item">
                         <a href="{{ route('customer_products.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer_products.index', 'customer_products.create', 'customer_products.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
@@ -90,7 +90,7 @@
 
                 @if (auth()->user()->isSeller())
                     @if (\App\Models\Addon::where('unique_identifier', 'pos_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'pos_system')->first()->activated)
-                        @if (\App\Models\BusinessSetting::where('type', 'pos_activation_for_seller')->first() != null && \App\Models\BusinessSetting::where('type', 'pos_activation_for_seller')->first()->value != 0)
+                        @if (get_setting( 'pos_activation_for_seller')->first() != null && get_setting( 'pos_activation_for_seller') != 0)
                             {{-- <li class="aiz-side-nav-item">
                                 <a href="{{ route('poin-of-sales.seller_index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['poin-of-sales.seller_index'])}}">
                                     <i class="las la-fax aiz-side-nav-icon"></i>
@@ -120,7 +120,7 @@
                         </li> --}}
                     @endif
 
-                    @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
+                    @if (get_setting( 'conversation_system') == 1)
                         @php
                             $conversation = \App\Models\Conversation::where('sender_id', Auth::user()->id)
                                 ->where('sender_viewed', 0)
@@ -175,7 +175,7 @@
                 @endif
 
 
-                @if (\App\Models\BusinessSetting::where('type', 'conversation_system')->first()->value == 1)
+                @if (get_setting( 'conversation_system') == 1)
                     {{-- @php
                            $conversation = \App\Models\Conversation::where('sender_id', auth()->user()->id)
                                ->where('sender_viewed', 0)
@@ -194,7 +194,7 @@
                 @endif
 
 
-                @if (\App\Models\BusinessSetting::where('type', 'wallet_system')->first()->value == 1)
+                @if (get_setting( 'wallet_system') == 1)
                     {{-- <li class="aiz-side-nav-item">
                         <a href="{{ route('wallet.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['wallet.index'])}}">
                             <i class="las la-dollar-sign aiz-side-nav-icon"></i>
@@ -374,7 +374,7 @@
 
             </ul>
         </div>
-        @if (\App\Models\BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1 &&
+        @if (get_setting( 'vendor_system_activation') == 1 &&
     auth()->user()->isCustomer())
             <div>
                 <a href="{{ route('shops.create') }}" class="btn btn-block btn-soft-primary rounded-0">

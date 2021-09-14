@@ -15,13 +15,13 @@
             @if($style === 'vanilla')
                 <div class="form-control mb-2">
                     <div class="custom-control custom-radio">
-                        <input wire:model.defer="{{ $name }}"
+                        <input @if($isWired) wire:model.{{ $wireType }}="{{ $name.($appendToName ? '.'.$key.'.'.$valueProperty : '') }}" @endif
                                type="radio"
                                class="custom-control-input @error($errorBagName) is-invalid @enderror"
-                               name="{{ $name }}@if(count($items) > 1)[]@endif"
+                               name="{{ $name }}"
                                id="{{ $id }}"
                                data-key="{{ $key }}"
-                               value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}"
+                               @if(!empty($value) || !empty($valueProperty)) value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}" @endif
                                @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
                                {{ $attributes }}
                         >

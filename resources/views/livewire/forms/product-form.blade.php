@@ -4,13 +4,25 @@
         <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
-                <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
+                <h4 class="card-header-title">
+                    @if(!empty($product->id))
+                        {{ translate('Edit Product') }}
+                    @else
+                        {{ translate('Add New Product') }}
+                    @endif
+                </h4>
             </div>
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="card-body">
-                <form class=" js-step-form-1"
+            <div class="card-body position-relative">
+                <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+                                      wire:target="validateSpecificSet"
+                                      wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+
+                <form class="js-step-form-1"
+                      wire:loading.class="opacity-3"
+                      wire:target="validateSpecificSet"
                       data-hs-step-form-options='{
                       "progressSelector": "#productStepFormProgress",
                       "stepsSelector": "#productStepFormContent",
@@ -68,8 +80,8 @@
 
                                     <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           wire:click="$set('page', 'attributes_variations')"
-                                        ><!-- onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))"-->
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))"
+                                        ><!-- wire:click="$set('page', 'attributes_variations')" -->
                                             <span class="step-icon step-icon-soft-dark">4</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('Attributes & variations') }}</span>
@@ -230,9 +242,9 @@
                                             </div>
                                         </div>
 
-                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EV::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}"></x-ev.form.radio>
+                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EV::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
-                                        <x-ev.form.radio name="product.shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping configuration') }}">
+                                        <x-ev.form.radio name="product.shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping configuration') }}" value="{{ $product->shipping_type ?: '' }}" >
                                             <x-slot name="flat_rate">
                                                 <x-ev.form.input name="product.flat_shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
                                             </x-slot>
@@ -281,9 +293,9 @@
                                     <!-- Body -->
                                     <div class="">
                                         <div class="full-width product-attributes-wrapper">
-                                            <x-ev.form.select name="attributes" :items="$attributes" value-property="id" label-property="name" :tags="true" label="{{ translate('Attributes') }}" :multiple="true" placeholder="{{ translate('Search available attributes...') }}">
+                                            <!--<x-ev.form.select name="attributes" :items="$attributes" value-property="id" label-property="name" :tags="true" label="{{ translate('Attributes') }}" :multiple="true" placeholder="{{ translate('Search available attributes...') }}">
                                                 <small class="text-muted">{{ translate('Choose the attributes of this product and then input values of each attribute.') }}</small>
-                                            </x-ev.form.select>
+                                            </x-ev.form.select>-->
 
                                             @if($attributes)
                                                 @foreach($attributes as $attribute)
@@ -299,11 +311,11 @@
                                                                               :items="$attribute->attribute_values"
                                                                               value-property="id"
                                                                               label-property="values"
-                                                                              :tags="true"
                                                                               :multiple="($custom_properties->multiple ?? null) ? true : false"
                                                                               placeholder="{{ translate('Search or add values...') }}"
                                                                               data-attribute-id="{{ $attribute->id }}"
-                                                                              data-type="{{ $attribute->type }}">
+                                                                              data-type="{{ $attribute->type }}"
+                                                                              :is-wired="false">
                                                                 @if($custom_properties->multiple ?? null)
                                                                     <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
                                                                                       class="mt-2 mb-2"
@@ -318,10 +330,9 @@
                                                                              label="{{ $attribute->name }}"
                                                                              data-attribute-id="{{ $attribute->id }}"
                                                                              error-bag-name="attributes.{{ $attribute->id }}"
-                                                                             value-property="values"
-                                                                             value="$attribute->attribute_values[0] ?? []"
+                                                                             :value="$attribute->attribute_values->values ?? ''"
                                                                              data-type="{{ $attribute->type }}"
-                                                                             wireType="lazy">
+                                                                             wireType="defer">
                                                             </x-ev.form.input>
                                                         @elseif($attribute->type === 'number')
                                                             <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
@@ -331,12 +342,11 @@
                                                                              :text="!empty($custom_properties->unit ?? null) ? $custom_properties->unit : ''"
                                                                              data-attribute-id="{{ $attribute->id }}"
                                                                              error-bag-name="attributes.{{ $attribute->id }}"
-                                                                             value-property="values"
-                                                                             value="$attribute->attribute_values[0] ?? []"
+                                                                             :value="$attribute->attribute_values->values ?? ''"
                                                                              :min="isset($custom_properties->min_value) ? $custom_properties->min_value : 0"
                                                                              :max="isset($custom_properties->max_value) ? $custom_properties->max_value : 999999999999999999999"
                                                                              data-type="{{ $attribute->type }}"
-                                                                             wireType="lazy">
+                                                                             wireType="defer">
                                                             </x-ev.form.input>
                                                         @elseif($attribute->type === 'date')
                                                             @php
@@ -352,8 +362,7 @@
                                                                                         placeholder="{{ translate('Choose Date(s)...') }}"
                                                                                         error-bag-name="attributes.{{ $attribute->id }}"
                                                                                         data-attribute-id="{{ $attribute->id }}"
-                                                                                        value-property="values"
-                                                                                        value="$attribute->attribute_values[0] ?? []"
+                                                                                        value="$attribute->attribute_values->values ?? []"
                                                                                         :options="$options"
                                                                                         icon="heroicon-o-calendar"
                                                                                         data-type="{{ $attribute->type }}"
@@ -362,25 +371,26 @@
                                                         @elseif($attribute->type === 'checkbox')
                                                             <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
                                                                                 :append-to-name="true"
-                                                                                :items="$attribute->attribute_values"
-                                                                                error-bag-name="attributes.{{ $attribute->id }}"
-                                                                                data-attribute-id="{{ $attribute->id }}"
                                                                                 value-property="selected"
                                                                                 label-property="values"
-                                                                                label="{{ $attribute->name }}"
-                                                                                data-type="{{ $attribute->type }}"
-                                                                                wireType="lazy">
-                                                            </x-ev.form.checkbox>
-                                                        @elseif($attribute->type === 'radio')
-                                                            <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
                                                                                 :items="$attribute->attribute_values"
                                                                                 error-bag-name="attributes.{{ $attribute->id }}"
                                                                                 data-attribute-id="{{ $attribute->id }}"
-                                                                                value-property="id"
-                                                                                label-property="values"
                                                                                 label="{{ $attribute->name }}"
                                                                                 data-type="{{ $attribute->type }}"
                                                                                 wireType="defer">
+                                                            </x-ev.form.checkbox>
+                                                        @elseif($attribute->type === 'radio')
+                                                            <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
+                                                                                :append-to-name="true"
+                                                                                value-property="selected"
+                                                                                label-property="values"
+                                                                                :items="$attribute->attribute_values"
+                                                                                error-bag-name="attributes.{{ $attribute->id }}"
+                                                                                data-attribute-id="{{ $attribute->id }}"
+                                                                                label="{{ $attribute->name }}"
+                                                                                data-type="{{ $attribute->type }}"
+                                                                                :isWired="false">
                                                             </x-ev.form.radio>
                                                         @endif
                                                     @endif
@@ -433,7 +443,7 @@
                                         </x-ev.form.input>
 
                                         <!-- SEO Meta Description -->
-                                        <x-ev.form.textarea name="product.meta_description" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
+                                        <x-ev.form.textarea name="product.meta_description" rows="5" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
                                             <small class="text-muted">{{ translate('Have in mind that description should be between 70 and max 200 characters. Facebook up to 200 chars, Twitter up to 150 chars max.') }}</small>
                                         </x-ev.form.textarea>
 
@@ -457,7 +467,13 @@
                                                 <button type="button" class="btn btn-primary"
                                                         onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', '', true]}}))"
                                                 >
-                                                    {{ translate('Add Product') }} <i class="fas fa-angle-right ml-1"></i>
+                                                    @if(!empty($product->id))
+                                                        {{ translate('Update Product') }}
+                                                    @else
+                                                        {{ translate('Add Product') }}
+                                                    @endif
+
+                                                    <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -482,8 +498,8 @@
     <x-ev.alert id="successMessageContent" class="{{ !$insert_success ? 'd-none':'' }}" content-class="flex flex-column" type="success" title="{{ translate('Product successfully created!') }}">
         <span class="d-block">{{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}</span>
         <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white mr-3" href="{{ $product->permalink }}">{{ translate('Preview') }}</a>
-            <a class="btn btn-white mr-3" href="{{ route('ev-products.create') }}">{{ translate('Edit') }}</a>
+            <a class="btn btn-white mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            <a class="btn btn-white mr-3" href="{{ route('ev-products.create') }}" target="_blank">{{ translate('Edit') }}</a>
             <!-- TODO: ^^^ Change route for edit to actually be ev-product edit route, not create! This is just for testing. ^^^ -->
         </div>
     </x-ev.alert>

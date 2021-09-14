@@ -3,9 +3,12 @@
     <div class="text-right">
 
     {{-- TODO: Make nice icon and general styling --}}
-    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
-        {{ translate('Edit') }}
-    </button>
+    <button wire:click.prevent="editLabel()"
+    class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle"
+    href="javascript:;">
+    @svg('heroicon-o-pencil-alt')
+    {{ translate('edit') }}
+</button>
     </div>
 
     @if ($show_input_field)

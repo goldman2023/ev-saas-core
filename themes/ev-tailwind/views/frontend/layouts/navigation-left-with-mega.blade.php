@@ -56,9 +56,9 @@
                         <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                             <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2">
                                 @if (get_setting('header_menu_labels') != null)
-                                    @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                                    @foreach (get_setting('header_menu_labels') as $key => $value)
                                         @php
-                                            $url = json_decode(get_setting('header_menu_links'), true)[$key];
+                                            $url = get_setting('header_menu_links')[$key];
                                             $target = "_self";
                                         @endphp
                                         <a href="{{ $url }}" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50" target="{{ $target }}">
@@ -227,9 +227,9 @@
                 <div class="mt-6">
                     <nav class="grid gap-6">
                         @if (get_setting('header_menu_labels') != null)
-                            @foreach (json_decode(get_setting('header_menu_labels'), true) as $key => $value)
+                            @foreach (get_setting('header_menu_labels') as $key => $value)
                                 @php
-                                    $url = json_decode(get_setting('header_menu_links'), true)[$key];
+                                    $url = get_setting('header_menu_links')[$key];
                                     $target = "_self";
                                 @endphp
                                 <a href="{{ $url }}" class="-m-3 p-3 flex items-center rounded-lg hover:bg-gray-50" target="{{ $target }}">

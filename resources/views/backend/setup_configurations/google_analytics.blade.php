@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-7">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="facebook_pixel" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'facebook_pixel')->first()->value == 1)
+                                    <input value="1" name="facebook_pixel" type="checkbox" @if (get_setting('facebook_pixel') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-md-7">
                                 <label class="aiz-switch aiz-switch-success mb-0">
-                                    <input value="1" name="google_analytics" type="checkbox" @if (\App\Models\BusinessSetting::where('type', 'google_analytics')->first()->value == 1)
+                                    <input value="1" name="google_analytics" type="checkbox" @if (get_setting('google_analytics') == 1)
                                         checked
                                     @endif>
                                     <span class="slider round"></span>

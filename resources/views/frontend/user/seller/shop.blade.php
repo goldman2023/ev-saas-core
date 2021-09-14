@@ -67,7 +67,7 @@
                         @enderror
                     </div>
                 </div>
-                @if (\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping')
+                @if (get_setting('shipping_type') == 'seller_wise_shipping')
                     <div class="row">
                         <div class="col-md-2">
                             <label>{{ translate('Shipping Cost')}} <span class="text-danger">*</span></label>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 @endif
-                @if (\App\Models\BusinessSetting::where('type', 'pickup_point')->first()->value == 1)
+                @if (get_setting('pickup_point') == 1)
                 <div class="row mb-3 d-none">
                     <label class="col-md-2 col-form-label">{{ translate('Pickup Points') }}</label>
                     <div class="col-md-10">

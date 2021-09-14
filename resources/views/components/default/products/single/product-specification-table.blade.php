@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table  table-thead-bordered table-nowrap table-align-middle">
+    <table class="table table-thead-bordered table-nowrap table-align-middle">
         <thead class="thead-light">
             <tr>
                 <th>{{ translate('Product Specification') }}</th>

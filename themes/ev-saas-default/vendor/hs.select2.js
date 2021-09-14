@@ -10,22 +10,22 @@
 
 ;(function ($) {
 	'use strict';
-	
+
 	$.HSCore.components.HSSelect2 = {
 		defaults: {
 			data: [],
 			width: '100%',
 			customClass: 'custom-select',
 			searchInputPlaceholder: false,
-      singleMultiple: false,
+            singleMultiple: false,
 			singleMultipleActiveClass: 'active',
 			singleMultiplePostfix: ' item(s) selected',
 			singleMultiplePrefix: null
 		},
-		
+
 		init: function (el, options) {
 			if (!el.length) return;
-			
+
 			var context = this,
 				defaults = Object.assign({}, context.defaults),
 				dataSettings = el.attr('data-hs-select2-options') ? JSON.parse(el.attr('data-hs-select2-options')) : {},
@@ -37,13 +37,13 @@
 					}
 				};
 			settings = $.extend(true, defaults, settings, dataSettings, options);
-			
+
 			/* Start : Init */
-			
+
 			var newSelect2 = el.select2(settings);
-			
+
 			/* End : Init */
-			
+
 			el.siblings('.select2').find('.select2-selection').removeClass('select2-selection--single').addClass(settings.customClass);
 
 			if (settings.singleMultiple) {
@@ -67,7 +67,7 @@
 			if (settings.searchInputPlaceholder) {
 				context.searchPlaceholder(newSelect2, settings)
 			}
-			
+
 			return newSelect2;
 		},
 
@@ -114,17 +114,17 @@
             '<b role="presentation"></b>' +
           '</span>')
     },
-		
+
 		formatData: function (params) {
 			var settings = params,
 				result;
-			
+
 			if (!settings.element) {
 				return settings.text;
 			}
-			
+
 			result = settings.element.dataset.optionTemplate ? settings.element.dataset.optionTemplate : '<span>' + settings.text + '</span>';
-			
+
 			return $.parseHTML(result);
 		},
 
@@ -159,5 +159,5 @@
 			})
 		}
 	};
-	
+
 })(jQuery);

@@ -7,7 +7,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
-                        <div class="card">
+                        <div class="card p-4">
                             <form class="js-validate" role="form" action="{{ route('login.submit') }}"
                                 method="POST">
                                 @csrf
@@ -71,13 +71,13 @@
                                             <label class="aiz-checkbox">
                                                 <input type="checkbox" name="remember"
                                                     {{ old('remember') ? 'checked' : '' }}>
-                                                <span class=opacity-60>{{ translate('Remember Me') }}</span>
+                                                <span class="opacity-60 small">{{ translate('Remember Me') }}</span>
                                                 <span class="aiz-square-check"></span>
                                             </label>
                                         </div>
                                         <div class="col-6 text-right">
                                             <a href="{{ route('password.request') }}"
-                                                class="text-reset opacity-60 fs-14">{{ translate('Forgot password?') }}</a>
+                                                class="small link-underline">{{ translate('Forgot password?') }}</a>
                                         </div>
                                     </div>
 
@@ -87,37 +87,33 @@
                                     </div>
 
                                     <div class="text-center mb-3">
-                                        <span class="divider divider-text">OR</span>
+                                        <span class="divider divider-text">{{ translate('OR') }}</span>
                                     </div>
 
-                                    @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1 || \App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
-                                        <div class="separator mb-3">
-                                            <span
-                                                class="bg-white px-3 opacity-60">{{ translate('Or Login With') }}</span>
-                                        </div>
-                                        <ul class="list-inline social colored text-center mb-5">
+                                    @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
+                                        <ul class="list-inline social colored text-center mb-4">
 
-                                            @if (\App\Models\BusinessSetting::where('type', 'google_login')->first()->value == 1)
-                                                <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
+                                            @if (get_setting('google_login') == 1)
+                                                <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Google
+                                                        {{ translate('Sign In with Google') }}
                                                     </span>
                                                 </a>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'facebook_login')->first()->value == 1)
-                                                <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
+                                            @if (get_setting('facebook_login') == 1)
+                                                <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Facebook
+                                                        {{ translate('Sign In with Facebook') }}
                                                     </span>
                                                 </a>
                                             @endif
-                                            @if (\App\Models\BusinessSetting::where('type', 'twitter_login')->first()->value == 1)
-                                                <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
+                                            @if (get_setting('twitter_login') == 1)
+                                                <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
                                                     <span class="d-flex justify-content-center align-items-center">
                                                         @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Twitter
+                                                        {{ translate('Sign In with Twitter') }}
                                                     </span>
                                                 </a>
                                             @endif
@@ -132,7 +128,8 @@
                                                  "animationType": "css-animation",
                                                  "animationIn": "slideInUp",
                                                  "duration": 400
-                                               }'>Sign Up
+                                               }'>
+                                            {{ translate('Sign Up') }}
                                         </a>
                                     </div>
                                 </div>

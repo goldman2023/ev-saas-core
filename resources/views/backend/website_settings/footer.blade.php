@@ -99,7 +99,7 @@
     									<input type="hidden" name="types[]" value="widget_one_labels">
     									<input type="hidden" name="types[]" value="widget_one_links">
     									@if (get_setting('widget_one_labels') != null)
-    										@foreach (json_decode(App\Models\BusinessSetting::where('type', 'widget_one_labels')->first()->value, true) as $key => $value)
+    										@foreach (get_setting( 'widget_one_labels') as $key => $value)
     											<div class="row gutters-5">
     												<div class="col-4">
     													<div class="form-group">
@@ -108,7 +108,7 @@
     												</div>
     												<div class="col">
     													<div class="form-group">
-    														<input type="text" class="form-control" placeholder="http://" name="widget_one_links[]" value="{{ json_decode(App\Models\BusinessSetting::where('type', 'widget_one_links')->first()->value, true)[$key] }}">
+    														<input type="text" class="form-control" placeholder="http://" name="widget_one_links[]" value="{{ get_setting( 'widget_one_links')[$key] }}">
     													</div>
     												</div>
     												<div class="col-auto">

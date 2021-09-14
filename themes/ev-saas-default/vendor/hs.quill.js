@@ -28,7 +28,7 @@
                     dataSettings = $el.attr('data-hs-quill-options') ? JSON.parse($el.attr('data-hs-quill-options')) : {},
                     settings = {},
                     $input = $(element).closest('.quill-custom').find('> input');
-                console.log($input);
+
                 settings = Object.assign({}, defaults, settings, dataSettings, options);
 
                 /* Start : Init */
@@ -38,19 +38,15 @@
                 const delta = newQuill.clipboard.convert(value)
 
                 newQuill.setContents(delta, 'silent');
-
-                /*  add initial content if there is any */
-                console.log(newQuill);
                 /* End : Init */
 
+                /*  add initial content if there is any */
                  // Set content from livewire, if any
                  if(typeof Livewire !== 'undefined') {
                     let content = Livewire.find($(element).closest('.lw-form').attr('wire:id')).get($input.attr('name')); // get tags property from livewire form component instance
                     newQuill.root.innerHTML = content;
                  } else {
                     let content = $input.val();
-                    console.log($input);
-                    console.log("set content");
                     newQuill.root.innerHTML = content;
                  }
 

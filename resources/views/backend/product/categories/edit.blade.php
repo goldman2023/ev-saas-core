@@ -108,7 +108,7 @@
                             <input type="text" placeholder="{{translate('Slug')}}" id="slug" name="slug" value="{{ $category->slug }}" class="form-control">
                         </div>
                     </div>
-                    @if (\App\Models\BusinessSetting::where('type', 'category_wise_commission')->first()->value == 1)
+                    @if (get_setting('category_wise_commission') == 1)
                         <div class="form-group row">
                             <label class="col-md-3 col-form-label">{{translate('Commission Rate')}}</label>
                             <div class="col-md-9 input-group">
