@@ -1,23 +1,19 @@
 @extends('frontend.layouts.user_panel')
+@section('page_title', translate('Business Profile'))
 
 @section('panel_content')
-    <div class="aiz-titlebar mt-2 mb-4">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1 class="h3">{{ translate('Business Profile') }}</h1>
-            </div>
-        </div>
-    </div>
+
 
     <x-company.company-categories-management :categories="$categories" :user="$user"> </x-company.company-categories-management>
 
-
-    <x-subsidiary-companies-management> </x-subsidiary-companies-management>
+    <div class="mb-3">
+        <x-subsidiary-companies-management> </x-subsidiary-companies-management>
+    </div>
 
     <form action="{{ route('frontend.attributes.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <!-- Basic Info-->
-        <div class="card">
+        <div class="card mb-3">
             <div class="card-header">
                 <h5 class="mb-0 h6">{{ translate('Company Attributes') }}</h5>
             </div>

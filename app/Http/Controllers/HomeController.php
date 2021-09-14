@@ -155,6 +155,8 @@ class HomeController extends Controller
             return view('frontend.user.customer.profile');
         } elseif (auth()->user()->isSeller()) {
             return view('frontend.user.seller.profile');
+        } else {
+            return view('frontend.user.customer.profile');
         }
     }
 

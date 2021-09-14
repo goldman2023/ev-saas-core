@@ -29,6 +29,13 @@ class EVService
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
                         'roles' => [],
+                    ],
+                    [
+                        'label' => translate('My Purchases'),
+                        'icon' => 'heroicon-o-calendar',
+                        'route' => route('purchase_history.index'),
+                        'is_active' => areActiveRoutes(['purchase_history']),
+                        'roles' => [],
                     ]
                 ]
             ],
@@ -71,8 +78,8 @@ class EVService
                     [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
+                        'route' => route('orders.index'),
+                        'is_active' => areActiveRoutes(['orders.index']),
                         'roles' => ['admin','seller'],
                     ],
                     [
@@ -90,9 +97,9 @@ class EVService
                     [
                         'label' => translate('Messages'),
                         'icon' => 'heroicon-o-chat',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
+                        'route' => route('conversations.index'),
+                        'is_active' => areActiveRoutes(['conversations.index', 'conversations.show']),
+                        'roles' => ['admin','seller', 'customer'],
                     ],
                     [
                         'label' => translate('Customers'),
@@ -123,15 +130,22 @@ class EVService
                     [
                         'label' => translate('Account settings'),
                         'icon' => 'heroicon-o-cog',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
+                        'route' => route('profile'),
+                        'is_active' => areActiveRoutes(['profile']),
 
                     ],
                     [
                         'label' => translate('Company settings'),
                         'icon' => 'heroicon-o-office-building',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
+                        'route' => route('attributes'),
+                        'is_active' => areActiveRoutes(['attributes']),
+                        'roles' => ['admin','seller'],
+                    ],
+                    [
+                        'label' => translate('Shop settings'),
+                        'icon' => 'heroicon-o-office-building',
+                        'route' => route('shops.index'),
+                        'is_active' => areActiveRoutes(['shops']),
                         'roles' => ['admin','seller'],
                     ],
                     [
