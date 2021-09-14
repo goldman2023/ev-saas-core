@@ -16,6 +16,7 @@ class CreateAttributeGroupsTable extends Migration
         Schema::create('attribute_groups', function (Blueprint $table) {
             $table->integer('id', true);
             $table->string('name', 255)->nullable();
+            $table->text('content_type');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

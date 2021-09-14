@@ -3,4 +3,6 @@ try {
 
     window.Quill = require('quill');
 
+    require('select2');
+
 } catch (e) {}
