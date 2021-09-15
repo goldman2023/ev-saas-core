@@ -3,16 +3,20 @@
         <form action="#" method="GET" class="stop-propagation mb-0">
             <div class="d-flex position-relative align-items-center">
                 <div class="d-none" data-toggle="class-toggle" data-target=".front-header-search">
-                    <button class="btn px-2" type="button" aria-label="search-button"><i
-                            class="la la-2x la-long-arrow-left"></i></button>
+                    <button class="btn px-2" type="button" aria-label="search-button">
+                        @svg('heroicon-o-search')
+                        </button>
                 </div>
                 <div class="input-group">
                     <input type="text" class="border-0 border-lg form-control" id="search" name="q"
-                        placeholder="{{ translate('Search Companies Example: Wood mills') }}"
+                        placeholder="{{ translate('Search Products, Companies or News') }}"
                         autocomplete="off">
                     <div class="input-group-append d-block">
-                        <button class="btn btn-success" type="submit">
-                            <i class="la la-search text-white la-flip-horizontal fs-18"></i>
+
+                        <button class="btn btn-primary" type="submit">
+                            <span class="d-block" style="min-width: 30px;">
+                            {{ svg('heroicon-o-search') }}
+                            </span>
                         </button>
                     </div>
                 </div>

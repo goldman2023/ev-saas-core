@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use App\Models\FlashDealProduct;
 use App\Models\ProductTax;
 use App\Models\User;
@@ -13,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
 use App;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+
 /**
  * App\Models\Product
  *
@@ -108,6 +112,8 @@ class Product extends Model
 {
     use ReviewTrait;
     use AttributeTrait;
+    use HasSlug;
+
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'variations', 'num_of_sale', 'thumbnail_img'];
@@ -132,6 +138,26 @@ class Product extends Model
                 $builder->where('published', 1);
             });
         }
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function getTranslation($field = '', $lang = false) {
@@ -231,6 +257,11 @@ class Product extends Model
         return $data;
     }
 
+    /* TODO: Implement product condition in backend: new/used/refurbished */
+    public function getCondition() {
+        return translate("New");
+    }
+
     /**
      * Get all photos related to the product but properly structured in an assoc. array
      * This function is used in frontend/themes etc.
@@ -238,6 +269,9 @@ class Product extends Model
      * @return string $link
      */
     public function getPermalinkAttribute() {
+        if(empty($this->slug))
+            return "#";
+
         return route('product', $this->slug);
     }
 

@@ -5,20 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App;
 use App\Models\AttributeTranslation;
+use App\Models\AttributeGroup;
 
 class Attribute extends Model
 {
     protected $with = ['attribute_values', 'attributes_relationship'];
 
-    public static function boot() {
+    protected $casts = [
+        'custom_properties' => 'object'
+    ];
+
+    public static function boot()
+    {
         parent::boot();
 
-        static::deleting(function($attribute) {
-             $attribute->attribute_translations()->delete();
-             $attribute->attributes_relationship()->delete();       
-             foreach($attribute->attribute_values as $value) {
-                 $value->delete();
-             }
+        static::deleting(function ($attribute) {
+            $attribute->attribute_translations()->delete();
+            $attribute->attributes_relationship()->delete();
+            foreach ($attribute->attribute_values as $value) {
+                $value->delete();
+            }
         });
     }
 
@@ -32,6 +38,14 @@ class Attribute extends Model
         return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
     }
 
+    public function get_group() {
+        if ($this->group !== NULL) {
+            return AttributeGroup::findOrFail($this->group);
+        }
+
+        return new AttributeGroup;
+    }
+
 
     public function getTranslation($field = '', $lang = false)
     {
@@ -43,5 +57,16 @@ class Attribute extends Model
     public function attribute_translations()
     {
         return $this->hasMany(AttributeTranslation::class);
+    }
+
+    public function included_categories()
+    {
+        //return $this->belongsToMany(RelatedModel, pivot_table_name, foreign_key_of_current_model_in_pivot_table, foreign_key_of_other_model_in_pivot_table);
+        return $this->belongsToMany(
+            Category::class,
+            'attribute_categories',
+            'attribute_id',
+            'category_id'
+        );
     }
 }

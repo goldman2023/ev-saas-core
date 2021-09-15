@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+
 /**
  * App\Models\Brand
  *
@@ -28,6 +30,8 @@ use App;
 
 class Brand extends Model
 {
+    use Cachable;
+
     protected static function boot()
     {
         parent::boot();
@@ -36,7 +40,7 @@ class Brand extends Model
             $builder->orderBy('name', 'asc');
         });
     }
-    
+
     public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $brand_translation = $this->hasMany(BrandTranslation::class)->where('lang', $lang)->first();

@@ -6,6 +6,7 @@ use App\Models\AttributeRelationship;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use App\Models\Attribute;
+use App\Models\AttributeGroup;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
 use OwenIt\Auditing\Models\Audit;
@@ -46,8 +47,9 @@ class AttributeController extends Controller
                 $content_type = 'App\Models\Event';
                 break;
         }
+        $attribute_groups = AttributeGroup::where('content_type', $content_type)->orderBy('created_at', 'desc')->get();
         $attributes = Attribute::where('content_type', $content_type)->orderBy('created_at', 'desc')->get();
-        return view('backend.attribute.index', compact(['attributes', 'content_type', 'slug']));
+        return view('backend.attribute.index', compact(['attributes', 'attribute_groups', 'content_type', 'slug']));
     }
 
     /**
@@ -69,8 +71,27 @@ class AttributeController extends Controller
     {
         // Create new Attribute
         $attribute = new Attribute;
+        $custom_properties = [];
+
         $attribute->name = $request->name;
         $attribute->type = $request->type;
+
+        //Attribute Group
+        if ($request->group != null) {
+            if (strpos($request->group, 'existing_group_') !== false) {
+                //If group exist
+                $attribute->group = substr($request->group, 15);
+            }else {
+                //If group not exist, create new one
+                $attribute_group = new AttributeGroup;
+                $attribute_group->name = $request->group;
+                $attribute_group->content_type = $request->content_type;
+                $attribute_group->save();
+
+                $attribute->group = $attribute_group->id;
+            }
+        }        
+
         if ($request->filterable) {
             $attribute->filterable = 1;
         }
@@ -82,14 +103,23 @@ class AttributeController extends Controller
             $attribute->schema_key = $request->schema_key;
             $attribute->schema_value = $request->schema_value;
         }
-        if ($request->type == "number") {
-            $custom_properties = array();
+
+        if ($request->type === "number") {
             $custom_properties["min_value"] = '';
             $custom_properties["max_value"] = '';
             $custom_properties["unit"] = '';
 
-            $attribute->custom_properties = json_encode($custom_properties, JSON_UNESCAPED_UNICODE);
+            $attribute->custom_properties = $custom_properties;
+        }  else if($attribute->type === "dropdown" || $attribute->type === "image") {
+            $custom_properties["multiple"] = false;
+            $attribute->custom_properties = $custom_properties;
+        } else if($attribute->type === "date") {
+            $custom_properties["with_time"] = false;
+            $custom_properties["range"] = false;
+            $custom_properties["historic"] = false;
+            $attribute->custom_properties = $custom_properties;
         }
+
         $attribute->content_type = $request->content_type;
         $attribute->save();
 
@@ -124,7 +154,8 @@ class AttributeController extends Controller
     {
         $lang = $request->lang;
         $attribute = Attribute::findOrFail($id);
-        return view('backend.attribute.edit', compact('attribute', 'lang'));
+        $custom_properties = $attribute->custom_properties;
+        return view('backend.attribute.edit', compact('attribute', 'custom_properties', 'lang'));
     }
 
     /**
@@ -136,29 +167,44 @@ class AttributeController extends Controller
      */
     public function update(UpdateAttributeRequest $request, $id)
     {
+
         $attribute = Attribute::findOrFail($id);
         if ($request->lang == config('app.locale')) {
             $attribute->name = $request->name;
         }
-        if ($attribute->type == "number") {
-            $custom_properties = array();
-            $custom_properties["min_value"] = $request->min_value;
-            $custom_properties["max_value"] = $request->max_value;
-            $custom_properties["unit"] = $request->unit;
 
-            $attribute->custom_properties = json_encode($custom_properties, JSON_UNESCAPED_UNICODE);
-        }
         $attribute->filterable = $request->filterable == "on" ? true : false;
         $attribute->is_admin = $request->is_admin == "on" ? true : false;
+
         if ($request->is_schema == "on") {
             $attribute->is_schema = 1;
             $attribute->schema_key = $request->schema_key;
             $attribute->schema_value = $request->schema_value;
-        }else {
+        } else {
             $attribute->is_schema = 0;
             $attribute->schema_key = null;
             $attribute->schema_value = null;
         }
+
+
+        if ($attribute->type === "number") {
+            $custom_properties = array();
+            $custom_properties["min_value"] = $request->min_value;
+            $custom_properties["max_value"] = $request->max_value;
+            $custom_properties["unit"] = $request->unit ?? '';
+
+            $attribute->custom_properties = $custom_properties;
+        } else if($attribute->type === "dropdown" || $attribute->type === "image") {
+            $custom_properties["multiple"] = !empty($request->multiple);
+            $attribute->custom_properties = $custom_properties;
+        } else if($attribute->type === "date") {
+            $custom_properties["with_time"] = !empty($request->with_time);
+            $custom_properties["range"] = !empty($request->range);
+            $custom_properties["historic"] = !empty($request->historic);
+            $attribute->custom_properties = $custom_properties;
+        }
+
+
         $attribute->save();
 
         $attribute_translation = AttributeTranslation::firstOrNew(['lang' => $request->lang, 'attribute_id' => $attribute->id]);

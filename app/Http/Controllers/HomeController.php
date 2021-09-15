@@ -44,10 +44,18 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.user_login');
+        return view('frontend.business_login');
     }
 
-    public function user_login(LoginRequest $request)
+    public function login_users()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+        return view('frontend.users_login');
+    }
+
+    public function business_login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
@@ -131,12 +139,13 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
+        return view('frontend.user.admin.dashboard');
+
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
         } else {
-            return view('frontend.user.admin.dasboard');
         }
     }
 
@@ -354,6 +363,9 @@ class HomeController extends Controller
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         $detailedProduct  = Product::where('slug', $slug)->first();
         $product  = $detailedProduct;
+
+        $this->log($product,"User viewed this product");
+
 
         if ($detailedProduct != null && $detailedProduct->published) {
             //updateCartSetup();

@@ -39,6 +39,7 @@
                     @endif
 
                     @if (get_setting('show_currency_switcher') == 'on')
+
                         <li class="list-inline-item dropdown" id="currency-change">
                             @php
                                 if (Session::has('currency_code')) {
@@ -91,7 +92,7 @@
                         </li>
                     @else
                         <li class="list-inline-item mr-3">
-                            <a href="{{ route('user.login') }}"
+                            <a href="{{ route('business.login') }}"
                                 class="text-reset py-2 d-inline-block opacity-60" data-test="header.login">{{ translate('Login') }}</a>
                         </li>
                         <li class="list-inline-item">

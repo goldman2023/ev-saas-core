@@ -67,29 +67,45 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'comment' => 'required',
+            'rating' => 'required',
+        ]);
         $review = new Review;
         $review->comment = $request->comment;
         $review->rating = $request->rating;
         $review->content_type = $request->content_type;
-        $review_relationship = new ReviewRelationship;
         $review->status = 0;
+        if ($request->content_type == 'App\Models\Product') {
+            $review->product_id = $request->product_id;
+        }
         $review->save();
+
+        $review_relationship = new ReviewRelationship;
         $review_relationship->review()->associate($review);
-        $company = null;
+
         if ($request->content_type == 'App\Models\Shop') {
             $company = Shop::where('slug', $request->company_name)->first();
+            if ($company == null) {
+                $review->delete();
+                flash(translate('Unable to find the company.'))->error();
+                return back();
+            }
+            $review_relationship->reviewable()->associate($company);
+        } else if ($request->content_type == 'App\Models\Product') {
+            $product = Product::where('slug', $request->product_name)->first();
+            if ($product == null) {
+                $review->delete();
+                flash(translate('Unable to find the Product.'))->error();
+                return back();
+            }
+            $review_relationship->reviewable()->associate($product);
         }
-        if ($company == null) {
-            $review->delete();
-            flash(translate('Unable to find the company.'))->error();
-            return back();
-        }
-
-        $review_relationship->reviewable()->associate($company);
         $review_relationship->creator()->associate(auth()->user());
         $review_relationship->save();
+
         flash(translate('Review has been created successfully.'))->success();
-        return redirect()->route('shop.sub-page', [$request->company_name, 'reviews']);
+        return back();
     }
 
     /**
@@ -141,7 +157,7 @@ class ReviewController extends Controller
     {
         $review = Review::findOrFail($request->id);
         $review->status = $request->status;
-        if($review->save()){
+        if ($review->save()) {
             return 1;
         }
         return 0;

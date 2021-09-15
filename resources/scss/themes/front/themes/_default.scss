@@ -17,10 +17,11 @@ $gray-800:                                                  #71869d;
 $gray-900:                                                  #1e2022;
 
 // Colors
+/* TODO: make this dynamic */
 $white:                                                     #fff;
 $green-400:                                                 #053937;
 $green-700:                                                 #032C2A;
-$dark:                                                      #032C2A;
+$dark:                                                      #24292e;
 $blue:                                                      #377dff;
 $teal:                                                      #00c9a7;
 $cyan:                                                      #00c9db;
@@ -33,8 +34,8 @@ $instagram:                                                 #3f729b;
 $github:                                                    #24292e;
 
 // Theme Colors
-$primary:                                                   $green-400;
-$secondary:                                                 $dark;
+$primary:                                                   $facebook;
+$secondary:                                                 $twitter;
 $success:                                                   $yellow;
 $info:                                                      $cyan;
 $warning:                                                   $yellow;

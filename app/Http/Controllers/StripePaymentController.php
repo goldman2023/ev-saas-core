@@ -57,7 +57,7 @@ class StripePaymentController extends Controller
                     'unit_amount' => $amount,
                     ],
                     'quantity' => 1,
-                    'description' => translate('Payment For B2BWood Club Membership')
+                    'description' => translate('Payment For ' . get_site_name() . '  Membership')
                     ]
                 ],
             'mode' => 'payment',

@@ -8,16 +8,18 @@ class Image extends Component
 {
 
     public $image;
+    public $dataSrcSet;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($image)
+    public function __construct($image, $dataSrcSet= null)
     {
         //
 
         $this->image = $image;
+        $this->dataSrcSet = $dataSrcSet;
     }
 
     /**

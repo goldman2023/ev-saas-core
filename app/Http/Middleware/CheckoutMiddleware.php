@@ -23,7 +23,7 @@ class CheckoutMiddleware
             }
             else {
                 session(['link' => url()->current()]);
-                return redirect()->route('user.login');
+                return redirect()->route('business.login');
             }
         }
         else{

@@ -146,7 +146,7 @@ return [
 
     'seo'                 => [
         'author'          => 'EIM Solutions',
-        'description'     => 'B2BWood Project Documentation',
+        'description'     => 'EV-SaaS Project Documentation',
         'keywords'        => '',
         'og'              => [
             'title'       => '',

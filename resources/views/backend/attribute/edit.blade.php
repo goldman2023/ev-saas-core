@@ -75,10 +75,9 @@
                     <input type="text" placeholder="{{ translate('Schema Value')}}" id="schema_value" name="schema_value" class="form-control" value="{{$attribute->schema_value}}">
                   </div>
 							</div>
-              @if ($attribute->type == 'number')
-                @php
-                  $custom_properties = json_decode($attribute->custom_properties);
-                @endphp
+
+              <!-- Attribute type specific custom properties -->
+              @if ($attribute->type === 'number')
                 <div class="form-group row">
                   <label class="col-sm-3 col-from-label" for="name">{{ translate('Minimum Value')}}</label>
                   <div class="col-sm-9">
@@ -97,15 +96,58 @@
                 <div class="form-group row">
                   <label class="col-sm-3 col-from-label" for="name">{{ translate('Unit')}}</label>
                   <div class="col-sm-9">
-                    <input type="text" value="{{ $custom_properties->unit }}" placeholder="$, €, °, ..." name="unit" class="form-control" required>
+                    <input type="text" value="{{ $custom_properties->unit }}" placeholder="$, €, °, ..." name="unit" class="form-control">
                   </div>
                 </div>
+
+              @elseif($attribute->type === 'dropdown' || $attribute->type === 'image')
+                  <div class="form-group row">
+                      <label class="col-sm-3 col-from-label" for="name">{{ translate('Multiple')}}</label>
+                      <div class="col-sm-9">
+                          <label class="aiz-switch aiz-switch-success mb-0">
+                              <input type="checkbox" name="multiple" @if($custom_properties->multiple ?? null) checked @endif />
+                              <span class="slider round"></span>
+                          </label>
+                      </div>
+                  </div>
+              @elseif($attribute->type === 'date')
+                  <div class="form-group row">
+                      <label class="col-sm-3 col-from-label" for="name">{{ translate('Date & Time (if disabled, will display only date)')}}</label>
+                      <div class="col-sm-9">
+                          <label class="aiz-switch aiz-switch-success mb-0">
+                              <input type="checkbox" name="with_time" @if($custom_properties->with_time ?? null) checked @endif />
+                              <span class="slider round"></span>
+                          </label>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <label class="col-sm-3 col-from-label" for="name">{{ translate('Range')}}</label>
+                      <div class="col-sm-9">
+                          <label class="aiz-switch aiz-switch-success mb-0">
+                              <input type="checkbox" name="range" @if($custom_properties->range ?? null) checked @endif />
+                              <span class="slider round"></span>
+                          </label>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <label class="col-sm-3 col-from-label" for="name">{{ translate('Historic date (values can be before 1970)')}}</label>
+                      <div class="col-sm-9">
+                          <label class="aiz-switch aiz-switch-success mb-0">
+                              <input type="checkbox" name="historic" @if($custom_properties->historic ?? null) checked @endif />
+                              <span class="slider round"></span>
+                          </label>
+                      </div>
+                  </div>
               @endif
+
               <div class="form-group text-right">
                   <button type="submit" class="btn btn-primary">{{translate('Save')}}</button>
               </div>
+
               <div class="form-group mb-3">
-                @if ($attribute->type == 'dropdown' || $attribute->type == 'checkbox')
+                @if ($attribute->type === 'dropdown' || $attribute->type === 'checkbox' || $attribute->type === 'radio')
                   <div class="d-flex justify-content-between align-items-center">
                     <label>{{translate('Attribute Values')}}</label>
                     <a class="btn btn-soft-primary" href="{{route('admin.attribute_value.create', ['attribute_id'=>$attribute->id, 'lang'=>config('app.locale')] )}}">

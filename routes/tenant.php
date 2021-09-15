@@ -37,16 +37,18 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 |
 */
 
-Route::get('/ev', [EVSaasController::class, 'index']);
-Route::get('/ev-tenant/create', [EVSaaSController::class, 'create']);
-
 Route::middleware([
     'web',
     'universal',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->namespace('App\Http\Controllers')->group(function () {
+
+    /* This is experimental, adding it here for now */
+    Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
     Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
+
+
     //Home Page
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -67,13 +69,15 @@ Route::middleware([
     Route::get('/aiz-uploader/get_uploaded_files', [AizUploadController::class, 'get_uploaded_files']);
     Route::post('/aiz-uploader/get_file_by_ids', [AizUploadController::class, 'get_preview_files']);
     Route::get('/aiz-uploader/download/{id}', [AizUploadController::class, 'attachment_download'])->name('download_attachment');
-// Tracking
+    // Tracking
     Route::get('/aff{id}', [AffiliateBannerController::class, 'track'])->name('affiliate_banner.track');
     Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
-// Tracking - END
+    // Tracking - END
 
 
     Route::resource('shops', 'ShopController');
+
+    Route::get('/business/register', 'ShopController@create')->name('business.register');
 
 
     Auth::routes(['verify' => true]);
@@ -89,11 +93,13 @@ Route::middleware([
 
     Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
-    Route::get('/users/login', [HomeController::class, 'login'])->name('user.login');
-    Route::get('/users/registration', [HomeController::class, 'registration'])->name('user.registration');
-    Route::post('/users/login', [HomeController::class, 'user_login'])->name('user.login.submit');
+    Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
+    Route::get('/users/login', [HomeController::class, 'login_users'])->name('users.login');
+    Route::get('/users/register', [HomeController::class, 'registration'])->name('user.registration');
+    Route::post('/business/login', [HomeController::class, 'business_login'])->name('login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
-
+    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
     Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_products.category');
@@ -104,7 +110,8 @@ Route::middleware([
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
-    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
+    /* TODO: Investigate this is causing some issues */
+    // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
@@ -129,7 +136,7 @@ Route::middleware([
     Route::any('/stripe/payment/callback', [StripePaymentController::class, 'callback'])->name('stripe.callback');
     Route::get('/stripe/success', [StripePaymentController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
-//Stripe END
+    //Stripe END
 
 
     Route::get('/compare', [CompareController::class, 'index'])->name('compare');
@@ -158,7 +165,7 @@ Route::middleware([
             'purchase_history' => 'id',
         ]);
         Route::post('/purchase_history/details', 'PurchaseHistoryController@purchase_history_details')->name('purchase_history.details');
-//    Route::get('/purchase_history/destroy/{id}', 'PurchaseHistoryController@destroy')->name('purchase_history.destroy');
+        //    Route::get('/purchase_history/destroy/{id}', 'PurchaseHistoryController@destroy')->name('purchase_history.destroy');
 
         Route::resource('wishlists', 'WishlistController');
         Route::post('/wishlists/remove', 'WishlistController@destroy')->name('wishlists.remove');
@@ -211,6 +218,8 @@ Route::middleware([
     Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
+        Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
+        Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');
@@ -245,7 +254,7 @@ Route::middleware([
         Route::resource('conversations', 'ConversationController')->parameters([
             'conversations' => 'id',
         ]);
-//    Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
+        //    Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
         Route::post('conversations/refresh', 'ConversationController@refresh')->name('conversations.refresh');
         Route::post('conversations/save', 'ConversationController@saveConversation')->name('conversations.save');
 
@@ -268,7 +277,7 @@ Route::middleware([
         Route::resource('digitalproducts', 'DigitalProductController')->parameters([
             'digitalproducts' => 'id',
         ])->except(['destroy']);
-//    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
+        //    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
         Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
         Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
 
@@ -279,8 +288,8 @@ Route::middleware([
         Route::resource('documentgallery', 'DocumentGalleryController')->parameters([
             'documentgallery' => 'id',
         ])->except(['destroy']);
-//    Route::get('/documentgallery/edit/{id}', 'DocumentGalleryController@edit')->name('documentgallery.edit');
-//    Route::post('/documentgallery/update/{id}', 'DocumentGalleryController@update')->name('documentgallery.update');
+        //    Route::get('/documentgallery/edit/{id}', 'DocumentGalleryController@edit')->name('documentgallery.edit');
+        //    Route::post('/documentgallery/update/{id}', 'DocumentGalleryController@update')->name('documentgallery.update');
         Route::get('/documentgallery/destroy/{id}', 'DocumentGalleryController@destroy')->name('documentgallery.destroy');
 
         //Notifications
@@ -295,7 +304,7 @@ Route::middleware([
         Route::get('/events', 'EventController@all_events')->name('events');
         Route::get('/events/{slug}', 'EventController@show')->name('event.show');
         Route::get('/events/category/{category_slug}', 'EventController@listingByCategory')->name('events.category');
-//    Route::post('/events/update/{id}', 'EventController@update')->name('event.update');
+        //    Route::post('/events/update/{id}', 'EventController@update')->name('event.update');
         Route::get('/events/destroy/{id}', 'EventController@destroy')->name('event.destroy');
 
 
@@ -303,10 +312,9 @@ Route::middleware([
         Route::resource('jobs', 'JobController')->parameters([
             'jobs' => 'id',
         ])->except(['destroy']);
-//    Route::post('/jobs/store', 'JobController@store')->name('jobs.store');
-//    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
+        //    Route::post('/jobs/store', 'JobController@store')->name('jobs.store');
+        //    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
         Route::get('/jobs/destroy/{id}', 'JobController@destroy')->name('jobs.destroy');
-
     });
 
 
@@ -326,23 +334,21 @@ Route::middleware([
     Route::get('/companies/category/{category_slug}', 'CompanyController@listingByCategory')->name('companies.category');
 
 
-//Blog Section
+    //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
     Route::get('/news/{slug}', [BlogController::class, 'blog_details'])->name('news.details');
     Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
 
-// Chat
+    // Chat
     Route::get('/styleguide', 'PageController@styleguide')->name('styleguide.index');
 
     Route::get('/chat', 'ChatController@index')->name('chat.index');
     Route::get('/early-bird', 'PageController@early_bird')->name('landing.early-bird');
     Route::get('/pricing', 'PageController@pricing')->name('landing.pricing');
 
-//Custom page
-    Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
 
 
-// Mailchimp subscriptions routes
+    // Mailchimp subscriptions routes
     Route::post('/subscribe/{type}', 'Integrations\MailchimpController@subscribe')
         ->name('mailchimp.subscribe');
 
@@ -376,4 +382,8 @@ Route::middleware([
         Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
         Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
+
+
+    //Custom page
+    Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
 });

@@ -1,3 +1,6 @@
+import Sortable from 'sortablejs';
+import flatpickr from "flatpickr";
+
 window._ = require('lodash');
 
 /**
@@ -7,10 +10,16 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap');
+    require('jquery-mask-plugin')
+    require('select2');
+    window.flatpickr = flatpickr;
+    window.Sortable = Sortable;
+    window.Quill = require('quill');
+    require('slick-carousel');
+
+    require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
 } catch (e) {}
 
 /**
@@ -39,3 +48,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+window.EV = {};
+require('./form');

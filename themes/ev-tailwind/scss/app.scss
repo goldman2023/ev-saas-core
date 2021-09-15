@@ -12,5 +12,15 @@
     animation-delay: -0.16s;
 }
 
-@import "vendor/line-awesome.min.css";
-@import 'swiper/swiper-bundle.css';
+// @import "vendor/line-awesome.min.css";
+// @import 'swiper/swiper-bundle.css';
+
+/* EV Saas Class Shortenings */
+
+.ev-button {
+    @apply rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md hover:bg-gray-50;
+}
+
+.ev-button-secondary {
+    @apply rounded-md shadow w-full flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md hover:bg-gray-50;
+}

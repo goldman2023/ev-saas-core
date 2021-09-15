@@ -298,7 +298,7 @@ class SellerController extends Controller
 
     public function login($id)
     {
-        $seller = Seller::findOrFail(decrypt($id));
+        $seller = Seller::findOrFail($id);
 
         $user  = $seller->user;
 

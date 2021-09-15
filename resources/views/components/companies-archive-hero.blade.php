@@ -6,38 +6,11 @@
                 <!-- Title -->
                 <div class="w-lg-80 text-center text-lg-left mb-5 mb-lg-7">
                     <h1 class="display-4">
-                        @php
-
-                            $image = asset('assets/img/hero-images/b2bwood-homepage-banner.jpg');
-
-                            if ($category) {
-                                $categoryTitle = $category->tile;
-                                $categoryTitle = $category->name;
-                            }
-
-                            //$country = 'Germany';
-
-                        @endphp
-                        @if ($categoryTitle)
-                            {{ translate('Find ') }} <span class="">{{ $categoryTitle }}</span>
-                            {{ translate('companies') }}
-                            <br><span class="text-primary text-highlight-warning">{{ translate('in') }}</span>
-
-                            @if ($country)
-                                {{ $country }}
-                                <img src="{{ static_asset('assets/img/flags/de.png') }}" height="20" class="mr-1">
-                            @else
-                                {{ translate('B2BWood Club') }}
-                            @endif
-
-                    </h1>
-                @else
                     {{ translate('Welcome to your new digital home') }}
                     <br><span class="text-primary text-highlight-warning">
                             {{ translate('Go ahead look around and make yourself comfortable...') }}
                         </span>
                     </h1>
-                    @endif
 
                 </div>
                 <!-- End Title -->
@@ -86,16 +59,20 @@
         <!-- End Row -->
 
         <div class="d-none d-lg-block col-lg-6 position-absolute top-0 right-0">
-            <img class="img-fluid rounded-lg" src="{{ $image }}" alt="Image Description">
-
-            <figure class="max-w-15rem w-100 position-absolute top-0 left-0 z-index-n1">
+            {{-- <img class="img-fluid rounded-lg" src="{{ $image }}" alt="Image Description"> --}}
+            <x-ev.dynamic-image
+            class="z-index-5"
+            :src="ev_dynamic_translate('#hero-image')" alt="Any alt text"
+            >
+        </x-ev.dynamic-image>
+            {{-- <figure class="max-w-15rem w-100 position-absolute top-0 left-0 z-index-n1">
                 <div class="mt-n6 ml-n5">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 335.2 335.2" width="100"
                         height="100">
                         <circle fill="#083937" opacity=".7" cx="167.6" cy="167.6" r="130.1" />
                     </svg>
                 </div>
-            </figure>
+            </figure> --}}
 
 
 

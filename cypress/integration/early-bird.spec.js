@@ -30,10 +30,10 @@ describe("EarlyBird Campaign", () => {
 
         cy.get('[data-test="email"]')
             .should("be.visible")
-            .type("testing@b2bwood.com");
+            .type("testing@eim.solutions");
         cy.get('[data-test="company"]')
             .should("be.visible")
-            .type("B2BWood Test");
+            .type("Company Test");
 
         cy.get('[data-test="phone"]')
             .should("be.visible")

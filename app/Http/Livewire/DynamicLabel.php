@@ -37,6 +37,10 @@ class DynamicLabel extends Component
         $this->show_input_field = true;
     }
 
+    public function close() {
+        $this->show_input_field = false;
+    }
+
     public function updateLabel()
     {
         $this->validate();
@@ -49,7 +53,6 @@ class DynamicLabel extends Component
 
     public function render()
     {
-
         return view('livewire.dynamic-label', [
             'label' => $this->label
         ]);
