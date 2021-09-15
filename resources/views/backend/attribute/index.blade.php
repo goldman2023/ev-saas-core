@@ -21,6 +21,7 @@
 							<th>#</th>
 							<th>{{ translate('Name')}}</th>
 							<th>{{ translate('Type')}}</th>
+							<th>{{ translate('Group')}}</th>
 							<th class="text-right">{{ translate('Options')}}</th>
 						</tr>
 					</thead>
@@ -30,6 +31,7 @@
 								<td>{{$key+1}}</td>
 								<td>{{$attribute->getTranslation('name')}}</td>
 								<td>{{$attribute->type}}</td>
+								<td>{{$attribute->get_group()->name}}</td>
 								<td class="text-right">
 									<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('admin.attributes.edit', ['id'=>$attribute->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
 										<i class="las la-edit"></i>
@@ -90,6 +92,7 @@
                                     <option value="radio">{{ translate('Radio') }}</option>
 									<option value="country">{{ translate('Country') }}</option>
 									<option value="number">{{ translate('Number') }}</option>
+									<option value="image">{{ translate('Image') }}</option>
 								</select>
 							</div>
 
