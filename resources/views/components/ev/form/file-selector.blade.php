@@ -7,7 +7,7 @@
             <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
         </div>
         <div class="form-control file-amount">{{ $placeholder }}</div>
-        <input type="hidden" name="{{ $name }}" class="selected-files" wire:model="{{ $name }}">
+        <input type="hidden" name="{{ $name }}" class="selected-files" wire:model="{{ $name }}" value="{{ $selectedFile }}">
     </div>
     <div class="file-preview box sm @if($sortable) js-sortable @endif"
          @if(!empty($sortableOptions))

@@ -100,7 +100,7 @@
                   </div>
                 </div>
 
-              @elseif($attribute->type === 'dropdown')
+              @elseif($attribute->type === 'dropdown' || $attribute->type === 'image')
                   <div class="form-group row">
                       <label class="col-sm-3 col-from-label" for="name">{{ translate('Multiple')}}</label>
                       <div class="col-sm-9">

@@ -110,7 +110,7 @@ class AttributeController extends Controller
             $custom_properties["unit"] = '';
 
             $attribute->custom_properties = $custom_properties;
-        }  else if($attribute->type === "dropdown") {
+        }  else if($attribute->type === "dropdown" || $attribute->type === "image") {
             $custom_properties["multiple"] = false;
             $attribute->custom_properties = $custom_properties;
         } else if($attribute->type === "date") {
@@ -194,7 +194,7 @@ class AttributeController extends Controller
             $custom_properties["unit"] = $request->unit ?? '';
 
             $attribute->custom_properties = $custom_properties;
-        } else if($attribute->type === "dropdown") {
+        } else if($attribute->type === "dropdown" || $attribute->type === "image") {
             $custom_properties["multiple"] = !empty($request->multiple);
             $attribute->custom_properties = $custom_properties;
         } else if($attribute->type === "date") {
