@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Forms\Products;
 
 use App\Models\Attribute;
 use App\Models\AttributeRelationship;
+use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
 use App\Facades\BusinessSettings;
 use App\Models\Product;
@@ -21,6 +22,7 @@ class ProductForm extends Component
 {
     protected array $rulesSets;
     public string $page;
+    public string $action;
     public bool $insert_success = false;
     public bool $update_success = false;
 
@@ -88,7 +90,7 @@ class ProductForm extends Component
             'product.est_shipping_days' => 'nullable|numeric'
         ];
 
-        $this->rulesSets['attributes_variations'] = [
+        $this->rulesSets['attributes'] = [
             'attributes.*' => 'required', //[ new AttributeValuesSelected() ]
         ];
 
@@ -119,8 +121,10 @@ class ProductForm extends Component
         // Set default params
         if($product) {
             $this->product = $product;
+            $this->action = 'update';
         } else {
             $this->product = new Product();
+            $this->action = 'insert';
         }
         $this->product->slug = '';
         $this->product->is_quantity_multiplied = 1;
@@ -134,12 +138,12 @@ class ProductForm extends Component
 
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
-            if($attribute->type === 'dropdown' || $attribute->type === 'radio' || $attribute->type === 'checkbox') {
+            if($attribute->is_predefined) {
                 $attribute->selcted_values = '';
             }
 
             if(empty($this->attributes[$key]->attribute_values)) {
-                if($attribute->type !== 'dropdown' && $attribute->type !== 'radio' && $attribute->type !== 'checkbox') {
+                if(!$attribute->is_predefined) {
                     $this->attributes[$key]->attribute_values[] = [
                         "id" => null,
                         "attribute_id" => $attribute->id,
@@ -180,102 +184,16 @@ class ProductForm extends Component
         DB::beginTransaction();
 
         try {
-            if(empty($this->product->brand_id)) {
-                $this->product->brand_id = null;
-            }
-
-            // Create new product!
-            if (auth()->user()->isSeller()) {
-                $this->product->user_id = auth()->user()->id;
-                $this->product->added_by = 'seller';
-            } else {
-                $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
-                $this->product->added_by = 'admin';
-            }
-
-            $this->product->tags = implode(',', $this->product->tags);
-
-            if ($this->product->shipping_type === 'free') {
-                $this->product->shipping_cost = 0;
-            } elseif ($this->product->shipping_type === 'flat_rate') {
-                $this->product->shipping_cost = $this->product->flat_shipping_cost;
-            } elseif ($this->product->shipping_type === 'product_wise') {
-                $this->product->shipping_cost = json_encode([]);
-            }
-
-            unset($this->product->flat_shipping_cost);
-
-            if (empty($this->product->meta_img)) {
-                $this->product->meta_img = $this->product->thumbnail_img;
-            }
-
-            if (empty($this->product->meta_title)) {
-                $this->product->meta_img = $this->product->name;
-            }
-
-            if (empty(trim($this->product->meta_description))) {
-                $this->product->meta_description = trim(strip_tags($this->product->description));
-            }
-
-            // TODO: Add Featured, Cash on delivery, Todays deal to the form
-            $this->product->cash_on_delivery = 0;
-            $this->product->featured = 0;
-            $this->product->todays_deal = 0;
-
-            // TODO: Add Product status option to the form - published, draft
-            $this->product->published = 1;
-
-            // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
-            // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
-
-            // Save product
-            $this->product->save();
+            // SET: Product Data
+            $this->setProductData();
 
             // SET: Product Translations
             $this->setProductTranslation();
 
             // TODO: VAT & TAX, Flash Deals
 
-            // CREATE: Attribute relationships
-            $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
-                $att = (object) $att;
-                return $att->selected === true;
-            });
-
-            if($selected_attributes) {
-                foreach($selected_attributes as $att) {
-                    $att = (object) $att;
-                    $att_values = $att->attribute_values;
-
-                    if($att_values) {
-                        if(isset($att_values['values'])) {
-                            // Create the value first
-                            $att_val = new AttributeValue();
-                            $att_val->attribute_id = $att->id;
-                            $att_val->values = $att_values['values'];
-                            $att_val->save();
-
-                            $att_values['id'] = $att_val->id;
-
-                            $att_values = [$att_values];
-                        }
-
-                        foreach($att_values as $att_value) {
-                            $att_value = (object) $att_value;
-                            if($att_value->selected ?? null) {
-                                // Create product-attribute relationship
-                                $att_rel = new AttributeRelationship();
-                                $att_rel->subject_type = 'App\Models\Product';
-                                $att_rel->subject_id = $this->product->id;
-                                $att_rel->attribute_id = $att->id;
-                                $att_rel->attribute_value_id = $att_value->id;
-                                $att_rel->for_variations = $att->for_variations;
-                                $att_rel->save();
-                            }
-                        }
-                    }
-                }
-            }
+            // SET: Attribute relationships
+            $this->setAttributes();
 
             // SET: Main & Variations Product Stocks
             $this->setProductStocks();
@@ -295,49 +213,17 @@ class ProductForm extends Component
         DB::beginTransaction();
 
         try {
-            if(empty($this->product->brand_id)) {
-                $this->product->brand_id = null;
-            }
-
-            $this->product->tags = implode(',', $this->product->tags);
-
-            if ($this->product->shipping_type === 'free') {
-                $this->product->shipping_cost = 0;
-            } elseif ($this->product->shipping_type === 'flat_rate') {
-                $this->product->shipping_cost = $this->product->flat_shipping_cost;
-            } elseif ($this->product->shipping_type === 'product_wise') {
-                $this->product->shipping_cost = json_encode([]);
-            }
-
-            unset($this->product->flat_shipping_cost);
-
-            if (empty($this->product->meta_img)) {
-                $this->product->meta_img = $this->product->thumbnail_img;
-            }
-
-            if (empty($this->product->meta_title)) {
-                $this->product->meta_img = $this->product->name;
-            }
-
-            if (empty(trim($this->product->meta_description))) {
-                $this->product->meta_description = trim(strip_tags($this->product->description));
-            }
-
-            // TODO: Add Featured, Cash on delivery, Todays deal to the form
-            $this->product->cash_on_delivery = 0;
-            $this->product->featured = 0;
-            $this->product->todays_deal = 0;
-
-            // TODO: Add Product status option to the form - published, draft
-            $this->product->published = 1;
-
-            // Save product
-            $this->product->save();
+            // SET: Product Data
+            $this->setProductData();
 
             // SET: Product Translations
             $this->setProductTranslation();
 
 
+            // TODO: VAT & TAX, Flash Deals
+
+            // SET: Attribute relationships
+            $this->setAttributes();
 
             // SET: Main & Variations Product Stocks
             $this->setProductStocks();
@@ -351,6 +237,60 @@ class ProductForm extends Component
             DB::rollBack();
             dd($e->getMessage());
         }
+    }
+
+    protected function setProductData() {
+        if(empty($this->product->brand_id)) {
+            $this->product->brand_id = null;
+        }
+
+        if($this->action === 'insert') {
+            if (auth()->user()->isSeller()) {
+                $this->product->user_id = auth()->user()->id;
+                $this->product->added_by = 'seller';
+            } else {
+                $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
+                $this->product->added_by = 'admin';
+            }
+        }
+
+        $this->product->tags = implode(',', $this->product->tags);
+
+        if ($this->product->shipping_type === 'free') {
+            $this->product->shipping_cost = 0;
+        } elseif ($this->product->shipping_type === 'flat_rate') {
+            $this->product->shipping_cost = $this->product->flat_shipping_cost;
+        } elseif ($this->product->shipping_type === 'product_wise') {
+            $this->product->shipping_cost = json_encode([]);
+        }
+
+        unset($this->product->flat_shipping_cost);
+
+        if (empty($this->product->meta_img)) {
+            $this->product->meta_img = $this->product->thumbnail_img;
+        }
+
+        if (empty($this->product->meta_title)) {
+            $this->product->meta_img = $this->product->name;
+        }
+
+        if (empty(trim($this->product->meta_description))) {
+            $this->product->meta_description = trim(strip_tags($this->product->description));
+        }
+
+        // TODO: Add Featured, Cash on delivery, Todays deal to the form
+        $this->product->cash_on_delivery = 0;
+        $this->product->featured = 0;
+        $this->product->todays_deal = 0;
+
+        // TODO: Add Product status option to the form - published, draft
+        $this->product->published = 1;
+
+        // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
+        // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
+
+        // Save product
+        $this->product->save();
     }
 
     protected function setProductTranslation() {
@@ -367,6 +307,68 @@ class ProductForm extends Component
         $product_stock->price = $this->product->unit_price;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->save();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function setAttributes() {
+        $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
+            $att = (object) $att;
+            return $att->selected === true;
+        });
+
+        if($selected_attributes) {
+            foreach($selected_attributes as $att) {
+                $att = (object) $att;
+                $att_values = $att->attribute_values;
+
+                if($att_values) {
+                    // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
+                    // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
+                    if(!$att->is_predefined) {
+                        // Create the value first
+                        $att_val = (!empty($att_values[0]['id'])) ? AttributeValue::find($att_values[0]['id']) : new AttributeValue();
+                        $att_val->attribute_id = (!empty($att_values[0]['id'])) ? $att_val->attribute_id : $att->id;
+                        $att_val->values = $att_values[0]['values'] ?? null;
+                        $att_val->save();
+
+                        if(empty($att_values[0]['id'])) {
+                            $att_values[0]['id'] = $att_val->id;
+
+                            // Set attribute value translations for non-predefined attributes
+                            $attribute_value_translation = AttributeTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
+                            $attribute_value_translation->name = $att_val->values;
+                            $attribute_value_translation->save();
+                        }
+                    }
+
+                    foreach($att_values as $att_value) {
+                        $att_value = (object) $att_value;
+
+                        if($att_value->selected ?? null) {
+                            // Create or find product-attribute relationship, but don't yet persist anything to DB
+                            $att_rel = AttributeRelationship::firstOrNew([
+                                'subject_type' => 'App\Models\Product',
+                                'subject_id' => $this->product->id,
+                                'attribute_id' => $att->id,
+                                'attribute_value_id' => $att_value->id
+                            ]);
+                            $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
+                            $att_rel->save();
+                        } else {
+                            // Remove attribute relationship if "selected" is false/null
+                            AttributeRelationship::where([
+                                'subject_type' => 'App\Models\Product',
+                                'subject_id' => $this->product->id,
+                                'attribute_id' => $att->id,
+                                'attribute_value_id' => $att_value->id
+                            ])->delete();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function dehydrate()
