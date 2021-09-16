@@ -21,15 +21,17 @@
 							<th>#</th>
 							<th>{{ translate('Name')}}</th>
 							<th>{{ translate('Type')}}</th>
+							<th>{{ translate('Group')}}</th>
 							<th class="text-right">{{ translate('Options')}}</th>
 						</tr>
 					</thead>
-					<tbody>
-						@foreach($attributes as $key => $attribute)
+					<tbody>						
+						@foreach($attributes as $key => $attribute)	
 							<tr>
 								<td>{{$key+1}}</td>
 								<td>{{$attribute->getTranslation('name')}}</td>
 								<td>{{$attribute->type}}</td>
+								<td>{{$attribute->get_group()->name}}</td>
 								<td class="text-right">
 									<a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('admin.attributes.edit', ['id'=>$attribute->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
 										<i class="las la-edit"></i>
@@ -54,6 +56,21 @@
 					<form action="{{ route('admin.attributes.store') }}" method="POST">
 							@csrf
 							<div class="form-group mb-3">
+								<label for="choice_attributes">{{translate('Attribute Group')}}</label>
+								<!-- Select2 -->
+								<select class="form-control js-select2-custom custom-select"
+										name="group"
+										data-hs-select2-options='{
+										"tags": true
+										}'>
+									<option value="">{{ translate('Please select group ...') }}</option>
+									@foreach ($attribute_groups as $group)
+										<option value="{{ 'existing_group_' . $group->id }}">{{ $group->name }}</option>
+									@endforeach
+								</select>
+								<!-- End Select2 -->
+							</div>
+							<div class="form-group mb-3">
 									<label for="name">{{translate('Name')}}</label>
 									<input type="text" placeholder="{{ translate('Name')}}" id="name" name="name" class="form-control" data-test="name" required>
 							</div>
@@ -75,6 +92,7 @@
                                     <option value="radio">{{ translate('Radio') }}</option>
 									<option value="country">{{ translate('Country') }}</option>
 									<option value="number">{{ translate('Number') }}</option>
+									<option value="image">{{ translate('Image') }}</option>
 								</select>
 							</div>
 
@@ -116,12 +134,13 @@
 
 @endsection
 
-@section('modal')
-    @include('modals.delete_modal')
-@endsection
+@push('footer_scripts')
+	
+    <!-- JS Front -->
+	<script src="{{ global_asset('front/js/hs.core.js') }}"></script>
+    <script src="{{ global_asset('front/js/hs.select2.js') }}"></script>
 
-@section('script')
-    <script type="text/javascript">
+	<script type="text/javascript">
         function onChangeType(evt){
 			$("#filterable").prop("checked", false);
 			if (evt.value == "plain_text") {
@@ -130,5 +149,15 @@
 				$("#filterable").removeAttr("disabled");
 			}
         }
+
+		// INITIALIZATION OF SELECT2
+		// =======================================================
+		$('.js-select2-custom').each(function () {
+			var select2 = $.HSCore.components.HSSelect2.init($(this));
+		});
     </script>
+@endpush
+
+@section('modal')
+    @include('modals.delete_modal')
 @endsection

@@ -3,6 +3,7 @@
 namespace App\View\Components\Default\Products\Single;
 
 use App\Models\Attribute;
+use App\Models\AttributeGroup;
 use App\Models\Product;
 use Illuminate\View\Component;
 
@@ -19,7 +20,19 @@ class ProductSpecificationTable extends Component
     {
         //
         $this->product = $product;
-        $this->product_attributes = Attribute::where('content_type', 'App\Models\Product')->orderBy('created_at', 'desc')->get();
+        $attribute_groups = AttributeGroup::where('content_type', 'App\Models\Product')->orderBy('id')->pluck('id')->toArray();
+        $group_ids[] = NULL;
+        $group_ids = array_merge($attribute_groups, $group_ids);
+        foreach($group_ids as $id) {
+            $sub_attributes = Attribute::where('group', $id)->where('content_type', 'App\Models\Product')->get();
+            if ($id == NULL) {
+                $product_attributes[$id] = $sub_attributes;
+            }else {
+                $product_attributes[AttributeGroup::findOrFail($id)->name] = $sub_attributes;
+            }
+        }
+
+        $this->product_attributes = $product_attributes;
 
     }
 

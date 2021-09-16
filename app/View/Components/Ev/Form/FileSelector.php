@@ -20,13 +20,14 @@ class FileSelector extends Component
     public $sortable;
     public $sortableOptions;
     public $errorBagName;
+    public $selectedFile;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [], $errorBagName = null)
+    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [], $errorBagName = null, $selectedFile = null)
     {
         $this->datatype = $datatype;
         $this->label = $label;
@@ -42,6 +43,7 @@ class FileSelector extends Component
         $this->sortable = $sortable;
         $this->sortableOptions = $sortableOptions;
         $this->errorBagName = $errorBagName ?: $name;
+        $this->selectedFile = $selectedFile;
     }
 
 

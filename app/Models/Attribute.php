@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App;
 use App\Models\AttributeTranslation;
+use App\Models\AttributeGroup;
 
 class Attribute extends Model
 {
@@ -46,6 +47,14 @@ class Attribute extends Model
     public function attribute_values()
     {
         return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
+    }
+
+    public function get_group() {
+        if ($this->group !== NULL) {
+            return AttributeGroup::findOrFail($this->group);
+        }
+
+        return new AttributeGroup;
     }
 
 
