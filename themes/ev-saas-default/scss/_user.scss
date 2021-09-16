@@ -376,3 +376,59 @@ img {
         opacity: 1;
     }
 }
+
+
+/**
+ * ==============================================
+ * Category Mega Menu
+ * ==============================================
+ */
+.aiz-category-menu .sub-cat-menu {
+    display: none;
+    position: absolute;
+    width: calc(100% - 25%);
+    left: calc(25% - 10px);
+    height: calc(100% + 20px);
+    overflow: hidden;
+    top: 0;
+    z-index: 9;
+    background-color: #fff;
+    overflow-y: auto;
+}
+[dir="rtl"] .aiz-category-menu .sub-cat-menu{
+    left: auto;
+    right: calc(25% - 10px);
+}
+.aiz-category-menu .category-nav-element:hover .sub-cat-menu{
+    display: block;
+}
+.aiz-category-menu .category-nav-element:hover > a{
+    position: relative;
+    z-index: 10;
+    background: #fff;
+    box-shadow: -2px 3px 5px rgb(0 0 0 / 0.1);
+}
+.hover-category-menu .all-category::before {
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 20px;
+    bottom: 100%;
+    right: 0;
+}
+.hover-category-menu .all-category::before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    border-top: 0;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid var(--soft-primary);
+    border-left: 12px solid transparent;
+    top: -12px;
+    right: 20px;
+}
+[dir="rtl"] .hover-category-menu .all-category::before {
+    left: 20px;
+    right: auto;
+}

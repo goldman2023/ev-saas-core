@@ -1,4 +1,13 @@
-<div>
+<div class="col-lg-3 position-static d-none d-lg-block">
+    <div class="aiz-category-menu bg-white rounded  shadow-sm">
+        <div class="p-3 bg-soft-primary d-none d-lg-block rounded-top all-category position-relative text-left">
+            <span class="fw-600 fs-16 mr-3">{{ translate('Categories') }}</span>
+            <a href="https://demo.activeitzone.com/ecommerce/categories" class="text-reset">
+                <span class="d-none d-lg-inline-block">{{ translate('See all') }} &gt;</span>
+            </a>
+        </div>
+    </div>
+
     <ul class="list-unstyled categories no-scrollbar py-2 mb-0 text-left">
         @foreach ($categories as $key => $category)
             <li class="category-nav-element" data-id="{{ $category['id'] }}" data-sub="{{ json_encode($category['children']) }}">
@@ -8,7 +17,7 @@
                         src="{{ uploaded_asset($category->icon) }}"
                         width="32"
                         alt="{{ $category->getTranslation('name') }}"
-                    > --}}  
+                    > --}}
                     <span class="cat-name">{{ $category['name'] }}</span>
                 </a>
                 @if(count($category['children'])>0)

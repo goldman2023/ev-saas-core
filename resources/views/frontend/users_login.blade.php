@@ -2,6 +2,7 @@
 
 @section('content')
     <x-ev.category-mega-menu></x-ev.category-mega-menu>
+
     <section class="gry-bg py-5">
         <div class="profile">
             <div class="container">
