@@ -48,6 +48,7 @@
         "paypal/paypal-checkout-sdk": "dev-master",
         "predis/predis": "^1.1",
         "qirolab/laravel-themer": "^1.5",
+        "rappasoft/laravel-livewire-tables": "^1.14",
         "razorpay/razorpay": "^2.7.0",
         "romanzipp/laravel-seo": "^2.2",
         "sentry/sentry-laravel": "^2.7.0",
@@ -122,9 +123,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.laraform.io"
-        }
+
     ]
 }

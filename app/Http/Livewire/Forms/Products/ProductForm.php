@@ -28,31 +28,8 @@ class ProductForm extends Component
 
     public Product $product;
     public array $attributes;
+    public array $variations;
 
-    /*public $name;
-    public $category_id;
-    public $brand_id;
-    public $unit;
-    public $tags;
-
-    public $thumbnail_img;
-    public $photos;
-    public $video_provider = '';
-    public $video_link;
-    public $pdf;
-    public $description;
-
-    public $min_qty;
-    public $current_stock;
-    public $low_stock_quantity;
-    public $unit_price;
-    public $purchase_price;
-    public $discount = 0;
-    public $discount_type = 'amount';
-    public $stock_visibility_state;
-    public $shipping_type;
-    public $is_quantity_multiplied;
-    public $set_shipping_days;*/
 
     protected function rules()
     {
@@ -122,9 +99,12 @@ class ProductForm extends Component
         if($product) {
             $this->product = $product;
             $this->action = 'update';
+
+            $this->variations = $this->product->variations()->get()->toArray();
         } else {
             $this->product = new Product();
             $this->action = 'insert';
+            $this->variations = [];
         }
         $this->product->slug = '';
         $this->product->is_quantity_multiplied = 1;
@@ -369,6 +349,14 @@ class ProductForm extends Component
                 }
             }
         }
+    }
+
+    public function getVariationsAttributesProperty() {
+        $atts_for_variations = collect($this->attributes)->filter(function($att, $key) {
+            return ((object) $att)->for_variations === true;
+        });
+
+        return $atts_for_variations;
     }
 
     public function dehydrate()

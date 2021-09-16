@@ -292,7 +292,7 @@
                                 </div>
 
 
-                                <div id="productStepAttributesVariations" class="{{ $page === 'attributes' ? 'active':'' }}" style="{{ $page !== 'attributes' ? "display: none;" : "" }}" >
+                                <div id="productStepAttributes" class="{{ $page === 'attributes' ? 'active':'' }}" style="{{ $page !== 'attributes' ? "display: none;" : "" }}" >
                                     <!-- Header -->
                                     <div class="border-bottom pb-2 mb-3">
                                         <div class="flex-grow-1">
@@ -451,7 +451,10 @@
                                     <!-- Body -->
                                     <div class="pb-4">
                                         <div class="full-width product-variations-wrapper">
-
+                                            <x-ev.form.variations-datatable id="ev-variations-datatables"
+                                                                            :variation-attributes="$this->variations_attributes"
+                                                                            :variations="$this->variations">
+                                            </x-ev.form.variations-datatable>
                                         </div>
                                     </div>
                                 </div>
@@ -539,10 +542,82 @@
         </span>
         <div class="d-flex align-items-center mt-3">
             <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
-            <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
+            @if(!empty($product->id))
+                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
+            @endif
         </div>
     </x-ev.alert>
     <!-- End Message Body -->
+
+    <script>
+        // INITIALIZATION OF DATATABLES
+        (function () { alert('asd');
+            /* Formatting function for row details - modify as you need */
+            function format (d) {
+                // `d` is the original data object for the row
+                return '<table>'+
+                    '<tr>'+
+                    '<td>Full name:</td>'+
+                    '<td>'+d.name+'</td>'+
+                    '</tr>'+
+                    '<tr>'+
+                    '<td>Extension number:</td>'+
+                    '<td>'+d.extn+'</td>'+
+                    '</tr>'+
+                    '<tr>'+
+                    '<td>Extra info:</td>'+
+                    '<td>And any further details here (images etc)...</td>'+
+                    '</tr>'+
+                    '</table>';
+            }
+
+            // INITIALIZATION OF DATATABLES
+            // =======================================================
+            let datatableCollapsable = $.HSCore.components.HSDatatables.init($('.variations-datatables'), {
+                //"data": data,
+                "columns": [
+                    {
+                        "className": 'details-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
+                    },
+                    @foreach(array_merge(['#', 'Name'], array_column($this->variations_attributes->toArray(), 'name'), ['']) as $col_name)
+                        { "data": "{{ $col_name }}" },
+                    @endforeach
+                ],
+                buttons: {
+                    buttons: [
+                        {
+                            enabled: true,
+                            text: '{{ translate('Add All') }}',
+                            action: function ( dt ) {
+                                console.log( 'My custom button!' );
+                            }
+                        }
+                    ]
+                },
+                order: []
+            });
+
+            // ADD EVENT LISTENER FOR OPENING AND CLOSING DETAILS
+            // =======================================================
+            $('.variations-datatables tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = datatableCollapsable.row( tr );
+
+                if ( row.child.isShown() ) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+                    // Open this row
+                    row.child( format(row.data()) ).show();
+                    tr.addClass('shown');
+                }
+            });
+        })(jQuery);
+    </script>
 </div>
 
 

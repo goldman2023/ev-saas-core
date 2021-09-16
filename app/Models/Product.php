@@ -185,6 +185,10 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function variations() {
+        return $this->hasMany(ProductVariation::class);
+    }
+
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
@@ -263,14 +267,14 @@ class Product extends Model
     }
 
     /**
-     * Get all photos related to the product but properly structured in an assoc. array
-     * This function is used in frontend/themes etc.
+     * Get the product permalink
      *
      * @return string $link
      */
     public function getPermalinkAttribute() {
-        if(empty($this->slug))
+        if(empty($this->slug)) {
             return "#";
+        }
 
         return route('product', $this->slug);
     }

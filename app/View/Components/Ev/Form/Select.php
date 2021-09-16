@@ -25,6 +25,7 @@ class Select extends Component
     public $options;
     public $errorBagName;
 
+
     /**
      * Create a new component instance.
      *

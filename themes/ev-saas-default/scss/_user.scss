@@ -1,6 +1,7 @@
 /*------------------------------------
   File for your custom SCSS style
 ------------------------------------*/
+[x-cloak] { display: none !important; }
 
 img {
     max-width: 100%;

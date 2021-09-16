@@ -1,8 +1,8 @@
 {
-    "/js/app.js": "/js/app.js?id=fb7b46d24b879134ac60",
+    "/js/app.js": "/js/app.js?id=dd641934f2a4d66f6f96",
     "/js/aiz-core.js": "/js/aiz-core.js?id=f4f72135450282545604",
     "/js/vue.js": "/js/vue.js?id=1b1a325ab99d4df64a29",
-    "/css/app.css": "/css/app.css?id=9efa858cd7a1f072259b",
+    "/css/app.css": "/css/app.css?id=97f58c2177705440d2ee",
     "/images/index.php": "/images/index.php?id=09e093847e43b5fc825b",
     "/vendor/hs.autocomplete-local-search.js": "/vendor/hs.autocomplete-local-search.js?id=d6efbadfe0a506f78ff9",
     "/vendor/hs.chartjs.js": "/vendor/hs.chartjs.js?id=6a7790d7d25d49944b21",
@@ -11,6 +11,7 @@
     "/vendor/hs.core.js": "/vendor/hs.core.js?id=5522f881dc77c59ffb0f",
     "/vendor/hs.countdown.js": "/vendor/hs.countdown.js?id=47f7a2e8f2e438ab5eca",
     "/vendor/hs.cubeportfolio.js": "/vendor/hs.cubeportfolio.js?id=e8997e22d639fcdafc29",
+    "/vendor/hs.datatables.js": "/vendor/hs.datatables.js?id=f12a6a420cfca27171af",
     "/vendor/hs.dropzone.js": "/vendor/hs.dropzone.js?id=048046161ab7a4848b68",
     "/vendor/hs.fancybox.js": "/vendor/hs.fancybox.js?id=861c7aa2b32e7261765b",
     "/vendor/hs.flatpickr.js": "/vendor/hs.flatpickr.js?id=c9ed1cd8cba5b5bc3033",
