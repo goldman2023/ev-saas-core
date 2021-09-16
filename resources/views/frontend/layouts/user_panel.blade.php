@@ -11,7 +11,7 @@
                     </div>
 
                     <!-- Breadcrumb -->
-                    <x-default.breadcrumbs.breadcrumbs></x-default.breadcrumbs.breadcrumbs>
+                    {{-- <x-default.breadcrumbs.breadcrumbs></x-default.breadcrumbs.breadcrumbs> --}}
                     <!-- End Breadcrumb -->
                 </div>
 

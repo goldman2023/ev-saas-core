@@ -1,14 +1,19 @@
-<div class="position-absolute" style="z-index:9999">
+<div>
     {{-- TODO: Make nice icon and general styling --}}
     {{-- TODO: Make nice icon and general styling --}}
-    <button wire:click.prevent="editLabel()" class="btn btn-sm btn-primary">
-        {{ translate('Edit') }}
-    </button>
+    <button wire:click.prevent="editLabel()"
+    style="position:absolute; left: 100%; margin-left: 10px; top: 0;"
+            class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle"
+            href="javascript:;">
+            @svg('heroicon-o-pencil-alt')
+            {{ translate('edit') }}
+        </button>
 
     @if ($show_input_field)
         {{-- TODO: Improve UX and UI of this element --}}
         <div class="absolute top-0 bg-white p-3 rounded-md shadow-xl z-90" style="z-index: 99999">
-
+            <div class="card">
+                <div class="card-body">
             <div class="ev-livewire-input-row">
                 {{-- TODO: Make option to select from existing files --}}
                 <label for="email" class="block text-sm font-medium text-gray-700">
@@ -43,6 +48,7 @@
 
 
             </div>
+            </div>
 
             <div>
                 <button type="button" wire:click.prevent="updateLabel()"
@@ -50,6 +56,10 @@
                     <!-- Heroicon name: solid/sort-ascending -->
                     <span>{{ translate('Save') }} </span>
                 </button>
+                <button wire:click.prevent="close()" class="btn btn-sm btn-danger ev-dynamic-close-button">
+                    <span>{{ translate('Cancel') }} </span>
+                </button>
+            </div>
             </div>
         </div>
     @endif

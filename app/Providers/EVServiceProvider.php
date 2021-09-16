@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Container\Container;
+use App\Http\Services\CategoryService;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Services\EVService;
 use App\Http\Services\BusinessSettingsService;
@@ -29,6 +30,12 @@ class EVServiceProvider extends ServiceProvider
         $this->app->singleton('business_settings', function() {
             return new BusinessSettingsService(fn () => Container::getInstance());
         });
+
+        // Register Categories Service Singleton
+        $this->app->singleton('ev_categories', function() {
+            return new CategoryService(fn () => Container:: getInstance());
+        });
+        
     }
 
     /**
