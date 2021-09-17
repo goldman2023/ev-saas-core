@@ -644,12 +644,13 @@ class HomeController extends Controller
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
                 
             foreach ($attributes as $attribute) {
-                if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != null) {
+                if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != "-1" && $request['attribute_' . $attribute['id']] != null) {
                     $filters[$attribute['id']] = $request['attribute_' . $attribute['id']];
                     switch ($attribute->type) {
                         case "number":
-                            $min_val = $request['attribute_' . $attribute['id']][0];
-                            $max_val = $request['attribute_' . $attribute['id']][1];
+                            $range_arr = explode(';', $request['attribute_' . $attribute['id']]);
+                            $min_val = floatval($range_arr[0]);
+                            $max_val = floatval($range_arr[1]);
                             if ($min_val != null && $max_val != null) {
                                 $contents = $contents->whereHas('attributes', function ($relation) use ($min_val, $max_val) {
                                     $relation->whereHas('attribute_value', function ($value) use ($min_val, $max_val) {
@@ -661,10 +662,10 @@ class HomeController extends Controller
                         case "date":
                             $arr_date_range = explode(" to ", $request['attribute_' . $attribute['id']]);
                             if (count($arr_date_range) > 0) {
-                                $query = "STR_TO_DATE(`values`, '%d-%m-%y') >= STR_TO_DATE(?, '%d-%m-%y') AND STR_TO_DATE(`values`, '%d-%m-%y') <= STR_TO_DATE(?, '%d-%m-%y')";
-                                $contents = $contents->whereHas('attributes', function ($relation) use ($query, $arr_date_range) {
-                                    $relation->whereHas('attribute_value', function ($value) use ($query, $arr_date_range) {
-                                        $value->whereRaw($query, $arr_date_range);
+                                $date_query = "STR_TO_DATE(`values`, '%d-%m-%Y') >= STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(`values`, '%d-%m-%Y') <= STR_TO_DATE(?, '%d-%m-%Y')";
+                                $contents = $contents->whereHas('attributes', function ($relation) use ($date_query, $arr_date_range) {
+                                    $relation->whereHas('attribute_value', function ($value) use ($date_query, $arr_date_range) {
+                                        $value->whereRaw($date_query, $arr_date_range);
                                     });
                                 });
                             }

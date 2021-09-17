@@ -326,9 +326,14 @@
             });
             // INITIALIZATION OF DATERANGEPICKER
             // =======================================================
-            $.HSCore.components.HSDaterangepicker.init($('.js-daterangepicker-times'), {
-                // startDate: moment().startOf('hour'),
-                // endDate: moment().startOf('hour').add(32, 'hour')
+            $.HSCore.components.HSDaterangepicker.init($('.js-daterangepicker-times'));
+
+            $('.js-daterangepicker-times').on('apply.daterangepicker', function(ev, picker) {
+                filter();
+            });
+            $('.js-daterangepicker-times').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                filter();
             });
     </script>
 @endpush
@@ -337,12 +342,4 @@
     function filter() {
         $('#search-form').submit();
     }
-
-    function rangefilter(arg, element) {
-        var attribute_id = element.getAttribute("data-attribute-id");
-        $('input[name="attribute_' + attribute_id + '[]"]').first().val(arg[0]);
-        $('input[name="attribute_' + attribute_id + '[]"]').last().val(arg[1]);
-        filter();
-    }
-
 </script>
