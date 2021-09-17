@@ -19,11 +19,13 @@ class Select extends Component
     public $items;
     public $valueProperty;
     public $labelProperty;
+    public $selected;
     public $search;
     public $multiple;
     public $tags;
     public $options;
     public $errorBagName;
+    public $disabled;
 
 
     /**
@@ -31,7 +33,7 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null)
+    public function __construct($isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $selected = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null, $disabled = false)
     {
         $this->isWired = $isWired;
         $this->type = $type;
@@ -39,6 +41,7 @@ class Select extends Component
         $this->items = collect($items);
         $this->valueProperty = $valueProperty;
         $this->labelProperty = $labelProperty;
+        $this->selected = $selected;
         $this->search = $search;
         $this->name = $name;
         $this->required = $required;
@@ -50,6 +53,7 @@ class Select extends Component
         $this->class = $class;
         $this->id = $id;
         $this->errorBagName = $errorBagName ?: $name;
+        $this->disabled = $disabled;
 
         /*$this->options = [
             'customClass' => 'custom-select',
@@ -66,6 +70,10 @@ class Select extends Component
 
         if($tags) {
             $this->options['tags'] = true;
+        }
+
+        if($disabled) {
+            $this->options['disabled'] = true;
         }
     }
 

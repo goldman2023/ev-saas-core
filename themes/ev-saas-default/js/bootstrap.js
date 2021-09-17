@@ -25,10 +25,10 @@ try {
     require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
 
     /* eXtend Alpine and start it */
-    Alpine.plugin(persist);
+    /*Alpine.plugin(persist);
     Alpine.plugin(intersect);
     window.Alpine = Alpine;
-    Alpine.start();
+    Alpine.start();*/
 } catch (e) {}
 
 /**

@@ -3,7 +3,7 @@
 @section('page_title', translate('Add New Product'))
 
 @push('head_scripts')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.2/af-2.3.7/date-1.1.1/fh-3.1.9/sc-2.0.5/sl-1.3.3/datatables.min.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
 @endpush
 
 @section('panel_content')
@@ -14,8 +14,6 @@
 @endsection
 
 @push('footer_scripts')
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.2/af-2.3.7/date-1.1.1/fh-3.1.9/sc-2.0.5/sl-1.3.3/datatables.min.js"></script>
-
     <script src="{{ static_asset('js/aiz-core.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-step-form/dist/hs-step-form.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>

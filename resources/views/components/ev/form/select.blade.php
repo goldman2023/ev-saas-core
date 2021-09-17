@@ -1,5 +1,8 @@
 <div class="form-group {{ $class }}">
-    <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @if(!empty($label))
+        <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @endif
+
     <select wire:model.defer="{{ $name }}"
             @if($id) id="{{ $id }}" @endif
             class="js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
@@ -16,7 +19,11 @@
                 @php $item = is_array($item) ? (object) $item : $item; @endphp
                 <option value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}"
                         {!! is_object($item) && !empty($item->attributes) ? $item->attributes : "" !!}
-                        @if(($item->selected ?? false) || (empty($placeholder) && $key === 0)) selected @endif>
+                        @if($selected == (is_object($item) ? ($item->{$valueProperty}??'') : $key)
+                            ||
+                            (empty($selected) && (($item->selected ?? false)  || (empty($placeholder) && $key === 0))))
+                            selected
+                        @endif>
                     {{ is_object($item) ? ($item->{$labelProperty}??'') : $item }}
                 </option>
             @endforeach

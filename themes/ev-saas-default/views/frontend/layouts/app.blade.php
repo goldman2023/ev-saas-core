@@ -64,6 +64,8 @@
     </style>
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
+    @livewireStyles
+
 
     <script src="{{ mix('js/app.js', 'themes/' . Theme::parent()) }}"></script>
     <!-- Vendor Scripts -->
@@ -127,11 +129,9 @@
 
     @yield('modal')
 
-
-
-
-
     @yield('script')
+
+    @livewireScripts
 
     {{-- TODO: Include this propertly --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
@@ -157,14 +157,9 @@
         });
     </script>
 
-
-
     @php
         echo get_setting('footer_script');
     @endphp
-
-    @livewireStyles
-    @livewireScripts
 </body>
 
 </html>

@@ -29,6 +29,7 @@ class ProductForm extends Component
     public Product $product;
     public array $attributes;
     public array $variations;
+    public $rows;
 
 
     protected function rules()
@@ -92,6 +93,7 @@ class ProductForm extends Component
      */
     public function mount($page = '', $product = null)
     {
+        $this->rows = collect([]);
         $this->page = $page;
         $this->attributes = EV::getMappedAttributes('App\Models\Product', $product);
 
@@ -367,6 +369,6 @@ class ProductForm extends Component
 
     public function render()
     {
-        return view('livewire.forms.product-form');
+        return view('livewire.forms.products.product-form');
     }
 }

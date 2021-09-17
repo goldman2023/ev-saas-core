@@ -382,15 +382,36 @@ class EVService
         return $mapped;
     }
 
-    public static function buildCategoriesTree($data, $pidKey, $idKey = "parent_id",) {
-        
+    public function generateAllVariations($attributes) {
+        $result = [[]];
+        $all_att_values = $attributes->pluck('attribute_values');
+
+        foreach ($all_att_values as $property => $property_values) {
+            $property_values = array_values(array_filter($property_values, function($v, $k) {
+                return $v['selected'] === true;
+            }, ARRAY_FILTER_USE_BOTH));
+
+            $tmp = [];
+            foreach ($result as $result_item) {
+                foreach ($property_values as $property_value) {
+                    $tmp[] = array_merge($result_item, [$property => $property_value]);
+                }
+            }
+            $result = $tmp;
+        }
+
+        return $result;
+    }
+
+    public static function buildCategoriesTree($data, $pidKey, $idKey = "parent_id") {
+
         $tree = function ($elements, $parentId = -1) use (&$tree, $pidKey, $idKey) {
             if($parentId < 0) $parentId = $pidKey;
             $branch = array();
             foreach ($elements as $element) {
-    
+
                 if ($element[$idKey] == $parentId) {
-    
+
                     $children = $tree($elements, $element['id']);
                     if ($children) {
                         $element['children'] = $children;
@@ -399,12 +420,12 @@ class EVService
                     }
                     $branch[] = $element;
                 }
-    
+
             }
             return $branch;
         };
-    
+
         $tree = $tree($data);
-    
+
     }
 }

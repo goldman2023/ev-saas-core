@@ -8,6 +8,10 @@ class ProductStock extends Model
 {
     //
     public function product(){
-    	return $this->belongsTo(Product::class);
+    	return $this->morphTo('subject');
+    }
+
+    public function product_variations(){
+        return $this->belongsTo(ProductVariation::class);
     }
 }

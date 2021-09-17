@@ -1,5 +1,7 @@
 <div class="form-group {{ $groupclass }}">
-    <label @if($id) for="{{ $id }}" @endif class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @if(!empty($label))
+        <label @if($id) for="{{ $id }}" @endif class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @endif
 
     @if(!empty($icon) || !empty($text))
         <div class="input-group @if($merge) input-group-merge @endif">
