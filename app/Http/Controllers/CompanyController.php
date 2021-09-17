@@ -40,7 +40,7 @@ class CompanyController extends Controller
         foreach ($sellers->get() as $seller) {
             $attributeIds = array_unique(array_merge($attributeIds, $seller->attributes->pluck('attribute_id')->toArray()), SORT_REGULAR);
         }
-        $attributes = Attribute::whereIn('id', $attributeIds)->where('filterable', true)->get();
+        $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
 
         $filters = array();
         foreach ($attributes as $attribute) {
