@@ -111,7 +111,7 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
     /* TODO: Investigate this is causing some issues */
-    // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
+    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
