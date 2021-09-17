@@ -14,7 +14,8 @@ class ContactFormWithMap extends Component
 
      public $map = false;
      public $address = '';
-    public function __construct($address="", $map = false)
+     public $form = 'email-form';
+    public function __construct($address="", $map = false, $form = 'email-form')
     {
         //
         $this->map = $map;
