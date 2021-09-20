@@ -2,7 +2,7 @@
     <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <div class="px-4 sm:px-6 sm:flex sm:items-center sm:justify-between lg:px-8 xl:px-0">
             <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">
-                <x-ev.label :label="ev_dynamic_translate('Customers also purchased')">
+                <x-ev.label :label="ev_dynamic_translate('Customers also purchased', true)">
                 </x-ev.label>
             </h2>
 

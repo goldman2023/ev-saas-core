@@ -4,12 +4,14 @@
         <div class="row mb-3">
             <div class="col">
                 <div class="media align-items-center">
-                    <img class="avatar avatar-sm mr-3" src="../assets/svg/brands/mailchimp.svg" alt="Image Description">
+                    <x-tenant.system.image alt="{{ $product->getTranslation('name') }}" class="avatar avatar-sm mr-3"
+                        :image="$product->thumbnail_img"></x-tenant.system.image>
                     <div class="media-body">
                         <h6 class="mb-0">
                             <a class="text-dark" href="employer.html">Mailchimp</a>
+                            {{-- TODO: Make this dynamic  --}}
                             <img class="avatar avatar-xss ml-1" src="../assets/svg/illustrations/top-vendor.svg"
-                                alt="Review rating" data-toggle="tooltip" data-placement="top" title="Claimed profile">
+                                alt="Review rating" data-toggle="tooltip" data-placement="top" title="{{ translate('In Stock') }}">
                         </h6>
                     </div>
                 </div>
@@ -37,13 +39,15 @@
         <!-- End Row -->
 
         <h3 class="mb-3">
-            <a class="text-dark" href="employer.html">Senior B2B sales consultant</a>
+            <a class="text-dark" href="{{ route('product', $product->slug) }}">
+                {{ $product->getTranslation('name') }}
+            </a>
         </h3>
 
         <span class="d-block font-size-1 text-body mb-1">$125k-$135k yearly</span>
 
         <span class="badge badge-soft-info mr-2">
-            <span class="legend-indicator bg-info"></span>Remote
+            <span class="legend-indicator bg-info"></span> {{ $product->getCondition() ?? '' }}
         </span>
     </div>
 
@@ -56,4 +60,3 @@
     </div>
 </div>
 <!-- End Card -->
-</div>
