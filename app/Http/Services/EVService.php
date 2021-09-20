@@ -128,6 +128,13 @@ class EVService
                 'label' => translate('Settings'),
                 'items' => [
                     [
+                        'label' => translate('Design settings'),
+                        'icon' => 'heroicon-o-cog',
+                        'route' => route('ev.settings.design'),
+                        'is_active' => areActiveRoutes(['ev.settings.design']),
+
+                    ],
+                    [
                         'label' => translate('Account settings'),
                         'icon' => 'heroicon-o-cog',
                         'route' => route('profile'),

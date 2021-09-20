@@ -138,6 +138,15 @@ Route::middleware([
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
     //Stripe END
 
+    Route::resource('addresses', 'AddressController')->parameters([
+        'addresses' => 'id',
+    ]);
+    //Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+    //Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
+
+
+
 
     Route::get('/compare', [CompareController::class, 'index'])->name('compare');
     Route::get('/compare/reset', [CompareController::class, 'reset'])->name('compare.reset');
@@ -216,7 +225,10 @@ Route::middleware([
     });
 
     Route::group(['middleware' => ['auth']], function () {
+        /* TODO : Admin only */
+        Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
 
+        /* TODO: Admin and seler only */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
         Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
         Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');

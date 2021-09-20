@@ -6,7 +6,6 @@
             </x-ev.label>
         </div>
         <!-- End Title -->
-        {{ $slider }}
         <!-- Products -->
         <div class="ev-slider mb-3">
             <div class="ev-slider-wrapper @if ($slider) js-slick-carousel @endif"

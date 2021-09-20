@@ -12,17 +12,17 @@
         <div class="row mb-2 @if ($slider) ev-slick @endif">
             @foreach ($categories as $category)
                 <!-- Card -->
-                <div class="col-sm-4">
+                <div class="col-sm-4 mb-3">
                     <a class="card card-bordered card-hover-shadow h-100" href="{{ route('products.category', $category->slug) }}">
                         <div class="card-body">
                             <div class="media align-items-center">
-
-
                                     <x-tenant.system.image class="avatar avatar-sm  mr-3" :image="$category->banner">
                                     </x-tenant.system.image>
-
                                 <div class="media-body">
                                     <h5 class="text-hover-primary mb-0">{{ $category->name }}</h5>
+                                    <small>
+                                      {{ $category->products()->count() }}  {{ translate('Products') }}
+                                    </small>
                                 </div>
 
                                 <div class="align-self-center text-muted text-hover-primary pl-2 ml-auto">

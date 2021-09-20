@@ -46,4 +46,12 @@ class BusinessSettingsService
     public function getAll() {
         return $this->settings;
     }
+
+    public function getMappedProductCardDesigns() {
+        return [
+            'product-card' => 'Default',
+            'product-card-detailed' => 'Detailed',
+            'product-card-detailed2' => 'Detailed2',
+        ];
+    }
 }
