@@ -9,12 +9,16 @@ use App\Models\Order;
 
 class CustomerController extends Controller
 {
+    public function __construct()
+    {
+        dd(Route::getCurrentRoute());
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $type = 'backend')
     {
         $sort_search = null;
         $customers = Customer::orderBy('created_at', 'desc');
@@ -28,7 +32,7 @@ class CustomerController extends Controller
             });
         }
         $customers = $customers->paginate(15);
-        return view('backend.customer.customers.index', compact('customers', 'sort_search'));
+        return view($type . '.customer.customers.index', compact('customers', 'sort_search'));
     }
 
     /**

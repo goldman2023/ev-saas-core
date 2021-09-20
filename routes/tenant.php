@@ -138,15 +138,6 @@ Route::middleware([
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
     //Stripe END
 
-    Route::resource('addresses', 'AddressController')->parameters([
-        'addresses' => 'id',
-    ]);
-    //Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-    //Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
-
-
-
 
     Route::get('/compare', [CompareController::class, 'index'])->name('compare');
     Route::get('/compare/reset', [CompareController::class, 'reset'])->name('compare.reset');
@@ -375,9 +366,27 @@ Route::middleware([
         Route::get('/checkout', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
         Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
         Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
+
+        Route::get('/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
+        Route::post('/payment', 'CheckoutController@checkout')->name('payment.checkout');
+        Route::post('/get_pick_up_points', 'HomeController@get_pick_up_points')->name('shipping_info.get_pick_up_points');
+        Route::get('/payment-select', 'CheckoutController@get_payment_info')->name('checkout.payment_info');
+        Route::post('/apply_coupon_code', 'CheckoutController@apply_coupon_code')->name('checkout.apply_coupon_code');
+        Route::post('/remove_coupon_code', 'CheckoutController@remove_coupon_code')->name('checkout.remove_coupon_code');
+        //Club point
+        Route::post('/apply-club-point', 'CheckoutController@apply_club_point')->name('checkout.apply_club_point');
+        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
     });
 
+    Route::resource('addresses', 'AddressController');
+    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
+    /* Customer Management - BY EIM */
+    Route::resource('customers', 'CustomerController');
+
+    Route::resource('leads', 'LeadController');
 
     // Tenant Management routes - added from SaaS Boilerplate
 

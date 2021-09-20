@@ -45,7 +45,7 @@
     <div class="container text-left">
         <div class="row">
             <div class="col-lg-8">
-                <form action="" class="form-default" role="form" method="POST" id="checkout-form">
+                <form action="{{ route('payment.checkout') }}" class="form-default" role="form" method="POST" id="checkout-form">
                     @csrf
                     <div class="card shadow-sm border-0 rounded">
                         <div class="card-header p-3">

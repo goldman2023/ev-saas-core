@@ -8,9 +8,11 @@
             <span class="badge badge-success badge-pill">New arrival</span>
         </div>
         <div class="position-absolute top-0 right-0 pt-3 pr-3">
-            <button type="button" class="btn btn-xs btn-icon btn-outline-secondary rounded-circle" data-toggle="tooltip"
-                data-placement="top" title="Save for later">
-                <i class="fas fa-heart"></i>
+            <button type="button" class="btn btn-xs btn-icon btn-outline-secondary rounded-circle"
+            onclick="addToWishList({{ $product->id }})"
+            data-toggle="tooltip"
+                data-placement="top" title="{{ translate('Add To Wishlist') }}">
+                {{ svg('heroicon-o-heart') }}
             </button>
         </div>
     </div>

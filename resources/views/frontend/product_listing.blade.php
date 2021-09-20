@@ -123,17 +123,18 @@
                                 @if ($product_count > 0)
 
                                     <div
-                                        class="row gutters-5 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-4 row-cols-md-3 row-cols-2 mt-2">
+                                        class="row gutters-5 mt-2">
                                         @foreach ($products as $key => $product)
-                                            <div class="col-sm-4 mb-5">
+                                            <div class="col-sm-4 mb-3">
                                                 <x-default.products.cards.product-card :product="$product"
-                                                style="{{ ev_dynamic_translate('product-card', true)->value }}">
+                                                style="product-card">
                                             </x-default.products.cards.product-card>
                                             </div>
                                         @endforeach
                                     </div>
                                     @if ($content == 'product' || isset($category_id))
-                                        <div class="ev-pagination">
+                                    <hr />
+                                        <div class="d-flex ev-pagination justify-content-center mt-3">
                                             {{ $products->links() }}
                                         </div>
                                     @endif
