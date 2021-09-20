@@ -1,5 +1,5 @@
 <div class="form-group {{ $class }}">
-    @if(!empty($label))
+    @if (!empty(trim($label)))
         <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
     @endif
 

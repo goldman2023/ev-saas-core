@@ -64,7 +64,9 @@
     </style>
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
 
+
     @livewireStyles
+    <link rel="stylesheet" href="{{ static_asset('/front/icon-set/style.css') }}">
 
 
     <script src="{{ mix('js/app.js', 'themes/' . Theme::parent()) }}"></script>
