@@ -7,10 +7,8 @@
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
     </section>
 
-
-
-    <section class="space-2">
-        <x-default.products.product-list slider="false">
+   <section class="space-2">
+        <x-default.products.product-list :slider="false">
         </x-default.products.product-list>
     </section>
 
