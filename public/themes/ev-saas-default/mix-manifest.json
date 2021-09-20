@@ -1,9 +1,9 @@
 {
-    "/js/app.js": "/js/app.js?id=dd641934f2a4d66f6f96",
-    "/js/aiz-core.js": "/js/aiz-core.js?id=f4f72135450282545604",
+    "/js/app.js": "/js/app.js?id=c6cb7c8f957c22002e29",
+    "/js/aiz-core.js": "/js/aiz-core.js?id=2c938e870fe34cb8eda5",
     "/js/vue.js": "/js/vue.js?id=1b1a325ab99d4df64a29",
-    "/css/app.css": "/css/app.css?id=97f58c2177705440d2ee",
-    "/images/index.php": "/images/index.php?id=09e093847e43b5fc825b",
+    "/css/app.css": "/css/app.css?id=d7c002bcf577692b8257",
+    "/images/photo-placeholder.jpg": "/images/photo-placeholder.jpg?id=c540fedd6648ee97ee23",
     "/vendor/hs.autocomplete-local-search.js": "/vendor/hs.autocomplete-local-search.js?id=d6efbadfe0a506f78ff9",
     "/vendor/hs.chartjs.js": "/vendor/hs.chartjs.js?id=6a7790d7d25d49944b21",
     "/vendor/hs.circles.js": "/vendor/hs.circles.js?id=2704059456c0e0af718d",
@@ -24,5 +24,6 @@
     "/vendor/hs.sortable.js": "/vendor/hs.sortable.js?id=98f9e6d92136b2ec923c",
     "/vendor/hs.tagify.js": "/vendor/hs.tagify.js?id=0c7a05165a6bda77fbfe",
     "/vendor/hs.typed.js": "/vendor/hs.typed.js?id=4a40f50dfbcbf494a534",
-    "/vendor/hs.validation.js": "/vendor/hs.validation.js?id=8d14b64b36585c44997a"
+    "/vendor/hs.validation.js": "/vendor/hs.validation.js?id=8d14b64b36585c44997a",
+    "/vendor/hs.daterangepicker.js": "/vendor/hs.daterangepicker.js?id=4d330686b171f6a95b2a"
 }

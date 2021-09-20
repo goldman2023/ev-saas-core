@@ -218,15 +218,15 @@ class Product extends Model
      * @return array*
      */
     public function getImagesAttribute() {
-        $photos_idx = explode(',', $this->photos);
+        $photos_idx = explode(',', $this->attributes['photos']);
         $photos = [];
         $data = [
             'thumbnail' => [],
             'gallery' => []
         ];
 
-        if(!empty($this->thumbnail_img)) {
-            array_unshift($photos_idx, $this->thumbnail_img);
+        if(!empty($this->attributes['thumbnail_img'])) {
+            array_unshift($photos_idx, $this->attributes['thumbnail_img']);
         }
 
         if(!empty($photos_idx)) {
@@ -244,7 +244,7 @@ class Product extends Model
                     $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
                 }
 
-                if($photo->id == $this->thumbnail_img) {
+                if($photo->id === $this->attributes['thumbnail_img']) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,
                         'url' => $url

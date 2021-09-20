@@ -189,6 +189,31 @@
             });
         });
 
+        document.addEventListener('toastIt', async function (event) {
+            let content = event.detail.content;
+            let id = event.detail.id;
+
+            $(id).find('.toast-body').text(content);
+
+            $(id).toast({
+                delay: 3000
+            });
+
+            $(id).toast('show');
+        });
+
+        document.addEventListener('set-variations-data', async function (event) {
+            let component = event.detail.component;
+            let target = event.detail.target;
+
+            /* Set file manager */
+            $(target+' .custom-file-manager').each(function(index, element) {
+                let input = $(element).find('input.selected-files');
+                component.set(input.attr('name'), $(input).val()); // set livewire
+            });
+
+            component.setVariationsData();
+        });
         document.addEventListener('validate-step', async function (event) {
             let component = event.detail.component;
             let method = event.detail.method;

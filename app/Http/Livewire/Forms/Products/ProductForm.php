@@ -28,7 +28,6 @@ class ProductForm extends Component
 
     public Product $product;
     public array $attributes;
-    public array $variations;
     public $rows;
 
 
@@ -101,12 +100,9 @@ class ProductForm extends Component
         if($product) {
             $this->product = $product;
             $this->action = 'update';
-
-            $this->variations = $this->product->variations()->get()->toArray();
         } else {
             $this->product = new Product();
             $this->action = 'insert';
-            $this->variations = [];
         }
         $this->product->slug = '';
         $this->product->is_quantity_multiplied = 1;
@@ -362,11 +358,6 @@ class ProductForm extends Component
         });
 
         return $atts_for_variations;
-    }
-
-    public function saveVariations() {
-        $this->emit('saveVariations');
-        $this->dispatchBrowserEvent('preventProductVariationsModalFade');
     }
 
     public function dehydrate()

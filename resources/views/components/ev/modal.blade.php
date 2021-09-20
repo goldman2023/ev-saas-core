@@ -20,7 +20,7 @@
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="modal-body {{ $bodyClass }}">
+            <div class="modal-body {{ $bodyClass }}" {{ $attributes }}>
                 {!! $slot !!}
             </div>
             <!-- End Body -->

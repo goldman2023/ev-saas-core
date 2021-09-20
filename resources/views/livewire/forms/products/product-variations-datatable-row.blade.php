@@ -4,7 +4,8 @@
                              selectedFile="{{ $row->image ?? null }}"
                              errorBagName="rows.{{ $row->name }}"
                              :multiple="false"
-                             :sortable="false">
+                             :sortable="false"
+                             wire-type="defer">
     </x-ev.form.file-selector>
 </x-livewire-tables::bs4.table.cell>
 
@@ -42,7 +43,7 @@ if($this->attributes->isNotEmpty()) {
                      type="number"
                      min="0"
                      error-bag-name="rows.{{ $row->name }}"
-                     value="{{ $row->price ?: 0 }}"
+                     value="{{ ($row->price ?? null) ?: 0 }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>
@@ -52,7 +53,7 @@ if($this->attributes->isNotEmpty()) {
                      type="number"
                      min="0"
                      error-bag-name="rows.{{ $row->name }}.temp_stock"
-                     value="{{ $row->temp_stock->qty ?: 0 }}"
+                     value="{{ ($row->temp_stock->qty ?? null) ?: 0 }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>
@@ -61,7 +62,7 @@ if($this->attributes->isNotEmpty()) {
     <x-ev.form.input name="rows.{{ $row->name }}.temp_stock.sku"
                      type="text"
                      error-bag-name="rows.{{ $row->name }}.temp_stock"
-                     value="{{ $row->temp_stock->sku ?: '' }}"
+                     value="{{ ($row->temp_stock->sku ?? null) ?: '' }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>

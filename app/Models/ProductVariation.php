@@ -27,13 +27,13 @@ class ProductVariation extends Model
     use AttributeTrait;
 
     protected $fillable = ['product_id', 'variant', 'image', 'price'];
-    protected $visible = ['id', 'product_id', 'variant', 'image', 'price', 'name', 'temp_stock'];
+    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'temp_stock'];
+    protected $appends = ['name', 'image_url', 'temp_stock'];
 
 
     public function product()
@@ -71,36 +71,30 @@ class ProductVariation extends Model
         return $name;
     }
 
-    /**
-     * Set the Temp Stock
-     *
-     * @param  string  $value
-     * @return void
-     */
     public function setTempStockAttribute($value)
     {
         $this->attributes['temp_stock'] = $value;
     }
 
     public function getTempStockAttribute() {
+        if(!isset($this->attributes['temp_stock'])) {
+            $stock = $this->stock()->first();
+
+            return $stock ?: collect([
+                'qty' => 0,
+                'sku' => ''
+            ]);
+        }
+
         return $this->attributes['temp_stock'];
     }
 
-    public function getImageAttribute() {
-        $url = '';
-
-        if(!empty($this->image ?? null)) {
-            $url = str_replace('tenancy/assets/', '', my_asset($this->image)); /* TODO: This is temporary fix */
-
-            if(config('imgproxy.enabled') == true) {
-                // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
-                // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
-                // TODO: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
-                $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
-            }
+    public function getImageUrlAttribute() {
+        if(!empty($this->attributes['image'] ?? null)) {
+            return uploaded_asset($this->attributes['image']);
         }
 
-        return $url;
+        return '';
     }
 
     // START: Casts section

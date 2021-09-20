@@ -463,10 +463,7 @@
                                                     :emptyMessage="translate('Please generate all variations or add them manually.')"
                                                     :product="$this->product"
                                                     :variation-attributes="$this->variations_attributes"
-                                                    :variations="$this->variations">
-                                                    <div class="btn btn-primary mt-3 ml-auto" wire:click="saveVariations()">
-                                                        {{ translate('Save variations') }}
-                                                    </div>
+                                                    wire-target="setVariationsData">
                                                 </livewire:forms.products.product-variations-datatable>
 
 
@@ -544,7 +541,6 @@
             </div>
         </div>
     @endif
-
 
     <!-- Message Body -->
     <x-ev.alert id="successMessageContent" class="{{ !$insert_success && !$update_success ? 'd-none':'' }}"

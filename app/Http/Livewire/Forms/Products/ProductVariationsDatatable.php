@@ -16,12 +16,20 @@ class ProductVariationsDatatable extends DataTableComponent
     protected string $pageName = 'product_variations';
     protected string $tableName = 'product_variations';
 
+    public $dataType = 'product_variations';
+    public string $primaryKey = 'name';
     public $product;
     public $attributes;
     public $variations;
     public $all_combinations;
     public $rows;
-    public $listeners = ['saveVariations' => 'setVariationsData'];
+    public $buttons;
+    public $wireTarget;
+    public $wireLoadingClass;
+    protected $listeners = [
+        'refreshDatatable' => '$refresh',
+        'saveVariations' => 'setVariationsData'
+    ];
 
 
     /**
@@ -29,27 +37,22 @@ class ProductVariationsDatatable extends DataTableComponent
      *
      * @return void
      */
-    public function mount($product = null, $variationAttributes = [], $variations = [])
+    public function mount($product = null, $variationAttributes = [], $buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3')
     {
         parent::mount();
 
         $this->product = $product;
         $this->attributes = collect($variationAttributes);
-        $this->variations = collect($variations);
+        $this->variations = collect($this->product->variations()->get()->keyBy('name')->toArray());
+
+
         $this->all_combinations = collect([]);
         $this->rows = collect([]);
+        $this->buttons = $buttons;
+        $this->wireTarget = $wireTarget;
+        $this->wireLoadingClass = $wireLoadingClass;
 
-        //$this->listeners = count($this->listeners ?? []) > 0 ? array_merge($this->listeners, ['saveVariations' => 'setVariationsData']) : ['saveVariations' => 'setVariationsData'];
-        //dd($this->listeners);
-        /*if($this->attributes->isNotEmpty()) {
-            foreach($this->attributes as $key => $att) {
-                $this->attributes[$key]->attribute_values = collect($this->attributes[$key]->attribute_values)->keyBy('id')->map(function($item) {
-                    return (object) $item;
-                });
-            }
-        }*/
-
-        // Creates all combinations.
+        // Create or Fetch all combinations.
         $this->createAllCombinations();
 
         // TODO: Fix the logic to use all only on bulk action and ADD single variation addition
@@ -77,6 +80,36 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->dispatchBrowserEvent('initProductForm');
     }
 
+    /*public function hydrateVariations() {
+        $this->variations = $this->variations->keyBy('name')->map(function($item) {
+            $item = (object) $item;
+            $item->temp_stock = (object) $item->temp_stock;
+            return $item;
+        });
+    }
+    public function dehydrateVariations() {
+        $this->variations = $this->variations->keyBy('name')->map(function($item) {
+            $item = (object) $item;
+            $item->temp_stock = (object) $item->temp_stock;
+            return $item;
+        });
+    }
+
+    public function hydrateAllCombinations() {
+        $this->all_combinations = $this->all_combinations->keyBy('name')->map(function($item) {
+            $item = (object) $item;
+            $item->temp_stock = (object) $item->temp_stock;
+            return $item;
+        });
+    }
+    public function dehydrateAllCombinations() {
+        $this->all_combinations = $this->all_combinations->keyBy('name')->map(function($item) {
+            $item = (object) $item;
+            $item->temp_stock = (object) $item->temp_stock;
+            return $item;
+        });
+    }*/
+
     public function dehydrateRows()
     {
         $this->rows = $this->rows->map(function($item) {
@@ -95,11 +128,13 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public function useAllVariations() {
         // Merge all combinations with currently added variations.
-        $this->rows = $this->all_combinations->keyBy('name')->merge($this->variations->keyBy('name'))->map(function($item) {
+
+        $this->rows = $this->all_combinations->merge($this->variations)->map(function($item) {
             $item = (object) $item;
             $item->temp_stock = (object) $item->temp_stock;
             return $item;
         });
+
     }
 
     public function createAllCombinations()
@@ -107,6 +142,7 @@ class ProductVariationsDatatable extends DataTableComponent
         $variations = collect([]);
         $matrix = EV::generateAllVariations($this->attributes);
 
+        // Get all possible combinations
         if(!empty($matrix)) {
             foreach($matrix as $index => $combo) {
                 if(empty($combo)) {
@@ -114,7 +150,7 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
 
                 $variation = new ProductVariation();
-                $variation->id = $index; // THIS IS JUST TEMPORARY! Remember to set ID to null before saving variations! Some ID is necessary for wire:key
+                $variation->id = null; // THIS IS JUST TEMPORARY! Remember to set ID to null before saving variations! Some ID is necessary for wire:key
                 $variation->product_id = $this->product->id;
 
                 $variant_data = [];
@@ -131,9 +167,11 @@ class ProductVariationsDatatable extends DataTableComponent
                 $variation->temp_stock = new ProductStock();
                 $variation->temp_stock->qty = 0;
                 $variation->temp_stock->sku = '';
-                $this->all_combinations->push($variation);
+                $this->all_combinations->push($variation->toArray()); // Turn the Model to Array!
             }
         }
+
+        $this->all_combinations = $this->all_combinations->keyBy('name');
 
         //$this->rows = collect($this->variations);
 
@@ -187,35 +225,50 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public function rowView(): string
     {
-        return 'livewire.forms.products.product-variations-datatable';
+        return 'livewire.forms.products.product-variations-datatable-row';
     }
 
     public function setVariationsData() {
+
         if($this->rows->isNotEmpty()) {
+            $this->variations = collect([]);
+
             foreach ($this->rows as $index => $variation) {
-                $temp_stock = $variation->temp_stock;
-                unset($variation->temp_stock);
-                $variation->id = null;
+                if(empty($variation->id)) {
+                    // New variation - Insert
+                    $temp_stock = $variation->temp_stock;
+                    unset($variation->temp_stock);
 
-                $variation_model = new ProductVariation();
-                $variation_model->fill((array) $variation);
-                $variation_model->save();
+                    $variation_model = new ProductVariation();
+                    $variation_model->fill((array) $variation);
+                    $variation_model->save();
 
-                // Save Product Variation Stock
-                $this->setProductVariationStocks(false, $variation_model, $temp_stock);
+                    // Save Product Variation Stock
+                    $this->setProductVariationStocks(false, $variation_model, $temp_stock);
+                    $this->variations->push($variation_model->toArray());
+                } else {
+                    // Old variation - Update
+                    $variation_model = ProductVariation::find($variation->id);
+                    $variation_model->image = $variation->image;
+                    $variation_model->price = $variation->price;
+                    $variation_model->save();
 
-                $this->rows[$index] = $variation_model;
+                    $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
+                    $this->variations->push($variation_model->toArray());
+                }
+
+                $this->variations = $this->variations->keyBy('name');
+                $this->useAllVariations();
+
+                $this->dispatchBrowserEvent('toastIt', ['id' => '#product-variations-toast', 'content' => translate('Variations successfully updated!')]);
             }
         }
-
-
     }
 
     protected function setProductVariationStocks($iterate = false, $variation_model = [], $stock = []) {
         if(!$iterate && !empty($variation_model) && !empty($stock)) {
             $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => 'App\Models\ProductVariation']);
-            $product_stock->price = $variation_model->price;
-            $product_stock->qty = (float) $stock->qty;
+            $product_stock->qty = (float) ($stock->qty ?? 0);
             $product_stock->sku = $stock->sku;
             $product_stock->save();
         } else if($iterate) {
@@ -229,6 +282,10 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
             }
         }
+    }
 
+    public function modalsView(): string
+    {
+        return 'livewire.forms.products.product-variations-datatable-footer';
     }
 }
