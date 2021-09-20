@@ -39,6 +39,7 @@
     <section class="mb-4 pt-3">
         <div class="container sm-px-0">
             <form class="___class_+?2___" id="search-form" action="" method="GET">
+                <input type="hidden" name="content" value="{{$content}}" />
                 <div class="row">
                     <div class="col-xl-3">
                         <div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
@@ -98,6 +99,10 @@
                                         </ul>
                                     </div>
                                 </div>
+
+                                @if($content != null)
+                                    <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
+                                @endif                                
                             </div>
                         </div>
                     </div>
@@ -180,6 +185,7 @@
                                     </div>
                                 </div>
                                 @if ($product_count > 0)
+                                
                                     <div
                                         class="row gutters-5 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-4 row-cols-md-3 row-cols-2 mt-2">
                                         @foreach ($products as $key => $product)
@@ -302,3 +308,38 @@
     </section>
 
 @endsection
+
+@push('footer_scripts')
+    <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs.daterangepicker.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs.ion-range-slider.js', false, true) }}"></script>
+    <script>
+            // INITIALIZATION OF SELECT PICKER
+            // =======================================================
+            $('.js-custom-select').each(function () {
+                var select2 = $.HSCore.components.HSSelect2.init($(this));
+            });
+            // INITIALIZATION OF ION RANGE SLIDER
+            // =======================================================
+            $('.js-ion-range-slider').each(function () {
+                $.HSCore.components.HSIonRangeSlider.init($(this));
+            });
+            // INITIALIZATION OF DATERANGEPICKER
+            // =======================================================
+            $.HSCore.components.HSDaterangepicker.init($('.js-daterangepicker-times'));
+
+            $('.js-daterangepicker-times').on('apply.daterangepicker', function(ev, picker) {
+                filter();
+            });
+            $('.js-daterangepicker-times').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+                filter();
+            });
+    </script>
+@endpush
+
+<script type="text/javascript">
+    function filter() {
+        $('#search-form').submit();
+    }
+</script>
