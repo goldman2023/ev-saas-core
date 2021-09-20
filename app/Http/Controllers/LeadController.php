@@ -37,9 +37,15 @@ class LeadController extends Controller
     {
         //
         $lead = new Lead($request->all());
+        /*  TODO: Create notification for new leads */
+        return redirect()->route('leads.success');
 
-        return redirect()->back();
+    }
 
+    public function success()
+    {
+        //
+        return view('frontend.thank_you_pages.thank-you-leads');
     }
 
     /**

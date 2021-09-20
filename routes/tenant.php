@@ -386,6 +386,8 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
+    /* Leads Management - BY EIM */
+    Route::get('leads/success', 'LeadController@success')->name('leads.success');
     Route::resource('leads', 'LeadController');
 
     // Tenant Management routes - added from SaaS Boilerplate
