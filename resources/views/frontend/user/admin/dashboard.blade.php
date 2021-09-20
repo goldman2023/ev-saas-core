@@ -6,6 +6,37 @@
         <x-free-member-notification> </x-free-member-notification>
     </div>
 
+    <section class="stats mb-3">
+        <div class="row">
+            <div class="col-4">
+                <x-default.dashboard.widgets.leads-widget>
+
+                <a href="{{ route('leads.index') }}">
+                    {{ translate('View all') }}
+                </a>
+
+                </x-default.dashboard.widgets.leads-widget>
+
+            </div>
+
+            <div class="col-4">
+                    <x-default.dashboard.widgets.products-widget>
+                        <a href="{{ route('ev-products.index') }}">
+                            {{ translate('View all') }}
+                        </a>
+                    </x-default.dashboard.widgets.products-widget>
+            </div>
+
+            <div class="col-4">
+                <x-default.dashboard.widgets.orders-widget>
+                    <a href="{{ route('orders.index') }}">
+                        {{ translate('View all') }}
+                    </a>
+                </x-default.dashboard.widgets.orders-widget>
+        </div>
+        </div>
+    </section>
+
     <x-default.dashboard.dashboard-summary.admin>
     </x-default.dashboard.dashboard-summary.admin>
 
@@ -15,7 +46,8 @@
                 {{-- TODO : make this company name dynamic --}}
                 <div class="h5 fw-600">{{ translate('Products') }} </div>
                 <p>{{ translate('Manage & organize your inventory and products') }}</p>
-                <a href="{{ route('ev-products.index') }}" class="btn btn-soft-primary">{{ translate('Manage Products') }}</a>
+                <a href="{{ route('ev-products.index') }}"
+                    class="btn btn-soft-primary">{{ translate('Manage Products') }}</a>
             </div>
         </div>
 

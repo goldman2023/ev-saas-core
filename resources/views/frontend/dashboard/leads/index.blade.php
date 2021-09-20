@@ -4,28 +4,9 @@
 @section('panel_content')
     <div class="row">
         <div class="col-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body">
-                  <h6 class="card-subtitle mb-2">{{ translate('Total Leads') }}</h6>
+            <x-default.dashboard.widgets.leads-widget></x-default.dashboard.widgets.leads-widget>
+         </div>
 
-                  <div class="row align-items-center gx-2">
-                    <div class="col">
-                      <span class="js-counter display-4 text-dark" data-value="24">
-                          {{ App\Models\Lead::count() }}
-                      </span>
-                      <span class="text-body font-size-sm ml-1">{{ translate('from') }} {{ App\Models\Lead::count() }}</span>
-                    </div>
-
-                    <div class="col-auto">
-                      <span class="badge badge-soft-success p-1">
-                        <x-heroicon-o-trending-up class="ev-icon__small" /> {{ App\Models\Lead::trend() }} %
-                      </span>
-                    </div>
-                  </div>
-                  <!-- End Row -->
-                </div>
-              </div>
-        </div>
     </div>
     <!-- Card -->
     <div class="card">
