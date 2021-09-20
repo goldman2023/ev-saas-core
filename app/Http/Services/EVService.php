@@ -31,6 +31,13 @@ class EVService
                         'roles' => [],
                     ],
                     [
+                        'label' => translate('Leads'),
+                        'icon' => 'heroicon-o-calendar',
+                        'route' => route('leads.index'),
+                        'is_active' => areActiveRoutes(['leads']),
+                        'roles' => ['admin'],
+                    ],
+                    [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-calendar',
                         'route' => route('purchase_history.index'),

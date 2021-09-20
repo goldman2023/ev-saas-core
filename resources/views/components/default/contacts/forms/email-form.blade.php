@@ -52,6 +52,8 @@
             </div>
         </div>
 
+        <input type="hidden" name="lead_url" value="{{ Request::fullUrl() }}">
+
         <button type="submit" class="btn btn-block btn-primary transition-3d-hover">
             {{ translate('Send Request') }}
         </button>

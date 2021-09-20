@@ -267,6 +267,7 @@ return [
         'DesignSettings' => App\Facades\DesignSettings::class,
         'BusinessSettings' => App\Facades\BusinessSettings::class,
         'Theme' => Qirolab\Theme\Theme::class,
+        'Carbon' => Illuminate\Support\Carbon::class,
     ],
 
 ];
