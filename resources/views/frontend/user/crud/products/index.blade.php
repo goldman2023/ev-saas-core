@@ -37,7 +37,7 @@
                                 </a>
                             </td>
                             <td><a href="{{ route('ev-products.edit', $product->slug) }}">{{ $product->name }}</a></td>
-                            <td>{{ $product->category()->name ?? '' }}</td>
+                            <td></td>
                             <td>{{ single_price($product->unit_price) }}</td>
                             <td>
                                 <label class="toggle-switch d-flex align-items-center " for="customSwitch2">

@@ -50,12 +50,13 @@ class Category extends Model
     public function classified_products(){
     	return $this->hasMany(CustomerProduct::class);
     }
+
     protected static function boot()
     {
         parent::boot();
 
         static::addGlobalScope('alphabetical', function (Builder $builder) {
-            $builder->orderBy('name', 'asc');
+            $builder->orderBy('name', 'ASC');
         });
     }
 
@@ -71,7 +72,20 @@ class Category extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->morphedByMany(Product::class, 'subject', 'category_relationships');
+    }
+
+    public function companies()
+    {
+        return $this->morphedByMany(Shop::class, 'subject', 'category_relationships');
+    }
+
+    // TODO: Create Category groups. Each category group is related to specific content types.
+    // TODO: Get rid of unnecessary categories tables in DB, like: blog_categories, home_categories.
+    // TODO: Make sure in future we only use following tables: categories, category_translations, category_relationships, category_groups (not created), category_group_relationships (not created)
+    public function news()
+    {
+        return $this->belongsTo(Blog::class, 'category_id');
     }
 
     public function categories()
@@ -87,15 +101,5 @@ class Category extends Model
     public function parentCategory()
     {
         return $this->belongsTo(Category::class, 'parent_id');
-    }
-
-    public function companies()
-    {
-        return $this->belongsToMany(Shop::class, 'company_category');
-    }
-
-    public function news()
-    {
-        return $this->belongsTo(Blog::class, 'category_id');
     }
 }

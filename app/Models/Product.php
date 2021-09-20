@@ -175,9 +175,9 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->morphToMany(Category::class, 'subject', 'category_relationships');
     }
 
     public function brand()

@@ -6,6 +6,7 @@ use App\Models\AttributeRelationship;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use App\Models\Attribute;
+use App\Models\AttributeGroup;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
 use OwenIt\Auditing\Models\Audit;
@@ -46,8 +47,9 @@ class AttributeController extends Controller
                 $content_type = 'App\Models\Event';
                 break;
         }
+        $attribute_groups = AttributeGroup::where('content_type', $content_type)->orderBy('created_at', 'desc')->get();
         $attributes = Attribute::where('content_type', $content_type)->orderBy('created_at', 'desc')->get();
-        return view('backend.attribute.index', compact(['attributes', 'content_type', 'slug']));
+        return view('backend.attribute.index', compact(['attributes', 'attribute_groups', 'content_type', 'slug']));
     }
 
     /**
@@ -74,6 +76,22 @@ class AttributeController extends Controller
         $attribute->name = $request->name;
         $attribute->type = $request->type;
 
+        //Attribute Group
+        if ($request->group != null) {
+            if (strpos($request->group, 'existing_group_') !== false) {
+                //If group exist
+                $attribute->group = substr($request->group, 15);
+            }else {
+                //If group not exist, create new one
+                $attribute_group = new AttributeGroup;
+                $attribute_group->name = $request->group;
+                $attribute_group->content_type = $request->content_type;
+                $attribute_group->save();
+
+                $attribute->group = $attribute_group->id;
+            }
+        }        
+
         if ($request->filterable) {
             $attribute->filterable = 1;
         }
@@ -92,7 +110,7 @@ class AttributeController extends Controller
             $custom_properties["unit"] = '';
 
             $attribute->custom_properties = $custom_properties;
-        }  else if($attribute->type === "dropdown") {
+        }  else if($attribute->type === "dropdown" || $attribute->type === "image") {
             $custom_properties["multiple"] = false;
             $attribute->custom_properties = $custom_properties;
         } else if($attribute->type === "date") {
@@ -176,7 +194,7 @@ class AttributeController extends Controller
             $custom_properties["unit"] = $request->unit ?? '';
 
             $attribute->custom_properties = $custom_properties;
-        } else if($attribute->type === "dropdown") {
+        } else if($attribute->type === "dropdown" || $attribute->type === "image") {
             $custom_properties["multiple"] = !empty($request->multiple);
             $attribute->custom_properties = $custom_properties;
         } else if($attribute->type === "date") {

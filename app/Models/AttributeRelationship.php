@@ -10,6 +10,8 @@ class AttributeRelationship extends Model implements \OwenIt\Auditing\Contracts\
 {
     use HasFactory, Auditable;
 
+    protected $fillable = ['subject_type','subject_id','attribute_id','attribute_value_id'];
+
     protected $casts = [
         'for_variations' => 'boolean'
     ];
