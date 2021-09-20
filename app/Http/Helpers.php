@@ -1,5 +1,6 @@
 <?php
 
+use App\Facades\BusinessSettings;
 use App\Models\Currency;
 use App\Models\BusinessSetting;
 use App\Models\Product;
@@ -202,7 +203,7 @@ if (!function_exists('default_language')) {
 if (!function_exists('convert_to_usd')) {
     function convert_to_usd($amount)
     {
-        $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
+        $business_settings = get_setting('system_default_currency');
         if ($business_settings != null) {
             $currency = Currency::find($business_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'USD')->first()->exchange_rate;
@@ -213,7 +214,7 @@ if (!function_exists('convert_to_usd')) {
 if (!function_exists('convert_to_kes')) {
     function convert_to_kes($amount)
     {
-        $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
+        $business_settings = get_setting('system_default_currency');
         if ($business_settings != null) {
             $currency = Currency::find($business_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'KES')->first()->exchange_rate;
@@ -226,7 +227,7 @@ if (!function_exists('filter_products')) {
     function filter_products($products)
     {
         $verified_sellers = verified_sellers_id();
-        if (BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1) {
+        if (get_setting('vendor_system_activation') == 1) {
             return $products->where('published', '1')->orderBy('created_at', 'desc')->where(function ($p) use ($verified_sellers) {
                 $p->where('added_by', 'admin')->orWhere(function ($q) use ($verified_sellers) {
                     $q->whereIn('user_id', $verified_sellers);
@@ -244,7 +245,7 @@ if (!function_exists('get_cached_products')) {
     {
         $products = \App\Models\Product::where('published', 1);
         $verified_sellers = verified_sellers_id();
-        if (BusinessSetting::where('type', 'vendor_system_activation')->first()->value == 1) {
+        if (get_setting('vendor_system_activation') == 1) {
             $products =  $products->where(function ($p) use ($verified_sellers) {
                 $p->where('added_by', 'admin')->orWhere(function ($q) use ($verified_sellers) {
                     $q->whereIn('user_id', $verified_sellers);
@@ -279,22 +280,16 @@ if (!function_exists('verified_sellers_id')) {
 if (!function_exists('convert_price')) {
     function convert_price($price)
     {
-        $business_settings = Cache::remember('system_default_currency_cache', 86400, function () {
-            return BusinessSetting::where('type', 'system_default_currency')->first();
-        });
+        $system_default_currency = get_setting('system_default_currency');
 
-
-
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
-            $price = floatval($price) / floatval($currency->exchange_rate);
+        if ($system_default_currency != null) {
+            $currency = Currency::find($system_default_currency);
+            $price = (float) $price / (float) $currency->exchange_rate;
         }
 
-        $code = Cache::remember('system_default_currency', env('ttl_redis_cache', 60), function () {
-            return \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        $code = Cache::remember(tenant('id').'_system_default_currency', config('cache.stores.redis.ttl_redis_cache', 60), function () {
+            return \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
         });
-
-
 
         if (Session::has('currency_code')) {
             $currency = Currency::where('code', Session::get('currency_code', $code))->first();
@@ -302,7 +297,7 @@ if (!function_exists('convert_price')) {
             $currency = Currency::where('code', $code)->first();
         }
 
-        $price = floatval($price) * floatval($currency->exchange_rate);
+        $price = (float) $price * (float) $currency->exchange_rate;
 
         return $price;
     }
@@ -312,13 +307,13 @@ if (!function_exists('convert_price')) {
 if (!function_exists('format_price')) {
     function format_price($price)
     {
-        if (BusinessSetting::where('type', 'decimal_separator')->first()->value == 1) {
-            $fomated_price = number_format($price, BusinessSetting::where('type', 'no_of_decimals')->first()->value);
+        if (get_setting('decimal_separator') == 1) {
+            $fomated_price = number_format($price, get_setting('no_of_decimals'));
         } else {
-            $fomated_price = number_format($price, BusinessSetting::where('type', 'no_of_decimals')->first()->value, ',', ' ');
+            $fomated_price = number_format($price, get_setting('no_of_decimals'), ',', ' ');
         }
 
-        if (BusinessSetting::where('type', 'symbol_format')->first()->value == 1) {
+        if (get_setting('symbol_format') == 1) {
             return currency_symbol() . $fomated_price;
         }
         return $fomated_price . currency_symbol();
@@ -501,8 +496,8 @@ if (!function_exists('home_discounted_base_price')) {
 if (!function_exists('currency_symbol')) {
     function currency_symbol()
     {
-        $code = Cache::remember('system_default_currency', env('ttl_redis_cache', 60), function () {
-            return \App\Models\Currency::findOrFail(\App\Models\BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        $code = Cache::remember('system_default_currency',  config('cache.stores.redis.ttl_redis_cache', 60), function () {
+            return \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
         });
 
         if (Session::has('currency_code')) {
@@ -708,12 +703,12 @@ if (!function_exists('brandsOfCategory')) {
 if (!function_exists('convertPrice')) {
     function convertPrice($price)
     {
-        $business_settings = BusinessSetting::where('type', 'system_default_currency')->first();
+        $business_settings = get_setting('system_default_currency')->first();
         if ($business_settings != null) {
             $currency = Currency::find($business_settings->value);
             $price = floatval($price) / floatval($currency->exchange_rate);
         }
-        $code = Currency::findOrFail(BusinessSetting::where('type', 'system_default_currency')->first()->value)->code;
+        $code = Currency::findOrFail(get_setting('system_default_currency'))->code;
         if (Session::has('currency_code')) {
             $currency = Currency::where('code', Session::get('currency_code', $code))->first();
         } else {
@@ -786,10 +781,10 @@ function getShippingCost($index)
 
     //Calculate Shipping Cost
     if (get_setting('shipping_type') == 'flat_rate') {
-        $calculate_shipping = \App\Models\BusinessSetting::where('type', 'flat_rate_shipping_cost')->first()->value;
+        $calculate_shipping = get_setting('flat_rate_shipping_cost');
     } elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
         if (!empty($admin_products)) {
-            $calculate_shipping = \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value;
+            $calculate_shipping = get_setting('shipping_cost_admin');
         }
         if (!empty($seller_products)) {
             foreach ($seller_products as $key => $seller_product) {
@@ -814,7 +809,7 @@ function getShippingCost($index)
         return $calculate_shipping / count(Session::get('cart'));
     } elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
         if ($product->added_by == 'admin') {
-            return \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value / count($admin_products);
+            return get_setting('shipping_cost_admin') / count($admin_products);
         } else {
             return \App\Models\Shop::where('user_id', $product->user_id)->first()->shipping_cost / count($seller_products[$product->user_id]);
         }
@@ -988,12 +983,13 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        $cache_key = tenant('id') . '_business_settings_' . $key;
+        return BusinessSettings::get($key, $default);
+        /*$cache_key = tenant('id') . '_business_settings_' . $key;
         $setting = Cache::get($cache_key, null);
 
         // If cache is empty, get setting from DB and store it in cache if not null
         if (empty($setting)) {
-            $setting = BusinessSetting::where('type', $key)->first();
+            $setting = get_setting($key)->first();
 
             // Cache the setting if it's found in DB
             if (!empty($setting)) {
@@ -1002,9 +998,7 @@ if (!function_exists('get_setting')) {
             }
 
             return !empty($setting) ? $setting->value : $default;
-        }
-
-        return $setting;
+        }*/
     }
 }
 
@@ -1156,8 +1150,8 @@ if (!function_exists('checkout_done')) {
             }
         }
         if (\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first() == null || !\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
-            if (BusinessSetting::where('type', 'category_wise_commission')->first()->value != 1) {
-                $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+            if (get_setting('category_wise_commission') != 1) {
+                $commission_percentage = get_setting('vendor_commission');
                 foreach ($order->orderDetails as $key => $orderDetail) {
                     $orderDetail->payment_status = 'paid';
                     $orderDetail->save();

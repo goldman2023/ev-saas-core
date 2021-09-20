@@ -15,6 +15,8 @@ class Attribute extends Model
         'custom_properties' => 'object'
     ];
 
+    protected $appends = ['is_predefined'];
+
     public static function boot()
     {
         parent::boot();
@@ -26,6 +28,15 @@ class Attribute extends Model
                 $value->delete();
             }
         });
+    }
+
+    /**
+     * Checks if attribute has one or multiple values
+     *
+     * @return bool
+     */
+    public function getIsPredefinedAttribute() {
+        return $this->type === 'dropdown' || $this->type === 'checkbox' || $this->type === 'radio';
     }
 
     public function attributes_relationship()

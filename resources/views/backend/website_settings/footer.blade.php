@@ -43,6 +43,9 @@
                                         @php echo get_setting('about_us_description'); @endphp
                                     </textarea>
     							</div>
+
+
+
     							<div class="text-right">
     								<button type="submit" class="btn btn-primary">{{ translate('Update') }}</button>
     							</div>
@@ -99,7 +102,7 @@
     									<input type="hidden" name="types[]" value="widget_one_labels">
     									<input type="hidden" name="types[]" value="widget_one_links">
     									@if (get_setting('widget_one_labels') != null)
-    										@foreach (json_decode(App\Models\BusinessSetting::where('type', 'widget_one_labels')->first()->value, true) as $key => $value)
+    										@foreach (get_setting( 'widget_one_labels') as $key => $value)
     											<div class="row gutters-5">
     												<div class="col-4">
     													<div class="form-group">
@@ -108,7 +111,7 @@
     												</div>
     												<div class="col">
     													<div class="form-group">
-    														<input type="text" class="form-control" placeholder="http://" name="widget_one_links[]" value="{{ json_decode(App\Models\BusinessSetting::where('type', 'widget_one_links')->first()->value, true)[$key] }}">
+    														<input type="text" class="form-control" placeholder="http://" name="widget_one_links[]" value="{{ get_setting( 'widget_one_links')[$key] }}">
     													</div>
     												</div>
     												<div class="col-auto">
@@ -175,6 +178,20 @@
                               @php echo get_setting('frontend_copyright_text'); @endphp
                           </textarea>
                   			</div>
+                    </div>
+                </div>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-from-label">{{translate('Show Footer bottom links?')}}</label>
+                            <div class="col-md-9">
+                              <label class="aiz-switch aiz-switch-success mb-0">
+                                <input type="hidden" name="types[]" value="enable_footer_bottom_links">
+                                <input type="checkbox" name="enable_footer_bottom_links" @if( get_setting('enable_footer_bottom_links') == 'on') checked @endif>
+                                <span></span>
+                              </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card shadow-none bg-light">

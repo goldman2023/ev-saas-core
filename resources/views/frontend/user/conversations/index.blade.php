@@ -1,15 +1,13 @@
 @extends('frontend.layouts.user_panel')
+@section('page_title', translate('Messages'))
 
 @section('panel_content')
-    <div class="aiz-titlebar mt-2 mb-4">
-      <div class="row align-items-center">
-          <div class="col-md-6">
-              <b class="h4">{{ translate('Requests')}}</b>
-          </div>
-      </div>
-    </div>
+
 
     <div class="card">
+        <div class="card-header">
+            <span class="h4">{{ translate('Messages')}}</span>
+        </div>
       <div class="card-body">
         <ul class="list-group list-group-flush">
           @foreach ($conversations as $key => $conversation)

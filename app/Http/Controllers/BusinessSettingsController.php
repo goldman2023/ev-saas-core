@@ -88,7 +88,7 @@ class BusinessSettingsController extends Controller
                 $this->overWriteEnvFile($type, $request[$type]);
         }
 
-        $business_settings = BusinessSetting::where('type', $request->payment_method.'_sandbox')->first();
+        $business_settings = get_setting($request->payment_method.'_sandbox');
         // dd($business_settings->type);
         if($business_settings != null){
             if ($request->has($request->payment_method.'_sandbox')) {
@@ -116,7 +116,7 @@ class BusinessSettingsController extends Controller
                 $this->overWriteEnvFile($type, $request[$type]);
         }
 
-        $business_settings = BusinessSetting::where('type', 'google_analytics')->first();
+        $business_settings = get_setting('google_analytics');
 
         if ($request->has('google_analytics')) {
             $business_settings->value = 1;
@@ -137,7 +137,7 @@ class BusinessSettingsController extends Controller
             $this->overWriteEnvFile($type, $request[$type]);
         }
 
-        $business_settings = BusinessSetting::where('type', 'google_recaptcha')->first();
+        $business_settings = get_setting('google_recaptcha');
 
         if ($request->has('google_recaptcha')) {
             $business_settings->value = 1;
@@ -164,7 +164,7 @@ class BusinessSettingsController extends Controller
                 $this->overWriteEnvFile($type, $request[$type]);
         }
 
-        $business_settings = BusinessSetting::where('type', 'facebook_chat')->first();
+        $business_settings = get_setting('facebook_chat');
 
         if ($request->has('facebook_chat')) {
             $business_settings->value = 1;
@@ -185,7 +185,7 @@ class BusinessSettingsController extends Controller
             $this->overWriteEnvFile($type, $request[$type]);
         }
 
-        $business_settings = BusinessSetting::where('type', 'facebook_comment')->first();
+        $business_settings = get_setting('facebook_comment');
         if(!$business_settings) {
             $business_settings = new BusinessSetting;
             $business_settings->type = 'facebook_comment';
@@ -208,7 +208,7 @@ class BusinessSettingsController extends Controller
                 $this->overWriteEnvFile($type, $request[$type]);
         }
 
-        $business_settings = BusinessSetting::where('type', 'facebook_pixel')->first();
+        $business_settings = get_setting('facebook_pixel');
 
         if ($request->has('facebook_pixel')) {
             $business_settings->value = 1;
@@ -286,7 +286,7 @@ class BusinessSettingsController extends Controller
             }
             array_push($form, $item);
         }
-        $business_settings = BusinessSetting::where('type', 'verification_form')->first();
+        $business_settings = get_setting('verification_form');
         $business_settings->value = json_encode($form);
         if($business_settings->save()){
             flash(translate("Verification form updated successfully"))->success();
@@ -304,12 +304,16 @@ class BusinessSettingsController extends Controller
                 $this->overWriteEnvFile('APP_TIMEZONE', $request[$type]);
             }
             else {
-                $business_settings = BusinessSetting::where('type', $type)->first();
+                $business_settings = get_setting($type);
                 $cache_key = tenant('id').'_business_settings_'.$type;
                 $value = is_array($request[$type]) ? json_encode($request[$type]) : $request[$type];
 
                 if(empty($business_settings)) {
                     // Create setting if it doesn't exist
+                    $business_settings = new BusinessSetting;
+                }
+
+                if(is_string($business_settings)) {
                     $business_settings = new BusinessSetting;
                 }
 
@@ -345,7 +349,7 @@ class BusinessSettingsController extends Controller
         }
 
 
-        $business_settings = BusinessSetting::where('type', $request->type)->first();
+        $business_settings = get_setting($request->type);
         if($business_settings!=null){
             if ($request->type == 'maintenance_mode' && $request->value == '1') {
                 if(env('DEMO_MODE') != 'On'){
@@ -399,12 +403,12 @@ class BusinessSettingsController extends Controller
 
     public function vendor_commission(Request $request)
     {
-        $business_settings = BusinessSetting::where('type', 'vendor_commission')->first();
+        $business_settings = get_setting('vendor_commission');
         return view('backend.sellers.seller_commission.index', compact('business_settings'));
     }
 
     public function vendor_commission_update(Request $request){
-        $business_settings = BusinessSetting::where('type', $request->type)->first();
+        $business_settings = get_setting($request->type);
         $business_settings->type = $request->type;
         $business_settings->value = $request->value;
         $business_settings->save();
@@ -418,7 +422,7 @@ class BusinessSettingsController extends Controller
     }
 
     public function shipping_configuration_update(Request $request){
-        $business_settings = BusinessSetting::where('type', $request->type)->first();
+        $business_settings = get_setting($request->type);
         $business_settings->value = $request[$request->type];
         $business_settings->save();
         return back();
@@ -430,7 +434,7 @@ class BusinessSettingsController extends Controller
 
     public function update_seo_setting(Request $request) {
         foreach($request->types as $key => $type) {
-            $business_settings = BusinessSetting::where('type', $type)->first();
+            $business_settings = get_setting($type);
             if($business_settings == null){
                 $business_settings = new BusinessSetting;
                 $business_settings->type = $type;

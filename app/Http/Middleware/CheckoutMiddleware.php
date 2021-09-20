@@ -17,7 +17,7 @@ class CheckoutMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (BusinessSetting::where('type', 'guest_checkout_active')->first()->value != 1) {
+        if (get_setting('guest_checkout_active') != 1) {
             if(Auth::check()){
                 return $next($request);
             }

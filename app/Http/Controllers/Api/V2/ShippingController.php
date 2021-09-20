@@ -31,10 +31,10 @@ class ShippingController extends Controller
             }
 
             if (get_setting('shipping_type') == 'flat_rate') {
-                $calculate_shipping = \App\Models\BusinessSetting::where('type', 'flat_rate_shipping_cost')->first()->value;
+                $calculate_shipping = get_setting('flat_rate_shipping_cost');
             } elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
                 if (!empty($admin_products)) {
-                    $calculate_shipping = \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value;
+                    $calculate_shipping = get_setting('shipping_cost_admin') ;
                 }
                 if (!empty($seller_products)) {
                     foreach ($seller_products as $key => $seller_product) {
@@ -81,7 +81,7 @@ class ShippingController extends Controller
 
             } elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
                 if ($product->added_by == 'admin') {
-                    $value =  \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value / count($admin_products);
+                    $value =  get_setting('shipping_cost_admin') / count($admin_products);
                 } else {
                     $value =  \App\Models\Shop::where('user_id', $product->user_id)->first()->shipping_cost / count($seller_products[$product->user_id]);
                 }

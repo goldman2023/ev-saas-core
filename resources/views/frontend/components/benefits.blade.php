@@ -2,48 +2,30 @@
 <div class="border-bottom bg-white">
     <div class="container space-2">
         <div class="row">
+            @for($i = 0; $i < 3; $i++)
             <div class="col-md-4 mb-7 mb-md-0">
                 <!-- Contacts -->
 {{--             TODO: Make this somehow dynamic    --}}
                 <div class="media">
                     <figure class="w-100 max-w-8rem mr-4">
-                        <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-65.svg" alt="SVG">
+                        <x-ev.dynamic-image class="img-fluid" :src="ev_dynamic_translate('#benefits-general-logo-' . $i, true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+                        </x-ev.dynamic-image>
                     </figure>
                     <div class="media-body">
-                        <h4 class="mb-1">24/7 Support</h4>
-                        <p class="font-size-1 mb-0">Contact us 24 hours a day, 7 days a week.</p>
+                        <h4 class="mb-1">
+                            <x-ev.label :label="ev_dynamic_translate('Benefit Title ' . $i, true)">
+                            </x-ev.label>
+                        </h4>
+                        <p class="font-size-1 mb-0">
+                            <x-ev.label :label="ev_dynamic_translate('Benefit Content ' . $i, true)">
+                            </x-ev.label>
+                        </p>
                     </div>
                 </div>
                 <!-- End Contacts -->
             </div>
+            @endfor
 
-            <div class="col-md-4 mb-7 mb-md-0">
-                <!-- Contacts -->
-                <div class="media">
-                    <figure class="w-100 max-w-8rem mr-4">
-                        <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-65.svg" alt="SVG">
-                    </figure>
-                    <div class="media-body">
-                        <h4 class="mb-1">30 Days return</h4>
-                        <p class="font-size-1 mb-0">We offer you a full refund within 30 days of purchase.</p>
-                    </div>
-                </div>
-                <!-- End Contacts -->
-            </div>
-
-            <div class="col-md-4">
-                <!-- Contacts -->
-                <div class="media">
-                    <figure class="w-100 max-w-8rem mr-4">
-                        <img class="img-fluid" src="https://htmlstream.com/front/assets/svg/icons/icon-65.svg" alt="SVG">
-                    </figure>
-                    <div class="media-body">
-                        <h4 class="mb-1">Free shipping</h4>
-                        <p class="font-size-1 mb-0">Automatically receive free standard shipping on every order.</p>
-                    </div>
-                </div>
-                <!-- End Contacts -->
-            </div>
         </div>
     </div>
 </div>

@@ -1,10 +1,8 @@
 @extends('frontend.layouts.user_panel')
+@section('page_title', translate('My Purchases'))
 
 @section('panel_content')
     <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0 h6">{{ translate('Purchase History') }}</h5>
-        </div>
         @if (count($orders) > 0)
             <div class="card-body">
                 <table class="table aiz-table mb-0">

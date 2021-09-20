@@ -1,16 +1,28 @@
 <div class="lw-form">
 
-    @if(!$insert_success)
+    @if(!$insert_success && !$update_success)
         <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
-                <h4 class="card-header-title">{{ translate('Add New Product') }}</h4>
+                <h4 class="card-header-title">
+                    @if(!empty($product->id))
+                        {{ translate('Edit Product') }}
+                    @else
+                        {{ translate('Add New Product') }}
+                    @endif
+                </h4>
             </div>
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="card-body">
-                <form class=" js-step-form-1"
+            <div class="card-body position-relative">
+                <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+                                      wire:target="validateSpecificSet"
+                                      wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+
+                <form class="js-step-form-1"
+                      wire:loading.class="opacity-3"
+                      wire:target="validateSpecificSet"
                       data-hs-step-form-options='{
                       "progressSelector": "#productStepFormProgress",
                       "stepsSelector": "#productStepFormContent",
@@ -66,14 +78,26 @@
                                         </a>
                                     </li>
 
-                                    <li class="step-item {{ $page === 'attributes_variations' ? 'active':'' }}">
+                                    <li class="step-item {{ $page === 'attributes' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           wire:click="$set('page', 'attributes_variations')"
-                                        ><!-- onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'attributes_variations']}}))"-->
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes']}}))"
+                                        ><!-- wire:click="$set('page', 'attributes')" -->
                                             <span class="step-icon step-icon-soft-dark">4</span>
                                             <div class="step-content">
-                                                <span class="step-title">{{ translate('Attributes & variations') }}</span>
-                                                <span class="step-title-description step-text font-size-1">{{ translate('Add product attributes and variations') }}</span>
+                                                <span class="step-title">{{ translate('Attributes') }}</span>
+                                                <span class="step-title-description step-text font-size-1">{{ translate('Add product attributes') }}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                    <li class="step-item {{ $page === 'variations' ? 'active':'' }}">
+                                        <a class="step-content-wrapper" href="javascript:;"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations']}}))"
+                                        ><!-- wire:click="$set('page', 'variations')" -->
+                                            <span class="step-icon step-icon-soft-dark">5</span>
+                                            <div class="step-content">
+                                                <span class="step-title">{{ translate('Variations') }}</span>
+                                                <span class="step-title-description step-text font-size-1">{{ translate('Add product variations') }}</span>
                                             </div>
                                         </a>
                                     </li>
@@ -81,7 +105,7 @@
                                     <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo']}}))">
-                                            <span class="step-icon step-icon-soft-dark">5</span>
+                                            <span class="step-icon step-icon-soft-dark">6</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('SEO') }}</span>
                                                 <span class="step-title-description step-text font-size-1">{{ translate('Edit product SEO settings') }}</span>
@@ -257,7 +281,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes_variations']}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes']}}))"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -268,12 +292,12 @@
                                 </div>
 
 
-                                <div id="productStepAttributesVariations" class="{{ $page === 'attributes_variations' ? 'active':'' }}" style="{{ $page !== 'attributes_variations' ? "display: none;" : "" }}" >
+                                <div id="productStepAttributesVariations" class="{{ $page === 'attributes' ? 'active':'' }}" style="{{ $page !== 'attributes' ? "display: none;" : "" }}" >
                                     <!-- Header -->
                                     <div class="border-bottom pb-2 mb-3">
                                         <div class="flex-grow-1">
                                             <span class="d-lg-none">{{ translate('Step 4 of 5') }}</span>
-                                            <h3 class="card-header-title">{{ translate('Attributes & variations') }}</h3>
+                                            <h3 class="card-header-title">{{ translate('Attributes') }}</h3>
                                         </div>
                                     </div>
                                     <!-- End Header -->
@@ -403,7 +427,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes_variations', 'seo']}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations']}}))"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -413,11 +437,30 @@
                                     <!-- End Footer -->
                                 </div>
 
+
+                                <div id="productStepVariations" class="{{ $page === 'variations' ? 'active':'' }}" style="{{ $page !== 'variations' ? "display: none;" : "" }}">
+                                    <!-- Header -->
+                                    <div class="border-bottom pb-2 mb-3">
+                                        <div class="flex-grow-1">
+                                            <span class="d-lg-none">{{ translate('Step 5 of 6') }}</span>
+                                            <h3 class="card-header-title">{{ translate('Variations') }}</h3>
+                                        </div>
+                                    </div>
+                                    <!-- End Header -->
+
+                                    <!-- Body -->
+                                    <div class="pb-4">
+                                        <div class="full-width product-variations-wrapper">
+
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div id="productStepSEO" class="{{ $page === 'seo' ? 'active':'' }}" style="{{ $page !== 'seo' ? "display: none;" : "" }}">
                                     <!-- Header -->
                                     <div class="border-bottom pb-2 mb-3">
                                         <div class="flex-grow-1">
-                                            <span class="d-lg-none">{{ translate('Step 5 of 5') }}</span>
+                                            <span class="d-lg-none">{{ translate('Step 6 of 6') }}</span>
                                             <h3 class="card-header-title">{{ translate('SEO') }}</h3>
                                         </div>
                                     </div>
@@ -431,7 +474,7 @@
                                         </x-ev.form.input>
 
                                         <!-- SEO Meta Description -->
-                                        <x-ev.form.textarea name="product.meta_description" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
+                                        <x-ev.form.textarea name="product.meta_description" rows="5" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
                                             <small class="text-muted">{{ translate('Have in mind that description should be between 70 and max 200 characters. Facebook up to 200 chars, Twitter up to 150 chars max.') }}</small>
                                         </x-ev.form.textarea>
 
@@ -455,7 +498,13 @@
                                                 <button type="button" class="btn btn-primary"
                                                         onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', '', true]}}))"
                                                 >
-                                                    {{ translate('Add Product') }} <i class="fas fa-angle-right ml-1"></i>
+                                                    @if(!empty($product->id))
+                                                        {{ translate('Update Product') }}
+                                                    @else
+                                                        {{ translate('Add Product') }}
+                                                    @endif
+
+                                                    <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -477,12 +526,20 @@
 
 
     <!-- Message Body -->
-    <x-ev.alert id="successMessageContent" class="{{ !$insert_success ? 'd-none':'' }}" content-class="flex flex-column" type="success" title="{{ translate('Product successfully created!') }}">
-        <span class="d-block">{{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}</span>
+    <x-ev.alert id="successMessageContent" class="{{ !$insert_success && !$update_success ? 'd-none':'' }}"
+                content-class="flex flex-column"
+                type="success"
+                title="{{ $insert_success ? translate('Product successfully created!') : ($update_success ? translate('Product successfully updated!') : '') }}">
+        <span class="d-block">
+            @if($insert_success)
+                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
+            @elseif($update_success)
+                {{ translate('You have successfully updated the product! Preview or edit your product:') }}
+            @endif
+        </span>
         <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
-            <a class="btn btn-white mr-3" href="{{ route('ev-products.create') }}" target="_blank">{{ translate('Edit') }}</a>
-            <!-- TODO: ^^^ Change route for edit to actually be ev-product edit route, not create! This is just for testing. ^^^ -->
+            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
         </div>
     </x-ev.alert>
     <!-- End Message Body -->

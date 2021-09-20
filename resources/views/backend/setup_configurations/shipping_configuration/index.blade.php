@@ -13,22 +13,22 @@
                     @csrf
                     <input type="hidden" name="type" value="shipping_type">
                     <div class="radio mar-btm">
-                        <input id="product-shipping" class="magic-radio" type="radio" name="shipping_type" value="product_wise_shipping" <?php if(\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'product_wise_shipping') echo "checked";?>>
+                        <input id="product-shipping" class="magic-radio" type="radio" name="shipping_type" value="product_wise_shipping" <?php if(get_setting('shipping_type') == 'product_wise_shipping') echo "checked";?>>
                         <label for="product-shipping">
                             <span>{{translate('Product Wise Shipping Cost')}}</span>
                             <span></span>
                         </label>
                     </div>
                     <div class="radio mar-btm">
-                        <input id="flat-shipping" class="magic-radio" type="radio" name="shipping_type" value="flat_rate" <?php if(\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'flat_rate') echo "checked";?>>
+                        <input id="flat-shipping" class="magic-radio" type="radio" name="shipping_type" value="flat_rate" <?php if(get_setting('shipping_type') == 'flat_rate') echo "checked";?>>
                         <label for="flat-shipping">{{translate('Flat Rate Shipping Cost')}}</label>
                     </div>
                     <div class="radio mar-btm">
-                        <input id="seller-shipping" class="magic-radio" type="radio" name="shipping_type" value="seller_wise_shipping" <?php if(\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') echo "checked";?>>
+                        <input id="seller-shipping" class="magic-radio" type="radio" name="shipping_type" value="seller_wise_shipping" <?php if(get_setting('shipping_type') == 'seller_wise_shipping') echo "checked";?>>
                         <label for="seller-shipping">{{translate('Seller Wise Flat Shipping Cost')}}</label>
                     </div>
                     <div class="radio mar-btm">
-                        <input id="area-shipping" class="magic-radio" type="radio" name="shipping_type" value="area_wise_shipping" <?php if(\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'area_wise_shipping') echo "checked";?>>
+                        <input id="area-shipping" class="magic-radio" type="radio" name="shipping_type" value="area_wise_shipping" <?php if(get_setting('shipping_type') == 'area_wise_shipping') echo "checked";?>>
                         <label for="area-shipping">{{translate('Area Wise Flat Shipping Cost')}}</label>
                     </div>
                     <div class="form-group mb-0 text-right">
@@ -75,7 +75,7 @@
                   <input type="hidden" name="type" value="flat_rate_shipping_cost">
                   <div class="form-group">
                       <div class="col-lg-12">
-                          <input class="form-control" type="text" name="flat_rate_shipping_cost" value="{{ \App\Models\BusinessSetting::where('type', 'flat_rate_shipping_cost')->first()->value }}">
+                          <input class="form-control" type="text" name="flat_rate_shipping_cost" value="{{ get_setting('flat_rate_shipping_cost') }}">
                       </div>
                   </div>
                   <div class="form-group mb-0 text-right">
@@ -113,7 +113,7 @@
                   <input type="hidden" name="type" value="shipping_cost_admin">
                   <div class="form-group">
                       <div class="col-lg-12">
-                          <input class="form-control" type="text" name="shipping_cost_admin" value="{{ \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value }}">
+                          <input class="form-control" type="text" name="shipping_cost_admin" value="{{ get_setting('shipping_cost_admin') }}">
                       </div>
                   </div>
                   <div class="form-group mb-0 text-right">

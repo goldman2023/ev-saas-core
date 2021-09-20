@@ -9,6 +9,6 @@ class BannerController extends Controller
 
     public function index()
     {
-        return new BannerCollection(json_decode(get_setting('home_banner1_images'), true));
+        return new BannerCollection(get_setting('home_banner1_images'));
     }
 }

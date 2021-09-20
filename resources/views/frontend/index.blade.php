@@ -62,9 +62,6 @@
     {{-- TODO: Add latest companies list here --}}
     {{-- HERE --}}
     {{-- END TODO --}}
-
-
-
     <section>
         <div class="container">
             <div class="row">

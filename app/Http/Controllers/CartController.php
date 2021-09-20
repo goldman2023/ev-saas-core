@@ -73,7 +73,7 @@ class CartController extends Controller
 
 
         if($str != null && $product->variant_product){
-            $product_stock = $product->stocks->where('variant', $str)->first();
+            $product_stock = $product->stocks->where('variant', $str);
             $price = $product_stock->price;
             $quantity = $product_stock->qty;
 

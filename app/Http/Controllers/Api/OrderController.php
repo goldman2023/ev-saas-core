@@ -28,10 +28,10 @@ class OrderController extends Controller
         $seller_products = array();
         //
 
-        if (\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'flat_rate') {
-            $shipping = \App\Models\BusinessSetting::where('type', 'flat_rate_shipping_cost')->first()->value;
+        if (get_setting('shipping_type') == 'flat_rate') {
+            $shipping = get_setting('flat_rate_shipping_cost');
         }
-        elseif (\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
+        elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
             foreach ($cartItems as $cartItem) {
                 $product = \App\Models\Product::find($cartItem->product_id);
                 if($product->added_by == 'admin'){
@@ -47,7 +47,7 @@ class OrderController extends Controller
                 }
             }
                 if(!empty($admin_products)){
-                    $shipping = \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value;
+                    $shipping = get_setting('shipping_cost_admin');
                 }
                 if(!empty($seller_products)){
                     foreach ($seller_products as $key => $seller_product) {
@@ -83,12 +83,12 @@ class OrderController extends Controller
 
             $order_detail_shipping_cost= 0;
 
-            if (\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'flat_rate') {
+            if (get_setting('shipping_type') == 'flat_rate') {
                 $order_detail_shipping_cost = $shipping/count($cartItems);
             }
-            elseif (\App\Models\BusinessSetting::where('type', 'shipping_type')->first()->value == 'seller_wise_shipping') {
+            elseif (get_setting('shipping_type') == 'seller_wise_shipping') {
                 if($product->added_by == 'admin'){
-                    $order_detail_shipping_cost = \App\Models\BusinessSetting::where('type', 'shipping_cost_admin')->first()->value/count($admin_products);
+                    $order_detail_shipping_cost = get_setting('shipping_cost_admin')  / count($admin_products);
                 }
                 else {
                     $order_detail_shipping_cost = \App\Models\Shop::where('user_id', $product->user_id)->first()->shipping_cost/count($seller_products[$product->user_id]);
@@ -122,7 +122,7 @@ class OrderController extends Controller
             ]);
         }
         // calculate commission
-        $commission_percentage = BusinessSetting::where('type', 'vendor_commission')->first()->value;
+        $commission_percentage = get_setting('vendor_commission');
         foreach ($order->orderDetails as $orderDetail) {
             if ($orderDetail->product->user->user_type == 'seller') {
                 $seller = $orderDetail->product->user->seller;

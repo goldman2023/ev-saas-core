@@ -1,4 +1,5 @@
 @extends('frontend.layouts.user_panel')
+@section('page_title', translate('Orders'))
 
 @section('panel_content')
 

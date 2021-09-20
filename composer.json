@@ -16,6 +16,7 @@
         "binarytorch/larecipe": "^2.4",
         "blade-ui-kit/blade-heroicons": "^1.2",
         "blade-ui-kit/blade-icons": "^1.1",
+        "brunocfalcao/blade-feather-icons": "^2.0",
         "cinetpay/cinetpay-php": "^1.9",
         "codeat3/blade-grommet-icons": "^1.1",
         "codeat3/blade-line-awesome-icons": "^1.0",
