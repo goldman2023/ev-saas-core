@@ -26,6 +26,18 @@ img {
 }
 
 
+.ev-icon {
+    width: 25px;
+    &__small {
+        width: 14px;
+    }
+
+    &__large {
+        width: 50px;
+    }
+}
+
+
 .ev-product-card {
     &__img {
         height: 200px;

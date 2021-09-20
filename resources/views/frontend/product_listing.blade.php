@@ -81,7 +81,7 @@
                                                 placeholder="{{ translate('Search query...') }}" autocomplete="off">
                                             <div class="input-group-append d-block">
                                                 <button class="btn btn-success" type="submit">
-                                                    <i class="la la-search text-white la-flip-horizontal fs-18"></i>
+                                                    <x-heroicon-s-search class="ev-icon"/>
                                                 </button>
                                             </div>
                                         </div>
