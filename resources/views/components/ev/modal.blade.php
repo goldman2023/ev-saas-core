@@ -1,10 +1,10 @@
 <!-- Modal Trigger -->
-<a class="btn btn-{{ $color }} transition-3d-hover {{ $btnclass }}" href="javascript:;" data-toggle="modal" data-target="#{{ $id }}">{{ $btntext }}</a>
+<a class="btn btn-{{ $color }} transition-3d-hover {{ $btnClass }}" href="javascript:;" data-toggle="modal" data-target="#{{ $id }}">{{ $btnText }}</a>
 <!-- End Modal Trigger -->
 
 <!-- Add New Card Modal -->
 <div class="modal fade" id="{{ $id }}" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered {{ $dialogclass }}" role="document">
+    <div class="modal-dialog modal-dialog-centered {{ $dialogClass }}" role="document">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header">
@@ -20,7 +20,7 @@
             <!-- End Header -->
 
             <!-- Body -->
-            <div class="modal-body">
+            <div class="modal-body {{ $bodyClass }}">
                 {!! $slot !!}
             </div>
             <!-- End Body -->

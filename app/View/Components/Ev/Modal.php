@@ -7,12 +7,13 @@ use Illuminate\View\Component;
 class Modal extends Component
 {
     public $class;
-    public $btnclass;
+    public $btnClass;
     public $id;
     public $color;
     public $headerTitle;
-    public $btntext;
-    public $dialogclass;
+    public $btnText;
+    public $dialogClass;
+    public $bodyClass;
 
 
     /**
@@ -20,15 +21,16 @@ class Modal extends Component
      *
      * @return void
      */
-    public function __construct($class = '', $btnclass = '', $id = '', $color = 'primary', $headerTitle = '', $btntext = '', $dialogclass = '')
+    public function __construct($class = '', $btnClass = '', $btnText = '', $id = '', $color = 'primary', $headerTitle = '',  $dialogClass = '', $bodyClass = '')
     {
         $this->class = $class;
-        $this->btnclass = $btnclass;
+        $this->btnClass = $btnClass;
         $this->id = $id;
         $this->color = $color;
         $this->headerTitle = $headerTitle;
-        $this->btntext = $btntext;
-        $this->dialogclass = $dialogclass;
+        $this->btnText = $btnText;
+        $this->dialogClass = $dialogClass;
+        $this->bodyClass = $bodyClass;
     }
 
     /**

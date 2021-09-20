@@ -453,8 +453,9 @@
                                         <div class="full-width product-variations-wrapper">
                                             <x-ev.modal color="primary"
                                                         id="product_variations_modal"
-                                                        dialogclass="modal-xl"
-                                                        btntext="{{ translate('Edit product variations') }}"
+                                                        dialog-class="modal-xl"
+                                                        body-class="d-flex flex-column"
+                                                        btn-text="{{ translate('Edit product variations') }}"
                                                         header-title="{{ translate('Product Variations') }}">
                                                 <livewire:forms.products.product-variations-datatable
                                                     :paginationEnabled="false"
@@ -463,7 +464,12 @@
                                                     :product="$this->product"
                                                     :variation-attributes="$this->variations_attributes"
                                                     :variations="$this->variations">
+                                                    <div class="btn btn-primary mt-3 ml-auto" wire:click="saveVariations()">
+                                                        {{ translate('Save variations') }}
+                                                    </div>
                                                 </livewire:forms.products.product-variations-datatable>
+
+
                                             </x-ev.modal>
 
 

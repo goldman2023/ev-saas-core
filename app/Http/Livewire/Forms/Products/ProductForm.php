@@ -285,10 +285,13 @@ class ProductForm extends Component
 
     protected function setProductStocks() {
         // TODO: Create proper product stocks for variations!
-        $product_stock = ProductStock::firstOrNew(['product_id' => $this->product->id]);
+        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => 'App\Models\Product']);
         $product_stock->price = $this->product->unit_price;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->save();
+
+        // TODO: You must a a field for Main Product SKU!!! SOmething like:
+        //$product_stock->sku = $this->product->sku;
     }
 
     /**
@@ -359,6 +362,11 @@ class ProductForm extends Component
         });
 
         return $atts_for_variations;
+    }
+
+    public function saveVariations() {
+        $this->emit('saveVariations');
+        $this->dispatchBrowserEvent('preventProductVariationsModalFade');
     }
 
     public function dehydrate()

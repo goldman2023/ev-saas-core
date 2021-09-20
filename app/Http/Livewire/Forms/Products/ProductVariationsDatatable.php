@@ -21,6 +21,8 @@ class ProductVariationsDatatable extends DataTableComponent
     public $variations;
     public $all_combinations;
     public $rows;
+    public $listeners = ['saveVariations' => 'setVariationsData'];
+
 
     /**
      * Create a new component instance.
@@ -37,6 +39,8 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->all_combinations = collect([]);
         $this->rows = collect([]);
 
+        //$this->listeners = count($this->listeners ?? []) > 0 ? array_merge($this->listeners, ['saveVariations' => 'setVariationsData']) : ['saveVariations' => 'setVariationsData'];
+        //dd($this->listeners);
         /*if($this->attributes->isNotEmpty()) {
             foreach($this->attributes as $key => $att) {
                 $this->attributes[$key]->attribute_values = collect($this->attributes[$key]->attribute_values)->keyBy('id')->map(function($item) {
@@ -71,6 +75,22 @@ class ProductVariationsDatatable extends DataTableComponent
     {
         parent::dehydrate();
         $this->dispatchBrowserEvent('initProductForm');
+    }
+
+    public function dehydrateRows()
+    {
+        $this->rows = $this->rows->map(function($item) {
+            $item = (object) $item;
+            $item->temp_stock = (object) $item->temp_stock;
+            return $item;
+        });
+    }
+    public function hydrateRows() {
+        $this->rows = $this->rows->map(function($item) {
+            $item = (object) $item;
+            $item->temp_stock = (object) $item->temp_stock;
+            return $item;
+        });
     }
 
     public function useAllVariations() {
@@ -132,17 +152,17 @@ class ProductVariationsDatatable extends DataTableComponent
     {
 
         $columns = [
-            Column::make('Image', 'image')
-                ->sortable(),
+            Column::make('Image', 'image'),
             Column::make('Name', 'name')
-                ->sortable(),
+                ->sortable(function(Builder $query, $direction) {
+                    $this->rows = ($direction === 'desc') ? $this->rows->sortKeysDesc() : $this->rows->sortKeys();
+                }),
         ];
 
         if($this->attributes->isNotEmpty()) {
             foreach($this->attributes as $att) {
                 $att = (object) $att;
                 $columns[] = Column::make($att->name, \Str::slug($att->name))
-                    ->sortable()
                     ->addClass('hidden md:table-cell');
             }
         }
@@ -152,8 +172,7 @@ class ProductVariationsDatatable extends DataTableComponent
                 ->sortable(),
             Column::make('QTY', 'qty')
                 ->sortable(),
-            Column::make('SKU', 'sku')
-                ->sortable(),
+            Column::make('SKU', 'sku'),
         ]);
 
         $columns[] = Column::blank();
@@ -169,5 +188,47 @@ class ProductVariationsDatatable extends DataTableComponent
     public function rowView(): string
     {
         return 'livewire.forms.products.product-variations-datatable';
+    }
+
+    public function setVariationsData() {
+        if($this->rows->isNotEmpty()) {
+            foreach ($this->rows as $index => $variation) {
+                $temp_stock = $variation->temp_stock;
+                unset($variation->temp_stock);
+                $variation->id = null;
+
+                $variation_model = new ProductVariation();
+                $variation_model->fill((array) $variation);
+                $variation_model->save();
+
+                // Save Product Variation Stock
+                $this->setProductVariationStocks(false, $variation_model, $temp_stock);
+
+                $this->rows[$index] = $variation_model;
+            }
+        }
+
+
+    }
+
+    protected function setProductVariationStocks($iterate = false, $variation_model = [], $stock = []) {
+        if(!$iterate && !empty($variation_model) && !empty($stock)) {
+            $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => 'App\Models\ProductVariation']);
+            $product_stock->price = $variation_model->price;
+            $product_stock->qty = (float) $stock->qty;
+            $product_stock->sku = $stock->sku;
+            $product_stock->save();
+        } else if($iterate) {
+            if($this->rows->isNotEmpty()) {
+                foreach($this->rows as $index => $var) {
+                    $product_stock = ProductStock::firstOrNew(['subject_id' => $var->id, 'subject_type' => 'App\Models\ProductVariation']);
+                    $product_stock->price = $var->price;
+                    $product_stock->qty = (float) $var->temp_stock->qty;
+                    $product_stock->sku = $var->temp_stock->sku;
+                    $product_stock->save();
+                }
+            }
+        }
+
     }
 }

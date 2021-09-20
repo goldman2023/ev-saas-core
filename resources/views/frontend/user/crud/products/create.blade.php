@@ -182,6 +182,14 @@
         $(window).on('load', window.EVProductFormInit);
         $(window).on('initProductForm', window.EVProductFormInit);
 
+        // TODO: Find a better way to prevent Modal fade after clicking Save Variations
+        $(window).on('preventProductVariationsModalFade', function(event) {
+            $('#product_variations_modal').addClass('show').css({
+                'display':'block',
+                'z-index': 1050
+            });
+        });
+
 
         document.addEventListener('validate-step', async function (event) {
             let component = event.detail.component;

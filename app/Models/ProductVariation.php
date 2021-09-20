@@ -72,7 +72,7 @@ class ProductVariation extends Model
     }
 
     /**
-     * Set the user's first name.
+     * Set the Temp Stock
      *
      * @param  string  $value
      * @return void
