@@ -170,7 +170,7 @@ function ev_dynamic_translate($key, $global = false, $lang = null)
 {
     $ttl = 60;
     $stringKey = ev_dynamic_translate_key($key, $global, $lang);
-    $dynamic_label = Cache::remember($stringKey, $ttl, function () use($stringKey) {
+    $dynamic_label = Cache::remember($stringKey, $ttl, function () use ($stringKey) {
         return EVLabel::where('key', $stringKey)->get();
     });
 
@@ -190,14 +190,37 @@ function ev_dynamic_translate($key, $global = false, $lang = null)
     return $dynamic_label;
 }
 
-function ev_dynamic_translate_key($key, $global = false, $lang = null) {
+function ev_dynamic_attribute($key, $attribute = 1, $global = true, $lang = null)
+{
+    $stringKey = ev_dynamic_translate_key($key, $global, $lang);
+    $ttl = 60;
+    $dynamic_attribute = Cache::remember($stringKey, $ttl, function () use ($stringKey) {
+        return EVLabel::where('key', $stringKey)->get();
+    });
+
+    /*  TODO: Make sure to upgrade this for multilanguage support */
+    if (count($dynamic_attribute) > 0) {
+        $dynamic_attribute = $dynamic_attribute[0];
+    } else {
+        $dynamic_attribute = new EVLabel();
+        $dynamic_attribute->key = $stringKey;
+        $dynamic_attribute->value = $key;
+
+        $dynamic_attribute->save();
+    }
+
+    return $dynamic_attribute;
+}
+
+function ev_dynamic_translate_key($key, $global = false, $lang = null)
+{
     $label_prefix =  Route::currentRouteName();
 
-    if(Route::current()->parameters()) {
+    if (Route::current()->parameters()) {
         $label_prefix .= '.' . implode(Route::current()->parameters());
     }
 
-    if($global) {
+    if ($global) {
         $label_prefix = 'global';
     }
 
@@ -207,7 +230,7 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null) {
         'stancl.tenancy'
     ];
 
-    foreach($excluded_prefixes as $excluded) {
+    foreach ($excluded_prefixes as $excluded) {
         if (str_contains($label_prefix, $excluded)) {
             return $key;
         }

@@ -35,4 +35,8 @@ class EVSaaSController extends Controller
 
         dd($tenant1);
     }
+
+    public function design_settings() {
+        return view('frontend.dashboard.settings.design-settings');
+    }
 }

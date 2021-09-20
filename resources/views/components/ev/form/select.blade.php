@@ -1,5 +1,7 @@
 <div class="form-group {{ $class }}">
-    <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @if (!empty(trim($label)))
+        <label @if($id) for="{{ $id }}" @endif class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @endif    
     <select wire:model.defer="{{ $name }}"
             @if($id) id="{{ $id }}" @endif
             class="js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"

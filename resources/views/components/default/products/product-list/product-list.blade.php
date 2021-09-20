@@ -6,7 +6,6 @@
             </x-ev.label>
         </div>
         <!-- End Title -->
-        {{ $slider }}
         <!-- Products -->
         <div class="ev-slider mb-3">
             <div class="ev-slider-wrapper @if ($slider) js-slick-carousel @endif"
@@ -24,8 +23,8 @@
                 <!-- Product -->
                 <div class="row">
                     @foreach ($products as $product)
-                    <div class="ev-slider-slide  @if ($slider) slick-slide @endif col-sm-4 mb-3">
-                        <div class="w-100">
+                    <div class="ev-slider-slide  @if ($slider) slick-slide @endif col-sm-3 mb-3">
+                        <div class="w-100 h-100">
                             <x-default.products.cards.product-card :product="$product"
                             style="product-card-detailed-2"
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">

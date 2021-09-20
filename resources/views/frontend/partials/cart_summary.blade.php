@@ -40,7 +40,7 @@
                 @foreach (Session::get('cart')->where('owner_id', Session::get('owner_id')) as $key => $cartItem)
                     @php
                         $product = \App\Models\Product::find($cartItem['id']);
-                        $subtotal += $cartItem['price']*$cartItem['quantity'];
+                        $subtotal += $cartItem['price']['raw']*$cartItem['quantity'];
                         $tax += $cartItem['tax']*$cartItem['quantity'];
 
                         if(isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
@@ -70,7 +70,7 @@
                             <strong class="product-quantity">× {{ $cartItem['quantity'] }}</strong>
                         </td>
                         <td class="product-total text-right">
-                            <span class="pl-4">{{ single_price($cartItem['price']*$cartItem['quantity']) }}</span>
+                            <span class="pl-4">{{ single_price($cartItem['price']['raw']*$cartItem['quantity']) }}</span>
                         </td>
                     </tr>
                 @endforeach

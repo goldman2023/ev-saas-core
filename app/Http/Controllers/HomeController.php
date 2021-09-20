@@ -624,20 +624,84 @@ class HomeController extends Controller
 
         $product_count = $products->count();
         $company_count = $shops->count();
-        $event_count = $events->count();
+        $event_count = $events->count();        
 
-        $attributeIds = array();
-        foreach ($events->get() as $event) {
-            $attributeIds = array_unique(array_merge($attributeIds, $event->attributes->pluck('attribute_id')->toArray()), SORT_REGULAR);
+        $attributes = array();
+        $filters = array();
+        $contents = array();
+        // Attributes based on Content Type
+        if ($content != null) {
+            if ($content == 'product') {
+                $contents = $products;
+            }else if ($content == 'company') {
+                $contents = Seller::whereIn('user_id', $shops->get()->pluck('user_id')->toArray());;
+            }else if ($content == 'event') {
+                $contents = $events;
+            }
+
+            $attributeIds = array();
+            foreach ($contents->get() as $item) {
+                $attributeIds = array_unique(array_merge($attributeIds, $item->attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
+            }
+            $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
+                
+            foreach ($attributes as $attribute) {
+                if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != "-1" && $request['attribute_' . $attribute['id']] != null) {
+                    $filters[$attribute['id']] = $request['attribute_' . $attribute['id']];
+                    switch ($attribute->type) {
+                        case "number":
+                            $range_arr = explode(';', $request['attribute_' . $attribute['id']]);
+                            $min_val = floatval($range_arr[0]);
+                            $max_val = floatval($range_arr[1]);
+                            if ($min_val != null && $max_val != null) {
+                                $contents = $contents->whereHas('attributes', function ($relation) use ($min_val, $max_val) {
+                                    $relation->whereHas('attribute_value', function ($value) use ($min_val, $max_val) {
+                                        $value->where('values', '>=', $min_val)->where('values', '<=', $max_val);
+                                    });
+                                });
+                            }
+                            break;
+                        case "date":
+                            $arr_date_range = explode(" to ", $request['attribute_' . $attribute['id']]);
+                            if (count($arr_date_range) > 0) {
+                                $date_query = "STR_TO_DATE(`values`, '%d-%m-%Y') >= STR_TO_DATE(?, '%d-%m-%Y') AND STR_TO_DATE(`values`, '%d-%m-%Y') <= STR_TO_DATE(?, '%d-%m-%Y')";
+                                $contents = $contents->whereHas('attributes', function ($relation) use ($date_query, $arr_date_range) {
+                                    $relation->whereHas('attribute_value', function ($value) use ($date_query, $arr_date_range) {
+                                        $value->whereRaw($date_query, $arr_date_range);
+                                    });
+                                });
+                            }
+                            break;
+                        case "checkbox":
+                            $checked_arr = $request['attribute_' . $attribute['id']];
+                            $contents = $contents->whereHas('attributes', function ($q) use ($checked_arr) {
+                                $q->whereIn('attribute_value_id', $checked_arr);
+                            });
+                            break;
+                        case "country":
+                            $code = $request['attribute_' . $attribute['id']];
+                            $contents = $contents->whereHas('attributes', function ($relation) use ($code) {
+                                $relation->whereHas('attribute_value', function ($value) use ($code) {
+                                    $value->where('values', $code);
+                                });
+                            });
+                            break;
+                        default:
+                            $val_id = $request['attribute_' . $attribute['id']];
+                            $contents = $contents->whereHas('attributes', function ($q) use ($val_id) {
+                                $q->where('attribute_value_id', $val_id);
+                            });
+                    }
+                }
+            }
         }
-        $attributes = Attribute::whereIn('id', $attributeIds)->where('filterable', true)->get();
 
 
         $products = filter_products($products)->paginate(10)->appends(request()->query());
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'product_count', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'product_count', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

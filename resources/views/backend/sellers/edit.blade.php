@@ -79,7 +79,7 @@
 
                                         if ($attribute->custom_properties === null) {
                                         }
-                                        $custom_properties = json_decode($attribute->custom_properties);
+                                        $custom_properties = $attribute->custom_properties;
                                         // TODO: Remove this is only a fallback quick-fix because of old attributes that do not have min/max values
                                         // Related to: https://app.usersnap.com/#/2f2a6b9f-d137-4d9c-b748-1c7228f02147/list
                                         /* if (empty($custom_properties->min_value)) {
@@ -126,7 +126,7 @@
                                         @endforeach
                                     </div>
                                 @endif
-                                @if ($attribute->type == 'plain_text' || $attribute->type == 'date')
+                                @if ($attribute->type == 'plain_text' || $attribute->type == 'date' || $attribute->type == 'image')
                                     @php
                                         $value = '';
                                         if ($seller->attributes->where('attribute_id', $attribute->id)->first() != null) {
@@ -137,7 +137,7 @@
                                         <input type="text" placeholder="{{ translate('Default Value') }}"
                                             id="{{ 'plain_text_' . $attribute->id }}" name="{{ $attribute->id }}"
                                             class="form-control" value="{{ $value }}">
-                                    @else
+                                    @elseif ($attribute->type == 'date')
                                         <input
                                             id="{{ 'date_' . $attribute->id }}"
                                             type="text"
@@ -146,6 +146,8 @@
                                             aria-describedby="date_range"
                                             placeholder="Select Date" data-time-picker="true" data-format="DD-MM-Y HH:mm"
                                             autocomplete="off" data-single="true">
+                                    @elseif ($attribute->type == 'image')
+                                        <x-ev.form.file-selector name="{{ $attribute->id }}" label="{{ translate('Image') }}" data_type="image" placeholder="Choose file..." :multiple="$attribute->custom_properties->multiple" :selectedFile="$value"></x-ev.form.file-selector>
                                     @endif
                                 @endif
                                 @if ($attribute->type == 'number')

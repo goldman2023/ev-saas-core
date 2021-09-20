@@ -57,12 +57,6 @@ Route::any('/iyzico/payment/callback/{payment_type}/{amount?}/{payment_method?}/
 
 Route::post('/get-city', 'CityController@get_city')->name('get-city');
 
-Route::resource('addresses', 'AddressController')->parameters([
-    'addresses' => 'id',
-]);
-//Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-//Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
 //payhere below
 Route::get('/payhere/checkout/testing', 'PayhereController@checkout_testing')->name('payhere.checkout.testing');

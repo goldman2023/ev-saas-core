@@ -1,4 +1,5 @@
-<form class="js-validate card shadow-lg mb-4">
+<form class="js-validate card shadow-lg mb-4" method="POST" action="{{ route('leads.store') }}">
+    @csrf
     <div class="card-header border-0 bg-light text-center py-4 px-4 px-md-6">
         <h2 class="h4 mb-0">
             <x-ev.label :label="ev_dynamic_translate('Contact Form Title', true)">
@@ -15,7 +16,7 @@
                     <label for="lastNameExample1" class="input-label">
                         {{ translate('Phone') }}
                     </label>
-                    <input type="text" class="form-control" name="lastNameExample1"
+                    <input type="text" class="form-control" name="phone"
                         id="lastNameExample1" placeholder="+370...." aria-label="Gaga" required
                         data-msg="Please enter last your name">
                 </div>
@@ -28,7 +29,7 @@
                     <label for="emailAddressExample1" class="input-label">
                         {{ translate('Email address') }}
                     </label>
-                    <input type="email" class="form-control" name="emailAddressExample1"
+                    <input type="email" class="form-control" name="email"
                         id="emailAddressExample1" placeholder="nayagaga@pixeel.com"
                         aria-label="alex@pixeel.com" required
                         data-msg="Please enter a valid email address">

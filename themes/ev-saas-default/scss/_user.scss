@@ -10,10 +10,31 @@ img {
 
 }
 
+/**
+*   Pagination styles
+*/
+.ev-pagination {
+    svg {
+        max-width: 30px;
+    }
+}
+
 .ev-brand-image-small {
     max-height: 25px;
     width: auto;
     max-width: 80%;
+}
+
+
+.ev-icon {
+    width: 25px;
+    &__small {
+        width: 14px;
+    }
+
+    &__large {
+        width: 50px;
+    }
 }
 
 
