@@ -114,9 +114,19 @@ class Product extends Model
     use AttributeTrait;
     use HasSlug;
 
+    /* Properties not saved in DB */
+    protected string $temp_sku;
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['stock'];
+
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'variations', 'num_of_sale', 'thumbnail_img'];
+        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'num_of_sale', 'thumbnail_img', 'temp_sku'];
 
     protected $casts = [
         'choice_options' => 'object',
@@ -124,7 +134,7 @@ class Product extends Model
         'attributes' => 'object'
     ];
 
-    protected $appends = ['images', 'permalink'];
+    protected $appends = ['images', 'permalink', 'temp_sku'];
 
     protected static function boot()
     {
@@ -194,9 +204,9 @@ class Product extends Model
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function stocks()
+    public function stock()
     {
-        return $this->hasMany(ProductStock::class);
+        return $this->morphOne(ProductStock::class, 'subject');
     }
 
     public function wishlists() {
@@ -272,12 +282,28 @@ class Product extends Model
      * @return string $link
      */
     public function getPermalinkAttribute() {
-        if(empty($this->slug)) {
+        if(empty($this->attributes['slug'])) {
             return "#";
         }
 
-        return route('product', $this->slug);
+        return route('product', $this->attributes['slug']);
     }
+
+    public function setTempSkuAttribute($value)
+    {
+        $this->temp_sku = $value;
+    }
+
+    public function getTempSkuAttribute() {
+        if(!isset($this->temp_sku)) {
+            $stock = $this->stock()->first();
+
+            return $stock->sku ?? '';
+        }
+
+        return $this->temp_sku;
+    }
+
 
     protected function asJson($value)
     {

@@ -189,6 +189,12 @@
             });
         });
 
+
+        document.addEventListener('triggerModal', function (event) {
+            let id = event.detail.id;
+            $(id).modal('toggle');
+        });
+
         document.addEventListener('toastIt', async function (event) {
             let content = event.detail.content;
             let id = event.detail.id;

@@ -7,6 +7,7 @@ use App\Models\AttributeRelationship;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
 use App\Facades\BusinessSettings;
+use App\Models\AttributeValueTranslation;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductTranslation;
@@ -53,6 +54,7 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
+            'product.temp_sku' => 'required',
             'product.min_qty' => 'required|numeric|min:1',
             'product.current_stock' => 'required|numeric|min:1', //  new ModelsExist(Upload::class)
             'product.low_stock_quantity' => 'required|numeric|min:1',
@@ -62,7 +64,7 @@ class ProductForm extends Component
             'product.discount_type' => 'required|in:amount,percent',
             'product.stock_visibility_state' => 'required|in:quantity,text,hide',
             'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
-            'product.flat_shipping_cost' => 'required_if:product.shipping_type,flat_rate',
+            'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
             'product.is_quantity_multiplied' => 'required|boolean',
             'product.est_shipping_days' => 'nullable|numeric'
         ];
@@ -103,16 +105,18 @@ class ProductForm extends Component
         } else {
             $this->product = new Product();
             $this->action = 'insert';
+
+            $this->product->slug = '';
+            $this->product->is_quantity_multiplied = 1;
+            $this->product->shipping_type = 'product_wise';
+            $this->product->stock_visibility_state = 'quantity';
+            $this->product->discount_type = 'amount';
+            $this->product->discount = 0;
+            $this->product->low_stock_quantity = 1;
+            $this->product->min_qty = 1;
+            $this->product->brand_id = null;
         }
-        $this->product->slug = '';
-        $this->product->is_quantity_multiplied = 1;
-        $this->product->shipping_type = 'product_wise';
-        $this->product->stock_visibility_state = 'quantity';
-        $this->product->discount_type = 'amount';
-        $this->product->discount = 0;
-        $this->product->low_stock_quantity = 1;
-        $this->product->min_qty = 1;
-        $this->product->brand_id = null;
+
 
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
@@ -131,6 +135,7 @@ class ProductForm extends Component
                 }
             }
         }
+
         //dd($this->attributes);
     }
 
@@ -236,13 +241,9 @@ class ProductForm extends Component
 
         if ($this->product->shipping_type === 'free') {
             $this->product->shipping_cost = 0;
-        } elseif ($this->product->shipping_type === 'flat_rate') {
-            $this->product->shipping_cost = $this->product->flat_shipping_cost;
         } elseif ($this->product->shipping_type === 'product_wise') {
             $this->product->shipping_cost = json_encode([]);
         }
-
-        unset($this->product->flat_shipping_cost);
 
         if (empty($this->product->meta_img)) {
             $this->product->meta_img = $this->product->thumbnail_img;
@@ -282,12 +283,9 @@ class ProductForm extends Component
     protected function setProductStocks() {
         // TODO: Create proper product stocks for variations!
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => 'App\Models\Product']);
-        $product_stock->price = $this->product->unit_price;
+        $product_stock->sku = $this->product->temp_sku;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->save();
-
-        // TODO: You must a a field for Main Product SKU!!! SOmething like:
-        //$product_stock->sku = $this->product->sku;
     }
 
     /**
@@ -318,7 +316,7 @@ class ProductForm extends Component
                             $att_values[0]['id'] = $att_val->id;
 
                             // Set attribute value translations for non-predefined attributes
-                            $attribute_value_translation = AttributeTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
+                            $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
                             $attribute_value_translation->name = $att_val->values;
                             $attribute_value_translation->save();
                         }

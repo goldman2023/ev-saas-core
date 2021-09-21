@@ -229,6 +229,11 @@
 
                                     <!-- Body -->
                                     <div class="">
+                                        <!-- Main Product SKU -->
+                                        <x-ev.form.input name="product.temp_sku" type="text" label="{{ translate('SKU') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
+                                            <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
+                                        </x-ev.form.input>
+
                                         <x-ev.form.input name="product.min_qty" type="number" label="{{ translate('Minimum quantity') }}" :required="true" min="1" step="1">
                                             <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
                                         </x-ev.form.input>
@@ -256,9 +261,9 @@
 
                                         <x-ev.form.radio name="product.stock_visibility_state" :items="EV::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
-                                        <x-ev.form.radio name="product.shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping configuration') }}" value="{{ $product->shipping_type ?: '' }}" >
+                                        <x-ev.form.radio name="product.shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping type') }}" value="{{ $product->shipping_type ?: '' }}" >
                                             <x-slot name="flat_rate">
-                                                <x-ev.form.input name="product.flat_shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
+                                                <x-ev.form.input name="product.shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
                                             </x-slot>
                                         </x-ev.form.radio>
 
@@ -472,6 +477,30 @@
 
                                         </div>
                                     </div>
+
+
+                                    <!-- Footer -->
+                                    <div class="border-top pt-3">
+                                        <div class="d-flex align-items-center">
+                                            <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
+                                                    data-hs-step-form-prev-options='{
+                                                     "targetSelector": "#productStepAttributes"
+                                                   }'>
+                                                @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
+                                                {{ translate('Previous step') }}
+                                            </button>
+
+                                            <div class="ml-auto">
+                                                <button type="button" class="btn btn-primary"
+                                                        data-hs-step-form-prev-options='{
+                                                         "targetSelector": "#productStepSEO"
+                                                       }'>
+                                                    {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Footer -->
                                 </div>
 
                                 <div id="productStepSEO" class="{{ $page === 'seo' ? 'active':'' }}" style="{{ $page !== 'seo' ? "display: none;" : "" }}">

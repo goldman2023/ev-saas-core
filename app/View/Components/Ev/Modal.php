@@ -15,6 +15,7 @@ class Modal extends Component
     public $dialogClass;
     public $bodyClass;
     public $wireTarget;
+    public $hasTrigger;
 
 
     /**
@@ -22,7 +23,7 @@ class Modal extends Component
      *
      * @return void
      */
-    public function __construct($class = '', $btnClass = '', $btnText = '', $id = '', $color = 'primary', $headerTitle = '',  $dialogClass = '', $bodyClass = '', $wireTarget = null)
+    public function __construct($class = '', $btnClass = '', $btnText = '', $id = '', $color = 'primary', $headerTitle = '',  $dialogClass = '', $bodyClass = '', $wireTarget = null, $hasTrigger = true)
     {
         $this->class = $class;
         $this->btnClass = $btnClass;
@@ -33,6 +34,7 @@ class Modal extends Component
         $this->dialogClass = $dialogClass;
         $this->bodyClass = $bodyClass;
         $this->wireTarget = $wireTarget;
+        $this->hasTrigger = $hasTrigger;
     }
 
     /**

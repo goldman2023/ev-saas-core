@@ -1,6 +1,9 @@
-<!-- Modal Trigger -->
-<a class="btn btn-{{ $color }} transition-3d-hover {{ $btnClass }}" href="javascript:;" data-toggle="modal" data-target="#{{ $id }}">{{ $btnText }}</a>
-<!-- End Modal Trigger -->
+@if($hasTrigger)
+    <!-- Modal Trigger -->
+        <a class="btn btn-{{ $color }} transition-3d-hover {{ $btnClass }}" href="javascript:;" data-toggle="modal" data-target="#{{ $id }}">{{ $btnText }}</a>
+    <!-- End Modal Trigger -->
+@endif
+
 
 <!-- Add New Card Modal -->
 <div class="modal fade" id="{{ $id }}" tabindex="-1" role="dialog" aria-hidden="true">

@@ -31,6 +31,8 @@ class ProductVariationsDatatable extends DataTableComponent
         'saveVariations' => 'setVariationsData'
     ];
 
+    public $bulkActionSetPricesID = 'ev-product-variations__set-prices';
+
 
     /**
      * Create a new component instance.
@@ -72,6 +74,7 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public array $bulkActions = [
         'useAllVariations' => 'Generate all',
+        'triggerSetAllPricesModal' => 'Set All Prices'
     ];
 
     public function dehydrate()
@@ -79,36 +82,6 @@ class ProductVariationsDatatable extends DataTableComponent
         parent::dehydrate();
         $this->dispatchBrowserEvent('initProductForm');
     }
-
-    /*public function hydrateVariations() {
-        $this->variations = $this->variations->keyBy('name')->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-            return $item;
-        });
-    }
-    public function dehydrateVariations() {
-        $this->variations = $this->variations->keyBy('name')->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-            return $item;
-        });
-    }
-
-    public function hydrateAllCombinations() {
-        $this->all_combinations = $this->all_combinations->keyBy('name')->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-            return $item;
-        });
-    }
-    public function dehydrateAllCombinations() {
-        $this->all_combinations = $this->all_combinations->keyBy('name')->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-            return $item;
-        });
-    }*/
 
     public function dehydrateRows()
     {
@@ -128,13 +101,15 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public function useAllVariations() {
         // Merge all combinations with currently added variations.
-
         $this->rows = $this->all_combinations->merge($this->variations)->map(function($item) {
             $item = (object) $item;
             $item->temp_stock = (object) $item->temp_stock;
             return $item;
         });
+    }
 
+    public function triggerSetAllPricesModal() {
+        $this->dispatchBrowserEvent('triggerModal', ['id' => '#'.$this->bulkActionSetPricesID]);
     }
 
     public function createAllCombinations()
