@@ -250,7 +250,6 @@ class ProductVariationsDatatable extends DataTableComponent
             if($this->rows->isNotEmpty()) {
                 foreach($this->rows as $index => $var) {
                     $product_stock = ProductStock::firstOrNew(['subject_id' => $var->id, 'subject_type' => 'App\Models\ProductVariation']);
-                    $product_stock->price = $var->price;
                     $product_stock->qty = (float) $var->temp_stock->qty;
                     $product_stock->sku = $var->temp_stock->sku;
                     $product_stock->save();

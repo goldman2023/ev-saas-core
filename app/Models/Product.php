@@ -131,7 +131,7 @@ class Product extends Model
     protected $casts = [
         'choice_options' => 'object',
         'colors' => 'object',
-        'attributes' => 'object'
+        'attributes' => 'object',
     ];
 
     protected $appends = ['images', 'permalink', 'temp_sku'];
@@ -228,7 +228,10 @@ class Product extends Model
      * @return array*
      */
     public function getImagesAttribute() {
+
         $photos_idx = explode(',', $this->attributes['photos']);
+        foreach ($photos_idx as &$i) $i = (int) $i;
+
         $photos = [];
         $data = [
             'thumbnail' => [],
@@ -236,6 +239,7 @@ class Product extends Model
         ];
 
         if(!empty($this->attributes['thumbnail_img'])) {
+            // Add thumb as the first element in photos array
             array_unshift($photos_idx, $this->attributes['thumbnail_img']);
         }
 
@@ -254,7 +258,7 @@ class Product extends Model
                     $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
                 }
 
-                if($photo->id === $this->attributes['thumbnail_img']) {
+                if($photo->id ===  (int) $this->attributes['thumbnail_img']) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,
                         'url' => $url
