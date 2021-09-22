@@ -115,7 +115,7 @@ class Product extends Model
     use HasSlug;
 
     /* Properties not saved in DB */
-    protected string $temp_sku;
+    public $temp_sku;
 
     /**
      * The relationships that should always be loaded.
@@ -134,7 +134,7 @@ class Product extends Model
         'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink', 'temp_sku'];
+    protected $appends = ['images', 'permalink','temp_sku'];
 
     protected static function boot()
     {
@@ -299,7 +299,7 @@ class Product extends Model
     }
 
     public function getTempSkuAttribute() {
-        if(!isset($this->temp_sku)) {
+        if(empty($this->temp_sku)) {
             $stock = $this->stock()->first();
 
             return $stock->sku ?? '';

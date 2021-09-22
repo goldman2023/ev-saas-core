@@ -26,14 +26,17 @@ class ProductVariation extends Model
     use ReviewTrait;
     use AttributeTrait;
 
-    protected $fillable = ['product_id', 'variant', 'image', 'price'];
+    /* Properties not saved in DB */
+    protected string $remove_flag;
+
+    protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag'];
     protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'image_url', 'temp_stock'];
+    protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag'];
 
 
     public function product()
@@ -95,6 +98,15 @@ class ProductVariation extends Model
         }
 
         return '';
+    }
+
+    public function setRemoveFlagAttribute($value)
+    {
+        $this->remove_flag = $value;
+    }
+
+    public function getRemoveFlagAttribute() {
+        return $this->remove_flag;
     }
 
     // START: Casts section

@@ -23,7 +23,6 @@
                     <th>{{ translate('Base Price') }}</th>
                     <th>{{ translate('Published') }}</th>
                     <th>{{ translate('Options') }}</th>
-                    <th style="width: 5%;"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +32,7 @@
                         <tr>
                             <td>
                                 <a href="{{ route('ev-products.edit', $product->slug) }}">
-                                    <img class="avatar avatar-sm avatar-circle mr-3" src="{{ $product->images['thumbnail']['url'] ?? '' }}" alt="{{ $product->name }}">
+                                    <img class="avatar avatar-sm avatar-circle mr-3 border" src="{{ $product->images['thumbnail']['url'] ?? '' }}" alt="{{ $product->name }}">
                                 </a>
                             </td>
                             <td><a href="{{ route('ev-products.edit', $product->slug) }}">{{ $product->name }}</a></td>

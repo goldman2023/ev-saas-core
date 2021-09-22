@@ -176,6 +176,22 @@
             $('.js-flatpickr').each(function () {
                 $.HSCore.components.HSFlatpickr.init($(this));
             });
+
+            // ATTRIBUTES FOR VARIATIONS (remove modal)
+            // =======================================================
+            $('input[name$="for_variations"]:checked').each(function(index, element) {
+                let select = $(element).closest('.form-group').find('select[data-attribute-id]');
+
+                select.on('select2:unselecting', function (e) {
+                    // This is triggered before attribute value is removed
+                    // Display a Modal and ask client if they are sure!
+                    let att_value = e.params.args.data.id;
+                    console.log(att_value);
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
         }
 
         $(window).on('load', window.EVProductFormInit);
