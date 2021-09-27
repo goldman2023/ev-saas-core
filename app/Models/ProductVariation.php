@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Events\Products\ProductVariationDeleting;
 use App\Traits\AttributeTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\Models\Product
@@ -25,12 +27,13 @@ class ProductVariation extends Model
 {
     use ReviewTrait;
     use AttributeTrait;
+    use Notifiable;
 
     /* Properties not saved in DB */
-    protected string $remove_flag;
+    public bool $remove_flag;
 
     protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag'];
-    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock'];
+    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock', 'remove_flag'];
 
     protected $casts = [
         'variant' => 'array',
@@ -38,6 +41,9 @@ class ProductVariation extends Model
 
     protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag'];
 
+    protected $dispatchesEvents = [
+        'deleting' => ProductVariationDeleting::class,
+    ];
 
     public function product()
     {
@@ -106,7 +112,7 @@ class ProductVariation extends Model
     }
 
     public function getRemoveFlagAttribute() {
-        return $this->remove_flag;
+        return $this->remove_flag ?? false;
     }
 
     // START: Casts section

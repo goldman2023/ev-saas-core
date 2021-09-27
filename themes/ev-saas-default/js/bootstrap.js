@@ -1,8 +1,8 @@
 import Sortable from 'sortablejs';
 import flatpickr from "flatpickr";
-import Alpine from 'alpinejs';
+/*import Alpine from 'alpinejs';
 import persist from '@alpinejs/persist';
-import intersect from '@alpinejs/intersect';
+import intersect from '@alpinejs/intersect';*/
 
 window._ = require('lodash');
 

@@ -1,4 +1,4 @@
-<div>
+<div class="{{ $class ?? '' }}">
     <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                           wire:target="{{ $wireTarget }}"
                           wire:loading.class.remove="d-none"></x-ev.loaders.spinner>

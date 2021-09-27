@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Forms\Products;
 
+use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductVariation;
-use Ev;
+use Arr;
+use EVS;
 use Illuminate\View\Component;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -26,9 +28,12 @@ class ProductVariationsDatatable extends DataTableComponent
     public $buttons;
     public $wireTarget;
     public $wireLoadingClass;
+    public $class;
     protected $listeners = [
         'refreshDatatable' => '$refresh',
-        'saveVariations' => 'setVariationsData'
+        'setProduct' => 'syncProduct',
+        'saveVariations' => 'setVariationsData',
+        'updatedAttributeValues' => 'syncAttributeValues'
     ];
 
     public $bulkActionSetPricesID = 'ev-product-variations__set-prices';
@@ -39,7 +44,7 @@ class ProductVariationsDatatable extends DataTableComponent
      *
      * @return void
      */
-    public function mount($product = null, $variationAttributes = [], $buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3')
+    public function mount($product = null, $variationAttributes = [], $buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3', $class = '')
     {
         parent::mount();
 
@@ -47,12 +52,12 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->attributes = collect($variationAttributes);
         $this->variations = collect($this->product->variations()->get()->keyBy('name')->toArray());
 
-
         $this->all_combinations = collect([]);
         $this->rows = collect([]);
         $this->buttons = $buttons;
         $this->wireTarget = $wireTarget;
         $this->wireLoadingClass = $wireLoadingClass;
+        $this->class = $class;
 
         // Create or Fetch all combinations.
         $this->createAllCombinations();
@@ -74,7 +79,7 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public array $bulkActions = [
         'useAllVariations' => 'Generate all',
-        'triggerSetAllPricesModal' => 'Set All Prices'
+        'triggerSetAllPricesModal' => 'Set price for all'
     ];
 
     public function dehydrate()
@@ -99,13 +104,25 @@ class ProductVariationsDatatable extends DataTableComponent
         });
     }
 
+    public function syncProduct(Product $product) {
+        $this->product = $product;
+    }
+
+    public function syncAttributeValues($attributes) {
+        $this->attributes = collect($attributes);
+        $this->createAllCombinations();
+        $this->useAllVariations();
+    }
+
     public function useAllVariations() {
         // Merge all combinations with currently added variations.
         $this->rows = $this->all_combinations->merge($this->variations)->map(function($item) {
             $item = (object) $item;
             $item->temp_stock = (object) $item->temp_stock;
             return $item;
-        });
+        })->filter(function ($row, $key) {
+            return $row->remove_flag === false;
+        })->sortKeys();
     }
 
     public function triggerSetAllPricesModal() {
@@ -114,8 +131,8 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public function createAllCombinations()
     {
-        $variations = collect([]);
-        $matrix = EV::generateAllVariations($this->attributes);
+        $matrix = EVS::generateAllVariations($this->attributes);
+        $this->all_combinations = collect([]);
 
         // Get all possible combinations
         if(!empty($matrix)) {
@@ -125,8 +142,8 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
 
                 $variation = new ProductVariation();
-                $variation->id = null; // THIS IS JUST TEMPORARY! Remember to set ID to null before saving variations! Some ID is necessary for wire:key
-                $variation->product_id = $this->product->id;
+                $variation->id = null;
+                $variation->product_id = $this->product->id ?? null;
 
                 $variant_data = [];
 
@@ -175,6 +192,7 @@ class ProductVariationsDatatable extends DataTableComponent
         if($this->attributes->isNotEmpty()) {
             foreach($this->attributes as $att) {
                 $att = (object) $att;
+
                 $columns[] = Column::make($att->name, \Str::slug($att->name))
                     ->addClass('hidden md:table-cell');
             }
@@ -206,12 +224,22 @@ class ProductVariationsDatatable extends DataTableComponent
     public function setVariationsData() {
 
         if($this->rows->isNotEmpty()) {
+            // Remove flagged Variations
+            foreach($this->variations as $variation) {
+                if($variation['remove_flag']) {
+                    $variation_model = ProductVariation::find($variation['id']);
+                    $variation_model->forceDelete();
+                }
+            }
+
+            // Set Variations
             $this->variations = collect([]);
 
             foreach ($this->rows as $index => $variation) {
                 if(empty($variation->id)) {
                     // New variation - Insert
                     $temp_stock = $variation->temp_stock;
+                    $variation->price = !empty($variation) ? $variation : 0;
                     unset($variation->temp_stock);
 
                     $variation_model = new ProductVariation();
@@ -222,21 +250,24 @@ class ProductVariationsDatatable extends DataTableComponent
                     $this->setProductVariationStocks(false, $variation_model, $temp_stock);
                     $this->variations->push($variation_model->toArray());
                 } else {
-                    // Old variation - Update
+                    // Old variation - Update or Delete
                     $variation_model = ProductVariation::find($variation->id);
                     $variation_model->image = $variation->image;
-                    $variation_model->price = $variation->price;
+                    $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
                     $variation_model->save();
 
                     $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
                     $this->variations->push($variation_model->toArray());
                 }
-
-                $this->variations = $this->variations->keyBy('name');
-                $this->useAllVariations();
-
-                $this->dispatchBrowserEvent('toastIt', ['id' => '#product-variations-toast', 'content' => translate('Variations successfully updated!')]);
             }
+
+            $this->variations = $this->variations->keyBy('name');
+            $this->useAllVariations();
+
+            // Update Attributes (used for variations) selected values in DB, by emitting
+            $this->emitUp('variationsUpdated');
+
+            $this->dispatchBrowserEvent('toastIt', ['id' => '#product-variations-toast', 'content' => translate('Variations successfully updated!')]);
         }
     }
 
@@ -256,6 +287,49 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
             }
         }
+    }
+
+    public function setAttributeValueRemoveFlag($matrix = []) {
+        // Loop through variations and set remove flag for those which are not in matrix
+
+        if($this->variations->isNotEmpty() && !empty($matrix)) {
+            $data = $this->variations->toArray();
+
+            foreach($data as $key => $variation) {
+                $passed = [];
+                foreach($matrix as $id => $val) {
+                    $passed[$id] = false;
+                }
+
+                foreach($matrix as $other_att_id => $other_att_vals) {
+                    // Check if other attributes values of the current variation are actually selected!
+                    // This is very important because we MUST mark variations, whose attribute values are not selected, as removeFlag = true!
+                    $other_att_vals = array_map(fn($val) => (int) $val, $other_att_vals); // "other attributes values" must be array of ints
+
+                    if(in_array((int) $variation['variant'][$other_att_id]['attribute_value_id'], $other_att_vals)) {
+                        $passed[$other_att_id] = true;
+                    }
+                }
+
+                if(array_sum(array_values($passed)) !== count($matrix)) {
+                    $data[$key]['remove_flag'] = true;
+                } else {
+                    $data[$key]['remove_flag'] = false;
+                }
+            }
+
+            $this->variations = collect($data)->sortKeys();
+            $this->useAllVariations();
+        }
+    }
+
+    public function setAllVariationsPrice($price) {
+        $data = $this->variations->toArray();
+        foreach($data as $key => $row) {
+            $data[$key]['price'] = $price;
+        }
+        $this->variations = collect($data)->sortKeys();
+        $this->useAllVariations();
     }
 
     public function modalsView(): string

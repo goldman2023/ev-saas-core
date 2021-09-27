@@ -15,7 +15,8 @@ use App\Models\Upload;
 use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use DB;
-use EV;
+use EVS;
+use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 
@@ -30,7 +31,11 @@ class ProductForm extends Component
     public Product $product;
     public array $attributes;
     public $rows;
+    public $productVariationsDatatableClass = 'ev-product-variations-component';
 
+    protected $listeners = [
+        'variationsUpdated' => 'updateAttributeValuesForVariations'
+    ];
 
     protected function rules()
     {
@@ -54,10 +59,10 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
-            'product.temp_sku' => 'required',
+            'product.temp_sku' => 'required|unique:App\Models\ProductStock,sku',
             'product.min_qty' => 'required|numeric|min:1',
             'product.current_stock' => 'required|numeric|min:1', //  new ModelsExist(Upload::class)
-            'product.low_stock_quantity' => 'required|numeric|min:1',
+            'product.low_stock_qty' => 'required|numeric|min:0',
             'product.unit_price' => 'required|numeric',
             'product.purchase_price' => 'nullable|numeric',
             'product.discount' => 'required|numeric',
@@ -96,7 +101,7 @@ class ProductForm extends Component
     {
         $this->rows = collect([]);
         $this->page = $page;
-        $this->attributes = EV::getMappedAttributes('App\Models\Product', $product);
+        $this->attributes = EVS::getMappedAttributes('App\Models\Product', $product);
 
         // Set default params
         if($product) {
@@ -112,7 +117,7 @@ class ProductForm extends Component
             $this->product->stock_visibility_state = 'quantity';
             $this->product->discount_type = 'amount';
             $this->product->discount = 0;
-            $this->product->low_stock_quantity = 1;
+            $this->product->low_stock_qty = 0;
             $this->product->min_qty = 1;
             $this->product->brand_id = null;
         }
@@ -139,7 +144,22 @@ class ProductForm extends Component
         //dd($this->attributes);
     }
 
-    public function validateSpecificSet($set_name, $next_page, $is_last = false)
+    public function dehydrate()
+    {
+        $this->dispatchBrowserEvent('initProductForm');
+        //$this->dispatchBrowserEvent('goToTop');
+    }
+
+    public function render()
+    {
+        return view('livewire.forms.products.product-form');
+    }
+
+    public function syncVariationsDatatable() {
+        $this->emit('updatedAttributeValues', $this->variations_attributes);
+    }
+
+    public function validateSpecificSet($set_name, $next_page, $is_last = false, $insert_on_step = null)
     {
         if($set_name) {
             foreach($this->rulesSets as $key => $set) {
@@ -151,7 +171,12 @@ class ProductForm extends Component
                 }
             }
 
-            if($is_last) {
+            // Check if insert on specific step is set
+            if(is_array($insert_on_step) && (in_array($next_page, $insert_on_step) || in_array($set_name, $insert_on_step))) {
+                if(empty($this->product->id)) {
+                    $this->insert(true);
+                }
+            } else if($is_last) {
                 if(empty($this->product->id)) {
                     $this->insert();
                 } else {
@@ -163,28 +188,40 @@ class ProductForm extends Component
         }
     }
 
-    protected function insert() {
+    /**
+     * Inserts product data to database.
+     * Inserts can be partial or full.
+     * 1. Full: inserts all the product data, attributes, variations, translations, stocks etc. to the database
+     * 2. Partial: inserts only part of the data to the database and creates a draft version of the product (before adding attributes, variations, stocks)
+     *
+     * @param false $partial
+     */
+    protected function insert(bool $partial = false): void
+    {
         DB::beginTransaction();
 
         try {
             // SET: Product Data
-            $this->setProductData();
+            $this->setProductData($partial ? 0 : 1);
 
             // SET: Product Translations
             $this->setProductTranslation();
 
             // TODO: VAT & TAX, Flash Deals
 
-            // SET: Attribute relationships
-            $this->setAttributes();
+            if(!$partial) {
+                // SET: Attribute relationships
+                $this->setAttributes();
+            }
 
-            // SET: Main & Variations Product Stocks
+            // SET: Main Product Stocks
             $this->setProductStocks();
 
             DB::commit();
 
             $this->insert_success = true;
 
+            $this->emit('setProduct', $this->product);
             $this->dispatchBrowserEvent('goToTop');
         } catch(\Exception $e) {
             DB::rollBack();
@@ -201,7 +238,6 @@ class ProductForm extends Component
 
             // SET: Product Translations
             $this->setProductTranslation();
-
 
             // TODO: VAT & TAX, Flash Deals
 
@@ -222,7 +258,7 @@ class ProductForm extends Component
         }
     }
 
-    protected function setProductData() {
+    protected function setProductData($published = 1) {
         if(empty($this->product->brand_id)) {
             $this->product->brand_id = null;
         }
@@ -253,9 +289,12 @@ class ProductForm extends Component
             $this->product->meta_img = $this->product->name;
         }
 
-        if (empty(trim($this->product->meta_description))) {
-            $this->product->meta_description = trim(strip_tags($this->product->description));
-        }
+        $this->product->meta_description = trim(strip_tags($this->product->description ?? ''));
+
+
+        // Purify WYSIWYG before saving
+        $this->product->description = Purifier::clean($this->product->description);
+
 
         // TODO: Add Featured, Cash on delivery, Todays deal to the form
         $this->product->cash_on_delivery = 0;
@@ -263,7 +302,7 @@ class ProductForm extends Component
         $this->product->todays_deal = 0;
 
         // TODO: Add Product status option to the form - published, draft
-        $this->product->published = 1;
+        $this->product->published = $published;
 
         // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
         // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
@@ -281,10 +320,10 @@ class ProductForm extends Component
     }
 
     protected function setProductStocks() {
-        // TODO: Create proper product stocks for variations!
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => 'App\Models\Product']);
         $product_stock->sku = $this->product->temp_sku;
         $product_stock->qty = $this->product->current_stock;
+        $product_stock->low_stock_qty = $this->product->low_stock_qty;
         $product_stock->save();
     }
 
@@ -350,22 +389,29 @@ class ProductForm extends Component
         }
     }
 
+    public function updateAttributeValuesForVariations() {
+        $atts = collect($this->attributes)->filter(function($att, $key) {
+            $att = (object) $att;
+            return $att->selected === true && $att->for_variations === true;
+        });
+
+        if($atts) {
+            foreach ($atts as $att) {
+                $att = (object)$att;
+                $att_values = $att->attribute_values;
+
+                if ($att_values) {
+
+                }
+            }
+        }
+    }
+
     public function getVariationsAttributesProperty() {
         $atts_for_variations = collect($this->attributes)->filter(function($att, $key) {
             return ((object) $att)->for_variations === true;
         });
 
         return $atts_for_variations;
-    }
-
-    public function dehydrate()
-    {
-        $this->dispatchBrowserEvent('initProductForm');
-        //$this->dispatchBrowserEvent('goToTop');
-    }
-
-    public function render()
-    {
-        return view('livewire.forms.products.product-form');
     }
 }

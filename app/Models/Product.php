@@ -116,6 +116,8 @@ class Product extends Model
 
     /* Properties not saved in DB */
     public $temp_sku;
+    public $current_stock;
+    public $low_stock_qty;
 
     /**
      * The relationships that should always be loaded.
@@ -126,7 +128,7 @@ class Product extends Model
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'num_of_sale', 'thumbnail_img', 'temp_sku'];
+        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
 
     protected $casts = [
         'choice_options' => 'object',
@@ -134,7 +136,7 @@ class Product extends Model
         'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink','temp_sku'];
+    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty'];
 
     protected static function boot()
     {
@@ -228,15 +230,23 @@ class Product extends Model
      * @return array*
      */
     public function getImagesAttribute() {
-
-        $photos_idx = explode(',', $this->attributes['photos']);
-        foreach ($photos_idx as &$i) $i = (int) $i;
-
         $photos = [];
         $data = [
             'thumbnail' => [],
             'gallery' => []
         ];
+
+        if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
+            $data['thumbnail'] = [
+                'id' => null,
+                'url' => null
+            ];
+            return $data;
+        }
+
+        $photos_idx = explode(',', $this->attributes['photos']);
+        foreach ($photos_idx as &$i) $i = (int) $i;
+
 
         if(!empty($this->attributes['thumbnail_img'])) {
             // Add thumb as the first element in photos array
@@ -306,6 +316,35 @@ class Product extends Model
         }
 
         return $this->temp_sku;
+    }
+
+
+    public function setCurrentStockAttribute($value) {
+        $this->current_stock = $value;
+    }
+
+    public function getCurrentStockAttribute() {
+        if(empty($this->current_stock)) {
+            $stock = $this->stock()->first();
+
+            return $stock->qty ?? 0;
+        }
+
+        return $this->current_stock;
+    }
+
+    public function setLowStockQtyAttribute($value) {
+        $this->low_stock_qty = $value;
+    }
+
+    public function getLowStockQtyAttribute() {
+        if(empty($this->low_stock_qty)) {
+            $stock = $this->stock()->first();
+
+            return $stock->low_stock_qty ?? 0;
+        }
+
+        return $this->low_stock_qty;
     }
 
 

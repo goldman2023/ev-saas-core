@@ -19,7 +19,7 @@
         @endif
     @endif
             @php $value = is_array($value) ? (object) $value : $value; @endphp
-            <input wire:model.{{ $wireType }}="{{ $name }}"
+            <input @if(!empty($name)) wire:model.{{ $wireType }}="{{ $name }}" @endif
                    type="{{ $type }}"
                    class="form-control {{ $class }} @error($errorBagName) is-invalid @enderror"
                    name="{{ $name }}"
@@ -31,6 +31,7 @@
                         value="{{ $value }}"
                    @endif
                    aria-label="{{ $label }}"
+                   @if(empty($name)) wire:ignore @endif
                    {{ $attributes }}
             >
     @if(!empty($icon) || !empty($text))

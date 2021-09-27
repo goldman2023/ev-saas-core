@@ -26,9 +26,8 @@
         <div class="file-preview box sm @if($sortable) js-sortable @endif"
              @if(!empty($sortableOptions))
              data-hs-sortable-options='@if(is_string($sortableOptions)) {!! $sortableOptions !!} @else @json($sortableOptions) @endif'
-            @endif
+             @endif
         >
-
         </div>
     @endif
 
