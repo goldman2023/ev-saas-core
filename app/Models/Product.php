@@ -13,6 +13,7 @@ use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -113,6 +114,7 @@ class Product extends Model
     use ReviewTrait;
     use AttributeTrait;
     use HasSlug;
+    use SoftDeletes;
 
     /* Properties not saved in DB */
     public $temp_sku;
