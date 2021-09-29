@@ -24,6 +24,7 @@
     {{-- TODO: Refactor this to blade components --}}
     @include('frontend.components.benefits')
 
+
 @endsection
 
 @section('script')
