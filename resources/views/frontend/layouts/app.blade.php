@@ -91,6 +91,9 @@
     </div>
 </div>
 
+<x-default.footer.mobile-footer></x-default.footer.mobile-footer>
+
+
 <!-- Print SignUp Modal Component -->
 <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
