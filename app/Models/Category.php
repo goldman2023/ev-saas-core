@@ -58,6 +58,11 @@ class Category extends Model
         static::addGlobalScope('alphabetical', function (Builder $builder) {
             $builder->orderBy('name', 'ASC');
         });
+
+
+        static::addGlobalScope('alphabetical', function (Builder $builder) {
+            $builder->orderBy('name', 'ASC');
+        });
     }
 
     public function subCategories()

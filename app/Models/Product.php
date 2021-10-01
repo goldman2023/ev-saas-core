@@ -138,6 +138,13 @@ class Product extends Model
                 $builder->where('published', 1);
             });
         }
+
+        if(is_vendor_site()) {
+            static::addGlobalScope('single_vendor', function (Builder $builder) {
+                $builder->where('user_id', '=' , 6);
+            });
+        }
+
     }
 
     /**

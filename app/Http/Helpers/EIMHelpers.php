@@ -240,3 +240,8 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 
     return $stringKey;
 }
+
+function is_vendor_site() {
+    /* TODO: make this dynamic */
+    return false;
+}
