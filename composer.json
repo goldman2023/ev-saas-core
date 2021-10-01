@@ -61,6 +61,7 @@
         "spatie/once": "^3.0",
         "spatie/schema-org": "^3.4",
         "stancl/tenancy": "^3.4",
+        "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
         "twilio/sdk": "^6.1",
         "yajra/laravel-datatables": "^1.5",

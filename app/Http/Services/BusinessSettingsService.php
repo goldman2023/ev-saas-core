@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Services;
-
 use App\Models\BusinessSetting;
 use Cache;
 
@@ -22,6 +21,24 @@ class BusinessSettingsService
     public function __construct($app) {
         $this->app = $app;
 
+        $this->setAll();
+    }
+
+    public function get($name, $default = null) {
+        return isset($this->settings[$name]) ? ($this->settings[$name]['value'] ?? $default) : $default;
+    }
+
+    public function getModel($name) {
+        return BusinessSetting::firstOrNew([
+            'type' => $name
+        ]);
+    }
+
+    public function getAll() {
+        return $this->settings;
+    }
+
+    public function setAll() {
         $cache_key = tenant('id') . '_business_settings';
         $settings = Cache::get($cache_key, null);
         $default = [];
@@ -37,13 +54,5 @@ class BusinessSettingsService
         }
 
         $this->settings = !empty($settings) ? $settings : $default;
-    }
-
-    public function get($name, $default = null) {
-        return isset($this->settings[$name]) ? ($this->settings[$name]['value'] ?? $default) : $default;
-    }
-
-    public function getAll() {
-        return $this->settings;
     }
 }

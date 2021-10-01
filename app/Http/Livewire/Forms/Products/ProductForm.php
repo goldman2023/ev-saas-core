@@ -8,6 +8,7 @@ use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
 use App\Facades\BusinessSettings;
 use App\Models\AttributeValueTranslation;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductTranslation;
@@ -32,6 +33,8 @@ class ProductForm extends Component
     public array $attributes;
     public $rows;
     public $productVariationsDatatableClass = 'ev-product-variations-component';
+    public $categories;
+    public $selected_categories_ids;
 
     protected $listeners = [
         'variationsUpdated' => 'updateAttributeValuesForVariations'
@@ -141,7 +144,8 @@ class ProductForm extends Component
             }
         }
 
-        //dd($this->attributes);
+        // Set categories
+        $this->categories = EVS::categoriesTree();
     }
 
     public function dehydrate()
