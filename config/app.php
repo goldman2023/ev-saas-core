@@ -269,6 +269,7 @@ return [
         'BusinessSettings' => App\Facades\BusinessSettings::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
+        'Carbon' => Illuminate\Support\Carbon::class,
     ],
 
 ];
