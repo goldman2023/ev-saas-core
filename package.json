@@ -37,6 +37,7 @@
         "@tailwindcss/forms": "^0.3.2",
         "@tailwindcss/line-clamp": "^0.2.1",
         "@tailwindcss/typography": "^0.4.1",
+        "@toast-ui/editor": "^3.1.0",
         "@yaireo/tagify": "^4.1.1",
         "alpinejs": "^3.2.3",
         "aos": "^2.3.4",

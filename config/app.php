@@ -186,6 +186,7 @@ return [
          * Package Service Providers...
          */
         \App\Providers\GoogleDriveServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -203,7 +204,7 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
 
         App\Providers\CartServiceProvider::class,
-
+        Mews\Purifier\PurifierServiceProvider::class,
     ],
 
     /*
@@ -257,17 +258,17 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PaytmWallet' => Anand\LaravelPaytmWallet\Facades\PaytmWallet::class,
         'Str' => Illuminate\Support\Str::class,
+        'Arr' => Illuminate\Support\Arr::class,
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'CartService' => App\Facades\CartService::class,
-        'EV' => App\Facades\EV::class,
-        'DesignSettings' => App\Facades\DesignSettings::class,
+        'EVS' => App\Facades\EVS::class,
         'BusinessSettings' => App\Facades\BusinessSettings::class,
         'Theme' => Qirolab\Theme\Theme::class,
-        'Carbon' => Illuminate\Support\Carbon::class,
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
     ],
 
 ];

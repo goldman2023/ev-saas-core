@@ -73,12 +73,43 @@
         $('.category-nav-element').each(function(i, el) {
             $(el).on('mouseover', function() {
                 if (!$(el).find('.sub-cat-menu').hasClass('loaded')) {
-                    $.post('{{ route('category.elements') }}', {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        id: $(el).data('id')
-                    }, function(data) {
-                        $(el).find('.sub-cat-menu').addClass('loaded').html(data);
-                    });
+                    $('.loaded').each(function (i, el){
+                        var preview_html = '<div class="c-preloader text-center absolute-center">'+
+                                          '<i class="las la-spinner la-spin la-3x opacity-70"></i>'+
+                                          '</div>';
+                        $(el).removeClass('loaded');
+                        $(el).html(preview_html);
+                    })
+
+                    var data = $(el).data('sub');
+                    var html = '<div class="card-columns">';
+                    var href = '{{ route("products.category", "") }}' + '/';
+                   
+                    data.map((item, key) => {
+                        html += '<div class="card shadow-none border-0">'+
+                                '<ul class="list-unstyled mb-3">'+
+                                '<li class="fw-600 border-bottom pb-2 mb-3">'+
+                                '<a class="text-reset" href="' + href + item.slug +'">' + item.name +'</a>'+
+                                '</li>';
+                        if(item.children.length > 0 ){
+                            item.children.map((sub_item, key)=>{
+                                html += '<li class="mb-2">'+
+                                        '<a class="text-reset" href="'+ href + sub_item.slug +'">'+ sub_item.name+ '</a>'+
+                                        '</li>'
+                            })
+                        }        
+                        html += '</ul>'+
+                                '</div>';
+                    })
+                    html += '</div>';
+                    $(el).find('.sub-cat-menu').addClass('loaded').html(html);
+
+                    // $.post('{{ route('category.elements') }}', {
+                    //     _token: $('meta[name="csrf-token"]').attr('content'),
+                    //     id: $(el).data('id')
+                    // }, function(data) {
+                    //     $(el).find('.sub-cat-menu').addClass('loaded').html(data);
+                    // });
                 }
             });
         });

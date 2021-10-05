@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 /**
  * App\Models\Category
@@ -35,7 +36,31 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Category extends Model
 {
-    use Cachable;
+    //use Cachable;
+    use HasRecursiveRelationships;
+    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
+
+    public $selected;
+
+    protected $appends = ['selected'];
+
+    public function getParentKeyName() {
+        return 'parent_id';
+    }
+
+    public function getLocalKeyName() {
+        return 'id';
+    }
+
+    public function getCustomPaths() {
+        return [
+            [
+                'name' => 'slug_path',
+                'column' => 'slug',
+                'separator' => '.',
+            ],
+        ];
+    }
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
@@ -65,14 +90,10 @@ class Category extends Model
         });
     }
 
-    public function subCategories()
-    {
-        return $this->hasMany(SubCategory::class);
-    }
 
-    public function subSubCategories()
+    public function categories()
     {
-        return $this->hasMany(SubSubCategory::class);
+        return $this->hasManyOfDescendantsAndSelf('App\Models\Category');
     }
 
     public function products()
@@ -93,18 +114,12 @@ class Category extends Model
         return $this->belongsTo(Blog::class, 'category_id');
     }
 
-    public function categories()
-    {
-        return $this->hasMany(Category::class, 'parent_id');
+    public function setSelectedAttribute($value) {
+        $this->selected = $value;
     }
 
-    public function childrenCategories()
-    {
-        return $this->hasMany(Category::class, 'parent_id')->with('categories');
+    public function getSelectedAttribute() {
+        return $this->selected ?? false;
     }
 
-    public function parentCategory()
-    {
-        return $this->belongsTo(Category::class, 'parent_id');
-    }
 }

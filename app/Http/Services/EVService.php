@@ -395,4 +395,30 @@ class EVService
 
         return $mapped;
     }
+
+    public function generateAllVariations($attributes) {
+        $result = [[]];
+        $all_att_values = $attributes->pluck('attribute_values');
+
+        foreach ($all_att_values as $property => $property_values) {
+            $property_values = array_values(array_filter($property_values, function($v, $k) {
+                return $v['selected'] === true;
+            }, ARRAY_FILTER_USE_BOTH));
+
+            $tmp = [];
+            foreach ($result as $result_item) {
+                foreach ($property_values as $property_value) {
+                    $tmp[] = array_merge($result_item, [$property => $property_value]);
+                }
+            }
+            $result = $tmp;
+        }
+
+        return $result;
+    }
+
+    public static function categoriesTree() {
+        $tree = Category::tree()->get()->toTree()->toArray();
+        return collect($tree)->recursive_children('children', ['fn' => 'keyBy', 'params' => ['slug']]);
+    }
 }

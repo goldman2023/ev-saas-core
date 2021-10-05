@@ -1,5 +1,8 @@
 import Sortable from 'sortablejs';
 import flatpickr from "flatpickr";
+/*import Alpine from 'alpinejs';
+import persist from '@alpinejs/persist';
+import intersect from '@alpinejs/intersect';*/
 
 window._ = require('lodash');
 
@@ -22,6 +25,12 @@ try {
     require('daterangepicker');
 
     require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
+
+    /* eXtend Alpine and start it */
+    /*Alpine.plugin(persist);
+    Alpine.plugin(intersect);
+    window.Alpine = Alpine;
+    Alpine.start();*/
 } catch (e) {}
 
 /**

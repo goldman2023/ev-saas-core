@@ -3,7 +3,7 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class EV extends Facade
+class EVS extends Facade
 {
     /**
      * Get the registered name of the component.

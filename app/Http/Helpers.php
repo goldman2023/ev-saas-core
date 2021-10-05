@@ -900,10 +900,19 @@ if (!function_exists('static_asset')) {
      * @param  bool|null  $secure
      * @return string
      */
-    function static_asset($path, $secure = null, $theme = false)
+    function static_asset($path, $secure = null, $theme = false, $cache_bust = false)
     {
+        $filemtime = '';
+
+        try {
+            if($cache_bust) {
+                $filemtime = filemtime(public_path('themes/' . Theme::parent() . '/' . $path));
+            }
+        } catch(\Exception $e) {}
+
+
         if ($theme) {
-            return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure);
+            return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure).($cache_bust ? '?v='.$filemtime : '');
         }
         return app('url')->asset($path, $secure);
     }
