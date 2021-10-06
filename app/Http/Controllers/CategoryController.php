@@ -72,12 +72,6 @@ class CategoryController extends Controller
             $category->level = $parent->level + 1 ;
         }
 
-        if ($request->slug != null) {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
-        }
-        else {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
-        }
         if ($request->commision_rate != null) {
             $category->commision_rate = $request->commision_rate;
         }
@@ -163,14 +157,6 @@ class CategoryController extends Controller
         elseif ($category->level < $previous_level) {
             CategoryUtility::move_level_up($category->id);
         }
-
-        if ($request->slug != null) {
-            $category->slug = strtolower($request->slug);
-        }
-        else {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
-        }
-
 
         if ($request->commision_rate != null) {
             $category->commision_rate = $request->commision_rate;

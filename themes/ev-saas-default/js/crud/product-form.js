@@ -121,6 +121,9 @@ window.EVProductFormInit = function(event) {
             if(name === 'attributes' || name.match(/attributes\.[0-9]+/g)) {
                 // get only selected attributes
                 $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
+            } else if(name === 'categories-selector') {
+                // Update instantly
+                console.log(data);
             }
 
         }
@@ -233,13 +236,15 @@ document.addEventListener('validate-step', async function (event) {
 
     /* Set selects */
     const selects = document.querySelectorAll(".lw-form .custom-select");
+    let selected_categories = [];
     for (const select of selects) {
         let name = select.getAttribute('name');
 
         if(name && !$(select).is('[name^="attributes"]')) {
-            let data = $(select).val();
+            // Attributes
             component.set(select.getAttribute('name'), $(select).val()); // set livewire
         } else if($(select).is('[name^="attributes."]')) {
+            // Attribute values
             let $att_id = $(select).data('attribute-id');
             let $att_values_idx = Array.isArray($(select).val()) ? $(select).val().map(x => parseInt(x, 10)) : $(select).val();
 
@@ -255,9 +260,17 @@ document.addEventListener('validate-step', async function (event) {
                     }
                 }
             }
-
+        } else if($(select).is('[name="selected_categories"]')) {
+            // Categories and sub-categories
+            selected_categories.concat($(select).val());
         }
     }
+
+    /* Set Selected Categories */
+    if(selected_categories.length > 0) {
+        component.set('selected_categories', selected_categories);
+    }
+
 
     /* Set Quill */
     $(".lw-form .quill-custom").each(function(index, element) {

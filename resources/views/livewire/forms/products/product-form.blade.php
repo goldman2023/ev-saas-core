@@ -137,7 +137,7 @@
                                     <div class="">
                                         <x-ev.form.input name="product.name" type="text" label="{{ translate('Product name') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
 
-                                        <x-ev.form.select name="product.category_id" :items="EVS::getMappedCategories()" label="{{ translate('Category') }}" :required="true" :search="true" placeholder="{{ translate('Select the category...') }}" />
+                                        <x-ev.form.categories-selector :items="$this->categories" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
                                         <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
