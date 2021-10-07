@@ -34,7 +34,7 @@ class ProductForm extends Component
     public $rows;
     public $productVariationsDatatableClass = 'ev-product-variations-component';
     public $categories;
-    public $selected_categories_ids;
+    public $selected_categories;
 
     protected $listeners = [
         'variationsUpdated' => 'updateAttributeValuesForVariations'
@@ -45,7 +45,7 @@ class ProductForm extends Component
         // Define rules sets
         $this->rulesSets['general'] = [
             'product.name' => 'required|min:6',
-            'product.category_id' => 'required|exists:App\Models\Category,id',
+            'selected_categories' => 'required',
             'product.brand_id' => 'nullable|exists:App\Models\Brand,id',
             'product.unit' => 'nullable|required', // TODO: make Units table or something like that
             'product.tags' => 'nullable|array',
@@ -105,14 +105,17 @@ class ProductForm extends Component
         $this->rows = collect([]);
         $this->page = $page;
         $this->attributes = EVS::getMappedAttributes('App\Models\Product', $product);
+        $this->categories = EVS::categoriesTree();
 
         // Set default params
         if($product) {
             $this->product = $product;
             $this->action = 'update';
+            $this->selected_categories = $this->product->categories()->get();
         } else {
             $this->product = new Product();
             $this->action = 'insert';
+            $this->selected_categories = collect([]);
 
             $this->product->slug = '';
             $this->product->is_quantity_multiplied = 1;
@@ -144,8 +147,6 @@ class ProductForm extends Component
             }
         }
 
-        // Set categories
-        $this->categories = EVS::categoriesTree();
     }
 
     public function dehydrate()

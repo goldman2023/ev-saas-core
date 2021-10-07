@@ -788,71 +788,74 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 var $this = $(this);
                 var files = $this.find(".selected-files").val();
 
-                $.post(
-                    window.AIZ.data.appUrl + "/aiz-uploader/get_file_by_ids",
-                    { _token: window.AIZ.data.csrf, ids: files },
-                    function (data) {
+                if(files.trim().length > 0) {
+                    $.post(
+                        window.AIZ.data.appUrl + "/aiz-uploader/get_file_by_ids",
+                        { _token: window.AIZ.data.csrf, ids: files },
+                        function (data) {
 
-                        $this.next(".file-preview").html(null);
+                            $this.next(".file-preview").html(null);
 
-                        if (data.length > 0) {
-                            $this.find(".file-amount").html(
-                                window.AIZ.uploader.updateFileHtml(data)
-                            );
-                            for (
-                                var i = 0;
-                                i < data.length;
-                                i++
-                            ) {
-                                var thumb = "";
-                                if (data[i].type === "image") {
-                                    thumb =
-                                        '<img src="' +
-                                        window.AIZ.data.fileBaseUrl +
-                                        data[i].file_name +
-                                        '" class="img-fit">';
-                                } else {
-                                    thumb = '<i class="la la-file-text"></i>';
+                            if (data.length > 0) {
+                                $this.find(".file-amount").html(
+                                    window.AIZ.uploader.updateFileHtml(data)
+                                );
+                                for (
+                                    var i = 0;
+                                    i < data.length;
+                                    i++
+                                ) {
+                                    var thumb = "";
+                                    if (data[i].type === "image") {
+                                        thumb =
+                                            '<img src="' +
+                                            window.AIZ.data.fileBaseUrl +
+                                            data[i].file_name +
+                                            '" class="img-fit">';
+                                    } else {
+                                        thumb = '<i class="la la-file-text"></i>';
+                                    }
+                                    var html =
+                                        '<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="' +
+                                        data[i].id +
+                                        '" title="' +
+                                        data[i].file_original_name +
+                                        "." +
+                                        data[i].extension +
+                                        '">' +
+                                        '<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">' +
+                                        thumb +
+                                        "</div>" +
+                                        '<div class="col body">' +
+                                        '<h6 class="d-flex">' +
+                                        '<span class="text-truncate title">' +
+                                        data[i].file_original_name +
+                                        "</span>" +
+                                        '<span class="ext">.' +
+                                        data[i].extension +
+                                        "</span>" +
+                                        "</h6>" +
+                                        "<p>" +
+                                        window.AIZ.extra.bytesToSize(
+                                            data[i].file_size
+                                        ) +
+                                        "</p>" +
+                                        "</div>" +
+                                        '<div class="remove">' +
+                                        '<button class="btn btn-sm btn-link remove-attachment" type="button">' +
+                                        '<i class="la la-close"></i>' +
+                                        "</button>" +
+                                        "</div>" +
+                                        "</div>";
+
+                                    $this.next(".file-preview").append(html);
                                 }
-                                var html =
-                                    '<div class="d-flex justify-content-between align-items-center mt-2 file-preview-item" data-id="' +
-                                    data[i].id +
-                                    '" title="' +
-                                    data[i].file_original_name +
-                                    "." +
-                                    data[i].extension +
-                                    '">' +
-                                    '<div class="align-items-center align-self-stretch d-flex justify-content-center thumb">' +
-                                    thumb +
-                                    "</div>" +
-                                    '<div class="col body">' +
-                                    '<h6 class="d-flex">' +
-                                    '<span class="text-truncate title">' +
-                                    data[i].file_original_name +
-                                    "</span>" +
-                                    '<span class="ext">.' +
-                                    data[i].extension +
-                                    "</span>" +
-                                    "</h6>" +
-                                    "<p>" +
-                                    window.AIZ.extra.bytesToSize(
-                                        data[i].file_size
-                                    ) +
-                                    "</p>" +
-                                    "</div>" +
-                                    '<div class="remove">' +
-                                    '<button class="btn btn-sm btn-link remove-attachment" type="button">' +
-                                    '<i class="la la-close"></i>' +
-                                    "</button>" +
-                                    "</div>" +
-                                    "</div>";
-
-                                $this.next(".file-preview").append(html);
+                            } else {
+                                $this.find(".file-amount").html(window.AIZ.local.choose_file);
                             }
-                        } else {
-                            $this.find(".file-amount").html(window.AIZ.local.choose_file);
-                        }
-                });
+                        });
+                }
+
             });
         }
     };

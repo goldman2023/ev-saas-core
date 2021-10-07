@@ -419,6 +419,6 @@ class EVService
 
     public static function categoriesTree() {
         $tree = Category::tree()->get()->toTree()->toArray();
-        return collect($tree)->recursive_children('children', ['fn' => 'keyBy', 'params' => ['slug']]);
+        return collect($tree)->recursive_apply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
     }
 }

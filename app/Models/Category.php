@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+use Str;
 
 /**
  * App\Models\Category
@@ -37,12 +40,15 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 class Category extends Model
 {
     //use Cachable;
+    use HasSlug;
     use HasRecursiveRelationships;
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
     public $selected;
+    public $title_path;
+    protected $path_separator = '.';
 
-    protected $appends = ['selected'];
+    protected $appends = ['selected', 'title_path'];
 
     public function getParentKeyName() {
         return 'parent_id';
@@ -57,23 +63,29 @@ class Category extends Model
             [
                 'name' => 'slug_path',
                 'column' => 'slug',
-                'separator' => '.',
+                'separator' => $this->path_separator,
             ],
         ];
     }
 
-    public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $category_translation = $this->hasMany(CategoryTranslation::class)->where('lang', $lang)->first();
-        return $category_translation != null ? $category_translation->$field : $this->$field;
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 
-    public function category_translations(){
-    	return $this->hasMany(CategoryTranslation::class);
-    }
-
-    public function classified_products(){
-    	return $this->hasMany(CustomerProduct::class);
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     protected static function boot()
@@ -90,6 +102,20 @@ class Category extends Model
         });
     }
 
+    /* TODO: Create a better way to join translations on categories fetch */
+    public function getTranslation($field = '', $lang = false){
+        $lang = $lang == false ? App::getLocale() : $lang;
+        $category_translation = $this->hasMany(CategoryTranslation::class)->where('lang', $lang)->first();
+        return $category_translation != null ? $category_translation->$field : $this->$field;
+    }
+
+    public function category_translations(){
+    	return $this->hasMany(CategoryTranslation::class);
+    }
+
+    public function classified_products(){
+    	return $this->hasMany(CustomerProduct::class);
+    }
 
     public function categories()
     {
@@ -122,4 +148,15 @@ class Category extends Model
         return $this->selected ?? false;
     }
 
+    public function getTitlePathAttribute() {
+        $title_path = explode($this->path_separator, $this->slug_path);
+
+        if(count($title_path) > 1) {
+            foreach($title_path as $key => $title) {
+                $title_path[$key] = trim(Str::title(str_replace('-', ' ', $title)));
+            }
+        }
+
+        return implode(' '.$this->path_separator.' ', $title_path);
+    }
 }
