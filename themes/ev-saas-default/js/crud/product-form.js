@@ -104,7 +104,7 @@ window.EVProductFormInit = function(event) {
     // =======================================================
     const selects = document.querySelectorAll(".lw-form select.custom-select");
     for (const select of selects) {
-        let name = select.getAttribute('name');
+        let name = select.getAttribute('name')
         let data = Livewire.find($(select).closest('.lw-form').attr('wire:id')).get(name); // get tags property from livewire form component instance
 
         if($(select).is('[dynamic-items]')) {
@@ -121,9 +121,9 @@ window.EVProductFormInit = function(event) {
             if(name === 'attributes' || name.match(/attributes\.[0-9]+/g)) {
                 // get only selected attributes
                 $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
-            } else if(name === 'categories-selector') {
-                // Update instantly
-                console.log(data);
+            } else if(name === 'selected_categories') {
+                // Preselect livewire selected categories
+                window.EV.form.select.preselectCategories(data);
             }
 
         }
@@ -235,14 +235,17 @@ document.addEventListener('validate-step', async function (event) {
     let params = event.detail.params;
 
     /* Set selects */
-    const selects = document.querySelectorAll(".lw-form .custom-select");
+    const selects = document.querySelectorAll(".lw-form select.custom-select");
     let selected_categories = [];
     for (const select of selects) {
         let name = select.getAttribute('name');
 
-        if(name && !$(select).is('[name^="attributes"]')) {
-            // Attributes
-            component.set(select.getAttribute('name'), $(select).val()); // set livewire
+        if($(select).is('.categories-selector')) {
+            // Categories and sub-categories
+            $(select).val().forEach(function(item) {
+                selected_categories.push(item);
+            });
+
         } else if($(select).is('[name^="attributes."]')) {
             // Attribute values
             let $att_id = $(select).data('attribute-id');
@@ -260,15 +263,16 @@ document.addEventListener('validate-step', async function (event) {
                     }
                 }
             }
-        } else if($(select).is('[name="selected_categories"]')) {
-            // Categories and sub-categories
-            selected_categories.concat($(select).val());
+        } else {
+            // Attributes
+            component.set(select.getAttribute('name'), $(select).val()); // set livewire
         }
     }
 
     /* Set Selected Categories */
+
     if(selected_categories.length > 0) {
-        component.set('selected_categories', selected_categories);
+        component.set('selected_categories', selected_categories.unique());
     }
 
 

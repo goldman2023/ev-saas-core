@@ -44,3 +44,4 @@ window.EV.form.select.setOnAttributeChange = function(selector = 'select[name="a
         }
     });
 }
+

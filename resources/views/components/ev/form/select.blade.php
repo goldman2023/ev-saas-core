@@ -12,7 +12,6 @@
             data-hs-select2-options='@json($options)'
             @if($items->isEmpty() && $tags) dynamic-items @endif
             {{ $attributes }}>
-        @if($placeholder || ($items->isEmpty() && $tags)) <option label="empty"></option> @endif
 
         @if($items)
             @foreach($items as $key => $item)

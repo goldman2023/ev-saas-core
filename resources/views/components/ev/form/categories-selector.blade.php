@@ -4,7 +4,6 @@
     @endif
 
         <select
-        wire:ignore
         name="selected_categories"
         class="categories-selector js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
         data-hs-select2-options='{!! $options !!}'
@@ -28,7 +27,7 @@
     <script>
         let all_categories = @json($items);
 
-        function initCategoriesSelectors() {
+        window.EV.form.select.initCategoriesSelectors = function() {
             $('.categories-selector').off('select2:unselect').on('select2:unselect', function(e) {
                 let value = e.params.data.id; // value is slug_path which is dot notation of key accessor
                 let level = value.split('.').length - 1;
@@ -91,12 +90,13 @@
 
                     let content = `
                         <select
+                            name="selected_categories"
                             class="categories-selector js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
                             size="1" style="opacity: 0;"
                             data-level="${level+1}"
                             data-hs-select2-options='${ '{!! $options !!}'.replace('categories-selector-level-0', 'categories-selector-level-'+(level+1)) }'
                             @if($multiple) multiple @endif
-                            {{ $attributes }}>
+                    {{ $attributes }}>
 
                         </select>
                     `;
@@ -109,12 +109,16 @@
                     // IMPORTANT: After appending, it has to be initialized again!!! Otherwise selecting won't work as expected!!!!
                     $.HSCore.components.HSSelect2.init(sub_selector);
 
-                    // Attach handlers
-                    initCategoriesSelectors();
+                    // ReAttach handlers
+                    window.EV.form.select.initCategoriesSelectors();
                 } else if(sub_selector.length > 0 && Object.keys(selected.children).length > 0) {
                     let current_sub_selections = sub_selector.select2('data').map(x => x.id);
 
                     // Create new optgroup in sub_cat selector
+                    if($(`#group-${selected.slug_path}`).length > 0) {
+                        return;
+                    }
+
                     let new_options = [`
                         <optgroup id="group-${selected.slug_path}" label="${selected.title_path.replace('.', ' / ')}">
                     `];
@@ -142,12 +146,71 @@
                     sub_selector.val(current_sub_selections);
                     sub_selector.trigger('change');
 
-                    // Attach handlers
-                    initCategoriesSelectors();
+                    // ReAttach handlers
+                    window.EV.form.select.initCategoriesSelectors();
                 }
+
+
+                if(e.params.level !== undefined && e.params.selected_items !== undefined && e.params.selected_items[e.params.level] !== undefined && e.params.selected_items[e.params.level].length > 0) {
+                    $('.categories-selector[data-level="'+e.params.level+'"]').val(e.params.selected_items[e.params.level].map(x => x.id));
+                    e.params.selected_items[e.params.level].forEach(function(item) {
+                        $('.categories-selector[data-level="'+e.params.level+'"]').trigger('change').trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: item,
+                                level: e.params.level + 1,
+                                selected_items: e.params.selected_items
+                            }
+                        });
+                    });
+                }
+
             });
         }
 
-        initCategoriesSelectors();
+        /**
+         * This is fired when Categories-Selector component has to set previously selected values (as when changing steps in product form etc)
+         */
+        window.EV.form.select.preselectCategories = function(data) {
+            if(data.length > 0) {
+                let selected = [];
+
+                data.forEach(function(category_path, index) {
+                    let cat_level = category_path.split('.').length - 1;
+                    let category = category_path.replace(/([.])/g, ".children.").split('.').reduce((a, b) => a[b], all_categories);
+
+                    if(selected[cat_level] === undefined) {
+                        selected[cat_level] = [{
+                            id: category_path,
+                            text: category.name
+                        }];
+                    } else {
+                        selected[cat_level].push({
+                            id: category_path,
+                            text: category.name
+                        });
+                    }
+                });
+
+                // Select proper values
+
+                if(selected[0].length > 0) {
+                    $('.categories-selector[data-level="0"]').val(selected[0].map(x => x.id)).trigger('change');
+                    selected[0].forEach(function(item) {
+                        $('.categories-selector[data-level="0"]').trigger({
+                            type: 'select2:select',
+                            params: {
+                                data: item,
+                                level: 1,
+                                selected_items: selected
+                            }
+                        });
+                    });
+                }
+            }
+        }
+
+
+        window.EV.form.select.initCategoriesSelectors();
     </script>
 </div>
