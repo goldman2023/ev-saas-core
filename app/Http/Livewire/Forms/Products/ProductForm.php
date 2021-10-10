@@ -17,9 +17,12 @@ use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use DB;
 use EVS;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
+use Str;
 
 class ProductForm extends Component
 {
@@ -62,7 +65,7 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
-            'product.temp_sku' => 'required|unique:App\Models\ProductStock,sku',
+            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock()->first()->id ?? null)],
             'product.min_qty' => 'required|numeric|min:1',
             'product.current_stock' => 'required|numeric|min:1', //  new ModelsExist(Upload::class)
             'product.low_stock_qty' => 'required|numeric|min:0',
@@ -111,7 +114,7 @@ class ProductForm extends Component
         if($product) {
             $this->product = $product;
             $this->action = 'update';
-            $this->selected_categories = $this->product->categories()->get();
+            $this->selected_categories = $this->product->selected_categories('slug_path');
         } else {
             $this->product = new Product();
             $this->action = 'insert';
@@ -185,7 +188,7 @@ class ProductForm extends Component
                 if(empty($this->product->id)) {
                     $this->insert();
                 } else {
-                    $this->update();
+                    $this->update(true);
                 }
             } else {
                 $this->page = $next_page;
@@ -204,13 +207,20 @@ class ProductForm extends Component
     protected function insert(bool $partial = false): void
     {
         DB::beginTransaction();
+        $this->insert_success = false;
 
         try {
             // SET: Product Data
             $this->setProductData($partial ? 0 : 1);
 
+            // SET: Product Categories
+            $this->setProductCategories();
+
             // SET: Product Translations
             $this->setProductTranslation();
+
+            // SET: Main Product Stocks
+            $this->setProductStocks();
 
             // TODO: VAT & TAX, Flash Deals
 
@@ -218,9 +228,6 @@ class ProductForm extends Component
                 // SET: Attribute relationships
                 $this->setAttributes();
             }
-
-            // SET: Main Product Stocks
-            $this->setProductStocks();
 
             DB::commit();
 
@@ -235,31 +242,37 @@ class ProductForm extends Component
     }
 
     protected function update() {
+        $this->update_success = false;
+
         DB::beginTransaction();
 
         try {
             // SET: Product Data
             $this->setProductData();
 
+            // SET: Product Categories
+            $this->setProductCategories();
+
             // SET: Product Translations
             $this->setProductTranslation();
+
+            // SET: Main & Variations Product Stocks
+            $this->setProductStocks();
 
             // TODO: VAT & TAX, Flash Deals
 
             // SET: Attribute relationships
             $this->setAttributes();
 
-            // SET: Main & Variations Product Stocks
-            $this->setProductStocks();
-
             DB::commit();
 
             $this->update_success = true;
 
+            $this->dispatchBrowserEvent('toastIt', ['id' => '#product-updated-toast']);
             $this->dispatchBrowserEvent('goToTop');
         } catch(\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+            dd($e);
         }
     }
 
@@ -316,6 +329,23 @@ class ProductForm extends Component
         $this->product->save();
     }
 
+    protected function setProductCategories() {
+        if(!empty($this->selected_categories)) {
+            $categories_idx = collect([]);
+            $wrapped_categories = Collection::wrap([$this->categories->toArray()]); // in order to use ->pluck and "dot" notation accessor, we need to wrap categories array into another array!
+
+            foreach($this->selected_categories as $selected) {
+                // $selected is a slug_path of the category
+                $cat = $wrapped_categories->pluck(Str::replace(Category::PATH_SEPARATOR,'.children.', $selected))->first();
+
+                if($cat) {
+                    $categories_idx->push($cat['id']);
+                }
+            }
+            $this->product->categories()->sync($categories_idx->toArray());
+        }
+    }
+
     protected function setProductTranslation() {
         $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
         $product_translation->name = $this->product->name;
@@ -369,24 +399,26 @@ class ProductForm extends Component
                     foreach($att_values as $att_value) {
                         $att_value = (object) $att_value;
 
-                        if($att_value->selected ?? null) {
-                            // Create or find product-attribute relationship, but don't yet persist anything to DB
-                            $att_rel = AttributeRelationship::firstOrNew([
-                                'subject_type' => 'App\Models\Product',
-                                'subject_id' => $this->product->id,
-                                'attribute_id' => $att->id,
-                                'attribute_value_id' => $att_value->id
-                            ]);
-                            $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
-                            $att_rel->save();
-                        } else {
-                            // Remove attribute relationship if "selected" is false/null
-                            AttributeRelationship::where([
-                                'subject_type' => 'App\Models\Product',
-                                'subject_id' => $this->product->id,
-                                'attribute_id' => $att->id,
-                                'attribute_value_id' => $att_value->id
-                            ])->delete();
+                        if($att_value->id ?? null) {
+                            if($att_value->selected ?? null) {
+                                // Create or find product-attribute relationship, but don't yet persist anything to DB
+                                $att_rel = AttributeRelationship::firstOrNew([
+                                    'subject_type' => 'App\Models\Product',
+                                    'subject_id' => $this->product->id,
+                                    'attribute_id' => $att->id,
+                                    'attribute_value_id' => $att_value->id
+                                ]);
+                                $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
+                                $att_rel->save();
+                            } else {
+                                // Remove attribute relationship if "selected" is false/null
+                                AttributeRelationship::where([
+                                    'subject_type' => 'App\Models\Product',
+                                    'subject_id' => $this->product->id,
+                                    'attribute_id' => $att->id,
+                                    'attribute_value_id' => $att_value->id
+                                ])->delete();
+                            }
                         }
                     }
                 }
@@ -418,5 +450,22 @@ class ProductForm extends Component
         });
 
         return $atts_for_variations;
+    }
+
+    public function levelSelectedCategories() {
+        $data = [];
+
+        if($this->selected_categories) {
+            foreach($this->selected_categories as $selected) {
+                $level = count(explode('.', $selected)) - 1;
+                if(!isset($data[$level])) {
+                    $data[$level] = [];
+                }
+
+                $data[$level][] = $selected;
+            }
+        }
+
+        return $data;
     }
 }

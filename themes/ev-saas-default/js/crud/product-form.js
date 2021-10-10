@@ -99,6 +99,8 @@ window.EVProductFormInit = function(event) {
         var goTo = new HSGoTo($(this)).init();
     });
 
+    /* Initialize Category selectors */
+    window.EV.form.select.initCategoriesSelectors();
 
     // If select2 is of TAGS type and these tags can be dynamically created, populate options on dehydrate, otherwise added tags will vanish because new component is rendered!
     // =======================================================
@@ -123,7 +125,7 @@ window.EVProductFormInit = function(event) {
                 $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
             } else if(name === 'selected_categories') {
                 // Preselect livewire selected categories
-                window.EV.form.select.preselectCategories(data);
+                //window.EV.form.select.preselectCategories(data);
             }
 
         }
@@ -270,7 +272,6 @@ document.addEventListener('validate-step', async function (event) {
     }
 
     /* Set Selected Categories */
-
     if(selected_categories.length > 0) {
         component.set('selected_categories', selected_categories.unique());
     }

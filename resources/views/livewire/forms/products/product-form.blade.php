@@ -1,6 +1,32 @@
+@push('pre_head_scripts')
+    <script>
+        let all_categories = @json($categories);
+    </script>
+@endpush
 <div class="lw-form" x-data="{}">
 
-    @if(!$insert_success && !$update_success)
+    <!-- Message Body -->
+    <x-ev.alert id="successMessageContent" class="{{ !$insert_success ? 'd-none':'' }}"
+                content-class="flex flex-column"
+                type="success"
+                title="{{ $insert_success ? translate('Product successfully created!') : '' }}">
+        <span class="d-block">
+            @if($insert_success)
+                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
+            @endif
+        </span>
+        <div class="d-flex align-items-center mt-3">
+            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            @if(!empty($product->id) && $insert_success)
+                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
+            @endif
+        </div>
+    </x-ev.alert>
+    <!-- End Message Body -->
+
+    <x-ev.toast id="product-updated-toast" title="{{ translate('Product successfully updated!') }}" class="bg-primary text-white"></x-ev.toast>
+
+    @if(!$insert_success)
         <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
@@ -137,7 +163,7 @@
                                     <div class="">
                                         <x-ev.form.input name="product.name" type="text" label="{{ translate('Product name') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
 
-                                        <x-ev.form.categories-selector :items="$this->categories" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
+                                        <x-ev.form.categories-selector :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
                                         <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
@@ -572,27 +598,6 @@
             </div>
         </div>
     @endif
-
-    <!-- Message Body -->
-    <x-ev.alert id="successMessageContent" class="{{ !$insert_success && !$update_success ? 'd-none':'' }}"
-                content-class="flex flex-column"
-                type="success"
-                title="{{ $insert_success ? translate('Product successfully created!') : ($update_success ? translate('Product successfully updated!') : '') }}">
-        <span class="d-block">
-            @if($insert_success)
-                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
-            @elseif($update_success)
-                {{ translate('You have successfully updated the product! Preview or edit your product:') }}
-            @endif
-        </span>
-        <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
-            @if(!empty($product->id))
-                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
-            @endif
-        </div>
-    </x-ev.alert>
-    <!-- End Message Body -->
 
     @if($product->id)
         <!-- Attribute for variation used value removal modal -->

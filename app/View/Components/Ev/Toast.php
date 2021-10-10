@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Toast extends Component
 {
     public $class;
+    public $titleClass;
     public $contentClass;
     public $id;
     public $type;
@@ -20,9 +21,10 @@ class Toast extends Component
      *
      * @return void
      */
-    public function __construct($class = '', $contentClass = '', $id = '', $type = 'primary', $icon = '', $title = '', $content = '', $close = false)
+    public function __construct($class = '', $titleClass = '', $contentClass = '', $id = '', $type = 'primary', $icon = '', $title = '', $content = '', $close = false)
     {
         $this->class = $class;
+        $this->titleClass = $titleClass;
         $this->contentClass = $contentClass;
         $this->id = $id;
         $this->type = $type;

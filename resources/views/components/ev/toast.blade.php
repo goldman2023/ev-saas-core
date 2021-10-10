@@ -7,7 +7,7 @@
                 @svg($icon, ['class' => 'avatar avatar-sm avatar-circle mr-2'])
             @endif
 
-            <h5 class="mb-0 toast-title">{{ $title }}</h5>
+            <h5 class="mb-0 toast-title {{ $titleClass }}">{{ $title }}</h5>
 
             @if($close)
                 <button type="button" class="close ml-3" data-dismiss="toast" aria-label="Close">
@@ -16,8 +16,10 @@
             @endif
         </div>
     @endif
-    <div class="toast-body">
-        {{ $content }}
-    </div>
+    @if($content)
+        <div class="toast-body">
+            {{ $content }}
+        </div>
+    @endif
 </div>
 <!-- End Toast -->

@@ -68,6 +68,7 @@
     @livewireStyles
     <link rel="stylesheet" href="{{ static_asset('/front/icon-set/style.css') }}">
 
+    @stack('pre_head_scripts')
 
     <script src="{{ mix('js/app.js', 'themes/' . Theme::parent()) }}"></script>
     <!-- Vendor Scripts -->

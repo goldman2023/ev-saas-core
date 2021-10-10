@@ -46,7 +46,7 @@ class Category extends Model
 
     public $selected;
     public $title_path;
-    protected $path_separator = '.';
+    public const PATH_SEPARATOR = '.';
 
     protected $appends = ['selected', 'title_path'];
 
@@ -63,7 +63,7 @@ class Category extends Model
             [
                 'name' => 'slug_path',
                 'column' => 'slug',
-                'separator' => $this->path_separator,
+                'separator' => self::PATH_SEPARATOR,
             ],
         ];
     }
@@ -144,7 +144,7 @@ class Category extends Model
     }
 
     public function getTitlePathAttribute() {
-        $title_path = explode($this->path_separator, $this->slug_path);
+        $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
 
         if(count($title_path) > 1) {
             foreach($title_path as $key => $title) {
@@ -152,6 +152,6 @@ class Category extends Model
             }
         }
 
-        return implode(' '.$this->path_separator.' ', $title_path);
+        return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
     }
 }
