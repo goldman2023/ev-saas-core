@@ -24,7 +24,7 @@
     </x-ev.alert>
     <!-- End Message Body -->
 
-    <x-ev.toast id="product-updated-toast" title="{{ translate('Product successfully updated!') }}" class="bg-primary text-white"></x-ev.toast>
+    <x-ev.toast id="product-updated-toast" position="bottom-center" title="{{ translate('Product successfully updated!') }}" class="bg-primary text-white"></x-ev.toast>
 
     @if(!$insert_success)
         <div class="card mb-3 mb-lg-5">
@@ -106,7 +106,7 @@
 
                                     <li class="step-item {{ $page === 'attributes' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes', ['attributes']]}}))"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes', false, ['attributes']]}}))"
                                         ><!-- wire:click="$set('page', 'attributes')" -->
                                             <span class="step-icon step-icon-soft-dark">4</span>
                                             <div class="step-content">
@@ -118,7 +118,7 @@
 
                                     <li class="step-item {{ $page === 'variations' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', ['variations']]}}))"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', false, ['variations']]}}))"
                                            wire:click="syncVariationsDatatable()"
                                         ><!-- wire:click="$set('page', 'variations')" -->
                                             <span class="step-icon step-icon-soft-dark">5</span>
@@ -131,7 +131,7 @@
 
                                     <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo']}}))">
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo', true]}}))">
                                             <span class="step-icon step-icon-soft-dark">6</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('SEO') }}</span>
@@ -313,7 +313,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes', ['attributes']]}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes', false, ['attributes']]}}))"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -459,7 +459,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', ['attributes']]}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', false, ['attributes']]}}))"
                                                         wire:click="syncVariationsDatatable()"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>

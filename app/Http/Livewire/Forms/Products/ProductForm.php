@@ -172,7 +172,7 @@ class ProductForm extends Component
         if($set_name) {
             foreach($this->rulesSets as $key => $set) {
                 $this->page = $key; // set page
-                $this->validate($set); // validate page
+                //$this->validate($set); // validate page
 
                 if($set_name == $key) {
                     break;
@@ -183,12 +183,16 @@ class ProductForm extends Component
             if(is_array($insert_on_step) && (in_array($next_page, $insert_on_step) || in_array($set_name, $insert_on_step))) {
                 if(empty($this->product->id)) {
                     $this->insert(true);
+                } else {
+                    //$this->update();
                 }
+
+                $this->page = $next_page;
             } else if($is_last) {
                 if(empty($this->product->id)) {
                     $this->insert();
                 } else {
-                    $this->update(true);
+                    $this->update();
                 }
             } else {
                 $this->page = $next_page;

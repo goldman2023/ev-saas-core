@@ -1,6 +1,5 @@
 <!-- Toast -->
-<!-- TODO: Add toast placement functionality to the component -->
-<div @if($id) id="{{ $id }}" @endif class="toast {{ $class }}" role="alert" aria-live="assertive" aria-atomic="true" style="position: fixed; top: 20px; right: 30px; z-index: 9999;">
+<div @if($id) id="{{ $id }}" @endif class="toast {{ $position }} {{ $class }}" role="alert" aria-live="assertive" aria-atomic="true">
     @if($title)
         <div class="toast-header">
             @if($icon)

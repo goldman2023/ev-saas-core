@@ -7,8 +7,39 @@ img {
     max-width: 100%;
 }
 
-.custom-control-input[data-type="radio"] {
+/*------------------------------------
+  Toast
+------------------------------------*/
+.toast {
+    position: fixed;
+    z-index: 9999;
 
+    &.top-right {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.top-left {
+        top: 20px;
+        left: 30px;
+    }
+    &.top-right {
+        top: 20px;
+        right: 30px;
+    }
+    &.bottom-center {
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.bottom-left {
+        bottom: 20px;
+        left: 30px;
+    }
+    &.bottom-right {
+        bottom: 20px;
+        right: 30px;
+    }
 }
 
 .ev-brand-image-small {
@@ -443,4 +474,16 @@ img {
 [dir="rtl"] .hover-category-menu .all-category::before {
     left: 20px;
     right: auto;
+}
+
+
+/*------------------------------------
+  Product Form
+------------------------------------*/
+#product_variations_modal {
+    .table {
+        td .form-group {
+            margin-bottom: 0;
+        }
+    }
 }
