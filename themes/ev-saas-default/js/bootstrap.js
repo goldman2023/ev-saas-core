@@ -4,6 +4,11 @@ import flatpickr from "flatpickr";
 import persist from '@alpinejs/persist';
 import intersect from '@alpinejs/intersect';*/
 
+/**
+ * Require custom prototypes
+ */
+require('./prototypes');
+
 window._ = require('lodash');
 
 /**

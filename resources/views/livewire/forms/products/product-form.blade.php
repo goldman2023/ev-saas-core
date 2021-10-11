@@ -1,6 +1,35 @@
+@push('pre_head_scripts')
+    <script>
+        let all_categories = @json($categories);
+    </script>
+@endpush
 <div class="lw-form" x-data="{}">
 
-    @if(!$insert_success && !$update_success)
+    <!-- Message Body -->
+    <x-ev.alert id="successMessageContent" class="{{ !$insert_success ? 'd-none':'' }}"
+                content-class="flex flex-column"
+                type="success"
+                title="{{ $insert_success ? translate('Product successfully created!') : '' }}">
+        <span class="d-block">
+            @if($insert_success)
+                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
+            @endif
+        </span>
+        <div class="d-flex align-items-center mt-3">
+            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            @if(!empty($product->id) && $insert_success)
+                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
+            @endif
+        </div>
+    </x-ev.alert>
+    <!-- End Message Body -->
+
+    <x-ev.toast id="product-updated-toast"
+                position="bottom-center"
+                content="{{ translate('Product successfully updated!') }}"
+                class="bg-success border-success text-white h3"></x-ev.toast>
+
+    @if(!$insert_success)
         <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
@@ -80,7 +109,7 @@
 
                                     <li class="step-item {{ $page === 'attributes' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes', ['attributes']]}}))"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes', false, ['attributes']]}}))"
                                         ><!-- wire:click="$set('page', 'attributes')" -->
                                             <span class="step-icon step-icon-soft-dark">4</span>
                                             <div class="step-content">
@@ -92,7 +121,7 @@
 
                                     <li class="step-item {{ $page === 'variations' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', ['variations']]}}))"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', false, ['variations']]}}))"
                                            wire:click="syncVariationsDatatable()"
                                         ><!-- wire:click="$set('page', 'variations')" -->
                                             <span class="step-icon step-icon-soft-dark">5</span>
@@ -105,7 +134,7 @@
 
                                     <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo']}}))">
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo', true]}}))">
                                             <span class="step-icon step-icon-soft-dark">6</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('SEO') }}</span>
@@ -137,7 +166,7 @@
                                     <div class="">
                                         <x-ev.form.input name="product.name" type="text" label="{{ translate('Product name') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
 
-                                        <x-ev.form.categories-selector :items="$this->categories" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
+                                        <x-ev.form.categories-selector :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
                                         <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
@@ -287,7 +316,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes', ['attributes']]}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes', false, ['attributes']]}}))"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -433,7 +462,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', ['attributes']]}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', false, ['attributes']]}}))"
                                                         wire:click="syncVariationsDatatable()"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
@@ -572,27 +601,6 @@
             </div>
         </div>
     @endif
-
-    <!-- Message Body -->
-    <x-ev.alert id="successMessageContent" class="{{ !$insert_success && !$update_success ? 'd-none':'' }}"
-                content-class="flex flex-column"
-                type="success"
-                title="{{ $insert_success ? translate('Product successfully created!') : ($update_success ? translate('Product successfully updated!') : '') }}">
-        <span class="d-block">
-            @if($insert_success)
-                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
-            @elseif($update_success)
-                {{ translate('You have successfully updated the product! Preview or edit your product:') }}
-            @endif
-        </span>
-        <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
-            @if(!empty($product->id))
-                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
-            @endif
-        </div>
-    </x-ev.alert>
-    <!-- End Message Body -->
 
     @if($product->id)
         <!-- Attribute for variation used value removal modal -->

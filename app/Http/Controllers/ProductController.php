@@ -133,9 +133,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::whereNull('parent_id')
             ->where('digital', 0)
-            ->with('childrenCategories')
+            //->with('childrenCategories')
             ->get();
 
         return view('backend.product.products.create', compact('categories'));
@@ -403,9 +403,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $lang = $request->lang;
         $tags = $product->tags;
-        $categories = Category::where('parent_id', 0)
+        $categories = Category::whereNull('parent_id')
             ->where('digital', 0)
-            ->with('childrenCategories')
+            //->with('childrenCategories')
             ->get();
         $product_attributes = Attribute::where('content_type', 'App\Models\Product')->orderBy('created_at', 'desc')->get();
         return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));

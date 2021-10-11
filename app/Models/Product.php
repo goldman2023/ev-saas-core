@@ -196,9 +196,25 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function selected_categories($pluck_property = null, $is_collection = true) {
+        $ids = $this->categories()->get()->pluck('id')->toArray();
+
+        if($pluck_property) {
+            $data = Category::tree()->get()->whereIn('id', $ids)->pluck($pluck_property);
+        } else {
+            $data = Category::tree()->get()->whereIn('id', $ids);
+        }
+
+        if(!$is_collection) {
+            $data = $data->toArray();
+        }
+
+        return $data;
+    }
+
     public function categories()
     {
-        return $this->morphToMany(Category::class, 'subject', 'category_relationships');
+        return $this->morphToMany(Category::class, 'subject', 'category_relationships', null, 'category_id');
     }
 
     public function brand()

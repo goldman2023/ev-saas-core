@@ -42,7 +42,6 @@ if($this->attributes->isNotEmpty()) {
     <x-ev.form.input name="rows.{{ $row->name }}.price"
                      type="number"
                      min="0"
-                     error-bag-name="rows.{{ $row->name }}"
                      value="{{ ($row->price ?? null) ?: 0 }}"
                      wireType="defer">
     </x-ev.form.input>
@@ -52,7 +51,6 @@ if($this->attributes->isNotEmpty()) {
     <x-ev.form.input name="rows.{{ $row->name }}.temp_stock.qty"
                      type="number"
                      min="0"
-                     error-bag-name="rows.{{ $row->name }}.temp_stock"
                      value="{{ ($row->temp_stock->qty ?? null) ?: 0 }}"
                      wireType="defer">
     </x-ev.form.input>
@@ -61,9 +59,14 @@ if($this->attributes->isNotEmpty()) {
 <x-livewire-tables::bs4.table.cell>
     <x-ev.form.input name="rows.{{ $row->name }}.temp_stock.sku"
                      type="text"
-                     error-bag-name="rows.{{ $row->name }}.temp_stock"
                      value="{{ ($row->temp_stock->sku ?? null) ?: '' }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>
 
+
+<x-livewire-tables::bs4.table.cell>
+    <button type="button" class="btn btn-danger px-2 pt-2 pb-1 mt-2" wire:click="setRemoveFlag('{{ $row->name }}')" style="line-height: 1;">
+        @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
+    </button>
+</x-livewire-tables::bs4.table.cell>

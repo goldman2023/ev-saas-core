@@ -9,10 +9,16 @@
 
 <!-- Product Variations Toast -->
 <x-ev.toast id="product-variations-toast"
+            position="bottom-center"
+            content="toast"
             icon="heroicon-o-save"
-            class="bg-success border-success text-white h4"></x-ev.toast>
+            class="bg-success border-success text-white h3"></x-ev.toast>
 
 <!-- Product Variations Datatable Bulk Actions Modals -->
+
+<!--------------------------------------
+   Modal: Set Prices for all rows
+-------------------------------------->
 <x-ev.modal id="{{ $bulkActionSetPricesID }}"
             header-title="{{ translate('Set Prices') }}"
             :has-trigger="false"

@@ -7,11 +7,13 @@ use App\Models\ProductStock;
 use App\Models\ProductVariation;
 use Arr;
 use EVS;
+use Illuminate\Validation\Rule;
 use Illuminate\View\Component;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
+use Str;
 
 class ProductVariationsDatatable extends DataTableComponent
 {
@@ -37,6 +39,35 @@ class ProductVariationsDatatable extends DataTableComponent
     ];
 
     public $bulkActionSetPricesID = 'ev-product-variations__set-prices';
+    public $bulkActionSetGenericSKUID = 'ev-product-variations__set-generic-sku';
+
+    protected $messages = [
+        'rows.*.price.required' => 'Price is required',
+        'rows.*.price.numeric' => 'Price must be numeric',
+        'rows.*.price.min' => 'Minimum value is :min',
+
+        'rows.*.temp_stock.sku.required' => 'SKU is required',
+        'rows.*.temp_stock.sku.unique' => 'SKU taken by another product',
+
+        'rows.*.temp_stock.qty.required' => 'Quantity is required',
+        'rows.*.temp_stock.qty.numeric' => 'Quantity must be numeric',
+        'rows.*.temp_stock.qty.min' => 'Minimum value is :min',
+    ];
+
+    protected function rules() {
+        $rules = [];
+
+        foreach($this->rows as $row) {
+            $name = (is_array($row) ? $row['name'] : $row->name);
+            $stock_id = (is_array($row) ? ($row['temp_stock']['id'] ?? null) : ($row->temp_stock->id ?? null));
+
+            $rules['rows.'.$name.'.price'] = 'required|numeric|min:1';
+            $rules['rows.'.$name.'.temp_stock.sku'] = ['required', Rule::unique('product_stocks', 'sku')->ignore($stock_id)];
+            $rules['rows.'.$name.'.temp_stock.qty'] = 'required|numeric|min:1';
+        }
+
+        return $rules;
+    }
 
 
     /**
@@ -63,7 +94,7 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->createAllCombinations();
 
         // TODO: Fix the logic to use all only on bulk action and ADD single variation addition
-        $this->useAllVariations();
+        $this->refreshRows();
     }
 
     public array $sortNames = [
@@ -78,8 +109,9 @@ class ProductVariationsDatatable extends DataTableComponent
     ];
 
     public array $bulkActions = [
-        'useAllVariations' => 'Generate all',
-        'triggerSetAllPricesModal' => 'Set price for all'
+        'generateAllVariations' => 'Generate all',
+        'triggerSetAllPricesModal' => 'Set price for all',
+        'setGenericSKUs' => 'Set generic SKUs'
     ];
 
     public function dehydrate()
@@ -90,18 +122,10 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public function dehydrateRows()
     {
-        $this->rows = $this->rows->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-            return $item;
-        });
+        $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
     }
     public function hydrateRows() {
-        $this->rows = $this->rows->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-            return $item;
-        });
+        $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
     }
 
     public function syncProduct(Product $product) {
@@ -111,16 +135,21 @@ class ProductVariationsDatatable extends DataTableComponent
     public function syncAttributeValues($attributes) {
         $this->attributes = collect($attributes);
         $this->createAllCombinations();
-        $this->useAllVariations();
+        $this->refreshRows();
     }
 
-    public function useAllVariations() {
-        // Merge all combinations with currently added variations.
-        $this->rows = $this->all_combinations->merge($this->variations)->map(function($item) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
+    // TODO: Don't forget to create a function that will merge $this->variations
+    public function generateAllVariations() {
+        $this->variations = $this->all_combinations->merge($this->variations)->map(function($item) {
+            $item['remove_flag'] = false;
             return $item;
-        })->filter(function ($row, $key) {
+        });
+
+        $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object']);
+    }
+
+    public function refreshRows($generate_all = true) {
+        $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object'])->filter(function ($row, $key) {
             return $row->remove_flag === false;
         })->sortKeys();
     }
@@ -164,6 +193,11 @@ class ProductVariationsDatatable extends DataTableComponent
         }
 
         $this->all_combinations = $this->all_combinations->keyBy('name');
+
+        // If $this->variations are empty (product doesn't have variations for now), make $this->variations to have $this->all_combinations
+        if($this->variations->isEmpty()) {
+            $this->variations = $this->all_combinations;
+        }
 
         //$this->rows = collect($this->variations);
 
@@ -225,49 +259,70 @@ class ProductVariationsDatatable extends DataTableComponent
 
         if($this->rows->isNotEmpty()) {
             // Remove flagged Variations
-            foreach($this->variations as $variation) {
+            foreach($this->variations as $key => $variation) {
                 if($variation['remove_flag']) {
                     $variation_model = ProductVariation::find($variation['id']);
-                    $variation_model->forceDelete();
+                    if(!empty($variation_model)) {
+                        try {
+                            $variation_model->forceDelete();
+                            unset($this->variations[$key]);
+                        } catch(\Exception $e) { }
+                    }
                 }
             }
 
-            // Set Variations
-            $this->variations = collect([]);
+            // Validate rows
+            // Make each row an array instead of object, because validate method cannot use dot notation on array with objects!
+            $this->rows = castCollectionItemsTo($this->rows, 'array', ['temp_stock' => 'array']);
 
-            foreach ($this->rows as $index => $variation) {
-                if(empty($variation->id)) {
-                    // New variation - Insert
-                    $temp_stock = $variation->temp_stock;
-                    $variation->price = !empty($variation) ? $variation : 0;
-                    unset($variation->temp_stock);
+            try {
+                $this->validate();
+                $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
 
-                    $variation_model = new ProductVariation();
-                    $variation_model->fill((array) $variation);
-                    $variation_model->save();
+                // Set Variations
+                $this->variations = collect([]);
 
-                    // Save Product Variation Stock
-                    $this->setProductVariationStocks(false, $variation_model, $temp_stock);
-                    $this->variations->push($variation_model->toArray());
-                } else {
-                    // Old variation - Update or Delete
-                    $variation_model = ProductVariation::find($variation->id);
-                    $variation_model->image = $variation->image;
-                    $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
-                    $variation_model->save();
+                foreach ($this->rows as $index => $variation) {
+                    if(empty($variation->id)) {
+                        // New variation - Insert
+                        $temp_stock = $variation->temp_stock;
+                        $variation->image = !empty($variation->image) ? $variation->image : null;
+                        unset($variation->temp_stock);
 
-                    $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
-                    $this->variations->push($variation_model->toArray());
+                        $variation_model = new ProductVariation();
+                        $variation_model->fill((array) $variation);
+                        $variation_model->save();
+
+                        // Save Product Variation Stock
+                        $this->setProductVariationStocks(false, $variation_model, $temp_stock);
+                        $this->variations->push($variation_model->toArray());
+                    } else {
+                        // Old variation - Update or Delete
+                        $variation_model = ProductVariation::find($variation->id);
+                        $variation_model->image = !empty($variation->image) ? $variation->image : null;
+                        $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
+                        $variation_model->save();
+
+                        $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
+                        $this->variations->push($variation_model->toArray());
+                    }
                 }
+
+                $this->variations = $this->variations->keyBy('name');
+                $this->refreshRows();
+
+                // Update Attributes (used for variations) selected values in DB, by emitting
+                //$this->emitUp('variationsUpdated');
+
+                $this->dispatchBrowserEvent('toastIt', ['id' => '#product-variations-toast', 'content' => translate('Variations successfully updated!')]);
+            } catch(\Illuminate\Validation\ValidationException $e) {
+                // Once the validation exception is caught,
+                // 1) set current error bag to retrieved validator message bag
+                $this->setErrorBag($e->validator->getMessageBag());
             }
 
-            $this->variations = $this->variations->keyBy('name');
-            $this->useAllVariations();
-
-            // Update Attributes (used for variations) selected values in DB, by emitting
-            $this->emitUp('variationsUpdated');
-
-            $this->dispatchBrowserEvent('toastIt', ['id' => '#product-variations-toast', 'content' => translate('Variations successfully updated!')]);
+            // 2) Revert rows to collection of objects!
+            $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
         }
     }
 
@@ -289,11 +344,23 @@ class ProductVariationsDatatable extends DataTableComponent
         }
     }
 
+    public function setRemoveFlag($row_name) {
+        if(!empty($this->variations->get($row_name))) {
+            $this->variations = $this->variations->map(function($variation) use($row_name) {
+                if($row_name === $variation['name']) {
+                    $variation['remove_flag'] = true;
+                }
+                return $variation;
+            });
+            $this->refreshRows();
+        }
+    }
+
     public function setAttributeValueRemoveFlag($matrix = []) {
         // Loop through variations and set remove flag for those which are not in matrix
 
         if($this->variations->isNotEmpty() && !empty($matrix)) {
-            $data = $this->variations->toArray();
+            $data = $this->variations;
 
             foreach($data as $key => $variation) {
                 $passed = [];
@@ -319,17 +386,30 @@ class ProductVariationsDatatable extends DataTableComponent
             }
 
             $this->variations = collect($data)->sortKeys();
-            $this->useAllVariations();
+            $this->refreshRows();
         }
     }
 
     public function setAllVariationsPrice($price) {
-        $data = $this->variations->toArray();
-        foreach($data as $key => $row) {
-            $data[$key]['price'] = $price;
+        if($this->variations->isNotEmpty()) {
+            $this->variations = $this->variations->map(function($variation) use ($price) {
+                $variation['price'] = $price;
+                return $variation;
+            });
         }
-        $this->variations = collect($data)->sortKeys();
-        $this->useAllVariations();
+
+        $this->refreshRows();
+    }
+
+    public function setGenericSKUs() {
+        if($this->variations->isNotEmpty()) {
+            $this->variations = $this->variations->map(function($variation) {
+                $variation['temp_stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
+                return $variation;
+            })->sortKeys();
+        }
+
+        $this->refreshRows();
     }
 
     public function modalsView(): string
