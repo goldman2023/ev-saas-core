@@ -59,9 +59,10 @@ class ProductVariationsDatatable extends DataTableComponent
 
         foreach($this->rows as $row) {
             $name = (is_array($row) ? $row['name'] : $row->name);
+            $stock_id = (is_array($row) ? ($row['temp_stock']['id'] ?? null) : ($row->temp_stock->id ?? null));
 
             $rules['rows.'.$name.'.price'] = 'required|numeric|min:1';
-            $rules['rows.'.$name.'.temp_stock.sku'] = ['required', Rule::unique('product_stocks', 'sku')->ignore($row->id ?? null)];
+            $rules['rows.'.$name.'.temp_stock.sku'] = ['required', Rule::unique('product_stocks', 'sku')->ignore($stock_id)];
             $rules['rows.'.$name.'.temp_stock.qty'] = 'required|numeric|min:1';
         }
 
@@ -93,7 +94,7 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->createAllCombinations();
 
         // TODO: Fix the logic to use all only on bulk action and ADD single variation addition
-        $this->useAllVariations(false);
+        $this->refreshRows();
     }
 
     public array $sortNames = [
@@ -108,7 +109,7 @@ class ProductVariationsDatatable extends DataTableComponent
     ];
 
     public array $bulkActions = [
-        'useAllVariations' => 'Generate all',
+        'generateAllVariations' => 'Generate all',
         'triggerSetAllPricesModal' => 'Set price for all',
         'setGenericSKUs' => 'Set generic SKUs'
     ];
@@ -134,30 +135,23 @@ class ProductVariationsDatatable extends DataTableComponent
     public function syncAttributeValues($attributes) {
         $this->attributes = collect($attributes);
         $this->createAllCombinations();
-        $this->useAllVariations(false);
+        $this->refreshRows();
     }
 
     // TODO: Don't forget to create a function that will merge $this->variations
-    public function useAllVariations($with_removed = true) {
-        // Merge all combinations with currently added variations.
-        $this->rows = $this->all_combinations->merge($this->variations)->map(function($item) use($with_removed) {
-            $item = (object) $item;
-            $item->temp_stock = (object) $item->temp_stock;
-
-            if($with_removed) {
-                $item->remove_flag = false;
-            }
-
+    public function generateAllVariations() {
+        $this->variations = $this->all_combinations->merge($this->variations)->map(function($item) {
+            $item['remove_flag'] = false;
             return $item;
         });
 
-        if(!$with_removed) {
-            $this->rows = $this->rows->filter(function ($row, $key) {
-                return $row->remove_flag === false;
-            });
-        }
+        $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object']);
+    }
 
-        $this->rows = $this->rows->sortKeys();
+    public function refreshRows($generate_all = true) {
+        $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object'])->filter(function ($row, $key) {
+            return $row->remove_flag === false;
+        })->sortKeys();
     }
 
     public function triggerSetAllPricesModal() {
@@ -265,10 +259,15 @@ class ProductVariationsDatatable extends DataTableComponent
 
         if($this->rows->isNotEmpty()) {
             // Remove flagged Variations
-            foreach($this->variations as $variation) {
+            foreach($this->variations as $key => $variation) {
                 if($variation['remove_flag']) {
                     $variation_model = ProductVariation::find($variation['id']);
-                    $variation_model->forceDelete();
+                    if(!empty($variation_model)) {
+                        try {
+                            $variation_model->forceDelete();
+                            unset($this->variations[$key]);
+                        } catch(\Exception $e) { }
+                    }
                 }
             }
 
@@ -287,7 +286,7 @@ class ProductVariationsDatatable extends DataTableComponent
                     if(empty($variation->id)) {
                         // New variation - Insert
                         $temp_stock = $variation->temp_stock;
-                        $variation->price = !empty($variation) ? $variation : 0;
+                        $variation->image = !empty($variation->image) ? $variation->image : null;
                         unset($variation->temp_stock);
 
                         $variation_model = new ProductVariation();
@@ -300,7 +299,7 @@ class ProductVariationsDatatable extends DataTableComponent
                     } else {
                         // Old variation - Update or Delete
                         $variation_model = ProductVariation::find($variation->id);
-                        $variation_model->image = $variation->image;
+                        $variation_model->image = !empty($variation->image) ? $variation->image : null;
                         $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
                         $variation_model->save();
 
@@ -310,10 +309,10 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
 
                 $this->variations = $this->variations->keyBy('name');
-                $this->useAllVariations(false);
+                $this->refreshRows();
 
                 // Update Attributes (used for variations) selected values in DB, by emitting
-                $this->emitUp('variationsUpdated');
+                //$this->emitUp('variationsUpdated');
 
                 $this->dispatchBrowserEvent('toastIt', ['id' => '#product-variations-toast', 'content' => translate('Variations successfully updated!')]);
             } catch(\Illuminate\Validation\ValidationException $e) {
@@ -353,7 +352,7 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
                 return $variation;
             });
-            $this->useAllVariations(false);
+            $this->refreshRows();
         }
     }
 
@@ -387,7 +386,7 @@ class ProductVariationsDatatable extends DataTableComponent
             }
 
             $this->variations = collect($data)->sortKeys();
-            $this->useAllVariations(false);
+            $this->refreshRows();
         }
     }
 
@@ -399,7 +398,7 @@ class ProductVariationsDatatable extends DataTableComponent
             });
         }
 
-        $this->useAllVariations(false);
+        $this->refreshRows();
     }
 
     public function setGenericSKUs() {
@@ -410,7 +409,7 @@ class ProductVariationsDatatable extends DataTableComponent
             })->sortKeys();
         }
 
-        $this->useAllVariations(false);
+        $this->refreshRows();
     }
 
     public function modalsView(): string

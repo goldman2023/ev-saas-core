@@ -24,7 +24,10 @@
     </x-ev.alert>
     <!-- End Message Body -->
 
-    <x-ev.toast id="product-updated-toast" position="bottom-center" title="{{ translate('Product successfully updated!') }}" class="bg-primary text-white"></x-ev.toast>
+    <x-ev.toast id="product-updated-toast"
+                position="bottom-center"
+                content="{{ translate('Product successfully updated!') }}"
+                class="bg-success border-success text-white h3"></x-ev.toast>
 
     @if(!$insert_success)
         <div class="card mb-3 mb-lg-5">
