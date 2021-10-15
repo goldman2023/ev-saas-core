@@ -24,18 +24,22 @@
 
 @elseif($editor === 'toast-ui-editor')
 <!-- ToastUI Editor -->
-<div class="toast-ui-editor-custom">
-    <div class="js-toast-ui-editor {{ $class }} @error($errorBagName) is-invalid @enderror"
-         @if(!empty($options)) data-ev-toastui-editor-options="@if(is_string($options)) {!! $options !!} @else @json($options) @endif" @endif
-    ></div>
+<div class="form-group">
+    <div class="toast-ui-editor-custom">
+        <label class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
 
-    <input type="text"
-           value="{{ $attributes['value'] }}"
-           data-textarea name="{{ $name }}" style="display: none !important;" wire:model.delay="{{ $name }}"/>
+        <div class="js-toast-ui-editor {{ $class }} @error($errorBagName) is-invalid @enderror"
+             @if(!empty($options)) data-ev-toastui-editor-options="@if(is_string($options)) {!! $options !!} @else @json($options) @endif" @endif
+        ></div>
 
-    @error($errorBagName)
+        <input type="text"
+               value="{{ $attributes['value'] }}"
+               data-textarea name="{{ $name }}" style="display: none !important;" wire:model.delay="{{ $name }}"/>
+
+        @error($errorBagName)
         <div class="invalid-feedback d-block">{{ $message }}</div>
-    @enderror
+        @enderror
+    </div>
 </div>
 <!-- End ToastUI Editor -->
 @endif

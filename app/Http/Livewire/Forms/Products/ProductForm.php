@@ -62,6 +62,7 @@ class ProductForm extends Component
             'product.video_link' => 'nullable|active_url',
             'product.pdf' => 'nullable|exists:App\Models\Upload,id',
             'product.description' => 'required|min:20',
+            'product.excerpt' => 'nullable',
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
@@ -186,17 +187,15 @@ class ProductForm extends Component
                 } else {
                     $this->update();
                 }
-
-                $this->page = $next_page;
             } else if($is_last) {
                 if(empty($this->product->id)) {
                     $this->insert();
                 } else {
                     $this->update();
                 }
-            } else {
-                $this->page = $next_page;
             }
+
+            $this->page = $next_page;
         }
     }
 
@@ -303,6 +302,16 @@ class ProductForm extends Component
             $this->product->shipping_cost = json_encode([]);
         }
 
+        // Purify WYSIWYG before saving
+        $this->product->description = Purifier::clean($this->product->description);
+
+        if(empty($this->product->excerpt)) {
+            $this->product->excerpt = strip_tags(Str::limit($this->product->description, 320, '...'));
+        } else {
+            $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
+        }
+
+        // SEO
         if (empty($this->product->meta_img)) {
             $this->product->meta_img = $this->product->thumbnail_img;
         }
@@ -311,14 +320,11 @@ class ProductForm extends Component
             $this->product->meta_img = $this->product->name;
         }
 
-        $this->product->meta_description = trim(strip_tags($this->product->description ?? ''));
+        if (empty($this->product->meta_description)) {
+            $this->product->meta_description = trim(strip_tags($this->product->description ?? ''));
+        }
 
-
-        // Purify WYSIWYG before saving
-        $this->product->description = Purifier::clean($this->product->description);
-
-
-        // TODO: Add Featured, Cash on delivery, Todays deal to the form
+        // TODO: Add Featured, Cash on delivery, Today's deal to the form
         $this->product->cash_on_delivery = 0;
         $this->product->featured = 0;
         $this->product->todays_deal = 0;
@@ -346,6 +352,7 @@ class ProductForm extends Component
                     $categories_idx->push($cat['id']);
                 }
             }
+
             $this->product->categories()->sync($categories_idx->toArray());
         }
     }
@@ -443,6 +450,12 @@ class ProductForm extends Component
 
                 if ($att_values) {
                     // ????
+                    // TODO: What happens when attribute values (used for variations) are changed AND product is saved without touching the variations modal?
+                    // FIX: It should SOFT DELETE product variations related to attribute value! IMPORTANT thing is to use SOFT DELETES, because if vendor wants to
+                    // revive the attribute value for some reason and generate variations related to it, we need to bring back the old variations in the DB from the dead.
+                    // This way we can always generate proper sales reports and never miss data!
+                    // SOFT DELETES FOR PRODUCT VARIATIONS ARE VERY IMPORTANT!!!!
+                    // NOTE: There can always be ONE product variation combination for certain product in the DB! We should never remove it fully, cuz we'll lose the data associated with it (number of variation sales, etc.)
                 }
             }
         }
