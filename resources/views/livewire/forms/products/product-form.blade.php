@@ -40,6 +40,14 @@
                         {{ translate('Add New Product') }}
                     @endif
                 </h4>
+
+                @if(!empty($product->id))
+                    <button class="btn btn-primary btn-xs d-flex justify-content-center ml-auto"
+                                 onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
+                        @svg('lineawesome-save', ['style' => 'width: 18px; height: 18px;', 'class' => 'mr-1'])
+                        <span>{{ translate('Save') }}</span>
+                    </button>
+                @endif
             </div>
             <!-- End Header -->
 
@@ -221,6 +229,10 @@
                                         <x-ev.form.file-selector name="product.pdf" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
 
                                         <x-ev.form.wysiwyg name="product.description" label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
+
+                                        <x-ev.form.textarea name="product.excerpt" label="{{ translate('Excerpt (short description)') }}" >
+                                            <small class="text-muted">{{ translate('If you leave excerpt empty, first 320 chars of description will be used as an excerpt.') }}</small>
+                                        </x-ev.form.textarea>
                                     </div>
                                     <!-- End Body -->
 

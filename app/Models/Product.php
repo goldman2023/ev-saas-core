@@ -120,6 +120,8 @@ class Product extends Model
     public $temp_sku;
     public $current_stock;
     public $low_stock_qty;
+    public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
+
 
     /**
      * The relationships that should always be loaded.
@@ -138,7 +140,7 @@ class Product extends Model
         'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty'];
+    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id'];
 
     protected static function boot()
     {
@@ -345,7 +347,7 @@ class Product extends Model
         if(empty($this->current_stock)) {
             $stock = $this->stock()->first();
 
-            return $stock->qty ?? 0;
+            return (float) ($stock->qty ?? 0);
         }
 
         return $this->current_stock;
@@ -359,10 +361,19 @@ class Product extends Model
         if(empty($this->low_stock_qty)) {
             $stock = $this->stock()->first();
 
-            return $stock->low_stock_qty ?? 0;
+            return (float) ($stock->low_stock_qty ?? 0);
         }
 
         return $this->low_stock_qty;
+    }
+
+
+    public function getCategoryIdAttribute() {
+        if(empty($this->category_id)) {
+            return $this->categories()->whereNull('parent_id')->first()->id ?? null;
+        }
+
+        return $this->category_id;
     }
 
 

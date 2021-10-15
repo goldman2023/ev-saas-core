@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use EVS;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
@@ -199,20 +200,22 @@ class EVService
 
 
     public function getMappedCategories() {
-        $categories = Category::where('parent_id', 0)
+        /*$categories = Category::where('parent_id', 0)
             ->where('digital', 0)
             ->with('childrenCategories')
-            ->get();
+            ->get();*/
+
+        $categories = EVS::categoriesTree();
 
         $mapped = [];
 
         $recursion = function($child_category) use (&$recursion, &$mapped) {
-            $value = str_repeat('--', $child_category->level);
+            $value = str_repeat('--', $child_category['level']);
 
-            $mapped[$child_category->id] = $value." ".$child_category->getTranslation('name');
+            $mapped[$child_category['id']] = $value." ".$child_category['name'];
 
-            if($child_category->categories) {
-                foreach ($child_category->categories as $childCategory) {
+            if(isset($child_category['children'])) {
+                foreach ($child_category['children'] as $childCategory) {
                     $recursion($childCategory);
                 }
             }
@@ -220,10 +223,10 @@ class EVService
 
         if($categories->isNotEmpty()) {
             foreach($categories as $category) {
-                $mapped[$category->id] = $category->getTranslation('name');
+                $mapped[$category['id']] = $category['name'];
 
-                if($category->childrenCategories) {
-                    foreach($category->childrenCategories as $childCategory) {
+                if($category['children']) {
+                    foreach($category['children'] as $childCategory) {
                         $recursion($childCategory);
                     }
                 }
@@ -407,4 +410,5 @@ class EVService
         $tree = Category::tree()->get()->toTree()->toArray();
         return collect($tree)->recursive_apply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
     }
+
 }

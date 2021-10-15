@@ -1,5 +1,5 @@
 <div class="modal fade" id="aizUploaderModal" data-test="aizUploaderModal" data-backdrop="static" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog modal-adaptive" role="document">
+    <div class="modal-dialog modal-adaptive modal-xl" role="document">
         <div class="modal-content h-100">
             <div class="modal-header pb-0 bg-light">
                 <div class="uppy-modal-nav">
@@ -13,7 +13,7 @@
                     </ul>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    @svg('heroicon-o-x')
+                    @svg('heroicon-o-x', ['style' => 'width: 24px; height: 24px; position: relative; top: -25px; right: -20px; stroke: var(--dark);'])
                 </button>
             </div>
             <div class="modal-body">

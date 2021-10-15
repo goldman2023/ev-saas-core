@@ -40,8 +40,7 @@
         @php
             $product = $detailedProduct;
         @endphp
-        <x-default.products.single.product-details :product="$product">
-        </x-default.products.single.product-details>
+        <x-default.products.single.product-details :product="$product"></x-default.products.single.product-details>
     </section>
 
 

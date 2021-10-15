@@ -360,7 +360,7 @@ class ProductVariationsDatatable extends DataTableComponent
         // Loop through variations and set remove flag for those which are not in matrix
 
         if($this->variations->isNotEmpty() && !empty($matrix)) {
-            $data = $this->variations;
+            $data = $this->variations->toArray();
 
             foreach($data as $key => $variation) {
                 $passed = [];
