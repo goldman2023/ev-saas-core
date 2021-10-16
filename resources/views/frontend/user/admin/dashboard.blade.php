@@ -5,35 +5,80 @@
     <div class="bg-white">
         <x-free-member-notification> </x-free-member-notification>
     </div>
+    <section>
+        <div class="row">
+            <div class="col-6">
+                <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="row">
+            <div class="col-6">
+                <x-default.dashboard.widgets.integration-stats-widget url="#" title="Google Analytics"
+                    img="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png?hl=ar">
+                </x-default.dashboard.widgets.integration-stats-widget>
+            </div>
+
+            <div class="col-6">
+                <x-default.dashboard.widgets.integration-stats-widget url="#" title="Mailchimp"
+                    img="https://www.drupal.org/files/project-images/MC_Logo.jpg">
+                </x-default.dashboard.widgets.integration-stats-widget>
+            </div>
+        </div>
+    </section>
 
     <section class="stats mb-3">
         <div class="row">
-            <div class="col-4">
-                <x-default.dashboard.widgets.leads-widget>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <x-default.dashboard.widgets.leads-widget>
 
-                <a href="{{ route('leads.index') }}">
-                    {{ translate('View all') }}
-                </a>
+                            <a href="{{ route('leads.index') }}">
+                                {{ translate('View all') }}
+                            </a>
 
-                </x-default.dashboard.widgets.leads-widget>
+                        </x-default.dashboard.widgets.leads-widget>
+
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <x-default.dashboard.widgets.orders-widget>
+                            <a href="{{ route('orders.index') }}">
+                                {{ translate('View all') }}
+                            </a>
+                        </x-default.dashboard.widgets.orders-widget>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <x-default.dashboard.widgets.products-widget>
+                            <a href="{{ route('ev-products.index') }}">
+                                {{ translate('View all') }}
+                            </a>
+                        </x-default.dashboard.widgets.products-widget>
+                    </div>
+
+                </div>
 
             </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <x-default.dashboard.widgets.integrations-widget>
 
-            <div class="col-4">
-                    <x-default.dashboard.widgets.products-widget>
-                        <a href="{{ route('ev-products.index') }}">
-                            {{ translate('View all') }}
-                        </a>
-                    </x-default.dashboard.widgets.products-widget>
+                        </x-default.dashboard.widgets.integrations-widget>
+                    </div>
+                </div>
             </div>
-
-            <div class="col-4">
-                <x-default.dashboard.widgets.orders-widget>
-                    <a href="{{ route('orders.index') }}">
-                        {{ translate('View all') }}
-                    </a>
-                </x-default.dashboard.widgets.orders-widget>
         </div>
+
+    </section>
+
+    <section>
+        <div class="row">
+            <div class="col-sm-6">
+            </div>
         </div>
     </section>
 
