@@ -7,7 +7,8 @@
     </div>
     <section>
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
+                <h5>{{ translate('Setup your store') }} </h5>
                 <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget>
             </div>
         </div>

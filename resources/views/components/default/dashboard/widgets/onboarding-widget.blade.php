@@ -1,149 +1,103 @@
-    <!-- Card -->
-    <div class="card h-100">
-      <!-- Header -->
-      <div class="card-header">
-        <h5 class="card-header-title">Connections</h5>
-      </div>
-      <!-- End Header -->
-
-      <!-- Body -->
-      <div class="card-body">
-        <ul class="list-unstyled list-unstyled-py-4 mb-0">
-          <!-- List Item -->
-          <li>
-            <div class="d-flex align-items-center">
-              <a class="d-flex align-items-center mr-2" href="#">
-                <div class="avatar avatar-sm avatar-soft-primary avatar-circle">
-                  <span class="avatar-initials">R</span>
-                  <span class="avatar-status avatar-sm-status avatar-status-warning"></span>
-                </div>
-                <div class="ml-3">
-                  <h5 class="text-hover-primary mb-0">Rachel Doe</h5>
-                  <span class="font-size-sm text-body">25 connections</span>
-                </div>
-              </a>
-              <div class="ml-auto">
-                <!-- Checkbox -->
-                <div class="custom-control custom-checkbox-switch">
-                  <input type="checkbox" id="connectionsCheckbox1" class="custom-control-input custom-checkbox-switch-input" checked="">
-                  <label class="custom-checkbox-switch-label btn-icon btn-xs rounded-circle" for="connectionsCheckbox1">
-                    <span class="custom-checkbox-switch-default">
-                      <i class="tio-user-add"></i>
-                    </span>
-                    <span class="custom-checkbox-switch-active">
-                      <i class="tio-done"></i>
-                    </span>
-                  </label>
-                </div>
-                <!-- End Checkbox -->
-              </div>
+<div class="row mb-5 mx-n2">
+    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+        <!-- Card -->
+        <div class="card card-bordered shadow-none h-100 card-complete">
+            <div class="card-overlay text-center justify-content-center d-flex"
+                style="position: absolute; top: 0; left: 0; background: rgba(0,0,0, 0.6); width: 100%; height: 100%;">
+                {{ svg('heroicon-s-check', ['class' => ' text-success w-25']) }}
             </div>
-          </li>
-          <!-- End List Item -->
 
-          <!-- List Item -->
-          <li>
-            <div class="d-flex align-items-center">
-              <a class="d-flex align-items-center mr-2" href="#">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="./assets/img/160x160/img8.jpg" alt="Image Description">
-                  <span class="avatar-status avatar-sm-status avatar-status-success"></span>
-                </div>
-                <div class="ml-3">
-                  <h5 class="text-hover-primary mb-0">Isabella Finley</h5>
-                  <span class="font-size-sm text-body">79 connections</span>
-                </div>
-              </a>
-              <div class="ml-auto">
-                <!-- Checkbox -->
-                <div class="custom-control custom-checkbox-switch">
-                  <input type="checkbox" id="connectionsCheckbox2" class="custom-control-input custom-checkbox-switch-input">
-                  <label class="custom-checkbox-switch-label btn-icon btn-xs rounded-circle" for="connectionsCheckbox2">
-                    <span class="custom-checkbox-switch-default">
-                      <i class="tio-user-add"></i>
-                    </span>
-                    <span class="custom-checkbox-switch-active">
-                      <i class="tio-done"></i>
-                    </span>
-                  </label>
-                </div>
-                <!-- End Checkbox -->
-              </div>
+            <div class="card-body pt-3 px-3 pb-0">
+                <h6 class="font-weight-normal">Add A logo</h6>
             </div>
-          </li>
-          <!-- End List Item -->
 
-          <!-- List Item -->
-          <li>
-            <div class="d-flex align-items-center">
-              <a class="d-flex align-items-center mr-2" href="#">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="./assets/img/160x160/img3.jpg" alt="Image Description">
-                  <span class="avatar-status avatar-sm-status avatar-status-warning"></span>
+            <div class="card-footer border-0 pt-0 px-3 pb-3">
+                <span class="d-block font-size-1 mb-2">{{ translate('Done!') }}</span>
+
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="43"
+                        aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <div class="ml-3">
-                  <h5 class="text-hover-primary mb-0">David Harrison</h5>
-                  <span class="font-size-sm text-body">0 connections</span>
-                </div>
-              </a>
-              <div class="ml-auto">
-                <!-- Checkbox -->
-                <div class="custom-control custom-checkbox-switch">
-                  <input type="checkbox" id="connectionsCheckbox3" class="custom-control-input custom-checkbox-switch-input" checked="">
-                  <label class="custom-checkbox-switch-label btn-icon btn-xs rounded-circle" for="connectionsCheckbox3">
-                    <span class="custom-checkbox-switch-default">
-                      <i class="tio-user-add"></i>
-                    </span>
-                    <span class="custom-checkbox-switch-active">
-                      <i class="tio-done"></i>
-                    </span>
-                  </label>
-                </div>
-                <!-- End Checkbox -->
-              </div>
             </div>
-          </li>
-          <!-- End List Item -->
-
-          <!-- List Item -->
-          <li>
-            <div class="d-flex align-items-center">
-              <a class="d-flex align-items-center mr-2" href="#">
-                <div class="avatar avatar-sm avatar-circle">
-                  <img class="avatar-img" src="./assets/img/160x160/img6.jpg" alt="Image Description">
-                  <span class="avatar-status avatar-sm-status avatar-status-danger"></span>
-                </div>
-                <div class="ml-3">
-                  <h5 class="text-hover-primary mb-0">Costa Quinn</h5>
-                  <span class="font-size-sm text-body">9 connections</span>
-                </div>
-              </a>
-              <div class="ml-auto">
-                <!-- Checkbox -->
-                <div class="custom-control custom-checkbox-switch">
-                  <input type="checkbox" id="connectionsCheckbox4" class="custom-control-input custom-checkbox-switch-input">
-                  <label class="custom-checkbox-switch-label btn-icon btn-xs rounded-circle" for="connectionsCheckbox4">
-                    <span class="custom-checkbox-switch-default">
-                      <i class="tio-user-add"></i>
-                    </span>
-                    <span class="custom-checkbox-switch-active">
-                      <i class="tio-done"></i>
-                    </span>
-                  </label>
-                </div>
-                <!-- End Checkbox -->
-              </div>
-            </div>
-          </li>
-          <!-- End List Item -->
-        </ul>
-      </div>
-      <!-- End Body -->
-
-      <!-- Footer -->
-      <a class="card-footer text-center" href="user-profile-connections.html">
-        View all connections <i class="tio-chevron-right"></i>
-      </a>
-      <!-- End Footer -->
+        </div>
+        <!-- End Card -->
     </div>
-    <!-- End Card -->
+
+    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+        <!-- Card -->
+        <div class="card card-bordered shadow-none h-100">
+            <div class="card-body pt-3 px-3 pb-0">
+                <h6 class="font-weight-normal">Connect Google Analytics</h6>
+            </div>
+
+            <div class="card-footer border-0 pt-0 px-3 pb-3">
+                <span class="d-block font-size-1 mb-2">28%</span>
+
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 28%" aria-valuenow="28"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+        <!-- Card -->
+        <div class="card card-bordered shadow-none h-100">
+            <div class="card-body pt-3 px-3 pb-0">
+                <h6 class="font-weight-normal">
+                    {{ translate('Sync your products')  }}
+                </h6>
+            </div>
+
+            <div class="card-footer border-0 pt-0 px-3 pb-3">
+                <span class="d-block font-size-1 mb-2">17%</span>
+
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 17%" aria-valuenow="17"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+        <!-- Card -->
+        <div class="card card-bordered shadow-none h-100">
+            <div class="card-body pt-3 px-3 pb-0">
+                <h6 class="font-weight-normal">{{ translate('Promote') }}</h6>
+            </div>
+
+            <div class="card-footer border-0 pt-0 px-3 pb-3">
+                <span class="d-block font-size-1 mb-2">6%</span>
+
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 6%" aria-valuenow="6"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+
+    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+        <!-- Card -->
+        <div class="card card-bordered shadow-none h-100">
+            <div class="card-body pt-3 px-3 pb-0">
+                <h6 class="font-weight-normal">{{ translate('Get your First Order!') }}</h6>
+            </div>
+
+            <div class="card-footer border-0 pt-0 px-3 pb-3">
+                <span class="d-block font-size-1 mb-2">5%</span>
+
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 5%" aria-valuenow="5"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        <!-- End Card -->
+    </div>
+</div>
