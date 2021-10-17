@@ -10,11 +10,79 @@
         <div class="card-body">
             <form action="{{ route('customer.profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <div class="row">
+                    <div class="col-lg-5 mb-7 mb-lg-0">
+                      <!-- Nav -->
+                      <ul class="nav nav-box" role="tablist">
+                        <li class="nav-item w-100 mx-0 mb-3">
+                          <a class="nav-link p-4 active" id="pills-one-code-features-example3-tab" data-toggle="pill" href="#pills-one-code-features-example3" role="tab" aria-controls="pills-one-code-features-example3" aria-selected="true">
+                            <div class="media align-items-center align-items-lg-start">
+                              <figure class="w-100 max-w-6rem mt-2 mr-4">
+                                <img class="img-fluid" src="../assets/svg/icons/icon-45.svg" alt="SVG">
+                              </figure>
+                              <div class="media-body">
+                                <h4 class="mb-0">Product Page Design</h4>
+                                <div class="d-none d-lg-block mt-2">
+                                  <p class="text-body mb-0">You can work with your existing website.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
 
-                <x-ev.form.select name="product_card_design_archive" :items="BusinessSettings::getMappedProductCardDesigns()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
+                        <li class="nav-item w-100 mx-0 mb-3">
+                          <a class="nav-link p-4" id="pills-two-code-features-example3-tab" data-toggle="pill" href="#pills-two-code-features-example3" role="tab" aria-controls="pills-two-code-features-example3" aria-selected="false">
+                            <div class="media align-items-center align-items-lg-start">
+                              <figure class="w-100 max-w-6rem mt-2 mr-4">
+                                <img class="img-fluid" src="../assets/svg/icons/icon-23.svg" alt="SVG">
+                              </figure>
+                              <div class="media-body">
+                                <h4 class="mb-0">Powerful features</h4>
+                                <div class="d-none d-lg-block mt-2">
+                                  <p class="text-body mb-0">Easily draft, change, customize and launch.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
 
-                <x-ev.form.file-selector name="product.pdf" label="{{ translate('Website Logo') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
+                        <li class="nav-item w-100 mx-0">
+                          <a class="nav-link p-4" id="pills-three-code-features-example3-tab" data-toggle="pill" href="#pills-three-code-features-example3" role="tab" aria-controls="pills-three-code-features-example3" aria-selected="false">
+                            <div class="media align-items-center align-items-lg-start">
+                              <figure class="w-100 max-w-6rem mt-2 mr-4">
+                                <img class="img-fluid" src="../assets/svg/icons/icon-44.svg" alt="SVG">
+                              </figure>
+                              <div class="media-body">
+                                <h4 class="mb-0">Advanced HTML/CSS editing</h4>
+                                <div class="d-none d-lg-block mt-2">
+                                  <p class="text-body mb-0">You can modify any aspect of your website.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                      <!-- End Nav -->
+                    </div>
 
+                    <div class="col-lg-7">
+                      <!-- Tab Content -->
+                      <div class="tab-content">
+                        <div class="tab-pane fade p-4 show active" id="pills-one-code-features-example3" role="tabpanel" aria-labelledby="pills-one-code-features-example3-tab">
+                          <p>First tab content...</p>
+                        </div>
+
+                        <div class="tab-pane fade p-4" id="pills-two-code-features-example3" role="tabpanel" aria-labelledby="pills-two-code-features-example3-tab">
+                          <p>Second tab content...</p>
+                        </div>
+
+                        <div class="tab-pane fade p-4" id="pills-three-code-features-example3" role="tabpanel" aria-labelledby="pills-three-code-features-example3-tab">
+                          <p>Third tab content...</p>
+                        </div>
+                      </div>
+                      <!-- End Tab Content -->
+                    </div>
+                  </div>
 
                 <div class="form-group mb-0 text-right">
                     <button type="submit" class="btn btn-primary">{{translate('Update Settings')}}</button>

@@ -35,6 +35,7 @@ use App\Http\Requests\LoginRequest;
 
 use function foo\func;
 use App\Notifications\CompanyVisit;
+use Exception;
 
 class HomeController extends Controller
 {
@@ -400,47 +401,7 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function shop($slug)
-    {
-        $shop  = Shop::where('slug', $slug)->first();
-        if ($shop != null) {
-            $seller = Seller::where('user_id', $shop->user_id)->first();
-            if (auth()->user()) {
-                visits($seller, "auth")->increment();
-                if (auth()->user()->id != $shop->user->id) {
-                    $shop->user->notify(new CompanyVisit(auth()->user()));
-                }
-                $this->log($seller, "user visited a company profile");
-            } else {
-                visits($seller)->increment();
-            }
 
-            // Seo integration with Schema.org
-            if (get_setting('enable_seo_company') == "on") {
-                seo()->addSchema($seller->get_schema());
-            }
-
-            if ($seller->verification_status != 0) {
-                return view('frontend.company.profile', compact('shop', 'seller'));
-                //                return view('frontend.seller_shop', compact('shop', 'seller'));
-            } else {
-                $company_owner_id = $seller->user->id;
-                if (auth()->user()) {
-                    $current_user_id = auth()->user()->id;
-                } else {
-                    $current_user_id = 0;
-                }
-
-                /* Show company profile for company owner user */
-                if ($company_owner_id === $current_user_id) {
-                    return view('frontend.company.profile', compact('shop', 'seller'));
-                } else {
-                    return view('frontend.seller_shop_without_verification', compact('shop', 'seller'));
-                }
-            }
-        }
-        abort(404);
-    }
 
     public function filter_shop($slug, $type)
     {
@@ -624,7 +585,7 @@ class HomeController extends Controller
 
         $product_count = $products->count();
         $company_count = $shops->count();
-        $event_count = $events->count();        
+        $event_count = $events->count();
 
         $attributes = array();
         $filters = array();
@@ -644,7 +605,7 @@ class HomeController extends Controller
                 $attributeIds = array_unique(array_merge($attributeIds, $item->attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
             }
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
-                
+
             foreach ($attributes as $attribute) {
                 if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != "-1" && $request['attribute_' . $attribute['id']] != null) {
                     $filters[$attribute['id']] = $request['attribute_' . $attribute['id']];

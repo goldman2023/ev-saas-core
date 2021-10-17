@@ -13,8 +13,10 @@ use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
@@ -49,6 +51,8 @@ Route::middleware([
     Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
 
 
+    // Feed Page (Possible new homepage)
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
     //Home Page
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -109,17 +113,18 @@ Route::middleware([
     Route::get('/customer-product/{slug}', [CustomerProductController::class, 'customer_product'])->name('customer.product');
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
     /* TODO: Investigate this is causing some issues */
     Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
+
     Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product');
     Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name('products.category');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name('products.variant_price');
-    Route::get('/shop/{slug}', [HomeController::class, 'shop'])->name('shop.visit');
+    Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
