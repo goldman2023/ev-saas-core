@@ -583,7 +583,7 @@ class HomeController extends Controller
                 ->orWhere('description', 'like', '%' . $query . '%');
         }
 
-        $product_count = $products->count();
+        $product_count = 0;
         $company_count = $shops->count();
         $event_count = $events->count();
 
@@ -658,7 +658,7 @@ class HomeController extends Controller
         }
 
 
-        $products = filter_products($products)->paginate(10)->appends(request()->query());
+        $products = $products;
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
