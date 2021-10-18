@@ -13,6 +13,10 @@ class CreateProductVariationsTable extends Migration
      */
     public function up()
     {
+        Schema::table('products', function (Blueprint $table) {
+            $table->bigInteger('id')->unsigned()->autoIncrement()->change();
+        });
+
         Schema::create('product_variations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('product_id')

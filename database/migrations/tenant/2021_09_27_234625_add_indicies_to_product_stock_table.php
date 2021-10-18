@@ -14,8 +14,16 @@ class AddIndiciesToProductStockTable extends Migration
     public function up()
     {
         Schema::table('product_stocks', function (Blueprint $table) {
-            $table->unsignedBigInteger('subject_id')->after('id');
-            $table->string('subject_type')->after('subject_id');
+
+            //check the column
+            if (!Schema::hasColumn('product_stocks', 'subject_id')) {
+                $table->unsignedBigInteger('subject_id')->after('id');
+            }
+
+            if (!Schema::hasColumn('product_stocks', 'subject_type')) {
+                $table->string('subject_type')->after('subject_id');
+            }
+
 
             $table->index(['subject_id', 'subject_type']);
             $table->unique('sku');

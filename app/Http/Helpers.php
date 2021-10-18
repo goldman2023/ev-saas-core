@@ -297,6 +297,7 @@ if (!function_exists('convert_price')) {
             $currency = Currency::where('code', $code)->first();
         }
 
+
         $price = (float) $price * (float) $currency->exchange_rate;
 
         return $price;
