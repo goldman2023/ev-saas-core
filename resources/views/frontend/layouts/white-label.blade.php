@@ -56,7 +56,7 @@
 <div class="">
 
     {{-- @include('frontend.inc.nav') --}}
-        <x-default.merchant.header></x-default.merchant.header>
+        <x-default.merchant.header :shop="$shop"></x-default.merchant.header>
 
 
     @yield('content')

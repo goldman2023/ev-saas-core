@@ -1,7 +1,7 @@
 @extends('frontend.layouts.white-label')
 
 @section('content')
-    <section class="space-1 bg-dark">
+    <section class="space-1 bg-dark space-top-3">
         <div class="container">
             <div class="row">
                 <div class="col-3">
@@ -27,7 +27,7 @@
 
     <section>
         <div class="container">
-            <h3>Shop by Brand</h3>
+            <h3>{{ translate('Shop by Brand') }}</h3>
         </div>
         <x-default.brands.brands-list>
         </x-default.brands.brands-list>

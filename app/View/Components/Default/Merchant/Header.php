@@ -6,14 +6,17 @@ use Illuminate\View\Component;
 
 class Header extends Component
 {
+    public $logo;
+    public $shop;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($shop)
     {
         //
+        $this->logo = $shop->user->shop->get_company_logo();
     }
 
     /**
