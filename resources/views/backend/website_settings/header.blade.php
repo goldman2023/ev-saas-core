@@ -84,7 +84,7 @@
 										</div>
 										<div class="col">
 											<div class="form-group">
-												<input type="text" class="form-control" placeholder="{{ translate('Link with') }} http:// {{ translate('or') }} https://" name="header_menu_links[]" value="{{ get_setting('header_menu_links'), true)[$key] }}">
+												<input type="text" class="form-control" placeholder="{{ translate('Link with') }} http:// {{ translate('or') }} https://" name="header_menu_links[]" value="{{ get_setting('header_menu_links', true)[$key] }}">
 											</div>
 										</div>
 										<div class="col-2">

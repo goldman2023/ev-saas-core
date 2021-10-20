@@ -12,6 +12,9 @@ const path = require("path");
  |
  */
 
+ /* TODO: Document this propertly right now it's a test using getstream.io react chat sdk */
+ mix.js('resources/js/feed.js', 'public/js').react().extract(['react', 'react-dom']);
+
 
 
 /* Minimal dependency requirements for public parts of the website */

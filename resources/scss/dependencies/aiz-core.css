@@ -3966,7 +3966,7 @@ input[type="number"] {
 .dropdown-item:hover,
 .dropdown-item:active {
     color: #fff !important;
-    background-color: var(--primary);
+    background-color: var(--primary) !important;
 }
 /*card elements*/
 .card {
@@ -4535,7 +4535,7 @@ input[type="number"] {
     outline: none !important;
 }
 .bootstrap-select .dropdown-toggle {
-    color: #898b92;
+    color: #000;
     background-color: transparent !important;
     border-color: #e2e5ec;
 }
@@ -5751,12 +5751,6 @@ div.footable-loader > span.fooicon:after {
 }
 .modal-header .close {
     font-size: 0;
-}
-.modal-header .close:before {
-    font-family: "Line Awesome Free";
-    font-weight: 900;
-    content: "\f00d";
-    font-size: 20px;
 }
 .modal-content .modal-body {
     padding: 20px 25px;

@@ -13,6 +13,7 @@ use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -113,18 +114,51 @@ class Product extends Model
     use ReviewTrait;
     use AttributeTrait;
     use HasSlug;
+    use SoftDeletes;
+
+     /**
+     * Stream: Add extra activity data - task name, and user's display name:
+     */
+    public function activityExtraData()
+    {
+        return array('name'=>'$this->name', 'display_name' =>' $this->display_name');
+    }
+
+
+   /**
+    * Stream: Change activity verb to 'created':
+    */
+    public function activityVerb()
+    {
+        return 'created';
+    }
+
+
+    /* Properties not saved in DB */
+    public $temp_sku;
+    public $current_stock;
+    public $low_stock_qty;
+    public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
+
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['stock'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'variations', 'num_of_sale', 'thumbnail_img'];
+        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
 
     protected $casts = [
         'choice_options' => 'object',
         'colors' => 'object',
-        'attributes' => 'object'
+        'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink'];
+    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id'];
 
     protected static function boot()
     {
@@ -138,6 +172,13 @@ class Product extends Model
                 $builder->where('published', 1);
             });
         }
+
+        if(is_vendor_site()) {
+            static::addGlobalScope('single_vendor', function (Builder $builder) {
+                $builder->where('user_id', '=' , 6);
+            });
+        }
+
     }
 
     /**
@@ -175,9 +216,25 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function selected_categories($pluck_property = null, $is_collection = true) {
+        $ids = $this->categories()->get()->pluck('id')->toArray();
+
+        if($pluck_property) {
+            $data = Category::tree()->get()->whereIn('id', $ids)->pluck($pluck_property);
+        } else {
+            $data = Category::tree()->get()->whereIn('id', $ids);
+        }
+
+        if(!$is_collection) {
+            $data = $data->toArray();
+        }
+
+        return $data;
+    }
+
     public function categories()
     {
-        return $this->morphToMany(Category::class, 'subject', 'category_relationships');
+        return $this->morphToMany(Category::class, 'subject', 'category_relationships', null, 'category_id');
     }
 
     public function brand()
@@ -185,14 +242,18 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function variations() {
+        return $this->hasMany(ProductVariation::class);
+    }
+
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function stocks()
+    public function stock()
     {
-        return $this->hasMany(ProductStock::class);
+        return $this->morphOne(ProductStock::class, 'subject');
     }
 
     public function wishlists() {
@@ -214,15 +275,27 @@ class Product extends Model
      * @return array*
      */
     public function getImagesAttribute() {
-        $photos_idx = explode(',', $this->photos);
         $photos = [];
         $data = [
             'thumbnail' => [],
             'gallery' => []
         ];
 
-        if(!empty($this->thumbnail_img)) {
-            array_unshift($photos_idx, $this->thumbnail_img);
+        if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
+            $data['thumbnail'] = [
+                'id' => null,
+                'url' => null
+            ];
+            return $data;
+        }
+
+        $photos_idx = explode(',', $this->attributes['photos']);
+        foreach ($photos_idx as &$i) $i = (int) $i;
+
+
+        if(!empty($this->attributes['thumbnail_img'])) {
+            // Add thumb as the first element in photos array
+            array_unshift($photos_idx, $this->attributes['thumbnail_img']);
         }
 
         if(!empty($photos_idx)) {
@@ -240,7 +313,7 @@ class Product extends Model
                     $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
                 }
 
-                if($photo->id == $this->thumbnail_img) {
+                if($photo->id ===  (int) $this->attributes['thumbnail_img']) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,
                         'url' => $url
@@ -263,17 +336,71 @@ class Product extends Model
     }
 
     /**
-     * Get all photos related to the product but properly structured in an assoc. array
-     * This function is used in frontend/themes etc.
+     * Get the product permalink
      *
      * @return string $link
      */
     public function getPermalinkAttribute() {
-        if(empty($this->slug))
+        if(empty($this->attributes['slug'])) {
             return "#";
+        }
 
-        return route('product', $this->slug);
+        return route('product', $this->attributes['slug']);
     }
+
+    public function setTempSkuAttribute($value)
+    {
+        $this->temp_sku = $value;
+    }
+
+    public function getTempSkuAttribute() {
+        if(empty($this->temp_sku)) {
+            $stock = $this->stock()->first();
+
+            return $stock->sku ?? '';
+        }
+
+        return $this->temp_sku;
+    }
+
+
+    public function setCurrentStockAttribute($value) {
+        $this->current_stock = $value;
+    }
+
+    public function getCurrentStockAttribute() {
+        if(empty($this->current_stock)) {
+            $stock = $this->stock()->first();
+
+            return (float) ($stock->qty ?? 0);
+        }
+
+        return $this->current_stock;
+    }
+
+    public function setLowStockQtyAttribute($value) {
+        $this->low_stock_qty = $value;
+    }
+
+    public function getLowStockQtyAttribute() {
+        if(empty($this->low_stock_qty)) {
+            $stock = $this->stock()->first();
+
+            return (float) ($stock->low_stock_qty ?? 0);
+        }
+
+        return $this->low_stock_qty;
+    }
+
+
+    public function getCategoryIdAttribute() {
+        if(empty($this->category_id)) {
+            return $this->categories()->whereNull('parent_id')->first()->id ?? null;
+        }
+
+        return $this->category_id;
+    }
+
 
     protected function asJson($value)
     {

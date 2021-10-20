@@ -40,8 +40,7 @@
         @php
             $product = $detailedProduct;
         @endphp
-        <x-default.products.single.product-details :product="$product">
-        </x-default.products.single.product-details>
+        <x-default.products.single.product-details :product="$product"></x-default.products.single.product-details>
     </section>
 
 
@@ -376,7 +375,6 @@
                         <div class="p-3">
                             <section>
                                 @php
-                                    $relatedProducts = filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get();
                                     $relatedProducts = null;
                                 @endphp
 

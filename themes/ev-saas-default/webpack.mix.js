@@ -24,6 +24,7 @@ mix.setPublicPath(`public/themes/${theme}`)
     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`).options({
         processCssUrls: false
     }).version()
+    .copy(`${__dirname}/js/crud/*.js`, `public/themes/${theme}/js/crud`)
     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
     .copyDirectory(`${__dirname}/vendor`, `public/themes/${theme}/vendor`)
     .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)

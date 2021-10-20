@@ -13,10 +13,28 @@ class CreateProductVariationsTable extends Migration
      */
     public function up()
     {
+        Schema::table('products', function (Blueprint $table) {
+            $table->bigInteger('id')->unsigned()->autoIncrement()->change();
+        });
+
         Schema::create('product_variations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('product_id');
+            $table->foreignId('product_id')
+                ->constrained('products')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->text('variant');
+            $table->string('image');
+            $table->double('price');
             $table->timestamps();
+
+            $table->index('product_id');
+        });
+
+        Schema::table('product_stocks', function (Blueprint $table) {
+            $table->dropColumn('variation_id');
+            $table->renameColumn('product_id', 'subject_id');
+            $table->renameColumn('variant', 'subject_type');
         });
     }
 
@@ -28,5 +46,11 @@ class CreateProductVariationsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('product_variations');
+
+        Schema::table('product_stocks', function (Blueprint $table) {
+            $table->bigInteger('variation_id');
+            $table->renameColumn('subject_id', 'product_id');
+            $table->renameColumn('subject_type', 'variant');
+        });
     }
 }

@@ -59,7 +59,7 @@
                     <li class="list-inline-item">
                         <a class="btn btn-sm btn-icon btn-soft-secondary rounded-circle p-2" target="_blank"
                             href="{{ get_setting('facebook_link') }}">
-                            {{ svg('feathericon-facebook') }}
+                            {{-- {{ svg('feathericon-facebook') }} --}}
                         </a>
                     </li>
                 @endif
@@ -67,28 +67,28 @@
                 @if (get_setting('twitter_link') != null)
                     <li class="list-inline-item">
                         <a href="{{ get_setting('twitter_link') }}" target="_blank" class="twitter">
-                            {{ svg('feathericon-twitter') }}
+                            {{-- {{ svg('feathericon-twitter') }} --}}
                         </a>
                     </li>
                 @endif
                 @if (get_setting('instagram_link') != null)
                     <li class="list-inline-item">
                         <a href="{{ get_setting('instagram_link') }}" target="_blank" class="instagram">
-                            {{ svg('feathericon-instagram') }}
+                            {{-- {{ svg('feathericon-instagram') }} --}}
                         </a>
                     </li>
                 @endif
                 @if (get_setting('youtube_link') != null)
                     <li class="list-inline-item">
                         <a href="{{ get_setting('youtube_link') }}" target="_blank" class="youtube">
-                            {{ svg('feathericon-youtube') }}
+                            {{-- {{ svg('feathericon-youtube') }} --}}
                         </a>
                     </li>
                 @endif
                 @if (get_setting('linkedin_link') != null)
                     <li class="list-inline-item">
                         <a href="{{ get_setting('linkedin_link') }}" target="_blank" class="linkedin">
-                            {{ svg('feathericon-linkedin') }}
+                            {{-- {{ svg('feathericon-linkedin') }} --}}
                         </a>
                     </li>
                 @endif

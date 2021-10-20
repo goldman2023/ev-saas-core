@@ -7,6 +7,32 @@ use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
 
+function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null) {
+    if(!empty($data)) {
+        if(!$data instanceof \Illuminate\Support\Collection) {
+            $data = collect($data);
+        }
+
+        $data = $data->map(function ($item, $index) use ($dataType, $casts) {
+            settype($item, $dataType);
+
+            if(!empty($casts) && (is_object($item) || is_array($item))) {
+                foreach($casts as $key => $cast) {
+                    if(is_object($item)) {
+                        settype($item->{$key}, $cast);
+                    } else if(is_array($item)) {
+                        settype($item[$key], $cast);
+                    }
+                }
+            }
+
+            return $item;
+        });
+    }
+
+    return $data;
+}
+
 function shorten_string($string, $wordsreturned)
 {
     $retval = $string;
@@ -239,4 +265,9 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
     $stringKey = $label_prefix . '.' . $key;
 
     return $stringKey;
+}
+
+function is_vendor_site() {
+    /* TODO: make this dynamic */
+    return false;
 }

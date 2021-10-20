@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use EVS;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductTranslation;
@@ -133,10 +134,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)
-            ->where('digital', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = EVS::getMappedCategories();
 
         return view('backend.product.products.create', compact('categories'));
     }
@@ -159,7 +157,7 @@ class ProductController extends Controller
         } else {
             $product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
         }
-        $product->category_id = $request->category_id;
+        //$product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->current_stock = $request->current_stock;
         $product->barcode = $request->barcode;
@@ -175,7 +173,7 @@ class ProductController extends Controller
         $product->thumbnail_img = $request->thumbnail_img;
         $product->unit = $request->unit;
         $product->min_qty = $request->min_qty;
-        $product->low_stock_quantity = $request->low_stock_quantity;
+        $product->low_stock_qty = $request->low_stock_quantity;
         $product->stock_visibility_state = $request->stock_visibility_state;
 
         $tags = array();
@@ -201,8 +199,6 @@ class ProductController extends Controller
         $product->discount_type = $request->discount_type;
         $product->shipping_type = $request->shipping_type;
         $product->est_shipping_days = $request->est_shipping_days;
-
-
 
 
         if ($request->has('shipping_type')) {
@@ -243,40 +239,6 @@ class ProductController extends Controller
             $product->pdf = $request->pdf->store('uploads/products/pdf');
         }
 
-        $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)) . '-' . Str::random(5);
-
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $product->colors = $request->colors;
-        } else {
-            $colors = array();
-            $product->colors = $colors;
-        }
-
-        $choice_options = array();
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $str = 'choice_options_' . $no;
-
-                $item['attribute_id'] = $no;
-
-                $data = array();
-                foreach (json_decode($request[$str][0]) as $key => $eachValue) {
-                    array_push($data, $eachValue->value);
-                }
-
-                $item['values'] = $data;
-                array_push($choice_options, $item);
-            }
-        }
-
-        if (!empty($request->choice_no)) {
-            $product->attributes = $request->choice_no;
-        } else {
-            $product->attributes = [];
-        }
-
-        $product->choice_options = $choice_options;
 
         $product->published = 1;
         if ($request->button == 'unpublish' || $request->button == 'draft') {
@@ -302,6 +264,12 @@ class ProductController extends Controller
 
         $this->store_attributes_updates($request, $product);
 
+        // Set Categories:
+        if(!empty($request->category_id)) {
+            $product->categories()->attach($request->category_id);
+        }
+
+
         //VAT & Tax
         if ($request->tax_id) {
             foreach ($request->tax_id as $key => $val) {
@@ -323,37 +291,14 @@ class ProductController extends Controller
             $flash_deal_product->save();
         }
 
-        //combinations start
-        $options = array();
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $colors_active = 1;
-            array_push($options, $request->colors);
-        }
 
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
-                }
-                array_push($options, $data);
-            }
-        }
+        // Main Product - Stock
+        $product_stock = new ProductStock;
+        $product_stock->product_id = $product->id;
+        $product_stock->price = $request->unit_price;
+        $product_stock->qty = $request->current_stock;
+        $product_stock->save();
 
-        //Generates the combinations of customer choice options
-        //$combinations = Combinations::makeCombinations($options);
-        $combinations = null;
-
-        if (1 > 2) {
-        } else {
-            $product_stock = new ProductStock;
-            $product_stock->product_id = $product->id;
-            $product_stock->price = $request->unit_price;
-            $product_stock->qty = $request->current_stock;
-            $product_stock->save();
-        }
-        //combinations end
 
         $product->save();
 
@@ -403,11 +348,9 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $lang = $request->lang;
         $tags = $product->tags;
-        $categories = Category::where('parent_id', 0)
-            ->where('digital', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = EVS::getMappedCategories();
         $product_attributes = Attribute::where('content_type', 'App\Models\Product')->orderBy('created_at', 'desc')->get();
+
         return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));
     }
 
@@ -439,79 +382,6 @@ class ProductController extends Controller
         $refund_request_addon = \App\Models\Addon::where('unique_identifier', 'refund_request')->first();
         $product = Product::findOrFail($id);
 
-        // Product Attribute Update
-        $updated_attributes = $request->except([
-            '_method', '_token', 'id', 'lang', 'name',
-            'category_id', 'brand_id', 'unit', 'min_qty', 'tags',
-            'photos', 'thumbnail_img', 'video_provider', 'video_link', 'colors',
-            'colors_active', 'unit_price', 'purchase_price', 'discount', 'discount_type',
-            'current_stock', 'description', 'pdf', 'meta_title', 'meta_description',
-            'meta_img', 'slug', 'shipping_type', 'flat_shipping_cost', 'low_stock_quantity',
-            'stock_visibility_state', 'cash_on_delivery', 'featured', 'todays_deal', 'flash_deal_id',
-            'flash_discount', 'flash_discount_type', 'est_shipping_days', 'button'
-        ]);
-
-        foreach($updated_attributes as $key => $value) {
-            $attribute_relationship = $product->attributes()->where('attribute_id', $key)->first();
-
-            $attribute = Attribute::find($key);
-
-            if(empty($attribute)) {
-                continue;
-            }
-
-            if ($value != null) {
-                $relationship_id = $value;
-                if ($attribute->type != "dropdown" && $attribute->type != "checkbox") {
-                    if ($attribute_relationship == null) {
-                        $attribute_value = new AttributeValue;
-                        $attribute_value->attribute_id = $attribute->id;
-                    }else {
-                        $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
-                    }
-                    $attribute_value->values = $value;
-                    $attribute_value->save();
-                    $relationship_id = $attribute_value->id;
-                }
-
-                if ($attribute->type != "checkbox") {
-                    if ($attribute_relationship == null) {
-                        $attribute_relationship = new AttributeRelationship;
-                        $attribute_relationship->subject_type = "App\Models\Product";
-                        $attribute_relationship->subject_id = $id;
-                        $attribute_relationship->attribute_id = $key;
-                    }
-                    $attribute_relationship->attribute_value_id = $relationship_id;
-                    $attribute_relationship->save();
-                }else {
-                    foreach($product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value)->get() as $relation) {
-                        $relation->delete();
-                    }
-                    foreach($value as $index => $option) {
-                        if (count($product->attributes()->where('attribute_id', $key)->where('attribute_value_id', $option)->get()) == 0) {
-                            $attribute_relationship = new AttributeRelationship;
-                            $attribute_relationship->subject_type = "App\Models\Product";
-                            $attribute_relationship->subject_id = $id;
-                            $attribute_relationship->attribute_id = $key;
-                            $attribute_relationship->attribute_value_id = $option;
-                            $attribute_relationship->save();
-                        }
-                    }
-                }
-            }else {
-                if ($attribute->type == "checkbox") {
-                    foreach($product->attributes()->where('attribute_id', $key) as $relation) {
-                        $relation->delete();
-                    }
-                }else if ($attribute_relationship != null){
-                    $attribute_value = AttributeValue::findOrFail($attribute_relationship->attribute_value_id);
-                    $attribute_relationship->delete();
-                    $attribute_value->delete();
-                }
-            }
-        }
-        $this->store_attributes_updates($request, $product);
-
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
         $product->current_stock = $request->current_stock;
@@ -538,7 +408,6 @@ class ProductController extends Controller
         $product->photos = $request->photos;
         $product->thumbnail_img = $request->thumbnail_img;
         $product->min_qty = $request->min_qty;
-        $product->low_stock_quantity = $request->low_stock_quantity;
         $product->stock_visibility_state = $request->stock_visibility_state;
 
         $tags = array();
@@ -607,105 +476,18 @@ class ProductController extends Controller
 
         $product->pdf = $request->pdf;
 
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $product->colors = $request->colors;
-        } else {
-            $colors = array();
-            $product->colors = $colors;
-        }
-
-        $choice_options = array();
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $str = 'choice_options_' . $no;
-
-                $item['attribute_id'] = $no;
-
-                $data = array();
-                foreach (json_decode($request[$str][0]) as $key => $eachValue) {
-                    array_push($data, $eachValue->value);
-                }
-
-                $item['values'] = $data;
-                array_push($choice_options, $item);
-            }
-        }
-
-        foreach ($product->stocks as $key => $stock) {
+        /*foreach ($product->stocks as $key => $stock) {
             $stock->delete();
-        }
-
-        if (!empty($request->choice_no)) {
-            $product->attributes = $request->choice_no;
-        } else {
-            $product->attributes = [];
-        }
-
-        $product->choice_options = $choice_options;
-
-
-        //combinations start
-        $options = array();
-        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-            $colors_active = 1;
-            array_push($options, $request->colors);
-        }
-
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $data = array();
-                foreach (json_decode($request[$name][0]) as $key => $item) {
-                    array_push($data, $item->value);
-                }
-                array_push($options, $data);
-            }
-        }
-
-        $combinations = []; //Combinations::makeCombinations($options);
-        //$combination = null;
-
-        if (count($combinations[0] ?? []) > 0) {
-            $product->variant_product = 1;
-            foreach ($combinations as $key => $combination) {
-                $str = '';
-                foreach ($combination as $key => $item) {
-                    if ($key > 0) {
-                        $str .= '-' . str_replace(' ', '', $item);
-                    } else {
-                        if ($request->has('colors_active') && $request->has('colors') && count($request->colors) > 0) {
-                            $color_name = \App\Models\Color::where('code', $item)->first()->name;
-                            $str .= $color_name;
-                        } else {
-                            $str .= str_replace(' ', '', $item);
-                        }
-                    }
-                }
-
-                $product_stock = ProductStock::where('product_id', $product->id)->where('variant', $str)->first();
-                if ($product_stock == null) {
-                    $product_stock = new ProductStock;
-                    $product_stock->product_id = $product->id;
-                }
-
-                $product_stock->variant = $str;
-                $product_stock->price = $request['price_' . str_replace('.', '_', $str)];
-                $product_stock->sku = $request['sku_' . str_replace('.', '_', $str)];
-                $product_stock->qty = $request['qty_' . str_replace('.', '_', $str)];
-                $product_stock->image = $request['img_' . str_replace('.', '_', $str)];
-
-                $product_stock->save();
-            }
-        } else {
-            $product_stock = new ProductStock;
-            $product_stock->product_id = $product->id;
-            $product_stock->price = $request->unit_price;
-            $product_stock->qty = $request->current_stock;
-            $product_stock->save();
-        }
+        }*/
 
         $product->save();
+
+        $this->store_attributes_updates($request, $product);
+
+        // Set Categories:
+        if(!empty($request->category_id)) {
+            $product->categories()->attach($request->category_id);
+        }
 
         //Flash Deal
         if ($request->flash_deal_id) {
@@ -734,6 +516,13 @@ class ProductController extends Controller
                 $product_tax->save();
             }
         }
+
+        $product_stock = new ProductStock;
+        $product_stock->product_id = $product->id;
+        $product_stock->price = $request->unit_price;
+        $product_stock->qty = $request->current_stock;
+        $product_stock->low_stock_qty = $request->low_stock_quantity;
+        $product_stock->save();
 
         // Product Translations
         $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $product->id]);

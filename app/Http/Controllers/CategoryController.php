@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use EVS;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\HomeCategory;
@@ -20,12 +22,12 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $sort_search =null;
+        $sort_search = null;
 //        $categories = Category::orderBy('name', 'asc');
         $categories = Category::orderBy('order_level', 'desc');
-        if ($request->has('search')){
-            $sort_search = $request->search;
-            $categories = $categories->where('name', 'like', '%'.$sort_search.'%');
+        if ($request->has('search')) {
+            $sort_search = strtolower($request->search);
+            $categories = $categories->where(DB::raw('lower(name)'), 'like', '%'.$sort_search.'%');
         }
         $categories = $categories->paginate(15);
         return view('backend.product.categories.index', compact('categories', 'sort_search'));
@@ -38,9 +40,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)
-            ->with('childrenCategories')
-            ->get();
+        $categories = EVS::getMappedCategories();
 
         return view('backend.product.categories.create', compact('categories'));
     }
@@ -69,15 +69,16 @@ class CategoryController extends Controller
             $category->parent_id = $request->parent_id;
 
             $parent = Category::find($request->parent_id);
-            $category->level = $parent->level + 1 ;
+            if(isset($parent->level )) {
+                $category->level = $parent->level + 1 ;
+            } else {
+                $category->level = 1;
+            }
+        } else {
+            $category->parent_id = null;
+            $category->level = null;
         }
 
-        if ($request->slug != null) {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
-        }
-        else {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
-        }
         if ($request->commision_rate != null) {
             $category->commision_rate = $request->commision_rate;
         }
@@ -113,11 +114,13 @@ class CategoryController extends Controller
     {
         $lang = $request->lang;
         $category = Category::findOrFail($id);
-        $categories = Category::where('parent_id', 0)
+        $categories = EVS::getMappedCategories();
+            /*Category::where('parent_id', 0)
             ->with('childrenCategories')
-            ->whereNotIn('id', CategoryUtility::children_ids($category->id, true))->where('id', '!=' , $category->id)
+            ->whereNotIn('id', CategoryUtility::children_ids($category->id, true))
+            ->where('id', '!=' , $category->id)
             ->orderBy('name','asc')
-            ->get();
+            ->get();*/
 
         return view('backend.product.categories.edit', compact('category', 'categories', 'lang'));
     }
@@ -127,7 +130,7 @@ class CategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -146,15 +149,14 @@ class CategoryController extends Controller
 
         $previous_level = $category->level;
 
-        if ($request->parent_id != "0") {
+        if ($request->parent_id != "0" && $request->parent_id != null ) {
             $category->parent_id = $request->parent_id;
 
             $parent = Category::find($request->parent_id);
             $category->level = $parent->level + 1 ;
-        }
-        else{
-            $category->parent_id = 0;
-            $category->level = 0;
+        } else {
+            $category->parent_id = null;
+            $category->level = null;
         }
 
         if($category->level > $previous_level){
@@ -163,14 +165,6 @@ class CategoryController extends Controller
         elseif ($category->level < $previous_level) {
             CategoryUtility::move_level_up($category->id);
         }
-
-        if ($request->slug != null) {
-            $category->slug = strtolower($request->slug);
-        }
-        else {
-            $category->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
-        }
-
 
         if ($request->commision_rate != null) {
             $category->commision_rate = $request->commision_rate;

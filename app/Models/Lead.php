@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
 
 class Lead extends Model
 {
@@ -12,9 +14,9 @@ class Lead extends Model
 
     public static function trend($period = 30)
     {
-        $present = Lead::where('created_at', '>=', \Carbon::now()->subdays($period))->count();
+        $present = Lead::where('created_at', '>=', Carbon::now()->subdays($period))->count();
 
-        $past = Lead::where('created_at', '<=', \Carbon::now()->subdays($period))->count();
+        $past = Lead::where('created_at', '<=', Carbon::now()->subdays($period))->count();
 
         if ($present == 0) {
             $present = 1;

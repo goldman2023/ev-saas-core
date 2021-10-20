@@ -1,5 +1,4 @@
 <!-- Hero Section -->
-
 <div class="container space-2">
     <div class="row">
         <div class="col-lg-7 mb-7 mb-lg-0">
@@ -30,14 +29,16 @@
             <!-- Title -->
             <div class="mb-5">
                 <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
-                <p>
-                    {!! $product->short_description !!}
-                </p>
+                @if(empty($product->excerpt))
+                    <p>
+                        {!! $product->excerpt !!}
+                    </p>
+                @endif
             </div>
 
             <!-- End Title -->
             <div class="product-description mb-3">
-                {{ $product->getTranslation('description'); }}
+                {!! $product->getTranslation('description') !!}
             </div>
 
             <!-- Price -->

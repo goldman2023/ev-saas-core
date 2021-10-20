@@ -499,7 +499,7 @@
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
                     @php
-                        $jobs_activated = get_setting('jobs_module')->first();
+                        $jobs_activated = get_setting('jobs_module'); //->first();
                         if($jobs_activated != null) {
 
                         } else {
@@ -524,7 +524,7 @@
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
                     @php
-                        $events_activated = get_setting('events_module')->first();
+                        $events_activated = get_setting('events_module'); //->first();
                         if($events_activated != null) {
 
                         } else {

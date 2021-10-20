@@ -15,6 +15,12 @@ A complete solution for E-commerce Business with exclusive features & super resp
 -   Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
 -   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"`
 
+
+# Running docker
+
+`chmod +x sail`
+`kool run up`
+
 # Local setup for assets
 In case you running into issues with wcompile permissions run
 `chmod 777 wcompile.sh`

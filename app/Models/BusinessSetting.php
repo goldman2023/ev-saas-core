@@ -4,6 +4,7 @@ namespace App\Models;
 
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * App\Models\BusinessSetting
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
 class BusinessSetting extends Model
 {
     use Cachable;
+    use Notifiable;
 
     public function getValueAttribute($value) {
         $decoded = json_decode($value, true);

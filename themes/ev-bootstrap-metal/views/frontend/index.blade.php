@@ -12,11 +12,6 @@
         </x-default.products.product-list>
     </section>
 
-    <section class="space-2">
-        <x-default.categories.category-list :slider="false">
-        </x-default.products.category-list>
-    </section>
-
     <section class="ev-product-contact">
         <x-default.contacts.sections.contact-form-with-map></x-default.contacts.sections.contact-form-with-map>
     </section>

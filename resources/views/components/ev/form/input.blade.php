@@ -1,5 +1,7 @@
 <div class="form-group {{ $groupclass }}">
-    <label @if($id) for="{{ $id }}" @endif class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @if(!empty($label))
+        <label @if($id) for="{{ $id }}" @endif class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
+    @endif
 
     @if(!empty($icon) || !empty($text))
         <div class="input-group @if($merge) input-group-merge @endif">
@@ -17,7 +19,7 @@
         @endif
     @endif
             @php $value = is_array($value) ? (object) $value : $value; @endphp
-            <input wire:model.{{ $wireType }}="{{ $name }}"
+            <input @if(!empty($name)) wire:model.{{ $wireType }}="{{ $name }}" @endif
                    type="{{ $type }}"
                    class="form-control {{ $class }} @error($errorBagName) is-invalid @enderror"
                    name="{{ $name }}"
@@ -29,6 +31,7 @@
                         value="{{ $value }}"
                    @endif
                    aria-label="{{ $label }}"
+                   @if(empty($name)) wire:ignore @endif
                    {{ $attributes }}
             >
     @if(!empty($icon) || !empty($text))

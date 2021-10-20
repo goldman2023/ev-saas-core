@@ -2,7 +2,7 @@
     <div class="row align-items-center gutters-5">
         <div class="col">
             <a href="/" class="text-reset d-block text-center pb-2 pt-3">
-                @svg('heroicon-o-home')
+                @svg('heroicon-o-home', ['class' => 'w-25'])
                 <span class="d-block fs-10 fw-600 opacity-60 opacity-100 fw-600">
                     {{ translate('Home') }}
                 </span>
@@ -10,7 +10,7 @@
         </div>
         <div class="col">
             <a href="/search/" class="text-reset d-block text-center pb-2 pt-3">
-                @svg('heroicon-o-clipboard-list')
+                @svg('heroicon-o-clipboard-list', ['class' => 'w-25'])
                 <span class="d-block fs-10 fw-600 opacity-60 ">
                     {{ translate('Categories') }}
                 </span>
@@ -19,7 +19,7 @@
 
         <div class="col">
             <a href="/page/contacts/" class="text-reset d-block text-center pb-2 pt-3">
-                @svg('heroicon-s-phone')
+                @svg('heroicon-s-phone', ['class' => 'w-25'])
                 <span class="d-block fs-10 fw-600 opacity-60 ">
                     {{ translate('Contacts') }}
                 </span>

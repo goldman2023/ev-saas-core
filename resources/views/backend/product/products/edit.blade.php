@@ -41,13 +41,9 @@
                                 <label class="col-lg-3 col-from-label">{{ translate('Category') }}</label>
                                 <div class="col-lg-8">
                                     <select class="form-control aiz-selectpicker" name="category_id" id="category_id"
-                                        data-selected="{{ $product->category_id }}" data-live-search="true" required>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">
-                                                {{ $category->getTranslation('name') }}</option>
-                                            @foreach ($category->childrenCategories as $childCategory)
-                                                @include('categories.child_category', ['child_category' => $childCategory])
-                                            @endforeach
+                                        data-selected="{{ $product->getCategoryIdAttribute() }}" data-live-search="true" required>
+                                        @foreach ($categories as $category_id => $category_name)
+                                            <option value="{{ $category_id }}" {{ ($category_id === $product->category_id) ? 'disabled':'' }}>{{ $category_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -238,35 +234,15 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group row">
-                                <div class="col-lg-3">
-                                    <input type="text" class="form-control" value="{{ translate('Colors') }}" disabled>
-                                </div>
-                                <div class="col-lg-8">
-                                    <select class="form-control aiz-selectpicker" data-live-search="true"
-                                        data-selected-text-format="count" name="colors[]" id="colors" multiple
-                                        @if (count($product->colors) <= 0) disabled @endif>
-                                        @foreach (\App\Models\Color::orderBy('name', 'asc')->get() as $key => $color)
-                                            <option value="{{ $color->code }}"
-                                                data-content="<span><span class='size-15px d-inline-block mr-2 rounded border' style='background:{{ $color->code }}'></span><span>{{ $color->name }}</span></span>"
-                                                <?php if (in_array($color->code, $product->colors)) {
-                                                    echo 'selected';
-                                                } ?>>
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-lg-1">
-                                    <label class="aiz-switch aiz-switch-success mb-0">
-                                        <input value="1" type="checkbox" name="colors_active" <?php if (count($product->colors) > 0) {
-    echo 'checked';
-} ?>>
-                                        <span></span>
-                                    </label>
-                                </div>
+
                             </div>
                         </div>
                     </div>
+
+
                     <x-admin.products.attributes-management :product="$product"></x-admin.products.attributes-management>
+
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0 h6">{{ translate('Product price + stock') }}</h5>
@@ -324,7 +300,7 @@
                             <div class="form-group row" id="quantity">
                                 <label class="col-lg-3 col-from-label">{{ translate('Quantity') }}</label>
                                 <div class="col-lg-6">
-                                    <input type="number" lang="en" value="{{ $product->current_stock }}" step="1"
+                                    <input type="number" lang="en" value="{{ $product->getCurrentStockAttribute() }}" step="1"
                                         placeholder="{{ translate('Quantity') }}" name="current_stock"
                                         class="form-control" required>
                                 </div>
@@ -546,7 +522,7 @@
                                     {{ translate('Quantity') }}
                                 </label>
                                 <input type="number" name="low_stock_quantity"
-                                    value="{{ $product->low_stock_quantity }}" min="0" step="1" class="form-control">
+                                    value="{{ $product->getLowStockQtyAttribute() }}" min="0" step="1" class="form-control">
                             </div>
                         </div>
                     </div>

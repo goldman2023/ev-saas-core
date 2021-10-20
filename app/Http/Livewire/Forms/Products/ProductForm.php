@@ -7,6 +7,8 @@ use App\Models\AttributeRelationship;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
 use App\Facades\BusinessSettings;
+use App\Models\AttributeValueTranslation;
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductTranslation;
@@ -14,9 +16,13 @@ use App\Models\Upload;
 use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use DB;
-use EV;
+use EVS;
+use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
+use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
+use Str;
 
 class ProductForm extends Component
 {
@@ -28,38 +34,21 @@ class ProductForm extends Component
 
     public Product $product;
     public array $attributes;
+    public $rows;
+    public $productVariationsDatatableClass = 'ev-product-variations-component';
+    public $categories;
+    public $selected_categories;
 
-    /*public $name;
-    public $category_id;
-    public $brand_id;
-    public $unit;
-    public $tags;
-
-    public $thumbnail_img;
-    public $photos;
-    public $video_provider = '';
-    public $video_link;
-    public $pdf;
-    public $description;
-
-    public $min_qty;
-    public $current_stock;
-    public $low_stock_quantity;
-    public $unit_price;
-    public $purchase_price;
-    public $discount = 0;
-    public $discount_type = 'amount';
-    public $stock_visibility_state;
-    public $shipping_type;
-    public $is_quantity_multiplied;
-    public $set_shipping_days;*/
+    protected $listeners = [
+        'variationsUpdated' => 'updateAttributeValuesForVariations'
+    ];
 
     protected function rules()
     {
         // Define rules sets
         $this->rulesSets['general'] = [
             'product.name' => 'required|min:6',
-            'product.category_id' => 'required|exists:App\Models\Category,id',
+            'selected_categories' => 'required',
             'product.brand_id' => 'nullable|exists:App\Models\Brand,id',
             'product.unit' => 'nullable|required', // TODO: make Units table or something like that
             'product.tags' => 'nullable|array',
@@ -73,19 +62,21 @@ class ProductForm extends Component
             'product.video_link' => 'nullable|active_url',
             'product.pdf' => 'nullable|exists:App\Models\Upload,id',
             'product.description' => 'required|min:20',
+            'product.excerpt' => 'nullable',
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
+            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock()->first()->id ?? null)],
             'product.min_qty' => 'required|numeric|min:1',
             'product.current_stock' => 'required|numeric|min:1', //  new ModelsExist(Upload::class)
-            'product.low_stock_quantity' => 'required|numeric|min:1',
+            'product.low_stock_qty' => 'required|numeric|min:0',
             'product.unit_price' => 'required|numeric',
             'product.purchase_price' => 'nullable|numeric',
             'product.discount' => 'required|numeric',
             'product.discount_type' => 'required|in:amount,percent',
             'product.stock_visibility_state' => 'required|in:quantity,text,hide',
             'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
-            'product.flat_shipping_cost' => 'required_if:product.shipping_type,flat_rate',
+            'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
             'product.is_quantity_multiplied' => 'required|boolean',
             'product.est_shipping_days' => 'nullable|numeric'
         ];
@@ -115,26 +106,32 @@ class ProductForm extends Component
      */
     public function mount($page = '', $product = null)
     {
+        $this->rows = collect([]);
         $this->page = $page;
-        $this->attributes = EV::getMappedAttributes('App\Models\Product', $product);
+        $this->attributes = EVS::getMappedAttributes('App\Models\Product', $product);
+        $this->categories = EVS::categoriesTree();
 
         // Set default params
         if($product) {
             $this->product = $product;
             $this->action = 'update';
+            $this->selected_categories = $this->product->selected_categories('slug_path');
         } else {
             $this->product = new Product();
             $this->action = 'insert';
+            $this->selected_categories = collect([]);
+
+            $this->product->slug = '';
+            $this->product->is_quantity_multiplied = 1;
+            $this->product->shipping_type = 'product_wise';
+            $this->product->stock_visibility_state = 'quantity';
+            $this->product->discount_type = 'amount';
+            $this->product->discount = 0;
+            $this->product->low_stock_qty = 0;
+            $this->product->min_qty = 1;
+            $this->product->brand_id = null;
         }
-        $this->product->slug = '';
-        $this->product->is_quantity_multiplied = 1;
-        $this->product->shipping_type = 'product_wise';
-        $this->product->stock_visibility_state = 'quantity';
-        $this->product->discount_type = 'amount';
-        $this->product->discount = 0;
-        $this->product->low_stock_quantity = 1;
-        $this->product->min_qty = 1;
-        $this->product->brand_id = null;
+
 
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
@@ -153,10 +150,25 @@ class ProductForm extends Component
                 }
             }
         }
-        //dd($this->attributes);
+
     }
 
-    public function validateSpecificSet($set_name, $next_page, $is_last = false)
+    public function dehydrate()
+    {
+        $this->dispatchBrowserEvent('initProductForm');
+        //$this->dispatchBrowserEvent('goToTop');
+    }
+
+    public function render()
+    {
+        return view('livewire.forms.products.product-form');
+    }
+
+    public function syncVariationsDatatable() {
+        $this->emit('updatedAttributeValues', $this->variations_attributes);
+    }
+
+    public function validateSpecificSet($set_name, $next_page, $is_last = false, $insert_on_step = null)
     {
         if($set_name) {
             foreach($this->rulesSets as $key => $set) {
@@ -168,40 +180,63 @@ class ProductForm extends Component
                 }
             }
 
-            if($is_last) {
+            // Check if insert on specific step is set
+            if(is_array($insert_on_step) && (in_array($next_page, $insert_on_step) || in_array($set_name, $insert_on_step))) {
+                if(empty($this->product->id)) {
+                    $this->insert(true);
+                } else {
+                    $this->update();
+                }
+            } else if($is_last) {
                 if(empty($this->product->id)) {
                     $this->insert();
                 } else {
                     $this->update();
                 }
-            } else {
-                $this->page = $next_page;
             }
+
+            $this->page = $next_page;
         }
     }
 
-    protected function insert() {
+    /**
+     * Inserts product data to database.
+     * Inserts can be partial or full.
+     * 1. Full: inserts all the product data, attributes, variations, translations, stocks etc. to the database
+     * 2. Partial: inserts only part of the data to the database and creates a draft version of the product (before adding attributes, variations, stocks)
+     *
+     * @param false $partial
+     */
+    protected function insert(bool $partial = false): void
+    {
         DB::beginTransaction();
+        $this->insert_success = false;
 
         try {
             // SET: Product Data
-            $this->setProductData();
+            $this->setProductData($partial ? 0 : 1);
+
+            // SET: Product Categories
+            $this->setProductCategories();
 
             // SET: Product Translations
             $this->setProductTranslation();
 
+            // SET: Main Product Stocks
+            $this->setProductStocks();
+
             // TODO: VAT & TAX, Flash Deals
 
-            // SET: Attribute relationships
-            $this->setAttributes();
-
-            // SET: Main & Variations Product Stocks
-            $this->setProductStocks();
+            if(!$partial) {
+                // SET: Attribute relationships
+                $this->setAttributes();
+            }
 
             DB::commit();
 
             $this->insert_success = true;
 
+            $this->emit('setProduct', $this->product);
             $this->dispatchBrowserEvent('goToTop');
         } catch(\Exception $e) {
             DB::rollBack();
@@ -210,36 +245,41 @@ class ProductForm extends Component
     }
 
     protected function update() {
+        $this->update_success = false;
+
         DB::beginTransaction();
 
         try {
             // SET: Product Data
             $this->setProductData();
 
+            // SET: Product Categories
+            $this->setProductCategories();
+
             // SET: Product Translations
             $this->setProductTranslation();
 
+            // SET: Main & Variations Product Stocks
+            $this->setProductStocks();
 
             // TODO: VAT & TAX, Flash Deals
 
             // SET: Attribute relationships
             $this->setAttributes();
 
-            // SET: Main & Variations Product Stocks
-            $this->setProductStocks();
-
             DB::commit();
 
             $this->update_success = true;
 
+            $this->dispatchBrowserEvent('toastIt', ['id' => '#product-updated-toast']);
             $this->dispatchBrowserEvent('goToTop');
         } catch(\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+            dd($e);
         }
     }
 
-    protected function setProductData() {
+    protected function setProductData($published = 1) {
         if(empty($this->product->brand_id)) {
             $this->product->brand_id = null;
         }
@@ -258,14 +298,20 @@ class ProductForm extends Component
 
         if ($this->product->shipping_type === 'free') {
             $this->product->shipping_cost = 0;
-        } elseif ($this->product->shipping_type === 'flat_rate') {
-            $this->product->shipping_cost = $this->product->flat_shipping_cost;
         } elseif ($this->product->shipping_type === 'product_wise') {
             $this->product->shipping_cost = json_encode([]);
         }
 
-        unset($this->product->flat_shipping_cost);
+        // Purify WYSIWYG before saving
+        $this->product->description = Purifier::clean($this->product->description);
 
+        if(empty($this->product->excerpt)) {
+            $this->product->excerpt = strip_tags(Str::limit($this->product->description, 320, '...'));
+        } else {
+            $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
+        }
+
+        // SEO
         if (empty($this->product->meta_img)) {
             $this->product->meta_img = $this->product->thumbnail_img;
         }
@@ -274,23 +320,41 @@ class ProductForm extends Component
             $this->product->meta_img = $this->product->name;
         }
 
-        if (empty(trim($this->product->meta_description))) {
-            $this->product->meta_description = trim(strip_tags($this->product->description));
+        if (empty($this->product->meta_description)) {
+            $this->product->meta_description = trim(strip_tags($this->product->description ?? ''));
         }
 
-        // TODO: Add Featured, Cash on delivery, Todays deal to the form
+        // TODO: Add Featured, Cash on delivery, Today's deal to the form
         $this->product->cash_on_delivery = 0;
         $this->product->featured = 0;
         $this->product->todays_deal = 0;
 
         // TODO: Add Product status option to the form - published, draft
-        $this->product->published = 1;
+        $this->product->published = $published;
 
         // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
         // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
 
         // Save product
         $this->product->save();
+    }
+
+    protected function setProductCategories() {
+        if(!empty($this->selected_categories)) {
+            $categories_idx = collect([]);
+            $wrapped_categories = Collection::wrap([$this->categories->toArray()]); // in order to use ->pluck and "dot" notation accessor, we need to wrap categories array into another array!
+
+            foreach($this->selected_categories as $selected) {
+                // $selected is a slug_path of the category
+                $cat = $wrapped_categories->pluck(Str::replace(Category::PATH_SEPARATOR,'.children.', $selected))->first();
+
+                if($cat) {
+                    $categories_idx->push($cat['id']);
+                }
+            }
+
+            $this->product->categories()->sync($categories_idx->toArray());
+        }
     }
 
     protected function setProductTranslation() {
@@ -302,10 +366,10 @@ class ProductForm extends Component
     }
 
     protected function setProductStocks() {
-        // TODO: Create proper product stocks for variations!
-        $product_stock = ProductStock::firstOrNew(['product_id' => $this->product->id]);
-        $product_stock->price = $this->product->unit_price;
+        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => 'App\Models\Product']);
+        $product_stock->sku = $this->product->temp_sku;
         $product_stock->qty = $this->product->current_stock;
+        $product_stock->low_stock_qty = $this->product->low_stock_qty;
         $product_stock->save();
     }
 
@@ -337,7 +401,7 @@ class ProductForm extends Component
                             $att_values[0]['id'] = $att_val->id;
 
                             // Set attribute value translations for non-predefined attributes
-                            $attribute_value_translation = AttributeTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
+                            $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
                             $attribute_value_translation->name = $att_val->values;
                             $attribute_value_translation->save();
                         }
@@ -346,24 +410,26 @@ class ProductForm extends Component
                     foreach($att_values as $att_value) {
                         $att_value = (object) $att_value;
 
-                        if($att_value->selected ?? null) {
-                            // Create or find product-attribute relationship, but don't yet persist anything to DB
-                            $att_rel = AttributeRelationship::firstOrNew([
-                                'subject_type' => 'App\Models\Product',
-                                'subject_id' => $this->product->id,
-                                'attribute_id' => $att->id,
-                                'attribute_value_id' => $att_value->id
-                            ]);
-                            $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
-                            $att_rel->save();
-                        } else {
-                            // Remove attribute relationship if "selected" is false/null
-                            AttributeRelationship::where([
-                                'subject_type' => 'App\Models\Product',
-                                'subject_id' => $this->product->id,
-                                'attribute_id' => $att->id,
-                                'attribute_value_id' => $att_value->id
-                            ])->delete();
+                        if($att_value->id ?? null) {
+                            if($att_value->selected ?? null) {
+                                // Create or find product-attribute relationship, but don't yet persist anything to DB
+                                $att_rel = AttributeRelationship::firstOrNew([
+                                    'subject_type' => 'App\Models\Product',
+                                    'subject_id' => $this->product->id,
+                                    'attribute_id' => $att->id,
+                                    'attribute_value_id' => $att_value->id
+                                ]);
+                                $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
+                                $att_rel->save();
+                            } else {
+                                // Remove attribute relationship if "selected" is false/null
+                                AttributeRelationship::where([
+                                    'subject_type' => 'App\Models\Product',
+                                    'subject_id' => $this->product->id,
+                                    'attribute_id' => $att->id,
+                                    'attribute_value_id' => $att_value->id
+                                ])->delete();
+                            }
                         }
                     }
                 }
@@ -371,14 +437,52 @@ class ProductForm extends Component
         }
     }
 
-    public function dehydrate()
-    {
-        $this->dispatchBrowserEvent('initProductForm');
-        //$this->dispatchBrowserEvent('goToTop');
+    public function updateAttributeValuesForVariations() {
+        $atts = collect($this->attributes)->filter(function($att, $key) {
+            $att = (object) $att;
+            return $att->selected === true && $att->for_variations === true;
+        });
+
+        if($atts) {
+            foreach ($atts as $att) {
+                $att = (object)$att;
+                $att_values = $att->attribute_values;
+
+                if ($att_values) {
+                    // ????
+                    // TODO: What happens when attribute values (used for variations) are changed AND product is saved without touching the variations modal?
+                    // FIX: It should SOFT DELETE product variations related to attribute value! IMPORTANT thing is to use SOFT DELETES, because if vendor wants to
+                    // revive the attribute value for some reason and generate variations related to it, we need to bring back the old variations in the DB from the dead.
+                    // This way we can always generate proper sales reports and never miss data!
+                    // SOFT DELETES FOR PRODUCT VARIATIONS ARE VERY IMPORTANT!!!!
+                    // NOTE: There can always be ONE product variation combination for certain product in the DB! We should never remove it fully, cuz we'll lose the data associated with it (number of variation sales, etc.)
+                }
+            }
+        }
     }
 
-    public function render()
-    {
-        return view('livewire.forms.product-form');
+    public function getVariationsAttributesProperty() {
+        $atts_for_variations = collect($this->attributes)->filter(function($att, $key) {
+            return ((object) $att)->for_variations === true;
+        });
+
+        return $atts_for_variations;
+    }
+
+    public function levelSelectedCategories() {
+        $data = [];
+
+        if($this->selected_categories) {
+            foreach($this->selected_categories as $selected) {
+                $level = count(explode('.', $selected)) - 1;
+                if(!isset($data[$level])) {
+                    $data[$level] = [];
+                }
+
+                $data[$level][] = $selected;
+            }
+        }
+
+        return $data;
     }
 }

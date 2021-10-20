@@ -4041,8 +4041,13 @@ input[type="number"] {
 .dropdown-item:hover,
 .dropdown-item:active {
     color: #fff !important;
-    background-color: var(--primary);
+    background-color: var(--primary) !important;
 }
+
+.dropdown-menu li.disabled {
+    opacity: 0.6;
+}
+
 /*card elements*/
 .card {
     -webkit-box-shadow: 0 0 13px 0 rgba(82, 63, 105, 0.05);
@@ -4234,7 +4239,7 @@ input[type="number"] {
     font-size: 0.875rem;
     height: calc(1.3125rem + 1.2rem + 2px);
     border: 1px solid #e2e5ec;
-    color: #898b92;
+    color: #000;
 }
 .form-control-sm {
     height: calc(1.5rem + 0.8rem + 2px);
@@ -4610,7 +4615,7 @@ input[type="number"] {
     outline: none !important;
 }
 .bootstrap-select .dropdown-toggle {
-    color: #898b92;
+    color: #000;
     background-color: transparent !important;
     border-color: #e2e5ec;
 }
@@ -5841,12 +5846,6 @@ div.footable-loader > span.fooicon:after {
 }
 .modal-header .close {
     font-size: 0;
-}
-.modal-header .close:before {
-    font-family: "Line Awesome Free";
-    font-weight: 900;
-    content: "\f00d";
-    font-size: 20px;
 }
 .modal-content .modal-body {
     padding: 20px 25px;

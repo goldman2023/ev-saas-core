@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\BusinessSetting;
+use App\Observers\BusinessSettingsObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,6 +30,7 @@ class EventServiceProvider extends ServiceProvider
   {
     parent::boot();
 
-    //
+    // Register Model Observers
+      BusinessSetting::observe(BusinessSettingsObserver::class);
   }
 }

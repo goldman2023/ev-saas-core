@@ -52,12 +52,15 @@
 @import "~flatpickr/dist/flatpickr.min.css"; // this will be moved to the beginning of the compiled file, cuz it's css, check: https://github.com/laravel-mix/laravel-mix/issues/429
 @import "~uppy/src/style.scss";
 @import "~select2/src/scss/core.scss";
-@import "~ion-rangeslider/css/ion.rangeSlider.css";
+@import "~ion-rangeslider/css/ion.rangeSlider.min.css";
 @import "~daterangepicker/daterangepicker.css";
+
+// Front Dashboard Custom
 @import "vendor/flatpickr";
-@import "vendor/select2";
+@import "vendor/fullcalendar";
 @import "vendor/ion-range-slider";
 @import "vendor/daterangepicker";
+
 
 /*----------------------------------------------------------------------
   * Front - Responsive Website Template version v3.3.0
@@ -69,3 +72,4 @@
 // Custom core
 @import 'user';
 @import 'custom';
+

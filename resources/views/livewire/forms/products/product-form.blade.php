@@ -1,6 +1,55 @@
-<div class="lw-form">
+@push('pre_head_scripts')
+    <script>
+        let all_categories = @json($categories);
+    </script>
+@endpush
+<div class="lw-form" x-data="{}">
 
-    @if(!$insert_success && !$update_success)
+    <!-- Message Body -->
+    <x-ev.alert id="successMessageContent" class="{{ !$insert_success ? 'd-none':'' }}"
+                content-class="flex flex-column"
+                type="success"
+                title="{{ $insert_success ? translate('Product successfully created!') : '' }}">
+        <span class="d-block">
+            @if($insert_success)
+                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
+            @endif
+        </span>
+        <div class="d-flex align-items-center mt-3">
+            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            @if(!empty($product->id) && $insert_success)
+                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
+            @endif
+        </div>
+    </x-ev.alert>
+
+    @if($insert_success)
+    <div class="row">
+        <div class="col-12">
+            <h5>{{ translate('Your product preview:') }}</h5>
+        </div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <x-default.products.cards.product-card
+            :product="$product"
+            >
+            </x-default.products.cards.product-card>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    @endif
+
+
+
+    <!-- End Message Body -->
+
+    <x-ev.toast id="product-updated-toast"
+                position="bottom-center"
+                content="{{ translate('Product successfully updated!') }}"
+                class="bg-success border-success text-white h3"></x-ev.toast>
+
+    @if(!$insert_success)
         <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
@@ -11,6 +60,14 @@
                         {{ translate('Add New Product') }}
                     @endif
                 </h4>
+
+                @if(!empty($product->id))
+                    <button class="btn btn-primary btn-xs d-flex justify-content-center ml-auto"
+                                 onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
+                        @svg('lineawesome-save', ['style' => 'width: 18px; height: 18px;', 'class' => 'mr-1'])
+                        <span>{{ translate('Save') }}</span>
+                    </button>
+                @endif
             </div>
             <!-- End Header -->
 
@@ -24,11 +81,11 @@
                       wire:loading.class="opacity-3"
                       wire:target="validateSpecificSet"
                       data-hs-step-form-options='{
-                      "progressSelector": "#productStepFormProgress",
-                      "stepsSelector": "#productStepFormContent",
-                      "endSelector": "#uploadResumeFinishBtn",
-                      "isValidate": false
-                    }'>
+                          "progressSelector": "#productStepFormProgress",
+                          "stepsSelector": "#productStepFormContent",
+                          "endSelector": "#uploadResumeFinishBtn",
+                          "isValidate": false
+                        }'>
                     <div class="row">
                         <div id="stickyBlockStartPoint" class="col-lg-4">
                             <!-- Sticky Block
@@ -80,7 +137,7 @@
 
                                     <li class="step-item {{ $page === 'attributes' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes']}}))"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'attributes', false, ['attributes']]}}))"
                                         ><!-- wire:click="$set('page', 'attributes')" -->
                                             <span class="step-icon step-icon-soft-dark">4</span>
                                             <div class="step-content">
@@ -92,7 +149,8 @@
 
                                     <li class="step-item {{ $page === 'variations' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations']}}))"
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', false, ['variations']]}}))"
+                                           wire:click="syncVariationsDatatable()"
                                         ><!-- wire:click="$set('page', 'variations')" -->
                                             <span class="step-icon step-icon-soft-dark">5</span>
                                             <div class="step-content">
@@ -104,7 +162,7 @@
 
                                     <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo']}}))">
+                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo', true]}}))">
                                             <span class="step-icon step-icon-soft-dark">6</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('SEO') }}</span>
@@ -136,11 +194,11 @@
                                     <div class="">
                                         <x-ev.form.input name="product.name" type="text" label="{{ translate('Product name') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
 
-                                        <x-ev.form.select name="product.category_id" :items="EV::getMappedCategories()" label="{{ translate('Category') }}" :required="true" :search="true" placeholder="{{ translate('Select the category...') }}" />
+                                        <x-ev.form.categories-selector :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
-                                        <x-ev.form.select name="product.brand_id" :items="EV::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
+                                        <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
-                                        <x-ev.form.select name="product.unit" :items="EV::getMappedUnits()" label="{{ translate('Unit') }}" :required="true" placeholder="{{ translate('Choose the product unit...') }}" />
+                                        <x-ev.form.select name="product.unit" :items="EVS::getMappedUnits()" label="{{ translate('Unit') }}" :required="true" placeholder="{{ translate('Choose the product unit...') }}" />
 
                                         <x-ev.form.select name="product.tags" :tags="true" label="{{ translate('Tags') }}" :multiple="true" placeholder="{{ translate('Type and hit enter to add a tag...') }}">
                                             <small class="text-muted">{{ translate('This is used for search. Input relevant words by which customer can find this product.') }}</small>
@@ -182,7 +240,7 @@
                                         ></x-ev.form.file-selector>
 
                                         <!-- Video -->
-                                        <x-ev.form.select name="product.video_provider" :items="EV::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
+                                        <x-ev.form.select name="product.video_provider" :items="EVS::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
                                         <x-ev.form.input name="product.video_link" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
                                             <small class="text-muted">{{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}</small>
                                         </x-ev.form.input>
@@ -191,6 +249,10 @@
                                         <x-ev.form.file-selector name="product.pdf" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
 
                                         <x-ev.form.wysiwyg name="product.description" label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
+
+                                        <x-ev.form.textarea name="product.excerpt" label="{{ translate('Excerpt (short description)') }}" >
+                                            <small class="text-muted">{{ translate('If you leave excerpt empty, first 320 chars of description will be used as an excerpt.') }}</small>
+                                        </x-ev.form.textarea>
                                     </div>
                                     <!-- End Body -->
 
@@ -229,13 +291,18 @@
 
                                     <!-- Body -->
                                     <div class="">
+                                        <!-- Main Product SKU -->
+                                        <x-ev.form.input name="product.temp_sku" type="text" label="{{ translate('SKU') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
+                                            <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
+                                        </x-ev.form.input>
+
                                         <x-ev.form.input name="product.min_qty" type="number" label="{{ translate('Minimum quantity') }}" :required="true" min="1" step="1">
                                             <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
                                         </x-ev.form.input>
                                         <x-ev.form.input name="product.current_stock" type="number" label="{{ translate('Stock quantity') }}" :required="true"  min="0" step="1">
                                             <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
                                         </x-ev.form.input>
-                                        <x-ev.form.input name="product.low_stock_quantity" type="number" label="{{ translate('Low stock quantity warning') }}"  min="0" step="1">
+                                        <x-ev.form.input name="product.low_stock_qty" type="number" label="{{ translate('Low stock quantity warning') }}"  min="0" step="1">
                                         </x-ev.form.input>
 
                                         <x-ev.form.input name="product.unit_price" type="number" label="{{ translate('Unit price') }}" :required="true"  min="0" step="0.01">
@@ -254,11 +321,11 @@
                                             </div>
                                         </div>
 
-                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EV::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
+                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EVS::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
-                                        <x-ev.form.radio name="product.shipping_type" :items="EV::getMappedShippingTypePerProduct()" label="{{ translate('Shipping configuration') }}" value="{{ $product->shipping_type ?: '' }}" >
+                                        <x-ev.form.radio name="product.shipping_type" :items="EVS::getMappedShippingTypePerProduct()" label="{{ translate('Shipping type') }}" value="{{ $product->shipping_type ?: '' }}" >
                                             <x-slot name="flat_rate">
-                                                <x-ev.form.input name="product.flat_shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
+                                                <x-ev.form.input name="product.shipping_cost" groupclass="{{ $product->shipping_type === 'flat_rate' ? '':'d-none' }}" type="number"  placeholder="{{ translate('Shipping cost') }}"  min="0" step="0.01"></x-ev.form.input>
                                             </x-slot>
                                         </x-ev.form.radio>
 
@@ -281,7 +348,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes']}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['price_stock_shipping', 'attributes', false, ['attributes']]}}))"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -292,7 +359,7 @@
                                 </div>
 
 
-                                <div id="productStepAttributesVariations" class="{{ $page === 'attributes' ? 'active':'' }}" style="{{ $page !== 'attributes' ? "display: none;" : "" }}" >
+                                <div id="productStepAttributes" class="{{ $page === 'attributes' ? 'active':'' }}" style="{{ $page !== 'attributes' ? "display: none;" : "" }}" >
                                     <!-- Header -->
                                     <div class="border-bottom pb-2 mb-3">
                                         <div class="flex-grow-1">
@@ -427,7 +494,8 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations']}}))"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', false, ['attributes']]}}))"
+                                                        wire:click="syncVariationsDatatable()"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -438,7 +506,7 @@
                                 </div>
 
 
-                                <div id="productStepVariations" class="{{ $page === 'variations' ? 'active':'' }}" style="{{ $page !== 'variations' ? "display: none;" : "" }}">
+                                <div id="productStepVariations" class="{{ $page === 'variations' ? 'active':'' }}" style="{{ $page !== 'variations' ? "display: block !important;" : "" }}">
                                     <!-- Header -->
                                     <div class="border-bottom pb-2 mb-3">
                                         <div class="flex-grow-1">
@@ -451,9 +519,51 @@
                                     <!-- Body -->
                                     <div class="pb-4">
                                         <div class="full-width product-variations-wrapper">
+                                            <x-ev.modal color="primary"
+                                                        id="product_variations_modal"
+                                                        dialog-class="modal-xl"
+                                                        body-class="d-flex flex-column"
+                                                        btn-text="{{ translate('Edit product variations') }}"
+                                                        header-title="{{ translate('Product Variations') }}"
+                                                        trigger-wire-click="">
+                                                <livewire:forms.products.product-variations-datatable
+                                                    class="{{ $productVariationsDatatableClass }}"
+                                                    :paginationEnabled="false"
+                                                    :showSearch="false"
+                                                    :emptyMessage="translate('Please generate all variations or add them manually.')"
+                                                    :product="$this->product"
+                                                    :variation-attributes="$this->variations_attributes"
+                                                    wire-target="setVariationsData">
+                                                </livewire:forms.products.product-variations-datatable>
+                                            </x-ev.modal>
+
 
                                         </div>
                                     </div>
+
+
+                                    <!-- Footer -->
+                                    <div class="border-top pt-3">
+                                        <div class="d-flex align-items-center">
+                                            <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
+                                                    data-hs-step-form-prev-options='{
+                                                     "targetSelector": "#productStepAttributes"
+                                                   }'>
+                                                @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
+                                                {{ translate('Previous step') }}
+                                            </button>
+
+                                            <div class="ml-auto">
+                                                <button type="button" class="btn btn-primary"
+                                                        data-hs-step-form-prev-options='{
+                                                         "targetSelector": "#productStepSEO"
+                                                       }'>
+                                                    {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Footer -->
                                 </div>
 
                                 <div id="productStepSEO" class="{{ $page === 'seo' ? 'active':'' }}" style="{{ $page !== 'seo' ? "display: none;" : "" }}">
@@ -524,25 +634,25 @@
         </div>
     @endif
 
-
-    <!-- Message Body -->
-    <x-ev.alert id="successMessageContent" class="{{ !$insert_success && !$update_success ? 'd-none':'' }}"
-                content-class="flex flex-column"
-                type="success"
-                title="{{ $insert_success ? translate('Product successfully created!') : ($update_success ? translate('Product successfully updated!') : '') }}">
-        <span class="d-block">
-            @if($insert_success)
-                {{ translate('You have successfully create a new product! Preview or edit your newly added product:') }}
-            @elseif($update_success)
-                {{ translate('You have successfully updated the product! Preview or edit your product:') }}
-            @endif
-        </span>
-        <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
-            <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
-        </div>
-    </x-ev.alert>
-    <!-- End Message Body -->
+    @if($product->id)
+        <!-- Attribute for variation used value removal modal -->
+        <x-ev.modal id="remove-selected-attribute-modal"
+                    header-title="{{ translate('Remove selected attribute?') }}"
+                    body-class="d-flex flex-column justify-content-center"
+                    :has-trigger="false">
+            <div class="d-flex flex-column justify-content-center">
+                <h5>{{ translate('Are you sure you want to remove the selected attribute value?') }}</h5>
+                <span class="small">
+                    {{ translate('*Variations containing the value you want to remove will be marked as removed and you won\'t see them in Variations modal, but they are not removed instantly. They\'ll be removed once you update variations in the modal.*') }}
+                </span>
+            </div>
+            <div class="d-flex align-items-center flex-row justify-content-center mt-3" >
+                <button type="button" class="btn btn-primary mr-3 remove-btn">{{ translate('Remove') }}</button>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" aria-label="Close">{{ translate('Cancel') }}</button>
+            </div>
+        </x-ev.modal>
+        <!-- Attribute for variation used value removal modal -->
+    @endif
 </div>
 
 
