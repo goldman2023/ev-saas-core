@@ -12,7 +12,13 @@
                 "fade": false,
                 "infinite": false,
                 "autoplay": true,
-                "autoplaySpeed": 7000
+                "autoplaySpeed": 7000,
+                "responsive": [{
+                    "breakpoint": 768,
+                    "settings": {
+                    "slidesToShow": 4,
+                      "arrows": false
+                    }}]
                 }'>
                 <!-- Product -->
 
@@ -20,8 +26,8 @@
                 @foreach ($brands as $brand)
                     <div class="text-center slick-slide">
                         <a href="{{ route('products.brand', $brand->slug) }}"
-                            class="d-block border border-light rounded hov-shadow-md">
-                            <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100"
+                            class="d-block rounded hov-shadow-md">
+                            <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100 bg-white"
                                 alt="{{ $brand->getTranslation('name') }}">
                         </a>
                     </div>
@@ -39,9 +45,8 @@
             padding: 10px;
             border-radius: 100%;
             background: white;
-            object-fit: contain;
-            border: 3px solid red;
-
+            object-fit: scale-down;
+            border: 2px solid red;
         }
 
         @media(max-width: 768px) {

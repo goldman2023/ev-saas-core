@@ -524,19 +524,13 @@
 
 @push('footer_scripts')
 
+<script src="{{ static_asset('vendor/hs-header/dist/hs-header.min.js', false, true) }}"></script>
 
     {{-- TODO Vukasin: Make this work - need to include hs-header propertly --}}
     {{-- How? :) --}}
     <script>
-        $(document).on('ready', function() {
             // INITIALIZATION OF HEADER
             // =======================================================
             var header = new HSHeader($('#header')).init();
-
-
-            // INITIALIZATION OF MEGA MENU
-            // =======================================================
-            var megaMenu = new HSMegaMenu($('.js-mega-menu')).init();
-        });
     </script>
 @endpush
