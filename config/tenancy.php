@@ -6,18 +6,18 @@ use Stancl\Tenancy\Database\Models\Domain;
 use Stancl\Tenancy\Database\Models\Tenant;
 
 $central_domains = [
-    'ev-saas.com',
-    'ev-saas.test',
-    'localhost',
-    '127.0.0.1',
+    //'ev-saas.com',
+    //'ev-saas.test',
+    //'localhost',
+    //'127.0.0.1',
     /* Production */
 ];
 
 
-if (env('APP_ENV') !== 'local') {
+if (env('APP_ENV') === 'production') {
     $central_domains[] = 'app.ev-saas.com';
 } else {
-    $central_domains[] = '127.0.0.1';
+    $central_domains[] = 'localhost';
 }
 
 return [

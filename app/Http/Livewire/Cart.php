@@ -67,7 +67,7 @@ class Cart extends Component
     }
 
     public function addToCart($params) {
-        if($this->template == 'main') {
+        if($this->template === 'main') {
             // id, quantity, has(color)
             request()->request->add([
                 'id' => (int) $params['id'],
@@ -80,7 +80,7 @@ class Cart extends Component
                 ]);
             }
 
-            $result = CartService::addToCart(request());
+            $result = null; //CartService::addToCart(request());
 
             if($result['status'] === 0) {
                 $this->dispatchBrowserEvent('add-to-cart-errors', $result['view']);

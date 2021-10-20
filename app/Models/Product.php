@@ -128,11 +128,11 @@ class Product extends Model
      *
      * @var array
      */
-    protected $with = ['stock'];
+    protected $with = ['stock', 'variations'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
+        'purchase_price', 'unit', 'slug', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
 
     protected $casts = [
         'choice_options' => 'object',
@@ -215,6 +215,51 @@ class Product extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function product_attributes()
+    {
+        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+                ->get()->unique();
+
+        // Eager load Attribute relationships for current product
+        if(!empty($data)) {
+            foreach($data as $key => $attribute) {
+                $data[$key]->load(['attributes_relationship' => function ($query) {
+                    $query->where([
+                        ['subject_id', '=', $this->id],
+                        ['subject_type', '=', Product::class]
+                    ]);
+                }]);
+            }
+        }
+
+        return $data;
+    }
+
+    public function product_attributes_for_variations()
+    {
+        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+            ->where('for_variations', '=', 'true')->get()->unique();
+
+        // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
+        if(!empty($data)) {
+            foreach($data as $key => $attribute) {
+                $data[$key]->load(['attributes_relationship' => function ($query) {
+                    $query->where([
+                        ['subject_id', '=', $this->id],
+                        ['subject_type', '=', Product::class]
+                    ]);
+                }]);
+
+                $att_values_ids = $attribute->attributes_relationship->pluck('attribute_value_id');
+                $data[$key]->load(['attribute_values' => function ($query) use ($att_values_ids) {
+                    $query->whereIn('id', $att_values_ids);
+                }]);
+            }
+        }
+
+        return $data;
     }
 
     public function variations() {
@@ -367,6 +412,10 @@ class Product extends Model
         return $this->low_stock_qty;
     }
 
+
+    public function has_variations() {
+        return $this->variations->isNotEmpty() ?? false;
+    }
 
     public function getCategoryIdAttribute() {
         if(empty($this->category_id)) {

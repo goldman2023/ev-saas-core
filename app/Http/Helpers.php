@@ -171,7 +171,7 @@ if (!function_exists('areActiveRoutes')) {
             if (Route::currentRouteName() == 'attributes.edit') {
                 $id = Route::current()->parameters()['id'];
                 $attribute = Attribute::findOrFail($id);
-                if ($route == 'product.attributes.edit' && $attribute->content_type == 'App\Models\Product') return $output;
+                if ($route == 'product.attributes.edit' && $attribute->content_type == Product::class) return $output;
                 if ($route == 'seller.attributes.edit' && $attribute->content_type == 'App\Models\Seller') return $output;
             }
         }
@@ -722,10 +722,6 @@ if (!function_exists('convertPrice')) {
 
 function translate($key, $lang = null)
 {
-
-
-
-
     if ($lang == null) {
         $lang = App::getLocale();
     }
@@ -993,21 +989,6 @@ if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
         return BusinessSettings::get($key, $default);
-        /*$cache_key = tenant('id') . '_business_settings_' . $key;
-        $setting = Cache::get($cache_key, null);
-
-        // If cache is empty, get setting from DB and store it in cache if not null
-        if (empty($setting)) {
-            $setting = get_setting($key)->first();
-
-            // Cache the setting if it's found in DB
-            if (!empty($setting)) {
-                Cache::forget($cache_key);
-                Cache::put($cache_key, $setting->value);
-            }
-
-            return !empty($setting) ? $setting->value : $default;
-        }*/
     }
 }
 

@@ -9,7 +9,7 @@ use App\Models\AttributeGroup;
 
 class Attribute extends Model
 {
-    protected $with = ['attribute_values', 'attributes_relationship'];
+    protected $with = ['attribute_values'];
 
     protected $casts = [
         'custom_properties' => 'object'
@@ -35,7 +35,8 @@ class Attribute extends Model
      *
      * @return bool
      */
-    public function getIsPredefinedAttribute() {
+    public function getIsPredefinedAttribute()
+    {
         return $this->type === 'dropdown' || $this->type === 'checkbox' || $this->type === 'radio';
     }
 

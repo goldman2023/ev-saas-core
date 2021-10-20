@@ -6,7 +6,7 @@
             <i class="la la-angle-right "></i>
         </a>
 
-        <a href="{{ route('login') }}"
+        <a href="{{ route('business.login') }}"
         class="ml-3 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-gray-900 font-medium bg-white hover:bg-indigo-700 {{ $class }}">
          {{ translate('Login') }}
          <i class="la la-angle-right "></i>
@@ -38,12 +38,12 @@
                         <a href="{{ route('admin.dashboard') }}"
                            class="block px-4 py-1 text-sm text-gray-700 hover:bg-gray-100">Admin panel
                         </a>
-                        <a href="{{ route('logout') }}" class="block px-4 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                        <a href="{{ route('user.logout') }}" class="block px-4 py-1 text-sm text-gray-700 hover:bg-gray-100"
                            onclick="event.preventDefault();
                                                                 document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                        <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="hidden">
                             {{ csrf_field() }}
                         </form>
                     </div>
@@ -56,7 +56,7 @@
                 <i class="la la-angle-right "></i>
             </a>
 
-            <a href="{{ route('logout') }}"
+            <a href="{{ route('user.logout') }}"
                class="text-reset py-2 d-inline-block opacity-60">{{ translate('Logout') }}</a>
         @endif
     @endguest

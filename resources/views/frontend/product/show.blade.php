@@ -375,11 +375,11 @@
                         <div class="p-3">
                             <section>
                                 @php
-                                    $relatedProducts = filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get();
+                                    //$relatedProducts = filter_products(\App\Models\Product::where('category_id', $product->category_id)->where('id', '!=', $product->id))->limit(10)->get();
                                     $relatedProducts = null;
                                 @endphp
 
-                                <x-default.products.product-list :products="$relatedProducts" style="products-slider" slider="true">
+                                <x-default.products.product-list :products="$relatedProducts" class="products-slider" slider="true">
                                 </x-default.products.product-list>
                             </section>
                             <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3"

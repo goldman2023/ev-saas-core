@@ -52,7 +52,7 @@
                             </button>
                         </form>
                         <div class="mt-3">
-                            {{translate('Already have an account')}} ? <a href="{{route('login')}}" class="btn-link mar-rgt text-bold">{{translate('Sign In')}}</a>
+                            {{translate('Already have an account')}} ? <a href="{{route('user.login')}}" class="btn-link mar-rgt text-bold">{{translate('Sign In')}}</a>
                         </div>
                     </div>
                 </div>

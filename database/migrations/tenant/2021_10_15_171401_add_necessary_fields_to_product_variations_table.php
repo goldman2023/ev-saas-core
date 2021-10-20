@@ -14,9 +14,16 @@ class AddNecessaryFieldsToProductVariationsTable extends Migration
     public function up()
     {
         Schema::table('product_variations', function (Blueprint $table) {
-            $table->integer('num_of_sales')->after('price')->default(0);
-            $table->timestamp('deleted_at', 0)->nullable(true)->after('updated_at');
+            if (!Schema::hasColumn('product_variations', 'num_of_sales')) {
+                $table->integer('num_of_sales')->after('price')->default(0);
+            }
 
+            if (!Schema::hasColumn('product_variations', 'deleted_at')) {
+                $table->timestamp('deleted_at', 0)->nullable(true)->after('updated_at');
+            }
+
+
+            $table->string('variant', 300)->change();
             $table->unique(['product_id', 'variant']);
         });
     }

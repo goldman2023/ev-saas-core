@@ -20,11 +20,11 @@ class ProductSpecificationTable extends Component
     {
         //
         $this->product = $product;
-        $attribute_groups = AttributeGroup::where('content_type', 'App\Models\Product')->orderBy('id')->pluck('id')->toArray();
+        $attribute_groups = AttributeGroup::where('content_type', Product::class)->orderBy('id')->pluck('id')->toArray();
         $group_ids[] = NULL;
         $group_ids = array_merge($attribute_groups, $group_ids);
         foreach($group_ids as $id) {
-            $sub_attributes = Attribute::where('group', $id)->where('content_type', 'App\Models\Product')->get();
+            $sub_attributes = Attribute::where('group', $id)->where('content_type', Product::class)->get();
             if ($id == NULL) {
                 $product_attributes[$id] = $sub_attributes;
             }else {

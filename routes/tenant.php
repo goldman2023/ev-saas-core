@@ -81,7 +81,7 @@ Route::middleware([
 
 
     Auth::routes(['verify' => true]);
-    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::get('/email/resend', [VerificationController::class, 'resend'])->name('email.verification.resend');
     Route::get('/verification-confirmation/{code}', [VerificationController::class, 'verification_confirmation'])->name('email.verification.confirmation');
     Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
@@ -94,11 +94,11 @@ Route::middleware([
     Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
     Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
-    Route::get('/users/login', [HomeController::class, 'login_users'])->name('users.login');
+    Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
+    Route::get('/users/login', [HomeController::class, 'login_users'])->name('user.login');
     Route::get('/users/register', [HomeController::class, 'registration'])->name('user.registration');
-    Route::post('/business/login', [HomeController::class, 'business_login'])->name('login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
-    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
@@ -111,7 +111,7 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
     /* TODO: Investigate this is causing some issues */
-    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
+    //Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 

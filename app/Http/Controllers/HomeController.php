@@ -7,6 +7,7 @@ use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use App\Traits\LoggingTrait;
+use DB;
 use Illuminate\Http\Request;
 use Session;
 use Auth;
@@ -362,14 +363,14 @@ class HomeController extends Controller
 
     public function product(Request $request, $slug)
     {
+
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         $detailedProduct  = Product::where('slug', $slug)->first();
         $product  = $detailedProduct;
 
-        $this->log($product,"User viewed this product");
+        //$this->log($product,"User viewed this product");
 
-
-        if ($detailedProduct != null && $detailedProduct->published) {
+        if (!empty($detailedProduct) && $detailedProduct->published) {
             //updateCartSetup();
             if (
                 $request->has('product_referral_code') &&
@@ -624,7 +625,7 @@ class HomeController extends Controller
 
         $product_count = $products->count();
         $company_count = $shops->count();
-        $event_count = $events->count();        
+        $event_count = $events->count();
 
         $attributes = array();
         $filters = array();
@@ -644,7 +645,7 @@ class HomeController extends Controller
                 $attributeIds = array_unique(array_merge($attributeIds, $item->attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
             }
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
-                
+
             foreach ($attributes as $attribute) {
                 if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != "-1" && $request['attribute_' . $attribute['id']] != null) {
                     $filters[$attribute['id']] = $request['attribute_' . $attribute['id']];

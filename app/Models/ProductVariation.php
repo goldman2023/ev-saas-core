@@ -32,6 +32,13 @@ class ProductVariation extends Model
     /* Properties not saved in DB */
     public bool $remove_flag;
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['stock'];
+
     protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag'];
     protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock', 'remove_flag'];
 
