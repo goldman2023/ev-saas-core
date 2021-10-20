@@ -31,7 +31,7 @@
                             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
                                 class="lazyload mx-auto h-70px mw-100 bg-white" :image="$product->thumbnail_img">
                             </x-tenant.system.image>
-                            @if ($key < 3)
+                            @if ($key < 2)
                                 <span class="badge badge-pill badge-success mt-2 ev-auction-badge">
                                     <div class="js-countdown text-white"
                                     data-hs-countdown-options='{

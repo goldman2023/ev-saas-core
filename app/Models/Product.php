@@ -116,6 +116,24 @@ class Product extends Model
     use HasSlug;
     use SoftDeletes;
 
+     /**
+     * Stream: Add extra activity data - task name, and user's display name:
+     */
+    public function activityExtraData()
+    {
+        return array('name'=>'$this->name', 'display_name' =>' $this->display_name');
+    }
+
+
+   /**
+    * Stream: Change activity verb to 'created':
+    */
+    public function activityVerb()
+    {
+        return 'created';
+    }
+
+
     /* Properties not saved in DB */
     public $temp_sku;
     public $current_stock;

@@ -20,6 +20,8 @@
     <meta name="description" content="@yield('meta_description', get_setting('meta_description') )"/>
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
 
+
+
     @yield('meta')
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
@@ -98,6 +100,11 @@
 @yield('modal')
 
 <script src="{{ mix('js/app.js', 'themes/'.Theme::parent()) }}"></script>
+
+<script src="{{ mix('js/manifest.js') }}"></script>
+<script src="{{ mix('js/vendor.js') }}"></script>
+<script src="{{ mix('js/feed.js') }}"></script>
+
 
     <!-- Vendor Scripts -->
     <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>

@@ -367,7 +367,29 @@ class HomeController extends Controller
         $detailedProduct  = Product::where('slug', $slug)->first();
         $product  = $detailedProduct;
 
-        $this->log($product,"User viewed this product");
+        if (auth()->user()) {
+            // Instantiate a new client, find your API keys in the dashboard.
+            $client = new \GetStream\Stream\Client('27bjdppvjh4u', 'dr8m8e8j6bzn2dnhm3fep3qf6xpuxtrt66z2hhv3fzzwgsnydfc3jv4w8tysh3ym');
+
+            // Instantiate a feed object
+            $userFeed = $client->feed('user', (string)auth()->user()->id);
+
+            echo "this is active";
+
+            // Create a new activity
+            $data = [
+                'actor' => 'user:' . auth()->user()->id,
+                'verb' => 'viewed',
+                'object' => 'Viewed Product ' . $product->name,
+                'foreign_id' => 'product:' . $product->id,
+            ];
+
+            $response = $userFeed->addActivity($data);
+
+        }
+
+
+        $this->log($product, "User viewed this product");
 
 
         if ($detailedProduct != null && $detailedProduct->published) {
@@ -594,9 +616,9 @@ class HomeController extends Controller
         if ($content != null) {
             if ($content == 'product') {
                 $contents = $products;
-            }else if ($content == 'company') {
+            } else if ($content == 'company') {
                 $contents = Seller::whereIn('user_id', $shops->get()->pluck('user_id')->toArray());;
-            }else if ($content == 'event') {
+            } else if ($content == 'event') {
                 $contents = $events;
             }
 
