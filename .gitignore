@@ -67,3 +67,4 @@ resources/scss/themes/front/theme.css
 public/ev-assets/front/svg/*
 public/assets/admin/*
 public/ev-assets/admin/css/admin.css
+react-feeds-example/*
