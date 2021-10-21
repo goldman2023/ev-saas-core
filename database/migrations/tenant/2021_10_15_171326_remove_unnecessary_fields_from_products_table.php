@@ -32,8 +32,7 @@ class RemoveUnnecessaryFieldsFromProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('category_id')->default(1);
-            $table->integer('variant_product')->default(0);
+
         });
     }
 }

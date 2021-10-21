@@ -180,7 +180,6 @@ return [
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
         // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        App\Providers\EVServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -203,8 +202,11 @@ return [
         Yajra\DataTables\ButtonsServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
 
-        App\Providers\CartServiceProvider::class,
+        //App\Providers\CartServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
+
+        // EVServiceProvider
+        App\Providers\EVServiceProvider::class,
     ],
 
     /*
@@ -264,9 +266,10 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
-        'CartService' => App\Facades\CartService::class,
         'EVS' => App\Facades\EVS::class,
         'BusinessSettings' => App\Facades\BusinessSettings::class,
+        'FX' => App\Facades\FX::class,
+        'IMG' => App\Facades\IMG::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,

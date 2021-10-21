@@ -108,7 +108,7 @@ class ProductForm extends Component
     {
         $this->rows = collect([]);
         $this->page = $page;
-        $this->attributes = EVS::getMappedAttributes('App\Models\Product', $product);
+        $this->attributes = EVS::getMappedAttributes(Product::class, $product);
         $this->categories = EVS::categoriesTree();
 
         // Set default params
@@ -366,7 +366,7 @@ class ProductForm extends Component
     }
 
     protected function setProductStocks() {
-        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => 'App\Models\Product']);
+        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
         $product_stock->sku = $this->product->temp_sku;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->low_stock_qty = $this->product->low_stock_qty;
@@ -414,7 +414,7 @@ class ProductForm extends Component
                             if($att_value->selected ?? null) {
                                 // Create or find product-attribute relationship, but don't yet persist anything to DB
                                 $att_rel = AttributeRelationship::firstOrNew([
-                                    'subject_type' => 'App\Models\Product',
+                                    'subject_type' => Product::class,
                                     'subject_id' => $this->product->id,
                                     'attribute_id' => $att->id,
                                     'attribute_value_id' => $att_value->id
@@ -424,7 +424,7 @@ class ProductForm extends Component
                             } else {
                                 // Remove attribute relationship if "selected" is false/null
                                 AttributeRelationship::where([
-                                    'subject_type' => 'App\Models\Product',
+                                    'subject_type' => Product::class,
                                     'subject_id' => $this->product->id,
                                     'attribute_id' => $att->id,
                                     'attribute_value_id' => $att_value->id

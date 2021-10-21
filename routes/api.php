@@ -1,8 +1,8 @@
 <?php
 /*
- * API Verision 2 (API v2)
+ * API Version 2 (API v2)
  */
-Route::prefix('v2')->as('api.')->group(function () {
+Route::prefix('v2')->as('api2.')->group(function () {
     Route::prefix('auth')->as('auth.')->group(function () {
         Route::post('login', 'Api\V2\AuthController@login')->name('login');
         Route::post('signup', 'Api\V2\AuthController@signup')->name('signup');
@@ -11,7 +11,7 @@ Route::prefix('v2')->as('api.')->group(function () {
         Route::post('password/confirm_reset', 'Api\V2\PasswordResetController@confirmReset')->name('password.confirm-reset');
         Route::post('password/resend_code', 'Api\V2\PasswordResetController@resendCode')->name('password.resend-code');
         Route::middleware('auth:api')->group(function () {
-            Route::get('logout', 'Api\V2\AuthController@logout')->name('logout');
+            //Route::get('logout', 'Api\V2\AuthController@logout')->name('logout');
             Route::get('user', 'Api\V2\AuthController@user')->name('user');
         });
         Route::post('resend_code', 'Api\V2\AuthController@resendCode')->name('resend-code');

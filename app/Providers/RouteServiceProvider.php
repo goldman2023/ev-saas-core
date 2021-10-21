@@ -228,6 +228,16 @@ class RouteServiceProvider extends ServiceProvider
    */
     protected function mapWebRoutes()
     {
+        /**
+         * Error: php artisan route:cache (names of different routes already exist)
+         *
+         * Fix: Only one central domain
+         *
+         * Explanation (From Laravel Tenancy: https://tenancyforlaravel.com/docs/v3/routes):
+         * If you're using multiple central domains, you can't use route names,
+         * because different routes (= different combinations of domains & paths) can't share the same name.
+         * If you need to use a different central domain for testing, use config()->set() in your TestCase setUp().
+         */
         foreach ($this->centralDomains() as $domain) {
             Route::middleware('web')
                 ->domain($domain)
@@ -259,6 +269,16 @@ class RouteServiceProvider extends ServiceProvider
    */
     protected function mapApiRoutes()
     {
+        /**
+         * Error: php artisan route:cache (names of different routes already exist)
+         *
+         * Fix: Only one central domain
+         *
+         * Explanation (From Laravel Tenancy: https://tenancyforlaravel.com/docs/v3/routes):
+         * If you're using multiple central domains, you can't use route names,
+         * because different routes (= different combinations of domains & paths) can't share the same name.
+         * If you need to use a different central domain for testing, use config()->set() in your TestCase setUp().
+         */
         foreach ($this->centralDomains() as $domain) {
             Route::prefix('api')
                 ->domain($domain)

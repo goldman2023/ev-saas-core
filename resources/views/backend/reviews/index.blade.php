@@ -30,7 +30,7 @@
                         <select class="form-control aiz-selectpicker" name="content_type" id="content_type" onchange="filter_by_content_type()">
                             <option value="all">{{translate('All Reviews')}}</option>
                             <option value="App\Models\Shop" {{$content_type == 'App\Models\Shop' ? 'selected' : ''}}>{{translate('Company Reviews')}}</option>
-                            <option value="App\Models\Product" {{$content_type == 'App\Models\Product' ? 'selected' : ''}}>{{translate('Product Reviews')}}</option>
+                            <option value="App\Models\Product" {{$content_type == App\Models\Product::class ? 'selected' : ''}}>{{translate('Product Reviews')}}</option>
                             <option value="App\Models\Seller" {{$content_type == 'App\Models\Seller' ? 'selected' : ''}}>{{translate('Seller Reviews')}}</option>
                             <option value="App\Models\Events" {{$content_type == 'App\Models\Events' ? 'selected' : ''}}>{{translate('Event Reviews')}}</option>
                         </select>

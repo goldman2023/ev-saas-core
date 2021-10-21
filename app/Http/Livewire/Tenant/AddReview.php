@@ -11,7 +11,7 @@ class AddReview extends Component
 {
     public $rating = 0;
     public $comment;
-    public $content_type = 'App\Models\Product';
+    public $content_type = Product::class;
     public $product_id;
     public $ratingError = null;
     public $open = false;
@@ -76,7 +76,7 @@ class AddReview extends Component
             $this->ratingError = "The rating field is required";
             $this->validate();
             return;
-        } 
+        }
         $this->validate();
         $review = new Review;
         $review->comment = $this->comment;

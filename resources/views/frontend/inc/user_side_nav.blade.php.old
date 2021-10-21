@@ -6,7 +6,7 @@
         </button>
     </div>
     <div class="absolute-top-left d-xl-none">
-        <a class="btn btn-sm p-2" href="{{ route('logout') }}">
+        <a class="btn btn-sm p-2" href="{{ route('user.logout') }}">
             <i class="las la-sign-out-alt la-2x"></i>
         </a>
     </div>

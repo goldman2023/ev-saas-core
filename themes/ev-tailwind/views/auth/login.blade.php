@@ -85,7 +85,7 @@
                     <div class="mt-6">
                         <div class="px-4 py-3 py-lg-4">
                             <div class="">
-                                <form class="form-default" role="form" action="{{ route('login.submit') }}" method="POST">
+                                <form class="form-default" role="form" action="{{ route('business.login.submit') }}" method="POST">
                                     @csrf
                                     @error('incorrect')
                                     <small class="text-danger">{{ $message }}</small>

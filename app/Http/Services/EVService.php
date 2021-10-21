@@ -2,12 +2,15 @@
 
 namespace App\Http\Services;
 
+use App\Models\Currency;
+use Cache;
 use EVS;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\View\ComponentAttributeBag;
+use Session;
 
 class EVService
 {
@@ -204,14 +207,13 @@ class EVService
                     [
                         'label' => translate('Log out'),
                         'icon' => 'heroicon-o-logout',
-                        'route' => route('logout'),
+                        'route' => route('user.logout'),
                         'is_active' => false,
                     ],
                 ]
             ]
         ];
     }
-
 
     public function getMappedCategories() {
         /*$categories = Category::where('parent_id', 0)

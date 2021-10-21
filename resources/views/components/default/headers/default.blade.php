@@ -138,7 +138,7 @@
                     @auth
                         <li class="list-inline-item">
                             <div class="hs-unfold">
-                                <a href="{{ route('logout') }}"
+                                <a href="{{ route('user.logout') }}"
                                     class="text-reset py-2 d-inline-block opacity-60">{{ translate('Logout') }}</a>
                             </div>
                         </li>
@@ -153,7 +153,7 @@
                         </li>
 
                         <li class="list-inline-item">
-                            <a href="{{ route('users.login') }}"
+                            <a href="{{ route('business.login') }}"
                                data-test="header.login">
                                 {{ translate('Login') }}
                             </a>

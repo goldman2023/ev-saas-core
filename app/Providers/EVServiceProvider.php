@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\IMGProxyService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container;
 use App\Http\Services\CategoryService;
@@ -9,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Services\EVService;
 use App\Http\Services\BusinessSettingsService;
+use App\Http\Services\FXService;
 use Blade;
 
 class EVServiceProvider extends ServiceProvider
@@ -23,9 +25,9 @@ class EVServiceProvider extends ServiceProvider
         // Add EV dynamic components to EV namespace
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
 
-        // Register EV Facade
-        $this->app->singleton('ev', function($app) {
-            return new EVService($app);
+        // Register IMG (IMGProxy) Singleton
+        $this->app->singleton('imgproxy', function() {
+            return new IMGProxyService(fn () => Container::getInstance());
         });
 
         // Register BusinessSetting Service Singleton
@@ -36,6 +38,16 @@ class EVServiceProvider extends ServiceProvider
         // Register Categories Service Singleton
         $this->app->singleton('ev_categories', function() {
             return new CategoryService(fn () => Container:: getInstance());
+        });
+
+        // Register FX Singleton
+        $this->app->singleton('fx', function() {
+            return new FXService(fn () => Container::getInstance());
+        });
+
+        // Register EV Singleton
+        $this->app->singleton('ev', function() {
+            return new EVService(fn () => Container::getInstance());
         });
 
 

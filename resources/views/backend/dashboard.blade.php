@@ -262,6 +262,9 @@
         }
     });
 
+    var sfs = {
+
+    }
     AIZ.plugins.chart('#graph-1',{
         type: 'bar',
         data: {
@@ -270,7 +273,23 @@
                 '{{ $category->getTranslation('name') }}',
                 @endforeach
             ],
+            datasets: [{
+                label: '{{ translate('Number of sale') }}',
+                data: [
 
+                ],
+                backgroundColor: [
+                    @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
+                        'rgba(55, 125, 255, 0.4)',
+                    @endforeach
+                ],
+                borderColor: [
+                    @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
+                        'rgba(55, 125, 255, 1)',
+                    @endforeach
+                ],
+                borderWidth: 1
+            }]
         },
         options: {
             scales: {
@@ -319,7 +338,9 @@
             ],
             datasets: [{
                 label: '{{ translate('Number of Stock') }}',
+                data: [
 
+                ],
                 backgroundColor: [
                     @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
                         'rgba(253, 57, 149, 0.4)',

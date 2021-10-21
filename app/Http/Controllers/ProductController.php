@@ -349,7 +349,7 @@ class ProductController extends Controller
         $lang = $request->lang;
         $tags = $product->tags;
         $categories = EVS::getMappedCategories();
-        $product_attributes = Attribute::where('content_type', 'App\Models\Product')->orderBy('created_at', 'desc')->get();
+        $product_attributes = Attribute::where('content_type', Product::class)->orderBy('created_at', 'desc')->get();
 
         return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));
     }

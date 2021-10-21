@@ -17,15 +17,12 @@ class RefactorProductsTable extends Migration
             if (Schema::hasColumn('products', 'attributes')) {
                 $table->dropColumn('attributes');
             }
-
             if (Schema::hasColumn('products', 'choice_options')) {
                 $table->dropColumn('choice_options');
             }
-
             if (Schema::hasColumn('products', 'colors')) {
                 $table->dropColumn('colors');
             }
-
             if (Schema::hasColumn('products', 'variations')) {
                 $table->dropColumn('variations');
             }
@@ -35,7 +32,6 @@ class RefactorProductsTable extends Migration
             if (Schema::hasColumn('products', 'low_stock_quantity')) {
                 $table->dropColumn('low_stock_quantity');
             }
-
             if (Schema::hasColumn('products', 'category_id')) {
                 $table->dropColumn('category_id');
             }

@@ -32,11 +32,11 @@
                         <tr>
                             <td>
                                 <a href="{{ route('ev-products.edit', $product->slug) }}">
-                                    <img class="avatar avatar-sm avatar-circle mr-3 border" src="{{ $product->images['thumbnail']['url'] ?? '' }}" alt="{{ $product->name }}">
+                                    <img class="avatar avatar-sm avatar-circle mr-3 border" src="{{ $product->images(['w' => '60'])['thumbnail']['url'] ?? '' }}" alt="{{ $product->name }}">
                                 </a>
                             </td>
                             <td><a href="{{ route('ev-products.edit', $product->slug) }}">{{ $product->name }}</a></td>
-                            <td></td>
+                            <td>{{ $product->selected_categories()->first()->name ?? '' }}</td>
                             <td>{{ single_price($product->unit_price) }}</td>
                             <td>
                                 <label class="toggle-switch d-flex align-items-center " for="customSwitch2">

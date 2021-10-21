@@ -13,7 +13,7 @@
                             <h1 class="h3 text-primary mb-0">{{ translate('Welcome to') }} {{ env('APP_NAME') }}</h1>
                             <p>{{ translate('Login to your account.') }}</p>
                         </div>
-                        <form class="pad-hor" method="POST" role="form" action="{{ route('login') }}">
+                        <form class="pad-hor" method="POST" role="form" action="{{ route('business.login') }}">
                             @csrf
                             <div class="form-group">
                                 <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus placeholder="{{ translate('Email') }}" data-test="email">

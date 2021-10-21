@@ -7,6 +7,7 @@ use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use App\Traits\LoggingTrait;
+use DB;
 use Illuminate\Http\Request;
 use Session;
 use Auth;
@@ -363,36 +364,14 @@ class HomeController extends Controller
 
     public function product(Request $request, $slug)
     {
+
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         $detailedProduct  = Product::where('slug', $slug)->first();
         $product  = $detailedProduct;
 
-        if (auth()->user()) {
-            // Instantiate a new client, find your API keys in the dashboard.
-            $client = new \GetStream\Stream\Client('27bjdppvjh4u', 'dr8m8e8j6bzn2dnhm3fep3qf6xpuxtrt66z2hhv3fzzwgsnydfc3jv4w8tysh3ym');
+        //$this->log($product,"User viewed this product");
 
-            // Instantiate a feed object
-            $userFeed = $client->feed('user', (string)auth()->user()->id);
-
-            echo "this is active";
-
-            // Create a new activity
-            $data = [
-                'actor' => 'user:' . auth()->user()->id,
-                'verb' => 'viewed',
-                'object' => 'Viewed Product ' . $product->name,
-                'foreign_id' => 'product:' . $product->id,
-            ];
-
-            $response = $userFeed->addActivity($data);
-
-        }
-
-
-        $this->log($product, "User viewed this product");
-
-
-        if ($detailedProduct != null && $detailedProduct->published) {
+        if (!empty($detailedProduct) && $detailedProduct->published) {
             //updateCartSetup();
             if (
                 $request->has('product_referral_code') &&

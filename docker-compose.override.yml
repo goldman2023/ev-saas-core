@@ -22,17 +22,34 @@ services:
     networks:
       - sail2
     depends_on:
-      - pgsql
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - '${DB_MYSQL_DOCKER_PORT_EXTERNAL:-3306}:3306'
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_DATABASE: '${DB_DATABASE:-evsaas}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-123456}'
+      #MYSQL_USER: '${DB_MYSQL_USERNAME:-root}'
+      MYSQL_PASSWORD: '${DB_PASSWORD:-123456}'
+    volumes:
+      - 'sail2mysql:/var/lib/mysql'
+    networks:
+      - sail2
+
 
   pgsql:
     image: 'postgres'
     ports:
-      - '${DB_DOCKER_PORT_EXTERNAL:-5432}:5432'
+      - '${DB_PGSQL_DOCKER_PORT_EXTERNAL:-5432}:5432'
     environment:
       PGUSER: '${DB_USERNAME:-postgres}'
       PGPASSWORD: '${DB_PASSWORD:-123456}'
       POSTGRES_DB: '${DB_DATABASE:-evsaas}'
-      POSTGRES_USER: '${DB_USERNAME:-postgres}'
+      POSTGRES_USER: '${DB_PGSQL_USERNAME:-postgres}'
       POSTGRES_PASSWORD: '${DB_PASSWORD:-123456}'
     volumes:
       - 'sail2pgsql:/var/lib/postgresql/data'
@@ -97,6 +114,8 @@ networks:
   sail2:
     driver: bridge
 volumes:
+  sail2mysql:
+    driver: local
   sail2pgsql:
     driver: local
   sail2redis:

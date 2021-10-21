@@ -11,6 +11,7 @@ use App\Models\Wishlist;
 use App\Traits\AttributeTrait;
 use Auth;
 use DB;
+use IMG;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -146,11 +147,11 @@ class Product extends Model
      *
      * @var array
      */
-    protected $with = ['stock'];
+    protected $with = ['stock', 'variations'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
+        'purchase_price', 'unit', 'slug', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
 
     protected $casts = [
         'choice_options' => 'object',
@@ -242,6 +243,51 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function product_attributes()
+    {
+        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+                ->get()->unique();
+
+        // Eager load Attribute relationships for current product
+        if(!empty($data)) {
+            foreach($data as $key => $attribute) {
+                $data[$key]->load(['attributes_relationship' => function ($query) {
+                    $query->where([
+                        ['subject_id', '=', $this->id],
+                        ['subject_type', '=', Product::class]
+                    ]);
+                }]);
+            }
+        }
+
+        return $data;
+    }
+
+    public function product_attributes_for_variations()
+    {
+        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+            ->where('for_variations', '=', 'true')->get()->unique();
+
+        // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
+        if(!empty($data)) {
+            foreach($data as $key => $attribute) {
+                $data[$key]->load(['attributes_relationship' => function ($query) {
+                    $query->where([
+                        ['subject_id', '=', $this->id],
+                        ['subject_type', '=', Product::class]
+                    ]);
+                }]);
+
+                $att_values_ids = $attribute->attributes_relationship->pluck('attribute_value_id');
+                $data[$key]->load(['attribute_values' => function ($query) use ($att_values_ids) {
+                    $query->whereIn('id', $att_values_ids);
+                }]);
+            }
+        }
+
+        return $data;
+    }
+
     public function variations() {
         return $this->hasMany(ProductVariation::class);
     }
@@ -268,13 +314,17 @@ class Product extends Model
         return $this->hasOne(FlashDealProduct::class);
     }
 
+    public function images($options = []) {
+        return $this->getImagesAttribute($options);
+    }
+
     /**
      * Get all images related to the product but properly structured in an assoc. array
      * This function is used in frontend/themes etc.
      *
      * @return array*
      */
-    public function getImagesAttribute() {
+    public function getImagesAttribute($options = []) {
         $photos = [];
         $data = [
             'thumbnail' => [],
@@ -284,7 +334,7 @@ class Product extends Model
         if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
             $data['thumbnail'] = [
                 'id' => null,
-                'url' => null
+                'url' => IMG::getPlaceholder()
             ];
             return $data;
         }
@@ -304,16 +354,17 @@ class Product extends Model
 
         if($photos) {
             foreach($photos as $photo) {
-                $url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
+                //$url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
 
-                if(config('imgproxy.enabled') == true) {
-                    // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
-                    // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
-                    // TODO: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
-                    $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
-                }
+                // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
+                // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
+                // DONE: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
+                //$url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
 
-                if($photo->id ===  (int) $this->attributes['thumbnail_img']) {
+
+                $url = IMG::get($photo->file_name, $options);
+
+                if($photo->id === (int) $this->attributes['thumbnail_img']) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,
                         'url' => $url
@@ -392,6 +443,10 @@ class Product extends Model
         return $this->low_stock_qty;
     }
 
+
+    public function has_variations() {
+        return $this->variations->isNotEmpty() ?? false;
+    }
 
     public function getCategoryIdAttribute() {
         if(empty($this->category_id)) {

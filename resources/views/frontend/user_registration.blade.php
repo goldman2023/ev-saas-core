@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="text-center">
                                     <p class="text-muted mb-0">{{ translate('Already have an account?')}}</p>
-                                    <a href="{{ route('users.login') }}">{{ translate('Log In')}}</a>
+                                    <a href="{{ route('user.login') }}">{{ translate('Log In')}}</a>
                                 </div>
                             </div>
                         </div>

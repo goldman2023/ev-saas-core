@@ -24,13 +24,13 @@
                 @auth
                     <div>{{ Auth::user()->name }}</div>
 
-                    <a href="{{ route('logout') }}"
+                    <a href="{{ route('user.logout') }}"
                         class="h-16 ml-4 border-transparent hover:border-gray-300 focus:text-gray-700 focus:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 focus:outline-none"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
                     </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                    <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="hidden">
                         @csrf
                     </form>
                 @endauth
