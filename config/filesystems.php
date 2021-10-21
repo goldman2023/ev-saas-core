@@ -42,7 +42,6 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => public_path(),
@@ -75,7 +74,12 @@ return [
             'region' => env('DIGITALOCEAN_SPACES_REGION'),
             'bucket' => env('DIGITALOCEAN_SPACES_BUCKET'),
         ],
+    ],
 
+    'disk_types' => [
+        'local' => ['local','public','backup-local'],
+        'cloud' => ['s3','google'],
+        'remote_plain' => [], // This is for 'sftp', 'ftp' etc.
     ],
 
 ];

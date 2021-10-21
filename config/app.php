@@ -269,6 +269,7 @@ return [
         'EVS' => App\Facades\EVS::class,
         'BusinessSettings' => App\Facades\BusinessSettings::class,
         'FX' => App\Facades\FX::class,
+        'IMG' => App\Facades\IMG::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
     ],

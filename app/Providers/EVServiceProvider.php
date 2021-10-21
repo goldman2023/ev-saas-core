@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\IMGProxyService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container;
 use App\Http\Services\CategoryService;
@@ -23,6 +24,11 @@ class EVServiceProvider extends ServiceProvider
     {
         // Add EV dynamic components to EV namespace
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
+
+        // Register IMG (IMGProxy) Singleton
+        $this->app->singleton('imgproxy', function() {
+            return new IMGProxyService(fn () => Container::getInstance());
+        });
 
         // Register BusinessSetting Service Singleton
         $this->app->singleton('business_settings', function() {

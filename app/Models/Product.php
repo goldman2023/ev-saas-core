@@ -11,6 +11,7 @@ use App\Models\Wishlist;
 use App\Traits\AttributeTrait;
 use Auth;
 use DB;
+use IMG;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -288,13 +289,17 @@ class Product extends Model
         return $this->hasOne(FlashDealProduct::class);
     }
 
+    public function images($options = []) {
+        return $this->getImagesAttribute($options);
+    }
+
     /**
      * Get all images related to the product but properly structured in an assoc. array
      * This function is used in frontend/themes etc.
      *
      * @return array*
      */
-    public function getImagesAttribute() {
+    public function getImagesAttribute($options = []) {
         $photos = [];
         $data = [
             'thumbnail' => [],
@@ -304,7 +309,7 @@ class Product extends Model
         if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
             $data['thumbnail'] = [
                 'id' => null,
-                'url' => null
+                'url' => IMG::getPlaceholder()
             ];
             return $data;
         }
@@ -324,16 +329,17 @@ class Product extends Model
 
         if($photos) {
             foreach($photos as $photo) {
-                $url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
+                //$url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
 
-                if(config('imgproxy.enabled') == true) {
-                    // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
-                    // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
-                    // TODO: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
-                    $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
-                }
+                // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
+                // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
+                // DONE: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
+                //$url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
 
-                if($photo->id ===  (int) $this->attributes['thumbnail_img']) {
+
+                $url = IMG::get($photo->file_name, $options);
+
+                if($photo->id === (int) $this->attributes['thumbnail_img']) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,
                         'url' => $url
