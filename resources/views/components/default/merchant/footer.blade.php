@@ -67,7 +67,9 @@
       <!-- Copyright -->
       <div class="row align-items-md-center">
         <div class="col-md-6 mb-4 mb-md-0">
-          <p class="small text-white-70 mb-0">© Front. 2020 Htmlstream. All rights reserved.</p>
+          <p class="small text-white-70 mb-0">
+            {{ translate('Powered by: ') }} {{ get_setting('website_name') }}
+            {{ translate('© Copyright.') }} {{ date('Y')}}.</p>
         </div>
 
         <div class="col-md-6 text-md-right">

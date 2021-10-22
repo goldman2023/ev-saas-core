@@ -5,7 +5,7 @@
             <!-- Nav -->
             <nav class="js-mega-menu navbar navbar-expand-lg">
                 <!-- Logo -->
-                <a class="navbar-brand" href="#" aria-label="Front">
+                <a class="navbar-brand" href="{{ route('home') }}" aria-label="Front">
                     <img src="{{ $logo }}" alt="Logo">
                 </a>
                 <!-- End Logo -->
@@ -39,7 +39,7 @@
                                 {{ translate('Products Catalog') }}
                             </a>
 
-                          
+
                         </li>
                         <!-- End Home -->
 
@@ -51,7 +51,7 @@
                                 {{ translate('Gun Range') }}
                             </a>
 
-                    
+
                         </li>
                         <!-- End Pages -->
 
@@ -63,11 +63,11 @@
                             {{ translate('Contact us') }}
                             </a>
 
-                          
+
                         </li>
                         <!-- End Blog -->
 
-                    
+
 
 
                         <!-- Button -->

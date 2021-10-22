@@ -26,7 +26,7 @@ class VendorMode
             $globalShop = null;
             $globalLayout = 'app';
         }
-        
+
 
         View::share('globalShop', $globalShop);
         View::share('globalLayout', $globalLayout);

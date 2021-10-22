@@ -12,7 +12,7 @@
     <meta name="file-base-url" content="{{ getFileBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', $globalShop->name .' | '.get_setting('site_motto'))</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
