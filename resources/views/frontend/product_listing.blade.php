@@ -99,13 +99,13 @@
                                                 @if (isset($category_id))
                                                     {{ translate('Products - ') }}{{ \App\Models\Category::find($category_id)->getTranslation('name') }}
                                                 @elseif(isset($query))
-                                                    {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product_count }}
+                                                    {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product->count() }}
                                                 @else
                                                     {{ translate('All Products') }}
                                                 @endif
                                             </h1>
                                         </div>
-                                        @if ($product_count > 0 && $content == null && !isset($category_id))
+                                        @if ($products->count() > 0 && $content == null && !isset($category_id))
                                             <div class="ml-auto text-right">
                                                 <a class="font-weight-bold"
                                                     href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">{{ translate('View all ') }}<i
@@ -120,7 +120,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($product_count > 0)
+                                @if ($products->count() > 0)
 
                                     <div
                                         class="row gutters-5 mt-2">
@@ -144,7 +144,7 @@
                             </div>
                         @endif
 
-                    
+
                     </div>
                     <div class="col-xl-3">
                         <div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
