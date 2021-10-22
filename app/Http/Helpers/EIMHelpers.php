@@ -3,9 +3,12 @@
 
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Shop;
 use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
+use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null) {
     if(!empty($data)) {
@@ -52,7 +55,9 @@ function get_active_theme()
 {
     return Theme::active();
 }
+function get_system_name() {
 
+}
 function get_site_name()
 {
     $site_name =  get_setting('website_name');
@@ -268,6 +273,20 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 }
 
 function is_vendor_site() {
-    /* TODO: make this dynamic */
-    return true;
+    /* TODO: make CRUD UI for this */
+    $domain = parse_url(Request::root())['host'];
+    $primaryDomain = tenant()->domains()->where('is_primary', '1')->first()->domain;
+    if($domain === $primaryDomain) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/* TODO: Move this to Vendor Singleton class */
+function get_global_shop() {
+    $domain = parse_url(Request::root());
+    $shop = Shop::where('domain', '=', $domain['host'])->first();
+
+    return $shop;
 }

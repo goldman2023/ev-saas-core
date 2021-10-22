@@ -4,19 +4,22 @@ namespace App\View\Components\Default\Merchant;
 
 use Illuminate\View\Component;
 
+
 class Header extends Component
 {
     public $logo;
     public $shop;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($shop)
+    public function __construct($shop = null)
     {
         //
-        $this->logo = $shop->user->shop->get_company_logo();
+        $this->shop = $shop;
+        $this->logo = $shop->get_company_logo();
     }
 
     /**

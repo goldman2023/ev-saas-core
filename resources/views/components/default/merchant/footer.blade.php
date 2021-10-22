@@ -5,30 +5,35 @@
         <div class="col-lg-3 mb-5 mb-lg-0">
           <!-- Logo -->
           <a href="#" aria-label="Front">
-            <img class="brand" src="../assets/svg/logos/logo-white.svg" alt="Logo">
+            <img src="{{ $logo }}" alt="Logo">
           </a>
           <!-- End Logo -->
         </div>
 
         <div class="col-6 col-md-3 col-lg-2 mb-5 mb-lg-0">
-          <h5 class="text-white font-weight-bold">Help and advice</h5>
-          <!-- Nav Links -->
-          <ul class="nav nav-sm nav-x-0 nav-white flex-column">
-            <li class="nav-item"><a class="nav-link" href="#">Contact us</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Legal & Privacy</a></li>
-          </ul>
-          <!-- End Nav Links -->
+          <h5 class="text-white font-weight-bold">
+            {{ translate('Products Catalog') }}
+          </h5>
+         
         </div>
 
         <div class="col-6 col-md-3 col-lg-2 mb-5 mb-lg-0">
-          <h5 class="text-white font-weight-bold">About us</h5>
-          <!-- Nav Links -->
-          <ul class="nav nav-sm nav-x-0 nav-white flex-column">
-            <li class="nav-item"><a class="nav-link" href="#">About Spec</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Careers</a></li>
-          </ul>
-          <!-- End Nav Links -->
+          <h5 class="text-white font-weight-bold"> 
+            {{ translate('Gun Range') }}
+          </h5>
+
+          <h5 class="text-white font-weight-bold"> 
+            {{ translate('Contact us') }}
+          </h5>
+
+          <h5 class="text-white font-weight-bold"> 
+            {{ translate('Shipping') }}
+          </h5>
+
+          <h5 class="text-white font-weight-bold"> 
+            {{ translate('About us') }}
+          </h5>
+          
         </div>
 
         <div class="col-md-6 col-lg-5">
@@ -62,7 +67,9 @@
       <!-- Copyright -->
       <div class="row align-items-md-center">
         <div class="col-md-6 mb-4 mb-md-0">
-          <p class="small text-white-70 mb-0">© Front. 2020 Htmlstream. All rights reserved.</p>
+          <p class="small text-white-70 mb-0">
+            {{ translate('Powered by: ') }} {{ get_setting('website_name') }}
+            {{ translate('© Copyright.') }} {{ date('Y')}}.</p>
         </div>
 
         <div class="col-md-6 text-md-right">

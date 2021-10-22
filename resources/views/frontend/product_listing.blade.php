@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.' . $globalLayout)
 
 @if (isset($category_id))
     @php
@@ -99,13 +99,13 @@
                                                 @if (isset($category_id))
                                                     {{ translate('Products - ') }}{{ \App\Models\Category::find($category_id)->getTranslation('name') }}
                                                 @elseif(isset($query))
-                                                    {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product_count }}
+                                                    {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product->count() }}
                                                 @else
                                                     {{ translate('All Products') }}
                                                 @endif
                                             </h1>
                                         </div>
-                                        @if ($product_count > 0 && $content == null && !isset($category_id))
+                                        @if ($products->count() > 0 && $content == null && !isset($category_id))
                                             <div class="ml-auto text-right">
                                                 <a class="font-weight-bold"
                                                     href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">{{ translate('View all ') }}<i
@@ -120,7 +120,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($product_count > 0)
+                                @if ($products->count() > 0)
 
                                     <div
                                         class="row gutters-5 mt-2">
@@ -144,99 +144,7 @@
                             </div>
                         @endif
 
-                        @if (($content == 'event' || $content == null ) && $event_count > 0)
-                            <div class="mt-3">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h1 class="h6 fw-600 text-body">
-                                            @if (isset($category_id))
-                                                {{ translate('Events - ') }}
-                                                {{ \App\Models\Category::find($category_id)->getTranslation('name') }}
-                                            @elseif(isset($query))
-                                                {{ translate('Events found matched ') }}"{{ $query }}"{{ ' : ' . $event_count }}
-                                            @else
-                                                {{ translate('All Companies') }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                    @if ($event_count > 0 && $content == null && !isset($category_id))
-                                        <div class="ml-auto text-right">
-                                            <a class="font-weight-bold"
-                                                href="{{ route('search', ['q' => $query, 'content' => 'event']) }}">{{ translate('View all ') }}<i
-                                                    class="las la-angle-right la-sm ml-1"></i></a>
-                                        </div>
-                                    @endif
-                                    <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">
-                                        <button type="button" class="btn btn-icon p-0" data-toggle="class-toggle"
-                                            data-target=".aiz-filter-sidebar">
-                                            <i class="la la-filter la-2x"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                @if ($event_count > 0)
-                                    <div class="mt-2 row">
-                                        @foreach ($events as $key => $event)
-                                            <x-event-card :event="$event" :items="$attributes"></x-event-card>
-                                        @endforeach
-                                    </div>
-                                    @if ($content == 'event' || isset($category_id))
-                                        <div
-                                            class="aiz-pagination aiz-pagination-center d-flex justify-content-center mt-4">
-                                            {{ $shops->links() }}
-                                        </div>
-                                    @endif
-                                @else
-                                    <p class="text-center mt-2">{{ translate('Nothing found') }}</p>
-                                @endif
-                            </div>
-                        @endif
 
-                        @if (($content == 'company' || $content == null) && $company_count > 0)
-                            <div class="mt-3">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <h1 class="h6 fw-600 text-body">
-                                            @if (isset($category_id))
-                                                {{ translate('Companies - ') }}
-                                                {{ \App\Models\Category::find($category_id)->getTranslation('name') }}
-                                            @elseif(isset($query))
-                                                {{ translate('Companies found matched ') }}"{{ $query }}"{{ ' : ' . $company_count }}
-                                            @else
-                                                {{ translate('All Companies') }}
-                                            @endif
-                                        </h1>
-                                    </div>
-                                    @if ($company_count > 0 && $content == null && !isset($category_id))
-                                        <div class="ml-auto text-right">
-                                            <a class="font-weight-bold"
-                                                href="{{ route('search', ['q' => $query, 'content' => 'company']) }}">{{ translate('View all ') }}<i
-                                                    class="las la-angle-right la-sm ml-1"></i></a>
-                                        </div>
-                                    @endif
-                                    <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">
-                                        <button type="button" class="btn btn-icon p-0" data-toggle="class-toggle"
-                                            data-target=".aiz-filter-sidebar">
-                                            <i class="la la-filter la-2x"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                @if ($company_count > 0)
-                                    <div class="mt-2">
-                                        @foreach ($shops as $key => $shop)
-                                            <x-company.company-card :company="$shop"></x-company.company-card>
-                                        @endforeach
-                                    </div>
-                                    @if ($content == 'company' || isset($category_id))
-                                        <div
-                                            class="aiz-pagination aiz-pagination-center d-flex justify-content-center mt-4">
-                                            {{ $shops->links() }}
-                                        </div>
-                                    @endif
-                                @else
-                                    <p class="text-center mt-2">{{ translate('Nothing found') }}</p>
-                                @endif
-                            </div>
-                        @endif
                     </div>
                     <div class="col-xl-3">
                         <div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">

@@ -319,7 +319,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.index');
+        /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
+        if(is_vendor_site()) {
+            $shop = get_global_shop();
+            return view('frontend.company.profile', compact('shop'));
+        } else {
+            return view('frontend.index');
+
+        }
     }
 
     public function flash_deal_details($slug)
@@ -590,8 +597,6 @@ class HomeController extends Controller
             $events = $events->where('title', 'like', '%' . $query . '%')
                 ->orWhere('description', 'like', '%' . $query . '%');
         }
-
-        $product_count = 0;
         $company_count = $shops->count();
         $event_count = $events->count();
 
@@ -666,11 +671,12 @@ class HomeController extends Controller
         }
 
 
-        $products = $products;
+        /* TODO: Make this to show products by actual category */
+        $products = Product::paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'product_count', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

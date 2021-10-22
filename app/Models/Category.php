@@ -103,8 +103,8 @@ class Category extends Model
             dd();
             static::addGlobalScope('single_vendor', function (Builder $builder) {
                 // TODO: ID list array with products only by single vendor
-                $category_array = [];
-                $builder->whereIn('id', $category_array);
+                // $category_array = [];
+                // $builder->whereIn('id', $category_array);
             });
         }
     }

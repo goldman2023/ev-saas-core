@@ -12,7 +12,7 @@
     <meta name="file-base-url" content="{{ getFileBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', $globalShop->name .' | '.get_setting('site_motto'))</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,15 +55,15 @@
 <!-- aiz-main-wrapper -->
 <div class="">
 
-    {{-- @include('frontend.inc.nav') --}}
-        <x-default.merchant.header :shop="$shop"></x-default.merchant.header>
-
-
-    @yield('content')
+        <x-default.merchant.header :shop="$globalShop"></x-default.merchant.header>
+        {{-- TODO: move this to separate css file --}}
+    <div style="padding-top: 150px;">
+        @yield('content')
+    </div>
 
     {{-- @include('frontend.inc.footer') --}}
 
-    <x-default.merchant.footer></x-default.merchant.footer>
+    <x-default.merchant.footer :shop="$globalShop"></x-default.merchant.footer>
 
 </div>
 
