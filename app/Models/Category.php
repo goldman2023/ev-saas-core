@@ -100,16 +100,13 @@ class Category extends Model
 
         /* TODO Implement propper global scope for single vendor */
         if (is_vendor_site()) {
+            dd();
             static::addGlobalScope('single_vendor', function (Builder $builder) {
                 // TODO: ID list array with products only by single vendor
                 $category_array = [];
                 $builder->whereIn('id', $category_array);
             });
         }
-
-        static::addGlobalScope('alphabetical', function (Builder $builder) {
-            $builder->orderBy('name', 'ASC');
-        });
     }
 
     /* TODO: Create a better way to join translations on categories fetch */

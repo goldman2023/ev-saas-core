@@ -269,5 +269,5 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 
 function is_vendor_site() {
     /* TODO: make this dynamic */
-    return false;
+    return true;
 }

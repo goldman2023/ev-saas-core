@@ -53,7 +53,7 @@ class Shop extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphToMany(User::class, 'subject', 'user_relationships');
     }
 
     public function categories()
