@@ -40,13 +40,13 @@ class ProductVariation extends Model
     protected $with = ['stock'];
 
     protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag'];
-    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock', 'remove_flag'];
+    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock', 'remove_flag', 'total_price'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag'];
+    protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag', 'total_price'];
 
     protected $dispatchesEvents = [
         'deleting' => ProductVariationDeleting::class,
@@ -60,6 +60,11 @@ class ProductVariation extends Model
     public function stock()
     {
         return $this->morphOne(ProductStock::class, 'subject');
+    }
+
+    public function flash_deals()
+    {
+        return $this->morphedByMany(FlashDeal::class, 'subject', 'flash_deal_relationships');
     }
 
     protected function asJson($value)
