@@ -1,8 +1,9 @@
 <div class="card h-100">
     <div class="card-body">
         <figure class="max-w-8rem mb-3">
-            <img class="img-fluid"
-                src="https://htmlstream.com/front/assets/svg/icons/icon-13.svg" alt="SVG">
+            <x-ev.dynamic-image class="img-fluid" :src="ev_dynamic_translate('#hero-benefit-image-'. $attributes['id'], true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+            </x-ev.dynamic-image>
+
         </figure>
         <x-ev.label
         tag="h4"

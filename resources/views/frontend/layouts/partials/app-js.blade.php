@@ -250,8 +250,10 @@
     }
 
     function addToWishList(id) {
+        console.log(id);
         @if (Auth::check() &&
             (auth()->user()->isCustomer() ||
+            auth()->user()->isAdmin() ||
                 auth()->user()->isSeller()))
             $.post('{{ route('wishlists.store') }}', {_token: AIZ.data.csrf, id: id}, function (data) {
             if (data != 0) {

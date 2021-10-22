@@ -69,10 +69,14 @@ class CategoryController extends Controller
             $category->parent_id = $request->parent_id;
 
             $parent = Category::find($request->parent_id);
-            $category->level = $parent->level + 1 ;
+            if(isset($parent->level )) {
+                $category->level = $parent->level + 1 ;
+            } else {
+                $category->level = 1;
+            }
         } else {
             $category->parent_id = null;
-            $category->level = 0;
+            $category->level = null;
         }
 
         if ($request->commision_rate != null) {
@@ -145,14 +149,14 @@ class CategoryController extends Controller
 
         $previous_level = $category->level;
 
-        if ($request->parent_id != "0") {
+        if ($request->parent_id != "0" && $request->parent_id != null ) {
             $category->parent_id = $request->parent_id;
 
             $parent = Category::find($request->parent_id);
             $category->level = $parent->level + 1 ;
         } else {
             $category->parent_id = null;
-            $category->level = 0;
+            $category->level = null;
         }
 
         if($category->level > $previous_level){

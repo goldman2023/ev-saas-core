@@ -22,6 +22,26 @@
             @endif
         </div>
     </x-ev.alert>
+
+    @if($insert_success)
+    <div class="row">
+        <div class="col-12">
+            <h5>{{ translate('Your product preview:') }}</h5>
+        </div>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <x-default.products.cards.product-card
+            :product="$product"
+            >
+            </x-default.products.cards.product-card>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+    @endif
+
+
+
     <!-- End Message Body -->
 
     <x-ev.toast id="product-updated-toast"

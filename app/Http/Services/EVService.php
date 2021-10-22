@@ -35,6 +35,13 @@ class EVService
                         'roles' => [],
                     ],
                     [
+                        'label' => translate('Leads'),
+                        'icon' => 'heroicon-o-calendar',
+                        'route' => route('leads.index'),
+                        'is_active' => areActiveRoutes(['leads']),
+                        'roles' => ['admin'],
+                    ],
+                    [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-calendar',
                         'route' => route('purchase_history.index'),
@@ -131,6 +138,13 @@ class EVService
             [
                 'label' => translate('Settings'),
                 'items' => [
+                    [
+                        'label' => translate('Design settings'),
+                        'icon' => 'heroicon-o-cog',
+                        'route' => route('ev.settings.design'),
+                        'is_active' => areActiveRoutes(['ev.settings.design']),
+
+                    ],
                     [
                         'label' => translate('Account settings'),
                         'icon' => 'heroicon-o-cog',

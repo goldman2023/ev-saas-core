@@ -302,7 +302,8 @@ class CheckoutController extends Controller
         $tax = 0;
         $shipping = 0;
         foreach (Session::get('cart') as $key => $cartItem) {
-            $subtotal += $cartItem['price'] * $cartItem['quantity'];
+
+            $subtotal += $cartItem['price']['raw'] * $cartItem['quantity'];
             $tax += $cartItem['tax'] * $cartItem['quantity'];
 
             if(isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
@@ -371,7 +372,7 @@ class CheckoutController extends Controller
             $shipping = 0;
 
             foreach (Session::get('cart') as $key => $cartItem) {
-                $subtotal += $cartItem['price'] * $cartItem['quantity'];
+                $subtotal += $cartItem['price']['raw'] * $cartItem['quantity'];
                 $tax += $cartItem['tax'] * $cartItem['quantity'];
                 if(isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
                     foreach(json_decode($cartItem['shipping'], true) as $shipping_region => $val) {
@@ -407,7 +408,7 @@ class CheckoutController extends Controller
         $shipping = 0;
         $shipping_info = $request->session()->get('shipping_info');
         foreach (Session::get('cart') as $key => $cartItem) {
-            $subtotal += $cartItem['price'] * $cartItem['quantity'];
+            $subtotal += $cartItem['price']['raw'] * $cartItem['quantity'];
             $tax += $cartItem['tax'] * $cartItem['quantity'];
             if(isset($cartItem['shipping']) && is_array(json_decode($cartItem['shipping'], true))) {
                 foreach(json_decode($cartItem['shipping'], true) as $shipping_region => $val) {
@@ -446,7 +447,7 @@ class CheckoutController extends Controller
                         $tax = 0;
                         $shipping = 0;
                         foreach (Session::get('cart') as $key => $cartItem) {
-                            $subtotal += $cartItem['price'] * $cartItem['quantity'];
+                            $subtotal += $cartItem['price']['raw'] * $cartItem['quantity'];
                             $tax += $cartItem['tax'] * $cartItem['quantity'];
                             $shipping += $cartItem['shipping'] * $cartItem['quantity'];
                         }
@@ -471,7 +472,7 @@ class CheckoutController extends Controller
                             foreach ($coupon_details as $key => $coupon_detail) {
                                 if ($coupon_detail->product_id == $cartItem['id']) {
                                     if ($coupon->discount_type == 'percent') {
-                                        $coupon_discount += $cartItem['price'] * $coupon->discount / 100;
+                                        $coupon_discount += $cartItem['price']['raw'] * $coupon->discount / 100;
                                     } elseif ($coupon->discount_type == 'amount') {
                                         $coupon_discount += $coupon->discount;
                                     }

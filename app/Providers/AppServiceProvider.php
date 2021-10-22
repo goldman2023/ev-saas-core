@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use DebugBar\DebugBar;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
   public function boot()
   {
     Schema::defaultStringLength(191);
+    Paginator::useBootstrap();
+
 
   }
 

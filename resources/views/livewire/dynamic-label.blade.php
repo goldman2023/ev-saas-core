@@ -1,27 +1,20 @@
-<div class="position-relative relative ev-dynamic-label-container z-index-100">
+<div class="ev-dynamic-label-container z-index-100">
 
     <span class="underline">{!! $label->value !!}</span>
-
-
-
-    {{-- <x-ev.dynamic-components.edit-dropdown>
-    </x-ev.dynamic-components.edit-dropdown> --}}
-
     @if ($show_input_field)
-        <div
-        style="z-index: 999"
+        <div style="z-index: 999"
             class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-card hs-unfold-content-initialized hs-unfold-css-animation animated slideInUp hs-unfold-reverse-y">
             {{-- TODO: Improve UX and UI of this element --}}
             <div class="card ev-dynamic-input-field">
 
-               <div class="card-header">
+                <div class="card-header">
                     {{ translate('Edit Label') }}
-               </div>
+                </div>
 
 
                 <div class="card-body">
                     <div class="">
-                        <div class="form">
+                        <div class=" form">
                             @if ($type === 'text')
                                 <input wire:model.defer="label.value" type="text" name="email" id="email"
                                     class="form-control" placeholder="{{ translate('Enter Text') }}">
@@ -55,7 +48,7 @@
 
 
 
-    <div class="hs-unfold ml-auto">
+    <div class="hs-unfold ml-auto bg-white">
         <button wire:click.prevent="editLabel()"
             class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle"
             href="javascript:;">

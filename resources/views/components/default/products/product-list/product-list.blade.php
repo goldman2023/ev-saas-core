@@ -1,43 +1,48 @@
     <!-- Products Section -->
-    <div class="container" style="padding: 0;">
+    <div class="container">
         <!-- Title -->
         <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3">
             <x-ev.label tag="h2" :label="ev_dynamic_translate('Products List Title', true)">
             </x-ev.label>
         </div>
         <!-- End Title -->
-
         <!-- Products -->
         <div class="ev-slider mb-3">
-            <div class="ev-slider-wrapper @if ($slider) js-slick-carousel @endif"
-
-            data-hs-slick-carousel-options='{
+            <div class="ev-slider-wrapper @if ($slider) js-slick-carousel @endif" data-hs-slick-carousel-options='{
                 "slidesToShow": 4,
+                "arrows": true,
+                "dots": true,
                 "responsive": [{
                   "breakpoint": 768,
                   "settings": {
+                      "slidesToShow": 1,
                     "arrows": false
                   }
                 }]
-              }'
-          >
+              }'>
 
                 <!-- Product -->
-
+                @if (!$slider)
+                    <div class="row">
+                @endif
                 @foreach ($products as $product)
-                    <div class="ev-slider-slide slick-slide">
-                        <div class="w-100">
-                            <x-default.products.cards.product-card :product="$product"
+                    <div class="ev-slider-slide  @if ($slider) slick-slide @else col-sm-3 @endif mb-3 p-3">
+                        <div class="w-100 h-100">
+                            <x-default.products.cards.product-card :product="$product" style="product-card-detailed-2"
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">
                             </x-default.products.cards.product-card>
                         </div>
                     </div>
 
                 @endforeach
-                <!-- End Product -->
+                @if (!$slider)
             </div>
+            @endif
+
+            <!-- End Product -->
         </div>
-        <div class="swiper-pagination"></div>
+    </div>
+    <div class="swiper-pagination"></div>
     </div>
 
     <!-- End Products -->
@@ -51,13 +56,3 @@
     </div>
     </div>
     <!-- End Products Section -->
-
-    @push('footer_scripts')
-        @if ($slider)
-
-            @push('footer_scripts')
-
-
-            @endpush
-        @endif
-    @endpush

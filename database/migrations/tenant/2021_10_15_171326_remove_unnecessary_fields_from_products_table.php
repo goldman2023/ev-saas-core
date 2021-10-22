@@ -17,6 +17,7 @@ class RemoveUnnecessaryFieldsFromProductsTable extends Migration
             if (Schema::hasColumn('products', 'category_id')) {
                 $table->dropColumn('category_id');
             }
+
             if (Schema::hasColumn('products', 'variant_product')) {
                 $table->dropColumn('variant_product');
             }

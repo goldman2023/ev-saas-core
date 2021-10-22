@@ -272,6 +272,7 @@ return [
         'IMG' => App\Facades\IMG::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
+        'Carbon' => Illuminate\Support\Carbon::class,
     ],
 
 ];

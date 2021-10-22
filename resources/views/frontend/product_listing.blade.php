@@ -41,71 +41,7 @@
             <form class="___class_+?2___" id="search-form" action="" method="GET">
                 <input type="hidden" name="content" value="{{$content}}" />
                 <div class="row">
-                    <div class="col-xl-3">
-                        <div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
-                            <div class="overlay overlay-fixed dark c-pointer" data-toggle="class-toggle"
-                                data-target=".aiz-filter-sidebar" data-same=".filter-sidebar-thumb"></div>
-                            <div class="collapse-sidebar c-scrollbar-light text-left">
-                                <div class="d-flex d-xl-none justify-content-between align-items-center pl-3 border-bottom">
-                                    <h3 class="h6 mb-0 fw-600">{{ translate('Filters') }}</h3>
-                                    <button type="button" class="btn btn-sm p-2 filter-sidebar-thumb"
-                                        data-toggle="class-toggle" data-target=".aiz-filter-sidebar">
-                                        <i class="las la-times la-2x"></i>
-                                    </button>
-                                </div>
-                                <div class="bg-white shadow-sm rounded mb-3">
-                                    <div class="fs-15 fw-600 p-3 border-bottom">
 
-                                    </div>
-                                    <div class="p-3">
-                                        <ul class="list-unstyled">
-                                            @if (!isset($category_id))
-                                                @foreach (\App\Models\Category::where('level', 0)->get() as $category)
-                                                    <li class="mb-2 ml-2">
-                                                        <a class="text-reset fs-14"
-                                                            href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
-                                                    </li>
-                                                @endforeach
-                                            @else
-                                                <li class="mb-2">
-                                                    <a class="text-reset fs-14 fw-600" href="{{ route('search') }}">
-                                                        <i class="las la-angle-left"></i>
-                                                        {{ translate('All Industries') }}
-                                                    </a>
-                                                </li>
-                                                @if (\App\Models\Category::find($category_id)->parent_id != 0)
-                                                    <li class="mb-2">
-                                                        <a class="text-reset fs-14 fw-600"
-                                                            href="{{ route('products.category', \App\Models\Category::find(\App\Models\Category::find($category_id)->parent_id)->slug) }}">
-                                                            <i class="las la-angle-left"></i>
-                                                            {{ \App\Models\Category::find(\App\Models\Category::find($category_id)->parent_id)->getTranslation('name') }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                <li class="mb-2">
-                                                    <a class="text-reset fs-14 fw-600"
-                                                        href="{{ route('products.category', \App\Models\Category::find($category_id)->slug) }}">
-                                                        <i class="las la-angle-left"></i>
-                                                        {{ \App\Models\Category::find($category_id)->getTranslation('name') }}
-                                                    </a>
-                                                </li>
-                                                @foreach (\App\Utility\CategoryUtility::get_immediate_children_ids($category_id) as $key => $id)
-                                                    <li class="ml-4 mb-2">
-                                                        <a class="text-reset fs-14"
-                                                            href="{{ route('products.category', \App\Models\Category::find($id)->slug) }}">{{ \App\Models\Category::find($id)->getTranslation('name') }}</a>
-                                                    </li>
-                                                @endforeach
-                                            @endif
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                @if($content != null)
-                                    <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
-                                @endif                                
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-xl-9">
                         <div class="d-flex justify-content-between mb-3">
                             <ul class="breadcrumb bg-transparent p-0">
@@ -145,7 +81,7 @@
                                                 placeholder="{{ translate('Search query...') }}" autocomplete="off">
                                             <div class="input-group-append d-block">
                                                 <button class="btn btn-success" type="submit">
-                                                    <i class="la la-search text-white la-flip-horizontal fs-18"></i>
+                                                    <x-heroicon-s-search class="ev-icon"/>
                                                 </button>
                                             </div>
                                         </div>
@@ -185,20 +121,20 @@
                                     </div>
                                 </div>
                                 @if ($product_count > 0)
-                                
+
                                     <div
-                                        class="row gutters-5 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-4 row-cols-md-3 row-cols-2 mt-2">
+                                        class="row gutters-5 mt-2">
                                         @foreach ($products as $key => $product)
-                                            <div class="col-sm-4 mb-5">
+                                            <div class="col-sm-4 mb-3">
                                                 <x-default.products.cards.product-card :product="$product"
-                                                style="{{ ev_dynamic_translate('product-card', true)->value }}">
+                                                style="product-card">
                                             </x-default.products.cards.product-card>
                                             </div>
                                         @endforeach
                                     </div>
                                     @if ($content == 'product' || isset($category_id))
-                                        <div
-                                            class="aiz-pagination aiz-pagination-center d-flex justify-content-center mt-4">
+                                    <hr />
+                                        <div class="d-flex ev-pagination justify-content-center mt-3">
                                             {{ $products->links() }}
                                         </div>
                                     @endif
@@ -301,6 +237,73 @@
                                 @endif
                             </div>
                         @endif
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
+                            <div class="overlay overlay-fixed dark c-pointer" data-toggle="class-toggle"
+                                data-target=".aiz-filter-sidebar" data-same=".filter-sidebar-thumb"></div>
+                            <div class="collapse-sidebar c-scrollbar-light text-left">
+                                <div class="d-flex d-xl-none justify-content-between align-items-center pl-3 border-bottom">
+                                    <h3 class="h6 mb-0 fw-600">{{ translate('Filters') }}</h3>
+                                    <button type="button" class="btn btn-sm p-2 filter-sidebar-thumb"
+                                        data-toggle="class-toggle" data-target=".aiz-filter-sidebar">
+                                        <i class="las la-times la-2x"></i>
+                                    </button>
+                                </div>
+                                <div class="bg-white shadow-sm rounded mb-3">
+                                    <div class="fs-15 fw-600 p-3 border-bottom">
+                                         {{ translate('categories') }}
+                                    </div>
+                                    <div class="p-3">
+                                        <ul class="list-unstyled">
+                                            @if (!isset($category_id))
+                                                @foreach (\App\Models\Category::where('level', 0)->get() as $category)
+                                                    <li class="mb-2 ml-2">
+                                                        <a class="text-reset fs-14"
+                                                            href="{{ route('products.category', $category->slug) }}">
+                                                            {{ $category->getTranslation('name') }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                <li class="mb-2">
+                                                    <a class="text-reset fs-14 fw-600" href="{{ route('search') }}">
+                                                        <i class="las la-angle-left"></i>
+                                                        {{ translate('All Industries') }}
+                                                    </a>
+                                                </li>
+                                                @if (\App\Models\Category::find($category_id)->parent_id != 0)
+                                                    <li class="mb-2">
+                                                        <a class="text-reset fs-14 fw-600"
+                                                            href="{{ route('products.category', \App\Models\Category::find(\App\Models\Category::find($category_id)->parent_id)->slug) }}">
+                                                            <i class="las la-angle-left"></i>
+                                                            {{ \App\Models\Category::find(\App\Models\Category::find($category_id)->parent_id)->getTranslation('name') }}
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                                <li class="mb-2">
+                                                    <a class="text-reset fs-14 fw-600"
+                                                        href="{{ route('products.category', \App\Models\Category::find($category_id)->slug) }}">
+                                                        <i class="las la-angle-left"></i>
+                                                        {{ \App\Models\Category::find($category_id)->getTranslation('name') }}
+                                                    </a>
+                                                </li>
+                                                @foreach (\App\Utility\CategoryUtility::get_immediate_children_ids($category_id) as $key => $id)
+                                                    <li class="ml-4 mb-2">
+                                                        <a class="text-reset fs-14"
+                                                            href="{{ route('products.category', \App\Models\Category::find($id)->slug) }}">{{ \App\Models\Category::find($id)->getTranslation('name') }}</a>
+                                                    </li>
+                                                @endforeach
+                                            @endif
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                @if($content != null)
+                                    <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

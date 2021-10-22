@@ -33,9 +33,11 @@ use Mail;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Requests\LoginRequest;
+use App\Models\CategoryRelationship;
 
 use function foo\func;
 use App\Notifications\CompanyVisit;
+use Exception;
 
 class HomeController extends Controller
 {
@@ -401,47 +403,7 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function shop($slug)
-    {
-        $shop  = Shop::where('slug', $slug)->first();
-        if ($shop != null) {
-            $seller = Seller::where('user_id', $shop->user_id)->first();
-            if (auth()->user()) {
-                visits($seller, "auth")->increment();
-                if (auth()->user()->id != $shop->user->id) {
-                    $shop->user->notify(new CompanyVisit(auth()->user()));
-                }
-                $this->log($seller, "user visited a company profile");
-            } else {
-                visits($seller)->increment();
-            }
 
-            // Seo integration with Schema.org
-            if (get_setting('enable_seo_company') == "on") {
-                seo()->addSchema($seller->get_schema());
-            }
-
-            if ($seller->verification_status != 0) {
-                return view('frontend.company.profile', compact('shop', 'seller'));
-                //                return view('frontend.seller_shop', compact('shop', 'seller'));
-            } else {
-                $company_owner_id = $seller->user->id;
-                if (auth()->user()) {
-                    $current_user_id = auth()->user()->id;
-                } else {
-                    $current_user_id = 0;
-                }
-
-                /* Show company profile for company owner user */
-                if ($company_owner_id === $current_user_id) {
-                    return view('frontend.company.profile', compact('shop', 'seller'));
-                } else {
-                    return view('frontend.seller_shop_without_verification', compact('shop', 'seller'));
-                }
-            }
-        }
-        abort(404);
-    }
 
     public function filter_shop($slug, $type)
     {
@@ -598,12 +560,18 @@ class HomeController extends Controller
         }
 
         $products = Product::where($conditions);
-
+        $products = [];
         if ($category_id != null) {
+            /* WORK IN Progress for category management */
+            /* TODO: Refactor category utility */
             $category_ids = CategoryUtility::children_ids($category_id);
             $category_ids[] = $category_id;
-
-            $products = $products->whereIn('category_id', $category_ids);
+            $relationships = CategoryRelationship::whereIn('category_id', $category_ids)->where('subject_type', '=',  'App\Models\Product')->get();
+            foreach($relationships as $item ) {
+                // $products =  array_push($products, $item->subject); // actual product
+            }
+            /* TODO: We need to update this part to fetch products by category_relationships */
+            $products = $products;
 
             $category = Category::find($category_id);
             $shops = $category->companies();
@@ -623,7 +591,7 @@ class HomeController extends Controller
                 ->orWhere('description', 'like', '%' . $query . '%');
         }
 
-        $product_count = $products->count();
+        $product_count = 0;
         $company_count = $shops->count();
         $event_count = $events->count();
 
@@ -634,9 +602,9 @@ class HomeController extends Controller
         if ($content != null) {
             if ($content == 'product') {
                 $contents = $products;
-            }else if ($content == 'company') {
+            } else if ($content == 'company') {
                 $contents = Seller::whereIn('user_id', $shops->get()->pluck('user_id')->toArray());;
-            }else if ($content == 'event') {
+            } else if ($content == 'event') {
                 $contents = $events;
             }
 
@@ -698,7 +666,7 @@ class HomeController extends Controller
         }
 
 
-        $products = filter_products($products)->paginate(10)->appends(request()->query());
+        $products = $products;
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 

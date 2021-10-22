@@ -19,33 +19,15 @@
     </section>
 
     <section class="space-1">
-        <x-default.products.product-list slider="false">
+        <x-default.products.product-list :slider="false">
         </x-default.products.product-list>
     </section>
-
-
-    <section>
-        <x-default.companies.companies-list></x-default.companies.companies-list>
-    </section>
-
-    <section class="space-2">
-
-        <x-default.products.product-list.with-category-icons :categories="$categories">
-        </x-default.products.product-list.with-category-icons>
-    </section>
-
-
 
 
     <section id="archive-hero">
         {{-- <x-companies-archive-hero></x-companies-archive-hero> --}}
     </section>
 
-    <section>
-
-        <x-default.categories.category-tabs-with-products :categories="$categories">
-        </x-default.categories.category-tabs-with-products>
-    </section>
 
     <section>
         @php
@@ -62,9 +44,6 @@
     {{-- TODO: Add latest companies list here --}}
     {{-- HERE --}}
     {{-- END TODO --}}
-
-
-
     <section>
         <div class="container">
             <div class="row">

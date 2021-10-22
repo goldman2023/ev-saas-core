@@ -9,16 +9,16 @@ return [
     |
     */
 
-    'api_key' => '9j8mussvhwku',
-    'api_secret' => 'k3hbcktzjskde4nenef9kvpud23rh6vbza6gzuc3s8spcv37h6aybkuv4z6ft3zd',
-    'api_app_id' => '111762',
+    'api_key' => '27bjdppvjh4u',
+    'api_secret' => 'dr8m8e8j6bzn2dnhm3fep3qf6xpuxtrt66z2hhv3fzzwgsnydfc3jv4w8tysh3ym',
+    'api_app_id' => '1148439',
     /*
     |-----------------------------------------------------------------------------
     | Client connection options
     |-----------------------------------------------------------------------------
     |
     */
-    'location' => 'us-east',
+    'location' => 'dublin',
     'timeout' => 3,
     /*
     |-----------------------------------------------------------------------------

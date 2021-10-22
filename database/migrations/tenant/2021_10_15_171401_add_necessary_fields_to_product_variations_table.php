@@ -36,10 +36,15 @@ class AddNecessaryFieldsToProductVariationsTable extends Migration
     public function down()
     {
         Schema::table('product_variations', function (Blueprint $table) {
-            $table->dropColumn('num_of_sales');
-            $table->dropColumn('deleted_at');
+            if (Schema::hasColumn('product_variations', 'num_of_sales')) {
+                $table->dropColumn('num_of_sales');
+            }
 
-            $table->dropUnique('product_variations_product_id_variant_index');
+            if (Schema::hasColumn('product_variations', 'deleted_at')) {
+                $table->dropColumn('deleted_at');
+            }
+
+            // $table->dropUnique('product_variations_product_id_variant_index');
         });
     }
 }

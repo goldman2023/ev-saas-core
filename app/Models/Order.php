@@ -77,4 +77,21 @@ class Order extends Model
     {
         return $this->hasMany(ClubPoint::class);
     }
+
+
+    public static function trend($period = 30)
+    {
+        $present = Order::where('created_at', '>=', \Carbon::now()->subdays($period))->count();
+
+        $past = Order::where('created_at', '<=', \Carbon::now()->subdays($period))->count();
+
+        if ($present == 0) {
+            $present = 1;
+        }
+
+        $percentChange = (1 - $past / $present) * 100;
+
+
+        return $percentChange;
+    }
 }

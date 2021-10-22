@@ -15,7 +15,7 @@ class CreateProductVariationsTable extends Migration
     {
         /* PRODUCT ID MUST BE BIGINT AUTO_INCREMENT!!!! */
         Schema::table('products', function (Blueprint $table) {
-            $table->bigIncrements('id')->change();
+            $table->bigIncrements('id')->autoIncrement()->change();
         });
 
         Schema::create('product_variations', function (Blueprint $table) {

@@ -13,8 +13,10 @@ use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
@@ -49,6 +51,8 @@ Route::middleware([
     Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
 
 
+    // Feed Page (Possible new homepage)
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
     //Home Page
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -109,17 +113,18 @@ Route::middleware([
     Route::get('/customer-product/{slug}', [CustomerProductController::class, 'customer_product'])->name('customer.product');
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
     /* TODO: Investigate this is causing some issues */
     //Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
+
     Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product');
     Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name('products.category');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name('products.variant_price');
-    Route::get('/shop/{slug}', [HomeController::class, 'shop'])->name('shop.visit');
+    Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
@@ -216,7 +221,10 @@ Route::middleware([
     });
 
     Route::group(['middleware' => ['auth']], function () {
+        /* TODO : Admin only */
+        Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
 
+        /* TODO: Admin and seler only */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
         Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
         Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');
@@ -363,9 +371,29 @@ Route::middleware([
         Route::get('/checkout', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
         Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
         Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
+
+        Route::get('/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
+        Route::post('/payment', 'CheckoutController@checkout')->name('payment.checkout');
+        Route::post('/get_pick_up_points', 'HomeController@get_pick_up_points')->name('shipping_info.get_pick_up_points');
+        Route::get('/payment-select', 'CheckoutController@get_payment_info')->name('checkout.payment_info');
+        Route::post('/apply_coupon_code', 'CheckoutController@apply_coupon_code')->name('checkout.apply_coupon_code');
+        Route::post('/remove_coupon_code', 'CheckoutController@remove_coupon_code')->name('checkout.remove_coupon_code');
+        //Club point
+        Route::post('/apply-club-point', 'CheckoutController@apply_club_point')->name('checkout.apply_club_point');
+        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
     });
 
+    Route::resource('addresses', 'AddressController');
+    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
+    /* Customer Management - BY EIM */
+    Route::resource('customers', 'CustomerController');
+
+    /* Leads Management - BY EIM */
+    Route::get('leads/success', 'LeadController@success')->name('leads.success');
+    Route::resource('leads', 'LeadController');
 
     // Tenant Management routes - added from SaaS Boilerplate
 
