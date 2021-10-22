@@ -50,6 +50,7 @@ class Category extends Model
 
     protected $appends = ['selected', 'title_path'];
 
+
     public function getParentKeyName() {
         return 'parent_id';
     }
@@ -96,6 +97,15 @@ class Category extends Model
             $builder->orderBy('name', 'ASC');
         });
 
+
+        /* TODO Implement propper global scope for single vendor */
+        if (is_vendor_site()) {
+            static::addGlobalScope('single_vendor', function (Builder $builder) {
+                // TODO: ID list array with products only by single vendor
+                $category_array = [];
+                $builder->whereIn('id', $category_array);
+            });
+        }
 
         static::addGlobalScope('alphabetical', function (Builder $builder) {
             $builder->orderBy('name', 'ASC');

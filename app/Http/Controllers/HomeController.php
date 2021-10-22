@@ -33,6 +33,7 @@ use Mail;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Requests\LoginRequest;
+use App\Models\CategoryRelationship;
 
 use function foo\func;
 use App\Notifications\CompanyVisit;
@@ -559,12 +560,18 @@ class HomeController extends Controller
         }
 
         $products = Product::where($conditions);
-
+        $products = [];
         if ($category_id != null) {
+            /* WORK IN Progress for category management */
+            /* TODO: Refactor category utility */
             $category_ids = CategoryUtility::children_ids($category_id);
             $category_ids[] = $category_id;
-
-            $products = $products->whereIn('category_id', $category_ids);
+            $relationships = CategoryRelationship::whereIn('category_id', $category_ids)->where('subject_type', '=',  'App\Models\Product')->get();
+            foreach($relationships as $item ) {
+                // $products =  array_push($products, $item->subject); // actual product
+            }
+            /* TODO: We need to update this part to fetch products by category_relationships */
+            $products = $products;
 
             $category = Category::find($category_id);
             $shops = $category->companies();
