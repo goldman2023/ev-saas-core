@@ -102,8 +102,8 @@ class Category extends Model
         if (is_vendor_site()) {
             static::addGlobalScope('single_vendor', function (Builder $builder) {
                 // TODO: ID list array with products only by single vendor
-                $category_array = [];
-                $builder->whereIn('id', $category_array);
+                // $category_array = [];
+                // $builder->whereIn('id', $category_array);
             });
         }
 

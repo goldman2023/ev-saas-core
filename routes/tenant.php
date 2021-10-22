@@ -22,6 +22,7 @@ use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
 use App\Http\Middleware\OwnerOnly;
+use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -44,6 +45,7 @@ Route::middleware([
     'universal',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
+    VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
     /* This is experimental, adding it here for now */

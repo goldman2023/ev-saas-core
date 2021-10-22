@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.' . $globalLayout)
 
 @section('meta_title'){{ $detailedProduct->meta_title }}@stop
 
@@ -60,7 +60,7 @@
                                         <circle style="fill:#FBD303;" cx="143.8" cy="143.8" r="143.8" />
                                         <circle style="fill:#F8B517;" cx="143.8" cy="143.8" r="93.6" />
                                         <polygon style="fill:#FCFCFD;" points="143.8,55.9 163.4,116.6 227.5,116.6 175.6,154.3 195.6,215.3 143.8,177.7 91.9,215.3 111.9,154.3
-                                                                    60,116.6 124.1,116.6 " />
+                                                                                60,116.6 124.1,116.6 " />
                                     </svg>
                                 </div>
                             @endif
@@ -379,7 +379,8 @@
                                     $relatedProducts = null;
                                 @endphp
 
-                                <x-default.products.product-list :products="$relatedProducts" class="products-slider" slider="true">
+                                <x-default.products.product-list :products="$relatedProducts" class="products-slider"
+                                    slider="true">
                                 </x-default.products.product-list>
                             </section>
                             <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3"
