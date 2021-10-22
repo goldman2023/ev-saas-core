@@ -55,15 +55,15 @@
 <!-- aiz-main-wrapper -->
 <div class="">
 
-    {{-- @include('frontend.inc.nav') --}}
         <x-default.merchant.header :shop="$globalShop"></x-default.merchant.header>
-
-
-    @yield('content')
+        {{-- TODO: move this to separate css file --}}
+    <div style="padding-top: 150px;">
+        @yield('content')
+    </div>
 
     {{-- @include('frontend.inc.footer') --}}
 
-    <x-default.merchant.footer></x-default.merchant.footer>
+    <x-default.merchant.footer :shop="$globalShop"></x-default.merchant.footer>
 
 </div>
 

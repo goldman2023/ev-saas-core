@@ -5,7 +5,7 @@
         <div class="col-lg-3 mb-5 mb-lg-0">
           <!-- Logo -->
           <a href="#" aria-label="Front">
-            <img class="brand" src="../assets/svg/logos/logo-white.svg" alt="Logo">
+            <img src="{{ $logo }}" alt="Logo">
           </a>
           <!-- End Logo -->
         </div>
