@@ -20,12 +20,13 @@ class VendorMode
     {
         if(is_vendor_site()) {
             /* TODO: Make this dynamic based on request domain and ID comes from domain mapping */
-            $globalShop = Shop::where('id', 5)->first();
+            $globalShop = get_global_shop();
             $globalLayout = 'white-label';
         } else {
             $globalShop = null;
             $globalLayout = 'app';
         }
+        
 
         View::share('globalShop', $globalShop);
         View::share('globalLayout', $globalLayout);

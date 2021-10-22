@@ -3,6 +3,7 @@
 
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Shop;
 use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
@@ -270,4 +271,9 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 function is_vendor_site() {
     /* TODO: make this dynamic */
     return true;
+}
+
+function get_global_shop() {
+    $shop = Shop::where('id', 5)->first();
+    return $shop;
 }

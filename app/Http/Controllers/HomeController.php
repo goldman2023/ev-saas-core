@@ -319,7 +319,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.index');
+        /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
+        if(is_vendor_site()) {
+            $shop = get_global_shop();
+            return view('frontend.company.profile', compact('shop'));
+        } else {
+            return view('frontend.index');
+
+        }
     }
 
     public function flash_deal_details($slug)
