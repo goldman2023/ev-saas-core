@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Redirect;
 use App\Models\Order;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Seller;
 use Session;
 use App\Models\CustomerPackage;

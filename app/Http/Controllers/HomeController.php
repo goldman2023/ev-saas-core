@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Session;
 use Auth;
 use Hash;
+use Vendor;
 use App\Models\Category;
 use App\Models\FlashDeal;
 use App\Models\Brand;
@@ -24,7 +25,7 @@ use App\Models\Shop;
 use App\Models\Event;
 use App\Models\Color;
 use App\Models\Order;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use ImageOptimizer;
 use Cookie;
 use Illuminate\Support\Str;
@@ -320,8 +321,8 @@ class HomeController extends Controller
     public function index()
     {
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
-        if(is_vendor_site()) {
-            $shop = get_global_shop();
+        if(Vendor::isVendorSite()) {
+            $shop = Vendor::getGlobalShop();
             return view('frontend.company.profile', compact('shop'));
         } else {
             return view('frontend.index');
@@ -827,7 +828,7 @@ class HomeController extends Controller
     {
         if (\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Models\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             if (auth()->user()->seller->remaining_digital_uploads > 0) {
-                $business_settings = get_setting('digital_product_upload')->first();
+                $tenant_settings = get_setting('digital_product_upload');
                 $categories = Category::where('digital', 1)->get();
                 return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
             } else {
@@ -836,7 +837,7 @@ class HomeController extends Controller
             }
         }
 
-        $business_settings = get_setting('digital_product_upload')->first();
+        $tenant_settings = get_setting('digital_product_upload');
         $categories = Category::get();
         return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
     }

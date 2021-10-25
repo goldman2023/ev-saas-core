@@ -287,7 +287,7 @@
                                 </a>
                             </li>
                             <li class="aiz-side-nav-item">
-                                <a href="{{ route('admin.business_settings.vendor_commission') }}" class="aiz-side-nav-link">
+                                <a href="{{ route('admin.tenant_settings.vendor_commission') }}" class="aiz-side-nav-link">
                                     <span class="aiz-side-nav-text">{{ translate('Seller Commission') }}</span>
                                 </a>
                             </li>

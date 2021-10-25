@@ -22,7 +22,7 @@
     						<h6 class="mb-0">{{ translate('About Widget') }}</h6>
     					</div>
     					<div class="card-body">
-    						<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+    						<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
     							@csrf
     							<div class="form-group">
     			                    <label class="form-label" for="signinSrEmail">{{ translate('Footer Logo') }}</label>
@@ -59,7 +59,7 @@
     						<h6 class="mb-0">{{ translate('Contact Info Widget') }}</h6>
     					</div>
     					<div class="card-body">
-                            <form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
     							@csrf
                                 <div class="form-group">
     								<label>{{ translate('Contact address') }}</label>
@@ -89,7 +89,7 @@
     						<h6 class="mb-0">{{ translate('Link Widget One') }}</h6>
     					</div>
     					<div class="card-body">
-                            <form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
     							<div class="form-group">
     								<label>{{ translate('Title') }}</label>
@@ -163,7 +163,7 @@
     	<div class="card-header">
     		<h6 class="fw-600 mb-0">{{ translate('Footer Bottom') }}</h6>
     	</div>
-        <form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
            <div class="card-body">
                 <div class="card shadow-none bg-light">

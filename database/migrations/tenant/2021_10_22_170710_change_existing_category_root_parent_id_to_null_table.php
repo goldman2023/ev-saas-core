@@ -33,8 +33,6 @@ class ChangeExistingCategoryRootParentIdToNullTable extends Migration
      */
     public function down()
     {
-        Schema::table('null', function (Blueprint $table) {
-            //
-        });
+
     }
 }

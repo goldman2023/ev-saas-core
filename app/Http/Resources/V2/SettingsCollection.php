@@ -3,7 +3,7 @@
 namespace App\Http\Resources\V2;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Currency;
 
 class SettingsCollection extends ResourceCollection

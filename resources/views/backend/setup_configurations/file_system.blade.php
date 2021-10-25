@@ -95,7 +95,7 @@
             else{
                 var value = 0;
             }
-            $.post('{{ route('admin.business_settings.update.activation') }}', {_token:'{{ csrf_token() }}', type:type, value:value}, function(data){
+            $.post('{{ route('admin.tenant_settings.update.activation') }}', {_token:'{{ csrf_token() }}', type:type, value:value}, function(data){
                 if(data == '1'){
                     AIZ.plugins.notify('success', '{{ translate('Settings updated successfully') }}');
                 }

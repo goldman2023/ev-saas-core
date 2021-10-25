@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Seller;
 use Session;
 

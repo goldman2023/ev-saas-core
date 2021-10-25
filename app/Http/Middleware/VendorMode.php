@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Shop;
 use Closure;
 use Auth;
+use Vendor;
 use Illuminate\Support\Facades\View;
 
 class VendorMode
@@ -18,15 +19,15 @@ class VendorMode
      */
     public function handle($request, Closure $next)
     {
-        if(is_vendor_site()) {
+
+        if(Vendor::isVendorSite()) {
             /* TODO: Make this dynamic based on request domain and ID comes from domain mapping */
-            $globalShop = get_global_shop();
+            $globalShop = Vendor::getGlobalShop();
             $globalLayout = 'white-label';
         } else {
             $globalShop = null;
             $globalLayout = 'app';
         }
-
 
         View::share('globalShop', $globalShop);
         View::share('globalLayout', $globalLayout);

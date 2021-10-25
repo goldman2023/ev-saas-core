@@ -26,7 +26,7 @@ use App\Models\Tax;
 use App\Models\Shop;
 use App\Models\Slider;
 use App\Models\HomeCategory;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Translation;
 
 class DemoController extends Controller
@@ -357,41 +357,41 @@ class DemoController extends Controller
         //     }
         // }
 
-        // $business_setting = get_setting('home_slider_images')->first();
-        // $business_setting->value = json_encode(Slider::pluck('photo')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_slider_images')->first();
+        // $tenant_setting->value = json_encode(Slider::pluck('photo')->toArray());
+        // $tenant_setting->save();
         //
-        // $business_setting = get_setting('home_slider_links')->first();
-        // $business_setting->value = json_encode(Slider::pluck('link')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_slider_links')->first();
+        // $tenant_setting->value = json_encode(Slider::pluck('link')->toArray());
+        // $tenant_setting->save();
 
-        // $business_setting = get_setting('home_banner1_images')->first();
-        // $business_setting->value = json_encode(Banner::where('position', 1)->pluck('photo')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_banner1_images')->first();
+        // $tenant_setting->value = json_encode(Banner::where('position', 1)->pluck('photo')->toArray());
+        // $tenant_setting->save();
         //
-        // $business_setting = get_setting('home_banner1_links')->first();
-        // $business_setting->value = json_encode(Banner::where('position', 1)->pluck('url')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_banner1_links')->first();
+        // $tenant_setting->value = json_encode(Banner::where('position', 1)->pluck('url')->toArray());
+        // $tenant_setting->save();
 
-        // $business_setting = get_setting('home_banner2_images')->first();
-        // $business_setting->value = json_encode(Banner::where('position', 2)->pluck('photo')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_banner2_images')->first();
+        // $tenant_setting->value = json_encode(Banner::where('position', 2)->pluck('photo')->toArray());
+        // $tenant_setting->save();
         //
-        // $business_setting = get_setting('home_banner2_links')->first();
-        // $business_setting->value = json_encode(Banner::where('position', 2)->pluck('url')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_banner2_links')->first();
+        // $tenant_setting->value = json_encode(Banner::where('position', 2)->pluck('url')->toArray());
+        // $tenant_setting->save();
 
-        // $business_setting = get_setting('home_categories')->first();
-        // $business_setting->value = json_encode(HomeCategory::pluck('category_id')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('home_categories')->first();
+        // $tenant_setting->value = json_encode(HomeCategory::pluck('category_id')->toArray());
+        // $tenant_setting->save();
 
-        // $business_setting = get_setting('top10_categories')->first();
-        // $business_setting->value = json_encode(Category::where('top', 1)->pluck('id')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('top10_categories')->first();
+        // $tenant_setting->value = json_encode(Category::where('top', 1)->pluck('id')->toArray());
+        // $tenant_setting->save();
         //
-        // $business_setting = get_setting('top10_brands')->first();
-        // $business_setting->value = json_encode(Brand::where('top', 1)->pluck('id')->toArray());
-        // $business_setting->save();
+        // $tenant_setting = get_setting('top10_brands')->first();
+        // $tenant_setting->value = json_encode(Brand::where('top', 1)->pluck('id')->toArray());
+        // $tenant_setting->save();
 
         // $code = 'en';
         // $jsonString = [];

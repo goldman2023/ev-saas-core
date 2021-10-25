@@ -72,95 +72,97 @@ class Seller extends Model
     use ReviewTrait;
     protected $fillable = ['admin_to_pay'];
 
-  public function user()
-  {
-    return $this->belongsTo(User::class);
-  }
-
-  public function payments()
-  {
-    return $this->hasMany(Payment::class);
-  }
-
-  public function get_attribute_label_by_id($id)
-  {
-    $attribute = $this
-      ->attributes()
-      ->where('attribute_id', '=', $id)
-      ->first();
-
-    if (!$attribute) {
-      return false;
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
-    $label = Attribute::where('id', $attribute->attribute_id)->first();
-    $custom_properties = json_decode($label->custom_properties);
-    if (isset($custom_properties->unit)) {
-      $label = $custom_properties->unit;
-    } else {
-      $label = false;
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
-    return $label;
-  }
+    public function get_attribute_label_by_id($id)
+    {
+        $attribute = $this
+          ->attributes()
+          ->where('attribute_id', '=', $id)
+          ->first();
 
-  public function get_attribute_value_by_id($id)
-  {
-    $attribute = $this
-      ->attributes()
-      ->where('attribute_id', '=', $id)
-      ->first();
+        if (!$attribute) {
+          return false;
+        }
 
+        $label = Attribute::where('id', $attribute->attribute_id)->first();
+        $custom_properties = json_decode($label->custom_properties);
+        if (isset($custom_properties->unit)) {
+          $label = $custom_properties->unit;
+        } else {
+          $label = false;
+        }
 
-    if (isset($attribute->attribute_value_id)) {
-      $value =  AttributeValue::find($attribute->attribute_value_id)->values;
-    } else {
-      $value = translate('No Data');
-    }
-    return $value;
-  }
-
-  public function get_schema() {
-    $default_properties = array();
-    $extra_properties = array();
-    $sameAs = $this->user->shop->facebook . "," .
-              $this->user->shop->google . "," .
-              $this->user->shop->twitter . "," .
-              $this->user->shop->youtube;
-
-    foreach($this->seo_attributes as $relation) {
-      $schema_value = $relation->attributes()->first()->schema_value ? $relation->attributes()->first()->schema_value : $relation->attribute_value->values;
-      if ($relation->attributes()->first()->type == 'checkbox') {
-        $schema_value = implode(",", $relation->attributes()->first()->attribute_values->pluck('values')->toArray());
-      }
-      if (in_array($relation->attributes()->first()->name, default_schema_attributes('App\Models\Seller'))) {
-        $default_properties[$relation->attributes()->first()->name] = $schema_value;
-      }else {        
-        $extra_properties[$relation->attributes()->first()->schema_key] = $schema_value;
-      }
+        return $label;
     }
 
-    $schema = Schema::corporation()
-                    ->legalName($this->user->shop->name)
-                    ->description($this->user->shop->meta_description)
-                    ->image(uploaded_asset($this->user->shop->sliders))
-                    ->logo(uploaded_asset($this->user->shop->logo))
-                    ->sameAs($sameAs)
-                    ->addProperties($extra_properties);
-    $postalAddress = Schema::postalAddress()->streetAddress($this->user->shop->address);
-
-    if (isset($default_properties["Website"])) $schema->url($default_properties["Website"]);
-    if (isset($default_properties["Contact email"])) $schema->email($default_properties["Contact email"]);
-    if (isset($default_properties["Contact phone"])) $schema->telephone($default_properties["Contact phone"]);
-    if (isset($default_properties["VAT Code"])) $schema->vatID($default_properties["VAT Code"]);
+    public function get_attribute_value_by_id($id)
+    {
+        $attribute = $this
+          ->attributes()
+          ->where('attribute_id', '=', $id)
+          ->first();
 
 
-    if (isset($default_properties["City"])) $postalAddress->addressLocality($default_properties["City"]);
-    if (isset($default_properties["Country"])) $postalAddress->addressCountry($default_properties["Country"]);
-    if (isset($default_properties["Zipcode"])) $postalAddress->postalCode($default_properties["Zipcode"]);
+        if ($attribute->attribute_value_id ?? null) {
+          $value =  AttributeValue::find($attribute->attribute_value_id)->values;
+        } else {
+          $value = translate('No Data');
+        }
+        return $value;
+    }
 
-    $schema->address($postalAddress);
+    public function get_schema() {
+        $default_properties = array();
+        $extra_properties = array();
+        $sameAs = $this->user->shop->facebook . "," .
+            $this->user->shop->google . "," .
+            $this->user->shop->twitter . "," .
+            $this->user->shop->youtube;
 
-    return $schema;
-  }
+        foreach($this->seo_attributes as $relation) {
+            $schema_value = $relation->attributes()->first()->schema_value ?: $relation->attribute_value->values;
+
+            if ($relation->attributes()->first()->type === 'checkbox') {
+                $schema_value = implode(",", $relation->attributes()->first()->attribute_values->pluck('values')->toArray());
+            }
+
+            if (in_array($relation->attributes()->first()->name, default_schema_attributes(Seller::class))) {
+                $default_properties[$relation->attributes()->first()->name] = $schema_value;
+            } else {
+                $extra_properties[$relation->attributes()->first()->schema_key] = $schema_value;
+            }
+        }
+
+        $schema = Schema::corporation()
+            ->legalName($this->user->shop->name)
+            ->description($this->user->shop->meta_description)
+            ->image(uploaded_asset($this->user->shop->sliders))
+            ->logo(uploaded_asset($this->user->shop->logo))
+            ->sameAs($sameAs)
+            ->addProperties($extra_properties);
+        $postalAddress = Schema::postalAddress()->streetAddress($this->user->shop->address);
+
+        if (isset($default_properties["Website"])) $schema->url($default_properties["Website"]);
+        if (isset($default_properties["Contact email"])) $schema->email($default_properties["Contact email"]);
+        if (isset($default_properties["Contact phone"])) $schema->telephone($default_properties["Contact phone"]);
+        if (isset($default_properties["VAT Code"])) $schema->vatID($default_properties["VAT Code"]);
+
+
+        if (isset($default_properties["City"])) $postalAddress->addressLocality($default_properties["City"]);
+        if (isset($default_properties["Country"])) $postalAddress->addressCountry($default_properties["Country"]);
+        if (isset($default_properties["Zipcode"])) $postalAddress->postalCode($default_properties["Zipcode"]);
+
+        $schema->address($postalAddress);
+
+        return $schema;
+    }
 }

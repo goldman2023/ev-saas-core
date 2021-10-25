@@ -23,7 +23,7 @@ Route::prefix('v2')->as('api2.')->group(function () {
     Route::get('brands/top', 'Api\V2\BrandController@top');
     Route::apiResource('brands', 'Api\V2\BrandController')->only('index');
 
-    Route::apiResource('business-settings', 'Api\V2\BusinessSettingController')->only('index');
+    Route::apiResource('business-settings', 'Api\V2\TenantSettingController')->only('index');
 
     Route::get('categories/featured', 'Api\V2\CategoryController@featured');
     Route::get('categories/home', 'Api\V2\CategoryController@home');

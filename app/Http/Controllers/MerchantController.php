@@ -16,22 +16,28 @@ class MerchantController extends Controller
 
     public function shop($slug)
     {
-        $shop  = Shop::where('slug', $slug)->first();
-        if ($shop != null) {
-            $seller = Seller::where('user_id', $shop->user_id)->first();
+        $shop = Shop::where('slug', $slug)->first();
+
+        if (!empty($shop)) {
+            $seller = $shop->seller();
+
+            // Increment visits of the company page!
             if (auth()->user()) {
-                visits($seller, "auth")->increment();
-                if (auth()->user()->id != $shop->user->id) {
+                visits($seller->user, "auth")->increment();
+
+                if (auth()->user()->id !== $seller->user->id) {
+                    // If logged user is NOT actually a seller account of the shop/business!
+                    $this->log($seller->user, "User visited a company profile");
+
                     try{
                         /* TODO: Fix this and make sure slack error does not break page */
                      //   $shop->user->notify(new CompanyVisit(auth()->user()));
-                    } catch(Exception $e) {
+                    } catch(\Exception $e) {
 
                     }
                 }
-                $this->log($seller, "user visited a company profile");
             } else {
-                visits($seller)->increment();
+                visits($seller->user)->increment();
             }
 
             // Seo integration with Schema.org
@@ -39,24 +45,19 @@ class MerchantController extends Controller
                 seo()->addSchema($seller->get_schema());
             }
 
-            if ($seller->verification_status != 0) {
+            if ($seller->verification_status !== 0) {
                 return view('frontend.company.profile', compact('shop', 'seller'));
-            } else {
-                $company_owner_id = $seller->user->id;
-                if (auth()->user()) {
-                    $current_user_id = auth()->user()->id;
-                } else {
-                    $current_user_id = 0;
-                }
-
-                /* Show company profile for company owner user */
-                if ($company_owner_id === $current_user_id) {
-                    return view('frontend.company.profile', compact('shop', 'seller'));
-                } else {
-                    return view('frontend.seller_shop_without_verification', compact('shop', 'seller'));
-                }
             }
+
+            // Show company profile only for company owner user
+            if ($seller->user->id === auth()->user()->id ?? null) {
+                return view('frontend.company.profile', compact('shop', 'seller'));
+            }
+
+            // Show company profile without verification tag to other people
+            return view('frontend.seller_shop_without_verification', compact('shop', 'seller'));
         }
+
         abort(404);
     }
 }

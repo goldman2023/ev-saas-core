@@ -6,7 +6,7 @@ use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
-use App\Facades\BusinessSettings;
+use App\Facades\TenantSettings;
 use App\Models\AttributeValueTranslation;
 use App\Models\Category;
 use App\Models\Product;

@@ -1,8 +1,8 @@
 <?php
 
-use App\Facades\BusinessSettings;
+use App\Facades\TenantSettings;
 use App\Models\Currency;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Product;
 use App\Models\SubSubCategory;
 use App\Models\FlashDealProduct;
@@ -203,9 +203,9 @@ if (!function_exists('default_language')) {
 if (!function_exists('convert_to_usd')) {
     function convert_to_usd($amount)
     {
-        $business_settings = get_setting('system_default_currency');
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        $tenant_settings = get_setting('system_default_currency');
+        if ($tenant_settings != null) {
+            $currency = Currency::find($tenant_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'USD')->first()->exchange_rate;
         }
     }
@@ -214,9 +214,9 @@ if (!function_exists('convert_to_usd')) {
 if (!function_exists('convert_to_kes')) {
     function convert_to_kes($amount)
     {
-        $business_settings = get_setting('system_default_currency');
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        $tenant_settings = get_setting('system_default_currency');
+        if ($tenant_settings != null) {
+            $currency = Currency::find($tenant_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'KES')->first()->exchange_rate;
         }
     }
@@ -704,9 +704,9 @@ if (!function_exists('brandsOfCategory')) {
 if (!function_exists('convertPrice')) {
     function convertPrice($price)
     {
-        $business_settings = get_setting('system_default_currency')->first();
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        $tenant_settings = get_setting('system_default_currency')->first();
+        if ($tenant_settings != null) {
+            $currency = Currency::find($tenant_settings->value);
             $price = floatval($price) / floatval($currency->exchange_rate);
         }
         $code = Currency::findOrFail(get_setting('system_default_currency'))->code;
@@ -989,7 +989,7 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        return BusinessSettings::get($key, $default);
+        return TenantSettings::get($key, $default);
     }
 }
 

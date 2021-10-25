@@ -9,7 +9,7 @@
     				<h6 class="fw-600 mb-0">{{ translate('General') }}</h6>
     			</div>
     			<div class="card-body">
-    				<form action="{{ route('admin.business_settings.update') }}" method="POST">
+    				<form action="{{ route('admin.tenant_settings.update') }}" method="POST">
     					@csrf
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">{{translate('Frontend Website Name')}}</label>
@@ -67,7 +67,7 @@
     				<h6 class="fw-600 mb-0">{{ translate('Global SEO') }}</h6>
     			</div>
     			<div class="card-body">
-    				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+    				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
     					@csrf
     					<div class="form-group row">
     						<label class="col-md-3 col-from-label">{{ translate('Meta Title') }}</label>
@@ -116,7 +116,7 @@
     				<h6 class="fw-600 mb-0">{{ translate('Cookies Agreement') }}</h6>
     			</div>
     			<div class="card-body">
-    				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+    				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
     					@csrf
     					<div class="form-group row">
     						<label class="col-md-3 col-from-label">{{ translate('Cookies Agreement Text') }}</label>
@@ -146,7 +146,7 @@
     				<h6 class="fw-600 mb-0">{{ translate('Custom Script') }}</h6>
     			</div>
     			<div class="card-body">
-    				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+    				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
     					@csrf
     					<div class="form-group row">
     						<label class="col-md-3 col-from-label">{{ translate('Header custom script - before </head>') }}</label>

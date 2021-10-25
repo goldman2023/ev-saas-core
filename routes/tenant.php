@@ -26,6 +26,7 @@ use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
@@ -43,7 +44,7 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 Route::middleware([
     'web',
     'universal',
-    InitializeTenancyByDomain::class,
+    InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
@@ -116,7 +117,7 @@ Route::middleware([
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
     /* TODO: Investigate this is causing some issues */
-    //Route::get('/search', [HomeController::class, 'search'])->name('products.index');
+    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 

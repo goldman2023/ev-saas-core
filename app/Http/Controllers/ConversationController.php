@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Conversation;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Message;
 use Auth;
 use App\Models\Product;

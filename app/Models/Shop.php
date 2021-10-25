@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Traits\AttributeTrait;
 use App\Traits\ReviewTrait;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -49,9 +49,18 @@ class Shop extends Model
     use AttributeTrait;
     use ReviewTrait;
 
-    protected $table = 'businesses';
+    protected $table = 'shops';
 
-    public function user()
+    public function seller()
+    {
+        $seller = Seller::where('user_id', $this->morphToMany(User::class, 'subject', 'user_relationships')->get()->first(function($value, $key) {
+                return $value->user_type === 'seller';
+            })->id ?? null)->first();
+
+        return !empty($seller->id ?? null) ? $seller : null;
+    }
+
+    public function users()
     {
         return $this->morphToMany(User::class, 'subject', 'user_relationships');
     }
@@ -59,6 +68,16 @@ class Shop extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'company_category');
+    }
+
+    public function settings()
+    {
+        return $this->hasMany(ShopSetting::class);
+    }
+
+    public function domains()
+    {
+        return $this->hasMany(ShopDomain::class);
     }
 
     public function jobs()
@@ -73,57 +92,57 @@ class Shop extends Model
 
     public static function companies_count_rounded()
     {
-    $total = 0;
+        $total = 0;
 
-    $companies = Shop::all()->count();
+        $companies = Shop::all()->count();
 
-    /* Round to closest 100 */
-    $total = ceil($companies / 100) * 100;
+        /* Round to closest 100 */
+        $total = ceil($companies / 100) * 100;
 
-    return $total;
+        return $total;
     }
 
     public function get_company_website_url()
     {
-    $website = [];
-    $website_attribute = $this->user->seller->get_attribute_value_by_id(40);
+        $website = [];
+        $website_attribute = $this->user->seller->get_attribute_value_by_id(40);
 
-    $website['href'] = $website_attribute;
+        $website['href'] = $website_attribute;
 
-    return $website;
+        return $website;
     }
 
     public function get_company_logo()
     {
 
-    if ($this->logo) {
-      $logo = uploaded_asset($this->logo);
-    } else {
-      $logo = "https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png";
-    }
+        if ($this->logo) {
+          $logo = uploaded_asset($this->logo);
+        } else {
+          $logo = "https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png";
+        }
 
-    return $logo;
+        return $logo;
     }
 
     public function get_company_cover()
     {
 
-    if ($this->sliders) {
-      $logo = uploaded_asset($this->sliders);
-    } else {
-      $logo = "https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80";
-    }
+        if ($this->sliders) {
+          $logo = uploaded_asset($this->sliders);
+        } else {
+          $logo = "https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80";
+        }
 
-    return $logo;
+        return $logo;
     }
 
     public function company_has_logo()
     {
-    if ($this->logo) {
-      return true;
-    } else {
-      return false;
-    }
+        if ($this->logo) {
+          return true;
+        }
+
+        return false;
     }
 
     public function company_size_calculated()

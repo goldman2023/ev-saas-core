@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 
 class CheckoutMiddleware
 {

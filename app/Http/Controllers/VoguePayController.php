@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Session;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Seller;
 
 class VoguePayController extends Controller

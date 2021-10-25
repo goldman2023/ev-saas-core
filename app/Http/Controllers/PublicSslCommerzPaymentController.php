@@ -8,7 +8,7 @@ use Auth;
 use Illuminate\Routing\UrlGenerator;
 use App\Http\Controllers;
 use App\Models\Order;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Seller;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CommissionController;

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDomainColumnToShopsTable extends Migration
+class CreateVendorDomainsTableInCentralApp extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,19 @@ class AddDomainColumnToShopsTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('businesses')) {
-            Schema::rename('businesses', 'shops');
-        }
-        Schema::create('shop_domains', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('shop_id');
-            $table->string('domain')->nullable()->unique();
+        Schema::create('vendor_domains', function (Blueprint $table) {
+            $table->id();
+            $table->string('tenant_id');
+            $table->string('domain');
             $table->timestamps();
 
-            $table->foreign('shop_id')
+            $table->foreign('tenant_id')
                 ->references('id')
-                ->on('shops')
+                ->on('tenants')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+
+            $table->unique(['tenant_id', 'domain']);
         });
     }
 
@@ -37,6 +36,6 @@ class AddDomainColumnToShopsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shop_domains');
+        Schema::dropIfExists('vendor_domains');
     }
 }

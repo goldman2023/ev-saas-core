@@ -6,7 +6,7 @@
                 </x-ev.label>
             </h2>
 
-            <a href="{{ route('products.index') }}"
+            <a href=""
                 class="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
                 {{ translate('See all Products') }}
                 <span aria-hidden="true"> &rarr;</span></a>

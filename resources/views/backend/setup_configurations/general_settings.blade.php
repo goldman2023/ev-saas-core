@@ -9,7 +9,7 @@
                     <h1 class="mb-0 h6">{{ translate('General Settings') }}</h1>
                 </div>
                 <div class="card-body">
-                    <form class="form-horizontal" action="{{ route('admin.business_settings.update') }}" method="POST"
+                    <form class="form-horizontal" action="{{ route('admin.tenant_settings.update') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="form-group row">

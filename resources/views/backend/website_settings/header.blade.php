@@ -16,7 +16,7 @@
 				<h6 class="mb-0">{{ translate('Header Setting') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group row">
 	                    <label class="col-md-3 col-from-label">{{ translate('Header Logo') }}</label>
