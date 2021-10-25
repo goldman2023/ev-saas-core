@@ -139,6 +139,7 @@ class Product extends Model
     public $temp_sku;
     public $current_stock;
     public $low_stock_qty;
+    public $total_price;
     public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
 
 
@@ -159,7 +160,7 @@ class Product extends Model
         'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id'];
+    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id', 'total_price'];
 
     protected static function boot()
     {
@@ -310,8 +311,9 @@ class Product extends Model
         return $this->hasMany(ProductTax::class);
     }
 
-    public function flash_deal_product() {
-        return $this->hasOne(FlashDealProduct::class);
+    public function flash_deals() {
+        return $this->morphedByMany(FlashDeal::class, 'subject', 'flash_deal_relationships')
+            ->where('status', '=', 1)->orderBy('created_at', 'desc');
     }
 
     public function images($options = []) {
@@ -397,6 +399,53 @@ class Product extends Model
         }
 
         return route('product', $this->attributes['slug']);
+    }
+
+    /**
+     * Get product end(total) price
+     *
+     * NOTE: Total price is a price of the product after all discounts, but without Tax included
+     *
+     * @return float $total
+     */
+    public function getTotalPriceAttribute() {
+        $total = $this->unit_price;
+
+        if($this->has_variations()) {
+            // TODO: Display lowest variant total price
+            return $total;
+        } else {
+            /*$flash_deal = $this->flash_deals()->first();
+
+            $flash_deals = \App\Models\FlashDeal::where('status', 1)->get();
+            $inFlashDeal = false;
+            foreach ($flash_deals as $flash_deal) {
+                if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first() != null) {
+                    $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first();
+                    if ($flash_deal_product->discount_type == 'percent') {
+                        $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
+                        $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
+                    } elseif ($flash_deal_product->discount_type == 'amount') {
+                        $lowest_price -= $flash_deal_product->discount;
+                        $highest_price -= $flash_deal_product->discount;
+                    }
+                    $inFlashDeal = true;
+                    break;
+                }
+            }
+
+            if (!$inFlashDeal) {
+                if ($product->discount_type == 'percent') {
+                    $lowest_price -= ($lowest_price * $product->discount) / 100;
+                    $highest_price -= ($highest_price * $product->discount) / 100;
+                } elseif ($product->discount_type == 'amount') {
+                    $lowest_price -= $product->discount;
+                    $highest_price -= $product->discount;
+                }
+            }*/
+        }
+
+        return $total;
     }
 
     public function setTempSkuAttribute($value)

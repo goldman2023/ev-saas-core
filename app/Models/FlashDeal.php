@@ -38,10 +38,31 @@ class FlashDeal extends Model
         return $flash_deal_translation != null ? $flash_deal_translation->$field : $this->$field;
     }
 
+    public function business() {
+        return $this->belongsTo(Shop::class, 'business_id', 'id');
+    }
+
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function brand() {
+        return $this->belongsTo(Brand::class, 'brand_id', 'id');
+    }
+
+    public function products() {
+        return $this->morphToMany(Product::class, 'subject', 'flash_deal_relationships');
+    }
+
+    public function product_variations() {
+        return $this->morphToMany(ProductVariation::class, 'subject', 'flash_deal_relationships');
+    }
+
     public function flash_deal_translations(){
       return $this->hasMany(FlashDealTranslation::class);
     }
-    public function flashDealProducts()
+
+    /*public function flashDealProducts()
     {
         return $this->hasMany(FlashDealProduct::class);
     }
@@ -49,5 +70,5 @@ class FlashDeal extends Model
     public function flash_deal_products()
     {
         return $this->hasMany(FlashDealProduct::class);
-    }
+    }*/
 }
