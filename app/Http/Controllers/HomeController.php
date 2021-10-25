@@ -582,12 +582,12 @@ class HomeController extends Controller
             $products = $products;
 
             $category = Category::find($category_id);
-            $shops = $category->companies();
+            // $shops = $category->companies();
             /* TODO Check verification for shops */
-            // $shops = Shop::all();
+            $shops = Shop::where('id');
         } else {
             /* TODO Check verification for shops */
-            // $shops = Shop::();
+            $shops = Shop::where('id');
         }
 
         $events = Event::whereIn('user_id', verified_sellers_id());
