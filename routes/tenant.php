@@ -222,9 +222,18 @@ Route::middleware([
         Route::get('/jobs/{id}/edit', 'JobController@seller_jobs_edit')->name('seller.jobs.edit');
     });
 
-    Route::group(['middleware' => ['auth']], function () {
+    /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
+    Route::group([
+        'middleware' => ['auth'],
+        'prefix' => 'dashboard'
+    ], function () {
         /* TODO : Admin only */
         Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
+        Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
+        /* Leads Management - BY EIM */
+        Route::get('leads/success', 'LeadController@success')->name('leads.success');
+        Route::resource('leads', 'LeadController');
+
 
         /* TODO: Admin and seler only */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
@@ -393,9 +402,7 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
-    /* Leads Management - BY EIM */
-    Route::get('leads/success', 'LeadController@success')->name('leads.success');
-    Route::resource('leads', 'LeadController');
+
 
     // Tenant Management routes - added from SaaS Boilerplate
 
