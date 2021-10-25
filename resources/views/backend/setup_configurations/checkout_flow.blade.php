@@ -14,7 +14,7 @@
                     <h1 class="mb-0 h6">{{ translate('Checkout Flow') }}</h1>
                 </div>
                 <div class="card-body">
-                    <form class="form-horizontal" action="{{ route('admin.business_settings.update') }}" method="POST"
+                    <form class="form-horizontal" action="{{ route('admin.tenant_settings.update') }}" method="POST"
                           enctype="multipart/form-data">
                         @csrf
                         <!-- FULL CART TEMPLATE -->

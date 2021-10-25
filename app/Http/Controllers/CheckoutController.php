@@ -16,7 +16,7 @@ use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\PaytmController;
 use App\Models\Order;
 use App\Models\CommissionHistory;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\User;

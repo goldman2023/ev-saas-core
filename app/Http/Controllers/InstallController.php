@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use URL;
 use DB;
 use Hash;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\User;
 use App\Models\Product;
 use CoreComponentRepository;
@@ -51,13 +51,13 @@ class InstallController extends Controller
     }
 
     public function system_settings(Request $request) {
-        $businessSetting = get_setting('system_default_currency')->first();
-        $businessSetting->value = $request->system_default_currency;
-        $businessSetting->save();
+        $tenantSetting = get_setting('system_default_currency')->first();
+        $tenantSetting->value = $request->system_default_currency;
+        $tenantSetting->save();
 
-        $businessSetting = get_setting('home_default_currency')->first();
-        $businessSetting->value = $request->system_default_currency;
-        $businessSetting->save();
+        $tenantSetting = get_setting('home_default_currency')->first();
+        $tenantSetting->value = $request->system_default_currency;
+        $tenantSetting->save();
 
         $this->writeEnvironmentFile('APP_NAME', $request->system_name);
 

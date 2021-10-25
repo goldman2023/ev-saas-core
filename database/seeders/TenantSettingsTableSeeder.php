@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class BusinessSettingsTableSeeder extends Seeder
+class TenantSettingsTableSeeder extends Seeder
 {
 
     /**
@@ -15,10 +15,10 @@ class BusinessSettingsTableSeeder extends Seeder
     public function run()
     {
 
-        if (\DB::table('business_settings')->count() == 0) {
-            \DB::table('business_settings')->delete();
+        if (\DB::table('tenant_settings')->count() == 0) {
+            \DB::table('tenant_settings')->delete();
 
-            \DB::table('business_settings')->insert(array(
+            \DB::table('tenant_settings')->insert(array(
                 0 =>
                     array(
                         'id' => 1,

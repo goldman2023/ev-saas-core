@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use App\Utility\PayhereUtility;
 use Redirect;
 use App\Models\Order;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Seller;
 use Session;
 use App\Models\CustomerPackage;

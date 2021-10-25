@@ -9,14 +9,14 @@
                   <h5 class="mb-0 h6">{{translate('Seller Commission')}}</h5>
               </div>
               <div class="card-body">
-                  <form class="form-horizontal" action="{{ route('admin.business_settings.vendor_commission.update') }}" method="POST" enctype="multipart/form-data">
+                  <form class="form-horizontal" action="{{ route('admin.tenant_settings.vendor_commission.update') }}" method="POST" enctype="multipart/form-data">
                   	@csrf
                     <div class="form-group row">
-                        <input type="hidden" name="type" value="{{ $business_settings->type }}">
+                        <input type="hidden" name="type" value="{{ $tenant_settings->type }}">
                         <label class="col-lg-3 control-label">{{ translate('Seller Commission') }}</label>
                         <div class="col-lg-9">
                             <div class="input-group">
-                                <input type="number" lang="en" min="0" step="0.01" value="{{ $business_settings->value }}" placeholder="{{translate('Seller Commission')}}" name="value" class="form-control">
+                                <input type="number" lang="en" min="0" step="0.01" value="{{ $tenant_settings->value }}" placeholder="{{translate('Seller Commission')}}" name="value" class="form-control">
                                 <div class="input-group-append">
                                     <span class="input-group-text">%</span>
                                 </div>
@@ -39,7 +39,7 @@
                 <div class="card-body">
                     <ul class="list-group">
                         <li class="list-group-item text-muted">
-                            1. {{ $business_settings->value }}% {{translate('of seller product price will be deducted from seller earnings') }}.
+                            1. {{ $tenant_settings->value }}% {{translate('of seller product price will be deducted from seller earnings') }}.
                         </li>
                         <li class="list-group-item text-muted">
                             2. {{translate('This commission only works when Category Based Commission is turned off from Business Settings') }}.

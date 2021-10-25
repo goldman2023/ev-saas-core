@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use ZipArchive;
 use DB;
 use Auth;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use CoreComponentRepository;
 use Illuminate\Support\Str;
 use Storage;

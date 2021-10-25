@@ -8,7 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AffiliateController;
 use App\Models\Order;
 use App\Models\Category;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
 use App\Models\User;

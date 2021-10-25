@@ -25,11 +25,17 @@ class Tenant extends BaseTenant implements TenantWithDatabase
         'trial_ends_at' => 'datetime',
     ];
 
+    public function vendor_domains()
+    {
+        return $this->hasMany(VendorDomain::class, 'tenant_id');
+    }
+
     public static function getCustomColumns(): array
     {
         return [
             'id',
             'email',
+            'type',
             'stripe_id',
             'card_brand',
             'card_last_four',

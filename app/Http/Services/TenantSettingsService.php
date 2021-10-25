@@ -1,19 +1,20 @@
 <?php
 
 namespace App\Http\Services;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use Cache;
 
 /**
- * We are getting all Business Settings from the cache, or DB.
+ * We are getting all Tenant Settings from the cache, or DB.
  * This is a singleton service, which means it'll be loaded only once during one request lifecycle.
  * This reduces the number of calls to both Redis/cache and DB.
  * There will be only one request to get all business settings cuz this class instance is reused everywhere in app if accessed via:
- * 1. Facade: App\Facades\BusinessSettings
+ * 1. Facade: App\Facades\TenantSettings
  * 2. helper: get_setting('{name}')
- * All settings are loaded into $settings variable and each of them can be accessed with get() function.
+ *
+ * All tenant settings are loaded into $settings variable and each of them can be accessed with get() function from this class OR using Facade - TenantSetting::get().
  */
-class BusinessSettingsService
+class TenantSettingsService
 {
     public $app;
     public $settings;
@@ -29,7 +30,7 @@ class BusinessSettingsService
     }
 
     public function getModel($name) {
-        return BusinessSetting::firstOrNew([
+        return TenantSetting::firstOrNew([
             'type' => $name
         ]);
     }
@@ -39,12 +40,12 @@ class BusinessSettingsService
     }
 
     public function setAll() {
-        $cache_key = tenant('id') . '_business_settings';
+        $cache_key = tenant('id') . '_tenant_settings';
         $settings = Cache::get($cache_key, null);
         $default = [];
 
         if (empty($settings)) {
-            $settings = BusinessSetting::select('id','type AS name','value')->get()->keyBy('name')->toArray();
+            $settings = TenantSetting::select('id','setting','value')->get()->keyBy('setting')->toArray();
 
             // Cache the settings if they are found in DB
             if (!empty($settings)) {

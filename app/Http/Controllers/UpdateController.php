@@ -7,7 +7,7 @@ use URL;
 use DB;
 use Artisan;
 use Schema;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Language;
 use App\Models\Category;
 use App\Models\CategoryTranslation;

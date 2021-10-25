@@ -8,7 +8,7 @@ use App\Models\CustomerPackage;
 use App\Models\CustomerPackageTranslation;
 use App\Models\CustomerPackagePayment;
 use App\Models\Wallet;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Reference;
 use Auth;
 use Session;

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Http\Resources\V2\BusinessSettingCollection;
-use App\Models\BusinessSetting;
+use App\Http\Resources\V2\TenantSettingCollection;
+use App\Models\TenantSetting;
 
-class BusinessSettingController extends Controller
+class TenantSettingController extends Controller
 {
     public function index()
     {
-        return new BusinessSettingCollection(BusinessSetting::all());
+        return new TenantSettingCollection(TenantSetting::all());
     }
 }

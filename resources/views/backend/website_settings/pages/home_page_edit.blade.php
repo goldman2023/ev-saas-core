@@ -14,7 +14,7 @@
 				<div class="alert alert-info">
 					{{ translate('We have limited banner height to maintain UI. We had to crop from both left & right side in view for different devices to make it responsive. Before designing banner keep these points in mind.') }}
 				</div>
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label>{{ translate('Photos & Links') }}</label>
@@ -106,7 +106,7 @@
 				<h6 class="mb-0">{{ translate('Home Banner 1 (Max 3)') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label>{{ translate('Banner & Links') }}</label>
@@ -198,7 +198,7 @@
 				<h6 class="mb-0">{{ translate('Home Banner 2 (Max 3)') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label>{{ translate('Banner & Links') }}</label>
@@ -290,7 +290,7 @@
 				<h6 class="mb-0">{{ translate('Home Categories') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label>{{ translate('Categories') }}</label>
@@ -358,7 +358,7 @@
 				<h6 class="mb-0">{{ translate('Home Banner 3 (Max 3)') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label>{{ translate('Banner & Links') }}</label>
@@ -450,7 +450,7 @@
 				<h6 class="mb-0">{{ translate('Top 10') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group row">
 						<label class="col-md-2 col-from-label">{{translate('Top Categories (Max 10)')}}</label>

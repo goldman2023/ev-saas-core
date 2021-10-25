@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\CustomerPackage;
 use App\Models\SellerPackage;
 use App\Models\Order;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Seller;
 use Session;
 

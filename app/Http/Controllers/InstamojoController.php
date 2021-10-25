@@ -9,7 +9,7 @@ use Session;
 use Redirect;
 use App\Models\Order;
 use App\Models\Seller;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\CustomerPackage;
 use App\Models\SellerPackage;
 use App\Http\Controllers\CustomerPackageController;

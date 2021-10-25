@@ -274,19 +274,10 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 
 function is_vendor_site() {
     /* TODO: make CRUD UI for this */
-    $domain = parse_url(Request::root())['host'];
-    $primaryDomain = tenant()->domains()->where('is_primary', '1')->first()->domain;
-    if($domain === $primaryDomain) {
-        return false;
-    } else {
-        return true;
-    }
+
 }
 
 /* TODO: Move this to Vendor Singleton class */
 function get_global_shop() {
-    $domain = parse_url(Request::root());
-    $shop = Shop::where('domain', '=', $domain['host'])->first();
 
-    return $shop;
 }

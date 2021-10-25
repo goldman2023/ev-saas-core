@@ -73,7 +73,7 @@
                                                     {{ translate($value) }}
                                                 </p>
                                                 <p class="mt-1 text-sm text-gray-500">
-                                                    {{-- TODO: Merge header_menu_labels and header_menu_links as one row in business_settings 'header_menu' and add subtitles in admin panel! Current logic sucks... --}}
+                                                    {{-- TODO: Merge header_menu_labels and header_menu_links as one row in tenant_settings 'header_menu' and add subtitles in admin panel! Current logic sucks... --}}
                                                     Get a better understanding of where your traffic is coming from.
                                                 </p>
                                             </div>
