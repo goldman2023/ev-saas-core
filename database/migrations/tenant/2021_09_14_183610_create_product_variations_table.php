@@ -18,19 +18,38 @@ class CreateProductVariationsTable extends Migration
             $table->bigIncrements('id')->autoIncrement()->change();
         });
 
-        Schema::create('product_variations', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->foreignId('product_id')
-                ->constrained('products')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->text('variant');
-            $table->string('image');
-            $table->double('price');
-            $table->timestamps();
+        if (Schema::hasTable('product_variations')) {
+            Schema::drop('product_variations');
+            Schema::create('product_variations', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->foreignId('product_id')
+                    ->constrained('products')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+                $table->text('variant');
+                $table->string('image');
+                $table->double('price');
+                $table->timestamps();
 
-            $table->index('product_id');
-        });
+                $table->index('product_id');
+            });
+        } else {
+            Schema::create('product_variations', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->foreignId('product_id')
+                    ->constrained('products')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+                $table->text('variant');
+                $table->string('image');
+                $table->double('price');
+                $table->timestamps();
+
+                $table->index('product_id');
+            });
+        }
+
+
 
         Schema::table('product_stocks', function (Blueprint $table) {
             if (Schema::hasColumn('product_stocks', 'variation_id')) {

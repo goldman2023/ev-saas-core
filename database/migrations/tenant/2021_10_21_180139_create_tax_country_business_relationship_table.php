@@ -13,9 +13,8 @@ class CreateTaxCountryBusinessRelationshipTable extends Migration
      */
     public function up()
     {
-        Schema::rename('shops', 'businesses');
-        Schema::table('businesses', function (Blueprint $table) {
-            if (Schema::hasColumn('businesses', 'shipping_cost')) {
+        Schema::table('shops', function (Blueprint $table) {
+            if (Schema::hasColumn('shops', 'shipping_cost')) {
                 $table->dropColumn('shipping_cost');
             }
         });
@@ -28,7 +27,7 @@ class CreateTaxCountryBusinessRelationshipTable extends Migration
 
             $table->foreign('business_id')
                 ->references('id')
-                ->on('businesses')
+                ->on('shops')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
@@ -62,7 +61,6 @@ class CreateTaxCountryBusinessRelationshipTable extends Migration
     public function down()
     {
         Schema::dropIfExists('tax_relationships');
-        Schema::rename('businesses', 'shops');
 
         Schema::table('taxes', function (Blueprint $table) {
             $table->dropColumn('business_id');

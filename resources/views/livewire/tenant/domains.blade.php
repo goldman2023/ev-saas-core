@@ -113,7 +113,7 @@
 
         <h2> {{ translate('Vendor Domains') }} </h2>
         <ul class="list-group">
-            @foreach (tenant()->vendor_domains as $domain)
+            @foreach (tenant()->vendor_domains()->toArray() as $domain)
                 <li class="list-group-item">
                     <div
                         class="hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition duration-150 ease-in-out">
