@@ -1,6 +1,6 @@
 
     <span class="text-dark font-size-2 font-weight-bold">
-                    {{ home_discounted_price($price) }}
+                    {{-- {{ home_discounted_price($price) }} --}}
         @if ($product->unit != null)
             <span class="opacity-70">/
                             {{ $product->getTranslation('unit') }}
