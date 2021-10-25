@@ -22,25 +22,13 @@
 <!-- End Main Slider -->
 
 <!-- Slider Nav -->
-<div class="position-absolute bottom-0 right-0 left-0 px-4 py-3">
-    <div id="heroSliderNav" class="js-slick-carousel slick slick-gutters-1 slick-transform-off max-w-27rem mx-auto"
-        data-hs-slick-carousel-options='{
-            "infinite": false,
-            "autoplaySpeed": 7000,
-            "slidesToShow": 3,
-            "isThumbs": true,
-            "isThumbsProgressCircle": true,
-            "thumbsProgressOptions": {
-              "color": "#377DFF",
-              "width": 8
-            },
-            "thumbsProgressContainer": ".js-slick-thumb-progress",
-            "asNavFor": "#heroSlider"
-          }'>
+<div class="position-relative py-3">
+    <div id="heroSliderNav" class="row"
+       >
         @foreach ($photos as $photo)
-            <div class="js-slide p-1 d-block avatar avatar-circle border">
-                <a class="js-slick-thumb-progress position-relative d-block avatar border rounded-circle p-1" href="javascript:;">
-                    <x-tenant.system.image class="avatar-img" :image="$photo">
+            <div class="d-block col-6">
+                <a class="js-slick-thumb-progress position-relative d-block p-1" href="javascript:;">
+                    <x-tenant.system.image :image="$photo">
                     </x-tenant.system.image>
                 </a>
 

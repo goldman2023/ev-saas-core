@@ -36,7 +36,8 @@
 @endsection
 
 @section('content')
-    <section class="___class_+?0___">
+{{-- Put all refactored product page parts inside here --}}
+    <section class="" id="productMainWrapper">
         @php
             $product = $detailedProduct;
         @endphp

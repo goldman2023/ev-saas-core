@@ -5,6 +5,7 @@
     <div class="container pt-lg-10">
         <h3 class="text-white">{{ translate('Gun auctions') }}</h3>
     </div>
+
     <x-default.auctions.list.auction-slider>
     </x-default.auctions.list.auction-slider>
 
@@ -14,7 +15,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <img class="w-100" style="object-fit:contain; margin-bottom: 10px;"
-                        src="{{ $shop->user->shop->get_company_logo() }}" alt="{{ $shop->name }}">
+                        src="{{ $shop->get_company_logo() }}" alt="{{ $shop->name }}">
 
                     <x-ev.category-mega-menu></x-ev.category-mega-menu>
                 </div>

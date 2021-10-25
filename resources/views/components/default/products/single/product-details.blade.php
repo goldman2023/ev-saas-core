@@ -1,5 +1,7 @@
 <!-- Hero Section -->
-<div class="container space-2">
+<x-default.products.single.product-sticky-bar :product="$product">
+</x-default.products.single.product-sticky-bar>
+<div class="container space-2" id="productDetailsContainer">
     <div class="row">
         <div class="col-lg-7 mb-7 mb-lg-0">
             <div class="pr-lg-4">
@@ -29,7 +31,7 @@
             <!-- Title -->
             <div class="mb-5">
                 <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
-                @if(!empty($product->excerpt))
+                @if (!empty($product->excerpt))
                     <p>
                         {!! $product->excerpt !!}
                     </p>
@@ -68,10 +70,10 @@
                     @if ($product->brand != null)
                         <div class="col-sm-6">
                             <small class="mr-2 opacity-50">{{ translate('Manufacturer:') }} </small><br>
-                                <a href="{{ route('products.brand', $product->brand->slug) }}">
-                                    <img class="mt-3" src="{{ uploaded_asset($product->brand->logo ?? '') }}"
-                                        alt="{{ $product->brand->getTranslation('name') }}" height="60">
-                                </a>
+                            <a href="{{ route('products.brand', $product->brand->slug) }}">
+                                <img class="mt-3" src="{{ uploaded_asset($product->brand->logo ?? '') }}"
+                                    alt="{{ $product->brand->getTranslation('name') }}" height="60">
+                            </a>
                         </div>
                     @endif
                 </div>
@@ -88,8 +90,9 @@
 
 
             <!-- Product: Variations -->
-            @if($product->has_variations())
-                <livewire:tenant.product.product-variations-selector :product="$product"></livewire:tenant.product.product-variations-selector>
+            @if ($product->has_variations())
+                <livewire:tenant.product.product-variations-selector :product="$product">
+                </livewire:tenant.product.product-variations-selector>
             @endif
             <!-- End Product: Variations -->
 
@@ -103,12 +106,12 @@
                         <input class="js-result form-control h-auto border-0 rounded-lg p-0" type="text" value="1">
                     </div>
                     <div class="col-5 text-right">
-                        <a class="js-minus btn btn-xs btn-icon btn-outline-secondary rounded-circle" href="javascript:;">
+                        <a class="js-minus btn btn-xs btn-icon btn-outline-secondary rounded-circle"
+                            href="javascript:;">
                             <i class="la la-plus"></i>
                             <span class="card-btn-toggle-active">−</span>
                         </a>
-                        <a class="js-plus btn btn-xs btn-icon btn-outline-secondary rounded-circle"
-                           href="javascript:;">
+                        <a class="js-plus btn btn-xs btn-icon btn-outline-secondary rounded-circle" href="javascript:;">
                             <span class="card-btn-toggle-active">+</span>
                         </a>
                     </div>
@@ -117,18 +120,21 @@
             <!-- End Quantity -->
 
             <!-- Product: Benefits -->
-            <?php /* <x-default.products.single.product-benefits> </x-default.products.single.product-benefits> */ ?>
             <!-- End Product: Benefits -->
 
             <div class="d-flex justify-content-end my-4">
                 <x-ev.button class="btn btn-outline-dark btn-pill px-4 w-auto mr-3 d-flex align-items-center">
-                    @svg('heroicon-o-heart', ['style' => 'width: 18px; height: 18px; margin-right: 8px; position: relative; top: -1px;'])
+                    @svg('heroicon-o-heart', ['style' => 'width: 18px; height: 18px; margin-right: 8px; position:
+                    relative; top: -1px;'])
                     {{ translate('Add to wishlist') }}
                 </x-ev.button>
                 <x-ev.button class="btn btn-primary btn-pill px-4 w-auto d-flex align-items-center">
                     {{ translate('Add to cart') }}
                 </x-ev.button>
             </div>
+
+            <x-default.products.single.product-benefits> </x-default.products.single.product-benefits>
+
 
             <!-- Help Link -->
             <div class="media align-items-center pt-2 border-top">
@@ -147,12 +153,19 @@
 </div>
 <!-- End Hero Section -->
 
+
 @push('footer_scripts')
     <script src="{{ static_asset('vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js', false, true) }}"></script>
 
     <!-- JS Plugins Init. -->
     <script>
         $(function() {
+
+            // INITIALIZATION OF STICKY BLOCK
+            $('.js-sticky-block').each(function() {
+                var stickyBlock = new HSStickyBlock($(this)).init();
+            });
+
             // INITIALIZATION OF QUANTITY COUNTER
             // =======================================================
             $('.js-quantity-counter').each(function() {

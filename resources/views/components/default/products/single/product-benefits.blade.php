@@ -12,7 +12,8 @@
                 <span class="col-9">
                   <span class="media align-items-center">
                     <span class="w-100 max-w-6rem mr-3">
-                      <img class="img-fluid" src="../assets/svg/icons/icon-65.svg" alt="SVG">
+                        <x-ev.dynamic-image class="img-fluid" :src="ev_dynamic_translate('#product-global-benefit-1', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+                        </x-ev.dynamic-image>
                     </span>
                     <span class="media-body">
                       <span class="d-block font-size-1 font-weight-bold">Free shipping</span>
@@ -48,7 +49,8 @@
                 <span class="col-9">
                   <span class="media align-items-center">
                     <span class="w-100 max-w-6rem mr-3">
-                      <img class="img-fluid" src="../assets/svg/icons/icon-64.svg" alt="SVG">
+                        <x-ev.dynamic-image class="img-fluid" :src="ev_dynamic_translate('#product-global-benefit-2', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
+                        </x-ev.dynamic-image>
                     </span>
                     <span class="media-body">
                       <span class="d-block font-size-1 font-weight-bold">30 Days return</span>
