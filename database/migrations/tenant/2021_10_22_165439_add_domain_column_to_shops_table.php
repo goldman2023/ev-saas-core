@@ -13,9 +13,7 @@ class AddDomainColumnToShopsTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('businesses')) {
-            Schema::rename('businesses', 'shops');
-        }
+
         Schema::create('shop_domains', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('shop_id');

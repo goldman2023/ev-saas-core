@@ -51,15 +51,16 @@ Route::middleware([
 
     /* This is experimental, adding it here for now */
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
-    Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
 
+
+    // Homepage For Multi/Single Vendor mode
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
     // Feed Page (Possible new homepage)
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
     //Home Page
-    Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    //category dropdown menu ajax call
+    //Category dropdown menu ajax call
     Route::post('/category/nav-element-list', [HomeController::class, 'get_category_items'])->name('category.elements');
 
     Route::get('/sitemap.xml', function () {
@@ -223,9 +224,18 @@ Route::middleware([
         Route::get('/jobs/{id}/edit', 'JobController@seller_jobs_edit')->name('seller.jobs.edit');
     });
 
-    Route::group(['middleware' => ['auth']], function () {
+    /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
+    Route::group([
+        'middleware' => ['auth'],
+        'prefix' => 'dashboard'
+    ], function () {
         /* TODO : Admin only */
         Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
+        Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
+        /* Leads Management - BY EIM */
+        Route::get('leads/success', 'LeadController@success')->name('leads.success');
+        Route::resource('leads', 'LeadController');
+
 
         /* TODO: Admin and seler only */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
@@ -394,9 +404,7 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
-    /* Leads Management - BY EIM */
-    Route::get('leads/success', 'LeadController@success')->name('leads.success');
-    Route::resource('leads', 'LeadController');
+
 
     // Tenant Management routes - added from SaaS Boilerplate
 

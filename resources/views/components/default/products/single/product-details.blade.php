@@ -1,6 +1,4 @@
 <!-- Hero Section -->
-<x-default.products.single.product-sticky-bar :product="$product">
-</x-default.products.single.product-sticky-bar>
 
 <div class="container space-2" id="productDetailsContainer">
     <div class="row">
@@ -38,6 +36,14 @@
                     </p>
                 @endif
             </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+                <h2 class="font-size-1 text-body mb-0">{{ translate('Price:') }}</h2>
+
+            </div>
+
+            <!-- End Price -->
 
             {{-- Brand --}}
             <div class="mb-5">

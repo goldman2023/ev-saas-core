@@ -27,12 +27,20 @@ class EVService
                         'is_active' => areActiveRoutes(['dashboard']),
                         'roles' => [], // empty array means ALL roles - admin/seller/customer
                     ],
+                    // [
+                    //     'label' => translate('Schedule'),
+                    //     'icon' => 'heroicon-o-calendar',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => [],
+                    // ],
+
                     [
-                        'label' => translate('Schedule'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => [],
+                        'label' => translate('Orders'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('orders.index'),
+                        'is_active' => areActiveRoutes(['orders.index']),
+                        'roles' => ['admin','seller'],
                     ],
                     [
                         'label' => translate('Leads'),
@@ -41,12 +49,18 @@ class EVService
                         'is_active' => areActiveRoutes(['leads']),
                         'roles' => ['admin'],
                     ],
+
+                ]
+            ],
+            [
+                'label' => translate('Customer zone'),
+                'items' => [
                     [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-calendar',
                         'route' => route('purchase_history.index'),
                         'is_active' => areActiveRoutes(['purchase_history']),
-                        'roles' => [],
+                        'roles' => ['customer'],
                     ]
                 ]
             ],
@@ -60,25 +74,32 @@ class EVService
                         'is_active' => areActiveRoutes(['ev-products.index']),
                         'roles' => ['admin','seller'],
                     ],
-                    [
-                        'label' => translate('Events'),
-                        'icon' => 'heroicon-o-ticket',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Jobs'),
-                        'icon' => 'heroicon-o-briefcase',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Events'),
+                    //     'icon' => 'heroicon-o-ticket',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Jobs'),
+                    //     'icon' => 'heroicon-o-briefcase',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                     [
                         'label' => translate('Blog'),
                         'icon' => 'heroicon-o-newspaper',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
+                        'roles' => ['admin','seller'],
+                    ],
+                    [
+                        'label' => translate('Website'),
+                        'icon' => 'heroicon-o-qrcode',
+                        'route' => route('ev.settings.domains'),
+                        'is_active' => areActiveRoutes(['ev.settings.domains']),
                         'roles' => ['admin','seller'],
                     ]
                 ]
@@ -93,13 +114,13 @@ class EVService
                         'is_active' => areActiveRoutes(['orders.index']),
                         'roles' => ['admin','seller'],
                     ],
-                    [
-                        'label' => translate('Subscriptions'),
-                        'icon' => 'heroicon-o-currency-dollar',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Subscriptions'),
+                    //     'icon' => 'heroicon-o-currency-dollar',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                 ]
             ],
             [
@@ -152,53 +173,53 @@ class EVService
                         'is_active' => areActiveRoutes(['profile']),
 
                     ],
-                    [
-                        'label' => translate('Company settings'),
-                        'icon' => 'heroicon-o-office-building',
-                        'route' => route('attributes'),
-                        'is_active' => areActiveRoutes(['attributes']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Shop settings'),
-                        'icon' => 'heroicon-o-office-building',
-                        'route' => route('shops.index'),
-                        'is_active' => areActiveRoutes(['shops']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Shipping settings'),
-                        'icon' => 'heroicon-o-truck',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Tax settings'),
-                        'icon' => 'heroicon-o-receipt-tax',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Company settings'),
+                    //     'icon' => 'heroicon-o-office-building',
+                    //     'route' => route('attributes'),
+                    //     'is_active' => areActiveRoutes(['attributes']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Shop settings'),
+                    //     'icon' => 'heroicon-o-office-building',
+                    //     'route' => route('shops.index'),
+                    //     'is_active' => areActiveRoutes(['shops']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Shipping settings'),
+                    //     'icon' => 'heroicon-o-truck',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Tax settings'),
+                    //     'icon' => 'heroicon-o-receipt-tax',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                 ]
             ],
             [
                 'label' => translate('Other'),
                 'items' => [
-                    [
-                        'label' => translate('Plans & billing'),
-                        'icon' => 'heroicon-o-credit-card',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Uploaded media'),
-                        'icon' => 'heroicon-o-upload',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Plans & billing'),
+                    //     'icon' => 'heroicon-o-credit-card',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Uploaded media'),
+                    //     'icon' => 'heroicon-o-upload',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                 ]
             ],
             [

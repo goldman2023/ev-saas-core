@@ -1,10 +1,51 @@
 /*------------------------------------
   File for your custom SCSS style
 ------------------------------------*/
+
+@import "components/default/system/coockies-agreement.scss";
+@import "components/default/header";
+@import "components/default/products/product-sticky-bar.scss";
+
+
+/* TODO: IMPORTANT!
+Make this wrapper component to add ev-icon class on all icons by default,
+meanwhile use .ev-icon class for adding icons
+ */
+.ev-icon {
+    width: 45px;
+    &__small {
+        width: 30px;
+    }
+    &__large {
+        width: 80px;
+    }
+    &__xs {
+        width: 20px;
+    }
+}
+
+#product-gallery-hero {
+    margin-top: -140px;
+    padding-top: 160px !important;
+    padding-bottom: 100px !important;
+    margin-bottom: -60px;
+    @media(max-width: 768px) {
+        margin-bottom: -20px;
+    }
+}
+
+.c-single-vendor-hero {
+    margin-top: -130px;
+    @media(max-width: 768px) {
+        margin-top: -30px;
+    }
+}
+
 [x-cloak] { display: none !important; }
 
 img {
     max-width: 100%;
+    height: auto;
 }
 
 /*------------------------------------

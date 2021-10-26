@@ -34,8 +34,8 @@ class RefactorBusinessUserRelationshipsTable extends Migration
             $rel->save();
         }
 
-        Schema::table('businesses', function (Blueprint $table) {
-            if (Schema::hasColumn('businesses', 'user_id')) {
+        Schema::table('shops', function (Blueprint $table) {
+            if (Schema::hasColumn('shops', 'user_id')) {
                 $table->dropColumn('user_id');
             }
         });

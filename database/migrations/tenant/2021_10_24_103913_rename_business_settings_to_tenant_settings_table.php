@@ -17,10 +17,6 @@ class RenameBusinessSettingsToTenantSettingsTable extends Migration
     {
         Schema::rename('business_settings', 'tenant_settings');
 
-        if(Schema::hasTable('businesses')) {
-            Schema::rename('businesses', 'shops');
-        }
-
         Schema::create('shop_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('shop_id');
@@ -69,6 +65,5 @@ class RenameBusinessSettingsToTenantSettingsTable extends Migration
     public function down()
     {
         Schema::rename('tenant_settings', 'business_settings');
-        Schema::rename('shops', 'businesses');
     }
 }

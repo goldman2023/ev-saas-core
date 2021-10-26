@@ -571,7 +571,6 @@ class HomeController extends Controller
         }
 
         $products = Product::where($conditions);
-        $products = [];
         if ($category_id != null) {
             /* WORK IN Progress for category management */
             /* TODO: Refactor category utility */
@@ -585,10 +584,12 @@ class HomeController extends Controller
             $products = $products;
 
             $category = Category::find($category_id);
-            $shops = $category->companies();
-            $shops = $shops->whereIn('user_id', verified_sellers_id());
+            // $shops = $category->companies();
+            /* TODO Check verification for shops */
+            $shops = Shop::where('id');
         } else {
-            $shops = Shop::whereIn('user_id', verified_sellers_id());
+            /* TODO Check verification for shops */
+            $shops = Shop::where('id');
         }
 
         $events = Event::whereIn('user_id', verified_sellers_id());
@@ -601,7 +602,6 @@ class HomeController extends Controller
             $events = $events->where('title', 'like', '%' . $query . '%')
                 ->orWhere('description', 'like', '%' . $query . '%');
         }
-        $company_count = $shops->count();
         $event_count = $events->count();
 
         $attributes = array();
@@ -680,7 +680,7 @@ class HomeController extends Controller
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

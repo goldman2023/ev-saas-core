@@ -29,7 +29,7 @@ class UpdateFlashDealsTable extends Migration
                 $table->integer('business_id')->nullable(false)->after('id');
                 $table->foreign('business_id')
                     ->references('id')
-                    ->on('businesses')
+                    ->on('shops')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             }

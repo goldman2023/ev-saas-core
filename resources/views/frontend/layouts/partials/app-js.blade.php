@@ -73,33 +73,42 @@
         $('.category-nav-element').each(function(i, el) {
             $(el).on('mouseover', function() {
                 if (!$(el).find('.sub-cat-menu').hasClass('loaded')) {
-                    $('.loaded').each(function (i, el){
-                        var preview_html = '<div class="c-preloader text-center absolute-center">'+
-                                          '<i class="las la-spinner la-spin la-3x opacity-70"></i>'+
-                                          '</div>';
+                    $('.loaded').each(function(i, el) {
+                        var preview_html =
+                            '<div class="c-preloader text-center absolute-center">' +
+                            '<i class="las la-spinner la-spin la-3x opacity-70"></i>' +
+                            '</div>';
                         $(el).removeClass('loaded');
                         $(el).html(preview_html);
                     })
 
                     var data = $(el).data('sub');
                     var html = '<div class="card-columns">';
-                    var href = '{{ route("products.category", "") }}' + '/';
-                   
+                    var href = '{{ route('products.category', '') }}' + '/';
+
                     data.map((item, key) => {
-                        html += '<div class="card shadow-none border-0">'+
-                                '<ul class="list-unstyled mb-3">'+
-                                '<li class="fw-600 border-bottom pb-2 mb-3">'+
-                                '<a class="text-reset" href="' + href + item.slug +'">' + item.name +'</a>'+
-                                '</li>';
-                        if(item.children.length > 0 ){
-                            item.children.map((sub_item, key)=>{
-                                html += '<li class="mb-2">'+
-                                        '<a class="text-reset" href="'+ href + sub_item.slug +'">'+ sub_item.name+ '</a>'+
+                        html += '<div class="card shadow-none border-0">' +
+                            '<ul class="list-unstyled mb-3">' +
+                            '<li class="fw-600 border-bottom pb-2 mb-3">' +
+                            '<a class="text-reset" href="' + href + item.slug + '">' +
+                            item.name + '</a>' +
+                            '</li>';
+                                console.log(item);
+                        if (item.children) {
+                            if (item.children.length > 0) {
+                                /* TODO: This does not work for 3rd level after category changes */
+                                item.children.map((sub_item, key) => {
+                                    html += '<li class="mb-2">' +
+                                        '<a class="text-reset" href="' + href +
+                                        sub_item.slug + '">' + sub_item.name +
+                                        '</a>' +
                                         '</li>'
-                            })
-                        }        
-                        html += '</ul>'+
-                                '</div>';
+                                })
+                            }
+                        }
+
+                        html += '</ul>' +
+                            '</div>';
                     })
                     html += '</div>';
                     $(el).find('.sub-cat-menu').addClass('loaded').html(html);
@@ -115,12 +124,15 @@
         });
 
         if ($('#languageDropdown').length > 0) {
-            $('#languageDropdown .dropdown-item').each(function () {
-                $(this).on('click', function (e) {
+            $('#languageDropdown .dropdown-item').each(function() {
+                $(this).on('click', function(e) {
                     e.preventDefault();
                     var $this = $(this);
                     var locale = $this.data('flag');
-                    $.post('{{ route('language.change') }}', {_token: $('meta[name="csrf-token"]').attr('content'), locale: locale}, function (data) {
+                    $.post('{{ route('language.change') }}', {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        locale: locale
+                    }, function(data) {
                         location.reload();
                     });
 
@@ -129,12 +141,15 @@
         }
 
         if ($('#currencyDropdown').length > 0) {
-            $('#currencyDropdown .dropdown-item').each(function () {
-                $(this).on('click', function (e) {
+            $('#currencyDropdown .dropdown-item').each(function() {
+                $(this).on('click', function(e) {
                     e.preventDefault();
                     var $this = $(this);
                     var currency_code = $this.data('flag');
-                    $.post('{{ route('currency.change') }}', {_token: $('meta[name="csrf-token"]').attr('content'), currency_code: currency_code}, function (data) {
+                    $.post('{{ route('currency.change') }}', {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        currency_code: currency_code
+                    }, function(data) {
                         location.reload();
                     });
 
@@ -253,7 +268,7 @@
         console.log(id);
         @if (Auth::check() &&
             (auth()->user()->isCustomer() ||
-            auth()->user()->isAdmin() ||
+                auth()->user()->isAdmin() ||
                 auth()->user()->isSeller()))
             $.post('{{ route('wishlists.store') }}', {_token: AIZ.data.csrf, id: id}, function (data) {
             if (data != 0) {
@@ -303,7 +318,7 @@
 
                     $('.product-gallery-thumb .carousel-box').each(function(i) {
                         if ($(this).data('variation') && data.variation == $(this).data(
-                            'variation')) {
+                                'variation')) {
                             $('.product-gallery-thumb').slick('slickGoTo', i);
                         }
                     })
