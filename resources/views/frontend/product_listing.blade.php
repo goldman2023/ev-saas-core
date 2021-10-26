@@ -38,8 +38,10 @@ $meta_description = get_setting('meta_description');
 <div class="bg-dark mb-3" style="margin-top:-130px;">
     <div class="container">
         <div class="row space-1 space-top-3">
-            <div class="col-8">
-                <h1 class="text-white mt-3">Shop</h1>
+            <div class="col-sm-8">
+                <h1 class="text-white mt-3">
+                    {{ translate('Shop') }}
+                </h1>
                 <div class="d-flex justify-content-between">
                     <ul class="breadcrumb bg-transparent p-0 text-white">
                         <li class="breadcrumb-item opacity-50">
@@ -66,7 +68,7 @@ $meta_description = get_setting('meta_description');
 
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-sm-4">
                 <form action="{{ route('search') }}" method="GET" class="mt-3 stop-propagation mb-0">
                     <div class="d-flex position-relative">
                         <div class="d-none" data-toggle="class-toggle" data-target=".front-header-search">
@@ -94,7 +96,7 @@ $meta_description = get_setting('meta_description');
 <section class="mb-4 pt-3">
     <div class="container sm-px-0">
 
-        <form class="___class_+?2___" id="search-form" action="" method="GET">
+        <form class="" id="search-form" action="" method="GET">
             <input type="hidden" name="content" value="{{$content}}" />
             <div class="row">
 
@@ -121,8 +123,10 @@ $meta_description = get_setting('meta_description');
                                 @if ($products->count() > 0 && $content == null && !isset($category_id))
                                 <div class="ml-auto text-right">
                                     <a class="font-weight-bold"
-                                        href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">{{
-                                        translate('View all ') }}<i class="las la-angle-right la-sm ml-1"></i></a>
+                                        href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">
+                                        {{ translate('View all ') }}
+                                        <i class="las la-angle-right la-sm ml-1"></i>
+                                    </a>
                                 </div>
                                 @endif
                                 <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">
@@ -133,6 +137,11 @@ $meta_description = get_setting('meta_description');
                                 </div>
                             </div>
                         </div>
+                        {{-- Sub Categories Display --}}
+                        @if($category_id)
+                            <x-default.categories.sub-category-cards :category_id="$category_id"></x-default.categories.sub-category-cards>
+                        @endif
+                        {{-- END Sub Categories Display --}}
                         @if ($products->count() > 0)
 
                         <div class="row gutters-5 mt-2">

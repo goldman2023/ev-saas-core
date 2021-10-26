@@ -4,18 +4,16 @@
     <div id="product-gallery-hero" class="overflow-hidden bg-dark">
         <div class="container">
             <div class="row ">
-                <div class="col-md-8 rounded-lg pl-0" style="max-height: 400px; overflow: hidden;">
+                <div class="col-md-8 rounded-lg pl-sm-0 position-relative mb-3 mb-sm-0"
+                    style="max-height: 400px; overflow: hidden;">
                     <div class="row ">
-                        <div class="col-sm-8 pr-0">
+                        <div class="col-sm-8 pr-sm-0 position-static">
                             <!-- Gallery -->
-                            @php
-
-                            @endphp
                             <a class="js-fancybox-item d-block" href="javascript:;">
                                 <x-tenant.system.image class="img-fluid w-100" :image="$photos[0]">
                                 </x-tenant.system.image>
 
-                                <div class="position-absolute bottom-10 right-0 pb-3 pr-3">
+                                <div class="position-absolute bottom-0 right-0 pb-3 pr-3">
                                     <span class="d-md-none btn btn-sm btn-light">
                                         {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
                                         {{ translate('View Photos') }}
@@ -23,7 +21,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-sm-4 pr-0 d-sm-block d-none">
+                        <div class="col-sm-4 pr-0 d-sm-block d-none position-static">
                             <!-- Gallery -->
                             <x-tenant.system.image class="img-fluid w-100" :image="$photos[1]">
                             </x-tenant.system.image>
@@ -36,9 +34,8 @@
                                 </x-tenant.system.image>
 
                                 <div
-                                    class="position-absolute bottom-0 mb-3 mr-3 right-0 pb-3 pr-3 d-flex align-items-center">
-                                    <span class="d-none d-md-inline-block btn btn-sm btn-light"
-                                        style="margin-bottom: 40px;">
+                                    class="position-absolute bottom-0 mr-3 right-0 pb-3 pr-3 d-flex align-items-center">
+                                    <span class="d-none d-md-inline-block btn btn-sm btn-light">
                                         {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
                                         {{ translate('View Photos') }}
                                     </span>
@@ -46,10 +43,10 @@
                             </a>
                             <!-- End Gallery -->
                             @foreach($photos as $key => $photo)
-                            @if($key > 2)
-                            <x-tenant.system.image class="js-fancybox-item d-none" :image="$photos[1]">
-                            </x-tenant.system.image>
-                            @endif
+                                @if($key > 2)
+                                    <x-tenant.system.image class="js-fancybox-item d-none" :image="$photos[1]">
+                                    </x-tenant.system.image>
+                                @endif
                             @endforeach
                         </div>
                     </div>

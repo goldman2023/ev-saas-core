@@ -1,7 +1,7 @@
 <div class="mb-9 mb-lg-0  p-3 ">
     <div class="row justify-content-lg-between mb-7">
         <div class="col-12 col-sm-7 mb-5 mb-sm-0">
-            <h1 class="h1 mb-0">{{ $product->getTranslation('name') }}</h1>
+            <h1 class="h2 mb-0">{{ $product->getTranslation('name') }}</h1>
             <span class="d-block text-dark mb-3">
                 <div class="d-flex ml-auto">
                     @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning ev-icon__xs'])
@@ -134,48 +134,6 @@
 
                     <x-default.products.single.product-specification-table :product="$product">
                     </x-default.products.single.product-specification-table>
-                </div>
-            </div>
-
-
-            <!-- End Row -->
-
-            <hr class="my-6">
-
-            <h4 class="mb-1">Estimated running costs</h4>
-            <p class="small">Based on available 3rd party data</p>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <span class="h1">£810</span>
-                    <p>Approximate costs per month</p>
-                </div>
-
-                <div class="col-md-6">
-                    <dl class="row">
-                        <dt class="col-sm-6 text-dark">
-                            <i class="fas fa-hand-holding-usd nav-icon"></i> Mortgage
-                        </dt>
-                        <dd class="col-sm-6 text-sm-right">£700 p/m</dd>
-
-                        <dt class="col-sm-6 text-dark">
-                            <i class="fas fa-burn nav-icon"></i> Energy
-                        </dt>
-                        <dd class="col-sm-6 text-sm-right">from £72 p/m</dd>
-
-                        <dt class="col-sm-6 text-dark">
-                            <i class="fas fa-tint nav-icon"></i> Water
-                        </dt>
-                        <dd class="col-sm-6 text-sm-right">
-                            from £38 p/m
-                        </dd>
-
-                        <dt class="col-sm-6 text-dark">
-                            <i class="fas fa-shield-alt nav-icon"></i> Home insurance
-                        </dt>
-                        <dd class="col-sm-6 text-sm-right">not known</dd>
-                    </dl>
-                    <!-- End Row -->
                 </div>
             </div>
             <!-- End Row -->

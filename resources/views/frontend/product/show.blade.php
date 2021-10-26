@@ -25,7 +25,7 @@
     <div id="stickyBlockEndPoint2"></div>
 
     {{-- @include('frontend.components.benefits') --}}
-    <section class="mt-3">
+    <section class="space-top-1">
         @php
         $relatedProducts = null;
         @endphp
