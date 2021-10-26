@@ -36,148 +36,162 @@
 @endsection
 
 @section('content')
-    <div class="container position-relative mb-5">
+    <div class="position-relative mb-5">
         <div id="fancyboxGallery" class="js-fancybox" data-hs-fancybox-options="{
-                    'selector': '#fancyboxGallery .js-fancybox-item'
-                }">
-            <div class="rounded-lg overflow-hidden rounded-lg">
-                <div class="row ">
-                    <div class="col-md-8" style="max-height: 400px; overflow: hidden;">
-                        <div class="row">
-                            <div class="col-8">
-                                <!-- Gallery -->
-                                @php
-                                    $photos = explode(',', $product->photos);
-                                @endphp
-                                <a class="js-fancybox-item d-block" href="javascript:;"
-                                    data-src="../assets/img/1920x1080/img27.jpg" data-caption="Front in frames - image #01">
+                        'selector': '#fancyboxGallery .js-fancybox-item'
+                    }">
+            <div class="overflow-hidden bg-dark" style="    margin-top: -140px;
+                padding-top: 160px !important;
+                padding-bottom: 40px !important;
+                margin-bottom: -80px;">
+                <div class="container">
+                    <div class="row ">
+                        <div class="col-md-8 rounded-lg" style="max-height: 400px; overflow: hidden;">
+                            <div class="row">
+                                <div class="col-8">
+                                    <!-- Gallery -->
+                                    @php
+                                        $photos = explode(',', $product->photos);
+                                    @endphp
+                                    <a class="js-fancybox-item d-block" href="javascript:;"
+                                        data-src="../assets/img/1920x1080/img27.jpg"
+                                        data-caption="Front in frames - image #01">
+                                        <x-tenant.system.image class="img-fluid w-100" :image="$photos[0]">
+                                        </x-tenant.system.image>
+
+                                        <div class="position-absolute bottom-10 right-0 pb-3 pr-3">
+                                            <span class="d-md-none btn btn-sm btn-light">
+                                                {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
+                                                {{ translate('View Photos') }}
+                                            </span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-4">
+                                    <!-- Gallery -->
                                     <x-tenant.system.image class="img-fluid w-100" :image="$photos[0]">
                                     </x-tenant.system.image>
+                                    </a>
 
-                                    <div class="position-absolute bottom-10 right-0 pb-3 pr-3">
-                                        <span class="d-md-none btn btn-sm btn-light">
-                                            {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
-                                            {{ translate('View Photos') }}
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-4">
-                                <!-- Gallery -->
-                                <x-tenant.system.image class="img-fluid w-100" :image="$photos[0]">
-                                </x-tenant.system.image>
-                                </a>
+                                    <!-- End Gallery -->
 
-                                <!-- End Gallery -->
+                                    <!-- Gallery -->
+                                    <a class="js-fancybox-item d-block" href="javascript:;"
+                                        data-src="../assets/img/1920x1080/img14.jpg"
+                                        data-caption="Front in frames - image #04">
+                                        <x-tenant.system.image class="img-fluid w-100 mb-3" :image="$photos[1]">
+                                        </x-tenant.system.image>
 
-                                <!-- Gallery -->
-                                <a class="js-fancybox-item d-block" href="javascript:;"
-                                    data-src="../assets/img/1920x1080/img14.jpg" data-caption="Front in frames - image #04">
-                                    <x-tenant.system.image class="img-fluid w-100 mb-3" :image="$photos[1]">
-                                    </x-tenant.system.image>
-
-                                    <div
-                                        class="position-absolute bottom-0 mb-3 mr-3 right-0 pb-3 pr-3 d-flex align-items-center">
-                                        <span class="d-none d-md-inline-block btn btn-sm btn-light">
-                                            {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
-                                            {{ translate('View Photos') }}
-                                        </span>
-                                    </div>
-                                </a>
-                                <!-- End Gallery -->
-
-                                <img class="js-fancybox-item d-none" alt="Image Description"
-                                    data-src="../assets/img/1920x1080/img24.jpg" data-caption="Front in frames - image #05">
-                                <img class="js-fancybox-item d-none" alt="Image Description"
-                                    data-src="../assets/img/1920x1080/img20.jpg" data-caption="Front in frames - image #06">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-4" id="stickyBlockStartPoint2">
-                        <div class="js-sticky-block" data-hs-sticky-block-options='{
-                                                                    "parentSelector": "#stickyBlockStartPoint2",
-                                                                    "breakpoint": "lg",
-                                                                    "startPoint": "#stickyBlockStartPoint2",
-                                                                    "endPoint": "#stickyBlockEndPoint2",
-                                                                    "stickyOffsetBottom": 20,
-                                                                    "stickyOffsetTop": 85
-                                                                  }'>
-
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-sm-12 d-flex flex-column">
-                                            <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
-
-                                                <x-default.products.single.product-brand-box :product="$product">
-                                                </x-default.products.single.product-brand-box>
-                                        </div>
-                                        <div class="col-12 mt-2 mb-2">
-                                            <span class="text-dark font-weight-bold">
-                                                <div>
-                                                    {{ translate('Price:') }}
-
-                                                </div>
-                                                @if (home_base_price($product->id) != home_discounted_base_price($product->id))
-                                                    <del
-                                                        class="h3 fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
-                                                @endif
-                                                <span
-                                                    class="h2 fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                        <div
+                                            class="position-absolute bottom-0 mb-3 mr-3 right-0 pb-3 pr-3 d-flex align-items-center">
+                                            <span class="d-none d-md-inline-block btn btn-sm btn-light">
+                                                {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
+                                                {{ translate('View Photos') }}
                                             </span>
-
                                         </div>
+                                    </a>
+                                    <!-- End Gallery -->
 
-                                        <div class="col-12">
-                                            <?php echo $product->getTranslation('short_description'); ?>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <a class="btn btn btn-primary d-flex justify-content-center align-items-center">
-                                                        {{ svg('heroicon-o-shopping-cart', ['class' => 'ev-icon__xs mr-2']) }}
-                                                        {{ translate('Add To Cart') }}</a>
-
-                                                </div>
-                                                <div class="col-4">
-                                                    <a class="btn btn-secondary align-items-center d-flex justify-content-center align-items-center">
-                                                        {{ svg('heroicon-o-heart', ['class' => 'ev-icon__xs mr-2']) }}
-                                                        Like
-                                                    </a>
-                                                </div>
-                                            </div>
-
-
-
-                                            <a
-                                                class="btn btn-sm d-flex mt-3 btn-dark justify-content-center text-center align-items-center">
-                                                {{ svg('heroicon-o-key', ['class' => 'ev-icon__xs mr-2']) }}
-                                                {{ translate('Join GunOB') }}
-
-                                            </a>
-                                            <div class="text-center">
-                                                <small>{{ translate('Gun Enthusiast Marketplace and social network') }}</small>
-                                                <br>
-                                            </div>
-                                            <div class="text-center mt-3 d-flex align-items-center justify-content-center">
-                                                <div class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
-                                                    {{ svg('heroicon-o-shield-check', ['class' => 'ev-icon__xs text-success mr-2']) }}
-
-                                                    {{ translate('GunOB Buyers Protection + Escrow') }}
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
+                                    <img class="js-fancybox-item d-none" alt="Image Description"
+                                        data-src="../assets/img/1920x1080/img24.jpg"
+                                        data-caption="Front in frames - image #05">
+                                    <img class="js-fancybox-item d-none" alt="Image Description"
+                                        data-src="../assets/img/1920x1080/img20.jpg"
+                                        data-caption="Front in frames - image #06">
                                 </div>
                             </div>
                         </div>
-                        <!-- End Row -->
+
+
+                        <div class="col-md-4" id="stickyBlockStartPoint2">
+                            <div class="js-sticky-block" data-hs-sticky-block-options='{
+                                                                        "parentSelector": "#stickyBlockStartPoint2",
+                                                                        "breakpoint": "lg",
+                                                                        "startPoint": "#stickyBlockStartPoint2",
+                                                                        "endPoint": "#stickyBlockEndPoint2",
+                                                                        "stickyOffsetBottom": 20,
+                                                                        "stickyOffsetTop": 85
+                                                                      }'>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12 d-flex flex-column">
+                                                <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
+
+                                                    <x-default.products.single.product-brand-box :product="$product">
+                                                    </x-default.products.single.product-brand-box>
+                                            </div>
+                                            <div class="col-12 mt-2 mb-2">
+                                                <span class="text-dark font-weight-bold">
+                                                    <div>
+                                                        {{ translate('Price:') }}
+
+                                                    </div>
+                                                    @if (home_base_price($product->id) != home_discounted_base_price($product->id))
+                                                        <del
+                                                            class="h3 fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                                                    @endif
+                                                    <span
+                                                        class="h2 fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                                </span>
+
+                                            </div>
+
+                                            <div class="col-12">
+                                                <?php echo $product->getTranslation('short_description'); ?>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <a
+                                                            class="btn btn btn-primary d-flex justify-content-center align-items-center">
+                                                            {{ svg('heroicon-o-shopping-cart', ['class' => 'ev-icon__xs mr-2']) }}
+                                                            {{ translate('Add To Cart') }}</a>
+
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <a
+                                                            class="btn btn-secondary align-items-center d-flex justify-content-center align-items-center">
+                                                            {{ svg('heroicon-o-heart', ['class' => 'ev-icon__xs mr-2']) }}
+                                                            Like
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <a
+                                                    class="btn btn-sm d-flex mt-3 btn-dark justify-content-center text-center align-items-center">
+                                                    {{ svg('heroicon-o-key', ['class' => 'ev-icon__xs mr-2']) }}
+                                                    {{ translate('Join GunOB') }}
+
+                                                </a>
+                                                <div class="text-center">
+                                                    <small>{{ translate('Gun Enthusiast Marketplace and social network') }}</small>
+                                                    <br>
+                                                </div>
+                                                <div
+                                                    class="text-center mt-3 d-flex align-items-center justify-content-center">
+                                                    <div
+                                                        class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
+                                                        {{ svg('heroicon-o-shield-check', ['class' => 'ev-icon__xs text-success mr-2']) }}
+
+                                                        {{ translate('GunOB Buyers Protection + Escrow') }}
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Row -->
+                        </div>
                     </div>
                 </div>
+
 
             </div>
 
@@ -255,7 +269,7 @@
                                                 <circle style="fill:#F8B517;" cx="143.8" cy="143.8" r="93.6" />
                                                 <polygon style="fill:#FCFCFD;"
                                                     points="143.8,55.9 163.4,116.6 227.5,116.6 175.6,154.3 195.6,215.3 143.8,177.7 91.9,215.3 111.9,154.3
-                                                                                                                                    60,116.6 124.1,116.6 " />
+                                                                                                                                        60,116.6 124.1,116.6 " />
                                             </svg>
                                         </div>
                                     @endif
