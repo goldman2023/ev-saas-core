@@ -5,7 +5,10 @@
                 <strong>{{ $attribute->name }}</strong>
                 <ul class="d-flex list-group-horizontal align-items-center mb-1 mt-2 pl-0">
                     @foreach ($attribute->attribute_values as $value)
-                        <li class="list-group-item px-3 py-2 border rounded mr-2 pointer">{{ $value->values }}</li>
+                        @php
+                            $active = $current->variant[$attribute->id]['attribute_value_id'] === $value->id;
+                        @endphp
+                        <li class="list-group-item px-3 py-2 border rounded mr-2 pointer {{ $active ? 'active':'' }}">{{ $value->values }}</li>
                     @endforeach
                 </ul>
             </div>

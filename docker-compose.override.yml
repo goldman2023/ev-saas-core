@@ -46,7 +46,7 @@ services:
     ports:
       - '${DB_PGSQL_DOCKER_PORT_EXTERNAL:-5432}:5432'
     environment:
-      PGUSER: '${DB_USERNAME:-postgres}'
+      PGUSER: '${DB_PGSQL_USERNAME:-postgres}'
       PGPASSWORD: '${DB_PASSWORD:-123456}'
       POSTGRES_DB: '${DB_DATABASE:-evsaas}'
       POSTGRES_USER: '${DB_PGSQL_USERNAME:-postgres}'

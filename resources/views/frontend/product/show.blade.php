@@ -67,9 +67,9 @@
                             @endif
                             <div class="opacity-50 fs-12 border-bottom">{{ translate('Sold By') }}</div>
                             @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
-                                <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}"
+                                <a href="{{ route('shop.visit', $detailedProduct->shop->slug) }}"
                                     class="text-reset d-block fw-600">
-                                    {{ $detailedProduct->user->shop->name }}
+                                    {{ $detailedProduct->shop->name }}
                                     @if ($detailedProduct->user->seller->verification_status == 1)
                                         <span class="ml-2"><i class="fa fa-check-circle"
                                                 style="color:green"></i></span>
@@ -78,7 +78,7 @@
                                                 style="color:red"></i></span>
                                     @endif
                                 </a>
-                                <div class="location opacity-70">{{ $detailedProduct->user->shop->address }}</div>
+                                <div class="location opacity-70">{{ $detailedProduct->shop->address }}</div>
                             @else
                                 <div class="fw-600">{{ env('APP_NAME') }}</div>
                             @endif
@@ -106,31 +106,31 @@
                         @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
                             <div class="row no-gutters align-items-center border-top">
                                 <div class="col">
-                                    <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}"
+                                    <a href="{{ route('shop.visit', $detailedProduct->shop->slug) }}"
                                         class="d-block btn btn-soft-primary rounded-0">{{ translate('Visit Store') }}</a>
                                 </div>
                                 <div class="col">
                                     <ul class="social list-inline mb-0">
                                         <li class="list-inline-item mr-0">
-                                            <a href="{{ $detailedProduct->user->shop->facebook }}" class="facebook"
+                                            <a href="{{ $detailedProduct->shop->facebook }}" class="facebook"
                                                 target="_blank">
                                                 <i class="lab la-facebook-f opacity-60"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item mr-0">
-                                            <a href="{{ $detailedProduct->user->shop->google }}" class="google"
+                                            <a href="{{ $detailedProduct->shop->google }}" class="google"
                                                 target="_blank">
                                                 <i class="lab la-google opacity-60"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item mr-0">
-                                            <a href="{{ $detailedProduct->user->shop->twitter }}" class="twitter"
+                                            <a href="{{ $detailedProduct->shop->twitter }}" class="twitter"
                                                 target="_blank">
                                                 <i class="lab la-twitter opacity-60"></i>
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="{{ $detailedProduct->user->shop->youtube }}" class="youtube"
+                                            <a href="{{ $detailedProduct->shop->youtube }}" class="youtube"
                                                 target="_blank">
                                                 <i class="lab la-youtube opacity-60"></i>
                                             </a>

@@ -322,7 +322,7 @@ class HomeController extends Controller
     {
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
         if(Vendor::isVendorSite()) {
-            $shop = Vendor::getGlobalShop();
+            $shop = Vendor::getVendorShop();
             return view('frontend.company.profile', compact('shop'));
         } else {
             return view('frontend.index');
@@ -373,9 +373,8 @@ class HomeController extends Controller
 
     public function product(Request $request, $slug)
     {
-
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $detailedProduct  = Product::where('slug', $slug)->first();
+        $detailedProduct  = Product::where('slug', $slug)->first()->load('shop');
         $product  = $detailedProduct;
 
         //$this->log($product,"User viewed this product");
@@ -401,6 +400,7 @@ class HomeController extends Controller
                 $affiliateController = new AffiliateController;
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
+
             if ($detailedProduct->digital == 1) {
                 return view('frontend.digital_product_details', compact('detailedProduct', 'product'));
             } else {
@@ -408,6 +408,7 @@ class HomeController extends Controller
             }
             // return view('frontend.product_details', compact('detailedProduct'));
         }
+
         abort(404);
     }
 

@@ -1,4 +1,4 @@
-@extends('frontend.layouts.white-label')
+@extends('frontend.layouts.'.$globalLayout)
 
 @section('content')
 <section class="bg-dark pt-lg-10">
@@ -30,7 +30,7 @@
     @include('frontend.components.benefits')
 
     <section class="space-1">
-        <x-default.products.product-list :products="$shop->user->products" :slider="true">
+        <x-default.products.product-list :products="$shop->products" :slider="true">
         </x-default.products.product-list>
     </section>
 

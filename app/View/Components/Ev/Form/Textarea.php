@@ -29,7 +29,7 @@ class Textarea extends Component
         $this->class = $class;
         $this->id = $id;
         $this->max = $max;
-        $this->errorBagName = $errorBagName;
+        $this->errorBagName = !empty($errorBagName) ? $errorBagName: $name;
     }
 
 

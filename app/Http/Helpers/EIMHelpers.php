@@ -271,13 +271,3 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 
     return $stringKey;
 }
-
-function is_vendor_site() {
-    /* TODO: make CRUD UI for this */
-
-}
-
-/* TODO: Move this to Vendor Singleton class */
-function get_global_shop() {
-
-}

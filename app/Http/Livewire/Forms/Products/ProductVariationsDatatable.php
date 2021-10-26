@@ -57,13 +57,17 @@ class ProductVariationsDatatable extends DataTableComponent
     protected function rules() {
         $rules = [];
 
-        foreach($this->rows as $row) {
-            $name = (is_array($row) ? $row['name'] : $row->name);
-            $stock_id = (is_array($row) ? ($row['temp_stock']['id'] ?? null) : ($row->temp_stock->id ?? null));
+        foreach($this->rows as $key => $row) {
+            $data = (array) $row;
+            $data['temp_stock'] = (array) $data['temp_stock'];
 
-            $rules['rows.'.$name.'.price'] = 'required|numeric|min:1';
-            $rules['rows.'.$name.'.temp_stock.sku'] = ['required', Rule::unique('product_stocks', 'sku')->ignore($stock_id)];
-            $rules['rows.'.$name.'.temp_stock.qty'] = 'required|numeric|min:1';
+            if(isset($data['name']) && !empty($data['variant'] ?? null)) {
+                $stock_id = $data['temp_stock']['id'] ?? null;
+
+                $rules['rows.'.$key.'.price'] = 'required|numeric|min:1';
+                $rules['rows.'.$key.'.temp_stock.sku'] = ['required', Rule::unique('product_stocks', 'sku')->ignore($stock_id)];
+                $rules['rows.'.$key.'.temp_stock.qty'] = 'required|numeric|min:1';
+            }
         }
 
         return $rules;
@@ -81,7 +85,9 @@ class ProductVariationsDatatable extends DataTableComponent
 
         $this->product = $product;
         $this->attributes = collect($variationAttributes);
-        $this->variations = collect($this->product->variations()->get()->keyBy('name')->toArray());
+        $this->variations = collect($this->product->variations()->get()->keyBy(function($item) {
+            return ProductVariation::composeVariantKey($item['name']);
+        })->toArray());
 
         $this->all_combinations = collect([]);
         $this->rows = collect([]);
@@ -192,7 +198,9 @@ class ProductVariationsDatatable extends DataTableComponent
             }
         }
 
-        $this->all_combinations = $this->all_combinations->keyBy('name');
+        $this->all_combinations = $this->all_combinations->keyBy(function($item) {
+            return ProductVariation::composeVariantKey($item['name']);
+        });
 
         // If $this->variations are empty (product doesn't have variations for now), make $this->variations to have $this->all_combinations
         if($this->variations->isEmpty()) {
@@ -256,7 +264,6 @@ class ProductVariationsDatatable extends DataTableComponent
     }
 
     public function setVariationsData() {
-
         if($this->rows->isNotEmpty()) {
             // Remove flagged Variations
             foreach($this->variations as $key => $variation) {
@@ -273,7 +280,9 @@ class ProductVariationsDatatable extends DataTableComponent
 
             // Validate rows
             // Make each row an array instead of object, because validate method cannot use dot notation on array with objects!
-            $this->rows = castCollectionItemsTo($this->rows, 'array', ['temp_stock' => 'array']);
+            $this->rows = castCollectionItemsTo($this->rows/*->filter(function($value, $key) {
+                $value = (array) $value; return (isset($value['name']) && !empty($value['variant'] ?? null));
+            })*/, 'array', ['temp_stock' => 'array']);
 
             try {
                 $this->validate();
@@ -308,7 +317,9 @@ class ProductVariationsDatatable extends DataTableComponent
                     }
                 }
 
-                $this->variations = $this->variations->keyBy('name');
+                $this->variations = $this->variations->keyBy(function($item) {
+                    return ProductVariation::composeVariantKey($item['name']);
+                });
                 $this->refreshRows();
 
                 // Update Attributes (used for variations) selected values in DB, by emitting
