@@ -1,4 +1,4 @@
-@extends('frontend.layouts.white-label')
+@extends('frontend.layouts.'.$globalLayout)
 
 @section('content')
 <section class="bg-dark space-top-lg-3  space-top-2 c-single-vendor-hero" >

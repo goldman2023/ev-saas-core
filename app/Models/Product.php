@@ -12,6 +12,7 @@ use App\Traits\AttributeTrait;
 use Auth;
 use DB;
 use IMG;
+use Vendor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -175,9 +176,9 @@ class Product extends Model
             });
         }
 
-        if(is_vendor_site()) {
+        if(Vendor::isVendorSite()) {
             static::addGlobalScope('single_vendor', function (Builder $builder) {
-                $builder->where('user_id', '=' , 6);
+                $builder->where('shop_id', '=' , Vendor::getVendorShop()->id ?? null);
             });
         }
 
@@ -216,6 +217,11 @@ class Product extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
     }
 
     public function selected_categories($pluck_property = null, $is_collection = true) {
@@ -267,7 +273,7 @@ class Product extends Model
     public function product_attributes_for_variations()
     {
         $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-            ->where('for_variations', '=', 'true')->get()->unique();
+            ->where('for_variations', '=', 1)->get()->unique();
 
         // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
         if(!empty($data)) {
@@ -312,8 +318,13 @@ class Product extends Model
     }
 
     public function flash_deals() {
-        return $this->morphedByMany(FlashDeal::class, 'subject', 'flash_deal_relationships')
-            ->where('status', '=', 1)->orderBy('created_at', 'desc');
+        // TODO: Add indicies to start_date and end_date!
+        return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
+            ->where([
+                ['status', '=', 1],
+                ['start_date', '<=', time()],
+                ['end_date', '>', time()],
+            ])->orderBy('created_at', 'desc');
     }
 
     public function images($options = []) {
@@ -409,40 +420,50 @@ class Product extends Model
      * @return float $total
      */
     public function getTotalPriceAttribute() {
-        $total = $this->unit_price;
+        $total = $this->attributes['unit_price'];
 
         if($this->has_variations()) {
-            // TODO: Display lowest variant total price
-            return $total;
-        } else {
-            /*$flash_deal = $this->flash_deals()->first();
+            // TODO: Display lowest/highest variant total price OR SOME COMBINATION
+            /*if ($flash_deal->discount_type === 'percent') {
+                $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
+                $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
+            } elseif ($flash_deal->discount_type === 'amount') {
+                $lowest_price -= $flash_deal_product->discount;
+                $highest_price -= $flash_deal_product->discount;
+            }*/
+            $flash_deal = $this->flash_deals()->first();
 
-            $flash_deals = \App\Models\FlashDeal::where('status', 1)->get();
-            $inFlashDeal = false;
-            foreach ($flash_deals as $flash_deal) {
-                if ($flash_deal != null && $flash_deal->status == 1 && strtotime(date('d-m-Y')) >= $flash_deal->start_date && strtotime(date('d-m-Y')) <= $flash_deal->end_date && FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first() != null) {
-                    $flash_deal_product = FlashDealProduct::where('flash_deal_id', $flash_deal->id)->where('product_id', $id)->first();
-                    if ($flash_deal_product->discount_type == 'percent') {
-                        $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
-                        $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
-                    } elseif ($flash_deal_product->discount_type == 'amount') {
-                        $lowest_price -= $flash_deal_product->discount;
-                        $highest_price -= $flash_deal_product->discount;
-                    }
-                    $inFlashDeal = true;
-                    break;
+            if(!empty($flash_deal)) {
+                if ($flash_deal->discount_type === 'percent') {
+                    $total -= ($total * $flash_deal->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $total -= $flash_deal->discount;
+                }
+            } else {
+                if ($this->attributes['discount_type'] === 'percent') {
+                    $total -= ($total * $this->attributes['discount']) / 100;
+                } elseif ($this->attributes['discount_type'] === 'amount') {
+                    $total -= $this->attributes['discount'];
                 }
             }
 
-            if (!$inFlashDeal) {
-                if ($product->discount_type == 'percent') {
-                    $lowest_price -= ($lowest_price * $product->discount) / 100;
-                    $highest_price -= ($highest_price * $product->discount) / 100;
-                } elseif ($product->discount_type == 'amount') {
-                    $lowest_price -= $product->discount;
-                    $highest_price -= $product->discount;
+            return $total;
+        } else {
+            $flash_deal = $this->flash_deals()->first();
+
+            if(!empty($flash_deal)) {
+                if ($flash_deal->discount_type === 'percent') {
+                    $total -= ($total * $flash_deal->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $total -= $flash_deal->discount;
                 }
-            }*/
+            } else {
+                if ($this->attributes['discount_type'] === 'percent') {
+                    $total -= ($total * $this->attributes['discount']) / 100;
+                } elseif ($this->attributes['discount_type'] === 'amount') {
+                    $total -= $this->attributes['discount'];
+                }
+            }
         }
 
         return $total;

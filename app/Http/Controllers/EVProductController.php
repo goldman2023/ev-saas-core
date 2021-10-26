@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class EVProductController extends Controller
     }
 
     public function edit(Request $request, $slug) {
-        $product = Auth::user()->products()->where('slug', $slug)->first();
+        $product = Auth::user()->shop()->first()->products()->where('slug', $slug)->first();
 
         return view('frontend.user.crud.products.edit')->with('product', $product);
     }

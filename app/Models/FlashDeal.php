@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\FlashDeal
@@ -31,6 +32,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 class FlashDeal extends Model
 {
     use Cachable;
+    use SoftDeletes;
 
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
@@ -51,7 +53,7 @@ class FlashDeal extends Model
     }
 
     public function products() {
-        return $this->morphToMany(Product::class, 'subject', 'flash_deal_relationships');
+        return $this->morphedByMany(Product::class, 'subject', 'flash_deal_relationships');
     }
 
     public function product_variations() {

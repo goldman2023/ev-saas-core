@@ -10,6 +10,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Str;
+use Vendor;
 
 /**
  * App\Models\Category
@@ -98,13 +99,11 @@ class Category extends Model
         });
 
 
-        /* TODO Implement propper global scope for single vendor */
-        if (is_vendor_site()) {
-
+        if (Vendor::isVendorSite()) {
             static::addGlobalScope('single_vendor', function (Builder $builder) {
-                // TODO: ID list array with products only by single vendor
-                // $category_array = [];
-                // $builder->whereIn('id', $category_array);
+                if(!empty(Vendor::getVendorCategoriesIDs())) {
+                    $builder->whereIn('categories.id', Vendor::getVendorCategoriesIDs());
+                }
             });
         }
     }

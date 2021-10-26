@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Tenant\Product;
 
 use App\Models\Product;
+use App\Models\ProductVariation;
 use Livewire\Component;
 use App\Facades\CartService;
 use Session;
@@ -13,6 +14,8 @@ class Price extends Component {
     public $unit;
     public $last_price_class;
     public $original_price_class;
+
+    protected $listeners = ['changeVariation'];
 
     /**
      * Create a new component instance.
@@ -25,7 +28,12 @@ class Price extends Component {
         $this->last_price_class = $last_price_class;
         $this->original_price_class = $original_price_class;
         $this->unit = $product->unit;
+
         //dd($this->attributes_for_variations);
+    }
+
+    public function changeVariation(ProductVariation $variation) {
+        $this->product = $variation;
     }
 
     public function render() {

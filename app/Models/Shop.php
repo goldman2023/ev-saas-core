@@ -80,6 +80,11 @@ class Shop extends Model
         return $this->hasMany(ShopDomain::class);
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function jobs()
     {
         return $this->hasMany(Job::class);

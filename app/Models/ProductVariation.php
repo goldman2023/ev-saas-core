@@ -9,6 +9,7 @@ use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Notifications\Notifiable;
+use Str;
 
 /**
  * App\Models\Product
@@ -62,9 +63,14 @@ class ProductVariation extends Model
         return $this->morphOne(ProductStock::class, 'subject');
     }
 
-    public function flash_deals()
-    {
-        return $this->morphedByMany(FlashDeal::class, 'subject', 'flash_deal_relationships');
+    public function flash_deals() {
+        // TODO: Add indicies to start_date and end_date!
+        return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
+            ->where([
+                ['status', '=', 1],
+                ['start_date', '<=', time()],
+                ['end_date', '>', time()],
+            ])->orderBy('created_at', 'desc');
     }
 
     protected function asJson($value)
@@ -127,6 +133,20 @@ class ProductVariation extends Model
         return $this->remove_flag ?? false;
     }
 
+    /**
+     * Get product variation end(total) price
+     *
+     * NOTE: Total price is a price of the product variation after all discounts, but without Tax included
+     *
+     * @return float $total
+     */
+    public function getTotalPriceAttribute()
+    {
+        $total = $this->price;
+
+        return $total;
+    }
+
     // START: Casts section
     // If $value is null or empty, value should always be empty array!
     // Reason: Ease of use in frontend and backend views
@@ -135,4 +155,9 @@ class ProductVariation extends Model
         return empty($atts) ? [] : $atts;
     }
     // END: Casts section
+
+    // MISC
+    public static function composeVariantKey($key) {
+        return Str::replace('.', ',', $key);
+    }
 }

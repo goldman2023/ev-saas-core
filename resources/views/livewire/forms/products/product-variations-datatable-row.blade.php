@@ -1,5 +1,5 @@
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.file-selector name="rows.{{ $row->name }}.image"
+    <x-ev.form.file-selector name="rows.{{ $index }}.image"
                              template="avatar"
                              selectedFile="{{ $row->image ?? null }}"
                              errorBagName="rows.{{ $row->name }}"
@@ -19,8 +19,8 @@ if($this->attributes->isNotEmpty()) {
         $att = (object) $att;
 @endphp
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.select name="rows.{{ $row->name }}.variant.{{ $att->id }}.attribute_value_id"
-                      error-bag-name="rows.{{ $row->name }}"
+    <x-ev.form.select name="rows.{{ $index }}.variant.{{ $att->id }}.attribute_value_id"
+                      error-bag-name="rows.{{ $index }}"
                       :items="$att->attribute_values"
                       value-property="id"
                       label-property="values"
@@ -39,7 +39,7 @@ if($this->attributes->isNotEmpty()) {
 
 
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.input name="rows.{{ $row->name }}.price"
+    <x-ev.form.input name="rows.{{ $index }}.price"
                      type="number"
                      min="0"
                      value="{{ ($row->price ?? null) ?: 0 }}"
@@ -48,7 +48,7 @@ if($this->attributes->isNotEmpty()) {
 </x-livewire-tables::bs4.table.cell>
 
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.input name="rows.{{ $row->name }}.temp_stock.qty"
+    <x-ev.form.input name="rows.{{ $index }}.temp_stock.qty"
                      type="number"
                      min="0"
                      value="{{ ($row->temp_stock->qty ?? null) ?: 0 }}"
@@ -57,7 +57,7 @@ if($this->attributes->isNotEmpty()) {
 </x-livewire-tables::bs4.table.cell>
 
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.input name="rows.{{ $row->name }}.temp_stock.sku"
+    <x-ev.form.input name="rows.{{ $index }}.temp_stock.sku"
                      type="text"
                      value="{{ ($row->temp_stock->sku ?? null) ?: '' }}"
                      wireType="defer">
@@ -66,7 +66,7 @@ if($this->attributes->isNotEmpty()) {
 
 
 <x-livewire-tables::bs4.table.cell>
-    <button type="button" class="btn btn-danger px-2 pt-2 pb-1 mt-2" wire:click="setRemoveFlag('{{ $row->name }}')" style="line-height: 1;">
+    <button type="button" class="btn btn-danger px-2 pt-2 pb-1 mt-2" wire:click="setRemoveFlag('{{ $index }}')" style="line-height: 1;">
         @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
     </button>
 </x-livewire-tables::bs4.table.cell>

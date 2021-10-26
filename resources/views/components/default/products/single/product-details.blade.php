@@ -28,7 +28,7 @@
             <!-- End Rating -->
 
             <!-- Title -->
-            <div class="mb-5">
+            <div class="mb-3">
                 <h1 class="h2">{{ $product->getTranslation('name') }}</h1>
                 @if (!empty($product->excerpt))
                     <p>
@@ -51,8 +51,8 @@
                     <div class="col-sm-6 d-flex flex-column">
                         <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small>
                         @if ($product->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
-                            <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">
-                                {{ $product->user->shop->name }}
+                            <a href="{{ route('shop.visit', $product->shop->slug) }}" class="text-reset font-weight-bold ">
+                                {{ $product->shop->name }}
                             </a>
                         @else
                             {{-- {{ translate('Inhouse product') }} --}}
@@ -67,9 +67,9 @@
                     </div>
                     @if ($product->brand != null)
                         <div class="col-sm-6">
-                            <small class="mr-2 opacity-50">{{ translate('Manufacturer:') }} </small><br>
+                            <small class="mr-2 opacity-50">{{ translate('Manufacturer:') }} </small>
                             <a href="{{ route('products.brand', $product->brand->slug) }}">
-                                <img class="mt-3" src="{{ uploaded_asset($product->brand->logo ?? '') }}"
+                                <img class="" src="{{ uploaded_asset($product->brand->logo ?? '') }}"
                                     alt="{{ $product->brand->getTranslation('name') }}" height="60">
                             </a>
                         </div>
@@ -77,15 +77,18 @@
                 </div>
 
             </div>
-
-            {{-- Seller Info --}}
-            <div class="mb-5">
-
-            </div>
-
-            {{-- End Seller Info --}}
             {{-- End Brand --}}
 
+
+            <!-- Price -->
+            <div class="mb-3">
+                <h2 class="font-size-1 text-body mb-2">{{ translate('Price:') }}</h2>
+                <livewire:tenant.product.price :product="$product"></livewire:tenant.product.price>
+            </div>
+            <!-- End Price -->
+
+            {{-- Seller Info --}}
+            {{-- End Seller Info --}}
 
             <!-- Product: Variations -->
             @if ($product->has_variations())
