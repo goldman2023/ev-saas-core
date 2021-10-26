@@ -374,7 +374,9 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $detailedProduct  = Product::where('slug', $slug)->first()->load('shop');
+        $detailedProduct  = Product::where('slug', $slug)->first()->load(['shop', 'flash_deals', 'variations', 'stock']);
+        $detailedProduct->variations = $detailedProduct->variations()->with(['flash_deals', 'product'])->get();
+
         $product  = $detailedProduct;
 
         //$this->log($product,"User viewed this product");

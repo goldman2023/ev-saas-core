@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\Products\ProductVariationDeleting;
+use App\Facades\FX;
 use App\Traits\AttributeTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
@@ -32,13 +33,14 @@ class ProductVariation extends Model
 
     /* Properties not saved in DB */
     public bool $remove_flag;
+    public $total_price;
 
     /**
      * The relationships that should always be loaded.
      *
      * @var array
      */
-    protected $with = ['stock'];
+    protected $with = ['stock', 'flash_deals'];
 
     protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag'];
     protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock', 'remove_flag', 'total_price'];
@@ -70,7 +72,7 @@ class ProductVariation extends Model
                 ['status', '=', 1],
                 ['start_date', '<=', time()],
                 ['end_date', '>', time()],
-            ])->orderBy('created_at', 'desc');
+            ])->orderBy('created_at', 'desc')->withPivot('include_variations');
     }
 
     protected function asJson($value)
@@ -134,17 +136,40 @@ class ProductVariation extends Model
     }
 
     /**
-     * Get product variation end(total) price
+     * Get product end(total) price
      *
-     * NOTE: Total price is a price of the product variation after all discounts, but without Tax included
+     * NOTE: Total price is a price of the product after all discounts, but without Tax included
      *
+     * @param bool $display
      * @return float $total
      */
-    public function getTotalPriceAttribute()
-    {
-        $total = $this->price;
+    public function getTotalPrice($display = false) {
+        $this->total_price = $this->attributes['price'];
+        /*if(empty($this->total_price)) {
+            $this->total_price = $this->attributes['price'];
 
-        return $total;
+            $flash_deal = $this->flash_deals->first() ?: $this->product->flash_deals->filter(function($value,$key) {
+                return (int) $value->pivot->include_variations === 1;
+            })->first();
+
+            if(!empty($flash_deal)) {
+                if ($flash_deal->discount_type === 'percent') {
+                    $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $this->total_price -= $flash_deal->discount;
+                }
+            }
+        }*/
+
+        return $display ? FX::formatPrice($this->total_price) : $this->total_price;
+    }
+
+    public function getOriginalPrice($display = false) {
+        return $display ? FX::formatPrice($this->attributes['price']) : $this->attributes['price'];
+    }
+
+    public function getTotalPriceAttribute() {
+        return $this->getTotalPrice();
     }
 
     // START: Casts section

@@ -57,7 +57,7 @@ class FlashDeal extends Model
     }
 
     public function product_variations() {
-        return $this->morphToMany(ProductVariation::class, 'subject', 'flash_deal_relationships');
+        return $this->morphedByMany(ProductVariation::class, 'subject', 'flash_deal_relationships');
     }
 
     public function flash_deal_translations(){

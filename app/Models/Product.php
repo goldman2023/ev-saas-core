@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cache;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Models\FlashDealProduct;
@@ -13,6 +14,7 @@ use Auth;
 use DB;
 use IMG;
 use Vendor;
+use FX;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -149,7 +151,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $with = ['stock', 'variations'];
+    //protected $with = ['stock', 'variations'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
@@ -258,7 +260,7 @@ class Product extends Model
         // Eager load Attribute relationships for current product
         if(!empty($data)) {
             foreach($data as $key => $attribute) {
-                $data[$key]->load(['attributes_relationship' => function ($query) {
+                $data[$key]->load(['attribute_relationships' => function ($query) {
                     $query->where([
                         ['subject_id', '=', $this->id],
                         ['subject_type', '=', Product::class]
@@ -272,27 +274,31 @@ class Product extends Model
 
     public function product_attributes_for_variations()
     {
-        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-            ->where('for_variations', '=', 1)->get()->unique();
+        // TODO: Create AttributeObserver class and remove cache on any relationship or value change
+        return Cache::get('product_'.$this->id.'_attributes_for_variations', function() {
+            $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+                ->where('for_variations', '=', 1)->without(['attribute_relationships', 'attribute_values'])->get()->unique();
 
-        // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
-        if(!empty($data)) {
-            foreach($data as $key => $attribute) {
-                $data[$key]->load(['attributes_relationship' => function ($query) {
-                    $query->where([
-                        ['subject_id', '=', $this->id],
-                        ['subject_type', '=', Product::class]
-                    ]);
-                }]);
+            // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
+            if(!empty($data)) {
+                foreach($data as $key => $attribute) {
+                    $data->put($key, $attribute->load(['attribute_relationships' => function ($query) {
+                        $query->where([
+                            ['subject_id', '=', $this->id],
+                            ['subject_type', '=', Product::class]
+                        ]);
+                    }]));
 
-                $att_values_ids = $attribute->attributes_relationship->pluck('attribute_value_id');
-                $data[$key]->load(['attribute_values' => function ($query) use ($att_values_ids) {
-                    $query->whereIn('id', $att_values_ids);
-                }]);
+                    $att_values_ids = $attribute->attribute_relationships->pluck('attribute_value_id');
+
+                    $data->put($key, $attribute->load(['attribute_values' => function ($query) use ($att_values_ids) {
+                        $query->whereIn('id', $att_values_ids);
+                    }]));
+                }
             }
-        }
 
-        return $data;
+            return $data;
+        });
     }
 
     public function variations() {
@@ -324,7 +330,7 @@ class Product extends Model
                 ['status', '=', 1],
                 ['start_date', '<=', time()],
                 ['end_date', '>', time()],
-            ])->orderBy('created_at', 'desc');
+            ])->orderBy('created_at', 'desc')->withPivot('include_variations');
     }
 
     public function images($options = []) {
@@ -417,56 +423,66 @@ class Product extends Model
      *
      * NOTE: Total price is a price of the product after all discounts, but without Tax included
      *
+     * @param bool $display
      * @return float $total
      */
-    public function getTotalPriceAttribute() {
-        $total = $this->attributes['unit_price'];
+    public function getTotalPrice($display = false) {
+        if(empty($this->total_price)) {
+            $this->total_price = $this->attributes['unit_price'];
 
-        if($this->has_variations()) {
-            // TODO: Display lowest/highest variant total price OR SOME COMBINATION
-            /*if ($flash_deal->discount_type === 'percent') {
-                $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
-                $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
-            } elseif ($flash_deal->discount_type === 'amount') {
-                $lowest_price -= $flash_deal_product->discount;
-                $highest_price -= $flash_deal_product->discount;
-            }*/
-            $flash_deal = $this->flash_deals()->first();
-
-            if(!empty($flash_deal)) {
-                if ($flash_deal->discount_type === 'percent') {
-                    $total -= ($total * $flash_deal->discount) / 100;
+            if($this->has_variations()) {
+                // TODO: Display lowest/highest variant total price OR SOME COMBINATION
+                /*if ($flash_deal->discount_type === 'percent') {
+                    $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
+                    $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
                 } elseif ($flash_deal->discount_type === 'amount') {
-                    $total -= $flash_deal->discount;
+                    $lowest_price -= $flash_deal_product->discount;
+                    $highest_price -= $flash_deal_product->discount;
+                }*/
+                $flash_deal = $this->flash_deals->first();
+
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->total_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->total_price -= $this->attributes['discount'];
+                    }
                 }
             } else {
-                if ($this->attributes['discount_type'] === 'percent') {
-                    $total -= ($total * $this->attributes['discount']) / 100;
-                } elseif ($this->attributes['discount_type'] === 'amount') {
-                    $total -= $this->attributes['discount'];
-                }
-            }
+                $flash_deal = $this->flash_deals->first();
 
-            return $total;
-        } else {
-            $flash_deal = $this->flash_deals()->first();
-
-            if(!empty($flash_deal)) {
-                if ($flash_deal->discount_type === 'percent') {
-                    $total -= ($total * $flash_deal->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
-                    $total -= $flash_deal->discount;
-                }
-            } else {
-                if ($this->attributes['discount_type'] === 'percent') {
-                    $total -= ($total * $this->attributes['discount']) / 100;
-                } elseif ($this->attributes['discount_type'] === 'amount') {
-                    $total -= $this->attributes['discount'];
+                // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->total_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->total_price -= $this->attributes['discount'];
+                    }
                 }
             }
         }
 
-        return $total;
+        return $display ? FX::formatPrice($this->total_price) : $this->total_price;
+    }
+
+    public function getOriginalPrice($display = false) {
+        return $display ? FX::formatPrice($this->attributes['unit_price']) : $this->attributes['unit_price'];
+    }
+
+    public function getTotalPriceAttribute() {
+        return $this->getTotalPrice();
     }
 
     public function setTempSkuAttribute($value)

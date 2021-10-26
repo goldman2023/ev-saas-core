@@ -34,27 +34,31 @@ class FXService
             $this->currency = Currency::where('code', $code)->first();
         }
 
-        $this->currency_symbol = $currency->symbol ?? '';
-    }
-
-    public function formatPrice($price)
-    {
-        if (get_setting('decimal_separator') == 1) {
-            $formatted_price = number_format($price, get_setting('no_of_decimals'));
-        } else {
-            $formatted_price = number_format($price, get_setting('no_of_decimals'), ',', ' ');
-        }
-
-        if (get_setting('symbol_format') == 1) {
-            return $this->currency_symbol . $formatted_price;
-        }
-
-        return $formatted_price . $this->currency_symbol;
+        $this->currency_symbol = $this->currency->symbol ?? '';
     }
 
     public function convertPrice($price)
     {
         $price = (float) $price / (float) $this->default_currency->exchange_rate;
         return (float) $price * (float) $this->currency->exchange_rate;
+    }
+
+    public function formatPrice($price, $convert = true)
+    {
+        if($convert) {
+            $price = $this->convertPrice($price);
+        }
+
+        if (get_setting('decimal_separator') === 1) {
+            $formatted_price = number_format($price, get_setting('no_of_decimals'));
+        } else {
+            $formatted_price = number_format($price, get_setting('no_of_decimals'), ',', ' ');
+        }
+
+        if (get_setting('symbol_format') === 1) {
+            return $this->currency_symbol . $formatted_price;
+        }
+
+        return $formatted_price . $this->currency_symbol;
     }
 }
