@@ -43,9 +43,9 @@
             <div id="product-gallery-hero" class="overflow-hidden bg-dark">
                 <div class="container">
                     <div class="row ">
-                        <div class="col-md-8 rounded-lg" style="max-height: 400px; overflow: hidden;">
-                            <div class="row">
-                                <div class="col-8">
+                        <div class="col-md-8 rounded-lg pl-0" style="max-height: 400px; overflow: hidden;">
+                            <div class="row ">
+                                <div class="col-8 pr-0">
                                     <!-- Gallery -->
                                     @php
                                         $photos = explode(',', $product->photos);
@@ -64,16 +64,15 @@
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-4 pr-0">
                                     <!-- Gallery -->
                                     <x-tenant.system.image class="img-fluid w-100" :image="$photos[0]">
                                     </x-tenant.system.image>
-                                    </a>
 
                                     <!-- End Gallery -->
 
                                     <!-- Gallery -->
-                                    <a class="js-fancybox-item d-block" href="javascript:;"
+                                    <a class="js-fancybox-item d-block mt-3" href="javascript:;"
                                         data-src="../assets/img/1920x1080/img14.jpg"
                                         data-caption="Front in frames - image #04">
                                         <x-tenant.system.image class="img-fluid w-100 mb-3" :image="$photos[1]">
@@ -81,7 +80,9 @@
 
                                         <div
                                             class="position-absolute bottom-0 mb-3 mr-3 right-0 pb-3 pr-3 d-flex align-items-center">
-                                            <span class="d-none d-md-inline-block btn btn-sm btn-light">
+                                            <span class="d-none d-md-inline-block btn btn-sm btn-light"
+
+                                            style="margin-bottom: 40px;">
                                                 {{ svg('heroicon-o-arrows-expand', ['class' => 'ev-icon__xs']) }}
                                                 {{ translate('View Photos') }}
                                             </span>
@@ -100,7 +101,7 @@
                         </div>
 
 
-                        <div class="col-md-4" id="stickyBlockStartPoint2">
+                        <div class="col-md-4 " id="stickyBlockStartPoint2">
                             <div class="js-sticky-block" data-hs-sticky-block-options='{
                                                                         "parentSelector": "#stickyBlockStartPoint2",
                                                                         "breakpoint": "lg",
