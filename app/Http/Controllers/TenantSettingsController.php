@@ -10,6 +10,7 @@ use App\Models\TenantSetting;
 use Artisan;
 use CoreComponentRepository;
 
+// TODO: REMOVE ALL .env CHANGES IN THIS CONTROLLER AND MOVE THOSE CHANGES TO DB!!!!
 class TenantSettingsController extends Controller
 {
     public function general_setting(Request $request)
@@ -203,6 +204,7 @@ class TenantSettingsController extends Controller
      */
     public function overWriteEnvFile($type, $val)
     {
+        // TODO: FIX THIS!
         if(env('DEMO_MODE') != 'On'){
             $path = base_path('.env');
             if (file_exists($path)) {
@@ -253,18 +255,18 @@ class TenantSettingsController extends Controller
 
     public function update(Request $request)
     {
-        foreach ($request->types as $key => $type) {
-            if($type == 'site_name'){
-                $this->overWriteEnvFile('APP_NAME', $request[$type]);
+        foreach ($request->types as $key => $setting) {
+            if($setting == 'site_name'){
+                $this->overWriteEnvFile('APP_NAME', $request[$setting]);
             }
-            if($type == 'timezone'){
-                $this->overWriteEnvFile('APP_TIMEZONE', $request[$type]);
+            if($setting == 'timezone'){
+                $this->overWriteEnvFile('APP_TIMEZONE', $request[$setting]);
             }
             else {
-                $value = is_array($request[$type]) ? json_encode($request[$type]) : $request[$type];
+                $value = is_array($request[$setting]) ? json_encode($request[$setting]) : $request[$setting];
 
-                $tenant_setting = TenantSetting::getModel($type);
-                $tenant_setting->type = $type;
+                $tenant_setting = TenantSetting::getModel($setting);
+                $tenant_setting->setting = $setting;
                 $tenant_setting->value = $value;
 
                 // Save setting to primary DB
@@ -275,8 +277,8 @@ class TenantSettingsController extends Controller
         return back();
     }
 
-    public function get($type) {
-        if(empty($type)) {
+    public function get($setting) {
+        if(empty($setting)) {
             return null;
         }
 
@@ -369,9 +371,9 @@ class TenantSettingsController extends Controller
     }
 
     public function update_seo_setting(Request $request) {
-        foreach($request->types as $key => $type) {
-            $tenant_settings = TenantSetting::getModel($type);
-            $tenant_settings->value = $request[$type];
+        foreach($request->types as $key => $setting) {
+            $tenant_settings = TenantSetting::getModel($setting);
+            $tenant_settings->value = $request[$setting];
             $tenant_settings->save();
         }
         flash(translate("SEO Settings updated successfully"))->success();

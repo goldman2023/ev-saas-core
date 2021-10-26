@@ -327,7 +327,7 @@ class EVService
             // For existing content type:
             // 1. Get attributes for that content type
             // 2. DO NOT fetch attribute relationships and attribute_values
-            $attrs = Attribute::without('attribute_values')->with('attributes_relationship', function($query) use($content_type, $subject) {
+            $attrs = Attribute::without('attribute_values')->with('attribute_relationships', function($query) use($content_type, $subject) {
                 $query->where([
                     ['subject_type', '=', $content_type],
                     ['subject_id', '=', $subject->id]
@@ -339,8 +339,8 @@ class EVService
             foreach($attrs as $key => $att) {
                 $attrs[$key]['attribute_values'] = [];
 
-                if(!empty($att['attributes_relationship'])) {
-                    foreach($att['attributes_relationship'] as $attr_rel) {
+                if(!empty($att['attribute_relationships'])) {
+                    foreach($att['attribute_relationships'] as $attr_rel) {
                         // Add attribute value id to array (we'll need those to query selected/typed att values from DB)
                         $attrs_values_idx[] = $attr_rel['attribute_value_id'];
 
@@ -383,7 +383,7 @@ class EVService
             // For new content type:
             // 1. Get attributes for that content type
             // 2. DO NOT fetch attribute relationships and attribute_values
-            $attrs = Attribute::without('attributes_relationship', 'attribute_values')->select('id','name','type','custom_properties')->where('content_type', $content_type)->get()->toArray();
+            $attrs = Attribute::without('attribute_relationships', 'attribute_values')->select('id','name','type','custom_properties')->where('content_type', $content_type)->get()->toArray();
             $relevant_attrs_idx = collect($attrs)->filter(function ($value, $key) {
                 return $value['is_predefined'];
             })->pluck('id')->all();
