@@ -1,6 +1,5 @@
 <!-- Hero Section -->
-<x-default.products.single.product-sticky-bar :product="$product">
-</x-default.products.single.product-sticky-bar>
+
 <div class="container space-2" id="productDetailsContainer">
     <div class="row">
         <div class="col-lg-7 mb-7 mb-lg-0">
@@ -44,7 +43,6 @@
 
             </div>
 
-            <livewire:tenant.product.price :product="$product"></livewire:tenant.product.price>
             <!-- End Price -->
 
             {{-- Brand --}}

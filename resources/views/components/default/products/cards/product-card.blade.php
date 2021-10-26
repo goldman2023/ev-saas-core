@@ -5,14 +5,16 @@
             :image="$product->thumbnail_img"></x-tenant.system.image>
 
         <div class="position-absolute top-0 left-0 pt-3 pl-3">
-            <span class="badge badge-success badge-pill">New arrival</span>
+            <span class="badge badge-success badge-pill">
+                {{ translate('New arrival') }}
+            </span>
         </div>
         <div class="position-absolute top-0 right-0 pt-3 pr-3">
-            <button type="button" class="btn btn-xs btn-icon btn-outline-secondary rounded-circle"
+            <button type="button" class="btn btn-xs p-1 btn-icon btn-outline-secondary rounded-circle bg-white"
             onclick="addToWishList({{ $product->id }})"
             data-toggle="tooltip"
                 data-placement="top" title="{{ translate('Add To Wishlist') }}">
-                {{ svg('heroicon-o-heart') }}
+                {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs']) }}
             </button>
         </div>
     </div>

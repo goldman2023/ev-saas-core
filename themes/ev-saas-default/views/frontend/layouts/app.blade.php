@@ -94,8 +94,9 @@
         <x-default.headers.header>
         </x-default.headers.header>
 
-
-    @yield('content')
+        <div class="space-top-lg-3 space-top-2">
+            @yield('content')
+        </div>
 
     {{-- @include('frontend.inc.footer') --}}
 

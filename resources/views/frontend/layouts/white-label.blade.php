@@ -57,7 +57,7 @@
 
         <x-default.merchant.header :shop="$globalShop"></x-default.merchant.header>
         {{-- TODO: move this to separate css file --}}
-    <div>
+    <div class="space-top-lg-3 space-top-2">
         @yield('content')
     </div>
 

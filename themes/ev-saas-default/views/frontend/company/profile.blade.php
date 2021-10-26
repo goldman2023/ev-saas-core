@@ -1,8 +1,8 @@
 @extends('frontend.layouts.white-label')
 
 @section('content')
-<section class="bg-dark pt-lg-10">
-    <div class="container pt-lg-10">
+<section class="bg-dark space-top-3 c-single-vendor-hero" >
+    <div class="container">
         <h3 class="text-white">{{ translate('Gun auctions') }}</h3>
     </div>
 
@@ -10,13 +10,10 @@
     </x-default.auctions.list.auction-slider>
 
 </section>
-    <section class="space-1 bg-dark space-lg-top-3">
+    <section class="space-1 bg-dark">
         <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <img class="w-100" style="object-fit:contain; margin-bottom: 10px;"
-                        src="{{ $shop->get_company_logo() }}" alt="{{ $shop->name }}">
-
+            <div class="row position-relative">
+                <div class="col-md-3 position-static">
                     <x-ev.category-mega-menu></x-ev.category-mega-menu>
                 </div>
                 <div class="col-md-9">
