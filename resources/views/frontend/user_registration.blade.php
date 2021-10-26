@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.' . $globalLayout)
 
 @section('content')
     <section class="gry-bg py-4">

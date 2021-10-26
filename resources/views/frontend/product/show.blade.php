@@ -158,13 +158,14 @@
                                                 </div>
 
 
-
+                                                @guest
                                                 <a
                                                     class="btn btn-sm d-flex mt-3 btn-dark justify-content-center text-center align-items-center">
                                                     {{ svg('heroicon-o-key', ['class' => 'ev-icon__xs mr-2']) }}
                                                     {{ translate('Join GunOB') }}
 
                                                 </a>
+                                                @endguest
                                                 <div class="text-center">
                                                     <small>{{ translate('Gun Enthusiast Marketplace and social network') }}</small>
                                                     <br>

@@ -61,7 +61,7 @@
                         <!-- Blog -->
                         <li class="navbar-nav-item">
                             <a id="blogMegaMenu" class="nav-link"
-                                href="javascript:;" aria-haspopup="true" aria-expanded="false"
+                                href="/pages/info/contact" aria-haspopup="true" aria-expanded="false"
                                 aria-labelledby="blogSubMenu">
                             {{ translate('Contact us') }}
                             </a>
@@ -76,8 +76,8 @@
                         <!-- Button -->
                         <li class="navbar-nav-last-item">
                             <a class="btn btn-sm btn-primary transition-3d-hover"
-                                href="https://themes.getbootstrap.com/product/front-multipurpose-responsive-template/"
-                                target="_blank">
+                                href="{{ route('user.login') }}"
+                                >
                                 {{ translate('Client area') }}
                             </a>
                         </li>

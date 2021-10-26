@@ -1,4 +1,4 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.' . $globalLayout)
 @section('content')
 
 <main id="content" role="main" class="bg-light">
