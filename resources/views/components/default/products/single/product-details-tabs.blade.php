@@ -4,9 +4,8 @@
             <h1 class="h1 mb-0">{{ $product->getTranslation('name') }}</h1>
             <span class="d-block text-dark mb-3">
                 <div class="d-flex ml-auto">
-                    @for ($i = 0; $i < 5; $i++)
-                        @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__xs'])
-                    @endfor
+                    @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning ev-icon__xs'])
+                        @endfor
                 </div>
             </span>
 
@@ -32,9 +31,9 @@
             <div class="pl-md-4">
                 <h2 class="mb-0">
                     @if (home_base_price($product->id) != home_discounted_base_price($product->id))
-                        <del class="h3 fw-600 opacity-50 mr-1">
-                            {{ home_base_price($product->id) }}
-                        </del>
+                    <del class="h3 fw-600 opacity-50 mr-1">
+                        {{ home_base_price($product->id) }}
+                    </del>
                     @endif
                     <span class="h2 fw-700 text-primary">
                         {{ home_discounted_base_price($product->id) }}</span>
@@ -115,6 +114,17 @@
                         {{ $product->getTranslation('description') }}
 
                     </div>
+                    <hr>
+                    <div class="mt-3">
+                        <x-default.products.single.product-brand-box :product="$product">
+                        </x-default.products.single.product-brand-box>
+                    </div>
+                    <hr>
+                    <div class="mt-3">
+                        <x-default.products.single.product-video :product="$product">
+                        </x-default.products.single.product-video>
+                    </div>
+
 
 
                 </div>
@@ -171,26 +181,8 @@
             <!-- End Row -->
         </div>
 
-        <div class="tab-pane fade mt-6" id="property-floorplan" role="tabpanel"
-            aria-labelledby="property-floorplan-tab">
-            <!-- Gallery -->
-            <a class="js-fancybox media-viewer" href="javascript:;" data-hs-fancybox-options="{
-             &quot;src&quot;: &quot;../assets/img/others/img1.png&quot;,
-             &quot;fancybox&quot;: &quot;fancyboxGalleryFloorPlan&quot;,
-             &quot;caption&quot;: &quot;Front in frames - image #01&quot;,
-             &quot;speed&quot;: 700,
-             &quot;loop&quot;: true
-           }">
-                <img class="img-fluid" src="../assets/img/others/img1.png" alt="Image Description">
-            </a>
-            <!-- End Gallery -->
-
-            <small class="form-text">Image source from <a href="https://floorplanner.com/"
-                    target="_blank">floorplanner.com</a></small>
-        </div>
-
         <div class="tab-pane fade mt-6" id="property-map" role="tabpanel" aria-labelledby="property-map-tab">
-            <h4 class="mb-4">Accessibility</h4>
+            <h4 class="mb-4">{{ translate('Reviews') }}</h4>
 
             <div class="row">
                 <div class="col-md-6">
@@ -200,9 +192,9 @@
                             <h6 class="mb-0">Location</h6>
 
                             <div class="d-flex ml-auto">
-                                @for ($i = 0; $i < 5; $i++)
-                                    @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__small'])
-                                @endfor
+                                @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning
+                                    ev-icon__small'])
+                                    @endfor
                             </div>
                         </li>
 
@@ -210,9 +202,9 @@
                             <h6 class="mb-0">Area safety</h6>
 
                             <div class="d-flex ml-auto">
-                                @for ($i = 0; $i < 5; $i++)
-                                    @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__small'])
-                                @endfor
+                                @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning
+                                    ev-icon__small'])
+                                    @endfor
                             </div>
                         </li>
 
@@ -220,9 +212,9 @@
                             <h6 class="mb-0">Close to schools</h6>
 
                             <div class="d-flex ml-auto">
-                                @for ($i = 0; $i < 5; $i++)
-                                    @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__small'])
-                                @endfor
+                                @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning
+                                    ev-icon__small'])
+                                    @endfor
                             </div>
                         </li>
                     </ul>
@@ -236,9 +228,9 @@
                             <h6 class="mb-0">Low cost</h6>
 
                             <div class="d-flex ml-auto">
-                                @for ($i = 0; $i < 5; $i++)
-                                    @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__small'])
-                                @endfor
+                                @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning
+                                    ev-icon__small'])
+                                    @endfor
                             </div>
                         </li>
 
@@ -246,9 +238,9 @@
                             <h6 class="mb-0">Built around</h6>
 
                             <div class="d-flex ml-auto">
-                                @for ($i = 0; $i < 5; $i++)
-                                    @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__small'])
-                                @endfor
+                                @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning
+                                    ev-icon__small'])
+                                    @endfor
                             </div>
                         </li>
 
@@ -256,9 +248,9 @@
                             <h6 class="mb-0">Value</h6>
 
                             <div class="d-flex ml-auto">
-                                @for ($i = 0; $i < 5; $i++)
-                                    @svg('heroicon-s-star', ["class" => 'text-warning ev-icon__small'])
-                                @endfor
+                                @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning
+                                    ev-icon__small'])
+                                    @endfor
                             </div>
                         </li>
                     </ul>
@@ -328,9 +320,9 @@
                         +1 416 346 8780
                     </span>
                     @if (get_setting('conversation_system') == 1)
-                        <button class="mt-2 btn btn-xs btn-soft-primary mr-auto" onclick="show_chat_modal()">
-                            {{ translate('Message Seller') }}
-                        </button>
+                    <button class="mt-2 btn btn-xs btn-soft-primary mr-auto" onclick="show_chat_modal()">
+                        {{ translate('Message Seller') }}
+                    </button>
                     @endif
                 </div>
             </div>

@@ -20,6 +20,11 @@ class ProductSlider extends Component
         //
         $this->photos = explode(',', $product->photos);
 
+        /* TODO: add placeholder images if there is less than 3 photos (needed for product single) */
+        if(count($this->photos) > 2) {
+
+        }
+
         $this->product = $product;
     }
 

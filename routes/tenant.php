@@ -51,15 +51,16 @@ Route::middleware([
 
     /* This is experimental, adding it here for now */
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
-    Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
 
+
+    // Homepage For Multi/Single Vendor mode
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
     // Feed Page (Possible new homepage)
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
     //Home Page
-    Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    //category dropdown menu ajax call
+    //Category dropdown menu ajax call
     Route::post('/category/nav-element-list', [HomeController::class, 'get_category_items'])->name('category.elements');
 
     Route::get('/sitemap.xml', function () {

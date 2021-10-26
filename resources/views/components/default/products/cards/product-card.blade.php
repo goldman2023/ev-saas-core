@@ -6,15 +6,14 @@
 
         <div class="position-absolute top-0 left-0 pt-3 pl-3">
             <span class="badge badge-success badge-pill">
-                {{ translate('New arrival') }}
+                {{ translate('New arrival!') }}
             </span>
         </div>
         <div class="position-absolute top-0 right-0 pt-3 pr-3">
-            <button type="button" class="btn btn-xs p-1 btn-icon btn-outline-secondary rounded-circle bg-white"
-            onclick="addToWishList({{ $product->id }})"
-            data-toggle="tooltip"
-                data-placement="top" title="{{ translate('Add To Wishlist') }}">
-                {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs']) }}
+            <button type="button" class="btn btn-xs p-1 btn-icon btn-danger rounded-circle "
+                onclick="addToWishList({{ $product->id }})" data-toggle="tooltip" data-placement="top"
+                title="{{ translate('Add To Wishlist') }}">
+                {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-white']) }}
             </button>
         </div>
     </div>
@@ -57,16 +56,17 @@
 
             <span class="text-dark font-weight-bold">
                 @if (home_base_price($product->id) != home_discounted_base_price($product->id))
-                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
                 @endif
                 <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
             </span>
         </div>
 
         {{-- TODO: Make an option to manage what buttons are visible --}}
-        {{-- <a href="{{ route('product', $product->slug) }}" type="button" class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
-        {{ translate('Add to Cart') }}
-      </a> --}}
+        {{-- <a href="{{ route('product', $product->slug) }}" type="button"
+            class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
+            {{ translate('Add to Cart') }}
+        </a> --}}
         <div class="hover-only">
 
             <a href="{{ route('product', $product->slug) }}" type="button"
