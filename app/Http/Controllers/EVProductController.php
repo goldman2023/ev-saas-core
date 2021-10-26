@@ -10,7 +10,7 @@ class EVProductController extends Controller
 {
     //
     public function index(Request $request) {
-        $products = Auth::user()->products()->orderBy('created_at','desc')->get();
+        $products = Auth::user()->products()->orderBy('created_at','desc')->paginate(20);
 
         return view('frontend.user.crud.products.index')->with('products', $products);
     }
