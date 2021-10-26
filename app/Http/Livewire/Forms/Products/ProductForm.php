@@ -129,6 +129,7 @@ class ProductForm extends Component
             $this->product->discount = 0;
             $this->product->low_stock_qty = 0;
             $this->product->min_qty = 1;
+            $this->product->unit_price = 0;
             $this->product->brand_id = null;
         }
 

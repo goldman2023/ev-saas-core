@@ -569,7 +569,6 @@ class HomeController extends Controller
         }
 
         $products = Product::where($conditions);
-        $products = [];
         if ($category_id != null) {
             /* WORK IN Progress for category management */
             /* TODO: Refactor category utility */
