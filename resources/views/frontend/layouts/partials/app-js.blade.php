@@ -93,7 +93,7 @@
                             '<a class="text-reset" href="' + href + item.slug + '">' +
                             item.name + '</a>' +
                             '</li>';
-
+                                console.log(item);
                         if (item.children) {
                             if (item.children.length > 0) {
                                 /* TODO: This does not work for 3rd level after category changes */

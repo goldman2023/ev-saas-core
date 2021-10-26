@@ -12,18 +12,18 @@
 
             <ul class="list-inline list-separator font-size-1 text-body d-flex">
                 <li class="list-inline-item align-items-center d-flex">
-                    @svg('heroicon-s-eye', ["class" => 'ev-icon__xs mr-2']) 3 Views
+                    @svg('heroicon-s-eye', ["class" => 'ev-icon__xs mr-2'])
+                    {{-- TODO: make this dynamic --}}
+                    3 Views
                 </li>
                 <li class="list-inline-item align-items-center d-flex">
                     @svg('heroicon-s-location-marker', ["class" => 'text-success ev-icon__xs mr-1'])
-
-
+                    {{-- TODO: make this dynamic --}}
                     {{ translate('Item Location:') }} Lithuania
                 </li>
                 <li class="list-inline-item  align-items-center d-flex">
                     @svg('heroicon-s-globe', ["class" => 'ev-icon__xs mr-1'])
-
-                    <i class="fas fa-ruler-combined text-muted mr-1"></i> {{ translate('Shipping globaly') }}
+                    {{ translate('Shipping globaly') }}
                 </li>
             </ul>
         </div>

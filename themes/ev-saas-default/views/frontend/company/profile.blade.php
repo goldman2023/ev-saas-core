@@ -1,7 +1,7 @@
 @extends('frontend.layouts.white-label')
 
 @section('content')
-<section class="bg-dark space-top-3 c-single-vendor-hero" >
+<section class="bg-dark space-top-lg-3  space-top-2 c-single-vendor-hero" >
     <div class="container">
         <h3 class="text-white">{{ translate('Gun auctions') }}</h3>
     </div>
@@ -31,7 +31,7 @@
         </x-default.products.product-list>
     </section>
 
-    <section class="space-2">
+    <section class="space-1">
         <div class="container">
             <h3>
                 {{ translate('Product Categories') }}
@@ -49,4 +49,7 @@
         <x-default.brands.brands-list>
         </x-default.brands.brands-list>
     </section>
+
+    @include('frontend.components.benefits')
+
 @endsection

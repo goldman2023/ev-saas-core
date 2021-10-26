@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-5 mb-7 mb-lg-0">
+    <div class="col-lg-4 mb-7 mb-lg-0">
       <!-- Nav -->
       <ul class="nav nav-box" role="tablist">
         @foreach ($categories as $key => $category)
@@ -29,17 +29,17 @@
       <!-- End Nav -->
     </div>
 
-    <div class="col-lg-7">
+    <div class="col-lg-8">
       <!-- Tab Content -->
       <div class="tab-content">
         @foreach ($categories as $key => $category)
-
-        <div class="tab-pane fade p-4 tab-pane fade p-4 @if($key === 0) show active @endif" id="category-tabs-{{ $key }}" role="tabpanel"
+        <div class="tab-pane fade pt-0 p-4 tab-pane fade @if($key === 0) show active @endif" id="category-tabs-{{ $key }}" role="tabpanel"
+        style="padding-top: 0 !important;"
         >
-          <p>{{ $category->name }}</p>
+          {{-- <h3 class="h4">{{ $category->name }}</h3> --}}
           <div class="row">
-            @foreach ($category->products()->take(4)->get() as $product)
-            <div class="col-sm-6">
+            @foreach (\App\Models\Product::take(4)->get() as $product)
+            <div class="col-sm-6 mb-3">
                 <x-default.products.cards.product-card :product="$product"
                     style="{{ ev_dynamic_translate('product-card', true)->value }}">
                 </x-default.products.cards.product-card>

@@ -24,6 +24,16 @@ meanwhile use .ev-icon class for adding icons
     }
 }
 
+#product-gallery-hero {
+    margin-top: -140px;
+    padding-top: 160px !important;
+    padding-bottom: 40px !important;
+    margin-bottom: -80px;
+    @media(max-width: 768px) {
+        margin-bottom: -20px;
+    }
+}
+
 .c-single-vendor-hero {
     margin-top: -130px;
     @media(max-width: 768px) {

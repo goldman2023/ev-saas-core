@@ -40,10 +40,7 @@
         <div id="fancyboxGallery" class="js-fancybox" data-hs-fancybox-options="{
                         'selector': '#fancyboxGallery .js-fancybox-item'
                     }">
-            <div class="overflow-hidden bg-dark" style="    margin-top: -140px;
-                padding-top: 160px !important;
-                padding-bottom: 40px !important;
-                margin-bottom: -80px;">
+            <div id="product-gallery-hero" class="overflow-hidden bg-dark">
                 <div class="container">
                     <div class="row ">
                         <div class="col-md-8 rounded-lg" style="max-height: 400px; overflow: hidden;">
