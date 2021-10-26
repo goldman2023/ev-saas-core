@@ -18,13 +18,12 @@ const path = require("path");
 
 
 /* Minimal dependency requirements for public parts of the website */
-mix.scripts([
+mix.js([
+    'resources/js/vendor/jquery.js',
     'resources/js/admin/vendors.js',
     'resources/js/vendor/aiz-core.js',
 ], 'public/assets/js/vendors.js');
 
-/* EV SaaS + HS Core In admin panel */
-mix.js('resources/js/admin/ev-saas.js', 'public/assets/admin/js/ev-saas.js').version()
 
 mix.scripts([
     'resources/js/vendor/vendors.js',

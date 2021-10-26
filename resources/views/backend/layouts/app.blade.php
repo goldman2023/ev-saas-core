@@ -71,8 +71,10 @@
 
     @yield('modal')
 
-
-    <script src="{{ static_asset('assets/admin/js/ev-saas.js') }}" > </script>
+    {{-- TODO: import jquery properly via webpack, didin't work last time I tried, fall back to this option,
+        works at least
+    --}}
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script src="{{ global_asset('js/vendors.js') }}" ></script>
 
 	@include('backend.layouts.partials.app-js')
