@@ -43,7 +43,7 @@
                 <div class="">
                     <a class="">
                         <h6>
-                            {{ translate('Sold By: ') }} {{ $product->user->shop->name }}
+                            {{ translate('Sold By: ') }} {{ $product->shop->name }}
                         </h6>
                     </a>
                 </div>
@@ -55,14 +55,14 @@
 
 
             <div class="b2b-product-pricing">
-                @if(home_base_price($product->id) != home_discounted_base_price($product->id))
+                @if($product->getBasePrice() != $product->getTotalPrice())
                     <small class="d-block text-lh-sm text-danger">
-                        <del>{{ home_base_price($product->id) }}</del>
+                        <del>{{ $product->getBasePrice(true) }}</del>
                     </small>
                 @endif
                 <span class="d-block h5 text-primary display-5 mb-0">
                             <span class="fw-700 text-primary">
-                                {{ home_discounted_base_price($product->id) }}
+                                {{ $product->getTotalPrice(true) }}
                             </span>
             </span>
             </div>

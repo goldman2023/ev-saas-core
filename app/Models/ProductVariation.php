@@ -143,7 +143,7 @@ class ProductVariation extends Model
      * @param bool $display
      * @return float $total
      */
-    public function getTotalPrice($display = false) {
+    public function getDiscountedPrice($display = false) {
         $this->total_price = $this->attributes['price'];
         /*if(empty($this->total_price)) {
             $this->total_price = $this->attributes['price'];
@@ -168,8 +168,8 @@ class ProductVariation extends Model
         return $display ? FX::formatPrice($this->attributes['price']) : $this->attributes['price'];
     }
 
-    public function getTotalPriceAttribute() {
-        return $this->getTotalPrice();
+    public function getDiscountedPriceAttribute() {
+        return $this->getDiscountedPrice();
     }
 
     // START: Casts section

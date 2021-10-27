@@ -24,10 +24,10 @@
             <div aria-hidden="true"
                  class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black opacity-50"></div>
             <p class="relative text-lg font-semibold text-white">
-                @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                    <del class="opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                @if($product->getBasePrice() != $product->getTotalPrice())
+                    <del class="opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                 @endif
-                <span class="opacity-100">{{ home_discounted_base_price($product->id) }}</span>
+                <span class="opacity-100">{{ $product->getTotalPrice(true) }}</span>
             </p>
         </div>
     </div>

@@ -2,7 +2,7 @@
 
 @section('content')
     @php
-        $prices = home_discounted_base_price($product['id'], false, true); // raw and display price
+        $prices = $product->getTotalPrice(false, true); // raw and display price
     @endphp
     <div class="bg-white">
         <div class="pt-6 pb-16 sm:pb-4"
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <x-tenant.product-list></x-tenant.product-list>
-            
+
             @livewire('tenant.product.review', ['product_id'=>$product->id])
 
         </div>

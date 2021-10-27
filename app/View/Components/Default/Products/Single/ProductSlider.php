@@ -9,7 +9,7 @@ class ProductSlider extends Component
 {
 
     public Product $product;
-    public $photos;
+    public $images;
     /**
      * Create a new component instance.
      *
@@ -17,18 +17,7 @@ class ProductSlider extends Component
      */
     public function __construct(Product $product)
     {
-        //
-        $this->photos = explode(',', $product->photos);
-
-        /* TODO: add placeholder images if there is less than 3 photos (needed for product single) */
-        if(count($this->photos) > 2) {
-            $this->photos[1] = $this->photos[0];
-        }
-
-        if(count($this->photos) > 3) {
-            $this->photos[2] = $this->photos[0];
-        }
-
+        $this->images = $product->images;
         $this->product = $product;
     }
 

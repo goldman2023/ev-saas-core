@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\PurchaseHistoryCollection;
+use App\Http\Resources\PurchaseHistory
+Collection;
 use App\Models\Order;
 
 class PurchaseHistoryController extends Controller

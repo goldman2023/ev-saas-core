@@ -30,13 +30,13 @@
         <div class="col-sm-5 column-divider-sm">
             <div class="pl-md-4">
                 <h2 class="mb-0">
-                    @if (home_base_price($product->id) != home_discounted_base_price($product->id))
+                    @if ($product->getBasePrice() != $product->getTotalPrice())
                     <del class="h3 fw-600 opacity-50 mr-1">
-                        {{ home_base_price($product->id) }}
+                        {{ $product->getBasePrice(true) }}
                     </del>
                     @endif
                     <span class="h2 fw-700 text-primary">
-                        {{ home_discounted_base_price($product->id) }}</span>
+                        {{ $product->getTotalPrice(true) }}</span>
                     </span>
                 </h2>
                 <span class="d-block text-dark mb-3">Est. Shipping 76€</span>
@@ -111,8 +111,7 @@
                     <h4 class="mb-4">Description</h4>
 
                     <div class="c-product-description">
-                        {{ $product->getTranslation('description') }}
-
+                        {!! $product->getTranslation('description') !!}
                     </div>
                     <hr>
                     <div class="mt-3">

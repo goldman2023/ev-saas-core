@@ -51,11 +51,11 @@
                         <span class="d-block font-size-1 text-body mb-1">
                             <span class="text-dark font-weight-bold">
                                 {{ translate('Price: ') }}
-                                @if (home_base_price($product->id) != home_discounted_base_price($product->id))
-                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                                @if ($product->getBasePrice() != $product->getTotalPrice())
+                                    <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                                 @endif
                                 <span
-                                    class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                    class="fw-700 text-primary">{{ getTotalPrice(true) }}</span>
                             </span>
 
                         </span>

@@ -38,10 +38,10 @@
                                     {{  $product->getTranslation('name')  }}
                                 </div>
                                 <div class="">
-                                    @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                        <del class="opacity-60 fs-15">{{ home_base_price($product->id) }}</del>
+                                    @if($product->getBasePrice() != $product->getTotalPrice())
+                                        <del class="opacity-60 fs-15">{{ $product->getBasePrice(true) }}</del>
                                     @endif
-                                    <span class="fw-600 fs-16 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                    <span class="fw-600 fs-16 text-primary">{{ $product->getTotalPrice(true) }}</span>
                                 </div>
                             </div>
                         </div>

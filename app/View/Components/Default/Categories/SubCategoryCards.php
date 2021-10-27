@@ -7,17 +7,15 @@ use Illuminate\View\Component;
 class SubCategoryCards extends Component
 {
     public $categories;
-    public $category_id;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($category_id = null, $categories = null)
+    public function __construct($categories = null)
     {
-        //
-        $this->categories = $categories;
-        $this->category_id = $category_id;
+        $this->categories = ($categories instanceof \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection) ? $categories->toTree() : $categories;
     }
 
     /**
