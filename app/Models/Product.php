@@ -143,6 +143,8 @@ class Product extends Model
     public $current_stock;
     public $low_stock_qty;
     public $total_price;
+    public $discounted_price;
+    public $base_price;
     public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
 
 
@@ -163,7 +165,7 @@ class Product extends Model
         'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id', 'total_price'];
+    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id', 'total_price', 'discounted_price', 'base_price'];
 
     protected static function boot()
     {
@@ -419,14 +421,15 @@ class Product extends Model
     }
 
     /**
-     * Get product end(total) price
+     * Get product total price with tax
      *
-     * NOTE: Total price is a price of the product after all discounts, but without Tax included
+     * NOTE: Total price is a price of the product after all discounts and with Tax included
      *
      * @param bool $display
-     * @return float $total
+     * @param bool $both_formats
+     * @return mixed $total
      */
-    public function getTotalPrice($display = false) {
+    public function getTotalPrice($display = true, $both_formats = false) {
         if(empty($this->total_price)) {
             $this->total_price = $this->attributes['unit_price'];
 
@@ -472,18 +475,131 @@ class Product extends Model
                     }
                 }
             }
+
+            // TODO: Create tax_relationship table and link it to subjects and taxes!
+            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+            if(!empty($this->attributes['tax'])) {
+                if ($this->attributes['tax_type'] === 'percent') {
+                    $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
+                } elseif ($this->attributes['tax_type'] === 'amount') {
+                    $this->total_price += $this->attributes['tax'];
+                }
+            }
+
+        }
+
+        if ($both_formats) {
+            return [
+                'raw' => $this->total_price,
+                'display' => FX::formatPrice($this->total_price)
+            ];
         }
 
         return $display ? FX::formatPrice($this->total_price) : $this->total_price;
+    }
+
+    public function getTotalPriceAttribute() {
+        return $this->getTotalPrice();
+    }
+
+    /**
+     * Get discounted price
+     *
+     * NOTE: Discounted price is a price of the product after all discounts, but without Tax included
+     *
+     * @param bool $display
+     * @return float $discounted_price
+     */
+    public function getDiscountedPrice($display = false) {
+        if(empty($this->discounted_price)) {
+            $this->discounted_price = $this->attributes['unit_price'];
+
+            if($this->has_variations()) {
+                // TODO: Display lowest/highest variant total price OR SOME COMBINATION
+                /*if ($flash_deal->discount_type === 'percent') {
+                    $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
+                    $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $lowest_price -= $flash_deal_product->discount;
+                    $highest_price -= $flash_deal_product->discount;
+                }*/
+                $flash_deal = $this->flash_deals->first();
+
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->discounted_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->discounted_price -= $this->attributes['discount'];
+                    }
+                }
+            } else {
+                $flash_deal = $this->flash_deals->first();
+
+                // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->discounted_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->discounted_price -= $this->attributes['discount'];
+                    }
+                }
+            }
+        }
+
+        return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
+    }
+
+    public function getDiscountedPriceAttribute() {
+        return $this->getDiscountedPrice();
+    }
+
+    /**
+     * Get Base price
+     *
+     * NOTE: Base price is the price of the product with product related taxes
+     *
+     * @param bool $display
+     * @return float $base_price
+     */
+    public function getBasePrice($display = false) {
+        if(empty($this->base_price)) {
+            $this->base_price = $this->attributes['unit_price'];
+
+            // TODO: Create tax_relationship table and link it to subjects and taxes!
+            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+            if(!empty($this->attributes['tax'])) {
+                if ($this->attributes['tax_type'] === 'percent') {
+                    $this->base_price += ($this->base_price * $this->attributes['tax']) / 100;
+                } elseif ($this->attributes['tax_type'] === 'amount') {
+                    $this->base_price += $this->attributes['tax'];
+                }
+            }
+        }
+
+        return $display ? FX::formatPrice($this->base_price) : $this->base_price;
+    }
+
+    public function getBasePriceAttribute() {
+        return $this->getBasePrice();
     }
 
     public function getOriginalPrice($display = false) {
         return $display ? FX::formatPrice($this->attributes['unit_price']) : $this->attributes['unit_price'];
     }
 
-    public function getTotalPriceAttribute() {
-        return $this->getTotalPrice();
-    }
+
 
     public function setTempSkuAttribute($value)
     {

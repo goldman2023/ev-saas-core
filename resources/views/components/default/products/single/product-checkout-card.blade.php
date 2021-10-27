@@ -13,13 +13,11 @@
                         {{ translate('Price:') }}
 
                     </div>
-                    @if (home_base_price($product->id) !=
-                    home_discounted_base_price($product->id))
-                    <del class="h3 fw-600 opacity-50 mr-1">{{ home_base_price($product->id)
-                        }}</del>
+                    @if ($product->getBasePrice() != $product->getTotalPrice())
+                    <del class="h3 fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                     @endif
                     <span class="h2 fw-700 text-primary">{{
-                        home_discounted_base_price($product->id) }}</span>
+                        $product->getTotalPrice(true) }}</span>
                 </span>
 
             </div>

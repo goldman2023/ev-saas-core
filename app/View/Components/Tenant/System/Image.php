@@ -9,17 +9,17 @@ class Image extends Component
 
     public $image;
     public $dataSrcSet;
+    public $fit;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($image, $dataSrcSet= null)
+    public function __construct($image, $fit = 'inherit', $dataSrcSet= null)
     {
-        //
-
-        $this->image = $image;
+        $this->image = is_string($image) ? $image : uploaded_asset($image);
         $this->dataSrcSet = $dataSrcSet;
+        $this->fit = $fit;
     }
 
     /**

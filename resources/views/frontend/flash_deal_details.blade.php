@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @if($flash_deal->status == 1 && strtotime(date('Y-m-d H:i:s')) <= $flash_deal->end_date) 
+    @if($flash_deal->status == 1 && strtotime(date('Y-m-d H:i:s')) <= $flash_deal->end_date)
     <div style="background-color:{{ $flash_deal->background_color }}">
         <section class="text-center mb-5">
             <img
@@ -50,10 +50,10 @@
                                     </div>
                                     <div class="p-md-3 p-2 text-left">
                                         <div class="fs-15">
-                                            @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                                <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                                            @if($product->getBasePrice() != $product->getTotalPrice())
+                                                <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                                             @endif
-                                            <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                            <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span>
                                         </div>
                                         <div class="rating rating-sm mt-1">
                                             {{ renderStarRating($product->rating) }}

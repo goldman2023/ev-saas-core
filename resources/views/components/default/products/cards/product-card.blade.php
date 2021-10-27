@@ -1,8 +1,11 @@
 <div class="ev-product-card card card-bordered shadow-none text-left h-100">
     <div class="position-relative">
 
-        <x-tenant.system.image alt="{{ $product->getTranslation('name') }}" class="card-img-top ev-product-card__img"
-            :image="$product->thumbnail_img"></x-tenant.system.image>
+        <a class="card-img-top" href="{{ route('product', $product->slug) }}">
+            <x-tenant.system.image alt="{{ $product->getTranslation('name') }}" class="card-img-top ev-product-card__img" fit="cover"
+                                   :image="$product->images['thumbnail']['url'] ?? ''"></x-tenant.system.image>
+        </a>
+
 
         <div class="position-absolute top-0 left-0 pt-3 pl-3">
             <span class="badge badge-success badge-pill">
@@ -55,10 +58,10 @@
         <div class="d-block text-left">
 
             <span class="text-dark font-weight-bold">
-                @if (home_base_price($product->id) != home_discounted_base_price($product->id))
-                <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                @if ($product->getBasePrice() != $product->getTotalPrice())
+                <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                 @endif
-                <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span>
             </span>
         </div>
 

@@ -2,8 +2,8 @@
     <div class="col-sm-6">
         <small class=" opacity-50">{{ translate('Sold by') }}: </small>
         @if ($product->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
-            <a href="{{ route('shop.visit', $product->user->shop->slug) }}" class="text-reset">
-                {{ $product->user->shop->name }}
+            <a href="{{ route('shop.visit', $product->shop->slug) }}" class="text-reset">
+                {{ $product->shop->name }}
             </a>
         @else
             {{-- {{ translate('Inhouse product') }} --}}

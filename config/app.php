@@ -207,6 +207,7 @@ return [
 
         // EVServiceProvider
         App\Providers\EVServiceProvider::class,
+        App\Providers\MacrosServiceProvider::class,
     ],
 
     /*
@@ -271,6 +272,7 @@ return [
         'TenantSettings' => App\Facades\TenantSettings::class,
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,
+        'Categories' => App\Facades\Categories::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,

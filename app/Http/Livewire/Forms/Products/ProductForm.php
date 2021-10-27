@@ -17,6 +17,7 @@ use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use DB;
 use EVS;
+use Categories;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Purifier;
@@ -109,7 +110,7 @@ class ProductForm extends Component
         $this->rows = collect([]);
         $this->page = $page;
         $this->attributes = EVS::getMappedAttributes(Product::class, $product);
-        $this->categories = EVS::categoriesTree();
+        $this->categories = Categories::getAll();
 
         // Set default params
         if($product) {

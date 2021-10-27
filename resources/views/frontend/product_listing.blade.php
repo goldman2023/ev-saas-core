@@ -1,20 +1,20 @@
 @extends('frontend.layouts.' . $globalLayout)
 
-@if (isset($category_id))
-@php
-$meta_title = \App\Models\Category::find($category_id)->meta_title;
-$meta_description = \App\Models\Category::find($category_id)->meta_description;
-@endphp
+@if (!empty($categories))
+    @php
+        $meta_title = $categories->first()->meta_title;
+        $meta_description = $categories->first()->meta_description;
+    @endphp
 @elseif (isset($brand_id))
-@php
-$meta_title = \App\Models\Brand::find($brand_id)->meta_title;
-$meta_description = \App\Models\Brand::find($brand_id)->meta_description;
-@endphp
+    @php
+        $meta_title = \App\Models\Brand::find($brand_id)->meta_title;
+        $meta_description = \App\Models\Brand::find($brand_id)->meta_description;
+    @endphp
 @else
-@php
-$meta_title = get_setting('meta_title');
-$meta_description = get_setting('meta_description');
-@endphp
+    @php
+        $meta_title = get_setting('meta_title');
+        $meta_description = get_setting('meta_description');
+    @endphp
 @endif
 
 @section('meta_title'){{ $meta_title }}@stop
@@ -47,21 +47,14 @@ $meta_description = get_setting('meta_description');
                         <li class="breadcrumb-item opacity-50">
                             <a class="" href="{{ route('home') }}">{{ translate('Home') }}</a>
                         </li>
-                        @if (!isset($category_id))
-                        <li class="breadcrumb-item fw-600">
-                            <a class="" href="{{ route('search') }}">"{{ translate('All Categories') }}"</a>
+                        <li class="breadcrumb-item {{ !empty($categories) ? 'fw-600':'opacity-50' }} ">
+                            <a class="{{ !empty($categories) ? '':'text-white' }}" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
-                        @else
-                        <li class="breadcrumb-item opacity-50">
-                            <a class="text-white" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
-                        </li>
-                        @endif
-                        @if (isset($category_id))
-                        <li class="text-dark fw-600 breadcrumb-item">
-                            <a class=""
-                                href="{{ route('products.category', \App\Models\Category::find($category_id)->slug) }}">"{{
-                                \App\Models\Category::find($category_id)->getTranslation('name') }}"</a>
-                        </li>
+                        @if (!empty($categories?->first()))
+                            <li class="text-dark fw-600 breadcrumb-item">
+                                <a class="text-white" href="{{ route('products.category', $categories->first()->slug) }}">
+                                    {{ $categories->first()->getTranslation('name') }}</a>
+                            </li>
                         @endif
                     </ul>
 
@@ -102,25 +95,23 @@ $meta_description = get_setting('meta_description');
 
                 <div class="col-xl-9">
 
-
                     @if ($content == 'product' || $content == null)
                     <div>
                         <div class="text-left">
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h1 class="h3 fw-600">
-                                        @if (isset($category_id))
-                                        {{ translate('Products - ') }}{{
-                                        \App\Models\Category::find($category_id)->getTranslation('name') }}
+                                        @if (!empty($categories))
+                                            {{ translate('Products - ') }}
+                                            {{ $categories->first()->getTranslation('name') }}
                                         @elseif(isset($query))
-                                        {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' .
-                                        $product->count() }}
+                                            {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product->count() }}
                                         @else
-                                        {{ translate('All Products') }}
+                                            {{ translate('All Products') }}
                                         @endif
                                     </h1>
                                 </div>
-                                @if ($products->count() > 0 && $content == null && !isset($category_id))
+                                @if ($products->count() > 0 && $content == null && !empty($categories))
                                 <div class="ml-auto text-right">
                                     <a class="font-weight-bold"
                                         href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">
@@ -138,8 +129,8 @@ $meta_description = get_setting('meta_description');
                             </div>
                         </div>
                         {{-- Sub Categories Display --}}
-                        @if($category_id)
-                            <x-default.categories.sub-category-cards :category_id="$category_id"></x-default.categories.sub-category-cards>
+                        @if(!empty($categories))
+                            <x-default.categories.sub-category-cards :categories="$categories"></x-default.categories.sub-category-cards>
                         @endif
                         {{-- END Sub Categories Display --}}
                         @if ($products->count() > 0)
@@ -147,12 +138,12 @@ $meta_description = get_setting('meta_description');
                         <div class="row gutters-5 mt-2">
                             @foreach ($products as $key => $product)
                             <div class="col-sm-4 mb-3">
-                                <x-default.products.cards.product-card :product="$product" style="product-card">
+                                <x-default.products.cards.product-card :product="$product" class="product-card">
                                 </x-default.products.cards.product-card>
                             </div>
                             @endforeach
                         </div>
-                        @if ($content == 'product' || isset($category_id))
+                        @if ($content == 'product' || !empty($categories))
                         <hr />
                         <div class="d-flex ev-pagination justify-content-center mt-3">
                             {{ $products->links() }}
@@ -180,60 +171,18 @@ $meta_description = get_setting('meta_description');
                             </div>
                             <div class="bg-white shadow-sm rounded mb-3">
                                 <div class="fs-15 fw-600 p-3 border-bottom">
-                                    {{ translate('categories') }}
+                                    {{ translate('Categories') }}
                                 </div>
                                 <div class="p-3">
                                     <ul class="list-unstyled">
-                                        @if (!isset($category_id))
-                                        @foreach (\App\Models\Category::where('level', 0)->get() as $category)
-                                        <li class="mb-2 ml-2">
-                                            <a class="text-reset fs-14"
-                                                href="{{ route('products.category', $category->slug) }}">
-                                                {{ $category->getTranslation('name') }}
-                                            </a>
-                                        </li>
-                                        @endforeach
-                                        @else
-                                        <li class="mb-2">
-                                            <a class="text-reset fs-14 fw-600" href="{{ route('search') }}">
-                                                <i class="las la-angle-left"></i>
-                                                {{ translate('All Industries') }}
-                                            </a>
-                                        </li>
-                                        @if (\App\Models\Category::find($category_id)->parent_id != 0)
-                                        <li class="mb-2">
-                                            <a class="text-reset fs-14 fw-600"
-                                                href="{{ route('products.category', \App\Models\Category::find(\App\Models\Category::find($category_id)->parent_id)->slug) }}">
-                                                <i class="las la-angle-left"></i>
-                                                {{
-                                                \App\Models\Category::find(\App\Models\Category::find($category_id)->parent_id)->getTranslation('name')
-                                                }}
-                                            </a>
-                                        </li>
-                                        @endif
-                                        <li class="mb-2">
-                                            <a class="text-reset fs-14 fw-600"
-                                                href="{{ route('products.category', \App\Models\Category::find($category_id)->slug) }}">
-                                                <i class="las la-angle-left"></i>
-                                                {{ \App\Models\Category::find($category_id)->getTranslation('name') }}
-                                            </a>
-                                        </li>
-                                        @foreach (\App\Utility\CategoryUtility::get_immediate_children_ids($category_id)
-                                        as $key => $id)
-                                        <li class="ml-4 mb-2">
-                                            <a class="text-reset fs-14"
-                                                href="{{ route('products.category', \App\Models\Category::find($id)->slug) }}">{{
-                                                \App\Models\Category::find($id)->getTranslation('name') }}</a>
-                                        </li>
-                                        @endforeach
-                                        @endif
+
                                     </ul>
                                 </div>
                             </div>
 
                             @if($content != null)
-                            <x-company.company-attributes :items="$attributes" :selected="$filters">
-                            </x-company.company-attributes>
+                                <x-company.company-attributes :items="$attributes" :selected="$filters">
+                                </x-company.company-attributes>
                             @endif
                         </div>
                     </div>

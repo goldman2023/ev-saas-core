@@ -9,10 +9,12 @@ use App\Models\AttributeValue;
 use App\Traits\LoggingTrait;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Session;
 use Auth;
 use Hash;
 use Vendor;
+use Categories;
 use App\Models\Category;
 use App\Models\FlashDeal;
 use App\Models\Brand;
@@ -541,23 +543,26 @@ class HomeController extends Controller
 
     public function listingByCategory(Request $request, $category_slug)
     {
-        $category = Category::where('slug', $category_slug)->first();
-        if ($category != null) {
-            return $this->search($request, $category->id);
+        $categories = \Categories::getChildrenAndSelf($category_slug);
+
+        if (!empty($categories) && $categories->isNotEmpty()) {
+            return $this->search($request, $categories);
         }
-        abort(404);
+
+        abort(404); // TODO: Maybe a redirect to All Categories?
+        return null;
     }
 
     public function listingByBrand(Request $request, $brand_slug)
     {
         $brand = Brand::where('slug', $brand_slug)->first();
-        if ($brand != null) {
+        if (!empty($brand)) {
             return $this->search($request, null, $brand->id);
         }
         abort(404);
     }
 
-    public function search(Request $request, $category_id = null, $brand_id = null)
+    public function search(Request $request, $categories = null, $brand_id = null)
     {
         $query = $request->q;
         $sort_by = $request->sort_by;
@@ -567,24 +572,15 @@ class HomeController extends Controller
         $conditions = ['published' => 1];
 
         if ($seller_id != null) {
-            $conditions = array_merge($conditions, ['user_id' => Seller::findOrFail($seller_id)->user->id]);
+            // ADD TRY CATCH BLOCK to capture the exception on fail!
+            $conditions = array_merge($conditions, ['shop_id' => Seller::findOrFail($seller_id)->user->shop->id]);
         }
 
         $products = Product::where($conditions);
-        if ($category_id != null) {
-            /* WORK IN Progress for category management */
-            /* TODO: Refactor category utility */
-            $category_ids = CategoryUtility::children_ids($category_id);
-            $category_ids[] = $category_id;
-            $relationships = CategoryRelationship::whereIn('category_id', $category_ids)->where('subject_type', '=',  'App\Models\Product')->get();
-            foreach($relationships as $item ) {
-                // $products =  array_push($products, $item->subject); // actual product
-            }
-            /* TODO: We need to update this part to fetch products by category_relationships */
-            $products = $products;
 
-            $category = Category::find($category_id);
-            // $shops = $category->companies();
+        if (!empty($categories) && $categories->isNotEmpty()) {
+            $products->restrictByCategories($categories);
+
             /* TODO Check verification for shops */
             $shops = Shop::where('id');
         } else {
@@ -676,11 +672,11 @@ class HomeController extends Controller
 
 
         /* TODO: Make this to show products by actual category */
-        $products = Product::paginate(12);
+        $products = $products->paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'categories', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

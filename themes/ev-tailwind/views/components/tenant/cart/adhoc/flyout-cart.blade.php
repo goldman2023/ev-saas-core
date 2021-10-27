@@ -66,7 +66,7 @@
                                         @foreach ($items as $item)
                                             @php
                                                 var_dump($item);
-                                                $prices = home_discounted_base_price($item['id'], false, true);
+                                                $prices = $item->getTotalPrice(false, true);
                                             @endphp
                                             <li class="py-6 flex">
                                                 <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">

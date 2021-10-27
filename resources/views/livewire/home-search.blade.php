@@ -2,15 +2,15 @@
     <div class="relative" @click.outside="showResult = false; showLoader = false;">
         <!-- Seach input form -->
         <form action="/search" class="flex flex-wrap justify-between md:flex-row">
-            <input 
+            <input
                 wire:model.debounce.500ms="query"
                 type="search"
                 name="query"
                 x-ref="searchQuery"
                 @input.debounce.500ms="checkSearchQuery('input')"
                 @focus="checkSearchQuery('focus')"
-                placeholder="Search Companies Example: Wood mills" 
-                required="required" 
+                placeholder="Search Companies Example: Wood mills"
+                required="required"
                 class="flex-1 h-10 px-4 m-1 text-gray-700 placeholder-gray-400 bg-transparent border-none appearance-none lg:h-12 dark:text-gray-200 focus:outline-none focus:placeholder-transparent focus:ring-0">
             <button type="submit" class="flex items-center justify-center w-full p-2 m-1 text-white transition-colors duration-200 transform rounded-md lg:w-12 lg:h-12 lg:p-0 bg-indigo-600 hover:bg-indigo-300 focus:outline-none focus:bg-indigo-300">
                 @svg('search', 'w-6 h-6')
@@ -19,7 +19,7 @@
         <!-- End Seach input form -->
 
         <!-- Seach result container -->
-        <div :class="{ 'hidden': !showResult }" class="hidden absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">    
+        <div :class="{ 'hidden': !showResult }" class="hidden absolute w-full shadow-xl bg-white rounded-[3px] min-h-[200px]">
             <!-- Dot loader -->
             <div class="flex justify-center">
                 <div :class="{ 'hidden': !showLoader }" class="dot-loader hidden">
@@ -78,10 +78,10 @@
                                                     {{  $product->getTranslation('name')  }}
                                                 </div>
                                                 <div class="">
-                                                    @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                                        <del class="opacity-60 text-[15px]">{{ home_base_price($product->id) }}</del>
+                                                    @if($product->getBasePrice() != $product->getTotalPrice())
+                                                        <del class="opacity-60 text-[15px]">{{ $product->getBasePrice(true) }}</del>
                                                     @endif
-                                                    <span class="font-semibold text-[16px] text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                                    <span class="font-semibold text-[16px] text-primary">{{ $product->getTotalPrice(true) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,17 +147,17 @@
                             @endforeach
                         </ul>
                     @endif
-                </div>        
+                </div>
             </div>
             <!-- End Seach result list -->
         </div>
         <!-- End Seach result container -->
-    </div>	
+    </div>
 </div>
 
 <script>
     function searchForm() {
-        return { 
+        return {
             showEmpty: @entangle('isEmpty').defer,
             showResult: @entangle('isOpen').defer,
             showLoader: @entangle('isLoader').defer,

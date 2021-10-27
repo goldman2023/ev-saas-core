@@ -170,7 +170,7 @@
 
                             <hr>
 
-                            @if(home_price($detailedProduct->id) != home_discounted_price($detailedProduct->id))
+                            @if($product->getOriginalPrice() != $product->getDiscountedPrice())
 
                                 <div class="row no-gutters mt-3">
                                     <div class="col-sm-2">
@@ -179,7 +179,7 @@
                                     <div class="col-sm-10">
                                         <div class="fs-20 opacity-60">
                                             <del>
-                                                {{ home_price($detailedProduct->id) }}
+                                                {{ $product->getOriginalPrice(true) }}
                                                 @if($detailedProduct->unit != null)
                                                     <span>/{{ $detailedProduct->getTranslation('unit') }}</span>
                                                 @endif
@@ -195,7 +195,7 @@
                                     <div class="col-sm-10">
                                         <div class="">
                                             <strong class="h2 fw-600 text-primary">
-                                                {{ home_discounted_price($detailedProduct->id) }}
+                                                {{ $product->getDiscountedPrice(true) }}
                                             </strong>
                                             @if($detailedProduct->unit != null)
                                                 <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
@@ -211,7 +211,7 @@
                                     <div class="col-sm-10">
                                         <div class="">
                                             <strong class="h2 fw-600 text-primary">
-                                                {{ home_discounted_price($detailedProduct->id) }}
+                                                {{ $product->getDiscountedPrice(true) }}
                                             </strong>
                                             @if($detailedProduct->unit != null)
                                                 <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
@@ -552,7 +552,7 @@
                                                 {{ renderStarRating($top_product->rating) }}
                                             </div>
                                             <div class="mt-2">
-                                                <span class="fs-17 fw-600 text-primary">{{ home_discounted_base_price($top_product->id) }}</span>
+                                                <span class="fs-17 fw-600 text-primary">{{ $top_product->getTotalPrice(true) }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -752,10 +752,10 @@
                                         </div>
                                         <div class="p-md-3 p-2 text-left">
                                             <div class="fs-15">
-                                                @if(home_base_price($related_product->id) != home_discounted_base_price($related_product->id))
-                                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($related_product->id) }}</del>
+                                                @if($related_product->getBasePrice() != $related_product->getTotalPrice())
+                                                    <del class="fw-600 opacity-50 mr-1">{{ $related_product->getBasePrice(true) }}</del>
                                                 @endif
-                                                <span class="fw-700 text-primary">{{ home_discounted_base_price($related_product->id) }}</span>
+                                                <span class="fw-700 text-primary">{{ $related_product->getTotalPrice(true) }}</span>
                                             </div>
                                             <div class="rating rating-sm mt-1">
                                                 {{ renderStarRating($related_product->rating) }}
