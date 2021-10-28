@@ -526,9 +526,9 @@ class HomeController extends Controller
 
         $categories = Category::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $shops = Shop::whereIn('user_id', verified_sellers_id())->where('name', 'like', '%' . $request->search . '%')->get()->take(3);
+        $shops = Shop::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $events = Event::whereIn('user_id', verified_sellers_id())->where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
+        $events = Event::where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
 
         if (sizeof($keywords) > 0 || sizeof($categories) > 0 || sizeof($products) > 0 || sizeof($shops) > 0) {
             return view('frontend.partials.search_content', compact('products', 'categories', 'keywords', 'shops', 'events'));

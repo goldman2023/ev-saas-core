@@ -1,3 +1,30 @@
 #header {
     position: fixed;
 }
+
+.sub-header {
+    background: $primary;
+
+    .nav-link {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+}
+
+.category-dropdown-toggle {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+}
+
+
+/* Main search component  */
+/* <x-b2-b-search></x-b2-b-search> */
+.c-main-search {
+    /* TODO: make this a variable */
+    background: #d6d6d6;
+    border-radius: 5px;
+
+    input[type='text'] {
+        background: transparent;
+    }
+}
