@@ -676,7 +676,7 @@ class HomeController extends Controller
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        $selected_category = $selected_categories->toTree()->first();
+        $selected_category = !empty($selected_categories) ? $selected_categories->toTree()->first() : null;
         return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 

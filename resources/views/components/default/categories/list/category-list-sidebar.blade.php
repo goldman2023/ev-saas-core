@@ -38,7 +38,7 @@
                         @foreach($categories as $category)
                             <div class="mb-2 mt-lg-0">
                                 @php
-                                    $show = $selectedCategory->id === $category->id || Str::startsWith($selectedCategory->slug_path, $category->slug_path);
+                                    $show = ($selectedCategory->id ?? null) === $category->id || Str::startsWith($selectedCategory->slug_path ?? null, $category->slug_path);
                                     $is_collapsed = $show ? '':'collapsed';
                                 @endphp
                                 <h3 class="c-category-list-sidebar__top-item h5 fw-500 d-flex justify-content-between align-items-center px-0 mb-1 {{ $is_collapsed }}"
@@ -71,7 +71,7 @@ function recursiveTemplate($children, $parent, $selectedCategory, $show = false)
         foreach($children as $category) {
 @endphp
     <a class="c-category-list-sidebar__submenu-item dropdown-item d-flex justify-content-between align-items-center px-0
-        @if(Str::startsWith($selectedCategory->slug_path, $category->slug_path)) active @endif
+        @if(Str::startsWith($selectedCategory->slug_path ?? null, $category->slug_path)) active @endif
     " href="{{ route('products.category', $category->slug) }}">
         <span class="pr-1 flex-text-ellipsis">{{ $category->name }}</span>
         <span class="badge border badge-pill">{{ $category->products_count ?? '' }}</span>
