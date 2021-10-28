@@ -543,10 +543,10 @@ class HomeController extends Controller
 
     public function listingByCategory(Request $request, $category_slug)
     {
-        $categories = \Categories::getChildrenAndSelf($category_slug);
+        $selected_categories = \Categories::getChildrenAndSelf($category_slug, 'flat');
 
-        if (!empty($categories) && $categories->isNotEmpty()) {
-            return $this->search($request, $categories);
+        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
+            return $this->search($request, $selected_categories);
         }
 
         abort(404); // TODO: Maybe a redirect to All Categories?
@@ -562,7 +562,7 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function search(Request $request, $categories = null, $brand_id = null)
+    public function search(Request $request, $selected_categories = null, $brand_id = null)
     {
         $query = $request->q;
         $sort_by = $request->sort_by;
@@ -578,8 +578,8 @@ class HomeController extends Controller
 
         $products = Product::where($conditions);
 
-        if (!empty($categories) && $categories->isNotEmpty()) {
-            $products->restrictByCategories($categories);
+        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
+            $products->restrictByCategories($selected_categories);
 
             /* TODO Check verification for shops */
             $shops = Shop::where('id');
@@ -676,7 +676,8 @@ class HomeController extends Controller
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'categories', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
+        $selected_category = $selected_categories->toTree()->first();
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

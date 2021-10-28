@@ -1,4 +1,5 @@
 <div>
+    <!-- Category List Small -->
     <!-- Component used: https://htmlstream.com/front/snippets/ecommerce.html#component-1 -->
 
     <!-- Categories Section -->
@@ -21,7 +22,7 @@
                                 <div class="media-body">
                                     <h5 class="text-hover-primary mb-0">{{ $category->name }}</h5>
                                     <small>
-                                      {{ $category->products()->count() }}  {{ translate('Products') }}
+                                      {{ $category->products_count }}  {{ translate('Products') }}
                                     </small>
                                 </div>
 
