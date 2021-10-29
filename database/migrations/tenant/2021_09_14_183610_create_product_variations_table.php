@@ -55,8 +55,13 @@ class CreateProductVariationsTable extends Migration
             if (Schema::hasColumn('product_stocks', 'variation_id')) {
                 $table->dropColumn('variation_id');
             }
-            $table->renameColumn('product_id', 'subject_id');
-            $table->renameColumn('variant', 'subject_type');
+            if (Schema::hasColumn('product_stocks', 'product_id') && !Schema::hasColumn('product_stocks', 'subject_id')) {
+                $table->renameColumn('product_id', 'subject_id');
+            }
+
+            if (Schema::hasColumn('product_stocks', 'variant') && !Schema::hasColumn('product_stocks', 'subject_type')) {
+                $table->renameColumn('variant', 'subject_type');
+            }
         });
     }
 

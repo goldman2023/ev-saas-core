@@ -14,7 +14,9 @@ class MakeImageNullableProductVariationsTable extends Migration
     public function up()
     {
         Schema::table('product_variations', function (Blueprint $table) {
-            $table->string('image', 255)->nullable(true)->change();
+            if (Schema::hasColumn('product_variations', 'image')) {
+                $table->string('image', 255)->nullable(true)->change();
+            }
         });
     }
 
