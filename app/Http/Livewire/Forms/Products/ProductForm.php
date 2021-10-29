@@ -332,7 +332,7 @@ class ProductForm extends Component
         $this->product->todays_deal = 0;
 
         // TODO: Add Product status option to the form - published, draft
-        $this->product->published = $published;
+        $this->product->published = 1;
 
         // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
         // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!

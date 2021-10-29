@@ -157,11 +157,7 @@
                             {{ translate('Login') }}
                         </a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="{{ route('shops.create') }}">
-                            {{ translate('Registration') }}
-                        </a>
-                    </li>
+
                     @endauth
                     <!-- End Account Login -->
                 </ul>
@@ -171,7 +167,7 @@
         <div id="logoAndNav" class="container">
             <!-- Nav -->
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-3 col-6">
                     <a class="navbar-brand" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
                         @php
                         $header_logo = get_setting('header_logo');
@@ -183,10 +179,10 @@
                         @endif
                     </a>
                 </div>
-                <div class="col-sm-6 align-items-center">
+                <div class="col-sm-6 align-items-center d-none d-sm-block">
                     <x-b2-b-search></x-b2-b-search>
                 </div>
-                <div class="col-sm-3 justify-content-end align-items-end text-right">
+                <div class="col-sm-3 col-6 justify-content-end align-items-end text-right">
                     <x-join-button>
                     </x-join-button>
                 </div>

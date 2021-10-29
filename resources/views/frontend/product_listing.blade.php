@@ -1,20 +1,20 @@
 @extends('frontend.layouts.' . $globalLayout)
 
 @if (!empty($selected_category))
-    @php
-        $meta_title = $selected_category->meta_title;
-        $meta_description = $selected_category->meta_description;
-    @endphp
+@php
+$meta_title = $selected_category->meta_title;
+$meta_description = $selected_category->meta_description;
+@endphp
 @elseif (isset($brand_id))
-    @php
-        $meta_title = \App\Models\Brand::find($brand_id)->meta_title;
-        $meta_description = \App\Models\Brand::find($brand_id)->meta_description;
-    @endphp
+@php
+$meta_title = \App\Models\Brand::find($brand_id)->meta_title;
+$meta_description = \App\Models\Brand::find($brand_id)->meta_description;
+@endphp
 @else
-    @php
-        $meta_title = get_setting('meta_title');
-        $meta_description = get_setting('meta_description');
-    @endphp
+@php
+$meta_title = get_setting('meta_title');
+$meta_description = get_setting('meta_description');
+@endphp
 @endif
 
 @section('meta_title'){{ $meta_title }}@stop
@@ -48,13 +48,14 @@
                             <a class="" href="{{ route('home') }}">{{ translate('Home') }}</a>
                         </li>
                         <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-600':'opacity-50' }} ">
-                            <a class="{{ !empty($selected_category) ? '':'text-white' }}" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
+                            <a class="{{ !empty($selected_category) ? '':'text-white' }}"
+                                href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
                         @if (!empty($selected_category))
-                            <li class="text-dark fw-600 breadcrumb-item">
-                                <a class="text-white" href="{{ route('products.category', $selected_category->slug) }}">
-                                    {{ $selected_category->getTranslation('name') }}</a>
-                            </li>
+                        <li class="text-dark fw-600 breadcrumb-item">
+                            <a class="text-white" href="{{ route('products.category', $selected_category->slug) }}">
+                                {{ $selected_category->getTranslation('name') }}</a>
+                        </li>
                         @endif
                     </ul>
 
@@ -104,20 +105,15 @@
                                     <i class="las la-times la-2x"></i>
                                 </button>
                             </div>
-                            <div class="bg-white shadow-sm rounded mb-3">
-                                <div class="fs-15 fw-600 p-3 border-bottom">
-                                    {{ translate('Categories') }}
-                                </div>
-                                <div class="p-3">
-                                    <ul class="list-unstyled">
+                            <div class="">
+                                <x-default.categories.category-list :selectedCategory="$selected_category"
+                                    style="category-list-sidebar"></x-default.categories.category-list>
 
-                                    </ul>
-                                </div>
                             </div>
 
                             @if($content != null)
-                                <x-company.company-attributes :items="$attributes" :selected="$filters">
-                                </x-company.company-attributes>
+                            <x-company.company-attributes :items="$attributes" :selected="$filters">
+                            </x-company.company-attributes>
                             @endif
                         </div>
                     </div>
@@ -131,12 +127,13 @@
                                 <div>
                                     <h1 class="h3 fw-600">
                                         @if (!empty($selected_category))
-                                            {{ translate('Products - ') }}
-                                            {{ $selected_category->getTranslation('name') }}
+                                        {{ translate('Products - ') }}
+                                        {{ $selected_category->getTranslation('name') }}
                                         @elseif(isset($query))
-                                            {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product->count() }}
+                                        {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' .
+                                        $product->count() }}
                                         @else
-                                            {{ translate('All Products') }}
+                                        {{ translate('All Products') }}
                                         @endif
                                     </h1>
                                 </div>
@@ -159,7 +156,8 @@
                         </div>
                         {{-- Sub Categories Display --}}
                         @if(!empty($selected_category))
-                            <x-default.categories.sub-category-cards :categories="$selected_category"></x-default.categories.sub-category-cards>
+                        <x-default.categories.sub-category-cards :categories="$selected_category">
+                        </x-default.categories.sub-category-cards>
                         @endif
                         {{-- END Sub Categories Display --}}
                         @if ($products->count() > 0)
@@ -189,8 +187,6 @@
 
 
                 <div class="col-xl-3">
-                    <x-default.categories.category-list :selectedCategory="$selected_category"
-                                                        style="category-list-sidebar"></x-default.categories.category-list>
 
                     <!--<div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
                         <div class="overlay overlay-fixed dark c-pointer" data-toggle="class-toggle"

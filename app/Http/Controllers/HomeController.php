@@ -569,14 +569,21 @@ class HomeController extends Controller
         $seller_id = $request->seller_id;
         $content = $request->content;
 
+
         $conditions = ['published' => 1];
 
         if ($seller_id != null) {
             // ADD TRY CATCH BLOCK to capture the exception on fail!
             $conditions = array_merge($conditions, ['shop_id' => Seller::findOrFail($seller_id)->user->shop->id]);
         }
-
         $products = Product::where($conditions);
+
+        /* TODO: This probably should be in brand controller and brand archive */
+        if($brand_id != null) {
+            $products->where('brand_id', $brand_id);
+        }
+
+
 
         if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             $products->restrictByCategories($selected_categories);
