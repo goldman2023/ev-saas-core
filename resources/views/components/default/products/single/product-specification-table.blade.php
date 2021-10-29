@@ -4,7 +4,7 @@
             <div class="title">
                 <h5>{{ $group }}</h5>
             </div>
-            <ul class="list-inline specification-list">
+            <ul class="specification-list list-group list-group-flush">
                 @foreach($attributes as $attribute)
                     @php
                         $attribute_value = $product
@@ -13,8 +13,8 @@
                             ->first();
                     @endphp
                     @isset($attribute_value)
-                        <li>
-                            <label>{{ $attribute->name }}</label> 
+                        <li class="list-group-item">
+                            <label>{{ $attribute->name }}</label>
                             <span>{{ $attribute_value->attribute_value->values; }}</span>
                         </li>
                     @endisset

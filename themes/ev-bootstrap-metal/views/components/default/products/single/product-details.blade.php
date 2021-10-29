@@ -54,15 +54,15 @@
                 <h2 class="font-size-1 text-body mb-0">{{ translate('Price:') }}</h2>
 
                 <span class="text-dark font-size-2 font-weight-bold">
-                    {{ home_discounted_price($product->id) }}
+                    {{ $product->getDiscountedPrice(true) }}
                     @if ($product->unit != null)
                         <span class="opacity-70">/
                             {{ $product->getTranslation('unit') }}
                         </span>
                     @endif
                 </span>
-                @if (home_price($product->id) != home_discounted_price($product->id))
-                    <span class="text-body ml-2"><del>{{ home_price($product->id) }}</del></span>
+                @if ($product->getOriginalPrice() != $product->getDiscountedPrice())
+                    <span class="text-body ml-2"><del>{{ $product->getOriginalPrice(true) }}</del></span>
                 @endif
             </div>
             <!-- End Price -->

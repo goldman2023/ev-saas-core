@@ -76,7 +76,7 @@ class ReviewController extends Controller
         $review->rating = $request->rating;
         $review->content_type = $request->content_type;
         $review->status = 0;
-        if ($request->content_type == 'App\Models\Product') {
+        if ($request->content_type == Product::class) {
             $review->product_id = $request->product_id;
         }
         $review->save();
@@ -92,7 +92,7 @@ class ReviewController extends Controller
                 return back();
             }
             $review_relationship->reviewable()->associate($company);
-        } else if ($request->content_type == 'App\Models\Product') {
+        } else if ($request->content_type == Product::class) {
             $product = Product::where('slug', $request->product_name)->first();
             if ($product == null) {
                 $review->delete();

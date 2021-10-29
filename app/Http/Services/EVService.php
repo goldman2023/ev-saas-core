@@ -2,11 +2,15 @@
 
 namespace App\Http\Services;
 
+use App\Models\Currency;
+use Cache;
+use EVS;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\View\ComponentAttributeBag;
+use Session;
 
 class EVService
 {
@@ -23,27 +27,15 @@ class EVService
                         'is_active' => areActiveRoutes(['dashboard']),
                         'roles' => [], // empty array means ALL roles - admin/seller/customer
                     ],
-                    [
-                        'label' => translate('Schedule'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => [],
-                    ],
-                    [
-                        'label' => translate('Leads'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => route('leads.index'),
-                        'is_active' => areActiveRoutes(['leads']),
-                        'roles' => ['admin'],
-                    ],
-                    [
-                        'label' => translate('My Purchases'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => route('purchase_history.index'),
-                        'is_active' => areActiveRoutes(['purchase_history']),
-                        'roles' => [],
-                    ]
+                    // [
+                    //     'label' => translate('Schedule'),
+                    //     'icon' => 'heroicon-o-calendar',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => [],
+                    // ],
+
+
                 ]
             ],
             [
@@ -57,32 +49,6 @@ class EVService
                         'roles' => ['admin','seller'],
                     ],
                     [
-                        'label' => translate('Events'),
-                        'icon' => 'heroicon-o-ticket',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Jobs'),
-                        'icon' => 'heroicon-o-briefcase',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Blog'),
-                        'icon' => 'heroicon-o-newspaper',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ]
-                ]
-            ],
-            [
-                'label' => translate('Manage'),
-                'items' => [
-                    [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('orders.index'),
@@ -90,14 +56,56 @@ class EVService
                         'roles' => ['admin','seller'],
                     ],
                     [
-                        'label' => translate('Subscriptions'),
-                        'icon' => 'heroicon-o-currency-dollar',
+                        'label' => translate('Leads'),
+                        'icon' => 'heroicon-o-calendar',
+                        'route' => route('leads.index'),
+                        'is_active' => areActiveRoutes(['leads']),
+                        'roles' => ['admin'],
+                    ],
+                    // [
+                    //     'label' => translate('Events'),
+                    //     'icon' => 'heroicon-o-ticket',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Jobs'),
+                    //     'icon' => 'heroicon-o-briefcase',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+
+                ]
+            ],
+            [
+                'label' => translate('Marketing'),
+                'items' => [
+                    [
+                        'label' => translate('Blog'),
+                        'icon' => 'heroicon-o-newspaper',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
                         'roles' => ['admin','seller'],
                     ],
+                    [
+                        'label' => translate('Website'),
+                        'icon' => 'heroicon-o-qrcode',
+                        'route' => route('ev.settings.domains'),
+                        'is_active' => areActiveRoutes(['ev.settings.domains']),
+                        'roles' => ['admin','seller'],
+                    ]
+                    // [
+                    //     'label' => translate('Subscriptions'),
+                    //     'icon' => 'heroicon-o-currency-dollar',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                 ]
             ],
+
             [
                 'label' => translate('CRM'),
                 'items' => [
@@ -132,6 +140,18 @@ class EVService
                 ]
             ],
             [
+                'label' => translate('Customer zone'),
+                'items' => [
+                    [
+                        'label' => translate('My Purchases'),
+                        'icon' => 'heroicon-o-calendar',
+                        'route' => route('purchase_history.index'),
+                        'is_active' => areActiveRoutes(['purchase_history']),
+                        'roles' => ['customer'],
+                    ]
+                ]
+            ],
+            [
                 'label' => translate('Settings'),
                 'items' => [
                     [
@@ -148,53 +168,53 @@ class EVService
                         'is_active' => areActiveRoutes(['profile']),
 
                     ],
-                    [
-                        'label' => translate('Company settings'),
-                        'icon' => 'heroicon-o-office-building',
-                        'route' => route('attributes'),
-                        'is_active' => areActiveRoutes(['attributes']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Shop settings'),
-                        'icon' => 'heroicon-o-office-building',
-                        'route' => route('shops.index'),
-                        'is_active' => areActiveRoutes(['shops']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Shipping settings'),
-                        'icon' => 'heroicon-o-truck',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Tax settings'),
-                        'icon' => 'heroicon-o-receipt-tax',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Company settings'),
+                    //     'icon' => 'heroicon-o-office-building',
+                    //     'route' => route('attributes'),
+                    //     'is_active' => areActiveRoutes(['attributes']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Shop settings'),
+                    //     'icon' => 'heroicon-o-office-building',
+                    //     'route' => route('shops.index'),
+                    //     'is_active' => areActiveRoutes(['shops']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Shipping settings'),
+                    //     'icon' => 'heroicon-o-truck',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Tax settings'),
+                    //     'icon' => 'heroicon-o-receipt-tax',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                 ]
             ],
             [
                 'label' => translate('Other'),
                 'items' => [
-                    [
-                        'label' => translate('Plans & billing'),
-                        'icon' => 'heroicon-o-credit-card',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
-                    [
-                        'label' => translate('Uploaded media'),
-                        'icon' => 'heroicon-o-upload',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Plans & billing'),
+                    //     'icon' => 'heroicon-o-credit-card',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
+                    // [
+                    //     'label' => translate('Uploaded media'),
+                    //     'icon' => 'heroicon-o-upload',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                 ]
             ],
             [
@@ -203,7 +223,7 @@ class EVService
                     [
                         'label' => translate('Log out'),
                         'icon' => 'heroicon-o-logout',
-                        'route' => route('logout'),
+                        'route' => route('user.logout'),
                         'is_active' => false,
                     ],
                 ]
@@ -211,22 +231,23 @@ class EVService
         ];
     }
 
-
     public function getMappedCategories() {
-        $categories = Category::where('parent_id', 0)
+        /*$categories = Category::where('parent_id', 0)
             ->where('digital', 0)
             ->with('childrenCategories')
-            ->get();
+            ->get();*/
+
+        $categories = Categories::getAll();
 
         $mapped = [];
 
         $recursion = function($child_category) use (&$recursion, &$mapped) {
-            $value = str_repeat('--', $child_category->level);
+            $value = str_repeat('--', $child_category['level']);
 
-            $mapped[$child_category->id] = $value." ".$child_category->getTranslation('name');
+            $mapped[$child_category['id']] = $value." ".$child_category['name'];
 
-            if($child_category->categories) {
-                foreach ($child_category->categories as $childCategory) {
+            if(isset($child_category['children'])) {
+                foreach ($child_category['children'] as $childCategory) {
                     $recursion($childCategory);
                 }
             }
@@ -234,10 +255,10 @@ class EVService
 
         if($categories->isNotEmpty()) {
             foreach($categories as $category) {
-                $mapped[$category->id] = $category->getTranslation('name');
+                $mapped[$category['id']] = $category['name'];
 
-                if($category->childrenCategories) {
-                    foreach($category->childrenCategories as $childCategory) {
+                if($category['children']) {
+                    foreach($category['children'] as $childCategory) {
                         $recursion($childCategory);
                     }
                 }
@@ -301,7 +322,7 @@ class EVService
             // For existing content type:
             // 1. Get attributes for that content type
             // 2. DO NOT fetch attribute relationships and attribute_values
-            $attrs = Attribute::without('attribute_values')->with('attributes_relationship', function($query) use($content_type, $subject) {
+            $attrs = Attribute::without('attribute_values')->with('attribute_relationships', function($query) use($content_type, $subject) {
                 $query->where([
                     ['subject_type', '=', $content_type],
                     ['subject_id', '=', $subject->id]
@@ -313,8 +334,8 @@ class EVService
             foreach($attrs as $key => $att) {
                 $attrs[$key]['attribute_values'] = [];
 
-                if(!empty($att['attributes_relationship'])) {
-                    foreach($att['attributes_relationship'] as $attr_rel) {
+                if(!empty($att['attribute_relationships'])) {
+                    foreach($att['attribute_relationships'] as $attr_rel) {
                         // Add attribute value id to array (we'll need those to query selected/typed att values from DB)
                         $attrs_values_idx[] = $attr_rel['attribute_value_id'];
 
@@ -357,7 +378,7 @@ class EVService
             // For new content type:
             // 1. Get attributes for that content type
             // 2. DO NOT fetch attribute relationships and attribute_values
-            $attrs = Attribute::without('attributes_relationship', 'attribute_values')->select('id','name','type','custom_properties')->where('content_type', $content_type)->get()->toArray();
+            $attrs = Attribute::without('attribute_relationships', 'attribute_values')->select('id','name','type','custom_properties')->where('content_type', $content_type)->get()->toArray();
             $relevant_attrs_idx = collect($attrs)->filter(function ($value, $key) {
                 return $value['is_predefined'];
             })->pluck('id')->all();
@@ -394,5 +415,26 @@ class EVService
         }
 
         return $mapped;
+    }
+
+    public function generateAllVariations($attributes) {
+        $result = [[]];
+        $all_att_values = $attributes->pluck('attribute_values');
+
+        foreach ($all_att_values as $property => $property_values) {
+            $property_values = array_values(array_filter($property_values, function($v, $k) {
+                return $v['selected'] === true;
+            }, ARRAY_FILTER_USE_BOTH));
+
+            $tmp = [];
+            foreach ($result as $result_item) {
+                foreach ($property_values as $property_value) {
+                    $tmp[] = array_merge($result_item, [$property => $property_value]);
+                }
+            }
+            $result = $tmp;
+        }
+
+        return $result;
     }
 }

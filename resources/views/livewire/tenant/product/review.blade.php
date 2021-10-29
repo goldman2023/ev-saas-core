@@ -8,9 +8,9 @@
                 {{ev_dynamic_translate('No reviews', true)}}
             </h3>
             @if(count($reviews)>0)
-            @foreach($reviews as $key => $review)
-            <livewire:tenant.product.review-card :review="$review" :key="$key"/>
-            @endforeach
+                @foreach($reviews as $key => $review)
+                    <livewire:tenant.product.review-card :review="$review" :key="$key"/>
+                @endforeach
             @else
             <p class="mt-5">
                 <x-ev.label :label="ev_dynamic_translate('No reviews', true)">

@@ -37,10 +37,10 @@ class AlterAttributesTableChangeEnum extends Migration
         if($this->driver === 'pgsql') {
             DB::transaction(function () {
                 DB::statement("ALTER TABLE attributes DROP CONSTRAINT attributes_type_check");
-                DB::statement("ALTER TABLE attributes ADD CONSTRAINT attributes_type_check CHECK (type in ('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'text_list', 'wysiwyg'))");
+                DB::statement("ALTER TABLE attributes ADD CONSTRAINT attributes_type_check CHECK (type in ('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'radio', 'text_list', 'wysiwyg'))");
             });
         } else {
-            DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'text_list', 'wysiwyg')");
+            DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'radio', 'text_list', 'wysiwyg')");
         }
     }
 
@@ -54,10 +54,10 @@ class AlterAttributesTableChangeEnum extends Migration
         if($this->driver === 'pgsql') {
             \DB::transaction(function () {
                 DB::statement("ALTER TABLE attributes DROP CONSTRAINT attributes_type_check");
-                DB::statement("ALTER TABLE attributes ADD CONSTRAINT attributes_type_check CHECK (type in ('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'wysiwyg'))");
+                DB::statement("ALTER TABLE attributes ADD CONSTRAINT attributes_type_check CHECK (type in ('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'radio', 'text_list', 'wysiwyg'))");
             });
         } else {
-            DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'wysiwyg')");
+            DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'radio', 'wysiwyg')");
         }
     }
 }

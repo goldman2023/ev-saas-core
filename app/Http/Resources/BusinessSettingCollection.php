@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class BusinessSettingCollection extends ResourceCollection
+class TenantSettingCollection extends ResourceCollection
 {
     public function toArray($request)
     {

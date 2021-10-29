@@ -2,27 +2,87 @@
   File for your custom SCSS style
 ------------------------------------*/
 
-img {
-    max-width: 100%;
-}
+@import "components";
 
-.aiz-mobile-bottom-nav {
-    svg {
-        width: 33px;
-        color: $primary;
+
+/* TODO: IMPORTANT!
+Make this wrapper component to add ev-icon class on all icons by default,
+meanwhile use .ev-icon class for adding icons
+ */
+.ev-icon {
+    width: 45px;
+
+    &__small {
+        width: 30px;
+    }
+    &__large {
+        width: 80px;
+    }
+    &__xs {
+        width: 20px;
+    }
+
+    [data-toggle="collapse"]:not(.collapsed) > &.chevron-down {
+        transform: rotate(180deg);
     }
 }
 
-.custom-control-input[data-type="radio"] {
-
+#product-gallery-hero {
+    margin-top: -140px;
+    padding-top: 160px !important;
+    padding-bottom: 100px !important;
+    margin-bottom: -60px;
+    @media(max-width: 768px) {
+        margin-bottom: -20px;
+    }
 }
 
-/**
-*   Pagination styles
-*/
-.ev-pagination {
-    svg {
-        max-width: 30px;
+.c-single-vendor-hero {
+    margin-top: -130px;
+    @media(max-width: 768px) {
+        margin-top: -30px;
+    }
+}
+
+[x-cloak] { display: none !important; }
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/*------------------------------------
+  Toast
+------------------------------------*/
+.toast {
+    position: fixed;
+    z-index: 9999;
+
+    &.top-right {
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.top-left {
+        top: 20px;
+        left: 30px;
+    }
+    &.top-right {
+        top: 20px;
+        right: 30px;
+    }
+    &.bottom-center {
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    &.bottom-left {
+        bottom: 20px;
+        left: 30px;
+    }
+    &.bottom-right {
+        bottom: 20px;
+        right: 30px;
     }
 }
 
@@ -30,18 +90,6 @@ img {
     max-height: 25px;
     width: auto;
     max-width: 80%;
-}
-
-
-.ev-icon {
-    width: 25px;
-    &__small {
-        width: 14px;
-    }
-
-    &__large {
-        width: 50px;
-    }
 }
 
 
@@ -84,6 +132,18 @@ img {
 /* Fix For Equal height columns while ussing swiper option: autoHeight: true, */
 .swiper-autoheight, .swiper-autoheight .swiper-slide {
     height: 100% !important;
+}
+
+/**
+ * ==============================================
+ * Select2 dropdown
+ * ==============================================
+ */
+.custom-select {
+    &[aria-disabled="true"] {
+        opacity: 0.5;
+        pointer-events: none;
+    }
 }
 
 /**
@@ -401,5 +461,107 @@ img {
     .aiz-uploader-search.open input {
         visibility: visible;
         opacity: 1;
+    }
+}
+
+
+/**
+ * ==============================================
+ * Category Mega Menu
+ * ==============================================
+ */
+.aiz-category-menu .sub-cat-menu {
+    display: none;
+    position: absolute;
+    width: calc(100% - 25%);
+    left: calc(25% - 10px);
+    height: calc(100% + 20px);
+    overflow: hidden;
+    top: 0;
+    z-index: 9;
+    background-color: #fff;
+    overflow-y: auto;
+}
+[dir="rtl"] .aiz-category-menu .sub-cat-menu{
+    left: auto;
+    right: calc(25% - 10px);
+}
+.aiz-category-menu .category-nav-element:hover .sub-cat-menu{
+    display: block;
+}
+.aiz-category-menu .category-nav-element:hover > a{
+    position: relative;
+    z-index: 10;
+    background: #fff;
+    box-shadow: -2px 3px 5px rgb(0 0 0 / 0.1);
+}
+.hover-category-menu .all-category::before {
+    position: absolute;
+    content: "";
+    width: 50px;
+    height: 20px;
+    bottom: 100%;
+    right: 0;
+}
+.hover-category-menu .all-category::before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    border-top: 0;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid var(--soft-primary);
+    border-left: 12px solid transparent;
+    top: -12px;
+    right: 20px;
+}
+[dir="rtl"] .hover-category-menu .all-category::before {
+    left: 20px;
+    right: auto;
+}
+
+
+/*------------------------------------
+  Product Form
+------------------------------------*/
+#product_variations_modal {
+    .table {
+        td .form-group {
+            margin-bottom: 0;
+        }
+    }
+    .dropdown-menu {
+        min-width: 9.4375rem;
+    }
+}
+
+/*------------------------------------
+  Specifications
+  TODO: Create component SCSS for this!
+------------------------------------*/
+.specification-row .title h5 {
+    font-size: 18px;
+}
+
+.specification-list {
+    padding: 35px 30px 34px;
+    font-size: 15px;
+
+    li {
+        display: flex;
+        margin-bottom: 18px;
+    }
+
+    label {
+        font-weight: 600;
+        line-height: 23px;
+        width: 190px;
+        min-width: 190px;
+        margin-bottom: 0;
+    }
+
+    span {
+        line-height: 23px;
+        color: #6e6e6e;
     }
 }

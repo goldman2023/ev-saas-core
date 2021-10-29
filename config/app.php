@@ -180,12 +180,12 @@ return [
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
         // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        App\Providers\EVServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
         \App\Providers\GoogleDriveServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -202,8 +202,12 @@ return [
         Yajra\DataTables\ButtonsServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
 
-        App\Providers\CartServiceProvider::class,
+        //App\Providers\CartServiceProvider::class,
+        Mews\Purifier\PurifierServiceProvider::class,
 
+        // EVServiceProvider
+        App\Providers\EVServiceProvider::class,
+        App\Providers\MacrosServiceProvider::class,
     ],
 
     /*
@@ -257,16 +261,20 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PaytmWallet' => Anand\LaravelPaytmWallet\Facades\PaytmWallet::class,
         'Str' => Illuminate\Support\Str::class,
+        'Arr' => Illuminate\Support\Arr::class,
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
-        'CartService' => App\Facades\CartService::class,
-        'EV' => App\Facades\EV::class,
-        'DesignSettings' => App\Facades\DesignSettings::class,
-        'BusinessSettings' => App\Facades\BusinessSettings::class,
+        'Vendor' => App\Facades\Vendor::class,
+        'EVS' => App\Facades\EVS::class,
+        'TenantSettings' => App\Facades\TenantSettings::class,
+        'FX' => App\Facades\FX::class,
+        'IMG' => App\Facades\IMG::class,
+        'Categories' => App\Facades\Categories::class,
         'Theme' => Qirolab\Theme\Theme::class,
+        'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,
     ],
 

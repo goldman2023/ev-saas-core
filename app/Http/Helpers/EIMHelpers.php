@@ -3,9 +3,38 @@
 
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Shop;
 use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
+use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+
+function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null) {
+    if(!empty($data)) {
+        if(!$data instanceof \Illuminate\Support\Collection) {
+            $data = collect($data);
+        }
+
+        $data = $data->map(function ($item, $index) use ($dataType, $casts) {
+            settype($item, $dataType);
+
+            if(!empty($casts) && (is_object($item) || is_array($item))) {
+                foreach($casts as $key => $cast) {
+                    if(is_object($item)) {
+                        settype($item->{$key}, $cast);
+                    } else if(is_array($item)) {
+                        settype($item[$key], $cast);
+                    }
+                }
+            }
+
+            return $item;
+        });
+    }
+
+    return $data;
+}
 
 function shorten_string($string, $wordsreturned)
 {
@@ -26,7 +55,9 @@ function get_active_theme()
 {
     return Theme::active();
 }
+function get_system_name() {
 
+}
 function get_site_name()
 {
     $site_name =  get_setting('website_name');

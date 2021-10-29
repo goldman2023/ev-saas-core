@@ -33,13 +33,10 @@
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label">{{translate('Parent Category')}}</label>
                         <div class="col-md-9">
-                            <select class="select2 form-control aiz-selectpicker" name="parent_id" data-toggle="select2" data-placeholder="Choose ..."data-live-search="true" data-selected="{{ $category->parent_id }}">
+                            <select class="select2 form-control aiz-selectpicker" name="parent_id" data-toggle="select2" data-placeholder="Choose ..." data-live-search="true" data-selected="{{ $category->parent_id }}">
                                 <option value="0">{{ translate('No Parent') }}</option>
-                                @foreach ($categories as $acategory)
-                                    <option value="{{ $acategory->id }}">{{ $acategory->getTranslation('name') }}</option>
-                                    @foreach ($acategory->childrenCategories as $childCategory)
-                                        @include('categories.child_category', ['child_category' => $childCategory])
-                                    @endforeach
+                                @foreach ($categories as $category_id => $category_name)
+                                    <option value="{{ $category_id }}" {{ ($category_id === $category->id) ? 'disabled':'' }}>{{ $category_name }}</option>
                                 @endforeach
                             </select>
                         </div>

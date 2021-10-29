@@ -13,16 +13,20 @@ use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
 use App\Http\Middleware\OwnerOnly;
+use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
@@ -40,19 +44,23 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 Route::middleware([
     'web',
     'universal',
-    InitializeTenancyByDomain::class,
+    InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
+    VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
     /* This is experimental, adding it here for now */
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
-    Route::get('/tenant/info', [EVSaaSController::class, 'info'])->name('tenant.info');
 
 
-    //Home Page
+    // Homepage For Multi/Single Vendor mode
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    //category dropdown menu ajax call
+    // Feed Page (Possible new homepage)
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
+    //Home Page
+
+    //Category dropdown menu ajax call
     Route::post('/category/nav-element-list', [HomeController::class, 'get_category_items'])->name('category.elements');
 
     Route::get('/sitemap.xml', function () {
@@ -81,7 +89,7 @@ Route::middleware([
 
 
     Auth::routes(['verify' => true]);
-    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::get('/email/resend', [VerificationController::class, 'resend'])->name('email.verification.resend');
     Route::get('/verification-confirmation/{code}', [VerificationController::class, 'verification_confirmation'])->name('email.verification.confirmation');
     Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
@@ -94,11 +102,11 @@ Route::middleware([
     Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
     Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
-    Route::get('/users/login', [HomeController::class, 'login_users'])->name('users.login');
+    Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
+    Route::get('/users/login', [HomeController::class, 'login_users'])->name('user.login');
     Route::get('/users/register', [HomeController::class, 'registration'])->name('user.registration');
-    Route::post('/business/login', [HomeController::class, 'business_login'])->name('login.submit');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
-    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
@@ -109,17 +117,18 @@ Route::middleware([
     Route::get('/customer-product/{slug}', [CustomerProductController::class, 'customer_product'])->name('customer.product');
     Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
 
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
     /* TODO: Investigate this is causing some issues */
-    // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
+    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
+
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product');
     Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name('products.category');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name('products.variant_price');
-    Route::get('/shop/{slug}', [HomeController::class, 'shop'])->name('shop.visit');
+    Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
@@ -215,9 +224,18 @@ Route::middleware([
         Route::get('/jobs/{id}/edit', 'JobController@seller_jobs_edit')->name('seller.jobs.edit');
     });
 
-    Route::group(['middleware' => ['auth']], function () {
+    /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
+    Route::group([
+        'middleware' => ['auth'],
+        'prefix' => 'dashboard'
+    ], function () {
         /* TODO : Admin only */
         Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
+        Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
+        /* Leads Management - BY EIM */
+        Route::get('leads/success', 'LeadController@success')->name('leads.success');
+        Route::resource('leads', 'LeadController');
+
 
         /* TODO: Admin and seler only */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
@@ -386,9 +404,7 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
-    /* Leads Management - BY EIM */
-    Route::get('leads/success', 'LeadController@success')->name('leads.success');
-    Route::resource('leads', 'LeadController');
+
 
     // Tenant Management routes - added from SaaS Boilerplate
 

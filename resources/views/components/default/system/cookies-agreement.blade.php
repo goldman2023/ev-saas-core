@@ -1,9 +1,9 @@
 @if (get_setting('show_cookies_agreement') == 'on')
     <!-- Cookie Alert -->
-    <div class="position-fixed bottom-0 left-1 z-index-4">
+    <div class="position-fixed bottom-0 left-1 z-index-4 c-coockies-agreement">
         <div class="alert bg-white w-lg-80 border shadow mx-auto" role="alert">
             <h5 class="text-dark">{{ translate('Cookies agreement') }}</h5>
-            <p class="small">
+            <p class="small text-dark">
                 @php
                     echo get_setting('cookies_agreement_text');
                 @endphp

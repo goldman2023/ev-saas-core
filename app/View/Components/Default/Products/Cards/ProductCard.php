@@ -14,7 +14,7 @@ class ProductCard extends Component
      *
      * @return void
      */
-    public function __construct(Product $product, string $style = 'product-card-detailed')
+    public function __construct(Product $product, string $style = 'product-card')
     {
         //
         $this->style = $style;

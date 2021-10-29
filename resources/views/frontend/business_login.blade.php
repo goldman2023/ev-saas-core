@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
                         <div class="card">
-                            <form class="js-validate" role="form" action="{{ route('login.submit') }}"
+                            <form class="js-validate" role="form" action="{{ route('business.login.submit') }}"
                                 method="POST">
                                 @csrf
 

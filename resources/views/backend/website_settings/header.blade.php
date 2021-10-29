@@ -16,7 +16,7 @@
 				<h6 class="mb-0">{{ translate('Header Setting') }}</h6>
 			</div>
 			<div class="card-body">
-				<form action="{{ route('admin.business_settings.update') }}" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('admin.tenant_settings.update') }}" method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group row">
 	                    <label class="col-md-3 col-from-label">{{ translate('Header Logo') }}</label>
@@ -84,7 +84,7 @@
 										</div>
 										<div class="col">
 											<div class="form-group">
-												<input type="text" class="form-control" placeholder="{{ translate('Link with') }} http:// {{ translate('or') }} https://" name="header_menu_links[]" value="{{ get_setting('header_menu_links'), true)[$key] }}">
+												<input type="text" class="form-control" placeholder="{{ translate('Link with') }} http:// {{ translate('or') }} https://" name="header_menu_links[]" value="{{ get_setting('header_menu_links', true)[$key] }}">
 											</div>
 										</div>
 										<div class="col-2">

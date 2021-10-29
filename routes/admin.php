@@ -86,29 +86,29 @@ Route::middleware([
             'profile' => 'id',
         ]);
 
-        Route::post('/business-settings/update', 'BusinessSettingsController@update')->name('business_settings.update');
-        Route::post('/business-settings/update/activation', 'BusinessSettingsController@updateActivationSettings')->name('business_settings.update.activation');
-        Route::get('/general-setting', 'BusinessSettingsController@general_setting')->name('general_setting.index');
-        Route::get('/checkout-flow', 'BusinessSettingsController@checkout_flow')->name('checkout_flow.index');
-        Route::get('/activation', 'BusinessSettingsController@activation')->name('activation.index');
-        Route::get('/payment-method', 'BusinessSettingsController@payment_method')->name('payment_method.index');
-        Route::get('/file_system', 'BusinessSettingsController@file_system')->name('file_system.index');
-        Route::get('/social-login', 'BusinessSettingsController@social_login')->name('social_login.index');
-        Route::get('/smtp-settings', 'BusinessSettingsController@smtp_settings')->name('smtp_settings.index');
-        Route::get('/google-analytics', 'BusinessSettingsController@google_analytics')->name('google_analytics.index');
-        Route::get('/google-recaptcha', 'BusinessSettingsController@google_recaptcha')->name('google_recaptcha.index');
+        Route::post('/business-settings/update', 'TenantSettingsController@update')->name('tenant_settings.update');
+        Route::post('/business-settings/update/activation', 'TenantSettingsController@updateActivationSettings')->name('tenant_settings.update.activation');
+        Route::get('/general-setting', 'TenantSettingsController@general_setting')->name('general_setting.index');
+        Route::get('/checkout-flow', 'TenantSettingsController@checkout_flow')->name('checkout_flow.index');
+        Route::get('/activation', 'TenantSettingsController@activation')->name('activation.index');
+        Route::get('/payment-method', 'TenantSettingsController@payment_method')->name('payment_method.index');
+        Route::get('/file_system', 'TenantSettingsController@file_system')->name('file_system.index');
+        Route::get('/social-login', 'TenantSettingsController@social_login')->name('social_login.index');
+        Route::get('/smtp-settings', 'TenantSettingsController@smtp_settings')->name('smtp_settings.index');
+        Route::get('/google-analytics', 'TenantSettingsController@google_analytics')->name('google_analytics.index');
+        Route::get('/google-recaptcha', 'TenantSettingsController@google_recaptcha')->name('google_recaptcha.index');
 
         //Facebook Settings
-        Route::get('/facebook-chat', 'BusinessSettingsController@facebook_chat')->name('facebook_chat.index');
-        Route::post('/facebook_chat', 'BusinessSettingsController@facebook_chat_update')->name('facebook_chat.update');
-        Route::get('/facebook-comment', 'BusinessSettingsController@facebook_comment')->name('facebook-comment');
-        Route::post('/facebook-comment', 'BusinessSettingsController@facebook_comment_update')->name('facebook-comment.update');
-        Route::post('/facebook_pixel', 'BusinessSettingsController@facebook_pixel_update')->name('facebook_pixel.update');
+        Route::get('/facebook-chat', 'TenantSettingsController@facebook_chat')->name('facebook_chat.index');
+        Route::post('/facebook_chat', 'TenantSettingsController@facebook_chat_update')->name('facebook_chat.update');
+        Route::get('/facebook-comment', 'TenantSettingsController@facebook_comment')->name('facebook-comment');
+        Route::post('/facebook-comment', 'TenantSettingsController@facebook_comment_update')->name('facebook-comment.update');
+        Route::post('/facebook_pixel', 'TenantSettingsController@facebook_pixel_update')->name('facebook_pixel.update');
 
-        Route::post('/env_key_update', 'BusinessSettingsController@env_key_update')->name('env_key_update.update');
-        Route::post('/payment_method_update', 'BusinessSettingsController@payment_method_update')->name('payment_method.update');
-        Route::post('/google_analytics', 'BusinessSettingsController@google_analytics_update')->name('google_analytics.update');
-        Route::post('/google_recaptcha', 'BusinessSettingsController@google_recaptcha_update')->name('google_recaptcha.update');
+        Route::post('/env_key_update', 'TenantSettingsController@env_key_update')->name('env_key_update.update');
+        Route::post('/payment_method_update', 'TenantSettingsController@payment_method_update')->name('payment_method.update');
+        Route::post('/google_analytics', 'TenantSettingsController@google_analytics_update')->name('google_analytics.update');
+        Route::post('/google_recaptcha', 'TenantSettingsController@google_recaptcha_update')->name('google_recaptcha.update');
 
         //Currency
         Route::get('/currency', 'CurrencyController@currency')->name('currency.index');
@@ -128,10 +128,10 @@ Route::middleware([
         Route::post('tax-status', 'TaxController@change_tax_status')->name('taxes.tax-status');
 
 
-        Route::get('/verification/form', 'BusinessSettingsController@seller_verification_form')->name('seller_verification_form.index');
-        Route::post('/verification/form', 'BusinessSettingsController@seller_verification_form_update')->name('seller_verification_form.update');
-        Route::get('/vendor_commission', 'BusinessSettingsController@vendor_commission')->name('business_settings.vendor_commission');
-        Route::post('/vendor_commission_update', 'BusinessSettingsController@vendor_commission_update')->name('business_settings.vendor_commission.update');
+        Route::get('/verification/form', 'TenantSettingsController@seller_verification_form')->name('seller_verification_form.index');
+        Route::post('/verification/form', 'TenantSettingsController@seller_verification_form_update')->name('seller_verification_form.update');
+        Route::get('/vendor_commission', 'TenantSettingsController@vendor_commission')->name('tenant_settings.vendor_commission');
+        Route::post('/vendor_commission_update', 'TenantSettingsController@vendor_commission_update')->name('tenant_settings.vendor_commission.update');
 
         Route::resource('languages', 'LanguageController')->parameters([
             'languages' => 'id',
@@ -143,8 +143,8 @@ Route::middleware([
 
 
         // SEO setting
-        Route::get('/seo', 'BusinessSettingsController@seo_setting')->name('seo.index');
-        Route::post('/seo/update_seo_setting', 'BusinessSettingsController@update_seo_setting')->name('seo.update_seo_setting');
+        Route::get('/seo', 'TenantSettingsController@seo_setting')->name('seo.index');
+        Route::post('/seo/update_seo_setting', 'TenantSettingsController@update_seo_setting')->name('seo.update_seo_setting');
 
         // website setting
         Route::group(['prefix' => 'website'], function () {
@@ -301,8 +301,8 @@ Route::middleware([
         Route::post('/classified_products/published', 'CustomerProductController@updatePublished')->name('classified_products.published');
 
         //Shipping Configuration
-        Route::get('/shipping_configuration', 'BusinessSettingsController@shipping_configuration')->name('shipping_configuration.index');
-        Route::post('/shipping_configuration/update', 'BusinessSettingsController@shipping_configuration_update')->name('shipping_configuration.update');
+        Route::get('/shipping_configuration', 'TenantSettingsController@shipping_configuration')->name('shipping_configuration.index');
+        Route::post('/shipping_configuration/update', 'TenantSettingsController@shipping_configuration_update')->name('shipping_configuration.update');
 
         // Route::resource('pages', 'PageController');
         // Route::get('/pages/destroy/{id}', 'PageController@destroy')->name('pages.destroy');

@@ -7,10 +7,14 @@ use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use App\Traits\LoggingTrait;
+use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Session;
 use Auth;
 use Hash;
+use Vendor;
+use Categories;
 use App\Models\Category;
 use App\Models\FlashDeal;
 use App\Models\Brand;
@@ -23,7 +27,7 @@ use App\Models\Shop;
 use App\Models\Event;
 use App\Models\Color;
 use App\Models\Order;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use ImageOptimizer;
 use Cookie;
 use Illuminate\Support\Str;
@@ -32,9 +36,11 @@ use Mail;
 use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Requests\LoginRequest;
+use App\Models\CategoryRelationship;
 
 use function foo\func;
 use App\Notifications\CompanyVisit;
+use Exception;
 
 class HomeController extends Controller
 {
@@ -316,7 +322,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('frontend.index');
+        /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
+        if(Vendor::isVendorSite()) {
+            $shop = Vendor::getVendorShop();
+            return view('frontend.company.profile', compact('shop'));
+        } else {
+            return view('frontend.index');
+
+        }
     }
 
     public function flash_deal_details($slug)
@@ -363,13 +376,14 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $detailedProduct  = Product::where('slug', $slug)->first();
+        $detailedProduct  = Product::where('slug', $slug)->first()->load(['shop', 'flash_deals', 'variations', 'stock']);
+        $detailedProduct->variations = $detailedProduct->variations()->with(['flash_deals', 'product'])->get();
+
         $product  = $detailedProduct;
 
-        $this->log($product,"User viewed this product");
+        //$this->log($product,"User viewed this product");
 
-
-        if ($detailedProduct != null && $detailedProduct->published) {
+        if (!empty($detailedProduct) && $detailedProduct->published) {
             //updateCartSetup();
             if (
                 $request->has('product_referral_code') &&
@@ -390,6 +404,7 @@ class HomeController extends Controller
                 $affiliateController = new AffiliateController;
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
+
             if ($detailedProduct->digital == 1) {
                 return view('frontend.digital_product_details', compact('detailedProduct', 'product'));
             } else {
@@ -397,50 +412,11 @@ class HomeController extends Controller
             }
             // return view('frontend.product_details', compact('detailedProduct'));
         }
+
         abort(404);
     }
 
-    public function shop($slug)
-    {
-        $shop  = Shop::where('slug', $slug)->first();
-        if ($shop != null) {
-            $seller = Seller::where('user_id', $shop->user_id)->first();
-            if (auth()->user()) {
-                visits($seller, "auth")->increment();
-                if (auth()->user()->id != $shop->user->id) {
-                    $shop->user->notify(new CompanyVisit(auth()->user()));
-                }
-                $this->log($seller, "user visited a company profile");
-            } else {
-                visits($seller)->increment();
-            }
 
-            // Seo integration with Schema.org
-            if (get_setting('enable_seo_company') == "on") {
-                seo()->addSchema($seller->get_schema());
-            }
-
-            if ($seller->verification_status != 0) {
-                return view('frontend.company.profile', compact('shop', 'seller'));
-                //                return view('frontend.seller_shop', compact('shop', 'seller'));
-            } else {
-                $company_owner_id = $seller->user->id;
-                if (auth()->user()) {
-                    $current_user_id = auth()->user()->id;
-                } else {
-                    $current_user_id = 0;
-                }
-
-                /* Show company profile for company owner user */
-                if ($company_owner_id === $current_user_id) {
-                    return view('frontend.company.profile', compact('shop', 'seller'));
-                } else {
-                    return view('frontend.seller_shop_without_verification', compact('shop', 'seller'));
-                }
-            }
-        }
-        abort(404);
-    }
 
     public function filter_shop($slug, $type)
     {
@@ -550,9 +526,9 @@ class HomeController extends Controller
 
         $categories = Category::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $shops = Shop::whereIn('user_id', verified_sellers_id())->where('name', 'like', '%' . $request->search . '%')->get()->take(3);
+        $shops = Shop::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $events = Event::whereIn('user_id', verified_sellers_id())->where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
+        $events = Event::where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
 
         if (sizeof($keywords) > 0 || sizeof($categories) > 0 || sizeof($products) > 0 || sizeof($shops) > 0) {
             return view('frontend.partials.search_content', compact('products', 'categories', 'keywords', 'shops', 'events'));
@@ -567,48 +543,56 @@ class HomeController extends Controller
 
     public function listingByCategory(Request $request, $category_slug)
     {
-        $category = Category::where('slug', $category_slug)->first();
-        if ($category != null) {
-            return $this->search($request, $category->id);
+        $selected_categories = \Categories::getChildrenAndSelf($category_slug, 'flat');
+
+        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
+            return $this->search($request, $selected_categories);
         }
-        abort(404);
+
+        abort(404); // TODO: Maybe a redirect to All Categories?
+        return null;
     }
 
     public function listingByBrand(Request $request, $brand_slug)
     {
         $brand = Brand::where('slug', $brand_slug)->first();
-        if ($brand != null) {
+        if (!empty($brand)) {
             return $this->search($request, null, $brand->id);
         }
         abort(404);
     }
 
-    public function search(Request $request, $category_id = null, $brand_id = null)
+    public function search(Request $request, $selected_categories = null, $brand_id = null)
     {
         $query = $request->q;
         $sort_by = $request->sort_by;
         $seller_id = $request->seller_id;
         $content = $request->content;
 
+
         $conditions = ['published' => 1];
 
         if ($seller_id != null) {
-            $conditions = array_merge($conditions, ['user_id' => Seller::findOrFail($seller_id)->user->id]);
+            // ADD TRY CATCH BLOCK to capture the exception on fail!
+            $conditions = array_merge($conditions, ['shop_id' => Seller::findOrFail($seller_id)->user->shop->id]);
         }
-
         $products = Product::where($conditions);
 
-        if ($category_id != null) {
-            $category_ids = CategoryUtility::children_ids($category_id);
-            $category_ids[] = $category_id;
+        /* TODO: This probably should be in brand controller and brand archive */
+        if($brand_id != null) {
+            $products->where('brand_id', $brand_id);
+        }
 
-            $products = $products->whereIn('category_id', $category_ids);
 
-            $category = Category::find($category_id);
-            $shops = $category->companies();
-            $shops = $shops->whereIn('user_id', verified_sellers_id());
+
+        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
+            $products->restrictByCategories($selected_categories);
+
+            /* TODO Check verification for shops */
+            $shops = Shop::where('id');
         } else {
-            $shops = Shop::whereIn('user_id', verified_sellers_id());
+            /* TODO Check verification for shops */
+            $shops = Shop::where('id');
         }
 
         $events = Event::whereIn('user_id', verified_sellers_id());
@@ -621,10 +605,7 @@ class HomeController extends Controller
             $events = $events->where('title', 'like', '%' . $query . '%')
                 ->orWhere('description', 'like', '%' . $query . '%');
         }
-
-        $product_count = $products->count();
-        $company_count = $shops->count();
-        $event_count = $events->count();        
+        $event_count = $events->count();
 
         $attributes = array();
         $filters = array();
@@ -633,9 +614,9 @@ class HomeController extends Controller
         if ($content != null) {
             if ($content == 'product') {
                 $contents = $products;
-            }else if ($content == 'company') {
+            } else if ($content == 'company') {
                 $contents = Seller::whereIn('user_id', $shops->get()->pluck('user_id')->toArray());;
-            }else if ($content == 'event') {
+            } else if ($content == 'event') {
                 $contents = $events;
             }
 
@@ -644,7 +625,7 @@ class HomeController extends Controller
                 $attributeIds = array_unique(array_merge($attributeIds, $item->attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
             }
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
-                
+
             foreach ($attributes as $attribute) {
                 if ($request->has('attribute_' . $attribute['id']) && $request['attribute_' . $attribute['id']] != "-1" && $request['attribute_' . $attribute['id']] != null) {
                     $filters[$attribute['id']] = $request['attribute_' . $attribute['id']];
@@ -697,11 +678,13 @@ class HomeController extends Controller
         }
 
 
-        $products = filter_products($products)->paginate(10)->appends(request()->query());
+        /* TODO: Make this to show products by actual category */
+        $products = $products->paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'product_count', 'company_count', 'event_count', 'query', 'category_id', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
+        $selected_category = !empty($selected_categories) ? $selected_categories->toTree()->first() : null;
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)
@@ -852,7 +835,7 @@ class HomeController extends Controller
     {
         if (\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first() != null && \App\Models\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
             if (auth()->user()->seller->remaining_digital_uploads > 0) {
-                $business_settings = get_setting('digital_product_upload')->first();
+                $tenant_settings = get_setting('digital_product_upload');
                 $categories = Category::where('digital', 1)->get();
                 return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
             } else {
@@ -861,7 +844,7 @@ class HomeController extends Controller
             }
         }
 
-        $business_settings = get_setting('digital_product_upload')->first();
+        $tenant_settings = get_setting('digital_product_upload');
         $categories = Category::get();
         return view('frontend.user.seller.digitalproducts.product_upload', compact('categories'));
     }

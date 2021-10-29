@@ -5,10 +5,10 @@
         </h1>
         <p class="text-xl font-medium text-gray-900">
             <!--   TODO: Add this as a general component         -->
-            @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+            @if($product->getBasePrice() != $product->getTotalPrice())
+                <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
             @endif
-            <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+            <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span>
         </p>
     </div>
     <!-- Reviews -->

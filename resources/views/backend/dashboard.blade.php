@@ -147,10 +147,10 @@
                         </div>
                         <div class="p-md-3 p-2 text-left">
                             <div class="fs-15">
-                                @if(home_base_price($product->id) != home_discounted_base_price($product->id))
-                                    <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                                @if($product->getBasePrice() != $product->getTotalPrice())
+                                    <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                                 @endif
-                                <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                                <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span>
                             </div>
                             <div class="rating rating-sm mt-1">
                                 {{ renderStarRating($product->rating) }}
@@ -261,17 +261,9 @@
             }
         }
     });
+
     var sfs = {
-            labels: [
-                @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
-                '{{ $category->getTranslation('name') }}',
-                @endforeach
-            ],
-            datasets: [
-                @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
-                {{ \App\Models\Product::where('category_id', $category->id)->sum('num_of_sale') }},
-                @endforeach
-            ]
+
     }
     AIZ.plugins.chart('#graph-1',{
         type: 'bar',
@@ -284,13 +276,7 @@
             datasets: [{
                 label: '{{ translate('Number of sale') }}',
                 data: [
-                    @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
-                        @php
-                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
-                            $category_ids[] = $category->id;
-                        @endphp
-                    {{ \App\Models\Product::whereIn('category_id', $category_ids)->sum('num_of_sale') }},
-                    @endforeach
+
                 ],
                 backgroundColor: [
                     @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
@@ -353,26 +339,7 @@
             datasets: [{
                 label: '{{ translate('Number of Stock') }}',
                 data: [
-                    @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)
-                        @php
-                            $category_ids = \App\Utility\CategoryUtility::children_ids($category->id);
-                            $category_ids[] = $category->id;
 
-                            $products = \App\Models\Product::whereIn('category_id', $category_ids)->get();
-                            $qty = 0;
-                            foreach ($products as $key => $product) {
-                                if ($product->variant_product) {
-                                    foreach ($product->stocks as $key => $stock) {
-                                        $qty += $stock->qty;
-                                    }
-                                }
-                                else {
-                                    $qty = $product->current_stock;
-                                }
-                            }
-                        @endphp
-                        {{ $qty }},
-                    @endforeach
                 ],
                 backgroundColor: [
                     @foreach (\App\Models\Category::where('level', 0)->get() as $key => $category)

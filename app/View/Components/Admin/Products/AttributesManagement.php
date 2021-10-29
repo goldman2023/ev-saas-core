@@ -21,7 +21,7 @@ class AttributesManagement extends Component
         if($product == null) {
             $this->product = new Product();
         }
-        $this->product_attributes = Attribute::where('content_type', 'App\Models\Product')
+        $this->product_attributes = Attribute::where('content_type', Product::class)
         ->orderBy('created_at', 'desc')
         ->get();
         //

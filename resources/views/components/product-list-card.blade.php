@@ -33,21 +33,21 @@
                         {{  $product->getTranslation('name')  }}
                     </h3>
                     <h6>
-                        {{ translate('Sold By: ') }} {{ $product->user->shop->name }}
+                        {{ translate('Sold By: ') }} {{ $product->shop->name }}
                     </h6>
                 </div>
 
                 <div class="d-flex mt-1 ml-auto">
                     <div class="text-right">
-                        @if(home_base_price($product->id) != home_discounted_base_price($product->id))
+                        @if($product->getBasePrice() != $product->getTotalPrice())
                             <small class="d-block display-6 text-danger">
-                                <del class="fw-600  mr-1">{{ home_base_price($product->id) }}</del>
+                                <del class="fw-600  mr-1">{{ $product->getBasePrice(true) }}</del>
                             </small>
                         @endif
 
                         <span class="d-block h5 text-primary display-4 mb-0">
                             <span class="fw-700 text-primary">
-                                {{ home_discounted_base_price($product->id) }}
+                                {{ $product->getTotalPrice(true) }}
                             </span>
                         </span>
                     </div>

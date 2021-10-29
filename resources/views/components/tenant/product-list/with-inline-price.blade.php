@@ -6,7 +6,7 @@
                 </x-ev.label>
             </h2>
 
-            <a href="{{ route('products.index') }}"
+            <a href=""
                 class="hidden text-sm font-semibold text-indigo-600 hover:text-indigo-500 sm:block">
                 {{ translate('See all Products') }}
                 <span aria-hidden="true"> &rarr;</span></a>
@@ -35,10 +35,10 @@
                             <p class="mt-1 text-sm text-gray-500">Black</p>
                         </div>
                         <p class="text-sm font-medium text-gray-900">
-                            @if (home_base_price($product->id) != home_discounted_base_price($product->id))
-                                <del class="fw-600 opacity-50 mr-1">{{ home_base_price($product->id) }}</del>
+                            @if ($product->getBasePrice() != $product->getTotalPrice(true))
+                                <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
                             @endif
-                            <span class="fw-700 text-primary">{{ home_discounted_base_price($product->id) }}</span>
+                            <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span>
                         </p>
                     </div>
                 </div>

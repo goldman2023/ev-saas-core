@@ -9,7 +9,7 @@ return [
     | It will assign the default active theme to be used if one is not set during
     | runtime.
     */
-    'active' => 'ev-tailwind',
+    'active' => 'ev-saas-default',
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ return [
     | file is not found in the currently active theme, then it will look for it
     | in the parent theme.
     */
-    'parent' => 'ev-tailwind',
+    'parent' => 'ev-saas-default',
 
     /*
     |--------------------------------------------------------------------------

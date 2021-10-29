@@ -1,8 +1,8 @@
 <?php
 
-use App\Facades\BusinessSettings;
+use App\Facades\TenantSettings;
 use App\Models\Currency;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Product;
 use App\Models\SubSubCategory;
 use App\Models\FlashDealProduct;
@@ -171,7 +171,7 @@ if (!function_exists('areActiveRoutes')) {
             if (Route::currentRouteName() == 'attributes.edit') {
                 $id = Route::current()->parameters()['id'];
                 $attribute = Attribute::findOrFail($id);
-                if ($route == 'product.attributes.edit' && $attribute->content_type == 'App\Models\Product') return $output;
+                if ($route == 'product.attributes.edit' && $attribute->content_type == Product::class) return $output;
                 if ($route == 'seller.attributes.edit' && $attribute->content_type == 'App\Models\Seller') return $output;
             }
         }
@@ -203,9 +203,9 @@ if (!function_exists('default_language')) {
 if (!function_exists('convert_to_usd')) {
     function convert_to_usd($amount)
     {
-        $business_settings = get_setting('system_default_currency');
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        $tenant_settings = get_setting('system_default_currency');
+        if ($tenant_settings != null) {
+            $currency = Currency::find($tenant_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'USD')->first()->exchange_rate;
         }
     }
@@ -214,9 +214,9 @@ if (!function_exists('convert_to_usd')) {
 if (!function_exists('convert_to_kes')) {
     function convert_to_kes($amount)
     {
-        $business_settings = get_setting('system_default_currency');
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        $tenant_settings = get_setting('system_default_currency');
+        if ($tenant_settings != null) {
+            $currency = Currency::find($tenant_settings->value);
             return (floatval($amount) / floatval($currency->exchange_rate)) * Currency::where('code', 'KES')->first()->exchange_rate;
         }
     }
@@ -296,6 +296,7 @@ if (!function_exists('convert_price')) {
         } else {
             $currency = Currency::where('code', $code)->first();
         }
+
 
         $price = (float) $price * (float) $currency->exchange_rate;
 
@@ -703,9 +704,9 @@ if (!function_exists('brandsOfCategory')) {
 if (!function_exists('convertPrice')) {
     function convertPrice($price)
     {
-        $business_settings = get_setting('system_default_currency')->first();
-        if ($business_settings != null) {
-            $currency = Currency::find($business_settings->value);
+        $tenant_settings = get_setting('system_default_currency')->first();
+        if ($tenant_settings != null) {
+            $currency = Currency::find($tenant_settings->value);
             $price = floatval($price) / floatval($currency->exchange_rate);
         }
         $code = Currency::findOrFail(get_setting('system_default_currency'))->code;
@@ -722,10 +723,6 @@ if (!function_exists('convertPrice')) {
 
 function translate($key, $lang = null)
 {
-
-
-
-
     if ($lang == null) {
         $lang = App::getLocale();
     }
@@ -849,7 +846,7 @@ if (!function_exists('api_asset')) {
 
 //return file uploaded via uploader
 if (!function_exists('uploaded_asset')) {
-    function uploaded_asset($id, $width =0 )
+    function uploaded_asset($id, $width = 0 )
     {
         /*  TODO: Fix this logic to unify images management */
         if (is_numeric($id)) {
@@ -900,10 +897,19 @@ if (!function_exists('static_asset')) {
      * @param  bool|null  $secure
      * @return string
      */
-    function static_asset($path, $secure = null, $theme = false)
+    function static_asset($path, $secure = null, $theme = false, $cache_bust = false)
     {
+        $filemtime = '';
+
+        try {
+            if($cache_bust) {
+                $filemtime = filemtime(public_path('themes/' . Theme::parent() . '/' . $path));
+            }
+        } catch(\Exception $e) {}
+
+
         if ($theme) {
-            return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure);
+            return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure).($cache_bust ? '?v='.$filemtime : '');
         }
         return app('url')->asset($path, $secure);
     }
@@ -983,22 +989,7 @@ if (!function_exists('isUnique')) {
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null)
     {
-        return BusinessSettings::get($key, $default);
-        /*$cache_key = tenant('id') . '_business_settings_' . $key;
-        $setting = Cache::get($cache_key, null);
-
-        // If cache is empty, get setting from DB and store it in cache if not null
-        if (empty($setting)) {
-            $setting = get_setting($key)->first();
-
-            // Cache the setting if it's found in DB
-            if (!empty($setting)) {
-                Cache::forget($cache_key);
-                Cache::put($cache_key, $setting->value);
-            }
-
-            return !empty($setting) ? $setting->value : $default;
-        }*/
+        return TenantSettings::get($key, $default);
     }
 }
 

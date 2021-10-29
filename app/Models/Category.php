@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+use Str;
+use Vendor;
 
 /**
  * App\Models\Category
@@ -35,8 +40,75 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Category extends Model
 {
-    use Cachable;
+    //use Cachable;
+    use HasSlug;
+    use HasRecursiveRelationships;
+    use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
+    public $selected;
+    public $title_path;
+    public const PATH_SEPARATOR = '.';
+
+    protected $appends = ['selected', 'title_path'];
+
+
+    public function getParentKeyName() {
+        return 'parent_id';
+    }
+
+    public function getLocalKeyName() {
+        return 'id';
+    }
+
+    public function getCustomPaths() {
+        return [
+            [
+                'name' => 'slug_path',
+                'column' => 'slug',
+                'separator' => self::PATH_SEPARATOR,
+            ],
+        ];
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('alphabetical', function (Builder $builder) {
+            $builder->orderBy('name', 'ASC');
+        });
+
+
+        if (Vendor::isVendorSite()) {
+            static::addGlobalScope('single_vendor', function (Builder $builder) {
+                if(!empty(Vendor::getVendorCategoriesIDs())) {
+                    $builder->whereIn('categories.id', Vendor::getVendorCategoriesIDs());
+                }
+            });
+        }
+    }
+
+    /* TODO: Create a better way to join translations on categories fetch */
     public function getTranslation($field = '', $lang = false){
         $lang = $lang == false ? App::getLocale() : $lang;
         $category_translation = $this->hasMany(CategoryTranslation::class)->where('lang', $lang)->first();
@@ -51,23 +123,9 @@ class Category extends Model
     	return $this->hasMany(CustomerProduct::class);
     }
 
-    protected static function boot()
+    public function categories()
     {
-        parent::boot();
-
-        static::addGlobalScope('alphabetical', function (Builder $builder) {
-            $builder->orderBy('name', 'ASC');
-        });
-    }
-
-    public function subCategories()
-    {
-        return $this->hasMany(SubCategory::class);
-    }
-
-    public function subSubCategories()
-    {
-        return $this->hasMany(SubSubCategory::class);
+        return $this->hasManyOfDescendantsAndSelf('App\Models\Category');
     }
 
     public function products()
@@ -88,18 +146,23 @@ class Category extends Model
         return $this->belongsTo(Blog::class, 'category_id');
     }
 
-    public function categories()
-    {
-        return $this->hasMany(Category::class, 'parent_id');
+    public function setSelectedAttribute($value) {
+        $this->selected = $value;
     }
 
-    public function childrenCategories()
-    {
-        return $this->hasMany(Category::class, 'parent_id')->with('categories');
+    public function getSelectedAttribute() {
+        return $this->selected ?? false;
     }
 
-    public function parentCategory()
-    {
-        return $this->belongsTo(Category::class, 'parent_id');
+    public function getTitlePathAttribute() {
+        $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
+
+        if(count($title_path) > 1) {
+            foreach($title_path as $key => $title) {
+                $title_path[$key] = trim(Str::title(str_replace('-', ' ', $title)));
+            }
+        }
+
+        return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
     }
 }

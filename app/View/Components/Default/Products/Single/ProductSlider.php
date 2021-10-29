@@ -9,7 +9,7 @@ class ProductSlider extends Component
 {
 
     public Product $product;
-    public $photos;
+    public $images;
     /**
      * Create a new component instance.
      *
@@ -17,9 +17,7 @@ class ProductSlider extends Component
      */
     public function __construct(Product $product)
     {
-        //
-        $this->photos = explode(',', $product->photos);
-
+        $this->images = $product->images;
         $this->product = $product;
     }
 

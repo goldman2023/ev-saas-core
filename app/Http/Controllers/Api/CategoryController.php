@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\CategoryCollection;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\Category;
 
 class CategoryController extends Controller

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AttributeRelationship;
 use App\Models\Shop;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\Attribute;
 use App\Models\AttributeGroup;
@@ -35,13 +36,13 @@ class AttributeController extends Controller
     public function slug_index(Request $request, $slug)
     {
 
-        $content_type = 'App\Models\Product';
+        $content_type = Product::class;
         switch ($slug) {
             case 'sellers':
                 $content_type = 'App\Models\Seller';
                 break;
             case 'product':
-                $content_type = 'App\Models\Product';
+                $content_type = Product::class;
                 break;
             case 'events':
                 $content_type = 'App\Models\Event';
@@ -90,7 +91,7 @@ class AttributeController extends Controller
 
                 $attribute->group = $attribute_group->id;
             }
-        }        
+        }
 
         if ($request->filterable) {
             $attribute->filterable = 1;

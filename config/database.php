@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_MYSQL_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -36,10 +36,10 @@ return [
 
         'tracker' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'host' => env('DB_MYSQL_HOST', '127.0.0.1'),
+            'port' => env('DB_MYSQL_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'username' => env('DB_MYSQL_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -57,10 +57,10 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'host' => env('DB_MYSQL_HOST', '127.0.0.1'),
+            'port' => env('DB_MYSQL_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'root'),
+            'username' => env('DB_MYSQL_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket'   => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -72,10 +72,10 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
+            'host' => env('DB_PGSQL_HOST', '127.0.0.1'),
+            'port' => env('DB_PGSQL_PORT', '5432'),
             'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'username' => env('DB_PGSQL_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',

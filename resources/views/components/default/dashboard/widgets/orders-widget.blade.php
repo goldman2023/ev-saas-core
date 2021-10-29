@@ -12,8 +12,10 @@
             </div>
 
             <div class="col-auto">
-                <span class="badge badge-soft-success p-1">
-                    <x-heroicon-o-trending-up class="ev-icon__small" /> {{ App\Models\Order::trend() }} %
+                <span class="badge badge-soft-success p-1 w-auto text-wrap">
+                    <x-heroicon-o-trending-up class="ev-icon__small" />
+                    <br>
+                    {{ App\Models\Order::trend() }} %
                 </span>
             </div>
         </div>

@@ -10,7 +10,7 @@ use App\Models\Product;
 use App\Models\OrderDetail;
 use App\Models\Coupon;
 use App\Models\CouponUsage;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\User;
 use DB;
 

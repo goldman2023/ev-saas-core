@@ -13,12 +13,12 @@
                     <div>
                         <x-ev.link-button :href="ev_dynamic_translate('#hero-cta-button')"
                         :label="ev_dynamic_translate('Get Started')"
-                        class="ev-button btn btn-primary mr-3">
+                        class="ev-button btn btn-primary mr-3 mb-3">
                         </x-ev.link-button>
 
                         <x-ev.link-button :href="ev_dynamic_translate('#hero-shop-button')"
                         :label="ev_dynamic_translate('Explore our Catalogue')"
-                        class="ev-button btn btn-outline-primary">
+                        class="ev-button btn btn-outline-primary mb-3">
                         </x-ev.link-button>
                     </div>
                 </div>

@@ -29,6 +29,6 @@ class CreateBusinessSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('business_settings');
+        Schema::dropIfExists('tenant_settings');
     }
 }

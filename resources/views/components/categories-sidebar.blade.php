@@ -6,11 +6,11 @@
     @php
         $category_route = $type.".category";
         $index_route = "companies.index";
-        if($type == "events") 
+        if($type == "events")
             $index_route = "events";
-        
+
     @endphp
-        
+
     <div class="p-3">
         <ul class="list-unstyled">
             @if (!isset($category_id))

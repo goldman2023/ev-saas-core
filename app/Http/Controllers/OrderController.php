@@ -15,7 +15,7 @@ use App\Models\OrderDetail;
 use App\Models\CouponUsage;
 use App\Models\OtpConfiguration;
 use App\Models\User;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use Auth;
 use Session;
 use DB;

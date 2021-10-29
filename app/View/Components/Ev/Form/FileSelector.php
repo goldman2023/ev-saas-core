@@ -21,13 +21,15 @@ class FileSelector extends Component
     public $sortableOptions;
     public $errorBagName;
     public $selectedFile;
+    public $template;
+    public $wireType;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($datatype = 'image', $name = '', $label = '', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [], $errorBagName = null, $selectedFile = null)
+    public function __construct($datatype = 'image', $name = '', $label = '', $template = 'input', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [], $errorBagName = null, $selectedFile = null, $wireType = null)
     {
         $this->datatype = $datatype;
         $this->label = $label;
@@ -44,6 +46,8 @@ class FileSelector extends Component
         $this->sortableOptions = $sortableOptions;
         $this->errorBagName = $errorBagName ?: $name;
         $this->selectedFile = $selectedFile;
+        $this->template = $template; // can be input or avatar
+        $this->wireType = $wireType;
     }
 
 

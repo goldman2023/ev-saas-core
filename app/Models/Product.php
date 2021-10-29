@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cache;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Models\FlashDealProduct;
@@ -11,8 +12,12 @@ use App\Models\Wishlist;
 use App\Traits\AttributeTrait;
 use Auth;
 use DB;
+use IMG;
+use Vendor;
+use FX;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -113,18 +118,54 @@ class Product extends Model
     use ReviewTrait;
     use AttributeTrait;
     use HasSlug;
+    use SoftDeletes;
+
+     /**
+     * Stream: Add extra activity data - task name, and user's display name:
+     */
+    public function activityExtraData()
+    {
+        return array('name'=>'$this->name', 'display_name' =>' $this->display_name');
+    }
+
+
+   /**
+    * Stream: Change activity verb to 'created':
+    */
+    public function activityVerb()
+    {
+        return 'created';
+    }
+
+
+    /* Properties not saved in DB */
+    public $temp_sku;
+    public $current_stock;
+    public $low_stock_qty;
+    public $total_price;
+    public $discounted_price;
+    public $base_price;
+    public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
+
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    //protected $with = ['stock', 'variations'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'colors', 'choice_options', 'current_stock', 'variations', 'num_of_sale', 'thumbnail_img'];
+        'purchase_price', 'unit', 'slug', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
 
     protected $casts = [
         'choice_options' => 'object',
         'colors' => 'object',
-        'attributes' => 'object'
+        'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink'];
+    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id', 'total_price', 'discounted_price', 'base_price'];
 
     protected static function boot()
     {
@@ -138,6 +179,13 @@ class Product extends Model
                 $builder->where('published', 1);
             });
         }
+
+        if(Vendor::isVendorSite()) {
+            static::addGlobalScope('single_vendor', function (Builder $builder) {
+                $builder->where('shop_id', '=' , Vendor::getVendorShop()->id ?? null);
+            });
+        }
+
     }
 
     /**
@@ -175,9 +223,30 @@ class Product extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
+
+    public function selected_categories($pluck_property = null, $is_collection = true) {
+        $ids = $this->categories()->get()->pluck('id')->toArray();
+
+        if($pluck_property) {
+            $data = Category::tree()->get()->whereIn('id', $ids)->pluck($pluck_property);
+        } else {
+            $data = Category::tree()->get()->whereIn('id', $ids);
+        }
+
+        if(!$is_collection) {
+            $data = $data->toArray();
+        }
+
+        return $data;
+    }
+
     public function categories()
     {
-        return $this->morphToMany(Category::class, 'subject', 'category_relationships');
+        return $this->morphToMany(Category::class, 'subject', 'category_relationships', null, 'category_id');
     }
 
     public function brand()
@@ -185,14 +254,67 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function product_attributes()
+    {
+        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+                ->get()->unique();
+
+        // Eager load Attribute relationships for current product
+        if(!empty($data)) {
+            foreach($data as $key => $attribute) {
+                $data[$key]->load(['attribute_relationships' => function ($query) {
+                    $query->where([
+                        ['subject_id', '=', $this->id],
+                        ['subject_type', '=', Product::class]
+                    ]);
+                }]);
+            }
+        }
+
+        return $data;
+    }
+
+    public function product_attributes_for_variations()
+    {
+        // TODO: Create AttributeObserver class and remove cache on any relationship or value change
+        return Cache::get('product_'.$this->id.'_attributes_for_variations', function() {
+            $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+                ->where('for_variations', '=', 1)->without(['attribute_relationships', 'attribute_values'])->get()->unique();
+
+            // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
+            if(!empty($data)) {
+                foreach($data as $key => $attribute) {
+                    $data->put($key, $attribute->load(['attribute_relationships' => function ($query) {
+                        $query->where([
+                            ['subject_id', '=', $this->id],
+                            ['subject_type', '=', Product::class]
+                        ]);
+                    }]));
+
+                    $att_values_ids = $attribute->attribute_relationships->pluck('attribute_value_id');
+
+                    $data->put($key, $attribute->load(['attribute_values' => function ($query) use ($att_values_ids) {
+                        $query->whereIn('id', $att_values_ids);
+                    }]));
+                }
+            }
+
+            return $data;
+        });
+    }
+
+    public function variations() {
+        return $this->hasMany(ProductVariation::class);
+    }
+
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function stocks()
+    public function stock()
     {
-        return $this->hasMany(ProductStock::class);
+        return $this->morphOne(ProductStock::class, 'subject');
     }
 
     public function wishlists() {
@@ -203,8 +325,18 @@ class Product extends Model
         return $this->hasMany(ProductTax::class);
     }
 
-    public function flash_deal_product() {
-        return $this->hasOne(FlashDealProduct::class);
+    public function flash_deals() {
+        // TODO: Add indicies to start_date and end_date!
+        return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
+            ->where([
+                ['status', '=', 1],
+                ['start_date', '<=', time()],
+                ['end_date', '>', time()],
+            ])->orderBy('created_at', 'desc')->withPivot('include_variations');
+    }
+
+    public function images($options = []) {
+        return $this->getImagesAttribute($options);
     }
 
     /**
@@ -213,16 +345,28 @@ class Product extends Model
      *
      * @return array*
      */
-    public function getImagesAttribute() {
-        $photos_idx = explode(',', $this->photos);
+    public function getImagesAttribute($options = []) {
         $photos = [];
         $data = [
             'thumbnail' => [],
             'gallery' => []
         ];
 
-        if(!empty($this->thumbnail_img)) {
-            array_unshift($photos_idx, $this->thumbnail_img);
+        if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
+            $data['thumbnail'] = [
+                'id' => null,
+                'url' => IMG::getPlaceholder()
+            ];
+            return $data;
+        }
+
+        $photos_idx = explode(',', $this->attributes['photos']);
+        foreach ($photos_idx as &$i) $i = (int) $i;
+
+
+        if(!empty($this->attributes['thumbnail_img'])) {
+            // Add thumb as the first element in photos array
+            array_unshift($photos_idx, $this->attributes['thumbnail_img']);
         }
 
         if(!empty($photos_idx)) {
@@ -231,16 +375,17 @@ class Product extends Model
 
         if($photos) {
             foreach($photos as $photo) {
-                $url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
+                //$url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
 
-                if(config('imgproxy.enabled') == true) {
-                    // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
-                    // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
-                    // TODO: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
-                    $url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
-                }
+                // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
+                // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
+                // DONE: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
+                //$url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
 
-                if($photo->id == $this->thumbnail_img) {
+
+                $url = IMG::get($photo->file_name, $options);
+
+                if($photo->id === (int) $this->attributes['thumbnail_img']) {
                     $data['thumbnail'] = [
                         'id' => $photo->id,
                         'url' => $url
@@ -263,17 +408,256 @@ class Product extends Model
     }
 
     /**
-     * Get all photos related to the product but properly structured in an assoc. array
-     * This function is used in frontend/themes etc.
+     * Get the product permalink
      *
      * @return string $link
      */
     public function getPermalinkAttribute() {
-        if(empty($this->slug))
+        if(empty($this->attributes['slug'])) {
             return "#";
+        }
 
-        return route('product', $this->slug);
+        return route('product', $this->attributes['slug']);
     }
+
+    /**
+     * Get product total price with tax
+     *
+     * NOTE: Total price is a price of the product after all discounts and with Tax included
+     *
+     * @param bool $display
+     * @param bool $both_formats
+     * @return mixed $total
+     */
+    public function getTotalPrice($display = true, $both_formats = false) {
+        if(empty($this->total_price)) {
+            $this->total_price = $this->attributes['unit_price'];
+
+            if($this->has_variations()) {
+                // TODO: Display lowest/highest variant total price OR SOME COMBINATION
+                /*if ($flash_deal->discount_type === 'percent') {
+                    $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
+                    $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $lowest_price -= $flash_deal_product->discount;
+                    $highest_price -= $flash_deal_product->discount;
+                }*/
+                $flash_deal = $this->flash_deals->first();
+
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->total_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->total_price -= $this->attributes['discount'];
+                    }
+                }
+            } else {
+                $flash_deal = $this->flash_deals->first();
+
+                // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->total_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->total_price -= $this->attributes['discount'];
+                    }
+                }
+            }
+
+            // TODO: Create tax_relationship table and link it to subjects and taxes!
+            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+            if(!empty($this->attributes['tax'])) {
+                if ($this->attributes['tax_type'] === 'percent') {
+                    $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
+                } elseif ($this->attributes['tax_type'] === 'amount') {
+                    $this->total_price += $this->attributes['tax'];
+                }
+            }
+
+        }
+
+        if ($both_formats) {
+            return [
+                'raw' => $this->total_price,
+                'display' => FX::formatPrice($this->total_price)
+            ];
+        }
+
+        return $display ? FX::formatPrice($this->total_price) : $this->total_price;
+    }
+
+    public function getTotalPriceAttribute() {
+        return $this->getTotalPrice();
+    }
+
+    /**
+     * Get discounted price
+     *
+     * NOTE: Discounted price is a price of the product after all discounts, but without Tax included
+     *
+     * @param bool $display
+     * @return float $discounted_price
+     */
+    public function getDiscountedPrice($display = false) {
+        if(empty($this->discounted_price)) {
+            $this->discounted_price = $this->attributes['unit_price'];
+
+            if($this->has_variations()) {
+                // TODO: Display lowest/highest variant total price OR SOME COMBINATION
+                /*if ($flash_deal->discount_type === 'percent') {
+                    $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
+                    $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $lowest_price -= $flash_deal_product->discount;
+                    $highest_price -= $flash_deal_product->discount;
+                }*/
+                $flash_deal = $this->flash_deals->first();
+
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->discounted_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->discounted_price -= $this->attributes['discount'];
+                    }
+                }
+            } else {
+                $flash_deal = $this->flash_deals->first();
+
+                // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
+                if(!empty($flash_deal)) {
+                    if ($flash_deal->discount_type === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
+                    } elseif ($flash_deal->discount_type === 'amount') {
+                        $this->discounted_price -= $flash_deal->discount;
+                    }
+                } else {
+                    if ($this->attributes['discount_type'] === 'percent') {
+                        $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
+                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                        $this->discounted_price -= $this->attributes['discount'];
+                    }
+                }
+            }
+        }
+
+        return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
+    }
+
+    public function getDiscountedPriceAttribute() {
+        return $this->getDiscountedPrice();
+    }
+
+    /**
+     * Get Base price
+     *
+     * NOTE: Base price is the price of the product with product related taxes
+     *
+     * @param bool $display
+     * @return float $base_price
+     */
+    public function getBasePrice($display = false) {
+        if(empty($this->base_price)) {
+            $this->base_price = $this->attributes['unit_price'];
+
+            // TODO: Create tax_relationship table and link it to subjects and taxes!
+            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+            if(!empty($this->attributes['tax'])) {
+                if ($this->attributes['tax_type'] === 'percent') {
+                    $this->base_price += ($this->base_price * $this->attributes['tax']) / 100;
+                } elseif ($this->attributes['tax_type'] === 'amount') {
+                    $this->base_price += $this->attributes['tax'];
+                }
+            }
+        }
+
+        return $display ? FX::formatPrice($this->base_price) : $this->base_price;
+    }
+
+    public function getBasePriceAttribute() {
+        return $this->getBasePrice();
+    }
+
+    public function getOriginalPrice($display = false) {
+        return $display ? FX::formatPrice($this->attributes['unit_price']) : $this->attributes['unit_price'];
+    }
+
+
+
+    public function setTempSkuAttribute($value)
+    {
+        $this->temp_sku = $value;
+    }
+
+    public function getTempSkuAttribute() {
+        if(empty($this->temp_sku)) {
+            $stock = $this->stock()->first();
+
+            return $stock->sku ?? '';
+        }
+
+        return $this->temp_sku;
+    }
+
+
+    public function setCurrentStockAttribute($value) {
+        $this->current_stock = $value;
+    }
+
+    public function getCurrentStockAttribute() {
+        if(empty($this->current_stock)) {
+            $stock = $this->stock()->first();
+
+            return (float) ($stock->qty ?? 0);
+        }
+
+        return $this->current_stock;
+    }
+
+    public function setLowStockQtyAttribute($value) {
+        $this->low_stock_qty = $value;
+    }
+
+    public function getLowStockQtyAttribute() {
+        if(empty($this->low_stock_qty)) {
+            $stock = $this->stock()->first();
+
+            return (float) ($stock->low_stock_qty ?? 0);
+        }
+
+        return $this->low_stock_qty;
+    }
+
+
+    public function has_variations() {
+        return $this->variations->isNotEmpty() ?? false;
+    }
+
+    public function getCategoryIdAttribute() {
+        if(empty($this->category_id)) {
+            return $this->categories()->whereNull('parent_id')->first()->id ?? null;
+        }
+
+        return $this->category_id;
+    }
+
 
     protected function asJson($value)
     {

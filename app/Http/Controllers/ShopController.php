@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Seller;
-use App\Models\BusinessSetting;
+use App\Models\TenantSetting;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
 use Auth;

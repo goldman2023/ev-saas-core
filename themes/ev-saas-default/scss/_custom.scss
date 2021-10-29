@@ -1,3 +1,10 @@
+/* Generate font-weight classes */
+@for $fw from 100 through 900 {
+    .fw-#{$fw} {
+        font-weight: $fw;
+    }
+}
+
 /* Generate opacity classes */
 @for $o from 1 through 9 {
     .opacity-#{$o} {
@@ -18,4 +25,18 @@
     top:50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.avatar, .fit-cover {
+    object-fit: cover;
+}
+
+.flex-text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

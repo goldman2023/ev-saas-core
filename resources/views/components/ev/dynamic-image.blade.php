@@ -14,6 +14,6 @@
     'href' => $href
     ])
 
-    <img {{ $attributes->merge(['class' => 'lazyload ']) }} data-srcset="{{ $dataSrcSet }}"
-        data-src="{{ uploaded_asset($src->value) }}" class="lazyload" onerror="this.onerror=null;this.src='{{ static_asset('img/placeholder.jpg') }}';">
+    <x-tenant.system.image :image="$src->value" :dataSrcSet="$dataSrcSet" ></x-tenant.system.image>
+
 @endif

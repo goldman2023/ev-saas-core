@@ -26,6 +26,7 @@
         "fideloper/proxy": "^4.0",
         "gabrielbull/ups-api": "^2.0.1",
         "genealabs/laravel-model-caching": "^0.11.3",
+        "get-stream/stream": "^5.1",
         "guzzlehttp/guzzle": "^6.5",
         "instamojo/instamojo-php": "^0.4.0",
         "intervention/image": "^2.5",
@@ -40,7 +41,6 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1.31",
-        "mediconesystems/livewire-datatables": "^0.6.1",
         "mews/purifier": "^3.3",
         "nao-pon/flysystem-google-drive": "~1.1",
         "niklasravnsborg/laravel-pdf": "^4.0",
@@ -52,7 +52,6 @@
         "razorpay/razorpay": "^2.7.0",
         "romanzipp/laravel-seo": "^2.2",
         "sentry/sentry-laravel": "^2.7.0",
-        "spatie/db-dumper": "^2.17",
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-backup": "^6.16",
         "spatie/laravel-newsletter": "^4.10",
@@ -61,10 +60,9 @@
         "spatie/once": "^3.0",
         "spatie/schema-org": "^3.4",
         "stancl/tenancy": "^3.4",
+        "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
-        "twilio/sdk": "^6.1",
-        "yajra/laravel-datatables": "^1.5",
-        "yajra/laravel-datatables-oracle": "~9.0"
+        "twilio/sdk": "^6.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -123,9 +121,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://composer.laraform.io"
-        }
+
     ]
 }
