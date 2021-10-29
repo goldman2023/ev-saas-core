@@ -17,12 +17,13 @@ class CategoryService
         $this->app = $app;
 
         $cache_key = tenant('id') . '_categories';
+
         $categories = Cache::get($cache_key, null);
         $default = [];
 
         if (empty($categories)) {
-            $tree = Category::tree()->get()->toTree()->toArray();
-            $categories = collect($tree)->recursive_apply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
+            $tree = Category::tree()->withCount(['products', 'companies'])->get()->toTree();
+            $categories = collect($tree)->recursiveApply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
 
             // Cache the categories if they are found in DB
             if (!empty($categories)) {
@@ -52,13 +53,31 @@ class CategoryService
      * @return mixed
      */
     public function getChildrenAndSelf($identificator, $type = 'flat') {
-        $category = (ctype_digit($identificator) || is_int($identificator)) ? Category::find($identificator) : Category::where('slug', $identificator)->first();
+        $search_property = (ctype_digit($identificator) || is_int($identificator)) ? 'id' : 'slug';
+
+        $category = $this->categories->recursiveFind('children', $search_property, $identificator);
+
+        if(empty($category)) {
+            $category = (ctype_digit($identificator) || is_int($identificator)) ? Category::find($identificator) : Category::where('slug', $identificator)->first();
+
+            if(empty($category)) {
+                return null;
+            }
+
+            if($type === 'flat') {
+                return $category->descendantsAndSelf()->withCount(['products', 'companies'])->get();
+            } else {
+                return $category->descendantsAndSelf()->withCount(['products', 'companies'])->get()->toTree();
+            }
+        }
 
         if($type === 'flat') {
-            return $category->descendantsAndSelf()->withCount(['products', 'companies'])->get();
-        } else {
-            return $category->descendantsAndSelf()->withCount(['products', 'companies'])->get()->toTree();
+            $flattened = new \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection([$category]);
+
+            return (!empty($category->children) && $category->children->isNotEmpty()) ? $flattened->merge($category->children->flattenTree('children')) : $flattened;
         }
+
+        return $category;
     }
 
     /**

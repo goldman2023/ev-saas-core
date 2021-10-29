@@ -2,9 +2,7 @@
   File for your custom SCSS style
 ------------------------------------*/
 
-@import "components/default/system/coockies-agreement.scss";
-@import "components/default/header";
-@import "components/default/products/product-sticky-bar.scss";
+@import "components";
 
 
 /* TODO: IMPORTANT!
@@ -13,6 +11,7 @@ meanwhile use .ev-icon class for adding icons
  */
 .ev-icon {
     width: 45px;
+
     &__small {
         width: 30px;
     }
@@ -21,6 +20,10 @@ meanwhile use .ev-icon class for adding icons
     }
     &__xs {
         width: 20px;
+    }
+
+    [data-toggle="collapse"]:not(.collapsed) > &.chevron-down {
+        transform: rotate(180deg);
     }
 }
 
@@ -529,5 +532,36 @@ img {
     }
     .dropdown-menu {
         min-width: 9.4375rem;
+    }
+}
+
+/*------------------------------------
+  Specifications
+  TODO: Create component SCSS for this!
+------------------------------------*/
+.specification-row .title h5 {
+    font-size: 18px;
+}
+
+.specification-list {
+    padding: 35px 30px 34px;
+    font-size: 15px;
+
+    li {
+        display: flex;
+        margin-bottom: 18px;
+    }
+
+    label {
+        font-weight: 600;
+        line-height: 23px;
+        width: 190px;
+        min-width: 190px;
+        margin-bottom: 0;
+    }
+
+    span {
+        line-height: 23px;
+        color: #6e6e6e;
     }
 }

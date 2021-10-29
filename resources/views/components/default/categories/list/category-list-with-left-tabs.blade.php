@@ -1,4 +1,5 @@
 <div class="row">
+    <!-- Category List With Left Tabs -->
     <div class="col-lg-4 mb-7 mb-lg-0">
       <!-- Nav -->
       <ul class="nav nav-box" role="tablist">
@@ -15,7 +16,7 @@
                     {{ $category->name }}
                 </h4>
                 <div class="d-none d-lg-block mt-2">
-                  <p class="text-body mb-0">{{ translate('Explore ') }} {{ $category->products()->count() }}  {{ translate('Products') }}</p>
+                  <p class="text-body mb-0">{{ translate('Explore ') }} {{ $category->products_count }}  {{ translate('Products') }}</p>
                 </div>
               </div>
             </div>

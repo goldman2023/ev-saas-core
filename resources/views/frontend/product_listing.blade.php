@@ -1,9 +1,9 @@
 @extends('frontend.layouts.' . $globalLayout)
 
-@if (!empty($categories))
+@if (!empty($selected_category))
     @php
-        $meta_title = $categories->first()->meta_title;
-        $meta_description = $categories->first()->meta_description;
+        $meta_title = $selected_category->meta_title;
+        $meta_description = $selected_category->meta_description;
     @endphp
 @elseif (isset($brand_id))
     @php
@@ -47,13 +47,13 @@
                         <li class="breadcrumb-item opacity-50">
                             <a class="" href="{{ route('home') }}">{{ translate('Home') }}</a>
                         </li>
-                        <li class="breadcrumb-item {{ !empty($categories) ? 'fw-600':'opacity-50' }} ">
-                            <a class="{{ !empty($categories) ? '':'text-white' }}" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
+                        <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-600':'opacity-50' }} ">
+                            <a class="{{ !empty($selected_category) ? '':'text-white' }}" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
-                        @if (!empty($categories?->first()))
+                        @if (!empty($selected_category))
                             <li class="text-dark fw-600 breadcrumb-item">
-                                <a class="text-white" href="{{ route('products.category', $categories->first()->slug) }}">
-                                    {{ $categories->first()->getTranslation('name') }}</a>
+                                <a class="text-white" href="{{ route('products.category', $selected_category->slug) }}">
+                                    {{ $selected_category->getTranslation('name') }}</a>
                             </li>
                         @endif
                     </ul>
@@ -130,9 +130,9 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h1 class="h3 fw-600">
-                                        @if (!empty($categories))
+                                        @if (!empty($selected_category))
                                             {{ translate('Products - ') }}
-                                            {{ $categories->first()->getTranslation('name') }}
+                                            {{ $selected_category->getTranslation('name') }}
                                         @elseif(isset($query))
                                             {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' . $product->count() }}
                                         @else
@@ -140,7 +140,7 @@
                                         @endif
                                     </h1>
                                 </div>
-                                @if ($products->count() > 0 && $content == null && !empty($categories))
+                                @if ($products->count() > 0 && $content == null && !empty($selected_category))
                                 <div class="ml-auto text-right">
                                     <a class="font-weight-bold"
                                         href="{{ route('search', ['q' => $query, 'content' => 'product']) }}">
@@ -158,8 +158,8 @@
                             </div>
                         </div>
                         {{-- Sub Categories Display --}}
-                        @if(!empty($categories))
-                            <x-default.categories.sub-category-cards :categories="$categories"></x-default.categories.sub-category-cards>
+                        @if(!empty($selected_category))
+                            <x-default.categories.sub-category-cards :categories="$selected_category"></x-default.categories.sub-category-cards>
                         @endif
                         {{-- END Sub Categories Display --}}
                         @if ($products->count() > 0)
@@ -172,7 +172,7 @@
                             </div>
                             @endforeach
                         </div>
-                        @if ($content == 'product' || !empty($categories))
+                        @if ($content == 'product' || !empty($selected_category))
                         <hr />
                         <div class="d-flex ev-pagination justify-content-center mt-3">
                             {{ $products->links() }}
@@ -187,6 +187,40 @@
 
                 </div>
 
+
+                <div class="col-xl-3">
+                    <x-default.categories.category-list :selectedCategory="$selected_category"
+                                                        style="category-list-sidebar"></x-default.categories.category-list>
+
+                    <!--<div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
+                        <div class="overlay overlay-fixed dark c-pointer" data-toggle="class-toggle"
+                            data-target=".aiz-filter-sidebar" data-same=".filter-sidebar-thumb"></div>
+                        <div class="collapse-sidebar c-scrollbar-light text-left">
+                            <div class="d-flex d-xl-none justify-content-between align-items-center pl-3 border-bottom">
+                                <h3 class="h6 mb-0 fw-600">{{ translate('Filters') }}</h3>
+                                <button type="button" class="btn btn-sm p-2 filter-sidebar-thumb"
+                                    data-toggle="class-toggle" data-target=".aiz-filter-sidebar">
+                                    <i class="las la-times la-2x"></i>
+                                </button>
+                            </div>
+                            <div class="bg-white shadow-sm rounded mb-3">
+                                <div class="fs-15 fw-600 p-3 border-bottom">
+                                    {{ translate('Categories') }}
+                                </div>
+                                <div class="p-3">
+                                    <ul class="list-unstyled">
+
+                                    </ul>
+                                </div>
+                            </div>
+
+                            @if($content != null)
+                                <x-company.company-attributes :items="$attributes" :selected="$filters">
+                                </x-company.company-attributes>
+                            @endif
+                        </div>
+                    </div>-->
+                </div>
             </div>
         </form>
     </div>

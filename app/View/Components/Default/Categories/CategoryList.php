@@ -3,12 +3,14 @@
 namespace App\View\Components\Default\Categories;
 
 use App\Models\Category;
+use Categories;
 use Illuminate\View\Component;
 
 class CategoryList extends Component
 {
 
     public $categories;
+    public $selectedCategory;
     public bool $slider;
     public $style;
     /**
@@ -16,17 +18,10 @@ class CategoryList extends Component
      *
      * @return void
      */
-    public function __construct($categories = null, $slider = false, $style = 'category-list-small')
+    public function __construct($selectedCategory = null, $slider = false, $style = 'category-list-small')
     {
-        //
-        if ($categories === null) {
-            $this->categories = Category::where('level', 0)
-                ->orderBy('order_level', 'desc')
-                ->get();
-        } else {
-            $this->categories = $categories;
-        }
-
+        $this->categories = Categories::getAll();
+        $this->selectedCategory = $selectedCategory;
         $this->slider = $slider;
         $this->style = $style;
     }

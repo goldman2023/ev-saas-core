@@ -15,7 +15,7 @@ class SubCategoryCards extends Component
      */
     public function __construct($categories = null)
     {
-        $this->categories = ($categories instanceof \Staudenmeir\LaravelAdjacencyList\Eloquent\Collection) ? $categories->toTree() : $categories;
+        $this->categories = $categories->children ?? null;
     }
 
     /**

@@ -1,35 +1,3 @@
-:root {
-    --primary: pink;
-    --secondary: blue;
-}
-
-.specification-row .title h5 {
-  font-size: 18px;
-}
-
-.specification-list {
-  padding: 35px 30px 34px;
-  font-size: 15px;
-
-  li {
-    display: flex;
-    margin-bottom: 18px;
-  }
-
-  label {
-    font-weight: 600;
-    line-height: 23px;
-    width: 190px;
-    min-width: 190px;
-    margin-bottom: 0;
-  }
-
-  span {
-    line-height: 23px;
-    color: #6e6e6e;
-  }
-}
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 // Bootstrap setup
