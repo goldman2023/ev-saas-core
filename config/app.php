@@ -198,8 +198,6 @@ return [
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
         Laravel\Passport\PassportServiceProvider::class,
-        Yajra\DataTables\DataTablesServiceProvider::class,
-        Yajra\DataTables\ButtonsServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
 
         //App\Providers\CartServiceProvider::class,
