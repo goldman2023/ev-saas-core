@@ -9,7 +9,6 @@ $central_domains = [
     //'ev-saas.com',
     //'ev-saas.test',
     //'localhost',
-    //'127.0.0.1',
     /* Production */
 ];
 
@@ -17,7 +16,7 @@ $central_domains = [
 if (env('APP_ENV') === 'production') {
     $central_domains[] = 'app.ev-saas.com';
 } else {
-    $central_domains[] = 'localhost';
+    $central_domains[] = 'ev-saas.localhost';
 }
 
 return [

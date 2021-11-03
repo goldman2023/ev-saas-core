@@ -53,6 +53,10 @@ Route::middleware([
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
 
 
+    // Route to show after creating new tenant:
+    Route::get('/welcome', [HomeController::class, 'index'])->name('tenant.welcome');
+
+
     // Homepage For Multi/Single Vendor mode
     Route::get('/', [HomeController::class, 'index'])->name('home');
 

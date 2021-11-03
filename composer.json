@@ -22,6 +22,7 @@
         "codeat3/blade-line-awesome-icons": "^1.0",
         "davidhsianturi/blade-bootstrap-icons": "^1.1",
         "diglactic/laravel-breadcrumbs": "^7.0",
+        "doctrine/dbal": "^3.1",
         "facade/ignition": "^2.10",
         "fideloper/proxy": "^4.0",
         "gabrielbull/ups-api": "^2.0.1",
