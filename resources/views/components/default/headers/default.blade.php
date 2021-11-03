@@ -175,7 +175,7 @@
                         @if ($header_logo != null)
                         <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
                         @else
-                        <img src="{{ static_asset('img/logo.png') }}" alt="{{ env('APP_NAME') }}">
+                        <img src="{{ static_asset('tenancy/assets/img/logo.jpg') }}" alt="{{ env('APP_NAME') }}">
                         @endif
                     </a>
                 </div>

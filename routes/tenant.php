@@ -17,6 +17,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
@@ -54,7 +55,7 @@ Route::middleware([
 
 
     // Route to show after creating new tenant:
-    Route::get('/welcome', [HomeController::class, 'index'])->name('tenant.welcome');
+    Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');
 
 
     // Homepage For Multi/Single Vendor mode
