@@ -55,6 +55,7 @@
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
     <!-- Inject Tenant :root vars -->
+    @include('root-vars')
 
     <!-- Theme styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">

@@ -4,7 +4,12 @@
 @import '~bootstrap/scss/functions';
 
 // Front setup
-@import 'themes/default';
+// IMPORTANT NOTE 1: Variables file (either theme default or tenant-theme) is prepended on webpack compile! Check `additionalData` option in .sass `pluginOptions` argument in webpack.mix.js (for more info, check: https://webpack.js.org/loaders/sass-loader/#additionaldata)!
+// IMPORTANT NOTE 2: SCSS variables are defined per TENANT and THEME, if tenant doesn't have it's own variables file for chosen theme -
+// scss file will be generated dynamically here: resources/tenants/{tenant_id}/_variables-{theme_name}.scss
+// After variables file for tenant|theme combination is generated, tenant main scss file will be compiled!
+// NOTE: Default tenant variables are actually default theme variables, and also if tenant doesn't have it's main scss file in /public folder, default theme scss will be used (app.scss)
+//@import 'themes/default';
 
 @import 'front/variables';
 

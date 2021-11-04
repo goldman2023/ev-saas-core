@@ -152,7 +152,7 @@ $outline:                                                   5px auto -webkit-foc
 $body-color:                                                $gray-700 !default;
 $headings-color:                                            $gray-900 !default;
 $link-color:                                                $primary !default;
-$link-hover-color:                                          darken($link-color, 15%) !default;
+$link-hover-color:                                          shade-color($link-color, 15%) !default;
 $active-color:                                              $primary !default;
 $disabled-color:                                            $gray-700 !default;
 $text-muted:                                                $gray-600 !default;
@@ -314,7 +314,7 @@ $input-placeholder-color:                                   $gray-500 !default;
 $input-group-addon-color:                                   $input-placeholder-color !default;
 $input-label-color:                                         $headings-color !default;
 $input-group-add-field-delete-color:                        $danger !default;
-$input-group-add-field-delete-hover-color:                  darken($danger, 7%) !default;
+$input-group-add-field-delete-hover-color:                  shade-color($danger, 7%) !default;
 $input-label-secondary-color:                               $text-muted !default;
 
 // Backgrounds
@@ -625,7 +625,7 @@ $header-section-bg-color:                                   $white !default;
 $header-navbar-toggler-bg-color:                            $gray-200 !default;
 $header-promo-banner-bg-color:                              $gray-200 !default;
 $header-banner-pseudo-bg-color:                             rgba($gray-900, .5) !default;
-$header-sub-menu-dark-bg-promo-footer-bg-color:             darken($dark, 3%) !default;
+$header-sub-menu-dark-bg-promo-footer-bg-color:             shade-color($dark, 3%) !default;
 $header-floating-section-bg-color:                          $white !default;
 
 // Z-indexes
@@ -784,7 +784,7 @@ $fullscreen-container-transition-delay:                     .5s !default;
 // Backgrounds
 $card-cap-bg:                                               $white !default;
 $card-bg-light:                                             $gray-200 !default;
-$card-bg-light-hover:                                       darken($card-bg-light, 1%) !default;
+$card-bg-light-hover:                                       shade-color($card-bg-light, 1%) !default;
 $card-body-color:                                           $gray-700 !default;
 $card-btn-color:                                            $headings-color !default;
 $card-btn-arrow-color:                                      $active-color !default;
@@ -1153,7 +1153,7 @@ $divider-margin-x:                                          1.5rem !default;
 $custom-file-color:                                         $gray-600 !default;
 
 // Borders
-$custom-control-indicator-border-color:                     darken($input-border-color, 5%) !default;
+$custom-control-indicator-border-color:                     shade-color($input-border-color, 5%) !default;
 $custom-control-indicator-checked-disabled-border:          rgba($primary, 0) !default;
 
 
@@ -1806,7 +1806,7 @@ $slick-pagination-interactive-active-title-color:           $primary !default;
 $slick-pagination-interactive-active-text-color:            $gray-700 !default;
 
 // Background
-$slick-bg-preloader:                                        url(#{$root-path}svg/components/circle-preloader.svg) no-repeat 50% 50% !default;
+$slick-bg-preloader:                                        url("~@/svg/components/circle-preloader.svg") no-repeat 50% 50% !default;
 $slick-arrow-bg-color:                                      $white !default;
 $slick-arrow-hover-bg-color:                                $primary !default;
 $slick-arrow-soft-white-bg-color:                           rgba($white, .1) !default;
@@ -2221,7 +2221,7 @@ $quill-btn-color:                                           $white !default;
 
 // Backgrounds
 $quill-btn-bg-color:                                        $primary !default;
-$quill-btn-bg-hover-color:                                  darken($primary, 7%) !default;
+$quill-btn-bg-hover-color:                                  shade-color($primary, 7%) !default;
 $quill-remove-bg-color:                                     $white !default;
 
 // Borders

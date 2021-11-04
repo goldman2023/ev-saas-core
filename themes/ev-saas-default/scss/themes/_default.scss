@@ -1,10 +1,6 @@
 // Front Default Color Variables
 // =========================================================
 
-$root-path:                                                 "../";
-
-
-
 // Grays
 $gray-100:                                                  #f7faff;
 $gray-200:                                                  #f8fafd;
@@ -32,12 +28,12 @@ $instagram:                                                 #3f729b;
 $github:                                                    #24292e;
 
 // Theme Colors
-$primary:                                                   $google;
-$secondary:                                                 $facebook;
-$success:                                                   $teal;
-$info:                                                      $cyan;
-$warning:                                                   $yellow;
-$danger:                                                    $red;
+$primary:                                                   #377dff;
+$secondary:                                                 #677788;
+$success:                                                   #00c9a7;
+$info:                                                      #09a5be;
+$warning:                                                   #ec9a3c;
+$danger:                                                    #ed4c78;
 
 // Theme Colors
 $theme-colors: () !default;

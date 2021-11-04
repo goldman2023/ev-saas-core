@@ -11,7 +11,7 @@
   &[type] {
     &:hover {
       color: color-yiq($hs-hover-background);
-      background-color: darken($hs-background, 7.5%);
+      background-color: shade-color($hs-background, 7.5%);
     }
   }
 
