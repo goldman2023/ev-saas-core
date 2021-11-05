@@ -145,6 +145,16 @@ class ProductVariationsDatatable extends DataTableComponent
     }
 
     // TODO: Don't forget to create a function that will merge $this->variations
+    /*
+     * Current functionality:
+     * For now, the moment anything regarding the attributes used for variations changes (switch att itself or add/remove it's value),
+     * event is emitted to ProductVariationsDatatable to generate new set of all_combinations in the background.
+     * Once you go to Variations step, generateAllVariations() is called which intersect previous variations with newly created set of
+     * all_combinations and and then merges values from previous variations to intersected variations and sorts them by key.
+
+     * This means that even if we change anything regarding the attribute values,
+     * variants which were previously defined and are not touched by removing variant att value, stay in the table!
+     */
     public function generateAllVariations() {
         $this->variations = $this->variations->intersectByKeys($this->all_combinations);
         $this->variations = $this->all_combinations->merge($this->variations)->map(function($item) {
