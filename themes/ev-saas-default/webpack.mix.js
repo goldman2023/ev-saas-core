@@ -1,9 +1,14 @@
+// TODO: FIX mix-manifest.json! For now mix() doesn't work cuz compiling tenant-theme css overrides mix-manifest.json!
 const mix = require("laravel-mix");
-const tailwindcss = require('tailwindcss');
+const os = require('os');
+let sassVars = require("get-sass-vars");
+let _ = require('lodash');
 const path = require("path");
 const fs = require("fs");
 const { spawn } = require("child_process");
 let CleanCSS = require('clean-css');
+
+const tailwindcss = require('tailwindcss');
 
 const mysql = require('mysql2/promise');
 const { Client } = require('pg');
@@ -55,6 +60,35 @@ mix.setPublicPath(`public/themes/${theme}`)
             },
         }
 });
+
+// Object Entries polyfill
+if (!Object.entries) {
+    (function() {
+        let hasOwn = Object.prototype.hasOwnProperty;
+
+        Object.entries = function(obj) {
+            let entrys = [];
+
+            for (let name in obj) {
+                if (hasOwn.call(obj, name)) {
+                    entrys.push([name, obj[name]]);
+                }
+            }
+
+            return entrys;
+        };
+    })();
+}
+
+// Remove First Char. Match
+String.prototype.removeFirstMatch = function(char) {
+    for (let i = 0; i < this.length; i++) {
+        if (this.charAt(i) == char) {
+            return this.slice(0, i) + this.slice(i + 1, this.length);
+        }
+    }
+    return this;
+}
 
 // Compile only tenant specific scss
 if(is_compiling_tenant) {
@@ -152,6 +186,37 @@ function createTenantCustomStylingVarsFile(tenant_id, theme) {
             mode: 0o664
         });
     }
+
+    // Check if default vars have some vars that are not present in theme-tenant vars file (e.g. added new default vars in the meantime)
+    // If there are new default vars which are not present in tenant-theme vars, add them dynamically
+    (async () => {
+        let default_vars = await sassVars(fs.readFileSync(`${__dirname}/scss/themes/_default.scss`));
+        let theme_tenant_vars = await sassVars(fs.readFileSync(`resources/scss/tenants/${tenant_id}/_variables-${theme}.scss`));
+
+        // Check the difference between default_vars and theme_tenant_vars
+        let diff_values = _.reduce(default_vars, function(result, value, key) {
+            return _.isEqual(value, theme_tenant_vars[key]) ?
+                result : result.concat(key);
+        }, []);
+
+        let new_vars = {};
+        for(const key in default_vars) {
+            if(!theme_tenant_vars.hasOwnProperty(key)) {
+                new_vars[key] = default_vars[key];
+            }
+        }
+
+        if(Object.keys(new_vars).length > 0) {
+            let flattenedMissingSCSSVars = flattenObjSass(new_vars, '', function(key, val) {
+                return val;
+            }).replace(/;\s/g, ';'+os.EOL);
+
+            fs.appendFileSync(`resources/scss/tenants/${tenant_id}/_variables-${theme}.scss`, flattenedMissingSCSSVars);
+        } else {
+            console.log('Nothing to append! All vars from default are present in tenant-theme scss: '+`resources/scss/tenants/${tenant_id}/_variables-${theme}.scss`);
+        }
+
+    })();
 }
 
 // TODO: Fix `Invalid character(s)` error when optimizing compiled css files -_-. No idea why it doesn't work tbh...
@@ -175,4 +240,22 @@ function optimizeCSS(file) {
     .catch(function(error) {
         console.error(error);
     });*/
+}
+
+
+function flattenObjSass(obj, prefix = "$", transform = (key, val) => val) {
+    return Object.entries(obj).reduce((go, el) => {
+        let key = `${prefix}${el[0]}`;
+        let val = el[1];
+        if (typeof val === "object" && !Array.isArray(val) && val) {
+            return go + `${flattenObjSass(val, `${key}-`, transform)}`;
+        } else {
+            return (
+                go +
+                `${key}: ${
+                    Array.isArray(val) ? `${transform(key, val)}` : transform(key, val)
+                }; `
+            );
+        }
+    }, "");
 }

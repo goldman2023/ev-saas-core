@@ -54,11 +54,8 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
-    <!-- Inject Tenant :root vars -->
-    @include('root-vars')
-
     <!-- Theme styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
+    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
 
 
     @livewireStyles
@@ -66,7 +63,7 @@
 
     @stack('pre_head_scripts')
 
-    <script src="{{ mix('js/app.js', 'themes/' . Theme::parent()) }}"></script>
+    <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
     <!-- Vendor Scripts -->
     <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>

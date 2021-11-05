@@ -53,6 +53,7 @@
         "dropzone": "^5.7.1",
         "flag-icon-css": "^3.5.0",
         "flatpickr": "^4.6.9",
+        "get-sass-vars": "^3.1.0",
         "ion-rangeslider": "^2.3.1",
         "jquery": "^3.5.1",
         "jquery-countdown": "^2.2.0",

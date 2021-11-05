@@ -34,6 +34,7 @@ $success:                                                   #00c9a7;
 $info:                                                      #09a5be;
 $warning:                                                   #ec9a3c;
 $danger:                                                    #ed4c78;
+$light:                                                     #f7faff;
 
 // Theme Colors
 $theme-colors: () !default;
@@ -41,3 +42,11 @@ $theme-colors: map-merge((
   "indigo":                                                 $indigo
 ), $theme-colors);
 // stylelint-enable
+
+
+// Font Families
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+$font-family-base: "Open Sans", sans-serif !default;
+$font-family-font-awesome-icon: "Font Awesome 5 Free" !default;
