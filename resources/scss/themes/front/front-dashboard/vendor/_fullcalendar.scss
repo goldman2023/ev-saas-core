@@ -43,34 +43,34 @@
   }
 
   .fullcalendar-custom-event-hs-team {
-    background-color: tint-color($fullcalendar-event-hs-team-bg-color, 35%);
+    background-color: lighten($fullcalendar-event-hs-team-bg-color, 35%);
 
     .fc-list-event-dot {
-      border-color: tint-color($fullcalendar-event-hs-team-bg-color, 25%);
+      border-color: lighten($fullcalendar-event-hs-team-bg-color, 25%);
     }
   }
 
   .fullcalendar-custom-event-reminders {
-    background-color: tint-color($fullcalendar-event-reminders-bg-color, 35%);
+    background-color: lighten($fullcalendar-event-reminders-bg-color, 35%);
 
     .fc-list-event-dot {
-      border-color: tint-color($fullcalendar-event-reminders-bg-color, 25%);
+      border-color: lighten($fullcalendar-event-reminders-bg-color, 25%);
     }
   }
 
   .fullcalendar-custom-event-tasks {
-    background-color: tint-color($fullcalendar-event-tasks-bg-color, 17%);
+    background-color: lighten($fullcalendar-event-tasks-bg-color, 17%);
 
     .fc-list-event-dot {
-      border-color: tint-color($fullcalendar-event-tasks-bg-color, 7%);
+      border-color: lighten($fullcalendar-event-tasks-bg-color, 7%);
     }
   }
 
   .fullcalendar-custom-event-holidays {
-    background-color: tint-color($fullcalendar-event-holidays-bg-color, 45%);
+    background-color: lighten($fullcalendar-event-holidays-bg-color, 45%);
 
     .fc-list-event-dot {
-      border-color: tint-color($fullcalendar-event-holidays-bg-color, 35%);
+      border-color: lighten($fullcalendar-event-holidays-bg-color, 35%);
     }
   }
 

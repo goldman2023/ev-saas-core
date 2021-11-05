@@ -146,10 +146,11 @@ class ProductVariationsDatatable extends DataTableComponent
 
     // TODO: Don't forget to create a function that will merge $this->variations
     public function generateAllVariations() {
+        $this->variations = $this->variations->intersectByKeys($this->all_combinations);
         $this->variations = $this->all_combinations->merge($this->variations)->map(function($item) {
             $item['remove_flag'] = false;
             return $item;
-        });
+        })->sortKeys();
 
         $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object']);
     }
@@ -191,6 +192,9 @@ class ProductVariationsDatatable extends DataTableComponent
                 $variation->variant = $variant_data;
                 $variation->price = $this->product->unit_price ?? 0;
                 $variation->image = null;
+                $variation->discount = 0;
+                $variation->discount_type = 'percent';
+
                 $variation->temp_stock = new ProductStock();
                 $variation->temp_stock->qty = 0;
                 $variation->temp_stock->sku = '';
@@ -200,11 +204,13 @@ class ProductVariationsDatatable extends DataTableComponent
 
         $this->all_combinations = $this->all_combinations->keyBy(function($item) {
             return ProductVariation::composeVariantKey($item['name']);
-        });
+        })->sortKeys();
 
         // If $this->variations are empty (product doesn't have variations for now), make $this->variations to have $this->all_combinations
         if($this->variations->isEmpty()) {
             $this->variations = $this->all_combinations;
+        } else {
+            $this->generateAllVariations();
         }
 
         //$this->rows = collect($this->variations);
@@ -367,14 +373,22 @@ class ProductVariationsDatatable extends DataTableComponent
         }
     }
 
-    public function setAttributeValueRemoveFlag($matrix = []) {
+    public function setAttributeValueRemoveFlag($matrix = []): void
+    {
         // Loop through variations and set remove flag for those which are not in matrix
-
         if($this->variations->isNotEmpty() && !empty($matrix)) {
             $data = $this->variations->toArray();
 
             foreach($data as $key => $variation) {
                 $passed = [];
+
+                // If number of attributes that define current variations are lesser than in provided $matrix,
+                // it means that new attribute is added/removed from defining variations and we should break this function without changing anything!
+                // Remove flags will be sorted out correctly once the $this->variations/rows are refreshed in the next action!
+                if(count($variation['variant']) !== count($matrix)) {
+                    return;
+                }
+
                 foreach($matrix as $id => $val) {
                     $passed[$id] = false;
                 }

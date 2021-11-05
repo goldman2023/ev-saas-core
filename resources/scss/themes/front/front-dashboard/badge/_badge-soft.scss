@@ -9,5 +9,5 @@
 }
 
 .badge-soft-warning {
-  color: shade-color($warning, 20%) !important;
+  color: darken($warning, 20%) !important;
 }

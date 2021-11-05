@@ -19,9 +19,6 @@
         @return mix(white, $color, $weight);
     }
 }
-@function tint-color($color, $weight) {
-    @return lighten($color, $weight);
-}
 
 // Shade a color: mix a color with black
 @function darken($color, $weight) {
@@ -35,9 +32,6 @@
     } @else {
         @return mix(black, $color, $weight);
     }
-}
-@function shade-color($color, $weight) {
-    @return darken($color, $weight);
 }
 
 // return css color variable with different opacity value

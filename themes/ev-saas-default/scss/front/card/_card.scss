@@ -178,7 +178,7 @@
 
   .card-dashed-body {
     color: $card-dashed-body-text-color;
-    border: $card-border-width dashed shade-color($card-border-color, 5%);
+    border: $card-border-width dashed darken($card-border-color, 5%);
     @include border-radius($card-border-radius);
     transition: $card-dashed-body-transition;
   }

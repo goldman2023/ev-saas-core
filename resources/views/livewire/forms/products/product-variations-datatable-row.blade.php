@@ -1,3 +1,4 @@
+@php $index = Str::slug($index); @endphp
 <x-livewire-tables::bs4.table.cell>
     <x-ev.form.file-selector name="rows.{{ $index }}.image"
                              template="avatar"

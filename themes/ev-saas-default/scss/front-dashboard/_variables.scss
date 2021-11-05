@@ -123,7 +123,7 @@ $outline:                                                   5px auto -webkit-foc
 $body-color:                                                $gray-700 !default;
 $headings-color:                                            $gray-900 !default;
 $link-color:                                                $primary !default;
-$link-hover-color:                                          shade-color($link-color, 15%) !default;
+$link-hover-color:                                          darken($link-color, 15%) !default;
 $active-color:                                              $primary !default;
 $disabled-color:                                            $gray-600 !default;
 $text-muted:                                                $gray-600 !default;
@@ -236,15 +236,15 @@ $input-label-color:                                         $headings-color !def
 $input-label-secondary-color:                               $text-muted !default;
 $form-text-color:                                           $text-muted !default;
 $input-group-add-field-delete-color:                        $danger !default;
-$input-group-add-field-delete-hover-color:                  shade-color($danger, 7%) !default;
+$input-group-add-field-delete-hover-color:                  darken($danger, 7%) !default;
 $input-valid-state-color:                                   $success !default;
 
 // Backgrounds
 $input-focus-bg:                                            $white !default;
 $input-group-addon-bg:                                      transparent !default;
 $input-valid-state-bg-size:                                 1rem !default;
-$input-group-light-bg-color:                                shade-color($gray-100, 1%) !default;
-$input-group-hover-light-bg-color:                          shade-color($gray-100, 1%) !default;
+$input-group-light-bg-color:                                darken($gray-100, 1%) !default;
+$input-group-hover-light-bg-color:                          darken($gray-100, 1%) !default;
 
 // Borders
 $input-border-color:                                        $border-color !default;
@@ -661,7 +661,7 @@ $navbar-dark-input-group-hover-light-bg-focus-color:        $white !default;
 $navbar-dark-vertical-aside-has-menu-pseudo-bg-active-color:$white !default;
 $navbar-dark-nav-compact-icon-hover-bg-color:               rgba($white, .1) !default;
 $navbar-toggle-bg-color:                                    $gray-200 !default;
-$navbar-toggle-bg-hover-color:                              shade-color($navbar-toggle-bg-color, 2%) !default;
+$navbar-toggle-bg-hover-color:                              darken($navbar-toggle-bg-color, 2%) !default;
 $navbar-dropdown-account-wrapper-bg-color:                  transparent !default;
 $navbar-dropdown-account-wrapper-bg-hover-color:            $secondary-hover-bg-color !default;
 $navbar-vertical-aside-has-menu-pseudo-bg-color:            $gray-400 !default;
@@ -673,7 +673,7 @@ $navbar-border-type:                                        $border-type !defaul
 $navbar-border-color:                                       $border-color !default;
 $navbar-dropdown-account-wrapper-border-radius:             $border-radius-pill !default;
 $navbar-light-toggle-border-color:                          transparent !default;
-$navbar-dark-border-color:                                  tint-color($dark, 5%) !default;
+$navbar-dark-border-color:                                  lighten($dark, 5%) !default;
 $navbar-dark-nav-dot-border-color:                          $navbar-dark-color !default;
 $navbar-vibrant-border-color:                               $white !default;
 $navbar-vertical-aside-has-menu-pseudo-border-radius:       $border-radius-rounded !default;
@@ -1172,7 +1172,7 @@ $custom-control-indicator-active-bg:                        $primary !default;
 $custom-control-indicator-checked-disabled-bg:              rgba($primary, .5) !default;
 
 // Borders
-$custom-control-indicator-border-color:                     shade-color($input-border-color, 5%) !default;
+$custom-control-indicator-border-color:                     darken($input-border-color, 5%) !default;
 
 // Type
 $custom-checkbox-indicator-icon-checked:                    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110' viewBox='0 0 110 110'><path fill='#{$custom-control-indicator-checked-color}' d='M98.1,16.2c-2.5-2.3-6.4-2.2-8.7,0.2L36.7,70.1l-13-15.5c-2.9-3.5-7.9-4.1-11.1-1.4c-2.9,2.4-3.5,6.6-1.4,10.1  l16.5,28c3.2,5.4,10.8,5.8,14.5,0.8l56.5-67.3C100.7,22.1,100.4,18.5,98.1,16.2z'/></svg>") !default;
@@ -2320,7 +2320,7 @@ $datatable-link-pagination-hover-color:                     $secondary !default;
 
 // Backgrounds
 $datatable-sort-arrow-active-bg:                            $primary !default;
-$datatable-sort-arrow-bg:                                   shade-color($gray-300, 3%) !default;
+$datatable-sort-arrow-bg:                                   darken($gray-300, 3%) !default;
 
 // Width & Height
 $datatable-sort-arrow-width:                                .7rem !default;
@@ -2400,7 +2400,7 @@ $quill-btn-color:                                           $white !default;
 // Backgrounds
 $quill-btn-bg-color:                                        $primary !default;
 $quill-picker-options-item-bg-hover-color:                  $dropdown-link-active-bg !default;
-$quill-btn-bg-hover-color:                                  shade-color($primary, 7%) !default;
+$quill-btn-bg-hover-color:                                  darken($primary, 7%) !default;
 $quill-remove-bg-color:                                     $white !default;
 
 // Borders
