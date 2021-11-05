@@ -11,6 +11,7 @@ function getSelectedAttributeValuesForVariations() {
         let other_att_id = Number(select.data('attribute-id'));
         matrix[other_att_id] = select.val().map(function(x) { return Number(x); });
     });
+    console.log(matrix);
     return matrix;
 }
 

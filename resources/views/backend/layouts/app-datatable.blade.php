@@ -22,7 +22,10 @@
 
     <!-- aiz core css -->
 {{--    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">--}}
-    <link rel="stylesheet" href="{{ static_asset('css/app.css') }}">
+
+    <!-- Theme styles -->
+    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
     @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
         <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
@@ -81,7 +84,7 @@
     @yield('modal')
 
     <script src="{{ static_asset('assets/js/vendors.js') }}" ></script>
-	<script src="{{ mix('js/app.js') }}"></script>
+	<script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
     <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 	@stack('scripts')
 

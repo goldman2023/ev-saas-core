@@ -420,16 +420,19 @@ class Product extends Model
         return route('product', $this->attributes['slug']);
     }
 
+    // START PRICES
+
     /**
-     * Get product total price with tax
+     * Get the Total price
      *
      * NOTE: Total price is a price of the product after all discounts and with Tax included
      *
      * @param bool $display
      * @param bool $both_formats
-     * @return mixed $total
+     * @return mixed
      */
-    public function getTotalPrice($display = true, $both_formats = false) {
+    public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
+    {
         if(empty($this->total_price)) {
             $this->total_price = $this->attributes['unit_price'];
 
@@ -503,14 +506,16 @@ class Product extends Model
     }
 
     /**
-     * Get discounted price
+     * Get Discounted price
      *
      * NOTE: Discounted price is a price of the product after all discounts, but without Tax included
      *
      * @param bool $display
-     * @return float $discounted_price
+     * @param bool $both_formats
+     * @return mixed
      */
-    public function getDiscountedPrice($display = false) {
+    public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
+    {
         if(empty($this->discounted_price)) {
             $this->discounted_price = $this->attributes['unit_price'];
 
@@ -558,6 +563,13 @@ class Product extends Model
             }
         }
 
+        if ($both_formats) {
+            return [
+                'raw' => $this->discounted_price,
+                'display' => FX::formatPrice($this->discounted_price)
+            ];
+        }
+
         return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
     }
 
@@ -571,9 +583,11 @@ class Product extends Model
      * NOTE: Base price is the price of the product with product related taxes
      *
      * @param bool $display
-     * @return float $base_price
+     * @param bool $both_formats
+     * @return mixed
      */
-    public function getBasePrice($display = false) {
+    public function getBasePrice(bool $display = false, bool $both_formats = false): mixed
+    {
         if(empty($this->base_price)) {
             $this->base_price = $this->attributes['unit_price'];
 
@@ -588,6 +602,13 @@ class Product extends Model
             }
         }
 
+        if ($both_formats) {
+            return [
+                'raw' => $this->base_price,
+                'display' => FX::formatPrice($this->base_price)
+            ];
+        }
+
         return $display ? FX::formatPrice($this->base_price) : $this->base_price;
     }
 
@@ -595,10 +616,28 @@ class Product extends Model
         return $this->getBasePrice();
     }
 
-    public function getOriginalPrice($display = false) {
+    /**
+     * Get Original price
+     *
+     * NOTE: Original price is the unit_price of the product (without flash-deals/discounts/taxes etc.)
+     *
+     * @param bool $display
+     * @param bool $both_formats
+     * @return mixed
+     */
+    public function getOriginalPrice(bool $display = false, bool $both_formats = false): mixed
+    {
+        if ($both_formats) {
+            return [
+                'raw' => $this->attributes['unit_price'],
+                'display' => FX::formatPrice($this->attributes['unit_price'])
+            ];
+        }
+
         return $display ? FX::formatPrice($this->attributes['unit_price']) : $this->attributes['unit_price'];
     }
 
+    // END PRICES
 
 
     public function setTempSkuAttribute($value)
