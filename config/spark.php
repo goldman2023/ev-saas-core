@@ -80,10 +80,10 @@ return [
     */
 
     'features' => [
-        // Features::billingAddressCollection(),
-        // Features::mustAcceptTerms(),
-        // Features::euVatCollection(['home-country' => 'BE']),
-        // Features::receiptEmails(['custom-addresses' => true]),
+        Features::billingAddressCollection(),
+        Features::mustAcceptTerms(),
+        Features::euVatCollection(['home-country' => 'BE']),
+        Features::receiptEmails(['custom-addresses' => true]),
         Features::paymentNotificationEmails(),
     ],
 

@@ -13,7 +13,9 @@
             </h3>
         </div>
         <div class="col-md-4 text-md-right">
-            <a class="btn btn-primary btn-pill transition-3d-hover px-5" target="_blank" href="dashboard/subscriptions">
+
+            <a class="btn btn-primary btn-pill transition-3d-hover px-5" target="_blank"
+            href="dashboard/subscriptions">
                 {{ translate('Subscribe') }}
             </a>
         </div>
