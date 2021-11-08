@@ -34,7 +34,6 @@ return [
 
     'middleware' => [
         'web',
-        'universal',
         InitializeTenancyByDomainAndVendorDomains::class,
         VendorMode::class,
     ],
@@ -135,8 +134,6 @@ return [
             /* TODO: Create  dynamic plans for multi vendor app, ex:
 
                 */
-
-
             'plans' => [
                 [
                     'name' => 'Business',

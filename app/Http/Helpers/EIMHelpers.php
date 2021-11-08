@@ -61,13 +61,6 @@ function get_system_name() {
 function get_site_name()
 {
     $site_name =  get_setting('website_name');
-    if (isset($_SERVER['SERVER_NAME'])) {
-        if ($_SERVER['SERVER_NAME'] === 'gunob.com') {
-
-            $site_name = 'MT Baltic';
-        }
-    }
-
 
     return $site_name;
 }
@@ -82,7 +75,9 @@ function get_site_logo()
     } else {
         $logo = get_setting('header_logo');
     }
+
     return $logo;
+
 }
 
 function get_site_colors()

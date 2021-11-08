@@ -193,7 +193,6 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\SparkServiceProvider::class,
        // App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Stancl\Tenancy\TenancyServiceProvider::class,
@@ -207,6 +206,11 @@ return [
         // EVServiceProvider
         App\Providers\EVServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
+
+
+        // Laravel Spark
+        App\Providers\SparkServiceProvider::class,
+
     ],
 
     /*
