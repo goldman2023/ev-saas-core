@@ -40,7 +40,9 @@
                     </span>
                 </h2>
                 <span class="d-block text-dark mb-3">Est. Shipping 76€</span>
-                <a href="#">Register and get shipping price</a>
+                @guest
+                <a href="{{ route('register') }}">Register and get shipping price</a>
+                @endguest
             </div>
         </div>
     </div>

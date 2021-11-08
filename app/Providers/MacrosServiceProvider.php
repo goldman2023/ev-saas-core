@@ -18,11 +18,28 @@ class MacrosServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Builder::macro('restrictByCategories', function($categories) {
-            // Pass categories_ids to Eloquent Builder by pointer!
-            Categories::restrictByCategories($categories, $this);
-        });
+        $this->setRouteMacros();
+        $this->setEloquentBuilderMacros();
+        $this->setCollectionMacros();
+    }
 
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+
+    }
+
+    protected function setRouteMacros(): void
+    {
+
+    }
+
+    protected function setCollectionMacros(): void
+    {
         /* Add Collection RecursiveApply marco function */
         Collection::macro('recursiveApply', function ($property_name, $method = []) {
             return $this->whenNotEmpty($recursive = function (&$items) use (&$recursive, $property_name, $method) {
@@ -83,13 +100,13 @@ class MacrosServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
+    protected function setEloquentBuilderMacros(): void
     {
-
+        Builder::macro('restrictByCategories', function($categories) {
+            // Pass categories_ids to Eloquent Builder by pointer!
+            Categories::restrictByCategories($categories, $this);
+        });
     }
+
+
 }

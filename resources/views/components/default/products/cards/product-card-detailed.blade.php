@@ -33,7 +33,7 @@
             <div class="row">
                 <div class="col-md-7">
                     <h3 class="mb-1">
-                        <a class="text-dark" href="{{ route('product', $product->slug) }}">
+                        <a class="text-dark" href="{{ $product->permalink }}">
                             {{ $product->getTranslation('name') }}
                         </a>
                     </h3>

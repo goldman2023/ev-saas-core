@@ -9,6 +9,11 @@
             <h5 class="text-white">{{ translate('Setup your store') }} </h5>
             <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget>
         </div>
+
+        <div class="col-12 mb-3">
+            <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe>
+
+        </div>
     </div>
 </section>
 

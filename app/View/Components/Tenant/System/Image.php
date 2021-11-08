@@ -17,7 +17,7 @@ class Image extends Component
      */
     public function __construct($image, $fit = 'inherit', $dataSrcSet= null)
     {
-        $this->image = is_string($image) ? $image : uploaded_asset($image);
+        $this->image = is_numeric($image) ?  uploaded_asset($image) : $image;
         $this->dataSrcSet = $dataSrcSet;
         $this->fit = $fit;
     }

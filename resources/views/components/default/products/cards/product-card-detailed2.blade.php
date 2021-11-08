@@ -39,7 +39,7 @@
         <!-- End Row -->
 
         <h3 class="mb-3">
-            <a class="text-dark" href="{{ route('product', $product->slug) }}">
+            <a class="text-dark" href="{{ $product->permalink }}">
                 {{ $product->getTranslation('name') }}
             </a>
         </h3>

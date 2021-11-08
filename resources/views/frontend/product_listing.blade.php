@@ -1,5 +1,4 @@
 @extends('frontend.layouts.' . $globalLayout)
-
 @if (!empty($selected_category))
 @php
 $meta_title = $selected_category->meta_title;
@@ -7,13 +6,13 @@ $meta_description = $selected_category->meta_description;
 @endphp
 @elseif (isset($brand_id))
 @php
-$meta_title = \App\Models\Brand::find($brand_id)->meta_title;
+$meta_title = \App\Models\Brand::find($brand_id)->name;
 $meta_description = \App\Models\Brand::find($brand_id)->meta_description;
 @endphp
 @else
 @php
-$meta_title = get_setting('meta_title');
-$meta_description = get_setting('meta_description');
+$meta_title = get_setting('website_name') . translate(' Products');
+$meta_description = get_setting('site_motto');
 @endphp
 @endif
 
@@ -41,46 +40,59 @@ $meta_description = get_setting('meta_description');
             <div class="col-sm-8">
                 <h1 class="text-white mt-3">
                     {{ translate('Shop') }}
+                    @isset($brand)
+                    {{ $brand->name }} {{ translate('Products')}}
+                    @endisset
                 </h1>
                 <div class="d-flex justify-content-between">
                     <ul class="breadcrumb bg-transparent p-0 text-white">
                         <li class="breadcrumb-item opacity-50">
                             <a class="" href="{{ route('home') }}">{{ translate('Home') }}</a>
                         </li>
+
+                        @isset($brand)
+                        <li class="breadcrumb-item {{ !empty($brand) ? 'fw-600':'opacity-50' }} ">
+                            <a class="{{ !empty($selected_category) ? '':'text-white' }}"
+                                href="{{ route('brands.all') }}">{{ translate('All Brands') }}</a>
+                        </li>
+                        @else
                         <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-600':'opacity-50' }} ">
                             <a class="{{ !empty($selected_category) ? '':'text-white' }}"
                                 href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
+                        @endisset
                         @if (!empty($selected_category))
                         <li class="text-dark fw-600 breadcrumb-item">
                             <a class="text-white" href="{{ route('products.category', $selected_category->slug) }}">
                                 {{ $selected_category->getTranslation('name') }}</a>
                         </li>
                         @endif
+
+                        @isset($brand)
+                        <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-600':'opacity-50' }} ">
+                            <a class="{{ !empty($selected_category) ? '':'text-white' }}"
+                                href="{{ route('products.brand', $brand->slug) }}">{{ $brand->name }}</a>
+                        </li>
+                        @endisset
                     </ul>
 
 
                 </div>
             </div>
             <div class="col-sm-4">
-                <form action="{{ route('search') }}" method="GET" class="mt-3 stop-propagation mb-0">
-                    <div class="d-flex position-relative">
-                        <div class="d-none" data-toggle="class-toggle" data-target=".front-header-search">
-                            <button class="btn px-2" type="button" aria-label="search-button">
-                                <i class="la la-2x la-long-arrow-left"></i></button>
-                        </div>
-                        <div class="input-group d-flex align-items-stretch">
-                            <input type="text" class="border-0 border-lg form-control h-100" id="search" name="q"
-                                value="{{ $query }}" placeholder="{{ translate('Search query...') }}"
-                                autocomplete="off">
-                            <div class="input-group-append d-block">
-                                <button class="btn btn-primary" type="submit">
-                                    <x-heroicon-s-search class="ev-icon__small" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                {{-- <x-b2-b-search></x-b2-b-search> --}}
+
+                @isset($brand)
+                <div class="p-3 bg-white text-center">
+                    <a href="{{ route('products.brand', $brand->slug) }}">
+
+                    <x-tenant.system.image style="max-height: 100px;" class="lazyload mx-auto h-70px mw-100 bg-white" :image="$brand->logo"
+                        alt="{{ $brand->name}}">
+                    </x-tenant.system.image>
+                    </a>
+                </div>
+
+                @endisset
             </div>
         </div>
     </div>
@@ -130,8 +142,8 @@ $meta_description = get_setting('meta_description');
                                         {{ translate('Products - ') }}
                                         {{ $selected_category->getTranslation('name') }}
                                         @elseif(isset($query))
-                                        {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' .
-                                        $product->count() }}
+                                        {{-- {{ translate('Products found matched ') }}"{{ $query }}"{{ ' : ' .
+                                        $product->count() }} --}}
                                         @else
                                         {{ translate('All Products') }}
                                         @endif

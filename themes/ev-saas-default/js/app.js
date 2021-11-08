@@ -7,6 +7,27 @@
 require('./bootstrap');
 
 
+
+$(document).ready(function() {
+    let headerScrolled = false;
+
+    $(window).scroll(function() {
+        $("body").addClass('body-has-scrolled');
+        clearTimeout($.data(this, 'scrollTimer'));
+        $.data(this, 'scrollTimer', setTimeout(function() {
+            $("body").addClass('body-has-scrolled');
+            headerScrolled = true;
+            console.log("Haven't scrolled in 250ms!");
+            console.log($("body").scrollTop());
+            if($(window).scrollTop() > 200) {
+                $("body").addClass('body-has-scrolled');
+            } else {
+                $("body").removeClass('body-has-scrolled');
+            }
+        }, 150));
+    });
+})
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

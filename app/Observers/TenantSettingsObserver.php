@@ -14,7 +14,7 @@ class TenantSettingsObserver
      *
      * @var bool
      */
-    public $afterCommit = true;
+    public bool $afterCommit = true;
 
     /**
      * Handle the Business Settings "saved" event.

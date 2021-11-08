@@ -15,12 +15,12 @@
     <div class="card-body pt-3 px-3 pb-0">
         <div class="mb-2">
             <a class="d-inline-block text-body small font-weight-bold mb-1"
-                href="{{ route('product', $product->slug) }}">
+                href="{{ $product->permalink }}">
 
 
             </a>
             <span class="d-block h4 font-weight-bold">
-                <a class="text-inherit" href="{{ route('product', $product->slug) }}">
+                <a class="text-inherit" href="{{ $product->permalink }}">
                     {{ $product->getTranslation('name') }}
                 </a>
             </span>
@@ -41,12 +41,12 @@
         </div>
 
         {{-- TODO: Make an option to manage what buttons are visible --}}
-        {{-- <a href="{{ route('product', $product->slug) }}" type="button" class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
+        {{-- <a href="{{ $product->permalink }}" type="button" class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
         {{ translate('Add to Cart') }}
       </a> --}}
         <div class="w-100 text-center mt-3">
 
-            <a href="{{ route('product', $product->slug) }}" type="button"
+            <a href="{{ $product->permalink }}" type="button"
                 class="ml-1 btn btn-sm btn-primary btn-pill transition-3d-hover">
                 {{ translate('View Details') }}
             </a>

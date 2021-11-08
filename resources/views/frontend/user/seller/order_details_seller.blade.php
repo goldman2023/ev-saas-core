@@ -150,7 +150,7 @@
                                     <td>{{ $key+1 }}</td>
                                     <td>
                                         @if ($orderDetail->product != null)
-                                            <a href="{{ route('product', $orderDetail->product->slug) }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a>
+                                            <a href="{{ $orderDetail->product->permalink }}" target="_blank">{{ $orderDetail->product->getTranslation('name') }}</a>
                                         @else
                                             <strong>{{  translate('Product Unavailable') }}</strong>
                                         @endif

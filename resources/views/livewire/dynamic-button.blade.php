@@ -4,7 +4,7 @@
     <button wire:click.prevent="editLabel()"
     style="position:absolute; left: 100%; margin-left: 10px; top: 0;"
 
-            class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle bg-white"
+            class="ev-edit-inline  js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle bg-white"
             href="javascript:;">
             @svg('heroicon-o-pencil-alt')
             {{ translate('edit') }}

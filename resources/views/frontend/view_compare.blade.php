@@ -40,7 +40,7 @@
                                     </th>
                                     @foreach (Session::get('compare') as $key => $item)
                                         <th scope="col" style="width:28%" class="font-weight-bold">
-                                            <a class="text-reset fs-15" href="{{ route('product', \App\Models\Product::find($item)->slug) }}">{{ \App\Models\Product::find($item)->getTranslation('name') }}</a>
+                                            <a class="text-reset fs-15" href="{{ \App\Models\Product::find($item)->permalink }}">{{ \App\Models\Product::find($item)->getTranslation('name') }}</a>
                                         </th>
                                     @endforeach
                                 </tr>

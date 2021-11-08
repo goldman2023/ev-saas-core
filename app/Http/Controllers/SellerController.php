@@ -45,9 +45,8 @@ class SellerController extends Controller
         return view('backend.sellers.index', compact('sellers', 'sort_search', 'approved'));
     }
 
-    public function index_data_table(SellerDataTable $dataTable)
-    {
-        return $dataTable->render('backend.sellers.index_data_table');
+        $sellers = Seller::all();
+        return view('backend.sellers.index', compact('sellers', 'sort_search', 'approved'));
     }
 
     /**
@@ -91,9 +90,10 @@ class SellerController extends Controller
             $seller->user_id = $user->id;
             if($seller->save()){
                 $shop = new Shop;
-                $shop->user_id = $user->id;
                 $shop->slug = 'demo-shop-'.$user->id;
                 $shop->save();
+                $shop->users()->attach($user);
+
                 flash(translate('Seller has been inserted successfully'))->success();
                 return redirect()->route('admin.sellers.index');
             }

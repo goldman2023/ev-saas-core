@@ -26,7 +26,7 @@ class VendorService
     public function __construct($app) {
         $this->is_vendor_site = false;
         $this->vendor_shop = null;
-        $this->vendor_categories = null;
+        $this->vendor_categories_ids = null;
     }
 
     public function isVendorSite(): bool
@@ -46,22 +46,23 @@ class VendorService
 
     public function getVendorShop()
     {
-        if(empty($this->shop)) {
+        if(empty($this->vendor_shop)) {
             $domain = parse_url(Request::root())['host'] ?? null;
             $shop_domain = ShopDomain::where('domain', '=', $domain)->first();
 
-            $this->shop = $shop_domain->shop ?? null;
+            $this->vendor_shop = $shop_domain->shop ?? null;
         }
 
-        return $this->shop;
+        return $this->vendor_shop;
     }
 
     public function getVendorCategoriesIDs() {
-        if(!empty($this->shop) && empty($this->vendor_categories_ids)) {
+        if(!empty($this->vendor_shop) && empty($this->vendor_categories_ids)) {
             // TODO: ID list array with products only by single vendor
             // TODO: Check Models CRUD PAGES!
             // TODO: Remove stock/variations $with and use them only when necessary
-            $all_products_ids = $this->shop->products()->without(['stocks', 'variations'])->select('id')->get()->pluck('id')->toArray();
+
+            $all_products_ids = $this->vendor_shop->products()->withOnly([])->get()->pluck('id')->toArray();
             $this->vendor_categories_ids = CategoryRelationship::where('subject_type', '=', Product::class)->whereIn('subject_id', $all_products_ids)
                 ->select('category_id')->get()->pluck('category_id')->unique()->toArray();
         }

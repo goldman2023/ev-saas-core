@@ -1,5 +1,6 @@
 <script>
     window.AIZ = window.AIZ || {};
+    console.log(topSearches);
 
     AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
@@ -32,8 +33,8 @@
 </script>
 
 @if (get_setting('facebook_chat') == 1)
-    <script type="text/javascript">
-        window.fbAsyncInit = function() {
+<script type="text/javascript">
+    window.fbAsyncInit = function() {
             FB.init({
                 xfbml: true,
                 version: 'v3.3'
@@ -48,11 +49,11 @@
             js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
-    </script>
-    <div id="fb-root"></div>
-    <!-- Your customer chat code -->
-    <div class="fb-customerchat" attribution=setup_tool page_id="{{ env('FACEBOOK_PAGE_ID') }}">
-    </div>
+</script>
+<div id="fb-root"></div>
+<!-- Your customer chat code -->
+<div class="fb-customerchat" attribution=setup_tool page_id="{{ env('FACEBOOK_PAGE_ID') }}">
+</div>
 @endif
 
 <script>
@@ -189,6 +190,7 @@
         search();
     });
 
+
     document.addEventListener('scroll', processScroll);
 
     function processScroll() {
@@ -205,8 +207,10 @@
 
     function search() {
         var searchKey = $('#search').val();
+        $('body').addClass("typed-search-box-shown");
+        $('.typed-search-box').removeClass('d-none');
         if (searchKey.length > 0) {
-            $('body').addClass("typed-search-box-shown");
+
 
             $('.typed-search-box').removeClass('d-none');
             $('.search-preloader').removeClass('d-none');
@@ -232,6 +236,11 @@
             $('body').removeClass("typed-search-box-shown");
         }
     }
+
+    $(".top-search-suggestion").click(function() {
+        $("#search").val($(this).text());
+        search();
+    });
 
     function updateNavCart() {
         $.post('{{ route('cart.nav_cart') }}', {

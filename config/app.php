@@ -206,6 +206,11 @@ return [
         // EVServiceProvider
         App\Providers\EVServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
+
+
+        // Laravel Spark
+        App\Providers\SparkServiceProvider::class,
+
     ],
 
     /*

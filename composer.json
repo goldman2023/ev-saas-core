@@ -33,7 +33,6 @@
         "intervention/image": "^2.5",
         "iyzico/iyzipay-php": "^2.0.48",
         "laracasts/flash": "^3.0",
-        "laravel/cashier": "^13.4",
         "laravel/framework": "8.*",
         "laravel/passport": "^10.1",
         "laravel/slack-notification-channel": "^2.3",
@@ -65,7 +64,8 @@
         "stancl/tenancy": "^3.4",
         "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
-        "twilio/sdk": "^6.1"
+        "twilio/sdk": "^6.1",
+        "laravel/spark-stripe": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -122,6 +122,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-
+        {
+            "type": "composer",
+            "url": "https://spark.laravel.com"
+        }
     ]
 }

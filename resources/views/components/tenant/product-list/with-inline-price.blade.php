@@ -27,7 +27,7 @@
                     <div class="mt-4 flex justify-between">
                         <div>
                             <h3 class="text-sm text-gray-700">
-                                <a href="{{ route('product', $product->slug) }}">
+                                <a href="{{ $product->permalink }}">
                                     <span aria-hidden="true" class="absolute inset-0"></span>
                                     {{ $product->getTranslation('name') }}
                                 </a>

@@ -17,7 +17,7 @@ class BrandsList extends Component
     {
         //
 
-        $this->brands = \App\Models\Brand::all();
+        $this->brands = \App\Models\Brand::take(15)->get();
     }
 
     /**

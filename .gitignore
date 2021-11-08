@@ -49,7 +49,7 @@ public/themes/ev-saas-default/css/*
 public/themes/ev-saas-default/js/*
 public/themes/ev-tailwind/js/*
 public/themes/ev-tailwind/css/*
-
+resources/scss/tenants/*
 resources/scss/dependencies/*.css
 resources/scss/dependencies/*.css.map
 resources/scss/dependencies/vendor/*.css
@@ -68,5 +68,4 @@ public/ev-assets/front/svg/*
 public/assets/admin/*
 public/ev-assets/admin/css/admin.css
 react-feeds-example/*
-public/themes/ev-saas-default/mix-manifest.json
 public/themes/ev-saas-default/mix-manifest.json

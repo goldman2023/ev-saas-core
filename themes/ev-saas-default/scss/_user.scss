@@ -3,7 +3,14 @@
 ------------------------------------*/
 
 @import "components";
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 
+}
 
 /* TODO: IMPORTANT!
 Make this wrapper component to add ev-icon class on all icons by default,

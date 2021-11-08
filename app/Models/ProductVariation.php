@@ -33,7 +33,11 @@ class ProductVariation extends Model
 
     /* Properties not saved in DB */
     public bool $remove_flag;
+    public $current_stock;
+    public $low_stock_qty;
     public $total_price;
+    public $discounted_price;
+    public $base_price;
 
     /**
      * The relationships that should always be loaded.
@@ -42,14 +46,14 @@ class ProductVariation extends Model
      */
     protected $with = ['stock', 'flash_deals'];
 
-    protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag'];
-    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'name', 'temp_stock', 'remove_flag', 'total_price'];
+    protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag', 'discount', 'discount_type'];
+    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'temp_stock', 'remove_flag', 'total_price'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag', 'total_price'];
+    protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag', 'current_stock', 'low_stock_qty', 'category_id', 'total_price', 'discounted_price', 'base_price'];
 
     protected $dispatchesEvents = [
         'deleting' => ProductVariationDeleting::class,
@@ -135,42 +139,176 @@ class ProductVariation extends Model
         return $this->remove_flag ?? false;
     }
 
+    // START PRICES
+
     /**
-     * Get product end(total) price
+     * Get product total price with tax
      *
-     * NOTE: Total price is a price of the product after all discounts, but without Tax included
+     * NOTE: Total price is a price of the product after all discounts and with Tax included
      *
      * @param bool $display
-     * @return float $total
+     * @param bool $both_formats
+     * @return mixed
      */
-    public function getDiscountedPrice($display = false) {
-        $this->total_price = $this->attributes['price'];
-        /*if(empty($this->total_price)) {
+    public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
+    {
+        if(empty($this->total_price)) {
             $this->total_price = $this->attributes['price'];
 
-            $flash_deal = $this->flash_deals->first() ?: $this->product->flash_deals->filter(function($value,$key) {
-                return (int) $value->pivot->include_variations === 1;
-            })->first();
+            // TODO: If Main Product of this variation is under a FlashDeal, take that Flash Deal into consideration too!
+            // TODO: For now only flash deals which are directly related to specific ProductVariation are taken into consideration!!!
+            $flash_deal = $this->flash_deals->first();
 
+            // NOTE: If FlashDeal is present for current product variation, DO NOT take ProductVariation's discount into consideration!
             if(!empty($flash_deal)) {
                 if ($flash_deal->discount_type === 'percent') {
                     $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
                 } elseif ($flash_deal->discount_type === 'amount') {
                     $this->total_price -= $flash_deal->discount;
                 }
+            } else {
+                if ($this->attributes['discount'] && $this->attributes['discount_type'] === 'percent') {
+                    $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
+                } elseif ($this->attributes['discount'] && $this->attributes['discount_type'] === 'amount') {
+                    $this->total_price -= $this->attributes['discount'];
+                }
             }
-        }*/
+
+            // TODO: Create tax_relationship table and link it to subjects and taxes!
+            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+
+            // NOTE: For now, taxes related to the Main Product are applied to each variation too!!!
+            if(!empty($this->product->tax)) {
+                if ($this->product->tax_type === 'percent') {
+                    $this->total_price += ($this->total_price * $this->product->tax) / 100;
+                } elseif ($this->product->tax_type === 'amount') {
+                    $this->total_price += $this->product->tax;
+                }
+            }
+
+        }
+
+        if ($both_formats) {
+            return [
+                'raw' => $this->total_price,
+                'display' => FX::formatPrice($this->total_price)
+            ];
+        }
 
         return $display ? FX::formatPrice($this->total_price) : $this->total_price;
     }
 
-    public function getOriginalPrice($display = false) {
-        return $display ? FX::formatPrice($this->attributes['price']) : $this->attributes['price'];
+    public function getTotalPriceAttribute() {
+        return $this->getTotalPrice();
+    }
+
+    /**
+     * Get Discounted price
+     *
+     * NOTE: Discounted price is a price of the product after all discounts, but without Tax included
+     *
+     * @param bool $display
+     * @param bool $both_formats
+     * @return mixed
+     */
+    public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
+    {
+        if(empty($this->discounted_price)) {
+            $this->discounted_price = $this->attributes['price'];
+
+            // TODO: If Main Product of this variation is under a FlashDeal, take that Flash Deal into consideration too!
+            // TODO: For now only flash deals which are directly related to specific ProductVariation are taken into consideration!!!
+            $flash_deal = $this->flash_deals->first();
+
+            // NOTE: If FlashDeal is present for current product variation, DO NOT take ProductVariation's discount into consideration!
+            if(!empty($flash_deal)) {
+                if ($flash_deal->discount_type === 'percent') {
+                    $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
+                } elseif ($flash_deal->discount_type === 'amount') {
+                    $this->total_price -= $flash_deal->discount;
+                }
+            } else {
+                if ($this->attributes['discount'] && $this->attributes['discount_type'] === 'percent') {
+                    $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
+                } elseif ($this->attributes['discount'] && $this->attributes['discount_type'] === 'amount') {
+                    $this->total_price -= $this->attributes['discount'];
+                }
+            }
+        }
+
+        if ($both_formats) {
+            return [
+                'raw' => $this->discounted_price,
+                'display' => FX::formatPrice($this->discounted_price)
+            ];
+        }
+
+        return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
     }
 
     public function getDiscountedPriceAttribute() {
         return $this->getDiscountedPrice();
     }
+
+    /**
+     * Get Base price
+     *
+     * NOTE: Base price is the price of the product with product related taxes
+     *
+     * @param bool $display
+     * @param bool $both_formats
+     * @return float
+     */
+    public function getBasePrice(bool $display = false, bool $both_formats = false): mixed{
+        if(empty($this->base_price)) {
+            $this->base_price = $this->attributes['price'];
+
+            // TODO: Create tax_relationship table and link it to subjects and taxes!
+            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+            if(!empty($this->attributes['tax'])) {
+                if ($this->attributes['tax_type'] === 'percent') {
+                    $this->base_price += ($this->base_price * $this->attributes['tax']) / 100;
+                } elseif ($this->attributes['tax_type'] === 'amount') {
+                    $this->base_price += $this->attributes['tax'];
+                }
+            }
+        }
+
+        if ($both_formats) {
+            return [
+                'raw' => $this->base_price,
+                'display' => FX::formatPrice($this->base_price)
+            ];
+        }
+
+        return $display ? FX::formatPrice($this->base_price) : $this->base_price;
+    }
+
+    public function getBasePriceAttribute() {
+        return $this->getBasePrice();
+    }
+
+    /**
+     * Get Original price
+     *
+     * NOTE: Original price is the `price` of the ProductVariation (without flash-deals/discounts/taxes etc.)
+     *
+     * @param bool $display
+     * @param bool $both_formats
+     * @return float
+     */
+    public function getOriginalPrice(bool $display = false, bool $both_formats = false): mixed {
+        if ($both_formats) {
+            return [
+                'raw' => $this->attributes['price'],
+                'display' => FX::formatPrice($this->attributes['price'])
+            ];
+        }
+
+        return $display ? FX::formatPrice($this->attributes['price']) : $this->attributes['price'];
+    }
+
+    // END PRICES
 
     // START: Casts section
     // If $value is null or empty, value should always be empty array!
@@ -183,6 +321,6 @@ class ProductVariation extends Model
 
     // MISC
     public static function composeVariantKey($key) {
-        return Str::replace('.', ',', $key);
+        return Str::slug(Str::replace('.', ',', $key));
     }
 }

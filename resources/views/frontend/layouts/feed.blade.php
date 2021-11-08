@@ -34,14 +34,16 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
-    <style>
-        :root {
-            --primary: yellow;
-            --secondary: green;
-            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
-        }
-    </style>
-    <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-saas-default') }}">
+    <!-- Theme styles -->
+    <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
+
+    @stack('pre_head_scripts')
+
+    <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
+    <!-- Vendor Scripts -->
+    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
+
 
 
     <x-default.system.tracking-pixels>
@@ -99,18 +101,9 @@
 
 @yield('modal')
 
-<script src="{{ mix('js/app.js', 'themes/'.Theme::parent()) }}"></script>
-
 <script src="{{ mix('js/manifest.js') }}"></script>
 <script src="{{ mix('js/vendor.js') }}"></script>
 <script src="{{ mix('js/feed.js') }}"></script>
-
-
-    <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
-
-
 
 @yield('script')
 

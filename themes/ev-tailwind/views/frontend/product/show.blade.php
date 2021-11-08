@@ -16,7 +16,7 @@
                 quantity: 1,
                 colors: null,
                 thumb: '{{  $product['images']['thumbnail']['url'] ?? '' }}',
-                link: '{{ route('product', $product['slug']) }}'
+                link: '{{ $product['permalink'] }}'
             }">
             <x-tenant.system.breadcrumbs></x-tenant.system.breadcrumbs>
             <div class="mt-8 max-w-2xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-4">

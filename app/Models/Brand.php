@@ -41,6 +41,11 @@ class Brand extends Model
         });
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
     public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $brand_translation = $this->hasMany(BrandTranslation::class)->where('lang', $lang)->first();
