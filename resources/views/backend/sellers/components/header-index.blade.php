@@ -4,7 +4,7 @@
             <h1 class="h3">{{translate('All Sellers')}}</h1>
         </div>
         <div class="col-md-6 d-flex justify-content-end">
-            <div class="d-flex align-items-center mr-3">
+            <div class="d-none align-items-center mr-3">
                 <label class="mr-2">{{translate('Switch View')}}</label>
                 <label class="aiz-switch aiz-switch-success mb-0">
                     <input onchange="switch_view({{ $is_datatable_view }})" type="checkbox" name="is_datatable_view" @if($is_datatable_view == 'true') checked @endif />

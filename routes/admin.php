@@ -53,7 +53,6 @@ Route::middleware([
         Route::post('/products/get_products_by_subcategory', 'ProductController@get_products_by_subcategory')->name('products.get_products_by_subcategory');
 
         //Seller DataTables
-        Route::get('sellers/data-table', 'SellerController@index_data_table')->name('sellers.index.data-table');
 
         Route::resource('sellers', 'SellerController')->parameters([
             'sellers' => 'id',

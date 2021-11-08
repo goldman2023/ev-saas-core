@@ -1,4 +1,4 @@
-<div class="container space-1">
+<div class="container space-1 mt-3 mt-lg-0">
 
     <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3 d-none">
         <x-ev.label tag="h3" :label="ev_dynamic_translate('Brands List Title', true)">
@@ -34,7 +34,7 @@
                         </span>
                         {{-- TODO Make this dynamic --}}
                         @if($key == 1)
-                        <span class="badge badge-pill badge-success mt-2 position-absolute top-0 left-3">
+                        <span class="badge badge-pill badge-success mt-2 position-absolute top-0 left-3 z-index-10">
                             {{ translate('New!') }}
                         </span>
                         @endif

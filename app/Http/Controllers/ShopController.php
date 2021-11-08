@@ -104,12 +104,12 @@ class ShopController extends Controller
         $user->save();
         if (Shop::where('user_id', $user->id)->first() == null) {
             $shop = new Shop;
-            $shop->user_id = $user->id;
             $shop->name = $request->company_name;
             $shop->address = $request->address;
             $shop->slug = preg_replace('/\s+/', '-', $request->name) . '-' . $shop->id;
 
             if ($shop->save()) {
+                $shop->users()->attach($user);
                 auth()->login($user, false);
                 if (get_setting('email_verification') != 1) {
                     $user->email_verified_at = date('Y-m-d H:m:s');

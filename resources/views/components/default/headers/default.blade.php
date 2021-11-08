@@ -3,7 +3,7 @@
     <div class="header-section">
         <!-- Topbar -->
         <div class="container header-hide-content pt-2">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center ev-top-bar">
                 <div>
                     <!-- Language -->
                     @if (get_setting('show_language_switcher') == 'on')
