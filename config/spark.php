@@ -19,7 +19,7 @@ return [
     |
     */
 
-    'path' => 'billing',
+    'path' => 'dashboard/subscriptions',
 
     /*
     |--------------------------------------------------------------------------
@@ -132,12 +132,17 @@ return [
 
             'default_interval' => 'monthly',
 
+            /* TODO: Create  dynamic plans for multi vendor app, ex:
+
+                */
+
+
             'plans' => [
                 [
-                    'name' => 'Standard',
+                    'name' => 'Business',
                     'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_id',
-                    'yearly_id' => 'price_id',
+                    'monthly_id' => 'price_1JtUlbASOFrdz0QBuOm9oJh5',
+                    'yearly_id' => 'price_1JtUmuASOFrdz0QBjyGpDwCs',
                     'features' => [
                         'Feature 1',
                         'Feature 2',
