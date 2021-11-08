@@ -135,7 +135,7 @@ class Product extends Model
      *
      * @var array
      */
-    //protected $with = ['stock', 'variations'];
+    protected $with = ['stock', 'flash_deals', 'variations'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
