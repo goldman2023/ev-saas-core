@@ -25,7 +25,7 @@
     <!-- Open Graph data -->
     <meta property="og:title" content="{{ $detailedProduct->meta_title }}" />
     <meta property="og:type" content="og:product" />
-    <meta property="og:url" content="{{ route('product', $detailedProduct->slug) }}" />
+    <meta property="og:url" content="{{ $detailedProduct->permalink }}" />
     <meta property="og:image" content="{{ uploaded_asset($detailedProduct->meta_img) }}" />
     <meta property="og:description" content="{{ $detailedProduct->meta_description }}" />
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
@@ -534,7 +534,7 @@
                                 <li class="py-3 px-0 list-group-item border-light">
                                     <div class="row gutters-10 align-items-center">
                                         <div class="col-5">
-                                            <a href="{{ route('product', $top_product->slug) }}" class="d-block text-reset">
+                                            <a href="{{ $top_product->permalink }}" class="d-block text-reset">
                                                 <img
                                                     class="img-fit lazyload h-xxl-110px h-xl-80px h-120px"
                                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -546,7 +546,7 @@
                                         </div>
                                         <div class="col-7 text-left">
                                             <h4 class="fs-13 text-truncate-2">
-                                                <a href="{{ route('product', $top_product->slug) }}" class="d-block text-reset">{{ $top_product->getTranslation('name') }}</a>
+                                                <a href="{{ $top_product->permalink }}" class="d-block text-reset">{{ $top_product->getTranslation('name') }}</a>
                                             </h4>
                                             <div class="rating rating-sm mt-1">
                                                 {{ renderStarRating($top_product->rating) }}
@@ -740,7 +740,7 @@
                                 <div class="carousel-box">
                                     <div class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
                                         <div class="">
-                                            <a href="{{ route('product', $related_product->slug) }}" class="d-block">
+                                            <a href="{{ $related_product->permalink }}" class="d-block">
                                                 <img
                                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
                                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -761,7 +761,7 @@
                                                 {{ renderStarRating($related_product->rating) }}
                                             </div>
                                             <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                                <a href="{{ route('product', $related_product->slug) }}" class="d-block text-reset">{{ $related_product->getTranslation('name') }}</a>
+                                                <a href="{{ $related_product->permalink }}" class="d-block text-reset">{{ $related_product->getTranslation('name') }}</a>
                                             </h3>
                                             @if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated)
                                                 <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
@@ -801,7 +801,7 @@
                             <input type="text" class="form-control mb-3" name="title" value="{{ $detailedProduct->name }}" placeholder="{{ translate('Product Name') }}" required>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" rows="8" name="message" required placeholder="{{ translate('Your Question') }}">{{ route('product', $detailedProduct->slug) }}</textarea>
+                            <textarea class="form-control" rows="8" name="message" required placeholder="{{ translate('Your Question') }}">{{ $detailedProduct->permalink }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

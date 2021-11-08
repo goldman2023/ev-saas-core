@@ -25,7 +25,7 @@
 
                 @foreach ($products as $key => $product)
                     <div class="text-center slick-slide position-relative">
-                        <a href="{{ route('product', $product->slug) }}" class="d-block rounded hov-shadow-md">
+                        <a href="{{ $product->permalink }}" class="d-block rounded hov-shadow-md">
 
 
                             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"

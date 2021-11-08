@@ -4,8 +4,8 @@
         <ul class="list-group list-group-raw">
             @foreach ($products as $key => $product)
                 <li class="list-group-item">
-                    <a class="text-reset" href="{{ route('product', $product->slug) }}">
-                        <div class="d-flex search-product align-items-start justify-content-start">
+                    <a class="text-reset" href="{{ $product->permalink }}">
+                        <div class="d-flex search-product align-items-center">
                             <div class="mr-3">
                                 <img class="w-25 img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img) }}">
                             </div>
