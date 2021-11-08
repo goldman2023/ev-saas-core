@@ -13,16 +13,19 @@ class CreateCategoryRelationshipsTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_relationships', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('subject_type');
-            $table->unsignedBigInteger('subject_id');
-            $table->unsignedBigInteger('category_id');
-            $table->timestamps();
+        if (!Schema::hasTable('category_relationships')) {
 
-            $table->index(['subject_type', 'subject_id']);
-            $table->index('category_id');
-        });
+            Schema::create('category_relationships', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('subject_type');
+                $table->unsignedBigInteger('subject_id');
+                $table->unsignedBigInteger('category_id');
+                $table->timestamps();
+
+                $table->index(['subject_type', 'subject_id']);
+                $table->index('category_id');
+            });
+        }
     }
 
     /**

@@ -22,9 +22,10 @@ class AddNecessaryFieldsToProductVariationsTable extends Migration
                 $table->timestamp('deleted_at', 0)->nullable(true)->after('updated_at');
             }
 
-
-            $table->string('variant', 300)->change();
-            $table->unique(['product_id', 'variant']);
+            if (Schema::hasColumn('product_variations', 'variant')) {
+                $table->string('variant', 300)->change();
+                $table->unique(['product_id', 'variant']);
+            }
         });
     }
 

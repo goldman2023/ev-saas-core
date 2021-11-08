@@ -1,4 +1,33 @@
 <div class="">
+    @if (count($products) > 0)
+        <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Products')}}</div>
+        <ul class="list-group list-group-raw">
+            @foreach ($products as $key => $product)
+                <li class="list-group-item">
+                    <a class="text-reset" href="{{ $product->permalink }}">
+                        <div class="d-flex search-product align-items-center">
+                            <div class="mr-3">
+                                <img class="w-25 img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img) }}">
+                            </div>
+                            <div class="">
+                                <div class="product-name text-truncate fs-14 mb-5px">
+                                    {{  $product->getTranslation('name')  }}
+                                </div>
+                                <div class="">
+                                    @if($product->getBasePrice() != $product->getTotalPrice())
+                                        <del class="opacity-60 fs-15">{{ $product->getBasePrice(true) }}</del>
+                                    @endif
+                                    <span class="fw-600 fs-16 text-primary">{{ $product->getTotalPrice(true) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    @endif
+</div>
+<div class="">
     @if (sizeof($keywords) > 0)
         <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Popular Suggestions')}}</div>
         <ul class="list-group list-group-raw">
@@ -22,35 +51,7 @@
         </ul>
     @endif
 </div>
-<div class="">
-    @if (count($products) > 0)
-        <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Products')}}</div>
-        <ul class="list-group list-group-raw">
-            @foreach ($products as $key => $product)
-                <li class="list-group-item">
-                    <a class="text-reset" href="{{ $product->permalink }}">
-                        <div class="d-flex search-product align-items-center">
-                            <div class="mr-3">
-                                <img class="size-40px img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img) }}">
-                            </div>
-                            <div class="flex-grow-1 overflow--hidden minw-0">
-                                <div class="product-name text-truncate fs-14 mb-5px">
-                                    {{  $product->getTranslation('name')  }}
-                                </div>
-                                <div class="">
-                                    @if($product->getBasePrice() != $product->getTotalPrice())
-                                        <del class="opacity-60 fs-15">{{ $product->getBasePrice(true) }}</del>
-                                    @endif
-                                    <span class="fw-600 fs-16 text-primary">{{ $product->getTotalPrice(true) }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            @endforeach
-        </ul>
-    @endif
-</div>
+
 <div class="">
     @if (count($events) > 0)
         <div class="px-2 py-1 text-uppercase fs-10 text-right text-muted bg-soft-secondary">{{translate('Events')}}</div>

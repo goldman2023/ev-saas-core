@@ -13,6 +13,7 @@
         <div class="col-12">
             {{-- TODO: add custom CTA and Text and Image options --}}
             <x-free-member-notification> </x-free-member-notification>
+            <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe>
             <x-company.company-onboarding-box> </x-company.company-onboarding-box>
         </div>
 

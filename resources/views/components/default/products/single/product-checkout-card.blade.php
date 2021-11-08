@@ -3,9 +3,11 @@
         <div class="row">
             <div class="col-sm-12 d-flex flex-column">
                 <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
+                    @isset($product->brand)
 
                     <x-default.products.single.product-brand-box :product="$product">
                     </x-default.products.single.product-brand-box>
+                    @endisset
             </div>
             <div class="col-12 mt-2 mb-2">
                 <span class="text-dark font-weight-bold">

@@ -526,9 +526,9 @@ class HomeController extends Controller
 
         $categories = Category::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $shops = Shop::whereIn('user_id', verified_sellers_id())->where('name', 'like', '%' . $request->search . '%')->get()->take(3);
+        $shops = Shop::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
-        $events = Event::whereIn('user_id', verified_sellers_id())->where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
+        $events = Event::where('title', 'like', '%' . $request->search . '%')->orWhere('description', 'like', '%' . $request->search . '%')->get()->take(3);
 
         if (sizeof($keywords) > 0 || sizeof($categories) > 0 || sizeof($products) > 0 || sizeof($shops) > 0) {
             return view('frontend.partials.search_content', compact('products', 'categories', 'keywords', 'shops', 'events'));
@@ -569,14 +569,21 @@ class HomeController extends Controller
         $seller_id = $request->seller_id;
         $content = $request->content;
 
+
         $conditions = ['published' => 1];
 
         if ($seller_id != null) {
             // ADD TRY CATCH BLOCK to capture the exception on fail!
             $conditions = array_merge($conditions, ['shop_id' => Seller::findOrFail($seller_id)->user->shop->id]);
         }
-
         $products = Product::where($conditions);
+
+        /* TODO: This probably should be in brand controller and brand archive */
+        if($brand_id != null) {
+            $products->where('brand_id', $brand_id);
+        }
+
+
 
         if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             $products->restrictByCategories($selected_categories);

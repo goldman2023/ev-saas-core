@@ -1,7 +1,7 @@
 @extends('frontend.layouts.' . $globalLayout)
 @section('content')
 
-<main id="content" role="main" class="bg-light">
+<main id="content" role="main" class="bg-light" style="margin-top:-50px;">
     <section class="bg-dark" style="background-image: url('https://htmlstream.com/front/assets/svg/components/abstract-shapes-20.svg');">
         <div class="container space-1 space-top-lg-2 space-bottom-lg-3">
             <div class="row align-items-center">

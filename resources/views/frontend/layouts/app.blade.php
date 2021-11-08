@@ -59,7 +59,7 @@
         <x-default.headers.header>
         </x-default.headers.header>
 
-
+    <section class="space-top-2"></section>
     @yield('content')
 
     {{-- @include('frontend.inc.footer') --}}

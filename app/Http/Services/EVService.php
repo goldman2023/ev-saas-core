@@ -56,6 +56,19 @@ class EVService
                     //     'roles' => [],
                     // ],
 
+
+                ]
+            ],
+            [
+                'label' => translate('Business'),
+                'items' => [
+                    [
+                        'label' => translate('Products'),
+                        'icon' => 'heroicon-o-shopping-cart',
+                        'route' => route('ev-products.index'),
+                        'is_active' => areActiveRoutes(['ev-products.index']),
+                        'roles' => ['admin','seller'],
+                    ],
                     [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
@@ -69,31 +82,6 @@ class EVService
                         'route' => route('leads.index'),
                         'is_active' => areActiveRoutes(['leads']),
                         'roles' => ['admin'],
-                    ],
-
-                ]
-            ],
-            [
-                'label' => translate('Customer zone'),
-                'items' => [
-                    [
-                        'label' => translate('My Purchases'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => route('purchase_history.index'),
-                        'is_active' => areActiveRoutes(['purchase_history']),
-                        'roles' => ['customer'],
-                    ]
-                ]
-            ],
-            [
-                'label' => translate('Business'),
-                'items' => [
-                    [
-                        'label' => translate('Products'),
-                        'icon' => 'heroicon-o-shopping-cart',
-                        'route' => route('ev-products.index'),
-                        'is_active' => areActiveRoutes(['ev-products.index']),
-                        'roles' => ['admin','seller'],
                     ],
                     // [
                     //     'label' => translate('Events'),
@@ -109,6 +97,12 @@ class EVService
                     //     'is_active' => areActiveRoutes(['']),
                     //     'roles' => ['admin','seller'],
                     // ],
+
+                ]
+            ],
+            [
+                'label' => translate('Marketing'),
+                'items' => [
                     [
                         'label' => translate('Blog'),
                         'icon' => 'heroicon-o-newspaper',
@@ -123,18 +117,6 @@ class EVService
                         'is_active' => areActiveRoutes(['ev.settings.domains']),
                         'roles' => ['admin','seller'],
                     ]
-                ]
-            ],
-            [
-                'label' => translate('Manage'),
-                'items' => [
-                    [
-                        'label' => translate('Orders'),
-                        'icon' => 'heroicon-o-document-text',
-                        'route' => route('orders.index'),
-                        'is_active' => areActiveRoutes(['orders.index']),
-                        'roles' => ['admin','seller'],
-                    ],
                     // [
                     //     'label' => translate('Subscriptions'),
                     //     'icon' => 'heroicon-o-currency-dollar',
@@ -144,6 +126,7 @@ class EVService
                     // ],
                 ]
             ],
+
             [
                 'label' => translate('CRM'),
                 'items' => [
@@ -175,6 +158,18 @@ class EVService
                         'is_active' => areActiveRoutes(['']),
                         'roles' => ['admin','seller'],
                     ],
+                ]
+            ],
+            [
+                'label' => translate('Customer zone'),
+                'items' => [
+                    [
+                        'label' => translate('My Purchases'),
+                        'icon' => 'heroicon-o-calendar',
+                        'route' => route('purchase_history.index'),
+                        'is_active' => areActiveRoutes(['purchase_history']),
+                        'roles' => ['customer'],
+                    ]
                 ]
             ],
             [

@@ -87,7 +87,7 @@
         <x-default.headers.header>
         </x-default.headers.header>
 
-        <div class="space-top-lg-3 space-top-2">
+        <div class="space-top-lg-4 space-top-3">
             @yield('content')
         </div>
 

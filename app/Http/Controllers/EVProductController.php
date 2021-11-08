@@ -10,7 +10,7 @@ class EVProductController extends Controller
 {
     //
     public function index(Request $request) {
-        $products = Auth::user()->products()->orderBy('created_at','desc')->get();
+        $products = Auth::user()->products()->orderBy('created_at','desc')->paginate(20);
 
         return view('frontend.user.crud.products.index')->with('products', $products);
     }
@@ -19,9 +19,10 @@ class EVProductController extends Controller
         return view('frontend.user.crud.products.create');
     }
 
-    public function edit(Request $request, $slug) {
-        $product = Auth::user()->shop()->first()->products()->where('slug', $slug)->first();
 
+    /* TODO: Add midleware for owner */
+    public function edit(Request $request, $slug) {
+        $product = Product::where('slug', $slug)->first();
         return view('frontend.user.crud.products.edit')->with('product', $product);
     }
 }

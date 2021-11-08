@@ -60,6 +60,10 @@
 
                 </tbody>
             </table>
+            <hr>
+            <div class="text-center d-flex justify-content-center">
+                {{ $products->links() }}
+            </div>
         </div>
         <!-- End Table -->
     </div>

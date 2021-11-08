@@ -115,8 +115,10 @@
                     </div>
                     <hr>
                     <div class="mt-3">
+                        @isset($product->brand)
                         <x-default.products.single.product-brand-box :product="$product">
                         </x-default.products.single.product-brand-box>
+                        @endisset
                     </div>
                     <hr>
                     <div class="mt-3">

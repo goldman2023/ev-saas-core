@@ -9,7 +9,13 @@
                 <h3 class="text-hover-primary mb-1">
                     {{ $title }}
                 </h3>
-                <span class="text-body">{{ translate('Track your website statics') }}</span>
+                <span class="text-body">
+                    @if($slot)
+                     {{ $slot }}
+                    @else
+
+                    @endif
+                </span>
             </div>
 
             <div class="ml-2 text-right">
