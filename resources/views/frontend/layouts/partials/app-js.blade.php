@@ -1,6 +1,5 @@
 <script>
     window.AIZ = window.AIZ || {};
-    console.log(topSearches);
 
     AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
