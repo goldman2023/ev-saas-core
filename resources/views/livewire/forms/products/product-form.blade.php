@@ -302,12 +302,15 @@
                                         <x-ev.form.input name="product.current_stock" type="number" label="{{ translate('Stock quantity') }}" :required="true"  min="0" step="1">
                                             <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
                                         </x-ev.form.input>
+
+
+
                                         <x-ev.form.input name="product.low_stock_qty" type="number" label="{{ translate('Low stock quantity warning') }}"  min="0" step="1">
                                         </x-ev.form.input>
 
+                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EVS::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
                                         <x-ev.form.input name="product.purchase_price" type="number" label="{{ translate('Purchase price') }}" min="0" step="0.01">
-
                                         </x-ev.form.input>
 
                                         <div class="row">
@@ -318,8 +321,6 @@
                                                 <x-ev.form.select name="product.discount_type" :items="['amount'=>translate('Flat'),'percent'=>translate('Percent')]" label="{{ translate('Discount type') }}" :required="true"/>
                                             </div>
                                         </div>
-
-                                        <x-ev.form.radio name="product.stock_visibility_state" :items="EVS::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
                                         <x-ev.form.radio name="product.shipping_type" :items="EVS::getMappedShippingTypePerProduct()" label="{{ translate('Shipping type') }}" value="{{ $product->shipping_type ?: '' }}" >
                                             <x-slot name="flat_rate">

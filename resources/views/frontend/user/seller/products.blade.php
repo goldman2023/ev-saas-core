@@ -90,7 +90,7 @@
                         <tr>
                             <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                             <td>
-                                <a href="{{ route('product', $product->slug) }}" target="_blank" class="text-reset">
+                                <a href="{{ $product->permalink }}" target="_blank" class="text-reset">
                                     {{ $product->getTranslation('name') }}
                                 </a>
                             </td>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Cache;
+use App\Builders\ProductsBuilder;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Models\FlashDealProduct;
@@ -21,6 +22,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use App\Traits\PermalinkTrait;
+use App\Traits\PriceTrait;
+use App\Traits\StockManagementTrait;
 
 /**
  * App\Models\Product
@@ -41,13 +45,9 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
  * @property string|null $description
  * @property float $unit_price
  * @property float $purchase_price
- * @property string|null $choice_options
- * @property string|null $colors
- * @property string $variations
  * @property int $todays_deal
  * @property int $published
  * @property int $featured
- * @property int $current_stock
  * @property string|null $unit
  * @property float|null $discount
  * @property string|null $discount_type
@@ -115,36 +115,18 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Product extends Model
 {
+    use PermalinkTrait;
     use ReviewTrait;
     use AttributeTrait;
     use HasSlug;
     use SoftDeletes;
 
-     /**
-     * Stream: Add extra activity data - task name, and user's display name:
-     */
-    public function activityExtraData()
-    {
-        return array('name'=>'$this->name', 'display_name' =>' $this->display_name');
-    }
+    use StockManagementTrait;
+    use PriceTrait;
 
-
-   /**
-    * Stream: Change activity verb to 'created':
-    */
-    public function activityVerb()
-    {
-        return 'created';
-    }
-
+    protected $table = 'products';
 
     /* Properties not saved in DB */
-    public $temp_sku;
-    public $current_stock;
-    public $low_stock_qty;
-    public $total_price;
-    public $discounted_price;
-    public $base_price;
     public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
 
 
@@ -157,35 +139,29 @@ class Product extends Model
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'num_of_sale', 'thumbnail_img', 'photos', 'temp_sku', 'current_stock', 'low_stock_qty'];
+        'purchase_price', 'unit', 'slug', 'num_of_sale', 'thumbnail_img', 'photos'];
 
     protected $casts = [
-        'choice_options' => 'object',
         'colors' => 'object',
         'attributes' => 'object',
     ];
 
-    protected $appends = ['images', 'permalink','temp_sku', 'current_stock', 'low_stock_qty', 'category_id', 'total_price', 'discounted_price', 'base_price'];
+    protected $appends = ['images', 'category_id'];
 
     protected static function boot()
     {
         parent::boot();
+    }
 
-        // Determine scope based on user role
-        // If admin: select products that are both published and not published
-        // If vendor/user: select products which are published
-        if(!auth()->check() || (auth()->check() && auth()->user()->isCustomer())) {
-            static::addGlobalScope('published', function (Builder $builder) {
-                $builder->where('published', 1);
-            });
-        }
-
-        if(Vendor::isVendorSite()) {
-            static::addGlobalScope('single_vendor', function (Builder $builder) {
-                $builder->where('shop_id', '=' , Vendor::getVendorShop()->id ?? null);
-            });
-        }
-
+    /**
+     * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)
+     *
+     * @param    \Illuminate\Database\Query\Builder  $query
+     * @return  App\Builders\ProductsBuilder
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new ProductsBuilder($query);
     }
 
     /**
@@ -206,6 +182,22 @@ class Product extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    /**
+     * Stream: Add extra activity data - task name, and user's display name:
+     */
+    public function activityExtraData()
+    {
+        return array('name'=>'$this->name', 'display_name' =>' $this->display_name');
+    }
+
+    /**
+     * Stream: Change activity verb to 'created':
+     */
+    public function activityVerb()
+    {
+        return 'created';
     }
 
     public function getTranslation($field = '', $lang = false) {
@@ -346,6 +338,7 @@ class Product extends Model
      * @return array*
      */
     public function getImagesAttribute($options = []) {
+        // TODO: Refactor this function to use Join and uploads_relationships table!
         $photos = [];
         $data = [
             'thumbnail' => [],
@@ -407,284 +400,6 @@ class Product extends Model
         return translate("New");
     }
 
-    /**
-     * Get the product permalink
-     *
-     * @return string $link
-     */
-    public function getPermalinkAttribute() {
-        if(empty($this->attributes['slug'])) {
-            return "#";
-        }
-
-        return route('product', $this->attributes['slug']);
-    }
-
-    // START PRICES
-
-    /**
-     * Get the Total price
-     *
-     * NOTE: Total price is a price of the product after all discounts and with Tax included
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return mixed
-     */
-    public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
-    {
-        if(empty($this->total_price)) {
-            $this->total_price = $this->attributes['unit_price'];
-
-            if($this->has_variations()) {
-                // TODO: Display lowest/highest variant total price OR SOME COMBINATION
-                /*if ($flash_deal->discount_type === 'percent') {
-                    $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
-                    $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
-                    $lowest_price -= $flash_deal_product->discount;
-                    $highest_price -= $flash_deal_product->discount;
-                }*/
-                $flash_deal = $this->flash_deals->first();
-
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
-                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
-                        $this->total_price -= $flash_deal->discount;
-                    }
-                } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
-                        $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
-                        $this->total_price -= $this->attributes['discount'];
-                    }
-                }
-            } else {
-                $flash_deal = $this->flash_deals->first();
-
-                // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
-                        $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
-                        $this->total_price -= $flash_deal->discount;
-                    }
-                } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
-                        $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
-                        $this->total_price -= $this->attributes['discount'];
-                    }
-                }
-            }
-
-            // TODO: Create tax_relationship table and link it to subjects and taxes!
-            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if(!empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === 'percent') {
-                    $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === 'amount') {
-                    $this->total_price += $this->attributes['tax'];
-                }
-            }
-
-        }
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->total_price,
-                'display' => FX::formatPrice($this->total_price)
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->total_price) : $this->total_price;
-    }
-
-    public function getTotalPriceAttribute() {
-        return $this->getTotalPrice();
-    }
-
-    /**
-     * Get Discounted price
-     *
-     * NOTE: Discounted price is a price of the product after all discounts, but without Tax included
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return mixed
-     */
-    public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
-    {
-        if(empty($this->discounted_price)) {
-            $this->discounted_price = $this->attributes['unit_price'];
-
-            if($this->has_variations()) {
-                // TODO: Display lowest/highest variant total price OR SOME COMBINATION
-                /*if ($flash_deal->discount_type === 'percent') {
-                    $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
-                    $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
-                    $lowest_price -= $flash_deal_product->discount;
-                    $highest_price -= $flash_deal_product->discount;
-                }*/
-                $flash_deal = $this->flash_deals->first();
-
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
-                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
-                        $this->discounted_price -= $flash_deal->discount;
-                    }
-                } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
-                        $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
-                        $this->discounted_price -= $this->attributes['discount'];
-                    }
-                }
-            } else {
-                $flash_deal = $this->flash_deals->first();
-
-                // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
-                        $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
-                        $this->discounted_price -= $flash_deal->discount;
-                    }
-                } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
-                        $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
-                        $this->discounted_price -= $this->attributes['discount'];
-                    }
-                }
-            }
-        }
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->discounted_price,
-                'display' => FX::formatPrice($this->discounted_price)
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
-    }
-
-    public function getDiscountedPriceAttribute() {
-        return $this->getDiscountedPrice();
-    }
-
-    /**
-     * Get Base price
-     *
-     * NOTE: Base price is the price of the product with product related taxes
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return mixed
-     */
-    public function getBasePrice(bool $display = false, bool $both_formats = false): mixed
-    {
-        if(empty($this->base_price)) {
-            $this->base_price = $this->attributes['unit_price'];
-
-            // TODO: Create tax_relationship table and link it to subjects and taxes!
-            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if(!empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === 'percent') {
-                    $this->base_price += ($this->base_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === 'amount') {
-                    $this->base_price += $this->attributes['tax'];
-                }
-            }
-        }
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->base_price,
-                'display' => FX::formatPrice($this->base_price)
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->base_price) : $this->base_price;
-    }
-
-    public function getBasePriceAttribute() {
-        return $this->getBasePrice();
-    }
-
-    /**
-     * Get Original price
-     *
-     * NOTE: Original price is the unit_price of the product (without flash-deals/discounts/taxes etc.)
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return mixed
-     */
-    public function getOriginalPrice(bool $display = false, bool $both_formats = false): mixed
-    {
-        if ($both_formats) {
-            return [
-                'raw' => $this->attributes['unit_price'],
-                'display' => FX::formatPrice($this->attributes['unit_price'])
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->attributes['unit_price']) : $this->attributes['unit_price'];
-    }
-
-    // END PRICES
-
-
-    public function setTempSkuAttribute($value)
-    {
-        $this->temp_sku = $value;
-    }
-
-    public function getTempSkuAttribute() {
-        if(empty($this->temp_sku)) {
-            $stock = $this->stock()->first();
-
-            return $stock->sku ?? '';
-        }
-
-        return $this->temp_sku;
-    }
-
-
-    public function setCurrentStockAttribute($value) {
-        $this->current_stock = $value;
-    }
-
-    public function getCurrentStockAttribute() {
-        if(empty($this->current_stock)) {
-            $stock = $this->stock()->first();
-
-            return (float) ($stock->qty ?? 0);
-        }
-
-        return $this->current_stock;
-    }
-
-    public function setLowStockQtyAttribute($value) {
-        $this->low_stock_qty = $value;
-    }
-
-    public function getLowStockQtyAttribute() {
-        if(empty($this->low_stock_qty)) {
-            $stock = $this->stock()->first();
-
-            return (float) ($stock->low_stock_qty ?? 0);
-        }
-
-        return $this->low_stock_qty;
-    }
-
-
     public function has_variations() {
         return $this->variations->isNotEmpty() ?? false;
     }
@@ -706,17 +421,9 @@ class Product extends Model
     // START: Casts section
     // If $value is null or empty, value should always be empty array!
     // Reason: Ease of use in frontend and backend views
-    public function getColorsAttribute($value) {
-        $atts = $this->castAttribute('attributes', $value);
-        return empty($atts) ? [] : $atts;
-    }
     public function getAttributesAttribute($value) {
         $colors = $this->castAttribute('colors', $value);
         return empty($colors) ? [] : $colors;
-    }
-    public function getChoiceOptionsAttribute($value) {
-        $choice_options = $this->castAttribute('choice_options', $value);
-        return empty($choice_options) ? [] : $choice_options;
     }
     // END: Casts section
 }

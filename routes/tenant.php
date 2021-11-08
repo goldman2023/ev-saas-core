@@ -23,6 +23,7 @@ use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
 use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -124,7 +125,7 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product');
+    Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::class.'.single');
     Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name('products.category');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name('products.variant_price');

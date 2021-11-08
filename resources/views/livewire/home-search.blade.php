@@ -68,7 +68,7 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($products as $key => $product)
                                 <li class="list-group-item py-3 px-5">
-                                    <a class="text-[14px]" href="{{ route('product', $product->slug) }}">
+                                    <a class="text-[14px]" href="{{ $product->permalink }}">
                                         <div class="flex search-product align-items-center">
                                             <div class="mr-3">
                                                 <img class="w-[40px] h-[40px] rounded-full" src="{{ uploaded_asset($product->thumbnail_img) }}">

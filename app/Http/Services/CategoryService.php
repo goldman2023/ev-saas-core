@@ -94,7 +94,7 @@ class CategoryService
 
             if($categories instanceof Collection) {
                 $data_type = gettype($categories->first());
-                if($data_type === 'object' && get_class($categories->first()) === Category::class) {
+                if($data_type === 'object' && $categories->first() instanceof Category) {
                     $categories = $categories->pluck('id')->toArray();
                 } else if($data_type === 'integer') {
                     $categories = $categories->toArray();
