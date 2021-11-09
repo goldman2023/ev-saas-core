@@ -128,7 +128,7 @@ trait GalleryTrait
                 'w' => 500
             ],
         ];
-        return array_merge($defaults, $options);
+        return array_merge_recursive($defaults, $options);
     }
 
     // Upload Groups Relations functions
