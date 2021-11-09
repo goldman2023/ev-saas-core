@@ -69,6 +69,11 @@ class ProductVariation extends Model
         return $this->morphOne(ProductStock::class, 'subject');
     }
 
+    public function serial_numbers()
+    {
+        return $this->morphMany(SerialNumber::class, 'subject');
+    }
+
     public function flash_deals() {
         // TODO: Add indicies to start_date and end_date!
         return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')

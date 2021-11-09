@@ -104,6 +104,7 @@ class ProductsBuilder extends Builder
     public function hydrate(array $items)
     {
         return parent::hydrate($items);
+
         // If FULL_FETCH_SCOPE is removed, use standard hydrate() from Eloquent/Builder
         if(in_array(self::FULL_FETCH_SCOPE_IDENTIFIER, $this->removedScopes(), true)) {
             return parent::hydrate($items);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\GalleryTrait;
 use Cache;
 use App\Builders\ProductsBuilder;
 use Spatie\Sluggable\HasSlug;
@@ -25,6 +26,8 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
+use App\Traits\Caching\RegeneratesCache;
+use App\Traits\Caching\SavesToCache;
 
 /**
  * App\Models\Product
@@ -116,6 +119,7 @@ use App\Traits\StockManagementTrait;
 class Product extends Model
 {
     use PermalinkTrait;
+    use GalleryTrait;
     use ReviewTrait;
     use AttributeTrait;
     use HasSlug;
@@ -123,6 +127,9 @@ class Product extends Model
 
     use StockManagementTrait;
     use PriceTrait;
+
+    use RegeneratesCache;
+    use SavesToCache;
 
     protected $table = 'products';
 
@@ -135,7 +142,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $with = ['stock', 'flash_deals', 'variations'];
+    protected $with = ['attributes', 'stock', 'flash_deals', 'variations', 'categories', 'brand', 'product_translations', 'serial_numbers', 'uploads'];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
@@ -309,6 +316,11 @@ class Product extends Model
         return $this->morphOne(ProductStock::class, 'subject');
     }
 
+    public function serial_numbers()
+    {
+        return $this->morphMany(SerialNumber::class, 'subject');
+    }
+
     public function wishlists() {
         return $this->hasMany(Wishlist::class);
     }
@@ -327,72 +339,12 @@ class Product extends Model
             ])->orderBy('created_at', 'desc')->withPivot('include_variations');
     }
 
-    public function images($options = []) {
-        return $this->getImagesAttribute($options);
-    }
-
-    /**
-     * Get all images related to the product but properly structured in an assoc. array
-     * This function is used in frontend/themes etc.
-     *
-     * @return array*
+    /*
+     * Get all Uploads related to the Model
      */
-    public function getImagesAttribute($options = []) {
-        // TODO: Refactor this function to use Join and uploads_relationships table!
-        $photos = [];
-        $data = [
-            'thumbnail' => [],
-            'gallery' => []
-        ];
-
-        if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
-            $data['thumbnail'] = [
-                'id' => null,
-                'url' => IMG::getPlaceholder()
-            ];
-            return $data;
-        }
-
-        $photos_idx = explode(',', $this->attributes['photos']);
-        foreach ($photos_idx as &$i) $i = (int) $i;
-
-
-        if(!empty($this->attributes['thumbnail_img'])) {
-            // Add thumb as the first element in photos array
-            array_unshift($photos_idx, $this->attributes['thumbnail_img']);
-        }
-
-        if(!empty($photos_idx)) {
-            $photos = get_images($photos_idx); // 1 SQL Query to rule them all...
-        }
-
-        if($photos) {
-            foreach($photos as $photo) {
-                //$url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
-
-                // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
-                // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
-                // DONE: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
-                //$url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
-
-
-                $url = IMG::get($photo->file_name, $options);
-
-                if($photo->id === (int) $this->attributes['thumbnail_img']) {
-                    $data['thumbnail'] = [
-                        'id' => $photo->id,
-                        'url' => $url
-                    ];
-                } else {
-                    $data['gallery'][] = [
-                        'id' => $photo->id,
-                        'url' => $url
-                    ];
-                }
-            }
-        }
-
-        return $data;
+    public function uploads() {
+        return $this->morphToMany(Upload::class, 'subject', 'uploads_content_relationships', 'upload_id')
+            ->withPivot('type AS toc, group_id');
     }
 
     /* TODO: Implement product condition in backend: new/used/refurbished */

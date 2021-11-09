@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\TenantSetting;
 use Cache;
 
-class ProductsObserver
+class ProductVariationsObserver
 {
     /**
      * Handle events after all transactions are committed.
@@ -16,13 +16,14 @@ class ProductsObserver
     public bool $afterCommit = true;
 
     /**
-     * Handle the Products "saved" event.
+     * Handle the ProductVariation "saved" event.
      *
      * @param Product $product
      * @return void
      */
     public function saved(Product $product)
     {
-        // When product is saved
+        // TODO: When ProductVariation is saved, clear the parent Product cache
+
     }
 }

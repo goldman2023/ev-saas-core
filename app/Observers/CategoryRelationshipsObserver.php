@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\TenantSetting;
 use Cache;
 
-class ProductsObserver
+class CategoryRelationshipsObserver
 {
     /**
      * Handle events after all transactions are committed.
@@ -16,7 +16,7 @@ class ProductsObserver
     public bool $afterCommit = true;
 
     /**
-     * Handle the Products "saved" event.
+     * Handle the CategoryRelationships "saved" event.
      *
      * @param Product $product
      * @return void
