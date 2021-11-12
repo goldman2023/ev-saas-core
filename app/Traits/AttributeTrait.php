@@ -18,7 +18,7 @@ trait AttributeTrait
         // When model data is retrieved, populate model prices data!
         static::retrieved(function ($model) {
             // Load Custom Attributes
-            $load_custom_attributes = $model->custom_attributes;
+            $model->load('custom_attributes');
         });
     }
 

@@ -15,6 +15,7 @@ trait PriceTrait
      * Abstract Trait Methods *
      ************************************/
     abstract public function getPriceColumn();
+    abstract public function useVariations(): ?bool;
 
     /**
      * Boot the trait
@@ -25,6 +26,8 @@ trait PriceTrait
     {
         // When model data is retrieved, populate model prices data!
         static::retrieved(function ($model) {
+            $model->load('flash_deals');
+
             $model->getTotalPrice();
             $model->getDiscountedPrice();
             $model->getBasePrice();
@@ -75,7 +78,7 @@ trait PriceTrait
         if(empty($this->total_price)) {
             $this->total_price = $this->attributes[$this->getPriceColumn()];
 
-            if($this->has_variations()) {
+            if($this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
                 /*if ($flash_deal->discount_type === 'percent') {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
@@ -165,7 +168,7 @@ trait PriceTrait
         if(empty($this->discounted_price)) {
             $this->discounted_price = $this->attributes[$this->getPriceColumn()];
 
-            if($this->has_variations()) {
+            if($this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
                 /*if ($flash_deal->discount_type === 'percent') {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;

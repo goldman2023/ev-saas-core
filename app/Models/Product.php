@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\BrandTrait;
+use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
+use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
+use App\Traits\VariationTrait;
 use Cache;
 use App\Builders\ProductsBuilder;
 use Spatie\Sluggable\HasSlug;
@@ -122,18 +126,22 @@ class Product extends Model
     use HasSlug;
     use SoftDeletes;
     use RegeneratesCache;
-    use SavesToCache;
 
+    use TranslationTrait;
     use PermalinkTrait;
     use AttributeTrait;
+    use CategoryTrait;
 
     use UploadTrait;
     use GalleryTrait;
+    use BrandTrait;
 
     use StockManagementTrait;
     use PriceTrait;
 
     use ReviewTrait;
+
+    use VariationTrait;
 
     protected $table = 'products';
 
@@ -142,10 +150,11 @@ class Product extends Model
 
     /**
      * The relationships that should always be loaded.
+     * NOTE: Translation, Category, Upload, Attribute, Variation, Price and Brand traits are eager loading all relationships by default
      *
      * @var array
      */
-    protected $with = ['custom_attributes', 'stock', 'flash_deals', 'variations', 'categories', 'brand', 'product_translations', 'serial_numbers', 'uploads'];
+    protected $with = [];
 
 
     protected $fillable = ['name', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
@@ -205,17 +214,6 @@ class Product extends Model
         return 'created';
     }
 
-    // TODO: Move everything related to translations to TranslationTrait!
-    public function getTranslation($field = '', $lang = false) {
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $product_translations = $this->hasMany(ProductTranslation::class)->where('lang', $lang)->first();
-        return $product_translations != null ? $product_translations->$field : $this->$field;
-    }
-
-    public function product_translations() {
-        return $this->hasMany(ProductTranslation::class);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -224,15 +222,6 @@ class Product extends Model
     public function shop()
     {
         return $this->belongsTo(Shop::class);
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function variations() {
-        return $this->hasMany(ProductVariation::class);
     }
 
     public function orderDetails()
@@ -253,9 +242,6 @@ class Product extends Model
         return translate("New");
     }
 
-    public function has_variations() {
-        return $this->variations->isNotEmpty() ?? false;
-    }
 
     public function getPdfAttribute() {
         if(empty($this->pdf ?? null)) {
@@ -282,5 +268,20 @@ class Product extends Model
     public function getPriceColumn()
     {
         return 'unit_price';
+    }
+
+    /**
+     * Returns true if this Model has Variations
+     *
+     * @return bool|null
+     */
+    public function useVariations(): ?bool
+    {
+        return true;
+    }
+
+    public function getTranslationModel(): ?string
+    {
+        return ProductTranslation::class;
     }
 }

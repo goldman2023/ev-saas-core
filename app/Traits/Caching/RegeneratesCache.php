@@ -4,6 +4,9 @@ namespace App\Traits\Caching;
 
 use App\Support\CacheRegenerator;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+use LogicException;
 
 trait RegeneratesCache
 {
@@ -23,9 +26,21 @@ trait RegeneratesCache
     {
         return $this->regenerator ??= app(CacheRegenerator::class, [
             'object' => $this,
-            'store' => $this->defaultCache(),
+            'store' => $this->defaultCacheStore(),
             'key' => $this->defaultCacheKey(),
         ]);
+    }
+
+    /**
+     * Saves the current object to the cache.
+     *
+     * @param  string|null  $key
+     * @param  \DateTimeInterface|\DateInterval|int|null  $ttl
+     * @return bool
+     */
+    public function saveToCache(string $key = null, $ttl = 60): bool
+    {
+        return $this->defaultCacheStore()->put($key ?? $this->defaultCacheKey(), $this->toCache(), $ttl);
     }
 
     /**
@@ -33,12 +48,34 @@ trait RegeneratesCache
      *
      * @return Repository
      */
-    abstract protected function defaultCache() : Repository;
+    protected function defaultCacheStore() : Repository
+    {
+        return Cache::store();
+    }
 
     /**
      * The cache key name to use by default.
      *
      * @return string
      */
-    abstract protected function defaultCacheKey() : string;
+    public function defaultCacheKey() : string
+    {
+        /* Default Cache key for the Modal */
+        if($this instanceof Model) {
+            return tenant()->id.'-'.get_class($this).'-'.$this->id;
+            // e.g. 5469dff5-3707-417d-b152-d9950de45daf-App\Models\Product-7
+        }
+
+        throw new LogicException('The class ' . static::class . ' has no default cache key.');
+    }
+
+    /**
+     * The data to insert into the cache.
+     *
+     * @return $this
+     */
+    public function toCache()
+    {
+        return $this;
+    }
 }

@@ -24,11 +24,6 @@ trait GalleryTrait
     {
         // When model data is retrieved, populate model prices data!
         static::retrieved(function ($model) {
-            // Check if $this->uploads is eager loaded or not. If not, load the relation!
-            /*if(empty($model->uploads)) {
-                //$model->load('uploads');
-            }*/
-
             $model->getThumbnailAttribute();
             $model->getCoverAttribute();
             $model->getGalleryAttribute();

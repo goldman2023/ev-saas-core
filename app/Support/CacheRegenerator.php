@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Carbon;
+use Cache;
 use Serializable;
 
 class CacheRegenerator implements Serializable

@@ -583,8 +583,6 @@ class HomeController extends Controller
             $products->where('brand_id', $brand_id);
         }
 
-
-
         if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             $products->restrictByCategories($selected_categories);
 

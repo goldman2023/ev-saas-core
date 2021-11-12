@@ -23,21 +23,21 @@ trait Cacher
     {
         $this->from_cache = true;
 
+        // Select only IDs
         $this->withGlobalScope($this->cacher_scope_identifier, function (Builder $builder) {
-            $builder->select('id');
+            $builder->select($builder->getModel()->getTable().'.id');
         });
     }
 
 
     /**
-     * Create a collection of models from plain arrays.
+     * Create a collection of models from plain arrays based on data from cache or DB
      *
      * @param  array  $items
      * @return Collection
      */
     public function hydrate(array $items)
     {
-
         // $items are sorted based on SQL query. $items may be just IDs
         if($this->from_cache) {
             $instance = $this->newModelInstance();
@@ -52,14 +52,14 @@ trait Cacher
             }
 
             // Get the data from Cache
-            $cached_models = collect(Cache::many($cache_keys)); // contains both present models and missing models (key=>empty)
+            $cached_models = new Collection(Cache::store()->many($cache_keys)); // contains both present models and missing models (key=>empty)
 
             // Check which caches are missing
             $missing_models = $cached_models->filter(function ($value, $key) {
                 return empty($value);
             });
 
-            //If there are missing models from the Cache, get only them directly from the DB and save them to Cache!
+            //If there are missing models from the Cache, get them directly from the DB and save them to Cache!
             if($missing_models->isNotEmpty()) {
                 $missing_ids = [];
                 foreach($missing_models as $key => $value) {
@@ -78,16 +78,18 @@ trait Cacher
 
                     return $model;
                 }, $missing_items))->keyBy(function ($item) {
+                    // Store missing models in cache!
+                    $item->cache()->regenerate(60 * 60 * 24 * 5, true);
+
+                    // Change key to use model cache key
                     return $this->generateModelCacheKey($item->id);
                 });
 
-                dd($missing_collection);
+                // Merge missing models with already cached using generated cache key and reset keys to start from 0 onward
+                return new Collection(collect($cached_models)->merge($missing_collection)->values());
             }
 
-            dd();
-
-            //dd($cached_models);
-            return parent::hydrate($items);
+            return $cached_models->values();
         }
 
         return parent::hydrate($items);

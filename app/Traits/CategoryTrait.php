@@ -17,7 +17,7 @@ trait CategoryTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model):void {
-            $this->categories; // Populate categories data
+            $model->load('categories');
         });
     }
 
@@ -45,7 +45,7 @@ trait CategoryTrait
      ************************************/
     public function getCategoryIdAttribute() {
         if(empty($this->category_id)) {
-            $this->category_id = $this->categories()->whereNull('parent_id')->first()->id ?? null;
+            $this->category_id = $this->categories->whereNull('parent_id')->first()->id ?? null;
         }
 
         return $this->category_id;

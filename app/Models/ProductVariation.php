@@ -11,6 +11,7 @@ use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\UploadTrait;
+use App\Traits\VariationTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
 use App;
@@ -48,15 +49,18 @@ class ProductVariation extends Model
 
     use ReviewTrait; // TODO: Is this necessary?
 
+    use VariationTrait;
+
     /* Properties not saved in DB */
     public bool $remove_flag;
 
     /**
      * The relationships that should always be loaded.
+     * NOTE: Uploads, Attribute, Price and Stock traits are eager loading all relationships by default
      *
      * @var array
      */
-    protected $with = ['custom_attributes', 'stock', 'flash_deals', 'uploads'];
+    protected $with = [];
 
     protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag', 'discount', 'discount_type'];
     //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'remove_flag'];
@@ -122,8 +126,23 @@ class ProductVariation extends Model
         return Str::slug(Str::replace('.', ',', $key));
     }
 
+    /**
+     * Returns column name of the price
+     *
+     * @return string
+     */
     public function getPriceColumn()
     {
         return 'price';
+    }
+
+    /**
+     * Returns true if this Model has Variations
+     *
+     * @return bool|null
+     */
+    public function useVariations(): ?bool
+    {
+        return false;
     }
 }
