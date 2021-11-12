@@ -23,7 +23,7 @@ trait Cacher
     {
         $this->from_cache = true;
 
-        // Select only IDs
+        // Select only IDs (because models themselves will be fetched from cache based on corresponding cache keys)
         $this->withGlobalScope($this->cacher_scope_identifier, function (Builder $builder) {
             $builder->select($builder->getModel()->getTable().'.id');
         });
