@@ -10,11 +10,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
+use App\Traits\Eloquent\Cacher;
 use Illuminate\Support\Collection;
 use Vendor;
 
 class ProductsBuilder extends Builder
 {
+    use Cacher;
+
     public const FULL_FETCH_SCOPE_IDENTIFIER = 'FULL_FETCH';
     protected string $stocks_table_name;
     protected string $serial_numbers_table_name;
@@ -44,6 +47,9 @@ class ProductsBuilder extends Builder
                 $builder->where('shop_id', '=' , Vendor::getVendorShop()->id ?? null);
             });
         }
+
+        // Initialize Cacher scope and properties!
+        $this->initCacher();
 
         // Always inner join ProductStock 1:1 relationship with Product Model and sort keys
         /*$this->withGlobalScope(self::FULL_FETCH_SCOPE_IDENTIFIER, function (Builder $builder) {
@@ -101,7 +107,7 @@ class ProductsBuilder extends Builder
      * @param  array  $items
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function hydrate(array $items)
+    /*public function hydrate(array $items)
     {
         return parent::hydrate($items);
 
@@ -110,7 +116,7 @@ class ProductsBuilder extends Builder
             return parent::hydrate($items);
         }
 
-        /*$instance = $this->newModelInstance();
+        $instance = $this->newModelInstance();
 
         return $instance->newCollection(array_map(function ($item) use ($items, $instance) {
             $model = $instance->newFromBuilder($this->filterByKeyPrefix($this->getModel()->getTable(), $item, 'object', true));
@@ -124,8 +130,8 @@ class ProductsBuilder extends Builder
             }
 
             return $model;
-        }, $items));*/
-    }
+        }, $items));
+    }*/
 
     protected function filterByKeyPrefix($prefix, $item, $cast_type = 'object', $remove_prefix = true): mixed
     {

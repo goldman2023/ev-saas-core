@@ -414,7 +414,7 @@
                             </div>
                         </div>
                         <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                        <input type="hidden" name="meta_img" value="{{ $product->meta_img }}" class="selected-files">
+                        <input type="hidden" name="meta_img" value="{{ $product->meta_img->id }}" class="selected-files">
                     </div>
                     <div class="file-preview box sm">
                     </div>

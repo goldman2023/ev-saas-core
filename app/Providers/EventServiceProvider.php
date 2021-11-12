@@ -8,6 +8,7 @@ use App\Models\ProductVariation;
 use App\Models\TenantSetting;
 use App\Observers\CategoryRelationshipsObserver;
 use App\Observers\ProductsObserver;
+use App\Observers\ProductVariationsObserver;
 use App\Observers\TenantSettingsObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -38,7 +39,7 @@ class EventServiceProvider extends ServiceProvider
     protected array $observers = [
         TenantSetting::class => [TenantSettingsObserver::class],
         Product::class => [ProductsObserver::class],
-        ProductVariation::class => [ProductsObserver::class],
+        ProductVariation::class => [ProductVariationsObserver::class],
         CategoryRelationship::class => [CategoryRelationshipsObserver::class]
     ];
 

@@ -33,7 +33,7 @@
                         <tr>
                             <td>
                                 <a href="{{ route('ev-products.edit', $product->slug) }}">
-                                    <img class="avatar avatar-sm avatar-circle mr-3" src="{{ $product->images['thumbnail']['url'] ?? '' }}" alt="{{ $product->name }}">
+                                    <img class="avatar avatar-sm avatar-circle mr-3" src="{{ $product->getThumbnail() }}" alt="{{ $product->name }}">
                                 </a>
                             </td>
                             <td><a href="{{ route('ev-products.edit', $product->slug) }}">{{ $product->name }}</a></td>

@@ -25,7 +25,7 @@ class ProductVariationsSelector extends Component {
     {
         $this->product = $product;
         $this->variations = $this->product->variations()->with(['flash_deals', 'product'])->get();
-        $this->attributes_for_variations = $product->product_attributes_for_variations();
+        $this->attributes_for_variations = $product->variant_attributes();
 
         $variant = [];
         foreach($this->attributes_for_variations as $attribute)  {
@@ -40,15 +40,15 @@ class ProductVariationsSelector extends Component {
         $this->current = $this->variations->where('variant', $this->current_variant)->first();
 
         $this->emitTo('tenant.product.price', 'changeVariation', $this->current);
-        //dd($this->attributes_for_variations);
+        //dd($this->variant_attributes);
     }
 
     public function hydrateAttributesForVariations($value) {
         // IMPORTANT!!!
-        // PROBLEM: On hydration (before action is fired), $this->attributes_for_variations contains wrong values even though we mounted it correctly and never changed it in the meantime!
-        // FIX: On every hydrate, get the proper data from the Cache (check product_attributes_for_variations() function)
+        // PROBLEM: On hydration (before action is fired), $this->variant_attributes contains wrong values even though we mounted it correctly and never changed it in the meantime!
+        // FIX: On every hydrate, get the proper data from the Cache (check variant_attributes() function in AttributeTrait)
         // TODO: Don't forget to create AttributeValueObserver and AttributeRelationshipObserver classes to remove this cache on any change!
-        $this->attributes_for_variations = $this->product->product_attributes_for_variations();
+        $this->attributes_for_variations = $this->product->variant_attributes();
     }
 
     public function updatedCurrentVariant($value = null, $key = null) {

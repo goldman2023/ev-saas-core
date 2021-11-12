@@ -13,6 +13,7 @@ trait GalleryTrait
     public ?Upload $thumbnail;
     public ?Upload $cover;
     public Collection|array|null $gallery;
+    public ?Upload $meta_img;
 
     /**
      * Boot the trait
@@ -24,13 +25,14 @@ trait GalleryTrait
         // When model data is retrieved, populate model prices data!
         static::retrieved(function ($model) {
             // Check if $this->uploads is eager loaded or not. If not, load the relation!
-            if(empty($this->uploads)) {
-                $this->load('uploads');
-            }
+            /*if(empty($model->uploads)) {
+                //$model->load('uploads');
+            }*/
 
             $model->getThumbnailAttribute();
             $model->getCoverAttribute();
             $model->getGalleryAttribute();
+            $model->getMetaImgAttribute();
         });
     }
 
@@ -41,8 +43,8 @@ trait GalleryTrait
      */
     public function initializeGalleryTrait(): void
     {
-        $this->append(['thumbnail', 'cover', 'gallery']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['thumbnail', 'cover', 'gallery'])));
+        $this->append(['thumbnail', 'cover', 'gallery', 'meta_img']);
+        $this->fillable(array_unique(array_merge($this->fillable, ['thumbnail', 'cover', 'gallery', 'meta_img'])));
     }
 
     /******* START THUMBNAIL *******/
@@ -68,7 +70,7 @@ trait GalleryTrait
     /******* START COVER *******/
     public function getCoverAttribute() {
         if(empty($this->cover)) {
-            $this->cover = $this->uploads->firstWhere('toc', 'cover');
+            $this->cover = empty($this->uploads) ? null : $this->uploads->firstWhere('toc', 'cover');
         }
 
         return $this->cover;
@@ -88,7 +90,7 @@ trait GalleryTrait
     /******* START GALLERY *******/
     public function getGalleryAttribute() {
         if(empty($this->gallery)) {
-            $this->gallery = $this->uploads->where('toc', 'gallery');
+            $this->gallery = empty($this->uploads) ? null : $this->uploads->where('toc', 'gallery');
         }
 
         return $this->gallery;
@@ -99,9 +101,9 @@ trait GalleryTrait
      *
      * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
      * @param string|null $cast_to
-     * @return mixed
+     * @return array|\Collection
      */
-    public function getGallery(array $options = [], ?string $cast_to = 'array'): mixed
+    public function getGallery(array $options = [], ?string $cast_to = 'array'): array|Collection
     {
         $gallery = [];
 
@@ -115,20 +117,67 @@ trait GalleryTrait
         return $cast_to === 'collection' ? collect($gallery) : $gallery;
     }
 
+    /******* START THUMBNAIL *******/
+    public function getMetaImgAttribute() {
+        if(empty($this->meta_img)) {
+            $this->meta_img = empty($this->uploads) ? null : $this->uploads->firstWhere('toc', 'meta_img');
+        }
+
+        return $this->meta_img;
+    }
+
+    /**
+     * Gets the Meta image URL
+     *
+     * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
+     * @return mixed
+     */
+    public function getMetaImg(array $options = []): mixed
+    {
+        return IMG::get($this->meta_img, $this->imgProxyDefaultOptions($options));
+    }
+
+    /**
+     * Gets All images combined (thumbnail, cover, gallery)
+     *
+     * @param array $options
+     * @param bool $include_meta
+     * @param string|null $cast_to
+     * @return array|Collection|null
+     */
+    public function getAllImages(array $options = [], bool $include_meta = false, ?string $cast_to = 'array'): array|Collection|null
+    {
+        // TODO: Somehow get only the unique images!
+        $all = array_values(array_filter(array_merge(
+            [$this->getThumbnail($options), $this->getCover($options)],
+            [$this->getGallery($options)]
+        )));
+
+        if($include_meta) {
+            $all[] = $this->getMetaImg($options);
+        }
+
+        return $cast_to === 'collection' ? collect($all) : $all;
+    }
+
     // Helpers
-    private function imgProxyDefaultOptions($options = []): array {
+    private function imgProxyDefaultOptions($options = [], $target = 'thumbnail'): array {
         $defaults = [
             'thumbnail' => [
                 'w' => 350
             ],
             'cover' => [
-                'w' => 600
+                'w' => 820
             ],
             'gallery' => [
                 'w' => 500
             ],
+            'meta_img' => [
+                'w' => 1200
+            ]
         ];
-        return array_merge_recursive($defaults, $options);
+
+        return array_merge_recursive($defaults[in_array($target, $defaults, true) ? $target : 'thumbnail'], $options);
     }
 
     // Upload Groups Relations functions

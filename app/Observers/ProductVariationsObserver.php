@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Product;
+use App\Models\ProductVariation;
 use App\Models\TenantSetting;
 use Cache;
 
@@ -18,12 +19,28 @@ class ProductVariationsObserver
     /**
      * Handle the ProductVariation "saved" event.
      *
-     * @param Product $product
+     * @param ProductVariation $product_variation
      * @return void
      */
-    public function saved(Product $product)
+    public function saved(ProductVariation $product_variation)
     {
         // TODO: When ProductVariation is saved, clear the parent Product cache
 
+    }
+
+    /**
+     * Handle the ProductVariation "deleting" event.
+     *
+     * @param ProductVariation $product_variation
+     * @return void
+     */
+    public function deleting(ProductVariation $product_variation)
+    {
+        // Remove variation stock when variation is deleted!
+        $stock = $product_variation->stock()->first();
+
+        if($stock) {
+            $stock->delete();
+        }
     }
 }

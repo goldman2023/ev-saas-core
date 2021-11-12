@@ -106,6 +106,23 @@ class MacrosServiceProvider extends ServiceProvider
             // Pass categories_ids to Eloquent Builder by pointer!
             Categories::restrictByCategories($categories, $this);
         });
+
+        // For Builders which use Cacher Trait
+        Builder::macro('nocache', function() {
+            if(isset($this->from_cache) && is_bool($this->from_cache)) {
+                $this->from_cache = false;
+                $this->withoutGlobalScope($this->cacher_scope_identifier);
+            }
+
+            return $this;
+        });
+
+        /*Builder::macro('cache', function() {
+            if(isset($this->from_cache) && is_bool($this->from_cache)) {
+                $this->from_cache = true;
+                $this->withGlobalScope($this->cacher_scope_identifier);
+            }
+        });*/
     }
 
 

@@ -49,8 +49,12 @@ class IMGProxyService
      */
     protected function getFrom(mixed $data, bool $static = false): string
     {
+        if(empty($data)) {
+            return $this->getPlaceholder();
+        }
+
         if ((!$static || $data instanceof Upload) && in_array($this->filesystem, $this->disk_types['cloud'], true)) {
-            $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? '') : $data);
+            $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? null) : $data);
         } else {
             $url = app('url')->asset($data, $this->secure);
         }
@@ -66,11 +70,12 @@ class IMGProxyService
      * $data can be Upload model or string. If Upload, pass the $data->file_name, otherwise, pass the $data as a string
      * If filesystem IS NOT 'cloud', use ->asset() to get it from the local machine filesystem
      *
-     * @param Upload|string $data
+     * @param ?string $url
+     * @param ?array $options
      * @param bool $static
      * @return string
      */
-    protected function proxify($url = null, $options = [], $static = false) {
+    protected function proxify(string $url = null, ?array $options = [], bool $static = false) {
         // Proxy images through IMGProxy only if 1) it's enabled and 2) asset is not static
         if($this->enabled && !$static) {
             $options['w'] = $options['w'] ?? 0;

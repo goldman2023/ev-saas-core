@@ -24,4 +24,9 @@ class Upload extends Model
     {
     	return $this->belongsTo(User::class);
     }
+
+    public function uploads() {
+        return $this->morphedByMany(Product::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
+            ->withPivot('type AS toc, group_id');
+    }
 }
