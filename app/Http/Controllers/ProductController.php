@@ -727,7 +727,7 @@ class ProductController extends Controller
         ]);
 
         foreach ($updated_attributes as $key => $value) {
-            $attribute_relationship = $product->attributes()->where('attribute_id', $key)->first();
+            $attribute_relationship = $product->custom_attributes()->where('attribute_id', $key)->first();
 
             $attribute = Attribute::find($key);
 
@@ -759,7 +759,7 @@ class ProductController extends Controller
                     $attribute_relationship->attribute_value_id = $relationship_id;
                     $attribute_relationship->save();
                 } else {
-                    $relations = $product->attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value)->get();
+                    $relations = $product->custom_attributes()->where('attribute_id', $key)->whereNotIn('attribute_value_id', $value)->get();
 
                     // Delete previous relations
                     foreach ($relations as $relation) {
@@ -779,7 +779,7 @@ class ProductController extends Controller
                 }
             } else {
                 if ($attribute->type === "checkbox" || $attribute->type === "radio") {
-                    foreach ($product->attributes()->where('attribute_id', $key) as $relation) {
+                    foreach ($product->custom_attributes()->where('attribute_id', $key) as $relation) {
                         $relation->delete();
                     }
                 } else if ($attribute_relationship != null) {

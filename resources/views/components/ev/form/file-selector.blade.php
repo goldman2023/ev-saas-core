@@ -19,7 +19,7 @@
             </span>
         @endif
 
-        <input type="hidden" name="{{ $name }}" class="selected-files" wire:model{{ $wireType ? '.'.$wireType : '' }}="{{ $name }}" value="{{ $selectedFile }}">
+        <input type="hidden" name="{{ $name }}" class="selected-files" wire:model{{ $wireType ? '.'.$wireType : '' }}="{{ $name }}">
     </div>
 
     @if($template === 'input')

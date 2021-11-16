@@ -9,8 +9,8 @@
                     @if ($attribute->type == 'number')
                         @php
                             $value = '';
-                            if ($product->attributes()->where('attribute_id', $attribute->id)->first() != null) {
-                                $value = $product->attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
+                            if ($product->custom_attributes()->where('attribute_id', $attribute->id)->first() != null) {
+                                $value = $product->custom_attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
                             }
 
                             if ($attribute->custom_properties === null) {
@@ -35,7 +35,7 @@
                                 class="form-control aiz-selectpicker" data-selected-text-format="count"
                                 data-live-search="true" data-placeholder="{{ translate('Choose Attributes') }}">
                                 @foreach ($attribute->attribute_values as $option)
-                                    <option value="{{ $option->id }}" @if (in_array($option->id, $product->attributes()->pluck('attribute_value_id')->toArray())) selected @endif>
+                                    <option value="{{ $option->id }}" @if (in_array($option->id, $product->custom_attributes()->pluck('attribute_value_id')->toArray())) selected @endif>
                                         {{ $option->getTranslation('name') }}</option>
                                 @endforeach
                             </select>
@@ -47,7 +47,7 @@
                                     <label class="aiz-checkbox">
                                         <input type="checkbox" name="{{ $attribute->id }}[]"
                                             value="{{ $option->id }}"
-                                            @if (in_array($option->id, $product->attributes()->where('attribute_id', $attribute->id)->pluck('attribute_value_id')->toArray())) checked @endif>
+                                            @if (in_array($option->id, $product->custom_attributes()->where('attribute_id', $attribute->id)->pluck('attribute_value_id')->toArray())) checked @endif>
                                         <span class="aiz-square-check"></span>
                                         <span>{{ $option->values }}</span>
                                     </label>
@@ -61,7 +61,7 @@
                                     <label class="aiz-radio">
                                         <input type="radio" name="{{ $attribute->id }}[]"
                                                value="{{ $option->id }}"
-                                               @if (in_array($option->id, $product->attributes()->where('attribute_id', $attribute->id)->pluck('attribute_value_id')->toArray())) checked @endif>
+                                               @if (in_array($option->id, $product->custom_attributes()->where('attribute_id', $attribute->id)->pluck('attribute_value_id')->toArray())) checked @endif>
                                         <span class="aiz-square-check"></span>
                                         <span>{{ $option->values }}</span>
                                     </label>
@@ -71,8 +71,8 @@
                         @if ($attribute->type == 'plain_text' || $attribute->type == 'date' || $attribute->type == 'image')
                             @php
                                 $value = '';
-                                if ($product->attributes()->where('attribute_id', $attribute->id)->first() != null) {
-                                    $value = $product->attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
+                                if ($product->custom_attributes()->where('attribute_id', $attribute->id)->first() != null) {
+                                    $value = $product->custom_attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
                                 }
                             @endphp
                             @if ($attribute->type == 'plain_text')
@@ -110,8 +110,8 @@
                             @php
                                 $countries = App\Models\Country::where('status', 1)->get();
                                 $country_code = '';
-                                if ($product->attributes()->where('attribute_id', $attribute->id)->first() != null) {
-                                    $country_code = $product->attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
+                                if ($product->custom_attributes()->where('attribute_id', $attribute->id)->first() != null) {
+                                    $country_code = $product->custom_attributes()->where('attribute_id', $attribute->id)->first()->attribute_value->values;
                                 }
                             @endphp
                             <select class="select2 form-control aiz-selectpicker" name="{{ $attribute->id }}"

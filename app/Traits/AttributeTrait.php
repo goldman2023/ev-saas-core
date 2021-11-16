@@ -5,6 +5,8 @@ namespace App\Traits;
 use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\Product;
+use AttributesService;
+use Illuminate\Database\Eloquent\Collection;
 
 trait AttributeTrait
 {
@@ -20,6 +22,23 @@ trait AttributeTrait
             // Load Custom Attributes
             $model->load('custom_attributes');
         });
+    }
+
+    public function custom_attributes_grouped($hideEmptyGroups = true) {
+        $att_groups = AttributesService::getGroups($this->shop ?? null);
+        $custom_attributes = $this->custom_attributes;
+
+        $att_groups = $att_groups->each(function ($group) use(&$custom_attributes) {
+            $items_in_group = $custom_attributes->where('group_id', $group->id);
+            $group->custom_attributes = $items_in_group;
+            $custom_attributes = $custom_attributes->whereNotIn('group_id', $group->id);
+        })->keyBy('name');
+
+        // Add attributes without group to `generic` column
+        $generic_group = AttributesService::newGroupInstance($custom_attributes);
+        $att_groups->put($generic_group->name, $generic_group);
+
+        return $hideEmptyGroups ? $att_groups->filter(fn($item) => ($item->custom_attributes instanceof \Illuminate\Support\Collection ? $item->custom_attributes->isNotEmpty() : !empty($item->custom_attributes))) : $att_groups;
     }
 
     public function custom_attributes()

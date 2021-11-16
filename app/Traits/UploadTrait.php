@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\Product;
+use Closure;
+use Illuminate\Support\Str;
 use IMG;
 use Illuminate\Support\Collection;
 use App\Models\Upload;
@@ -18,9 +21,73 @@ trait UploadTrait
     protected static function bootUploadTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model):void {
+        static::retrieved(function ($model): void {
             $model->load('uploads');
+
+            // Initiate dynamic properties values
+            $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
+                if($property['multiple'] ?? false) {
+                    // Multiple Uploads
+                    $model->{$property['property_name']} = $model->uploads->where('relation_type', $property['relation_type'])->values();
+                } else {
+                    // Single Upload
+                    $model->{$property['property_name']} = $model->uploads->firstWhere('relation_type', $property['relation_type']);
+                }
+            });
         });
+    }
+
+    /**
+     * Initialize the trait
+     *
+     * @return void
+     */
+    public function initializeUploadTrait(): void
+    {
+        $this->dynamicUploadPropertiesWalker(function($property) {
+            // Add dynamic properties to Model $append and $fillable vars
+            $this->appendCoreProperties([$property['property_name']]);
+            $this->append([$property['property_name']]);
+            $this->fillable(array_unique(array_merge($this->fillable, [$property['property_name']])));
+        });
+    }
+
+    /**
+     * Converts gallery properties from Upload model(s) to Upload ID(s)
+     *
+     * @return self
+     */
+    public function convertUploadModelsToIDs(): self
+    {
+        // Convert Dynamic Uploads to IDs
+        $this->dynamicUploadPropertiesWalker(function($property) {
+            if($this->{$property['property_name']} instanceof Collection) {
+                // Property is a collection of Upload instances or IDs
+                foreach($this->{$property['property_name']} as $key => $item) {
+                    $this->{$property['property_name']} = ($item instanceof Upload) ? $this->{$property['property_name']}->put($key, (int) $item->id) : $this->{$property['property_name']}->put($key, (int) $this->{$property['property_name']});
+                }
+
+                $this->{$property['property_name']} = $this->{$property['property_name']}->unique()->join(',');
+            } else if(is_array($this->{$property['property_name']})) {
+                foreach($this->{$property['property_name']} as $key => $item) {
+                    $this->{$property['property_name']}[$key] = ($item instanceof Upload) ? (int) $item->id : (int) $this->{$property['property_name']};
+                }
+                $this->{$property['property_name']} = implode(',', array_unique($this->{$property['property_name']}));
+            } else if($this->{$property['property_name']} instanceof Upload) {
+                // Property is single Upload instance
+                $this->{$property['property_name']} = (int) $this->{$property['property_name']}->id;
+            } else if(ctype_digit($this->{$property['property_name']})) {
+                // Property is not Upload nor Collection (it's most probably number already, but it can be numeric string, hence cast it to int)
+                $this->{$property['property_name']} = (int) $this->{$property['property_name']};
+            }
+        });
+
+        // Convert Gallery Uploads to IDs (if GalleryTrait is present - we check that if convertGalleryModelsToIDs() method exists)
+        if(method_exists($this, 'convertGalleryModelsToIDs')) {
+            $this->convertGalleryModelsToIDs();
+        }
+
+        return $this;
     }
 
     /************************************
@@ -28,6 +95,50 @@ trait UploadTrait
      ************************************/
     public function uploads() {
         return $this->morphToMany(Upload::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
-            ->withPivot('type AS toc', 'group_id');
+            ->withPivot('type AS relation_type', 'group_id');
+    }
+
+    /**
+     * An abstract function which defines dynamic model upload-related properties.
+     *
+     * IMPORTANT: For property_name always use snake-case with underscore!!!
+     *
+     * Returns an array of properties where each property is consisted of desired parameters, like this:
+     * [
+     *       [
+     *          'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+     *          'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+     *          'is_image' => false, // This value determines if Upload URL will be proxified using IMGProxy. If true, URL will be proxified; If false, standard URL will be returned! Default: false!
+     *          'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+     *       ],
+     *       ...
+     *       ...
+     *   ];
+     * @return array
+     */
+    abstract public function getDynamicModelUploadProperties() : array;
+
+
+    /**
+     * Walks through DynamicModelUploadProperties and executes a provided closure for each property if conditions are met.
+     *
+     * Conditions:
+     * 1. `property_name` parameter is not empty
+     * 2. `relation_type` parameter is not empty
+     * 3. Provided callback is an instance of Closure ($callback is anonymous function)
+     *
+     * @param ?Closure $callback
+     */
+    protected function dynamicUploadPropertiesWalker(?Closure $callback = null): void {
+        $dynamic_properties = $this->getDynamicModelUploadProperties();
+
+        if(!empty($dynamic_properties)) {
+            foreach ($dynamic_properties as $property) {
+                // Both `property_name` and `relation_type` have to be set in order to create desired Upload properties (+ getter/setter functions)
+                if(!empty($property['property_name'] ?? null) && !empty($property['relation_type'] ?? null) && $callback instanceof Closure) {
+                    $callback($property);
+                }
+            }
+        }
     }
 }

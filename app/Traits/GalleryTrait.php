@@ -10,10 +10,10 @@ use App\Models\UploadsGroup;
 
 trait GalleryTrait
 {
-    public ?Upload $thumbnail;
-    public ?Upload $cover;
-    public Collection|array|null $gallery;
-    public ?Upload $meta_img;
+    public mixed $thumbnail;
+    public mixed $cover;
+    public mixed $gallery;
+    public mixed $meta_img;
 
     /**
      * Boot the trait
@@ -38,14 +38,34 @@ trait GalleryTrait
      */
     public function initializeGalleryTrait(): void
     {
+        $this->appendCoreProperties(['thumbnail', 'cover', 'gallery', 'meta_img']);
         $this->append(['thumbnail', 'cover', 'gallery', 'meta_img']);
         $this->fillable(array_unique(array_merge($this->fillable, ['thumbnail', 'cover', 'gallery', 'meta_img'])));
+    }
+
+    /**
+     * Converts gallery properties from Upload model(s) to Upload ID(s)
+     *
+     * @return void
+     */
+    public function convertGalleryModelsToIDs() {
+        $this->thumbnail = ($this->thumbnail instanceof Upload) ? ($this->thumbnail->id ?? null) : $this->thumbnail;
+        $this->cover = ($this->cover instanceof Upload) ? ($this->cover->id ?? null) : $this->cover;
+        $this->meta_img = ($this->meta_img instanceof Upload) ? ($this->meta_img->id ?? null) : $this->meta_img;
+
+        $gallery_ids = [];
+        if(($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && !empty($this->gallery))) {
+            foreach($this->gallery as $img) {
+                $gallery_ids[] = ($img instanceof Upload) ? ($img->id ?? null) : $img;
+            }
+        }
+        $this->gallery = implode(',', array_unique($gallery_ids));
     }
 
     /******* START THUMBNAIL *******/
     public function getThumbnailAttribute() {
         if(empty($this->thumbnail)) {
-            $this->thumbnail = $this->uploads->firstWhere('toc', 'thumbnail');
+            $this->thumbnail = $this->uploads->firstWhere('relation_type', 'thumbnail');
         }
 
         return $this->thumbnail;
@@ -59,13 +79,13 @@ trait GalleryTrait
      */
     public function getThumbnail(array $options = []): mixed
     {
-        return IMG::get($this->thumbnail, $this->imgProxyDefaultOptions($options));
+        return IMG::get($this->thumbnail, IMG::mergeWithDefaultOptions($options, 'thumbnail'));
     }
 
     /******* START COVER *******/
     public function getCoverAttribute() {
         if(empty($this->cover)) {
-            $this->cover = empty($this->uploads) ? null : $this->uploads->firstWhere('toc', 'cover');
+            $this->cover = empty($this->uploads) ? null : $this->uploads->firstWhere('relation_type', 'cover');
         }
 
         return $this->cover;
@@ -79,13 +99,13 @@ trait GalleryTrait
      */
     public function getCover(array $options = []): mixed
     {
-        return IMG::get($this->cover, $this->imgProxyDefaultOptions($options));
+        return IMG::get($this->cover, IMG::mergeWithDefaultOptions($options, 'cover'));
     }
 
     /******* START GALLERY *******/
     public function getGalleryAttribute() {
         if(empty($this->gallery)) {
-            $this->gallery = empty($this->uploads) ? null : $this->uploads->where('toc', 'gallery');
+            $this->gallery = empty($this->uploads) ? null : $this->uploads->where('relation_type', 'gallery');
         }
 
         return $this->gallery;
@@ -104,7 +124,7 @@ trait GalleryTrait
 
         if(!empty($this->gallery)) {
             foreach($this->gallery as $image) {
-                $gallery[] = IMG::get($image, $this->imgProxyDefaultOptions($options));
+                $gallery[] = IMG::get($image, IMG::mergeWithDefaultOptions($options, 'gallery'));
             }
         }
 
@@ -115,7 +135,7 @@ trait GalleryTrait
     /******* START THUMBNAIL *******/
     public function getMetaImgAttribute() {
         if(empty($this->meta_img)) {
-            $this->meta_img = empty($this->uploads) ? null : $this->uploads->firstWhere('toc', 'meta_img');
+            $this->meta_img = empty($this->uploads) ? null : $this->uploads->firstWhere('relation_type', 'meta_img');
         }
 
         return $this->meta_img;
@@ -129,7 +149,7 @@ trait GalleryTrait
      */
     public function getMetaImg(array $options = []): mixed
     {
-        return IMG::get($this->meta_img, $this->imgProxyDefaultOptions($options));
+        return IMG::get($this->meta_img, IMG::mergeWithDefaultOptions($options, 'meta_img'));
     }
 
     /**
@@ -153,26 +173,6 @@ trait GalleryTrait
         }
 
         return $cast_to === 'collection' ? collect($all) : $all;
-    }
-
-    // Helpers
-    private function imgProxyDefaultOptions($options = [], $target = 'thumbnail'): array {
-        $defaults = [
-            'thumbnail' => [
-                'w' => 350
-            ],
-            'cover' => [
-                'w' => 820
-            ],
-            'gallery' => [
-                'w' => 500
-            ],
-            'meta_img' => [
-                'w' => 1200
-            ]
-        ];
-
-        return array_merge_recursive($defaults[in_array($target, $defaults, true) ? $target : 'thumbnail'], $options);
     }
 
     // Upload Groups Relations functions

@@ -78,6 +78,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | FORCE HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | Wheter to force using secure connection.
+    | This should be always true on production.
+    | While local development depends on setup and configuration.
+    |
+    */
+
+    'force_https' => env('FORCE_HTTPS', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
@@ -193,6 +206,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\SparkServiceProvider::class,
        // App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Stancl\Tenancy\TenancyServiceProvider::class,
@@ -206,11 +220,7 @@ return [
         // EVServiceProvider
         App\Providers\EVServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
-
-
-        // Laravel Spark
-        App\Providers\SparkServiceProvider::class,
-
+        App\Providers\ViewServiceProvider::class,
     ],
 
     /*
@@ -276,6 +286,7 @@ return [
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,
         'Categories' => App\Facades\Categories::class,
+        'AttributesService' => App\Facades\AttributesService::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,

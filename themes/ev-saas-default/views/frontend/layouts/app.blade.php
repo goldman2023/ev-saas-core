@@ -6,8 +6,11 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
-    <meta name="file-base-url" content="{{ getFileBaseURL() }}">
-    <meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
+    <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
@@ -130,7 +133,7 @@
 
     @livewireScripts
 
-    {{-- TODO: Include this propertly --}}
+    {{-- TODO: Include this properly --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
 

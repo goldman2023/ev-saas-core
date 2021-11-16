@@ -165,7 +165,6 @@ Route::middleware([
     Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
     Route::group(['middleware' => []], function () {
-        Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
         Route::get('/dashboard/thank-you', 'CompanyController@thankYouPage')->name('company.thank-you');
         Route::get('/profile', 'HomeController@profile')->name('profile');
         Route::get('/attributes', 'HomeController@attributes')->name('attributes');
@@ -235,6 +234,8 @@ Route::middleware([
         'middleware' => ['auth'],
         'prefix' => 'dashboard'
     ], function () {
+        Route::get('/', 'HomeController@dashboard')->name('dashboard');
+
         /* TODO : Admin only */
         Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
         Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');

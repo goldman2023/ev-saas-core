@@ -186,7 +186,7 @@ class Shop extends Model
 
     public function company_has_required_attributes()
     {
-    $attributeCount = $this->user->seller->attributes()
+    $attributeCount = $this->user->seller->custom_attributes()
       ->count();
 
     if ($attributeCount > 5) {

@@ -4,7 +4,7 @@
     AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
         appUrl: $('meta[name="app-url"]').attr("content"),
-        fileBaseUrl: $('meta[name="file-bucket-url"]').attr("content"),
+        storageBaseUrl: $('meta[name="storage-base-url"]').attr("content"),
     };
 </script>
 <script>

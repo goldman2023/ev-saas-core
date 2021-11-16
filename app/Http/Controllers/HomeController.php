@@ -620,7 +620,7 @@ class HomeController extends Controller
 
             $attributeIds = array();
             foreach ($contents->get() as $item) {
-                $attributeIds = array_unique(array_merge($attributeIds, $item->attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
+                $attributeIds = array_unique(array_merge($attributeIds, $item->custom_attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
             }
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
 

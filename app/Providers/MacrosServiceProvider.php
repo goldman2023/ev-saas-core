@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +21,7 @@ class MacrosServiceProvider extends ServiceProvider
     {
         $this->setRouteMacros();
         $this->setEloquentBuilderMacros();
+        $this->setEloquentRelationMacros();
         $this->setCollectionMacros();
     }
 
@@ -108,8 +110,8 @@ class MacrosServiceProvider extends ServiceProvider
         });
 
         // For Builders which use Cacher Trait
-        Builder::macro('nocache', function() {
-            if(isset($this->from_cache) && is_bool($this->from_cache)) {
+        Builder::macro('noCache', function() {
+            if(isset($this->from_cache, $this->cacher_scope_identifier)) {
                 $this->from_cache = false;
                 $this->withoutGlobalScope($this->cacher_scope_identifier);
             }
@@ -125,5 +127,12 @@ class MacrosServiceProvider extends ServiceProvider
         });*/
     }
 
-
+    protected function setEloquentRelationMacros(): void {
+        Relation::macro('noCache', function() {
+            // Changes here are done by pointer, not by reference!
+            $this->getQuery()->noCache();
+            // ^^^ IMPORTANT: It looks like applying functions to the Builder with getQuery()->{chained fs), actually changes Builder used for relation by reference!
+            return $this;
+        });
+    }
 }

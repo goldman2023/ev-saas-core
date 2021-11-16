@@ -14,7 +14,7 @@ class HttpsProtocol {
      */
     public function handle($request, Closure $next)
     {
-        if (env('FORCE_HTTPS') == "On" && !$request->secure()) {
+        if (config('app.force_https') && !$request->secure()) {
             return $next($request);
         }
         return $next($request);

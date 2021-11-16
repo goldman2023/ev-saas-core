@@ -21,7 +21,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'trial_ends_at' => 'datetime',
     ];
 
-
     public function sendEmailVerificationNotification()
     {
         $this->notify(new EmailVerificationNotification());

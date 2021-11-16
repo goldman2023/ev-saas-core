@@ -50,9 +50,13 @@ class Attribute extends Model
         return $this->hasManyThrough(AttributeValue::class, AttributeRelationship::class, 'attribute_id', 'id', 'id', 'attribute_value_id');
     }
 
+    public function group() {
+        return $this->belongsTo(AttributeGroup::class, 'group_id');
+    }
+
     public function get_group() {
-        if ($this->group !== NULL) {
-            return AttributeGroup::findOrFail($this->group);
+        if (!empty($this->group_id)) {
+            return AttributeGroup::findOrFail($this->group_id);
         }
 
         return new AttributeGroup;
