@@ -34,7 +34,7 @@ use Str;
  * @mixin \Eloquent
  */
 
-class ProductVariation extends Model
+class ProductVariation extends EVBaseModel
 {
     use Notifiable;
     use SoftDeletes;
@@ -144,5 +144,10 @@ class ProductVariation extends Model
     public function useVariations(): ?bool
     {
         return false;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [];
     }
 }

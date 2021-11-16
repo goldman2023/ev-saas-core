@@ -37,7 +37,7 @@ trait CategoryTrait
      ************************************/
     public function categories()
     {
-        return $this->morphToMany(Category::class, 'subject', 'category_relationships', null, 'category_id');
+        return $this->morphToMany(Category::class, 'subject', 'category_relationships', 'subject_id');
     }
 
     /************************************
@@ -56,20 +56,23 @@ trait CategoryTrait
      ************************************/
     public function selected_categories($pluck_property = null, $is_collection = true, $toTree = false) {
         $data = $this->categories;
+        $all_categories = \Categories::getAll(true);
+
+        $selected_categories = $all_categories->whereIn('slug', $data->pluck('slug')->toArray());
 
         if($pluck_property) {
-            $data = $data->pluck($pluck_property);
+            $selected_categories = $selected_categories->pluck($pluck_property);
         }
 
         if($toTree) {
-            $data = $data->toTree();
+            $selected_categories = $selected_categories->toTree();
         }
 
         if(!$is_collection) {
-            $data = $data->toArray();
+            $selected_categories = $selected_categories->toArray();
         }
 
-        return $data;
+        return $selected_categories;
     }
 
 }

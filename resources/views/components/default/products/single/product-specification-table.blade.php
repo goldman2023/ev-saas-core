@@ -1,21 +1,17 @@
 <div class="specification-inner">
-    @foreach ($product_attributes as $group => $attributes)
-        <div class="specification-row">
+
+    @foreach ($product_grouped_attributes as $group_name => $group)
+        <div class="specification-row mt-3">
             <div class="title">
-                <h5>{{ $group }}</h5>
+                <h5>{{ $group->name }}</h5>
             </div>
+
             <ul class="specification-list list-group list-group-flush">
-                @foreach($attributes as $attribute)
-                    @php
-                        $attribute_value = $product
-                            ->attributes()
-                            ->where('attribute_id', $attribute->id)
-                            ->first();
-                    @endphp
-                    @isset($attribute_value)
+                @foreach($group->custom_attributes as $attribute)
+                    @if($attribute->attribute_values->isNotEmpty() && !empty($att_values_plucked = $attribute->attribute_values->pluck('values')))
                         <li class="list-group-item">
                             <label>{{ $attribute->name }}</label>
-                            <span>{{ $attribute_value->attribute_value->values; }}</span>
+                            <span>{{ implode(', ', $att_values_plucked) }}</span>
                         </li>
                     @endisset
                 @endforeach

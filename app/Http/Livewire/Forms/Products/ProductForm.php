@@ -57,8 +57,8 @@ class ProductForm extends Component
 
         // Define rules sets
         $this->rulesSets['content'] = [
-            'product.thumbnail_img' => 'required|exists:App\Models\Upload,id',
-            'product.photos' => ['required', new EVModelsExist(Upload::class)],
+            'product.thumbnail' => 'required|exists:App\Models\Upload,id',
+            'product.gallery' => ['required', new EVModelsExist(Upload::class)],
             'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
             'product.video_link' => 'nullable|active_url',
             'product.pdf' => 'nullable|exists:App\Models\Upload,id',
@@ -67,9 +67,9 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
-            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock()->first()->id ?? null)],
+            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
             'product.min_qty' => 'required|numeric|min:1',
-            'product.current_stock' => 'required|numeric|min:1', //  new ModelsExist(Upload::class)
+            'product.current_stock' => 'required|numeric|min:1',
             'product.low_stock_qty' => 'required|numeric|min:0',
             'product.unit_price' => 'required|numeric',
             'product.purchase_price' => 'nullable|numeric',
@@ -114,7 +114,7 @@ class ProductForm extends Component
 
         // Set default params
         if($product) {
-            $this->product = $product;
+            $this->product = $product->convertUploadModelsToIDs();
             $this->action = 'update';
             $this->selected_categories = $this->product->selected_categories('slug_path');
         } else {
@@ -133,7 +133,6 @@ class ProductForm extends Component
             $this->product->unit_price = 0;
             $this->product->brand_id = null;
         }
-
 
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
@@ -313,6 +312,9 @@ class ProductForm extends Component
             $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
         }
 
+        // TODO: Sync thumbnail, gallery, meta_img and other dynamic uploads to the DB
+        //$this->product->uploads()->sync();
+
         // SEO
         if (empty($this->product->meta_img)) {
             $this->product->meta_img = $this->product->thumbnail_img;
@@ -344,11 +346,10 @@ class ProductForm extends Component
     protected function setProductCategories() {
         if(!empty($this->selected_categories)) {
             $categories_idx = collect([]);
-            $wrapped_categories = Collection::wrap([$this->categories->toArray()]); // in order to use ->pluck and "dot" notation accessor, we need to wrap categories array into another array!
 
             foreach($this->selected_categories as $selected) {
                 // $selected is a slug_path of the category
-                $cat = $wrapped_categories->pluck(Str::replace(Category::PATH_SEPARATOR,'.children.', $selected))->first();
+                $cat = Categories::getBySlugPath($selected);
 
                 if($cat) {
                     $categories_idx->push($cat['id']);

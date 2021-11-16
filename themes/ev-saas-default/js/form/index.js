@@ -1,6 +1,3 @@
-window.EV.form = {
-    select: {},
-    radio: {},
-};
+window.EV.form = {};
 require('./select');
 require('./radio');

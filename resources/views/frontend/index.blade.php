@@ -7,12 +7,6 @@
         </x-default.brands.brands-list>
     </section>
 
-    @php
-    $categories = App\Models\Category::where('level', 0)
-        ->orderBy('order_level', 'desc')
-        ->get();
-    @endphp
-
     <section class="overflow-hidden">
         <x-default.hero.product-hero></x-default.hero.product-hero>
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
@@ -28,14 +22,7 @@
         {{-- <x-companies-archive-hero></x-companies-archive-hero> --}}
     </section>
 
-
     <section>
-        @php
-            $categories = App\Models\Category
-                ::where('level', 0)
-                ->orderBy('order_level', 'desc')
-                ->get();
-        @endphp
         <x-default.categories.category-list :categories="$categories" slider="true"> </x-default.categories.category-list>
     </section>
 

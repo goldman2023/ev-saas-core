@@ -19,10 +19,10 @@ class EVProductController extends Controller
         return view('frontend.user.crud.products.create');
     }
 
-
-    /* TODO: Add midleware for owner */
+    /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
+
         return view('frontend.user.crud.products.edit')->with('product', $product);
     }
 }

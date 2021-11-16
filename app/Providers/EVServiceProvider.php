@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Services\AttributesService;
 use App\Http\Services\IMGProxyService;
 use App\Http\Services\VendorService;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,11 @@ class EVServiceProvider extends ServiceProvider
         // Register Categories Service Singleton
         $this->app->singleton('ev_categories', function() {
             return new CategoryService(fn () => Container:: getInstance());
+        });
+
+        // Register Attributes Service Singleton
+        $this->app->singleton('ev_attributes', function() {
+            return new AttributesService(fn () => Container:: getInstance());
         });
 
         // Register FX Singleton

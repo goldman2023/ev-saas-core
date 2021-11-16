@@ -24,25 +24,25 @@
     </x-ev.alert>
 
     @if($insert_success)
-    <div class="row">
-        <div class="col-12">
-            <h5>{{ translate('Your product preview:') }}</h5>
+        <div class="row">
+            <div class="col-12">
+                <h5>{{ translate('Your product preview:') }}</h5>
+            </div>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <x-default.products.cards.product-card
+                    :product="$product"
+                >
+                </x-default.products.cards.product-card>
+            </div>
+            <div class="col-sm-4"></div>
         </div>
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
-            <x-default.products.cards.product-card
-            :product="$product"
-            >
-            </x-default.products.cards.product-card>
-        </div>
-        <div class="col-sm-4"></div>
-    </div>
 
     @endif
 
 
 
-    <!-- End Message Body -->
+<!-- End Message Body -->
 
     <x-ev.toast id="product-updated-toast"
                 position="bottom-center"
@@ -63,7 +63,7 @@
 
                 @if(!empty($product->id))
                     <button class="btn btn-primary btn-xs d-flex justify-content-center ml-auto"
-                                 onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
+                            onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
                         @svg('lineawesome-save', ['style' => 'width: 18px; height: 18px;', 'class' => 'mr-1'])
                         <span>{{ translate('Save') }}</span>
                     </button>
@@ -233,8 +233,8 @@
                                     <!-- Body -->
                                     <div class="pb-4">
                                         <!-- Images -->
-                                        <x-ev.form.file-selector name="product.thumbnail_img" label="{{ translate('Thumbnail image') }}" data_type="image" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
-                                        <x-ev.form.file-selector name="product.photos" label="{{ translate('Gallery image') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
+                                        <x-ev.form.file-selector name="product.thumbnail" label="{{ translate('Thumbnail image') }}" data_type="image" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
+                                        <x-ev.form.file-selector name="product.gallery" label="{{ translate('Gallery image') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
                                                                  :sortable="true"
                                                                  :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
                                         ></x-ev.form.file-selector>
@@ -371,7 +371,7 @@
                                     <!-- Body -->
                                     <div class="">
                                         <div class="full-width product-attributes-wrapper">
-                                            <!--<x-ev.form.select name="attributes" :items="$attributes" value-property="id" label-property="name" :tags="true" label="{{ translate('Attributes') }}" :multiple="true" placeholder="{{ translate('Search available attributes...') }}">
+                                        <!--<x-ev.form.select name="attributes" :items="$attributes" value-property="id" label-property="name" :tags="true" label="{{ translate('Attributes') }}" :multiple="true" placeholder="{{ translate('Search available attributes...') }}">
                                                 <small class="text-muted">{{ translate('Choose the attributes of this product and then input values of each attribute.') }}</small>
                                             </x-ev.form.select>-->
 
@@ -460,15 +460,15 @@
                                                             </x-ev.form.checkbox>
                                                         @elseif($attribute->type === 'radio')
                                                             <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
-                                                                                :append-to-name="true"
-                                                                                value-property="selected"
-                                                                                label-property="values"
-                                                                                :items="$attribute->attribute_values"
-                                                                                error-bag-name="attributes.{{ $attribute->id }}"
-                                                                                data-attribute-id="{{ $attribute->id }}"
-                                                                                label="{{ $attribute->name }}"
-                                                                                data-type="{{ $attribute->type }}"
-                                                                                :isWired="false">
+                                                                             :append-to-name="true"
+                                                                             value-property="selected"
+                                                                             label-property="values"
+                                                                             :items="$attribute->attribute_values"
+                                                                             error-bag-name="attributes.{{ $attribute->id }}"
+                                                                             data-attribute-id="{{ $attribute->id }}"
+                                                                             label="{{ $attribute->name }}"
+                                                                             data-type="{{ $attribute->type }}"
+                                                                             :isWired="false">
                                                             </x-ev.form.radio>
                                                         @endif
                                                     @endif
@@ -634,7 +634,7 @@
     @endif
 
     @if($product->id)
-        <!-- Attribute for variation used value removal modal -->
+    <!-- Attribute for variation used value removal modal -->
         <x-ev.modal id="remove-selected-attribute-modal"
                     header-title="{{ translate('Remove selected attribute?') }}"
                     body-class="d-flex flex-column justify-content-center"

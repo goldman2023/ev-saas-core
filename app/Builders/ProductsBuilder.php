@@ -18,7 +18,6 @@ class ProductsBuilder extends Builder
 {
     use Cacher;
 
-    public const FULL_FETCH_SCOPE_IDENTIFIER = 'FULL_FETCH';
     protected string $stocks_table_name;
     protected string $serial_numbers_table_name;
     protected string $flash_deals_table_name;
@@ -49,7 +48,7 @@ class ProductsBuilder extends Builder
         }
 
         // Initialize Cacher scope and properties!
-        $this->initCacher();
+        //$this->initCacher();
     }
 
     /**

@@ -9,7 +9,6 @@
 
 @section('panel_content')
     <section id="app">
-        {{-- $form->render() --}}
         <livewire:forms.products.product-form page="general" :product="$product"/>
     </section>
 @endsection

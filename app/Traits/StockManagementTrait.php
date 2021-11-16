@@ -78,7 +78,7 @@ trait StockManagementTrait
      * Stock Attributes Getters/Setters *
      ************************************/
     public function getUseSerialAttribute() {
-        if(empty($this->use_serial)) {
+        if(empty($this->use_serial ?? null)) {
             $this->use_serial = (bool) (empty($this->stock) ? false : ($this->stock->use_serial ?? false));
         }
 
@@ -105,7 +105,7 @@ trait StockManagementTrait
 
     public function getCurrentStockAttribute() {
         if(empty($this->current_stock)) {
-            if($this->use_serial) {
+            if($this->use_serial ?? null) {
                 $this->current_stock = (int) $this->serial_numbers->where('status', 'in_stock')->count(); // Get the count of all IN_STOCK serial_numbers of the targeted model
             } else {
                 $this->current_stock = (float) (empty($this->stock) ? null : ($this->stock->qty ?? 0));

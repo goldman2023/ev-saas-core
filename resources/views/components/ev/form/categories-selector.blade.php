@@ -32,11 +32,11 @@
                     @if($selectedCategories[$level-1] ?? null)
                         @foreach($selectedCategories[$level-1] as $parent_slug)
                             @php
-                                $children = \Illuminate\Support\Collection::wrap([$items->toArray()])->pluck(Str::replace(App\Models\Category::PATH_SEPARATOR, '.children.', $parent_slug))->first();
+                                $parent = \Categories::getBySlugPath($parent_slug);
                             @endphp
-                            @if(count($children['children'] ?? []) > 0)
+                            @if(count($parent['children'] ?? []) > 0)
                                 <optgroup id="group-{{ $parent_slug }}" label="{{ str_replace('.', ' / ', $parent_slug) }}">
-                                    @foreach($children['children'] as $key => $child)
+                                    @foreach($parent['children'] as $key => $child)
                                         <option value="{{ $child['slug_path'] }}" @if(in_array($child['slug_path'], $selectedCategories[$level])) selected @endif>
                                             {{ $child['name'] }}
                                         </option>

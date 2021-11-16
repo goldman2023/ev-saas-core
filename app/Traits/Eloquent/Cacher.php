@@ -12,7 +12,7 @@ use Str;
 trait Cacher
 {
     public string $cacher_scope_identifier = 'force_cached_data';
-    public bool $from_cache;
+    public bool $from_cache = false;
 
     /**
      * Initialize the trait
@@ -66,7 +66,7 @@ trait Cacher
                     $missing_ids[] = $this->generateModelCacheKey($key, true);
                 }
 
-                $missing_builder = $this->nocache()->applyScopes()->whereIn($this->getModel()->getTable().'.id', $missing_ids);
+                $missing_builder = $this->noCache()->applyScopes()->whereIn($this->getModel()->getTable().'.id', $missing_ids);
                 $missing_items = $missing_builder->getQuery()->get()->all();
 
                 $missing_collection = $instance->newCollection(array_map(function ($item) use ($missing_items, $instance) {

@@ -20,7 +20,6 @@ class VendorMode
     public function handle($request, Closure $next)
     {
         if(Vendor::isVendorSite()) {
-            /* TODO: Make this dynamic based on request domain and ID comes from domain mapping */
             $globalShop = Vendor::getVendorShop();
             $globalLayout = 'white-label';
         } else {

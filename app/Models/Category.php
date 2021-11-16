@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
@@ -45,6 +46,8 @@ class Category extends Model
     use HasRecursiveRelationships;
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
+    use TranslationTrait;
+
     public $selected;
     public $title_path;
     public const PATH_SEPARATOR = '.';
@@ -58,6 +61,16 @@ class Category extends Model
 
     public function getLocalKeyName() {
         return 'id';
+    }
+
+    public function getPathName()
+    {
+        return 'path';
+    }
+
+    public function getPathSeparator()
+    {
+        return '.';
     }
 
     public function getCustomPaths() {
@@ -98,8 +111,8 @@ class Category extends Model
             $builder->orderBy('name', 'ASC');
         });
 
-
         if (Vendor::isVendorSite()) {
+            // If Vendor Site, add global scope to restrict categories by categories in which vendor actually has any models
             static::addGlobalScope('single_vendor', function (Builder $builder) {
                 if(!empty(Vendor::getVendorCategoriesIDs())) {
                     $builder->whereIn('categories.id', Vendor::getVendorCategoriesIDs());
@@ -108,32 +121,22 @@ class Category extends Model
         }
     }
 
-    /* TODO: Create a better way to join translations on categories fetch */
-    public function getTranslation($field = '', $lang = false){
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $category_translation = $this->hasMany(CategoryTranslation::class)->where('lang', $lang)->first();
-        return $category_translation != null ? $category_translation->$field : $this->$field;
-    }
-
-    public function category_translations(){
-    	return $this->hasMany(CategoryTranslation::class);
-    }
-
+    // TODO: FIX THIS TOO. REMOVE CLASSIFIED PRODUCTS!
     public function classified_products(){
     	return $this->hasMany(CustomerProduct::class);
     }
 
     public function categories()
     {
-        return $this->hasManyOfDescendantsAndSelf('App\Models\Category');
+        return $this->hasManyOfDescendantsAndSelf(self::class);
     }
 
     public function products()
     {
-        return $this->morphedByMany(Product::class, 'subject', 'category_relationships');
+        return $this->morphedByMany(Product::class, 'subject', 'category_relationships')->noCache();
     }
 
-    public function companies()
+    public function shops()
     {
         return $this->morphedByMany(Shop::class, 'subject', 'category_relationships');
     }
@@ -164,5 +167,10 @@ class Category extends Model
         }
 
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
+    }
+
+    public function getTranslationModel(): ?string
+    {
+        return CategoryTranslation::class;
     }
 }

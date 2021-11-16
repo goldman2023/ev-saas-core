@@ -67,7 +67,6 @@ use App\Traits\Caching\SavesToCache;
  * @property string|null $meta_title
  * @property string|null $meta_description
  * @property string|null $meta_img
- * @property string|null $pdf
  * @property string $slug
  * @property float $rating
  * @property \Illuminate\Support\Carbon $created_at
@@ -121,7 +120,7 @@ use App\Traits\Caching\SavesToCache;
  * @mixin \Eloquent
  */
 
-class Product extends Model
+class Product extends EVBaseModel
 {
     use HasSlug;
     use SoftDeletes;
@@ -145,9 +144,6 @@ class Product extends Model
 
     protected $table = 'products';
 
-    /* Properties not saved in DB */
-    public $pdf;
-
     /**
      * The relationships that should always be loaded.
      * NOTE: Translation, Category, Upload, Attribute, Variation, Price and Brand traits are eager loading all relationships by default
@@ -159,8 +155,6 @@ class Product extends Model
 
     protected $fillable = ['name', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'num_of_sale'];
-
-    protected $appends = ['pdf'];
 
     protected static function boot()
     {
@@ -243,14 +237,6 @@ class Product extends Model
     }
 
 
-    public function getPdfAttribute() {
-        if(empty($this->pdf ?? null)) {
-            $this->pdf = $this->uploads->firstWhere('toc', 'pdf');
-        }
-
-        return $this->pdf;
-    }
-
     protected function asJson($value)
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);
@@ -283,5 +269,16 @@ class Product extends Model
     public function getTranslationModel(): ?string
     {
         return ProductTranslation::class;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+                'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+            ]
+        ];
     }
 }
