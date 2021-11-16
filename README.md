@@ -16,6 +16,9 @@ A complete solution for E-commerce Business with exclusive features & super resp
 -   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"`
 -   Compiling specific theme-tenant-combo: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js" -- --env tenant_id={id}` (Note: running npx mix on specific theme compiles 1) default theme and 2) all tenants main scss who use that theme)
 
+## Compiling for Default theme
+
+- `npx mix --mix-config="themes/ev-saas-default/webpack.mix.js"`
 
 # Running docker
 

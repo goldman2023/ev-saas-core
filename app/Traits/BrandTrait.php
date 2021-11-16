@@ -51,8 +51,11 @@ trait BrandTrait
         if(!empty($this->attributes['brand_id'] ?? null)) {
             // Load the brand relation
             $this->brand_id = $this->attributes['brand_id'];
+
+            return $this->attributes['brand_id'];
+        } else {
+            return 0;
         }
 
-        return $this->attributes['brand_id'];
     }
 }

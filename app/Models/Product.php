@@ -134,7 +134,6 @@ class Product extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use BrandTrait;
-
     use StockManagementTrait;
     use PriceTrait;
 
@@ -275,8 +274,8 @@ class Product extends EVBaseModel
     {
         return [
             [
-                'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
-                'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+                // 'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+                // 'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
                 'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
             ]
         ];
