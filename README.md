@@ -93,6 +93,43 @@ Example Component usage:
 
 Please see Components.md file, for more information, right now we add any dynamic and component usage examples in Components.md file
 
+# Usage Of The Images
+All Images that have `galleryTrait` can have access 
+* You must add `uploadTrait ` to utilize `galleryTrait`
+
+### Example Of Gallery usage 
+
+```
+$options = [
+    'w' => 100,
+    'h' => 100, // Auto height can be set if you remove 'h' property
+]
+```
+
+*getGallery($options)* 
+
+```
+@foreach($product->getGallery(['w' => 300]) as $item)
+    <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$item ?? ''">
+    </x-tenant.system.image>
+@endforeach
+```
+
+*getThumbnail($options)*
+
+```
+  <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getThumbnail() ?? ''">
+  </x-tenant.system.image>
+```
+
+*getCover($options)*
+```
+<x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getCover() ?? ''">
+</x-tenant.system.image>
+```
+
+and *get
+
 # Image Optimization and dynamic images
 
 For images optimization and resizing this project uses this library:

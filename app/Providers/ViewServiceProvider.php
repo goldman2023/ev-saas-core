@@ -14,25 +14,28 @@ use Illuminate\Support\Facades\View;
 
 class ViewServiceProvider extends ServiceProvider
 {
-  /**
-   * Bootstrap any application services.
-   *
-   * @return void
-   */
-  public function boot()
-  {
-      View::composer('*', function($view) {
-          $view->with('categories', Categories::getAll());
-      });
-  }
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
 
-  /**
-   * Register any application services.
-   *
-   * @return void
-   */
-  public function register()
-  {
+        View::composer('*', function ($view) {
+            /* Check if it's not central app */
+            if (tenant() != null) {
+                $view->with('categories', Categories::getAll());
+            }
+        });
+    }
 
-  }
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+    }
 }

@@ -19,9 +19,9 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
             $table->unsignedBigInteger('group_id')->nullable(true)->change();
             $table->integer('order')->after('type')->default(0)->nullable();
         });
-
+        /* TODO: Fix when creating new tenant and running migrations on the first initialization */
         // Reattach uploads from `products` columns to uploads_content_relationships table
-        $products = Product::withoutGlobalScopes()->withOnly([])->get();
+        /* $products = Product::noCache()->get();
         $uploads = [];
         foreach($products as $product) {
 
@@ -52,7 +52,7 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
             if(!empty($product->pdf) && Upload::where('id', $product->pdf)->exists()) {
                 $product->uploads()->attach($product->pdf, ['type' => 'pdf']);
             }
-        }
+        } */
 
         // Remove unnecessary columns from `products` (thumbnail_img, photos, meta_img, pdf)
         Schema::table('products', function (Blueprint $table) {

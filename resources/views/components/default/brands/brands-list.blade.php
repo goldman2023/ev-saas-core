@@ -29,9 +29,9 @@
                         <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100 bg-white"
                             alt="{{ $brand->getTranslation('name') }}">
 
-                        <span class="badge badge-pill badge-primary mt-2">
-                            {{ $brand->products()->count() }} {{ translate('Items') }}
-                        </span>
+                        {{-- <span class="badge badge-pill badge-primary mt-2">
+                            {{ $brand->products_count }} {{ translate('Items') }}
+                        </span> --}}
                         {{-- TODO Make this dynamic --}}
                         @if($key == 1)
                         <span class="badge badge-pill badge-success mt-2 position-absolute top-0 left-3 z-index-10">
