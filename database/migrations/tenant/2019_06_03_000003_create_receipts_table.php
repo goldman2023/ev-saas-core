@@ -13,15 +13,17 @@ class CreateReceiptsTable extends Migration
      */
     public function up()
     {
-        Schema::create('receipts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->index();
-            $table->string('provider_id')->index();
-            $table->string('amount');
-            $table->string('tax');
-            $table->timestamp('paid_at');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('receipts')) {
+            Schema::create('receipts', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->index();
+                $table->string('provider_id')->index();
+                $table->string('amount');
+                $table->string('tax');
+                $table->timestamp('paid_at');
+                $table->timestamps();
+            });
+        }
     }
 
     /**
