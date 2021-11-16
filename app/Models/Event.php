@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\Attribute;
 use App\Models\AttributeValue;
+use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\AttributeTrait;
 use App\Traits\GalleryTrait;
@@ -18,9 +20,11 @@ use Spatie\Sluggable\SlugOptions;
 class Event extends Model
 {
     use AttributeTrait;
+    use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
-//    use HasSlug;
+    use TranslationTrait;
+    use HasSlug;
 
     /**
      * Get the options for generating the slug.
@@ -32,23 +36,9 @@ class Event extends Model
             ->saveSlugsTo('slug');
     }
 
-    public function getTranslation($field = '', $lang = false) {
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $event_translations = $this->hasMany(EventTranslation::class)->where('lang', $lang)->first();
-        return $event_translations != null ? $event_translations->$field : $this->$field;
-    }
-
-    public function event_translations() {
-        return $this->hasMany(EventTranslation::class);
-    }
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function upload()
-    {
-        return $this->belongsTo(Upload::class);
     }
 
     public function get_attribute_label_by_id($id)
@@ -159,4 +149,8 @@ class Event extends Model
         return $schema;
     }
 
+    public function getTranslationModel(): ?string
+    {
+        return EventTranslation::class;
+    }
 }

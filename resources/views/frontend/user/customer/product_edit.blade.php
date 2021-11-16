@@ -170,7 +170,7 @@
                                 <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
                             </div>
                             <div class="form-control file-amount">{{ translate('Choose File') }}</div>
-                            <input type="hidden" name="meta_img" class="selected-files" value="{{ $product->meta_img }}">
+                            <input type="hidden" name="meta_img" class="selected-files" value="{{ $product->meta_img->id }}">
                         </div>
                         <div class="file-preview box sm">
                         </div>

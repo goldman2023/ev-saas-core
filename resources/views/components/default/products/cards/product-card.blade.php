@@ -3,7 +3,7 @@
 
         <a class="card-img-top" href="{{ $product->permalink }}">
             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}" class="card-img-top ev-product-card__img" fit="cover"
-                                   :image="$product->images['thumbnail']['url'] ?? ''"></x-tenant.system.image>
+                                   :image="$product->getThumbnail()"></x-tenant.system.image>
         </a>
 
 

@@ -34,7 +34,7 @@ class VendorService
         if(!$this->is_vendor_site) {
             $domain = parse_url(Request::root())['host'] ?? null;
             //$tenant_domains = tenant()->domains()->get()->pluck('domain')->toArray();
-            $vendor_domains = tenant()->vendor_domains()->pluck('domain')->toArray();
+            $vendor_domains = tenant()->vendor_domains->pluck('domain')->toArray();
 
             if(in_array($domain, $vendor_domains, true)) {
                 $this->is_vendor_site = true;

@@ -2,6 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\BrandTrait;
+use App\Traits\CategoryTrait;
+use App\Traits\GalleryTrait;
+use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
+use App\Traits\VariationTrait;
 use Cache;
 use App\Builders\ProductsBuilder;
 use Spatie\Sluggable\HasSlug;
@@ -25,6 +31,8 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
+use App\Traits\Caching\RegeneratesCache;
+use App\Traits\Caching\SavesToCache;
 
 /**
  * App\Models\Product
@@ -115,38 +123,44 @@ use App\Traits\StockManagementTrait;
 
 class Product extends Model
 {
-    use PermalinkTrait;
-    use ReviewTrait;
-    use AttributeTrait;
     use HasSlug;
     use SoftDeletes;
+    use RegeneratesCache;
+
+    use TranslationTrait;
+    use PermalinkTrait;
+    use AttributeTrait;
+    use CategoryTrait;
+
+    use UploadTrait;
+    use GalleryTrait;
+    use BrandTrait;
 
     use StockManagementTrait;
     use PriceTrait;
 
+    use ReviewTrait;
+
+    use VariationTrait;
+
     protected $table = 'products';
 
     /* Properties not saved in DB */
-    public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
-
+    public $pdf;
 
     /**
      * The relationships that should always be loaded.
+     * NOTE: Translation, Category, Upload, Attribute, Variation, Price and Brand traits are eager loading all relationships by default
      *
      * @var array
      */
-    protected $with = ['stock', 'flash_deals', 'variations'];
+    protected $with = [];
 
 
-    protected $fillable = ['name', 'added_by', 'user_id', 'category_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'num_of_sale', 'thumbnail_img', 'photos'];
+    protected $fillable = ['name', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
+        'purchase_price', 'unit', 'slug', 'num_of_sale'];
 
-    protected $casts = [
-        'colors' => 'object',
-        'attributes' => 'object',
-    ];
-
-    protected $appends = ['images', 'category_id'];
+    protected $appends = ['pdf'];
 
     protected static function boot()
     {
@@ -200,16 +214,6 @@ class Product extends Model
         return 'created';
     }
 
-    public function getTranslation($field = '', $lang = false) {
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $product_translations = $this->hasMany(ProductTranslation::class)->where('lang', $lang)->first();
-        return $product_translations != null ? $product_translations->$field : $this->$field;
-    }
-
-    public function product_translations() {
-        return $this->hasMany(ProductTranslation::class);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -220,93 +224,9 @@ class Product extends Model
         return $this->belongsTo(Shop::class);
     }
 
-    public function selected_categories($pluck_property = null, $is_collection = true) {
-        $ids = $this->categories()->get()->pluck('id')->toArray();
-
-        if($pluck_property) {
-            $data = Category::tree()->get()->whereIn('id', $ids)->pluck($pluck_property);
-        } else {
-            $data = Category::tree()->get()->whereIn('id', $ids);
-        }
-
-        if(!$is_collection) {
-            $data = $data->toArray();
-        }
-
-        return $data;
-    }
-
-    public function categories()
-    {
-        return $this->morphToMany(Category::class, 'subject', 'category_relationships', null, 'category_id');
-    }
-
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function product_attributes()
-    {
-        $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-                ->get()->unique();
-
-        // Eager load Attribute relationships for current product
-        if(!empty($data)) {
-            foreach($data as $key => $attribute) {
-                $data[$key]->load(['attribute_relationships' => function ($query) {
-                    $query->where([
-                        ['subject_id', '=', $this->id],
-                        ['subject_type', '=', Product::class]
-                    ]);
-                }]);
-            }
-        }
-
-        return $data;
-    }
-
-    public function product_attributes_for_variations()
-    {
-        // TODO: Create AttributeObserver class and remove cache on any relationship or value change
-        return Cache::get('product_'.$this->id.'_attributes_for_variations', function() {
-            $data = $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-                ->where('for_variations', '=', 1)->without(['attribute_relationships', 'attribute_values'])->get()->unique();
-
-            // 1) Eager load Attribute relationships for current product and based on that, 2) eager load attribute values
-            if(!empty($data)) {
-                foreach($data as $key => $attribute) {
-                    $data->put($key, $attribute->load(['attribute_relationships' => function ($query) {
-                        $query->where([
-                            ['subject_id', '=', $this->id],
-                            ['subject_type', '=', Product::class]
-                        ]);
-                    }]));
-
-                    $att_values_ids = $attribute->attribute_relationships->pluck('attribute_value_id');
-
-                    $data->put($key, $attribute->load(['attribute_values' => function ($query) use ($att_values_ids) {
-                        $query->whereIn('id', $att_values_ids);
-                    }]));
-                }
-            }
-
-            return $data;
-        });
-    }
-
-    public function variations() {
-        return $this->hasMany(ProductVariation::class);
-    }
-
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
-    }
-
-    public function stock()
-    {
-        return $this->morphOne(ProductStock::class, 'subject');
     }
 
     public function wishlists() {
@@ -317,101 +237,19 @@ class Product extends Model
         return $this->hasMany(ProductTax::class);
     }
 
-    public function flash_deals() {
-        // TODO: Add indicies to start_date and end_date!
-        return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
-            ->where([
-                ['status', '=', 1],
-                ['start_date', '<=', time()],
-                ['end_date', '>', time()],
-            ])->orderBy('created_at', 'desc')->withPivot('include_variations');
-    }
-
-    public function images($options = []) {
-        return $this->getImagesAttribute($options);
-    }
-
-    /**
-     * Get all images related to the product but properly structured in an assoc. array
-     * This function is used in frontend/themes etc.
-     *
-     * @return array*
-     */
-    public function getImagesAttribute($options = []) {
-        // TODO: Refactor this function to use Join and uploads_relationships table!
-        $photos = [];
-        $data = [
-            'thumbnail' => [],
-            'gallery' => []
-        ];
-
-        if(empty($this->attributes['photos'] ?? null) && empty($this->attributes['thumbnail_img'] ?? null)) {
-            $data['thumbnail'] = [
-                'id' => null,
-                'url' => IMG::getPlaceholder()
-            ];
-            return $data;
-        }
-
-        $photos_idx = explode(',', $this->attributes['photos']);
-        foreach ($photos_idx as &$i) $i = (int) $i;
-
-
-        if(!empty($this->attributes['thumbnail_img'])) {
-            // Add thumb as the first element in photos array
-            array_unshift($photos_idx, $this->attributes['thumbnail_img']);
-        }
-
-        if(!empty($photos_idx)) {
-            $photos = get_images($photos_idx); // 1 SQL Query to rule them all...
-        }
-
-        if($photos) {
-            foreach($photos as $photo) {
-                //$url = str_replace('tenancy/assets/', '', my_asset($photo->file_name)); /* TODO: This is temporary fix */
-
-                // TODO: Create an ImgProxyService class and Imgproxy facade to construct links with specific parameters and signature
-                // TODO: Put an Imgproxy server behind a CDN so it caches the images and offloads the server!
-                // DONE: Enable SSL on imgproxy server and add certificate for images.ev-saas.com subdomain
-                //$url = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.$url.'@webp'; // generate webp on the fly through imgproxy
-
-
-                $url = IMG::get($photo->file_name, $options);
-
-                if($photo->id === (int) $this->attributes['thumbnail_img']) {
-                    $data['thumbnail'] = [
-                        'id' => $photo->id,
-                        'url' => $url
-                    ];
-                } else {
-                    $data['gallery'][] = [
-                        'id' => $photo->id,
-                        'url' => $url
-                    ];
-                }
-            }
-        }
-
-        return $data;
-    }
-
     /* TODO: Implement product condition in backend: new/used/refurbished */
     public function getCondition() {
         return translate("New");
     }
 
-    public function has_variations() {
-        return $this->variations->isNotEmpty() ?? false;
-    }
 
-    public function getCategoryIdAttribute() {
-        if(empty($this->category_id)) {
-            return $this->categories()->whereNull('parent_id')->first()->id ?? null;
+    public function getPdfAttribute() {
+        if(empty($this->pdf ?? null)) {
+            $this->pdf = $this->uploads->firstWhere('toc', 'pdf');
         }
 
-        return $this->category_id;
+        return $this->pdf;
     }
-
 
     protected function asJson($value)
     {
@@ -426,4 +264,24 @@ class Product extends Model
         return empty($colors) ? [] : $colors;
     }
     // END: Casts section
+
+    public function getPriceColumn()
+    {
+        return 'unit_price';
+    }
+
+    /**
+     * Returns true if this Model has Variations
+     *
+     * @return bool|null
+     */
+    public function useVariations(): ?bool
+    {
+        return true;
+    }
+
+    public function getTranslationModel(): ?string
+    {
+        return ProductTranslation::class;
+    }
 }

@@ -581,14 +581,7 @@ class HomeController extends Controller
         /* TODO: This probably should be in brand controller and brand archive */
         if($brand_id != null) {
             $products->where('brand_id', $brand_id);
-            $brand = Brand::where('id', $brand_id)->get()->first();
-        } else {
-            $brand = null;
         }
-
-
-
-
 
         if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             $products->restrictByCategories($selected_categories);
@@ -687,8 +680,9 @@ class HomeController extends Controller
         $products = $products->paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
+
         $selected_category = !empty($selected_categories) ? $selected_categories->toTree()->first() : null;
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters', 'brand'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Upload;
 use Storage;
 use Theme;
 
@@ -37,21 +38,44 @@ class IMGProxyService
     /**
      * Generate an asset path for the application.
      *
-     * @param string $path
+     * Notes:
+     * If current app filesystem IS 'cloud' and (not static OR provided $data is Upload), use Storage facade to get the URL.
+     * $data can be Upload model or string. If Upload, pass the $data->file_name, otherwise, pass the $data as a string
+     * If filesystem IS NOT 'cloud', use ->asset() to get it from the local machine filesystem
+     *
+     * @param Upload|string $data
+     * @param bool $static
      * @return string
      */
-    protected function getFrom($path, $static = false): string
+    protected function getFrom(mixed $data, bool $static = false): string
     {
-        if (!$static && in_array($this->filesystem, $this->disk_types['cloud'], true)) {
-            $url = Storage::disk($this->filesystem)->url($path);
+        if(empty($data)) {
+            return $this->getPlaceholder();
+        }
+
+        if ((!$static || $data instanceof Upload) && in_array($this->filesystem, $this->disk_types['cloud'], true)) {
+            $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? null) : $data);
         } else {
-            $url = app('url')->asset($path, $this->secure);
+            $url = app('url')->asset($data, $this->secure);
         }
 
         return !empty($url) ? $url : $this->getPlaceholder();
     }
 
-    protected function proxify($url = null, $options = [], $static = false) {
+    /**
+     * Generate an asset path for the application.
+     *
+     * Notes:
+     * If current app filesystem IS 'cloud' and (not static OR provided $data is Upload), use Storage facade to get the URL.
+     * $data can be Upload model or string. If Upload, pass the $data->file_name, otherwise, pass the $data as a string
+     * If filesystem IS NOT 'cloud', use ->asset() to get it from the local machine filesystem
+     *
+     * @param ?string $url
+     * @param ?array $options
+     * @param bool $static
+     * @return string
+     */
+    protected function proxify(string $url = null, ?array $options = [], bool $static = false) {
         // Proxy images through IMGProxy only if 1) it's enabled and 2) asset is not static
         if($this->enabled && !$static) {
             $options['w'] = $options['w'] ?? 0;

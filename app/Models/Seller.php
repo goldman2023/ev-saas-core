@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Attribute;
 use App\Models\AttributeValue;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\AttributeTrait;
 use App\Traits\GalleryTrait;
@@ -68,8 +69,10 @@ use App\Models\User;
 class Seller extends Model
 {
     use AttributeTrait;
+    use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
+
     protected $fillable = ['admin_to_pay'];
 
     public function user()

@@ -13,44 +13,34 @@ use Qirolab\Theme\Theme;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
+  /**
+   * Bootstrap any application services.
+   *
+   * @return void
+   */
+  public function boot()
+  {
 
-        Schema::defaultStringLength(191);
-        Paginator::useBootstrap();
-        if ($this->isSecure()) {
-            \URL::forceScheme('https');
-        }
-    }
+    Schema::defaultStringLength(191);
+    Paginator::useBootstrap();
 
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        if (env('APP_DEBUG')) {
-            \Debugbar::enable();
-        } else {
-            \Debugbar::disable();
-        }
-    }
 
-    public function isSecure()
-    {
-        $isSecure = false;
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-            $isSecure = true;
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
-            $isSecure = true;
-        }
 
-        return $isSecure;
-    }
+
+
+  }
+
+  /**
+   * Register any application services.
+   *
+   * @return void
+   */
+  public function register()
+  {
+      if(config('app.debug')){
+          \Debugbar::enable();
+      }else{
+          \Debugbar::disable();
+      }
+  }
 }

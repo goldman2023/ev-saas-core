@@ -26,7 +26,7 @@ class AddSerialNumbersTable extends Migration
         });
 
         Schema::table('products', function (Blueprint $table) {
-            $table->tinyInteger('has_serial')->default(0);
+            $table->tinyInteger('use_serial')->default(0);
         });
     }
 
@@ -40,8 +40,8 @@ class AddSerialNumbersTable extends Migration
         Schema::dropIfExists('serial_numbers');
 
         Schema::table('products', function (Blueprint $table) {
-            if(Schema::hasColumn('products', 'has_serial')) {
-                $table->dropColumn('has_serial');
+            if(Schema::hasColumn('products', 'use_serial')) {
+                $table->dropColumn('use_serial');
             }
         });
     }
