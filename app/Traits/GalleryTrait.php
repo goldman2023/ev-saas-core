@@ -105,7 +105,7 @@ trait GalleryTrait
     /******* START GALLERY *******/
     public function getGalleryAttribute() {
         if(empty($this->gallery)) {
-            $this->gallery = empty($this->uploads) ? null : $this->uploads->where('relation_type', 'gallery');
+            $this->gallery = empty($this->uploads) ? null : $this->uploads->where('relation_type', 'gallery')->sortBy('order');
         }
 
         return $this->gallery;
@@ -173,6 +173,48 @@ trait GalleryTrait
         }
 
         return $cast_to === 'collection' ? collect($all) : $all;
+    }
+
+    public function syncGalleryUploads() {
+
+        $gallery_uploads = ['thumbnail', 'cover', 'gallery','meta_img'];
+
+        foreach($gallery_uploads as $property) {
+            $upload = $this->{$property};
+
+            if($property === 'gallery') {
+                if(is_string($upload)) {
+                    // property is either multiple IDs (1,2,3...) or numeric string single ID ("55")
+                    $upload_keys = explode(',', $upload);
+                } else if ($upload instanceof Collection) {
+                    $upload_keys = $upload->toArray();
+                } else if (is_array($upload)) {
+                    $upload_keys = $upload;
+                } else {
+                    return;
+                }
+            } else {
+                if($upload instanceof Upload) {
+                    $upload_keys = [$upload->id];
+                } else if(ctype_digit($upload) || is_int($upload)) {
+                    $upload_keys = [$upload];
+                } else {
+                    continue;
+                }
+            }
+
+
+            $upload_values = $upload_keys;
+            array_walk($upload_values, function(&$value, $key) use($property) {
+                $value = [
+                    'relation_type' => $property,
+                    'order' => $property === 'gallery' ? $key : 0
+                ];
+            });
+            $sync_array = array_combine($upload_keys, $upload_values);
+
+            $this->uploads()->wherePivot('relation_type', $property)->sync($sync_array);
+        }
     }
 
     // Upload Groups Relations functions

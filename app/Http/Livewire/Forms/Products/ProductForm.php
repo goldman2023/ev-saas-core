@@ -134,6 +134,8 @@ class ProductForm extends Component
             $this->product->brand_id = null;
         }
 
+
+
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
             if($attribute->is_predefined) {
@@ -148,6 +150,10 @@ class ProductForm extends Component
                         "values" => '',
                         "selected" => true,
                     ];
+                } else {
+                    if(empty($this->attributes[$key]->attribute_values)) {
+                        $this->attributes[$key]->attribute_values = [];
+                    }
                 }
             }
         }
@@ -312,8 +318,8 @@ class ProductForm extends Component
             $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
         }
 
-        // TODO: Sync thumbnail, gallery, meta_img and other dynamic uploads to the DB
-        //$this->product->uploads()->sync();
+        // DONE: Sync thumbnail, gallery, meta_img and other dynamic uploads
+        $this->product->syncUploads();
 
         // SEO
         if (empty($this->product->meta_img)) {

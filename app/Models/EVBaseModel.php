@@ -9,6 +9,29 @@ class EVBaseModel extends Model
 {
     protected array $core_properties = [];
 
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // After this moment Model is a) booted, b) traits are initialized, c) attributes are filled from original values
+        // What is left to do is define $core_properties of the newly created Model object, otherwise we'll face `Undefined property` error if we ever try to access core_property of the newly created model
+        $this->initCoreProperties();
+    }
+
+    public function initCoreProperties() {
+        if($this->core_properties) {
+            foreach($this->core_properties as $property) {
+                $this->$property = null;
+            }
+        }
+    }
+
     public function appendCoreProperties($properties = [])
     {
         $this->core_properties = array_unique(
