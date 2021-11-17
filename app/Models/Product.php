@@ -253,6 +253,7 @@ class Product extends EVBaseModel
      */
     public function useVariations(): ?bool
     {
+        /* TODO : Make this dynamic by actual values */
         return true;
     }
 

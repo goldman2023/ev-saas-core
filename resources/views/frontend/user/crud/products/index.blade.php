@@ -31,11 +31,11 @@
                     @foreach($products as $product)
                         <tr>
                             <td>
-                                <a href="{{ route('ev-products.edit', $product->slug) }}">
+                                <a href="{{ route('ev-products.details', $product->slug) }}">
                                     <img class="avatar avatar-sm avatar-circle mr-3 border" src="{{ $product->getThumbnail(['w' => 60]) }}" alt="{{ $product->name }}">
                                 </a>
                             </td>
-                            <td><a href="{{ route('ev-products.edit', $product->slug) }}">{{ $product->name }}</a></td>
+                            <td><a href="{{ route('ev-products.details', $product->slug) }}">{{ $product->name }}</a></td>
                             <td>{{ $product->selected_categories()->first()->name ?? '' }}</td>
                             <td>{{ single_price($product->unit_price) }}</td>
                             <td>
@@ -47,9 +47,12 @@
                                 </label>
                             </td>
                             <td>
+                                @if($product->useVariations())
                                 <a class="btn btn-soft-info btn-circle btn-xs" href="{{ route('ev-products.edit.variations', $product->slug) }}">
                                     {{ translate('Variations') }}
                                 </a>
+                                @endif
+
                                 <a class="btn btn-soft-info btn-icon btn-circle btn-xs" href="{{ route('ev-products.edit', $product->slug) }}">
                                     @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;'])
                                 </a>

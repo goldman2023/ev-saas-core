@@ -44,4 +44,9 @@ class EVProductController extends Controller
         ->with('productVariationsDatatableClass', $productVariationsDatatableClass)
         ->with('variations_attributes', $variations_attributes);
     }
+
+    public function product_details(Request $request, $slug) {
+        $product = Product::where('slug', $slug)->first();
+        return view('frontend.user.crud.products.details')->with('product', $product);
+    }
 }
