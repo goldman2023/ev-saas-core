@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductVariation;
 use Arr;
+use DB;
 use EVS;
 use Illuminate\Validation\Rule;
 use Illuminate\View\Component;
@@ -20,8 +21,8 @@ class ProductVariationsDatatable extends DataTableComponent
     protected string $pageName = 'product_variations';
     protected string $tableName = 'product_variations';
 
-    public $dataType = 'product_variations';
-    public string $primaryKey = 'name';
+    public $dataType;
+    public string $primaryKey;
     public $product;
     public $attributes;
     public $variations;
@@ -38,8 +39,8 @@ class ProductVariationsDatatable extends DataTableComponent
         'updatedAttributeValues' => 'syncAttributeValues'
     ];
 
-    public $bulkActionSetPricesID = 'ev-product-variations__set-prices';
-    public $bulkActionSetGenericSKUID = 'ev-product-variations__set-generic-sku';
+    public $bulkActionSetPricesID;
+    public $bulkActionSetGenericSKUID;
 
     protected $messages = [
         'rows.*.price.required' => 'Price is required',
@@ -83,9 +84,16 @@ class ProductVariationsDatatable extends DataTableComponent
     {
         parent::mount();
 
+        $this->dataType = 'product_variations';
+        $this->primaryKey = 'name';
+        $this->bulkActionSetPricesID = 'ev-product-variations__set-prices';
+        $this->bulkActionSetGenericSKUID = 'ev-product-variations__set-generic-sku';
+
         $this->product = $product;
         $this->attributes = collect($variationAttributes);
-        $this->variations = collect($this->product->variations()->get()->keyBy(function($item) {
+        $this->variations = collect($this->product->variations()->get()->map(function($item) {
+            return $item->convertUploadModelsToIDs();
+        })->keyBy(function($item) {
             return ProductVariation::composeVariantKey($item['name']);
         })->toArray());
 
@@ -201,10 +209,9 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
                 $variation->variant = $variant_data;
                 $variation->price = $this->product->unit_price ?? 0;
-                $variation->image = null;
                 $variation->discount = 0;
                 $variation->discount_type = 'percent';
-
+                //$variation->thumbnail = null;
                 $variation->temp_stock = new ProductStock();
                 $variation->temp_stock->qty = 0;
                 $variation->temp_stock->sku = '';
@@ -307,31 +314,42 @@ class ProductVariationsDatatable extends DataTableComponent
                 // Set Variations
                 $this->variations = collect([]);
 
-                foreach ($this->rows as $index => $variation) {
-                    if(empty($variation->id)) {
-                        // New variation - Insert
-                        $temp_stock = $variation->temp_stock;
-                        $variation->image = !empty($variation->image) ? $variation->image : null;
-                        unset($variation->temp_stock);
+                DB::beginTransaction();
 
-                        $variation_model = new ProductVariation();
-                        $variation_model->fill((array) $variation);
-                        $variation_model->save();
+                try {
+                    foreach ($this->rows as $index => $variation) {
+                        if(empty($variation->id)) {
+                            // New variation - Insert
+                            $temp_stock = $variation->temp_stock;
+                            unset($variation->temp_stock);
 
-                        // Save Product Variation Stock
-                        $this->setProductVariationStocks(false, $variation_model, $temp_stock);
-                        $this->variations->push($variation_model->toArray());
-                    } else {
-                        // Old variation - Update or Delete
-                        $variation_model = ProductVariation::find($variation->id);
-                        $variation_model->image = !empty($variation->image) ? $variation->image : null;
-                        $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
-                        $variation_model->save();
+                            $variation_model = new ProductVariation();
+                            $variation_model->fill((array) $variation);
+                            $variation_model->save();
 
-                        $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
-                        $this->variations->push($variation_model->toArray());
+                            // Sync Uploads and update Stock
+                            //$variation_model->syncUploads(); // insert variation thumbnail
+                            $this->setProductVariationStocks(false, $variation_model, $temp_stock);
+                            $this->variations->push($variation_model->toArray());
+                        } else {
+                            // Old variation - Update or Delete
+                            $variation_model = ProductVariation::find($variation->id);
+                            $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
+                            $variation_model->save();
+
+                            // Sync Uploads and update Stock
+                            //$variation_model->syncUploads(); // insert variation thumbnail
+                            $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
+                            $this->variations->push($variation_model->toArray());
+                        }
                     }
+
+                    DB::commit();
+                } catch(\Exception $e) {
+                    DB::rollBack();
+                    dd($e);
                 }
+
 
                 $this->variations = $this->variations->keyBy(function($item) {
                     return ProductVariation::composeVariantKey($item['name']);

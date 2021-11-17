@@ -2,8 +2,8 @@
 <x-livewire-tables::bs4.table.cell>
     <x-ev.form.file-selector name="rows.{{ $index }}.image"
                              template="avatar"
-                             selectedFile="{{ $row->image ?? null }}"
-                             errorBagName="rows.{{ $row->name }}"
+                             selectedFile="{{ $row->thumbnail ?? null }}"
+                             errorBagName="rows.{{ $row->thumbnail }}"
                              :multiple="false"
                              :sortable="false"
                              wire-type="defer">

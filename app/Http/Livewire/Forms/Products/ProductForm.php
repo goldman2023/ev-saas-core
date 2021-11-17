@@ -115,6 +115,7 @@ class ProductForm extends Component
         // Set default params
         if($product) {
             $this->product = $product->convertUploadModelsToIDs();
+            //dd($this->product);
             $this->action = 'update';
             $this->selected_categories = $this->product->selected_categories('slug_path');
         } else {

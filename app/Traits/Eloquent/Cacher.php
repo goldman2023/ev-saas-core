@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits\Eloquent;
 
+use App\Builders\ProductsBuilder;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -29,6 +30,19 @@ trait Cacher
         });
     }
 
+    /**
+     * Get the hydrated models without eager loading.
+     *
+     * @param  array|string  $columns
+     * @return \Illuminate\Database\Eloquent\Model[]|static[]
+     */
+    public function getModels($columns = ['*'])
+    {
+        // DO NOT FORWARD THE CALL USING THE $this->model->hydrate(...), instead use current builder!!! $this->>hydrate(...)
+        return $this->hydrate(
+            $this->query->get($columns)->all()
+        )->all();
+    }
 
     /**
      * Create a collection of models from plain arrays based on data from cache or DB

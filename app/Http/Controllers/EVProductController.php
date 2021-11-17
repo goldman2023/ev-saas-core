@@ -21,8 +21,8 @@ class EVProductController extends Controller
 
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
-        $product = Product::where('slug', $slug)->first();
-
+        $product = Product::noCache()->where('slug', $slug)->first();
+        
         return view('frontend.user.crud.products.edit')->with('product', $product);
     }
 }

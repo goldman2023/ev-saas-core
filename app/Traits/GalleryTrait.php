@@ -64,7 +64,10 @@ trait GalleryTrait
 
     /******* START THUMBNAIL *******/
     public function getThumbnailAttribute() {
-        if(empty($this->thumbnail)) {
+        if(empty($this->thumbnail)) { /*dd($this->uploads);
+            foreach($this->uploads ) {
+
+            }*/
             $this->thumbnail = $this->uploads->firstWhere('relation_type', 'thumbnail');
         }
 
