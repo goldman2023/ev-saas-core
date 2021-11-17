@@ -17,7 +17,7 @@ use Spatie\SchemaOrg\Schema;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Event extends Model
+class Event extends EVBaseModel
 {
     use AttributeTrait;
     use UploadTrait;
@@ -29,7 +29,7 @@ class Event extends Model
     /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
@@ -44,8 +44,8 @@ class Event extends Model
     public function get_attribute_label_by_id($id)
     {
         $attribute = $this->custom_attributes()
-                        ->where('attribute_id', '=', $id)
-                        ->first();
+            ->where('attribute_id', '=', $id)
+            ->first();
 
         if (!$attribute) {
             return false;
@@ -65,44 +65,45 @@ class Event extends Model
     public function get_attribute_value_by_id($id)
     {
         $attribute = $this->custom_attributes()
-                    ->where('attribute_id', '=', $id)
-                    ->first();
+            ->where('attribute_id', '=', $id)
+            ->first();
 
         if (isset($attribute->attribute_value_id)) {
-             $value =  AttributeValue::find($attribute->attribute_value_id)->values;
+            $value =  AttributeValue::find($attribute->attribute_value_id)->values;
         } else {
             $value = translate('No Data');
         }
 
         if (is_numeric($value)) {
-        $value = number_format($value, 2, '.', ',');
+            $value = number_format($value, 2, '.', ',');
         }
 
         return $value;
     }
 
-    public function get_schema() {
+    public function get_schema()
+    {
         $default_properties = array();
         $extra_properties = array();
 
-        foreach($this->seo_attributes as $relation) {
+        foreach ($this->seo_attributes as $relation) {
             $schema_value = $relation->custom_attributes()->first()->schema_value ? $relation->custom_attributes()->first()->schema_value : $relation->attribute_value->values;
             if ($relation->custom_attributes()->first()->type == 'checkbox') {
                 $schema_value = implode(",", $relation->custom_attributes()->first()->attribute_values->pluck('values')->toArray());
             }
             if (in_array($relation->custom_attributes()->first()->name, default_schema_attributes('App\Models\Event'))) {
                 $default_properties[$relation->custom_attributes()->first()->name] = $schema_value;
-            }else {
+            } else {
                 $extra_properties[$relation->custom_attributes()->first()->schema_key] = $schema_value;
             }
         }
 
         $schema = Schema::event()
-                        ->name($this->title)
-                        ->description($this->description)
-                        ->eventStatus('https://schema.org/EventScheduled')
-                        ->image(uploaded_asset($this->upload_id))
-                        ->addProperties($extra_properties);
+            ->name($this->title)
+            ->description($this->description)
+            ->eventStatus('https://schema.org/EventScheduled')
+            ->image(uploaded_asset($this->upload_id))
+            ->addProperties($extra_properties);
 
         if (isset($default_properties["Start Date"])) $schema->startDate($default_properties["Start Date"]);
         if (isset($default_properties["End Date"])) $schema->endDate($default_properties["End Date"]);
@@ -112,11 +113,10 @@ class Event extends Model
             $schema->eventAttendanceMode('https://schema.org/OfflineEventAttendanceMode');
 
         // location schema attributes
-        if (isset($default_properties["Event type"]) && $default_properties["Event type"] == "Online"){
+        if (isset($default_properties["Event type"]) && $default_properties["Event type"] == "Online") {
             $location = Schema::virtualLocation();
             if (isset($default_properties["JoinURL"])) $location->url($default_properties["JoinURL"]);
-        }
-        else {
+        } else {
             $location = Schema::place();
             if (isset($default_properties["Location name"])) $schema->name($default_properties["Location name"]);
             $postalAddress = Schema::postalAddress();
@@ -142,8 +142,8 @@ class Event extends Model
 
         // organizer schema attributes
         $organizer = Schema::organization()
-                            ->name($this->user->shop->name)
-                            ->url(env('APP_URL') . '/shop/' . $this->user->shop->slug);
+            ->name($this->user->shop->name)
+            ->url(env('APP_URL') . '/shop/' . $this->user->shop->slug);
         $schema->organizer($organizer);
 
         return $schema;
@@ -152,5 +152,12 @@ class Event extends Model
     public function getTranslationModel(): ?string
     {
         return EventTranslation::class;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            []
+        ];
     }
 }
