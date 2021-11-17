@@ -17,7 +17,9 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
     {
         Schema::table('uploads_content_relationships', function (Blueprint $table) {
             $table->unsignedBigInteger('group_id')->nullable(true)->change();
-            $table->integer('order')->after('type')->default(0)->nullable();
+            if (!Schema::hasColumn('uploads_content_relationships', 'order')) {
+                $table->integer('order')->after('type')->default(0)->nullable();
+            }
         });
         /* TODO: Fix when creating new tenant and running migrations on the first initialization */
         // Reattach uploads from `products` columns to uploads_content_relationships table
@@ -56,19 +58,19 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
 
         // Remove unnecessary columns from `products` (thumbnail_img, photos, meta_img, pdf)
         Schema::table('products', function (Blueprint $table) {
-            if(Schema::hasColumn('products', 'thumbnail_img')) {
+            if (Schema::hasColumn('products', 'thumbnail_img')) {
                 $table->dropColumn('thumbnail_img');
             }
 
-            if(Schema::hasColumn('products', 'photos')) {
+            if (Schema::hasColumn('products', 'photos')) {
                 $table->dropColumn('photos');
             }
 
-            if(Schema::hasColumn('products', 'meta_img')) {
+            if (Schema::hasColumn('products', 'meta_img')) {
                 $table->dropColumn('meta_img');
             }
 
-            if(Schema::hasColumn('products', 'pdf')) {
+            if (Schema::hasColumn('products', 'pdf')) {
                 $table->dropColumn('pdf');
             }
         });
