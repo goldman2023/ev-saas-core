@@ -47,6 +47,9 @@
                                 </label>
                             </td>
                             <td>
+                                <a class="btn btn-soft-info btn-circle btn-xs" href="{{ route('ev-products.edit.variations', $product->slug) }}">
+                                    {{ translate('Variations') }}
+                                </a>
                                 <a class="btn btn-soft-info btn-icon btn-circle btn-xs" href="{{ route('ev-products.edit', $product->slug) }}">
                                     @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;'])
                                 </a>

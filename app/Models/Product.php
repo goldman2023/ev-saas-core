@@ -241,15 +241,6 @@ class Product extends EVBaseModel
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 
-    // START: Casts section
-    // If $value is null or empty, value should always be empty array!
-    // Reason: Ease of use in frontend and backend views
-    public function getAttributesAttribute($value) {
-        $colors = $this->castAttribute('colors', $value);
-        return empty($colors) ? [] : $colors;
-    }
-    // END: Casts section
-
     public function getPriceColumn()
     {
         return 'unit_price';
@@ -274,8 +265,8 @@ class Product extends EVBaseModel
     {
         return [
             [
-                // 'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
-                // 'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+                'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+                'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
                 'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
             ]
         ];

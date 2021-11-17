@@ -89,6 +89,7 @@ class ProductVariationsDatatable extends DataTableComponent
             return ProductVariation::composeVariantKey($item['name']);
         })->toArray());
 
+
         $this->all_combinations = collect([]);
         $this->rows = collect([]);
         $this->buttons = $buttons;
