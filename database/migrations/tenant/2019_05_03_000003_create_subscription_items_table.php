@@ -13,16 +13,19 @@ class CreateSubscriptionItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscription_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('subscription_id');
-            $table->string('stripe_id')->index();
-            $table->string('stripe_plan');
-            $table->integer('quantity');
-            $table->timestamps();
+        if(!Schema::hasTable('subscription_items')) {
+            Schema::create('subscription_items', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('subscription_id');
+                $table->string('stripe_id')->index();
+                $table->string('stripe_plan');
+                $table->integer('quantity');
+                $table->timestamps();
 
-            $table->unique(['subscription_id', 'stripe_plan']);
-        });
+                $table->unique(['subscription_id', 'stripe_plan']);
+            });
+        };
+
     }
 
     /**

@@ -66,7 +66,7 @@ use App\Models\User;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Seller whereVerificationStatus($value)
  * @mixin \Eloquent
  */
-class Seller extends Model
+class Seller extends EVBaseModel
 {
     use AttributeTrait;
     use UploadTrait;
@@ -167,5 +167,11 @@ class Seller extends Model
         $schema->address($postalAddress);
 
         return $schema;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+        ];
     }
 }

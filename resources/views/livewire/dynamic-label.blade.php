@@ -50,7 +50,7 @@
 
     <div class="hs-unfold ml-auto bg-white">
         <button wire:click.prevent="editLabel()"
-            class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle"
+            class="ev-edit-inline  js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary card-unfold rounded-circle"
             href="javascript:;">
             @svg('heroicon-o-pencil-alt')
             {{ translate('edit') }}

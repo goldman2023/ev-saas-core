@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            </from>
+        </form>
             <div class="card-body">
                 <table class="table aiz-table mb-0">
                     <thead>
@@ -49,14 +49,14 @@
                     </thead>
                     <tbody>
                     @foreach($sellers as $key => $seller)
-                        @if($seller->user != null && $seller->user->shop != null)
+                        @if($seller->user != null && $seller->shop != null)
                             <tr>
                                 <td>{{ ($key+1) + ($sellers->currentPage() - 1)*$sellers->perPage() }}</td>
                                 <td>
                                     @if($seller->user->banned == 1)
                                         <i class="fa fa-ban text-danger" aria-hidden="true"></i>
                                     @endif
-                                    {{$seller->user->shop->name}}
+                                    {{$seller->shop->name}}
                                 </td>
                                 <td>{{$seller->user->phone}}</td>
                                 <td>{{$seller->user->email}}</td>
@@ -159,7 +159,7 @@
                     </tbody>
                 </table>
                 <div class="aiz-pagination">
-                    {{ $sellers->appends(request()->input())->links() }}
+                    {{-- {{ $sellers->appends(request()->input())->links() }} --}}
                 </div>
             </div>
     </div>

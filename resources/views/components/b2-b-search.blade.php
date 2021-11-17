@@ -1,6 +1,6 @@
 <div class="c-main-search flex-grow-1 front-header-search d-flex align-items-center">
     <div class="position-relative flex-grow-1">
-        <form action="#" method="GET" class="stop-propagation mb-0">
+        <form action="{{route('search') }}" method="GET" class="stop-propagation mb-0">
             <div class="d-flex position-relative align-items-center">
                 <div class="d-none" data-toggle="class-toggle" data-target=".front-header-search">
                     <button class="btn btn-sm px-2" type="button" aria-label="search-button">
@@ -10,6 +10,7 @@
                 <div class="input-group">
                     <input type="text" class="border-0 border-lg form-control" id="search" name="q"
                         placeholder="{{ translate('Search Products, Companies or News') }}"
+                        value="@isset($_GET['q']) {{ $_GET['q'] }} @endisset"
                         autocomplete="off">
                     <div class="input-group-append d-block">
 
@@ -37,6 +38,17 @@
             </div>
             <div id="search-content" class="text-left">
 
+            </div>
+            <div class="top-searches text-center">
+                {{ translate('Try popular searches: ') }}
+
+                @php
+                    $topSearches = \App\Models\Search::orderBy("count", "desc")->take(10)->get();
+                @endphp
+
+                @foreach ($topSearches as $item)
+                <a href="#" class="top-search-suggestion">{{ $item->query }}</a> /
+                @endforeach
             </div>
         </div>
     </div>

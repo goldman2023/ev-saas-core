@@ -22,13 +22,14 @@
                             @endif
                             <span class="cat-name">{{ $category['name'] }}</span>
                         </a>
-                        @if (count($category['children']) > 0)
+                        {{-- TODO: Categories dropdown menu updates --}}
+                        {{-- @if (count($category['children']) > 0)
                             <div class="sub-cat-menu c-scrollbar-light rounded shadow-lg p-4">
                                 <div class="c-preloader text-center absolute-center">
                                     <i class="las la-spinner la-spin la-3x opacity-70"></i>
                                 </div>
                             </div>
-                        @endif
+                        @endif --}}
                     </li>
                 @endforeach
             </ul>

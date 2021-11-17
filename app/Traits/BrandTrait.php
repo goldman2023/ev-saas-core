@@ -53,7 +53,6 @@ trait BrandTrait
             $this->brand_id = $this->attributes['brand_id'];
         }*/
 
-        return $this->attributes['brand_id'];
     }
 
     /*public function setBrandIdAttribute($value) {

@@ -134,7 +134,6 @@ class Product extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use BrandTrait;
-
     use StockManagementTrait;
     use PriceTrait;
 
@@ -242,15 +241,6 @@ class Product extends EVBaseModel
         return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
 
-    // START: Casts section
-    // If $value is null or empty, value should always be empty array!
-    // Reason: Ease of use in frontend and backend views
-    public function getAttributesAttribute($value) {
-        $colors = $this->castAttribute('colors', $value);
-        return empty($colors) ? [] : $colors;
-    }
-    // END: Casts section
-
     public function getPriceColumn()
     {
         return 'unit_price';
@@ -263,6 +253,7 @@ class Product extends EVBaseModel
      */
     public function useVariations(): ?bool
     {
+        /* TODO : Make this dynamic by actual values */
         return true;
     }
 

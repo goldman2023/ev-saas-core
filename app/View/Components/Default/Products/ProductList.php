@@ -22,7 +22,7 @@ class ProductList extends Component
         if($products != null) {
             $this->products = $products;
         } else {
-            $products = Product::paginate($items);
+            $products = Product::with('brand')->paginate($items);
         }
         $this->products = $products;
         $this->slider = $slider;

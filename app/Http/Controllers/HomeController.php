@@ -322,6 +322,38 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $products = Product::noCache()->get();
+        $uploads = [];
+        foreach($products as $product) {
+
+            if(!empty($product->thumbnail_img) && Upload::where('id', $product->thumbnail_img)->exists()) {
+                $product->uploads()->attach($product->thumbnail_img, ['type' => 'thumbnail']);
+                $product->uploads()->attach($product->thumbnail_img, ['type' => 'meta_img']);
+            }
+
+            $gallery = collect(explode(',', $product->photos))->filter(function($item, $key) {
+                return ctype_digit($item);
+            })->map(function ($item, $key) {
+                return [
+                    'id' => (int) $item,
+                    'type' => 'gallery',
+                    'order' => $key
+                ];
+            })->keyBy('id')->forget('id')->transform(function ($item, $key) {
+                unset($item['id']);
+                return $item;
+            });
+
+            foreach($gallery as $upload_id => $pivotData) {
+                if(Upload::where('id', $upload_id)->exists()) { // skip uploads that don't exist
+                    $product->uploads()->attach($upload_id, $pivotData);
+                }
+            }
+
+            if(!empty($product->pdf) && Upload::where('id', $product->pdf)->exists()) {
+                $product->uploads()->attach($product->pdf, ['type' => 'pdf']);
+            }
+        }
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
         if(Vendor::isVendorSite()) {
             $shop = Vendor::getVendorShop();

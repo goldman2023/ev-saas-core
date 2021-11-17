@@ -23,7 +23,8 @@ class VendorService
     protected $is_vendor_site;
     protected $vendor_categories_ids;
 
-    public function __construct($app) {
+    public function __construct($app)
+    {
         $this->is_vendor_site = false;
         $this->vendor_shop = null;
         $this->vendor_categories_ids = null;
@@ -31,12 +32,13 @@ class VendorService
 
     public function isVendorSite(): bool
     {
-        if(!$this->is_vendor_site) {
+        /* Check if it's not central app */
+        if (!$this->is_vendor_site && tenant() != null) {
             $domain = parse_url(Request::root())['host'] ?? null;
             //$tenant_domains = tenant()->domains()->get()->pluck('domain')->toArray();
             $vendor_domains = tenant()->vendor_domains->pluck('domain')->toArray();
 
-            if(in_array($domain, $vendor_domains, true)) {
+            if (in_array($domain, $vendor_domains, true)) {
                 $this->is_vendor_site = true;
             }
         }
@@ -46,7 +48,7 @@ class VendorService
 
     public function getVendorShop()
     {
-        if(empty($this->vendor_shop)) {
+        if (empty($this->vendor_shop)) {
             $domain = parse_url(Request::root())['host'] ?? null;
             $shop_domain = ShopDomain::where('domain', '=', $domain)->first();
 
@@ -56,8 +58,9 @@ class VendorService
         return $this->vendor_shop;
     }
 
-    public function getVendorCategoriesIDs() {
-        if(!empty($this->vendor_shop) && empty($this->vendor_categories_ids)) {
+    public function getVendorCategoriesIDs()
+    {
+        if (!empty($this->vendor_shop) && empty($this->vendor_categories_ids)) {
             // TODO: ID list array with products only by single vendor
             // TODO: Check Models CRUD PAGES!
             // TODO: Remove stock/variations $with and use them only when necessary
