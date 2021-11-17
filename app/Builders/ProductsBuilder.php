@@ -48,7 +48,7 @@ class ProductsBuilder extends Builder
         }
 
         // Initialize Cacher scope and properties!
-        //$this->initCacher();
+        $this->initCacher();
     }
 
     /**

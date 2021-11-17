@@ -28,7 +28,7 @@ trait UploadTrait
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
                 if($property['multiple'] ?? false) {
                     // Multiple Uploads
-                    $model->{$property['property_name']} = $model->uploads->where('relation_type', $property['relation_type'])->values();
+                    $model->{$property['property_name']} = $model->uploads->where('relation_type', $property['relation_type'])->sortBy('order')->values();
                 } else {
                     // Single Upload
                     $model->{$property['property_name']} = $model->uploads->firstWhere('relation_type', $property['relation_type']);
@@ -95,7 +95,7 @@ trait UploadTrait
      ************************************/
     public function uploads() {
         return $this->morphToMany(Upload::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
-            ->withPivot('type AS relation_type', 'group_id');
+            ->withPivot('relation_type', 'group_id');
     }
 
     /**
@@ -139,6 +139,53 @@ trait UploadTrait
                     $callback($property);
                 }
             }
+        }
+    }
+
+    public function syncUploads() {
+        // Construct dynamic uploads sync array
+        $this->dynamicUploadPropertiesWalker(function($property) {
+            $upload = $this->{$property['property_name']};
+
+            if($property['multiple']) {
+                if(is_string($upload)) {
+                    // property is either multiple IDs (1,2,3...) or numeric string single ID ("55")
+                    $upload_keys = explode(',', $upload);
+                } else if ($upload instanceof Collection) {
+                    $upload_keys = $upload->toArray();
+                } else if (is_array($upload)) {
+                    $upload_keys = $upload;
+                } else {
+                    $upload_keys = null;
+                }
+            } else {
+                if($upload instanceof Upload) {
+                    $upload_keys = [$upload->id];
+                } else if(ctype_digit($upload) || is_int($upload)) {
+                    $upload_keys = [$upload];
+                } else {
+                    $upload_keys = null;
+                }
+            }
+
+            if($upload_keys) {
+                $upload_values = $upload_keys;
+                array_walk($upload_values, function(&$value, $key) use($property) {
+                    $value = [
+                        'relation_type' => $property['relation_type'],
+                        'order' => $key
+                    ];
+                });
+            }
+
+            $sync_array = $upload_keys ? array_combine($upload_keys, $upload_values) : null;
+
+            $this->uploads()->wherePivot('relation_type', $property['relation_type'])->sync($sync_array);
+        });
+
+        // Sync Gallery uploads
+        if(method_exists($this, 'syncGalleryUploads')) {
+            $this->syncGalleryUploads();
         }
     }
 }

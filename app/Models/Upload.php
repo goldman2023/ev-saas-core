@@ -29,7 +29,7 @@ class Upload extends EVBaseModel
 
     public function uploads() {
         return $this->morphedByMany(Product::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
-            ->withPivot('type AS relation_type, group_id');
+            ->withPivot('relation_type, group_id');
     }
 
 
