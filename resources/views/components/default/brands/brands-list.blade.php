@@ -4,28 +4,19 @@
         <x-ev.label tag="h3" :label="ev_dynamic_translate('Brands List Title', true)">
         </x-ev.label>
     </div>
-
+    <style>
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+    </style>
     <div class="ev-brands-swiper">
-        <div class="ev-brands-slider">
-            <div class="js-slick-carousel" data-hs-slick-carousel-options='{
-                "slidesToShow" : 6,
-                "fade": false,
-                "infinite": false,
-                "autoplay": true,
-                "autoplaySpeed": 7000,
-                "responsive": [{
-                    "breakpoint": 768,
-                    "settings": {
-                    "slidesToShow": 4,
-                      "arrows": false
-                    }}]
-                }'>
+        <div class="ev-brands-slider" style="overflow: scroll;">
+            <div class="d-flex flex-nowrap">
                 <!-- Product -->
-
-
                 @foreach ($brands as $key => $brand)
-                <div class="text-center slick-slide">
-                    <a href="{{ route('products.brand', $brand->slug) }}" class="d-block rounded hov-shadow-md position-relative">
+                <div class="text-center mr-lg-3 position-relative" style="min-width: 100px;">
+                    <a href="{{ route('products.brand', $brand->slug) }}"
+                        class="d-block rounded hov-shadow-md position-relative">
                         <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100 bg-white"
                             alt="{{ $brand->getTranslation('name') }}">
 
