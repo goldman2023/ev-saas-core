@@ -19,8 +19,8 @@ trait PermalinkTrait
         static::retrieved(function ($model) {
             $routeKeyName = method_exists($model, 'getRouteKeyName') ? $model->getRouteKeyName() : 'slug';
 
-            if (!empty($model->attributes[$routeKeyName] ?? null) && Route::has(get_class($model).'.single')) {
-                $model->permalink = route(get_class($model).'.single', $model->attributes[$routeKeyName]);
+            if (!empty($model->attributes[$routeKeyName] ?? null) && Route::has($model::class.'.single')) {
+                $model->permalink = route($model::class.'.single', $model->attributes[$routeKeyName]);
             }
         });
     }

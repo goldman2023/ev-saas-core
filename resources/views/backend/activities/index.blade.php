@@ -25,7 +25,7 @@
                     {{--                    Entity Affected --}}
                     <td>
                         <strong>ID: </strong>{{@!class_exists($activity->subject_type) || $activity->subject == null ? "N/A" : $activity->subject->id }}<br>
-                        <strong>Type: </strong>{{@!class_exists($activity->subject_type) || $activity->subject == null ? "N/A" : get_class($activity->subject) }}
+                        <strong>Type: </strong>{{@!class_exists($activity->subject_type) || $activity->subject == null ? "N/A" : $activity->subject::class }}
                     </td>
                 </tr>
             @endforeach

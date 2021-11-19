@@ -7,19 +7,27 @@
     <div class="card-body">
         <h1> {{ $product->name }}</h1>
 
-        Actions:
+        <strong>Actions:</strong>
+
         @if($product->useVariations())
-        <a class="btn btn-soft-info btn-circle btn-xs"
-            href="{{ route('ev-products.edit.variations', $product->slug) }}">
-            {{ translate('Variations') }}
-        </a>
+            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+               href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+                {{ translate('Stock Management') }}
+            </a>
         @endif
 
-        <a class="btn btn-soft-info btn-circle btn-xs" href="{{ route('ev-products.edit', $product->slug) }}">
-            {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;'])
+        @if($product->useVariations())
+            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+                href="{{ route('ev-products.edit.variations', $product->slug) }}">
+                {{ translate('Variations') }}
+            </a>
+        @endif
+
+        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center" href="{{ route('ev-products.edit', $product->slug) }}">
+            {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
-        <a class="btn btn-soft-danger btn-circle btn-xs confirm-delete" href="javascript:void(0)">
-            {{ translate('Delete') }} @svg('heroicon-o-trash', ['style' => 'height: 16px;'])
+        <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete " href="javascript:void(0)">
+            {{ translate('Delete') }} @svg('heroicon-o-trash', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
 
         <div class="ev-product-preview mt-3">

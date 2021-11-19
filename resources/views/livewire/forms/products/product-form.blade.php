@@ -39,10 +39,7 @@
         </div>
 
     @endif
-
-
-
-<!-- End Message Body -->
+    <!-- End Message Body -->
 
     <x-ev.toast id="product-updated-toast"
                 position="bottom-center"
@@ -150,7 +147,7 @@
                                     <li class="step-item {{ $page === 'variations' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', false, ['variations']]}}))"
-                                           wire:click="syncVariationsDatatable()"
+                                           wire:click="refreshVariationsDatatable()"
                                         ><!-- wire:click="$set('page', 'variations')" -->
                                             <span class="step-icon step-icon-soft-dark">5</span>
                                             <div class="step-content">
@@ -302,8 +299,6 @@
                                         <x-ev.form.input name="product.current_stock" type="number" label="{{ translate('Stock quantity') }}" :required="true"  min="0" step="1">
                                             <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
                                         </x-ev.form.input>
-
-
 
                                         <x-ev.form.input name="product.low_stock_qty" type="number" label="{{ translate('Low stock quantity warning') }}"  min="0" step="1">
                                         </x-ev.form.input>
@@ -494,7 +489,7 @@
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
                                                         onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', false, ['attributes']]}}))"
-                                                        wire:click="syncVariationsDatatable()"
+                                                        wire:click="refreshVariationsDatatable()"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>

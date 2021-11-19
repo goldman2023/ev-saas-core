@@ -1,0 +1,23 @@
+/*------------------------------------
+  Input Group Borderless
+------------------------------------*/
+
+.form-control-borderless,
+.input-group-borderless .form-control,
+.input-group-borderless .input-group-text {
+  border: none;
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+// Borderless
+.custom-select-borderless {
+  border-color: transparent;
+
+  &:focus {
+    box-shadow: none;
+    border-color: transparent;
+  }
+}

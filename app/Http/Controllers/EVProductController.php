@@ -22,31 +22,33 @@ class EVProductController extends Controller
 
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
-        $product = Product::noCache()->where('slug', $slug)->first();
-        
+        $product = Product::where('slug', $slug)->first();
+
         return view('frontend.user.crud.products.edit')->with('product', $product);
     }
 
-    public function edit_variations(Request $request, $slug) {
+    public function edit_stocks(Request $request, $slug) {
+        $product = Product::where('slug', $slug)->first();
 
+        return view('frontend.user.crud.products.stocks')
+            ->with('product', $product)
+            ->with('variations_attributes', $product->variant_attributes());
+    }
+
+    public function edit_variations(Request $request, $slug) {
         $productVariationsDatatableClass = 'ev-product-variations-component';
 
-
         $product = Product::where('slug', $slug)->first();
-        $attributes =  EVS::getMappedAttributes(Product::class, $product);
-        $variations_attributes = collect($attributes)->filter(function($att, $key) {
-            return ((object) $att)->for_variations === true;
-        });
-
 
         return view('frontend.user.crud.products.variations')
         ->with('product', $product)
-        ->with('productVariationsDatatableClass', $productVariationsDatatableClass)
-        ->with('variations_attributes', $variations_attributes);
+        ->with('variations_attributes', $product->variant_attributes())
+        ->with('productVariationsDatatableClass', $productVariationsDatatableClass);
     }
 
     public function product_details(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
+
         return view('frontend.user.crud.products.details')->with('product', $product);
     }
 }

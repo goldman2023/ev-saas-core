@@ -28,10 +28,14 @@ trait UploadTrait
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
                 if($property['multiple'] ?? false) {
                     // Multiple Uploads
-                    $model->{$property['property_name']} = $model->uploads->where('relation_type', $property['relation_type'])->sortBy('order')->values();
+                    $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
+                        return $upload->pivot->relation_type === $property['relation_type'];
+                    })->sortBy('order')->values();
                 } else {
                     // Single Upload
-                    $model->{$property['property_name']} = $model->uploads->firstWhere('relation_type', $property['relation_type']);
+                    $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
+                        return $upload->pivot->relation_type === $property['relation_type'];
+                    })->first();
                 }
             });
         });

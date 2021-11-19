@@ -41,6 +41,7 @@ class ProductForm extends Component
     public $selected_categories;
 
     protected $listeners = [
+        // TODO Do we need this?
         'variationsUpdated' => 'updateAttributeValuesForVariations'
     ];
 
@@ -109,13 +110,11 @@ class ProductForm extends Component
     {
         $this->rows = collect([]);
         $this->page = $page;
-        $this->attributes = EVS::getMappedAttributes(Product::class, $product);
         $this->categories = Categories::getAll();
 
         // Set default params
         if($product) {
             $this->product = $product->convertUploadModelsToIDs();
-            //dd($this->product);
             $this->action = 'update';
             $this->selected_categories = $this->product->selected_categories('slug_path');
         } else {
@@ -135,7 +134,7 @@ class ProductForm extends Component
             $this->product->brand_id = null;
         }
 
-
+        $this->attributes = $this->product->getMappedAttributes();
 
         // Set default attributes
         foreach($this->attributes as $key => $attribute) {
@@ -172,8 +171,10 @@ class ProductForm extends Component
         return view('livewire.forms.products.product-form');
     }
 
-    public function syncVariationsDatatable() {
-        $this->emit('updatedAttributeValues', $this->variations_attributes);
+    public function refreshVariationsDatatable() {
+        // TODO: Refresh variations datatable
+        $this->emit('refreshDatatable');
+        //$this->emit('updatedAttributeValues', $this->variations_attributes);
     }
 
     public function validateSpecificSet($set_name, $next_page, $is_last = false, $insert_on_step = null)
@@ -244,7 +245,7 @@ class ProductForm extends Component
 
             $this->insert_success = true;
 
-            $this->emit('setProduct', $this->product);
+            //$this->emit('setProduct', $this->product);
             $this->dispatchBrowserEvent('goToTop');
         } catch(\Exception $e) {
             DB::rollBack();

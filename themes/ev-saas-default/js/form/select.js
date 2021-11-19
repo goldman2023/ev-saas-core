@@ -1,5 +1,19 @@
 window.EV.form.select = {
     /**
+     * This should be added to [x-init="window.EV.form.select.select2Alpine(...)"] attribute of alpine component
+     */
+    /*select2Alpine: function(xComponent, selectedKey) { console.log(xComponent);
+        xComponent.select2 = $(xComponent.$refs.select).select2();
+        xComponent.select2.on("select2:select", (event) => {
+            console.log(event.target.value);
+            xComponent[selectedKey] = event.target.value;
+        });
+        xComponent.$watch(selectedKey, (value) => {
+            xComponent.select2.val(value).trigger("change");
+        });
+    },*/
+
+    /**
      * This is fired when Select2 "Selected Attributes" change
      */
     setOnAttributeChange: function(selector = 'select[name="attributes"]') {

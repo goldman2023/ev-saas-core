@@ -111,26 +111,31 @@ class MacrosServiceProvider extends ServiceProvider
 
         // For Builders which use Cacher Trait
         Builder::macro('noCache', function() {
-            if(isset($this->from_cache, $this->cacher_scope_identifier)) {
-                $this->from_cache = false;
-                $this->withoutGlobalScope($this->cacher_scope_identifier);
+            if(method_exists($this, 'disableCacher')) {
+                $this->disableCacher();
             }
 
             return $this;
         });
 
-        /*Builder::macro('cache', function() {
-            if(isset($this->from_cache) && is_bool($this->from_cache)) {
-                $this->from_cache = true;
-                $this->withGlobalScope($this->cacher_scope_identifier);
+        Builder::macro('fromCache', function() {
+            if(method_exists($this, 'enableCacher')) {
+                $this->enableCacher();
             }
-        });*/
+            return $this;
+        });
     }
 
     protected function setEloquentRelationMacros(): void {
         Relation::macro('noCache', function() {
             // Changes here are done by pointer, not by reference!
             $this->getQuery()->noCache();
+            // ^^^ IMPORTANT: It looks like applying functions to the Builder with getQuery()->{chained fs), actually changes Builder used for relation by reference!
+            return $this;
+        });
+        Relation::macro('fromCache', function() {
+            // Changes here are done by pointer, not by reference!
+            $this->getQuery()->fromCache();
             // ^^^ IMPORTANT: It looks like applying functions to the Builder with getQuery()->{chained fs), actually changes Builder used for relation by reference!
             return $this;
         });

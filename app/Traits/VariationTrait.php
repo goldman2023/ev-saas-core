@@ -27,15 +27,20 @@ trait VariationTrait
         });
     }
 
-    public function hasVariations() {
+    /**
+     * Checks if Model has any variations.
+     * Use this function to determine logic for dependent traits, like:
+     * 1. Price calculation functions
+     * etc.
+     *
+     * @return void
+     */
+    public function hasVariations(): bool
+    {
         return $this->useVariations() ? ($this->variations->isNotEmpty() ?? false) : false;
     }
 
     public function variations() {
-        if($this->useVariations()) {
-            return $this->hasMany(ProductVariation::class);
-        }
-
-        return null;
+        return $this->hasMany(ProductVariation::class);
     }
 }

@@ -34,9 +34,7 @@ class ProductVariationsDatatable extends DataTableComponent
     public $class;
     protected $listeners = [
         'refreshDatatable' => '$refresh',
-        'setProduct' => 'syncProduct',
         'saveVariations' => 'setVariationsData',
-        'updatedAttributeValues' => 'syncAttributeValues'
     ];
 
     public $bulkActionSetPricesID;
@@ -80,7 +78,7 @@ class ProductVariationsDatatable extends DataTableComponent
      *
      * @return void
      */
-    public function mount($product = null, $variationAttributes = [], $buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3', $class = '')
+    public function mount($buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3', $class = '')
     {
         parent::mount();
 
@@ -89,14 +87,15 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->bulkActionSetPricesID = 'ev-product-variations__set-prices';
         $this->bulkActionSetGenericSKUID = 'ev-product-variations__set-generic-sku';
 
-        $this->product = $product;
-        $this->attributes = collect($variationAttributes);
+        $this->product = Product::where('slug', request()->slug)->first()->convertUploadModelsToIDs();
+        $this->attributes = collect($this->product->getMappedAttributes())->filter(function($att, $key) {
+            return ((object) $att)->for_variations === true;
+        }); // these attributes are only attributes used for_variations*/
         $this->variations = collect($this->product->variations()->get()->map(function($item) {
             return $item->convertUploadModelsToIDs();
         })->keyBy(function($item) {
             return ProductVariation::composeVariantKey($item['name']);
         })->toArray());
-
 
         $this->all_combinations = collect([]);
         $this->rows = collect([]);
@@ -109,7 +108,7 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->createAllCombinations();
 
         // TODO: Fix the logic to use all only on bulk action and ADD single variation addition
-        $this->refreshRows();
+        //$this->refreshRows();
     }
 
     public array $sortNames = [
@@ -143,16 +142,6 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
     }
 
-    public function syncProduct(Product $product) {
-        $this->product = $product;
-    }
-
-    public function syncAttributeValues($attributes) {
-        $this->attributes = collect($attributes);
-        $this->createAllCombinations();
-        $this->refreshRows();
-    }
-
     // TODO: Don't forget to create a function that will merge $this->variations
     /*
      * Current functionality:
@@ -171,6 +160,8 @@ class ProductVariationsDatatable extends DataTableComponent
             return $item;
         })->sortKeys();
 
+        // TODO: Because of $this->>rows structure we are getting the checksum error...Possible solutions:
+        // TODO: Try to convert rows to arrays always and use array notation in FE blade templates
         $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object']);
     }
 
@@ -178,10 +169,6 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object'])->filter(function ($row, $key) {
             return $row->remove_flag === false;
         })->sortKeys();
-    }
-
-    public function triggerSetAllPricesModal() {
-        $this->dispatchBrowserEvent('triggerModal', ['id' => '#'.$this->bulkActionSetPricesID]);
     }
 
     public function createAllCombinations()
@@ -212,7 +199,7 @@ class ProductVariationsDatatable extends DataTableComponent
                 $variation->price = $this->product->unit_price ?? 0;
                 $variation->discount = 0;
                 $variation->discount_type = 'percent';
-                //$variation->thumbnail = null;
+                $variation->thumbnail = null;
                 $variation->temp_stock = new ProductStock();
                 $variation->temp_stock->qty = 0;
                 $variation->temp_stock->sku = '';
@@ -329,7 +316,7 @@ class ProductVariationsDatatable extends DataTableComponent
                             $variation_model->save();
 
                             // Sync Uploads and update Stock
-                            //$variation_model->syncUploads(); // insert variation thumbnail
+                            $variation_model->syncUploads(); // insert variation thumbnail
                             $this->setProductVariationStocks(false, $variation_model, $temp_stock);
                             $this->variations->push($variation_model->toArray());
                         } else {
@@ -339,7 +326,7 @@ class ProductVariationsDatatable extends DataTableComponent
                             $variation_model->save();
 
                             // Sync Uploads and update Stock
-                            //$variation_model->syncUploads(); // insert variation thumbnail
+                            $variation_model->syncUploads(); // insert variation thumbnail
                             $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
                             $this->variations->push($variation_model->toArray());
                         }
@@ -442,6 +429,10 @@ class ProductVariationsDatatable extends DataTableComponent
             $this->variations = collect($data)->sortKeys();
             $this->refreshRows();
         }
+    }
+
+    public function triggerSetAllPricesModal() {
+        $this->dispatchBrowserEvent('triggerModal', ['id' => '#'.$this->bulkActionSetPricesID]);
     }
 
     public function setAllVariationsPrice($price) {

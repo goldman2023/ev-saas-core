@@ -62,7 +62,7 @@ class ProductVariation extends EVBaseModel
      */
     protected $with = [];
 
-    protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag', 'discount', 'discount_type'];
+    protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type'];
     //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'remove_flag'];
 
     protected $casts = [
@@ -90,7 +90,7 @@ class ProductVariation extends EVBaseModel
             // TODO: Fix this to use parent product attribute values, so we don't have to query this part!
             $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
             foreach($att_values as $key => $value) {
-                $name .= $value->name.($key+1 !== $att_values->count() ? '-' : '');
+                $name .= Str::slug($value->name.($key+1 !== $att_values->count() ? '-' : ''));
             }
         }
 
@@ -131,7 +131,7 @@ class ProductVariation extends EVBaseModel
      *
      * @return string
      */
-    public function getPriceColumn()
+    public function getPriceColumn(): string
     {
         return 'price';
     }

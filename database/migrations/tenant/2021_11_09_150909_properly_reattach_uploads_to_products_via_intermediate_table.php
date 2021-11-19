@@ -23,7 +23,7 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
         });
         /* TODO: Fix when creating new tenant and running migrations on the first initialization */
         // Reattach uploads from `products` columns to uploads_content_relationships table
-        /* $products = Product::noCache()->get();
+        /* $products = Product::get();
         $uploads = [];
         foreach($products as $product) {
 
