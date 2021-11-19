@@ -120,13 +120,15 @@
                              "isResponsive": false,
                              "isShowPaging": false,
                              "pagination": "serialNumbersDatatablePagination"
-                           }'>
+                           }'
+                           >
                         <thead class="thead-light">
                             <tr>
                                 <th>{{ translate('Serial number') }}</th>
                                 <th>{{ translate('Status') }}</th>
                                 <th>{{ translate('Last status update') }}</th>
                                 <th>{{ translate('Created at') }}</th>
+                                <th class="d-flex justify-content-center">{{ translate('Actions') }}</th>
                             </tr>
                         </thead>
 
@@ -154,6 +156,14 @@
                                     <td>
                                         {{ $serial->created_at->format('d.m.Y') }}
                                     </td>
+                                    <td class="d-flex justify-content-center">
+                                        @if($serial->status === 'in_stock')
+                                            <button type="button" class="btn btn-dark btn-xs p-1 rounded" wire:click="" style="line-height: 1;">
+                                                <!--@svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])-->
+                                                <span>{{ translate('Invalidate') }}</span>
+                                            </button>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif
@@ -162,8 +172,79 @@
                 </div>
                 <!-- End Table -->
 
+                <span class="divider mt-4">{{ translate('New serial numbers') }}</span>
+
+                <!-- Card Body -->
+                <div class="card-body js-add-field " id="main-product-new-serial-numbers" data-hs-add-field-options='{
+                            "template": "#addSerialNumberTemplate",
+                            "container": "#addSerialNumberContainer",
+                            "defaultCreated": {{ count($new_serial_numbers) }},
+                            "limit": 9999
+                          }'>
+
+                    @if(count($new_serial_numbers) > 0)
+                        <script id="newSerialNumbersJSON" type="application/json">
+                            @php echo json_encode($new_serial_numbers); @endphp
+                        </script>
+                    @endif
+
+                    @if($errors->hasAny($errors->keys()))
+                        <script id="newSerialNumbersErrorsJSON" type="application/json">
+                            @php echo json_encode([$errors->getMessages()]); @endphp
+                        </script>
+                    @endif
+
+                    <div id="addSerialNumberContainer">
+
+                    </div>
+
+                    <div class="w-100 d-flex justify-content-between align-items-center mt-2">
+                        <a href="javascript:;" class="js-create-field form-link btn btn-sm btn-no-focus btn-secondary d-inline-flex align-items-center mt-0">
+                            @svg('heroicon-s-plus', ['style' => 'width: 16px; height:16px;'])
+                            <span>{{ translate('Add serial number') }}</span>
+                        </a>
+
+                        <a href="javascript:;" class="btn btn-sm btn-no-focus btn-primary d-none align-items-center mt-0 save-btn"
+                           onClick="document.dispatchEvent(new CustomEvent('save-new-serial-numbers', {detail: {component: @this, target: '#main-product-new-serial-numbers', params: ['new_serial_numbers']}}))">
+                            <span>{{ translate('Save') }}</span>
+                        </a>
+                    </div>
+
+
+                </div>
+                <!-- End Card Body -->
+
                 <!-- Footer -->
                 <div class="card-footer">
+
+                    <!-- Add Serial Number Template -->
+                    <div id="addSerialNumberTemplate" class="w-100" style="display: none;">
+                        <div class="d-flex flex-row align-items-center w-100 pb-2">
+                            <div class="input-group-add-field mt-0 pr-3">
+                                <input type="text" name="serial_number" class="form-control" value="" />
+                            </div>
+                            <div class="input-group-add-field mt-0 mr-3">
+                                <select class="js-custom-select-dynamic" name="serial_number_status" data-hs-select2-options='{
+                                          "minimumResultsForSearch": "Infinity",
+                                          "customClass": "custom-select custom-select-sm",
+                                          "dropdownAutoWidth": true,
+                                          "width": true
+                                }'>
+                                    <option value="in_stock" >{{ translate('In stock') }}</option>
+                                    <option value="out_of_stock" >{{ translate('Out of stock') }}</option>
+                                    <option value="reserved" >{{ translate('Reserved') }}</option>
+                                </select>
+                            </div>
+
+                            <div  class="input-group-add-field mt-0">
+                                <button type="button" class="btn btn-danger btn-xs p-1 rounded js-delete-field d-inline-flex">
+                                    @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Add Serial Number Template -->
+
                     <!-- Pagination -->
                     <div class="d-flex justify-content-center justify-content-sm-end">
                         <nav id="serialNumbersDatatablePagination" aria-label="Activity pagination"></nav>
@@ -171,6 +252,7 @@
                     <!-- End Pagination -->
                 </div>
                 <!-- End Footer -->
+
 
             </div>
             <!-- End Card -->

@@ -35,6 +35,7 @@ class StockManagementForm extends Component
     public $serial_numbers;
     public $serial_status;
     public $serial_search;
+    public $new_serial_numbers;
 
     protected $listeners = [
 
@@ -52,17 +53,12 @@ class StockManagementForm extends Component
         ];
 
         // Define rules sets
-        /*$this->rulesSets['content'] = [
-            'product.thumbnail' => 'required|exists:App\Models\Upload,id',
-            'product.gallery' => ['required', new EVModelsExist(Upload::class)],
-            'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
-            'product.video_link' => 'nullable|active_url',
-            'product.pdf' => 'nullable|exists:App\Models\Upload,id',
-            'product.description' => 'required|min:20',
-            'product.excerpt' => 'nullable',
+        $this->rulesSets['new_serial_numbers'] = [
+            'new_serial_numbers.*.serial_number' => 'required|unique:App\Models\SerialNumber,serial_number',
+            'new_serial_numbers.*.status' => ['required', 'in:in_stock,out_of_stock,reserved'],
         ];
 
-        $this->rulesSets['price_stock_shipping'] = [
+        /*$this->rulesSets['price_stock_shipping'] = [
             'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
             'product.min_qty' => 'required|numeric|min:1',
             'product.current_stock' => 'required|numeric|min:1',
@@ -110,6 +106,7 @@ class StockManagementForm extends Component
             $this->serial_numbers = $this->product->serial_numbers;
             $this->attributes = $this->product->variant_attributes();
             $this->status = '';
+            $this->new_serial_numbers = [];
         }
 
         // Set default attributes
@@ -164,16 +161,12 @@ class StockManagementForm extends Component
         });
     }
 
-    public function validateSpecificSet($set_name, $next_page, $is_last = false, $insert_on_step = null)
+    public function validateSpecificSet($set_name)
     {
         if($set_name) {
-            foreach($this->rulesSets as $key => $set) {
-                $this->validate($set); // validate page
+            $this->rules();
 
-                if($set_name == $key) {
-                    break;
-                }
-            }
+            $this->validate($this->rulesSets[$set_name]); // validate stock
 
             if($set_name === 'main_stock') {
                 // Update Main Product Stock
@@ -320,4 +313,5 @@ class StockManagementForm extends Component
         $product_stock->low_stock_qty = $this->product->low_stock_qty;
         $product_stock->save();
     }
+
 }
