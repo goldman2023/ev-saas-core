@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits\Eloquent;
 
+use App\Builders\ProductsBuilder;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -15,11 +16,11 @@ trait Cacher
     public bool $from_cache = false;
 
     /**
-     * Initialize the trait
+     * Init Cacher
      *
      * @return void
      */
-    public function initCacher(): void
+    public function enableCacher(): void
     {
         $this->from_cache = true;
 
@@ -29,6 +30,26 @@ trait Cacher
         });
     }
 
+    //
+    public function disableCacher(): void
+    {
+        $this->from_cache = false;
+        $this->withoutGlobalScope($this->cacher_scope_identifier);
+    }
+
+    /**
+     * Get the hydrated models without eager loading.
+     *
+     * @param  array|string  $columns
+     * @return \Illuminate\Database\Eloquent\Model[]|static[]
+     */
+    public function getModels($columns = ['*'])
+    {
+        // DO NOT FORWARD THE CALL USING THE $this->model->hydrate(...), instead use current builder!!! $this->>hydrate(...)
+        return $this->hydrate(
+            $this->query->get($columns)->all()
+        )->all();
+    }
 
     /**
      * Create a collection of models from plain arrays based on data from cache or DB
@@ -98,12 +119,12 @@ trait Cacher
     public function generateModelCacheKey($model_id, bool $reverse = false, $cast_to = 'int'): mixed
     {
         if($reverse) {
-            $id = Str::replace(tenant()->id.'-'.get_class($this->getModel()).'-', '', $model_id);
+            $id = Str::replace(tenant()->id.'-'.($this->getModel()::class).'-', '', $model_id);
             settype($id, $cast_to);
 
             return $id;
         }
 
-        return tenant()->id.'-'.get_class($this->getModel()).'-'.$model_id;
+        return tenant()->id.'-'.($this->getModel()::class).'-'.$model_id;
     }
 }

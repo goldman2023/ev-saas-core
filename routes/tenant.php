@@ -248,8 +248,10 @@ Route::middleware([
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
         Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
         Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');
-        Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
         Route::get('/ev-products/edit/{slug}/details', [EVProductController::class, 'product_details'])->name('ev-products.details');
+        Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
+        Route::get('/ev-products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('ev-products.edit.stocks');
+
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');

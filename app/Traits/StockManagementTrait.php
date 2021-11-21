@@ -41,7 +41,7 @@ trait StockManagementTrait
     public function initializeStockManagementTrait(): void
     {
         $this->append(['temp_sku', 'current_stock', 'low_stock_qty', 'use_serial']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['temp_sku', 'current_stock', 'low_stock_qty', 'use_serial'])));
+        $this->fillable(array_unique(array_merge($this->fillable, ['temp_sku', 'current_stock', 'low_stock_qty'])));
     }
 
     /**

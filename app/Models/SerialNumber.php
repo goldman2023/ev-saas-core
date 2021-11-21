@@ -21,6 +21,11 @@ class SerialNumber extends Model
     protected $fillable = ['subject_id', 'subject_type', 'serial_number', 'status'];
     protected $visible = ['id', 'subject_id', 'subject_type', 'serial_number', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
+    protected $casts = [
+        'created_at'  => 'datetime:d/m/Y',
+        'updated_at' => 'datetime:d/m/Y H:i',
+    ];
+
     public function subject() {
         return $this->morphTo('subject');
     }

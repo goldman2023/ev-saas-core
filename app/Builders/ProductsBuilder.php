@@ -47,8 +47,8 @@ class ProductsBuilder extends Builder
             });
         }
 
-        // Initialize Cacher scope and properties!
-        $this->initCacher();
+        // Cacher is initially disabled! Where you want to use cached data, chain `->fromCache()` to the builder query!
+        //$this->enableCacher();
     }
 
     /**

@@ -78,7 +78,8 @@ trait PriceTrait
         if(empty($this->total_price)) {
             $this->total_price = $this->attributes[$this->getPriceColumn()];
 
-            if($this->hasVariations()) {
+
+            if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
                 /*if ($flash_deal->discount_type === 'percent') {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
@@ -168,7 +169,7 @@ trait PriceTrait
         if(empty($this->discounted_price)) {
             $this->discounted_price = $this->attributes[$this->getPriceColumn()];
 
-            if($this->hasVariations()) {
+            if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
                 /*if ($flash_deal->discount_type === 'percent') {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;

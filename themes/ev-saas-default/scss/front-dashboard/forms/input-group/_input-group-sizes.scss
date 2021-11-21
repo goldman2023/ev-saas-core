@@ -1,0 +1,63 @@
+/*------------------------------------
+  Form Sizes
+------------------------------------*/
+
+.input-group-sm.input-group-merge {
+  .custom-select,
+  .form-control {
+    &:not(:first-child) {
+      @include border-left-radius($input-group-merge-border-radius-sm);
+    }
+
+    &:not(:last-child) {
+      @include border-right-radius($input-group-merge-border-radius-sm);
+    }
+  }
+
+  .input-group-prepend {
+    .input-group-text {
+      &:first-child {
+        @include border-left-radius($input-group-merge-border-radius-sm);
+      }
+    }
+  }
+
+  .input-group-append {
+    .input-group-text {
+      &:last-child {
+        @include border-right-radius($input-group-merge-border-radius-sm);
+      }
+    }
+  }
+}
+
+.input-group-lg.input-group-merge {
+  .custom-select,
+  .form-control {
+    &:not(:first-child) {
+      padding-left: $input-padding-x * 3;
+      @include border-left-radius($input-group-merge-border-radius-lg);
+    }
+
+    &:not(:last-child) {
+      padding-right: $input-padding-x * 3;
+      @include border-right-radius($input-group-merge-border-radius-lg);
+    }
+  }
+
+  .input-group-prepend {
+    .input-group-text {
+      &:first-child {
+        @include border-left-radius($input-group-merge-border-radius-lg);
+      }
+    }
+  }
+
+  .input-group-append {
+    .input-group-text {
+      &:last-child {
+        @include border-right-radius($input-group-merge-border-radius-lg);
+      }
+    }
+  }
+}

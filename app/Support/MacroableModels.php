@@ -75,7 +75,7 @@ class MacroableModels
     {
         $models = $this->macros[$name];
         Builder::macro($name, function(...$args) use ($name, $models){
-            $class = get_class($this->getModel());
+            $class = $this->getModel()::class;
 
             if (! isset($models[$class])) {
                 throw new \BadMethodCallException("Call to undefined method ${class}::${name}()");

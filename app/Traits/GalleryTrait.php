@@ -65,7 +65,9 @@ trait GalleryTrait
     /******* START THUMBNAIL *******/
     public function getThumbnailAttribute() {
         if(empty($this->thumbnail)) {
-            $this->thumbnail = $this->uploads->firstWhere('relation_type', 'thumbnail');
+            $this->thumbnail = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
+                return $upload->pivot->relation_type === 'thumbnail';
+            })->first();
         }
 
         return $this->thumbnail;
@@ -85,7 +87,9 @@ trait GalleryTrait
     /******* START COVER *******/
     public function getCoverAttribute() {
         if(empty($this->cover)) {
-            $this->cover = empty($this->uploads) ? null : $this->uploads->firstWhere('relation_type', 'cover');
+            $this->cover = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
+                return $upload->pivot->relation_type === 'cover';
+            })->first();
         }
 
         return $this->cover;
@@ -105,7 +109,9 @@ trait GalleryTrait
     /******* START GALLERY *******/
     public function getGalleryAttribute() {
         if(empty($this->gallery)) {
-            $this->gallery = empty($this->uploads) ? null : $this->uploads->where('relation_type', 'gallery')->sortBy('order');
+            $this->gallery = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
+                return $upload->pivot->relation_type === 'gallery';
+            })->sortBy('order');
         }
 
         return $this->gallery;
@@ -135,7 +141,9 @@ trait GalleryTrait
     /******* START THUMBNAIL *******/
     public function getMetaImgAttribute() {
         if(empty($this->meta_img)) {
-            $this->meta_img = empty($this->uploads) ? null : $this->uploads->firstWhere('relation_type', 'meta_img');
+            $this->meta_img = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
+                return $upload->pivot->relation_type === 'meta_img';
+            })->first();
         }
 
         return $this->meta_img;

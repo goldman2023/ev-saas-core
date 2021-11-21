@@ -322,8 +322,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::noCache()->get();
-        $uploads = [];
+        $products = Product::limit(12)->get();
+        /*$uploads = [];
         foreach($products as $product) {
 
             if(!empty($product->thumbnail_img) && Upload::where('id', $product->thumbnail_img)->exists()) {
@@ -353,7 +353,7 @@ class HomeController extends Controller
             if(!empty($product->pdf) && Upload::where('id', $product->pdf)->exists()) {
                 $product->uploads()->attach($product->pdf, ['type' => 'pdf']);
             }
-        }
+        }*/
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
         if(Vendor::isVendorSite()) {
             $shop = Vendor::getVendorShop();
@@ -408,8 +408,8 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $detailedProduct  = Product::where('slug', $slug)->first()->load(['shop', 'flash_deals', 'variations', 'stock']);
-        $detailedProduct->variations = $detailedProduct->variations()->with(['flash_deals', 'product'])->get();
+        $detailedProduct  = Product::where('slug', $slug)->first()->load(['shop']);
+        $detailedProduct->variations = $detailedProduct->variations()->get();
 
         $product  = $detailedProduct;
 

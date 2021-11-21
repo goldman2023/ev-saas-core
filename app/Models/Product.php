@@ -247,13 +247,12 @@ class Product extends EVBaseModel
     }
 
     /**
-     * Returns true if this Model has Variations
+     * Returns true if this Model uses Variations
      *
      * @return bool|null
      */
     public function useVariations(): ?bool
     {
-        /* TODO : Make this dynamic by actual values */
         return true;
     }
 

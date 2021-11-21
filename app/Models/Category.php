@@ -133,7 +133,7 @@ class Category extends Model
 
     public function products()
     {
-        return $this->morphedByMany(Product::class, 'subject', 'category_relationships')->noCache();
+        return $this->morphedByMany(Product::class, 'subject', 'category_relationships');
     }
 
     public function shops()

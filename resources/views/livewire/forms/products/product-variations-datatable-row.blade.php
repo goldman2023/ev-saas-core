@@ -1,9 +1,10 @@
 @php $index = Str::slug($index); @endphp
+
 <x-livewire-tables::bs4.table.cell>
     <x-ev.form.file-selector name="rows.{{ $index }}.image"
                              template="avatar"
-                             selectedFile="{{ $row->image ?? null }}"
-                             errorBagName="rows.{{ $row->name }}"
+                             selectedFile="{{ $row->thumbnail ?? null }}"
+                             errorBagName="rows.{{ $row->thumbnail }}"
                              :multiple="false"
                              :sortable="false"
                              wire-type="defer">
@@ -27,7 +28,7 @@ if($this->attributes->isNotEmpty()) {
                       label-property="values"
                       :multiple="false"
                       data-attribute-id="{{ $att->id }}"
-                      selected="{{ $row->variant[$att->id]['attribute_value_id'] }}"
+                      selected="{{ $row->variant->{$att->id}->attribute_value_id }}"
                       data-type="{{ $att->type }}"
                       :disabled="true"
                       :is-wired="true">

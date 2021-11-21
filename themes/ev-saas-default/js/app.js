@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 
-
+/*
 $(document).ready(function() {
     let headerScrolled = false;
 
@@ -17,8 +17,8 @@ $(document).ready(function() {
         $.data(this, 'scrollTimer', setTimeout(function() {
             $("body").addClass('body-has-scrolled');
             headerScrolled = true;
-            console.log("Haven't scrolled in 250ms!");
-            console.log($("body").scrollTop());
+            //console.log("Haven't scrolled in 250ms!");
+            //console.log($("body").scrollTop());
             if($(window).scrollTop() > 200) {
                 $("body").addClass('body-has-scrolled');
             } else {
@@ -26,7 +26,7 @@ $(document).ready(function() {
             }
         }, 150));
     });
-})
+})*/
 
 /**
  * The following block of code may be used to automatically register your
