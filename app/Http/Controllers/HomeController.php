@@ -322,7 +322,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::limit(12)->get();
+        $products = Product::fromCache()->paginate(12);
         /*$uploads = [];
         foreach($products as $product) {
 

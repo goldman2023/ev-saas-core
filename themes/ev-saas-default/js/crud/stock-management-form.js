@@ -40,31 +40,32 @@ window.EVStockManagementFormInit = function(event) {
 
                 // Set values if any (after save and after form reinitialization from livewire)
                 let newSerialNumbers = $('#newSerialNumbersJSON').length > 0 ? JSON.parse($('#newSerialNumbersJSON').html()) : [];
-                let newSerialNumbersErrors = $('#newSerialNumbersErrorsJSON').length > 0 ? JSON.parse($('#newSerialNumbersErrorsJSON').html())[0] : [];
+                let newSerialNumbersErrors = $('#stockManagementFormErrors').length > 0 ? JSON.parse($('#stockManagementFormErrors').html())[0] : [];
 
-                $(this.container).find('> div').each(function(index, element) {
-                    let serialNumberInput = $(element).find('input[name="serial_number"]');
-                    let serialNumberStatusInput = $(element).find('input[name="serial_number_status"]');
+                let element = $(this.container).find('> div:last-of-type');
+                let index = $(this.container).find('> div').length -1;
 
-                    if(newSerialNumbers[index] !== undefined) {
-                        try {
-                            serialNumberInput.val(newSerialNumbers[index]['serial_number']);
-                            serialNumberStatusInput.val(newSerialNumbers[index]['status']).trigger('change');
-                        } catch(error) {
-                            console.log(error);
-                        }
+                let serialNumberInput = $(element).find('input[name="serial_number"]');
+                let serialNumberStatusInput = $(element).find('input[name="serial_number_status"]');
+
+                if(newSerialNumbers[index] !== undefined) {
+                    try {
+                        serialNumberInput.val(newSerialNumbers[index]['serial_number']);
+                        serialNumberStatusInput.val(newSerialNumbers[index]['status']).trigger('change');
+                    } catch(error) {
+                        console.log(error);
                     }
+                }
 
-                    // Append errors if any
-                    console.log(newSerialNumbersErrors.indexOf('new_serial_numbers.'+index+'.serial_number'));
-                    if(newSerialNumbersErrors.indexOf('new_serial_numbers.'+index+'.serial_number') !== -1) {
-                        $('<small class="text-danger">'+newSerialNumbersErrors['new_serial_numbers.'+index+'.serial_number']+'</small>').insertAfter(serialNumberInput);
-                    }
+                // Append errors if any
+                if(Object.keys(newSerialNumbersErrors).indexOf('new_serial_numbers.'+index+'.serial_number') !== -1) {
+                    $('<small class="text-danger">'+newSerialNumbersErrors['new_serial_numbers.'+index+'.serial_number']+'</small>').insertAfter(serialNumberInput);
+                }
 
-                    if(newSerialNumbersErrors.indexOf('new_serial_numbers.'+index+'.status') !== -1) {
-                        $('<small class="text-danger">'+newSerialNumbersErrors['new_serial_numbers.'+index+'.status']+'</small>').insertAfter(serialNumberStatusInput);
-                    }
-                });
+                if(Object.keys(newSerialNumbersErrors).indexOf('new_serial_numbers.'+index+'.status') !== -1) {
+                    $('<small class="text-danger">'+newSerialNumbersErrors['new_serial_numbers.'+index+'.status']+'</small>').insertAfter(serialNumberStatusInput);
+                }
+                //
 
                 // Display Save btn
                 $(this.container).closest('.js-add-field').find('.save-btn').removeClass('d-none').addClass('d-inline-flex');
@@ -97,7 +98,6 @@ $(window).on('initStockManagementForm', window.EVStockManagementFormInit);
 document.addEventListener('save-new-serial-numbers', async function (event) {
     let component = event.detail.component;
     let target = event.detail.target;
-    let params = event.detail.params;
 
     let new_serial_numbers = [];
 
@@ -113,7 +113,7 @@ document.addEventListener('save-new-serial-numbers', async function (event) {
 
     if(new_serial_numbers.length > 0) {
         component.set('new_serial_numbers', new_serial_numbers); // set livewire
-        component.validateSpecificSet(...params);
+        component.insertSerialNumbers();
     }
 
 });

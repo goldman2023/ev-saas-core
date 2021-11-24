@@ -5,6 +5,13 @@
     }
 }
 
+/* Generate font-size classes */
+@for $s from 8 through 46 {
+    .text-#{$s} {
+        font-size: $s + px;
+    }
+}
+
 /* Generate opacity classes */
 @for $o from 1 through 9 {
     .opacity-#{$o} {
@@ -39,4 +46,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.no-max-height {
+    max-height: none !important;
 }

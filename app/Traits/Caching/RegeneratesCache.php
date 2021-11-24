@@ -62,8 +62,7 @@ trait RegeneratesCache
     {
         /* Default Cache key for the Modal */
         if($this instanceof Model) {
-            return tenant()->id.'-'.($this::class).'-'.$this->id;
-            // e.g. 5469dff5-3707-417d-b152-d9950de45daf-App\Models\Product-7
+            return Cache::store()->getModelCacheKey($this::class, $this->id);
         }
 
         throw new LogicException('The class ' . static::class . ' has no default cache key.');

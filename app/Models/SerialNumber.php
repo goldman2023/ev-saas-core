@@ -22,9 +22,15 @@ class SerialNumber extends Model
     protected $visible = ['id', 'subject_id', 'subject_type', 'serial_number', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
-        'created_at'  => 'datetime:d/m/Y',
-        'updated_at' => 'datetime:d/m/Y H:i',
+        'created_at'  => 'datetime:d.m.Y',
+        'updated_at' => 'datetime:d.m.Y H:i',
     ];
+
+    public const STATUS_ENUM = ['in_stock', 'out_of_stock', 'reserved'];
+
+    public static function getStatusEnum($as_string = false, $separator = ',') {
+        return $as_string ? implode($separator, self::STATUS_ENUM) : self::STATUS_ENUM;
+    }
 
     public function subject() {
         return $this->morphTo('subject');

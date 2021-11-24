@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Cache;
 use Serializable;
@@ -80,7 +81,22 @@ class CacheRegenerator implements Serializable
     public function forget(): void
     {
         $this->store->forget($this->key);
-        $this->store->forget($this->key.':time');
+        $this->store->forget($this->key.static::$timeSuffix);
+    }
+
+    /**
+     * (STATIC) Forgets the cached data.
+     *
+     * @param $model_class
+     * @param $model_id
+     * @return void
+     */
+    public static function forgetModel($model_class, $model_id): void
+    {
+        $model_cache_key = Cache::store()->getModelCacheKey($model_class, $model_id);
+
+        Cache::store()->forget($model_cache_key);
+        Cache::store()->forget($model_cache_key.static::$timeSuffix);
     }
 
     /**
@@ -105,6 +121,32 @@ class CacheRegenerator implements Serializable
         $this->invalidAt = $now;
 
         return true;
+    }
+
+    /**
+     * (STATIC) Regenerates the data in the cache.
+     *
+     * @param $model
+     * @param int $ttl
+     * @return bool
+     */
+    public static function regenerateModel($model, int $ttl = 60): bool
+    {
+        if($model instanceof Model && method_exists($model, 'toCache')) {
+            $model_cache_key = Cache::store()->getModelCacheKey($model::class, $model->id);
+
+            Cache::store()->forget($model_cache_key);
+            Cache::store()->forget($model_cache_key.static::$timeSuffix);
+
+            Cache::store()->setMultiple([
+                $model_cache_key                     => $model->toCache(),
+                $model_cache_key.static::$timeSuffix => $now = now(),
+            ], $ttl);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**

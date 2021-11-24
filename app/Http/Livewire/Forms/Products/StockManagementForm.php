@@ -2,95 +2,82 @@
 
 namespace App\Http\Livewire\Forms\Products;
 
-use App\Models\Attribute;
-use App\Models\AttributeRelationship;
-use App\Models\AttributeTranslation;
-use App\Models\AttributeValue;
-use App\Facades\TenantSettings;
-use App\Models\AttributeValueTranslation;
-use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductStock;
-use App\Models\ProductTranslation;
-use App\Models\Upload;
-use App\Rules\AttributeValuesSelected;
-use App\Rules\EVModelsExist;
+use App\Models\SerialNumber;
 use DB;
 use EVS;
 use Categories;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
-use Str;
+use App\Traits\Livewire\RulesSets;
 
 class StockManagementForm extends Component
 {
-    protected array $rulesSets;
-    public bool $update_success = false;
+    use RulesSets;
 
-    public ?Product $product;
+    public $product;
+    public $edit_product;
     public $attributes;
     public $serial_numbers;
     public $serial_status;
     public $serial_search;
     public $new_serial_numbers;
+    public $edit_serial_numbers;
 
     protected $listeners = [
 
     ];
 
+    /*
+     * This function has to list rules for every property we are going to use on FE! Otherwise property is not accessible on FE side!!!
+     * Use ->getRuleSet($set_name) to validate only specific set of rules.
+     * If ->validate() without params is called, all rules will be used for variations.
+     */
     protected function rules()
     {
-        // Define rules sets
-        $this->rulesSets['main_stock'] = [
-            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
+        return [
+            'product.temp_sku' => ['required', 'filled', Rule::unique($this->product->stock->getTable(), 'sku')->ignore($this->product->stock->id ?? null)],
             'product.current_stock' => 'required|numeric|min:0',
             'product.low_stock_qty' => 'required|numeric|min:0',
             'product.use_serial' => 'required|bool',
             'product.stock_visibility_state' => 'required|in:quantity,text,hide',
-        ];
-
-        // Define rules sets
-        $this->rulesSets['new_serial_numbers'] = [
-            'new_serial_numbers.*.serial_number' => 'required|unique:App\Models\SerialNumber,serial_number',
+            'new_serial_numbers.*.serial_number' => 'required|unique:App\Models\SerialNumber,serial_number|distinct:ignore_case',
             'new_serial_numbers.*.status' => ['required', 'in:in_stock,out_of_stock,reserved'],
+            'edit_serial_numbers.*.serial_number' => ['required'],
+            'edit_serial_numbers.*.status' => ['required', 'in:'.SerialNumber::getStatusEnum(true)],
         ];
-
-        /*$this->rulesSets['price_stock_shipping'] = [
-            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
-            'product.min_qty' => 'required|numeric|min:1',
-            'product.current_stock' => 'required|numeric|min:1',
-            'product.low_stock_qty' => 'required|numeric|min:0',
-            'product.unit_price' => 'required|numeric',
-            'product.purchase_price' => 'nullable|numeric',
-            'product.discount' => 'required|numeric',
-            'product.discount_type' => 'required|in:amount,percent',
-            'product.stock_visibility_state' => 'required|in:quantity,text,hide',
-            'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
-            'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
-            'product.is_quantity_multiplied' => 'required|boolean',
-            'product.est_shipping_days' => 'nullable|numeric'
-        ];
-
-        $this->rulesSets['attributes'] = [
-            'attributes.*' => 'required', //[ new AttributeValuesSelected() ]
-        ];
-
-        $this->rulesSets['seo'] = [
-            'product.meta_title' => 'nullable',
-            'product.meta_description' => 'nullable',
-            'product.meta_img' => 'nullable',
-        ];*/
-
-        $rules = [];
-        foreach($this->rulesSets as $key => $items) {
-            $rules = array_merge($rules, $items);
-        }
-
-        return $rules;
     }
+
+    protected function messages() {
+        return [
+            'product.temp_sku.required' => translate('This field is required'),
+            'product.temp_sku.filled' => translate('This field cannot be empty'),
+            'product.temp_sku.unique' => translate('SKU must be unique. Another model is using it already.'),
+            'product.temp_stock.unique' => translate('This SKU is already taken'),
+            'product.current_stock.required' => translate('This field is required'),
+            'product.current_stock.numeric' => translate('Quantity must be numeric'),
+            'product.current_stock.min' => translate('Quantity cannot be less than 0'),
+            'product.low_stock_qty.required' => translate('This field is required'),
+            'product.low_stock_qty.numeric' => translate('Must be numeric'),
+            'product.low_stock_qty.min' => translate('Cannot be less than 0'),
+            'product.stock_visibility_state.required' => translate('This field is required'),
+            'product.stock_visibility_state.in' => translate('Must be one of the following: quantity, text, hide'),
+            'new_serial_numbers.*.serial_number.required' => translate('This field is required'),
+            'new_serial_numbers.*.serial_number.unique' => translate('Serial number already taken'),
+            'new_serial_numbers.*.serial_number.distinct' => translate('This field has a duplicate value'),
+            'new_serial_numbers.*.status.required' => translate('This field is required'),
+            'new_serial_numbers.*.status.in' => translate('Value must be one of these: '.SerialNumber::getStatusEnum(true, ', ')),
+            'edit_serial_numbers.*.serial_number.required' => translate('This field is required'),
+            'edit_serial_numbers.*.serial_number.unique' => translate('Serial number already taken'),
+            'edit_serial_numbers.*.serial_number.distinct' => translate('This field has a duplicate value'),
+            'edit_serial_numbers.*.status.required' => translate('This field is required'),
+            'edit_serial_numbers.*.status.in' => translate('Value must be one of these: '.SerialNumber::getStatusEnum(true, ', ')),
+        ];
+    }
+
 
     /**
      * Create a new component instance.
@@ -103,40 +90,18 @@ class StockManagementForm extends Component
         // Set default params
         if($product) {
             $this->product = $product;
-            $this->serial_numbers = $this->product->serial_numbers;
+            $this->edit_product = $this->product->toArray();
+            $this->fetchSerialNumbers();
             $this->attributes = $this->product->variant_attributes();
             $this->status = '';
             $this->new_serial_numbers = [];
+            $this->serial_search = null;
         }
-
-        // Set default attributes
-        /*foreach($this->attributes as $key => $attribute) {
-            if($attribute->is_predefined) {
-                $attribute->selcted_values = '';
-            }
-
-            if(empty($this->attributes[$key]->attribute_values)) {
-                if(!$attribute->is_predefined) {
-                    $this->attributes[$key]->attribute_values[] = [
-                        "id" => null,
-                        "attribute_id" => $attribute->id,
-                        "values" => '',
-                        "selected" => true,
-                    ];
-                } else {
-                    if(empty($this->attributes[$key]->attribute_values)) {
-                        $this->attributes[$key]->attribute_values = [];
-                    }
-                }
-            }
-        }*/
-
     }
 
     public function dehydrate()
     {
         $this->dispatchBrowserEvent('initStockManagementForm');
-        //$this->dispatchBrowserEvent('goToTop');
     }
 
     public function render()
@@ -144,54 +109,141 @@ class StockManagementForm extends Component
         return view('livewire.forms.products.product-stock-management-form');
     }
 
-    public function updatedSerialStatus() {
-        // TODO: get with status among searched items
-        if(empty($this->serial_status)) {
-            $this->serial_numbers = $this->product->serial_numbers;
-        } else {
-            $this->serial_numbers = $this->product->serial_numbers->where('status', $this->serial_status);
-        }
-    }
+    protected function mapEditingSerialNumbers() {
+        $mapped = $this->serial_numbers->map(function($item) {
+            $is_trashed = $item->trashed();
+            $item = $item->toArray();
 
-    public function updatedSerialSearch() {
-        //$this->updatedSerialStatus();
-        //TODO: Search among selected statuses
-        $this->serial_numbers = $this->product->serial_numbers->filter(function ($item) {
-            return str_contains($item->serial_number, $this->serial_search) !== false;
+            $item['edit_mode'] = false;
+            $item['trashed'] = $is_trashed;
+
+            return $item;
         });
+
+        $this->edit_serial_numbers = $mapped->toArray();
     }
 
-    public function validateSpecificSet($set_name)
-    {
-        if($set_name) {
-            $this->rules();
+    public function invalidateSerialNumber(SerialNumber $serial_number) {
+        $serial_number->delete();
 
-            $this->validate($this->rulesSets[$set_name]); // validate stock
-
-            if($set_name === 'main_stock') {
-                // Update Main Product Stock
-                $this->updateMainStock();
-            } else if($set_name === 'variations_stock') {
-                // Update Variations Stocks
-                $this->updateVariationsStocks();
-            }
-        }
+        // 1. Get serial_numbers (a list without deleted serial_number)
+        $this->fetchSerialNumbers();
     }
 
-    protected function updateMainStock() {
-        $this->update_success = false;
+    public function reviveSerialNumber($id) {
+        // We cannot use Model injection based on provided $id because model we want to get here is Soft Deleted and that's why we'll get error 404 page,
+        // If we check debug bar, we are getting: No query results for model [App\Models\SerialNumber] in vendor/livewire/livewire/src/ImplicitlyBoundMethod.php#98
+        // Basically Implicit Model injection does not work with soft deleted models
+        $serial_number = SerialNumber::withTrashed()->find($id);
+        $serial_number->restore();
+
+        $this->fetchSerialNumbers();
+    }
+
+    protected function insertSerialNumbers() {
+        $this->validate($this->getRuleSet('new_serial_numbers'));
 
         DB::beginTransaction();
 
         try {
-
+            if(!empty($this->new_serial_numbers)) {
+                foreach($this->new_serial_numbers as $new_serial) {
+                    $serial = SerialNumber::firstOrNew([
+                        'subject_id' => $this->product->id,
+                        'subject_type' => Product::class,
+                        'serial_number' => $new_serial['serial_number'],
+                    ]);
+                    $serial->status = $new_serial['status'];
+                    $serial->save();
+                }
+            }
 
             DB::commit();
 
-            $this->update_success = true;
+            $this->fetchSerialNumbers();
 
-            //$this->dispatchBrowserEvent('toastIt', ['id' => '#product-updated-toast']);
-            $this->dispatchBrowserEvent('goToTop');
+            $this->new_serial_numbers = []; // reset new array
+        } catch(\Exception $e) {
+            DB::rollBack();
+            dd($e);
+        }
+    }
+
+    public function updateSerialNumber($id) {
+        $serial_number = SerialNumber::withTrashed()->find($id); // Check why we don't use model injection in fun. parameters inside reviveSerialNumber() function
+
+        $item_key = collect($this->edit_serial_numbers)->search(fn($value, $key) => $serial_number->id === $value['id'] );
+
+        $this->validate($this->getRuleSet('edit_serial_numbers'));
+
+        DB::beginTransaction();
+
+        try {
+            $updated_serial = collect($this->edit_serial_numbers)->get($item_key);
+
+            if(!empty($updated_serial)) {
+                $serial_number->serial_number = $updated_serial['serial_number'];
+                $serial_number->status = $updated_serial['status'];
+                $serial_number->save();
+
+                DB::commit();
+
+                $this->fetchSerialNumbers();
+            }
+        } catch(\Exception $e) {
+            DB::rollBack();
+            dd($e);
+        }
+    }
+
+    public function updatedSerialStatus() {
+        $this->fetchSerialNumbers();
+    }
+
+    public function updatedSerialSearch() {
+        $this->fetchSerialNumbers();
+    }
+
+    protected function fetchSerialNumbers() {
+        $query = $this->product->serial_numbers();
+
+        // Filtering by `Serial status`
+        if(in_array($this->serial_status, SerialNumber::getStatusEnum())) {
+            $query->where('status', $this->serial_status);
+        } else if($this->serial_status === 'trashed') {
+            $query->onlyTrashed();
+        }
+
+        // Filtering by `Search key`
+        if(!empty($trimmed_search = trim($this->serial_search))) {
+            $query->where('serial_number', 'like', '%'.$trimmed_search.'%');
+        }
+
+        $this->serial_numbers = $query->get();
+
+        $this->mapEditingSerialNumbers();
+    }
+
+    public function updateMainStock() {
+        $this->validate($this->getRuleSet('product'));
+
+        DB::beginTransaction();
+        dd($this->product->temp_sku);
+        try {
+            // TODO: Write main stock update logic
+            $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => $this->product::class]);
+            $product_stock->sku = $this->product->temp_sku;
+            $product_stock->qty = $this->product->current_stock;
+            $product_stock->low_stock_qty = $this->product->low_stock_qty;
+            $product_stock->use_serial = $this->product->use_serial;
+            $product_stock->save();
+
+            // Save stock visibility state (TODO: Think about moving stock-visibility-state column to `stocks` table instead of `products`)
+            $this->product->save();
+
+            DB::commit();
+
+            $this->dispatchBrowserEvent('toastIt', ['id' => '#stock-updated-toast', 'content' => translate('Main product updated successfully!')]);
         } catch(\Exception $e) {
             DB::rollBack();
             dd($e);
@@ -199,11 +251,13 @@ class StockManagementForm extends Component
     }
 
     protected function updateVariationsStocks() {
-        $this->update_success = false;
+        //$this->validate($this->getRuleSet('product'));
 
         DB::beginTransaction();
 
         try {
+            // TODO: Write variations stocks update logic
+
 
 
             DB::commit();
@@ -218,100 +272,12 @@ class StockManagementForm extends Component
         }
     }
 
-    protected function setProductData($published = 1) {
-        if(empty($this->product->brand_id)) {
-            $this->product->brand_id = null;
-        }
-
-        if($this->action === 'insert') {
-            if (auth()->user()->isSeller()) {
-                $this->product->user_id = auth()->user()->id;
-                $this->product->added_by = 'seller';
-            } else {
-                $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
-                $this->product->added_by = 'admin';
-            }
-        }
-
-        $this->product->tags = implode(',', $this->product->tags);
-
-        if ($this->product->shipping_type === 'free') {
-            $this->product->shipping_cost = 0;
-        } elseif ($this->product->shipping_type === 'product_wise') {
-            $this->product->shipping_cost = json_encode([]);
-        }
-
-        // Purify WYSIWYG before saving
-        $this->product->description = Purifier::clean($this->product->description);
-
-        if(empty($this->product->excerpt)) {
-            $this->product->excerpt = strip_tags(Str::limit($this->product->description, 320, '...'));
-        } else {
-            $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
-        }
-
-        // DONE: Sync thumbnail, gallery, meta_img and other dynamic uploads
-        $this->product->syncUploads();
-
-        // SEO
-        if (empty($this->product->meta_img)) {
-            $this->product->meta_img = $this->product->thumbnail_img;
-        }
-
-        if (empty($this->product->meta_title)) {
-            $this->product->meta_img = $this->product->name;
-        }
-
-        if (empty($this->product->meta_description)) {
-            $this->product->meta_description = trim(strip_tags($this->product->description ?? ''));
-        }
-
-        // TODO: Add Featured, Cash on delivery, Today's deal to the form
-        $this->product->cash_on_delivery = 0;
-        $this->product->featured = 0;
-        $this->product->todays_deal = 0;
-
-        // TODO: Add Product status option to the form - published, draft
-        $this->product->published = 1;
-
-        // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
-        // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
-
-        // Save product
-        $this->product->save();
-    }
-
-    protected function setProductCategories() {
-        if(!empty($this->selected_categories)) {
-            $categories_idx = collect([]);
-
-            foreach($this->selected_categories as $selected) {
-                // $selected is a slug_path of the category
-                $cat = Categories::getBySlugPath($selected);
-
-                if($cat) {
-                    $categories_idx->push($cat['id']);
-                }
-            }
-
-            $this->product->categories()->sync($categories_idx->toArray());
-        }
-    }
-
-    protected function setProductTranslation() {
-        $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
-        $product_translation->name = $this->product->name;
-        $product_translation->unit = $this->product->unit;
-        $product_translation->description = $this->product->description;
-        $product_translation->save();
-    }
-
-    protected function setProductStocks() {
+    /*protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
         $product_stock->sku = $this->product->temp_sku;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->low_stock_qty = $this->product->low_stock_qty;
         $product_stock->save();
-    }
+    }*/
 
 }

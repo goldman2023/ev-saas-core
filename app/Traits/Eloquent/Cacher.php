@@ -14,6 +14,7 @@ trait Cacher
 {
     public string $cacher_scope_identifier = 'force_cached_data';
     public bool $from_cache = false;
+    public array $applied_named_scopes = [];
 
     /**
      * Init Cacher
@@ -38,6 +39,26 @@ trait Cacher
     }
 
     /**
+     * Execute the query as a "select" statement.
+     *
+     * @param  array|string  $columns
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function get($columns = ['*'])
+    {
+        $builder = $this->applyScopes(); //$this->applyScopes();
+
+        // If we actually found models we will also eager load any relationships that
+        // have been specified as needing to be eager loaded, which will solve the
+        // n+1 query issue for the developers to avoid running a lot of queries.
+        if (count($models = $builder->getModels($columns)) > 0) {
+            $models = $builder->eagerLoadRelations($models);
+        }
+
+        return $builder->getModel()->newCollection($models);
+    }
+
+    /**
      * Get the hydrated models without eager loading.
      *
      * @param  array|string  $columns
@@ -59,6 +80,7 @@ trait Cacher
      */
     public function hydrate(array $items)
     {
+
         // $items are sorted based on SQL query. $items may be just IDs
         if($this->from_cache) {
             $instance = $this->newModelInstance();
@@ -87,27 +109,18 @@ trait Cacher
                     $missing_ids[] = $this->generateModelCacheKey($key, true);
                 }
 
-                $missing_builder = $this->noCache()->applyScopes()->whereIn($this->getModel()->getTable().'.id', $missing_ids);
-                $missing_items = $missing_builder->getQuery()->get()->all();
-
-                $missing_collection = $instance->newCollection(array_map(function ($item) use ($missing_items, $instance) {
-                    $model = $instance->newFromBuilder($item);
-
-                    if (count($missing_items) > 1) {
-                        $model->preventsLazyLoading = Model::preventsLazyLoading();
-                    }
-
-                    return $model;
-                }, $missing_items))->keyBy(function ($item) {
+                // We have the missing IDs now, so we are going to fetch models with IDs using fresh noCache Builder
+                $missing_builder = $this->getModel()->noCache()->whereIn($this->getModel()->getTable().'.id', $missing_ids);
+                $missing_items = $missing_builder->get()->keyBy(function ($item) {
                     // Store missing models in cache!
                     $item->cache()->regenerate(60 * 60 * 24 * 5, true);
 
-                    // Change key to use model cache key
+                    // Change key to use model cache key so we can properly merge $cached_models with $missing_items
                     return $this->generateModelCacheKey($item->id);
                 });
 
                 // Merge missing models with already cached using generated cache key and reset keys to start from 0 onward
-                return new Collection(collect($cached_models)->merge($missing_collection)->values());
+                return new Collection(collect($cached_models)->merge($missing_items)->values());
             }
 
             return $cached_models->values();
