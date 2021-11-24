@@ -4,11 +4,15 @@ namespace App\Providers;
 
 use App\Models\CategoryRelationship;
 use App\Models\Product;
+use App\Models\ProductStock;
 use App\Models\ProductVariation;
+use App\Models\SerialNumber;
 use App\Models\TenantSetting;
 use App\Observers\CategoryRelationshipsObserver;
 use App\Observers\ProductsObserver;
+use App\Observers\ProductStocksObserver;
 use App\Observers\ProductVariationsObserver;
+use App\Observers\SerialNumbersObserver;
 use App\Observers\TenantSettingsObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -40,6 +44,8 @@ class EventServiceProvider extends ServiceProvider
         TenantSetting::class => [TenantSettingsObserver::class],
         Product::class => [ProductsObserver::class],
         ProductVariation::class => [ProductVariationsObserver::class],
+        ProductStock::class => [ProductStocksObserver::class],
+        SerialNumber::class => [SerialNumbersObserver::class],
         CategoryRelationship::class => [CategoryRelationshipsObserver::class]
     ];
 

@@ -726,6 +726,17 @@ function translate($key, $lang = null)
     if ($lang == null) {
         $lang = App::getLocale();
     }
+
+    /*
+     * TODO: Make Translation Singleton in which we'll get all translations in assoc array:
+     * [
+     *      lang_key => [`$lang` => ['id' => `$id`, value => `$lang_value`]]
+     *      ...
+     * ]
+     *
+     * TODO: Refactor this function to get translation for the $key from assoc array in singleton
+     * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
+     */
     $translation_def = Cache::remember($key . $lang, 60, function () use ($key) {
         return Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
     });

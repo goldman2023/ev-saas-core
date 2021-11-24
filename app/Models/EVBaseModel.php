@@ -129,4 +129,5 @@ class EVBaseModel extends Model
 
         return parent::__call($method, $parameters);
     }
+
 }

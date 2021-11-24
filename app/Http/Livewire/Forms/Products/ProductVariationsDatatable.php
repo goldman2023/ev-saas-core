@@ -361,14 +361,14 @@ class ProductVariationsDatatable extends DataTableComponent
 
     protected function setProductVariationStocks($iterate = false, $variation_model = [], $stock = []) {
         if(!$iterate && !empty($variation_model) && !empty($stock)) {
-            $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => 'App\Models\ProductVariation']);
+            $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => ProductVariation::class]);
             $product_stock->qty = (float) ($stock->qty ?? 0);
             $product_stock->sku = $stock->sku;
             $product_stock->save();
         } else if($iterate) {
             if($this->rows->isNotEmpty()) {
                 foreach($this->rows as $index => $var) {
-                    $product_stock = ProductStock::firstOrNew(['subject_id' => $var->id, 'subject_type' => 'App\Models\ProductVariation']);
+                    $product_stock = ProductStock::firstOrNew(['subject_id' => $var->id, 'subject_type' => ProductVariation::class]);
                     $product_stock->qty = (float) $var->temp_stock->qty;
                     $product_stock->sku = $var->temp_stock->sku;
                     $product_stock->save();

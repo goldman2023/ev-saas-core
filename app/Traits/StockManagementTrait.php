@@ -41,24 +41,7 @@ trait StockManagementTrait
     public function initializeStockManagementTrait(): void
     {
         $this->append(['temp_sku', 'current_stock', 'low_stock_qty', 'use_serial']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['temp_sku', 'current_stock', 'low_stock_qty'])));
-    }
-
-    /**
-     * Get the casts array.
-     * Note: Appends the `use_serial` cast to bool
-     *
-     * @return array
-     */
-    public function getCasts()
-    {
-        $this->casts = array_unique(
-            array_merge($this->casts, [
-                'use_serial' => 'bool'
-            ])
-        );
-
-        return parent::getCasts();
+        $this->fillable(array_unique(array_merge($this->fillable, ['temp_sku', 'current_stock', 'low_stock_qty', 'use_serial'])));
     }
 
     /************************************
@@ -71,7 +54,7 @@ trait StockManagementTrait
 
     public function serial_numbers()
     {
-        return $this->morphMany(SerialNumber::class, 'subject');
+        return $this->morphMany(SerialNumber::class, 'subject')->orderBy('status', 'ASC');
     }
 
     /************************************
@@ -83,6 +66,11 @@ trait StockManagementTrait
         }
 
         return $this->use_serial;
+    }
+
+    public function setUseSerialAttribute($value)
+    {
+        $this->use_serial = (bool) $value;
     }
 
     public function setTempSkuAttribute($value)
@@ -130,6 +118,43 @@ trait StockManagementTrait
     /**********************************
      * Serial Numbers Stock Functions *
      **********************************/
+    public function getSerialNumbersStockStats() {
+        $all_serials = $this->serial_numbers()->orderBy('status', 'ASC')->withTrashed();
+
+        $stats = [
+            'in_stock' => 0,
+            'out_of_stock' => 0,
+            'reserved' => 0,
+            'trashed' => 0,
+            'total' => 0,
+            'total_with_trashed' => 0
+        ];
+
+        $all_serials->each(function ($model, $key) use (&$stats) {
+            if($model->trashed()) {
+                ++$stats['trashed'];
+            } else if($model->status === 'in_stock') {
+                ++$stats['in_stock'];
+            } else if($model->status === 'out_of_stock') {
+                ++$stats['out_of_stock'];
+            } else if($model->status === 'reserved') {
+                ++$stats['reserved'];
+            }
+
+            if(!$model->trashed()) {
+                ++$stats['total'];
+            }
+
+            ++$stats['total_with_trashed'];
+        });
+
+        return $stats;
+    }
+
+    public function getInStockSerials($count = false) {
+        return $count ? $this->serial_numbers->where('status', 'in_stock')->count() : $this->serial_numbers->where('status', 'in_stock');
+    }
+
     public function getOutOfStockSerials($count = false) {
         return $count ? $this->serial_numbers->where('status', 'out_of_stock')->count() : $this->serial_numbers->where('status', 'out_of_stock');
     }

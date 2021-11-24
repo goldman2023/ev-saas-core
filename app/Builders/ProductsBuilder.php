@@ -22,6 +22,9 @@ class ProductsBuilder extends Builder
     protected string $serial_numbers_table_name;
     protected string $flash_deals_table_name;
 
+    // Regarding `double scopes apply` issue, check the fix here: https://github.com/GeneaLabs/laravel-model-caching/pull/358
+    // Point is to check if scopes are already applied before applying them again!
+
     public function __construct(QueryBuilder $query)
     {
         parent::__construct($query);

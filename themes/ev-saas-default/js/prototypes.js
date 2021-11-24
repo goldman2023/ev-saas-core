@@ -9,3 +9,11 @@ Array.prototype.unique = function() {
 
     return a;
 };
+
+window.getSafe = function(fn, defaultVal) {
+    try {
+        return fn();
+    } catch (e) {
+        return defaultVal;
+    }
+}
