@@ -35,7 +35,6 @@ class ShopsTableSeeder extends Seeder
                         'meta_title' => 'Demo Shop',
                         'meta_description' => 'Demo description',
                         'pick_up_point_id' => NULL,
-                        'shipping_cost' => 0.0,
                     ),
             ));
 
