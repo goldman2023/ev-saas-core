@@ -140,7 +140,7 @@ class StockManagementForm extends Component
         $this->fetchSerialNumbers();
     }
 
-    protected function insertSerialNumbers() {
+    public function insertSerialNumbers() {
         $this->validate($this->getRuleSet('new_serial_numbers'));
 
         DB::beginTransaction();
