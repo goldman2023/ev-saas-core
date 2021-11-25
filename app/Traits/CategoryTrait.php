@@ -44,7 +44,7 @@ trait CategoryTrait
      * Category Attributes Getters/Setters *
      ************************************/
     public function getCategoryIdAttribute() {
-        if(empty($this->category_id)) {
+        if(!isset($this->category_id)) {
             $this->category_id = $this->categories->whereNull('parent_id')->first()->id ?? null;
         }
 

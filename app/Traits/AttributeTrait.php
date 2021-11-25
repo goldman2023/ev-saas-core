@@ -136,20 +136,14 @@ trait AttributeTrait
             }
 
             // 4. Fetch ONLY attribute values for dropdown, checkbox, radio attribute types
-            $relevant_attrs_idx = collect($attrs)->filter(function ($value, $key) {
-                return $value['is_predefined'];
-            })->pluck('id')->all();
-            $predefined_attrs_values = collect(AttributeValue::whereIn('attribute_id', $relevant_attrs_idx)->select('id', 'attribute_id', 'values')->get()->toArray())->groupBy('attribute_id')->transform(function($item, $key) {
-                return $item->keyBy('id')->toArray();
-            })->all();
+            $relevant_attrs_idx = collect($attrs)->filter(fn($value, $key) => $value['is_predefined'])->pluck('id')->all();
+            $predefined_attrs_values = collect(AttributeValue::whereIn('attribute_id', $relevant_attrs_idx)->select('id', 'attribute_id', 'values')->get()->toArray())->groupBy('attribute_id')->transform(fn($item, $key) => $item->keyBy('id')->toArray())->all();
 
             // 5. FETCH attribute values based on att. values ids provided from previously queried relationships
             $attrs_values = collect(AttributeValue::whereIn('id', $attrs_values_idx)->select('id', 'attribute_id', 'values')->get()->toArray())->transform(function($item, $key) {
                 $item['selected'] = true;
                 return $item;
-            })->groupBy('attribute_id')->transform(function($item, $key) {
-                return $item->keyBy('id')->toArray();
-            })->all();
+            })->groupBy('attribute_id')->transform(fn($item, $key) => $item->keyBy('id')->toArray())->all();
 
 
             // 6. Replace & merge recursively predefined values with selected attribute values
@@ -169,9 +163,7 @@ trait AttributeTrait
             // 1. Get attributes for that content type
             // 2. DO NOT fetch attribute relationships and attribute_values
             $attrs = Attribute::without('attribute_relationships', 'attribute_values')->select('id','name','type','custom_properties')->where('content_type', $this::class)->get()->toArray();
-            $relevant_attrs_idx = collect($attrs)->filter(function ($value, $key) {
-                return $value['is_predefined'];
-            })->pluck('id')->all();
+            $relevant_attrs_idx = collect($attrs)->filter(fn($value, $key) => $value['is_predefined'])->pluck('id')->all();
 
             // 3. Fetch ONLY attribute values for dropdown, checkbox, radio attribute types
             $predefined_attrs_values = collect(AttributeValue::whereIn('attribute_id', $relevant_attrs_idx)->select('id', 'attribute_id', 'values')->get()->toArray())->groupBy('attribute_id')->all();

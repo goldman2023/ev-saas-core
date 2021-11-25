@@ -5,7 +5,7 @@
             show: false,
             content: '{{ $content }}',
         }"
-        :class="{ 'opacity-100': show }"
+        :class="{ 'opacity-10': show }"
 
     @endif
     {{ $attributes }}

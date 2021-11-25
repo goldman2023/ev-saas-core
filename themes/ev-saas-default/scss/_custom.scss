@@ -13,7 +13,7 @@
 }
 
 /* Generate opacity classes */
-@for $o from 1 through 9 {
+@for $o from 1 through 10 {
     .opacity-#{$o} {
         opacity: $o / 10;
     }

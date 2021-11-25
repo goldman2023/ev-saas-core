@@ -19,11 +19,11 @@
         @endif
     @endif
 
-        @if($quantityCounter && !$disabled)
+        @if($quantityCounter)
             <div class="js-quantity-counter input-group-quantity-counter">
         @endif
             @php $value = is_array($value) ? (object) $value : $value; @endphp
-            <input @if(!empty($name)) wire:model.{{ $wireType }}="{{ $name }}" @endif
+            <input @if(!empty($name)) wire:model{{ $wireType ? '.'.$wireType : '' }}="{{ $name }}" @endif
                    type="{{ $quantityCounter && !$disabled ? 'number' : $type }}"
                    class="form-control {{ $class }} @error($errorBagName) is-invalid @enderror {{ $quantityCounter && !$disabled ? 'js-result input-group-quantity-counter-control': '' }}"
                    name="{{ $name }}"
@@ -39,12 +39,12 @@
                    {{ $attributes }}
                    @if($disabled) disabled @endif
             >
-        @if($quantityCounter && !$disabled)
+        @if($quantityCounter)
                 <div class="input-group-quantity-counter-toggle">
-                    <a class="js-minus input-group-quantity-counter-btn" href="javascript:;">
+                    <a class="js-minus input-group-quantity-counter-btn {{ $disabled ? 'd-none':'' }}" href="javascript:;">
                         <i class="tio-remove"></i>
                     </a>
-                    <a class="js-plus input-group-quantity-counter-btn" href="javascript:;">
+                    <a class="js-plus input-group-quantity-counter-btn {{ $disabled ? 'd-none':'' }}" href="javascript:;">
                         <i class="tio-add"></i>
                     </a>
                 </div>
