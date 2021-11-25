@@ -30,4 +30,11 @@ class Job extends Model
             ->saveSlugsTo('slug');
     }
 
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            []
+        ];
+    }
+
 }
