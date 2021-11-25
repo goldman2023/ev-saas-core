@@ -22,7 +22,6 @@ class ShopsTableSeeder extends Seeder
                 0 =>
                     array(
                         'id' => 1,
-                        'user_id' => 2,
                         'name' => 'Demo Shop',
                         'logo' => NULL,
                         'sliders' => NULL,
