@@ -28,7 +28,6 @@
 
 @push('footer_scripts')
     <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-toggle-switch/dist/hs-toggle-switch.min.js', false, true) }}"></script>
 
     <!-- CDN stuff -->

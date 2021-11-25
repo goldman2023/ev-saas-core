@@ -8,7 +8,7 @@
                 position="bottom-center"
                 class="bg-success border-success text-white h3"
                 :is_x="true"
-                @toastIt.window="if(event.detail.id == 'stock-updated-toast') {
+                @toast.window="if(event.detail.id == 'stock-updated-toast') {
                     content = event.detail.content;
                     show = true;
                 }"
@@ -42,11 +42,22 @@
                     </div>
 
                     <div class="d-flex align-items-center fw-600 opacity-10">
-                        <label class="toggle-switch mr-2">
-                            <input type="checkbox" name="product.use_serial" wire:model.lazy="product.use_serial"
+                        <label class="toggle-switch mr-2" >
+                            <input type="checkbox" name="product.use_serial" wire:model.defer="product.use_serial"
                                    class="js-toggle-switch toggle-switch-input"
                                    data-hs-toggle-switch-options="[]"
-                                   @click="$dispatch('display-serial-numbers-table', $($el).is(':checked'));">
+                                   x-ref="product_use_serial"
+                                   x-on:click="
+                                       if(!$($el).is(':checked')) {
+                                            $($refs.serial_numbers_forms).addClass('d-none');
+                                            $('input[name=\'product.current_stock\']').prop('disabled', false)
+                                            .parent().find('.input-group-quantity-counter-btn').removeClass('d-none');
+                                       } else {
+                                            $($refs.serial_numbers_forms).removeClass('d-none');
+                                            $('input[name=\'product.current_stock\']').prop('disabled', true)
+                                            .parent().find('.input-group-quantity-counter-btn').addClass('d-none');
+                                       }
+                                   ">
                             <span class="toggle-switch-label">
                                 <span class="toggle-switch-indicator"></span>
                             </span>
@@ -69,13 +80,10 @@
             </form>
         </div>
 
-        <div class="row mt-3"
-             x-data="{
-                open: @entangle('product.use_serial')
-             }"
-             x-show="open"
-             @display-serial-numbers-table.window="open = $event.detail;"
-             >
+
+
+        <div class="row mt-3 {{ !$product->use_serial ? 'd-none':'' }}" :class="{'d-none':!$($refs.product_use_serial).is(':checked')}" x-ref="serial_numbers_forms" id="serial_numbers_forms">
+
             <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                                   wire:target="status"
                                   wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
@@ -426,6 +434,8 @@
             </div>
             <!-- End Card -->
         </div>
+
+
 
     </div>
 </div>

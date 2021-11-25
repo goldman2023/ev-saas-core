@@ -61,7 +61,7 @@ trait StockManagementTrait
      * Stock Attributes Getters/Setters *
      ************************************/
     public function getUseSerialAttribute() {
-        if(empty($this->use_serial ?? null)) {
+        if(!isset($this->use_serial)) {
             $this->use_serial = (bool) (empty($this->stock) ? false : ($this->stock->use_serial ?? false));
         }
 
@@ -79,11 +79,12 @@ trait StockManagementTrait
     }
 
     public function getTempSkuAttribute() {
-        if(empty($this->temp_sku)) {
+        // Set temp_sku only on first model hydration!
+        if(!isset($this->temp_sku)) {
             $this->temp_sku = (string) (empty($this->stock) ? null : ($this->stock->sku ?? ''));
         }
 
-        return $this->temp_sku;
+        return $this->temp_sku ?? '';
     }
 
 
@@ -92,9 +93,9 @@ trait StockManagementTrait
     }
 
     public function getCurrentStockAttribute() {
-        if(empty($this->current_stock)) {
+        if(!isset($this->current_stock)) {
             if($this->use_serial ?? null) {
-                $this->current_stock = (int) $this->serial_numbers->where('status', 'in_stock')->count(); // Get the count of all IN_STOCK serial_numbers of the targeted model
+                $this->current_stock = (int) $this->serial_numbers()->where('status', 'in_stock')->count(); // Get the count of all IN_STOCK serial_numbers of the targeted model
             } else {
                 $this->current_stock = (float) (empty($this->stock) ? null : ($this->stock->qty ?? 0));
             }
@@ -108,7 +109,7 @@ trait StockManagementTrait
     }
 
     public function getLowStockQtyAttribute() {
-        if(empty($this->low_stock_qty)) {
+        if(!isset($this->low_stock_qty)) {
             $this->low_stock_qty = (float) (empty($this->stock) ? null : ($this->stock->low_stock_qty ?? 0));
         }
 

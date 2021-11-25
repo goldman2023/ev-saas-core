@@ -4,9 +4,10 @@
         @if($prependText)
             <span class="font-size-1 text-muted">{{ $prependText }}</span>
         @endif
-            <label class="toggle-switch mr-2" @if($id) for="{{ $id }}" @endif>
+            <label class="toggle-switch mr-2" @if($id) for="{{ $id }}" @endif for="toggle-{{ $name }}">
                 <input type="checkbox"
                        name="{{ $name }}"
+                       id="toggle-{{ $name }}"
                        wire:model="{{ $name }}"
                        class="js-toggle-switch toggle-switch-input"
                        @if($id) id="{{ $id }}" @endif
@@ -16,10 +17,11 @@
                 <span class="toggle-switch-label">
                   <span class="toggle-switch-indicator"></span>
                 </span>
+
+                @if($appendText)
+                    <span class="font-size-1 text-muted">{{ $appendText }}</span>
+                @endif
             </label>
-        @if($appendText)
-            <span class="font-size-1 text-muted">{{ $appendText }}</span>
-        @endif
     </div>
 
     @error($errorBagName)

@@ -22,7 +22,7 @@ window.EVStockManagementFormInit = function(event) {
     // INITIALIZATION OF QUANTITY COUNTER
     // =======================================================
     $('.js-quantity-counter').each(function () {
-        var quantityCounter = new HSQuantityCounter($(this)).init();
+        var quantityCounter = (new window.EV.form.HSQuantityCounter()).init($(this));
     });
 
 

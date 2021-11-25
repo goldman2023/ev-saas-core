@@ -140,7 +140,7 @@ class StockManagementForm extends Component
         $this->fetchSerialNumbers();
     }
 
-    protected function insertSerialNumbers() {
+    public function insertSerialNumbers() {
         $this->validate($this->getRuleSet('new_serial_numbers'));
 
         DB::beginTransaction();
@@ -228,7 +228,7 @@ class StockManagementForm extends Component
         $this->validate($this->getRuleSet('product'));
 
         DB::beginTransaction();
-        dd($this->product->temp_sku);
+
         try {
             // TODO: Write main stock update logic
             $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => $this->product::class]);
@@ -243,7 +243,7 @@ class StockManagementForm extends Component
 
             DB::commit();
 
-            $this->dispatchBrowserEvent('toastIt', ['id' => '#stock-updated-toast', 'content' => translate('Main product updated successfully!')]);
+            $this->dispatchBrowserEvent('toast', ['id' => 'stock-updated-toast', 'content' => translate('Main product updated successfully!')]);
         } catch(\Exception $e) {
             DB::rollBack();
             dd($e);
