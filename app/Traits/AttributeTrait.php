@@ -21,7 +21,9 @@ trait AttributeTrait
         // When model data is retrieved, populate model prices data!
         static::retrieved(function ($model) {
             // Load Custom Attributes
-            $model->load('custom_attributes');
+            if(!isset($model->custom_attributes)) {
+                $model->load('custom_attributes');
+            }
         });
     }
 
@@ -60,7 +62,6 @@ trait AttributeTrait
                         ['subject_type', '=', $this::class]
                     ]);
                 },
-                //'attribute_relationships.attribute_value'
             ])
             ->withPivot('for_variations');
     }

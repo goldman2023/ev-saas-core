@@ -19,7 +19,9 @@ trait BrandTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model) {
-            $model->load('brand');
+            if(!isset($model->brand)) {
+                $model->load('brand');
+            }
 
             //$model->getBrandIdAttribute();
         });

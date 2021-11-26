@@ -8,6 +8,7 @@
                 position="bottom-center"
                 class="bg-success border-success text-white h3"
                 :is_x="true"
+                x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
                 @toast.window="if(event.detail.id == 'stock-updated-toast') {
                     content = event.detail.content;
                     show = true;
@@ -80,8 +81,7 @@
             </form>
         </div>
 
-
-
+        <!-- Main Product Serial Numbers -->
         <div class="row mt-3 {{ !$product->use_serial ? 'd-none':'' }}" :class="{'d-none':!$($refs.product_use_serial).is(':checked')}" x-ref="serial_numbers_forms" id="serial_numbers_forms">
 
             <x-ev.loaders.spinner class="absolute-center z-10 d-none"
@@ -89,7 +89,7 @@
                                   wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
             <!-- Card -->
-            <div class="card container-fluid" wire:loading.class="opacity-3">
+            <div class="card container-fluid shadow-none" wire:loading.class="opacity-3">
                 <!-- Header -->
                 <div class="card-header">
                     <div class="row justify-content-between align-items-center flex-grow-1">
@@ -203,8 +203,6 @@
                                 }"
                         >
                         <template x-for="(item, key) in items" :key="item.id" wire:key="item.id">
-                            <!-- TODO: Fix style conditional -->
-                            <!-- TODO: Fix error msgs display on close -->
                             <tr :style="item.trashed ? {background:'rgb(255 0 0 / 10%)'} : {}"
                                 x-bind:data-row-index="key"
                                 :class="'edit_serial_number_row_'+item.id"
@@ -435,7 +433,64 @@
             <!-- End Card -->
         </div>
 
-
-
     </div>
+    <!-- END: Main Product CARD -->
+
+    <!-- Product Variations CARD -->
+    @if($product->useVariations())
+    <div class="card container-fluid py-3 mt-3">
+        <div class="card-header pl-2">
+            <h5 class="card-header-title">{{ translate('Product Variations') }}</h5>
+        </div>
+
+        <div class="card-body px-0">
+            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+                                  wire:target="status"
+                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+
+            <div class="container-fluid" wire:loading.class="opacity-3">
+                <div id="serialNumbersDatatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
+                    <div class="row border-bottom mb-4 py-2 " style="background-color: #f8fafd;">
+                        <div class="col-3 table-th-cell">{{ translate('Name') }}</div>
+                        <div class="col-2 table-th-cell">{{ translate('Current Qty') }}</div>
+                        <div class="col-2 table-th-cell">{{ translate('Low stock qty') }}</div>
+                        <div class="col-5 table-th-cell">{{ translate('SKU') }}</div>
+                    </div>
+
+                    @if($variations)
+                        @foreach($variations as $key => $variation)
+                            <div class="row mb-3">
+                                <div class="col-3 d-flex align-items-center">
+                                    <strong style="max-width: 150px; overflow: hidden; whitespace:nowrap;">{{ $variation->getVariantName($attributes, false, ' | ') }}</strong>
+                                </div>
+                                <div class="col-2 d-flex align-items-center">
+                                    <x-ev.form.input groupclass="mb-0" name="variations.{{ $key }}.current_stock" :quantity_counter="true" type="number" :required="true" min="0" step="1">
+                                    </x-ev.form.input>
+                                </div>
+                                <div class="col-2 d-flex align-items-center">
+                                    <x-ev.form.input groupclass="mb-0" name="variations.{{ $key }}.low_stock_qty" :quantity_counter="true" type="number" :required="true"  min="0" step="1">
+                                    </x-ev.form.input>
+                                </div>
+                                <div class="col-5 d-flex align-items-center">
+                                    <x-ev.form.input groupclass="w-100 mb-0" name="variations.{{ $key }}.temp_sku" type="text" :required="true"> </x-ev.form.input>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
+
+                <div class="d-flex flex-row align-items-center">
+                    <a href="javascript:;" class="btn btn-sm btn-no-focus btn-primary align-items-center ml-auto mt-0 save-btn"
+                       wire:click="updateVariationsStocks()">
+                        <span>{{ translate('Save') }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="">
+
+        </div>
+    </div>
+    @endif
 </div>

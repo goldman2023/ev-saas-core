@@ -26,7 +26,9 @@ trait PriceTrait
     {
         // When model data is retrieved, populate model prices data!
         static::retrieved(function ($model) {
-            $model->load('flash_deals');
+            if(!isset($model->flash_deals)) {
+                $model->load('flash_deals');
+            }
 
             $model->getTotalPrice();
             $model->getDiscountedPrice();

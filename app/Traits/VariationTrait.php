@@ -21,7 +21,7 @@ trait VariationTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model) {
-            if($model->useVariations()) {
+            if($model->useVariations() && !isset($model->variations)) {
                 $model->load('variations');
             }
         });

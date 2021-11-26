@@ -528,6 +528,16 @@ img {
 }
 
 /*------------------------------------
+  Table
+------------------------------------*/
+.table-th-cell {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-width: 0;
+}
+
+/*------------------------------------
   Form Control
 ------------------------------------*/
 .form-control {

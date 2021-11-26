@@ -17,7 +17,9 @@ trait CategoryTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model):void {
-            $model->load('categories');
+            if(!isset($model->categories)) {
+                $model->load('categories');
+            }
         });
     }
 
