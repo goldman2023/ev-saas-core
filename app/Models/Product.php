@@ -271,4 +271,10 @@ class Product extends EVBaseModel
             ]
         ];
     }
+
+    function public_view_count() {
+        /* TODO: Implement some view libeary, i'm looking into two different ones */
+
+        return 100;
+    }
 }

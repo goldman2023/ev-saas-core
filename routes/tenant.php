@@ -130,7 +130,7 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::class.'.single');
+    Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.single');
     Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name('products.category');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name('products.variant_price');

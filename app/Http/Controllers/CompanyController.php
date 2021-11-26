@@ -26,19 +26,19 @@ class CompanyController extends Controller
 
         if ($category_id != null) {
             $category = Category::find($category_id);
-            $shops = $category->companies();
-            $shops = $shops->whereIn('user_id', verified_sellers_id());
+            /* TODO: Add filtering by category for shops */
+            $shops =   Shop::query();
             $title = $category->name . ' Companies';
         } else {
             $category = Category::all();
 
-            $shops = Shop::whereIn('user_id', verified_sellers_id());
+            $shops = Shop::query();
         }
 
         $attributeIds = array();
-        $sellers = Seller::whereIn('user_id', $shops->get()->pluck('user_id')->toArray());
+        $sellers = Seller::query();
         foreach ($sellers->get() as $seller) {
-            $attributeIds = array_unique(array_merge($attributeIds, $seller->attributes->pluck('attribute_id')->toArray()), SORT_REGULAR);
+            // $attributeIds = array_unique(array_merge($attributeIds, $seller->attributes->pluck('attribute_id')->toArray()), SORT_REGULAR);
         }
         $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
 
@@ -92,7 +92,7 @@ class CompanyController extends Controller
             }
         }
 
-        $shops = $shops->whereIn('user_id', $sellers->get()->pluck('user_id')->toArray())->paginate(12);
+        $shops = $shops->paginate(12);
         return view('frontend.shop_listing', compact('shops', 'attributes', 'category_id', 'filters', 'title'));
     }
 

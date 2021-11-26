@@ -199,4 +199,14 @@ trait AttributeTrait
 
         return $mapped;
     }
+
+
+    function get_attribute_value_by_id($id) {
+
+       $attributeValue =  AttributeValue::where('attribute_id', $id)->get();
+
+       return $attributeValue;
+
+
+    }
 }
