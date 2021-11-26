@@ -185,7 +185,7 @@
                                             <h3 class="card-header-title">{{ translate('General') }}</h3>
                                         </div>
                                     </div>
-                                    <!-- End Header -->
+                                    <!-- End Header -->z
 
                                     <!-- Body -->
                                     <div class="">
@@ -525,7 +525,7 @@
                                                     :paginationEnabled="false"
                                                     :showSearch="false"
                                                     :emptyMessage="translate('Please generate all variations or add them manually.')"
-                                                    :product="$this->product"
+                                                    :product="$product"
                                                     :variation-attributes="$this->variations_attributes"
                                                     wire-target="setVariationsData">
                                                 </livewire:forms.products.product-variations-datatable>

@@ -450,7 +450,7 @@
 
             <div class="container-fluid" wire:loading.class="opacity-3">
                 <div id="serialNumbersDatatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
-                    <div class="row border-bottom mb-4 py-2 " style="background-color: #f8fafd;">
+                    <div class="row border-bottom mb-4 py-3" style="background-color: #f8fafd;">
                         <div class="col-3 table-th-cell">{{ translate('Name') }}</div>
                         <div class="col-2 table-th-cell">{{ translate('Current Qty') }}</div>
                         <div class="col-2 table-th-cell">{{ translate('Low stock qty') }}</div>
@@ -486,10 +486,6 @@
                     </a>
                 </div>
             </div>
-        </div>
-
-        <div class="">
-
         </div>
     </div>
     @endif
