@@ -14,8 +14,7 @@ $class_col_body_2 = 'col-md-5';
             <div class="{{ $class_media }}">
                 <div class="media align-items-center align-items-sm-start">
                     {{-- TODO: Move this to separate css file for company card styles --}}
-                    <img class="avatar avatar-xl mr-3" style="object-fit:contain; margin-bottom: 10px;"
-                        src="{{ $company->user->shop->get_company_logo() }}" alt="{{ $company->name }}">
+
                     <div class="media-body d-none">
                         <h6 class="mb-0">
                             <a class="text-dark" href="{{ route('shop.visit', $company->slug) }}">
@@ -85,14 +84,15 @@ $class_col_body_2 = 'col-md-5';
 
         <div class="card-footer">
             <ul class="list-inline list-separator small text-body">
-                <li class="list-inline-item">{{ translate('Est.') }} {{ $company->user->seller->get_attribute_value_by_id(10) }}</li>
-                <li class="list-inline-item">{{ country_name_by_code($company->user->seller->get_attribute_value_by_id(12))  }}</li>
-                <li class="list-inline-item">{{ translate('Company Type:') }} {{ $company->user->seller->get_attribute_value_by_id(1)  }}</li>
+                <li class="list-inline-item">{{ translate('Est.') }} {{ $company->get_attribute_value_by_id(10) }}</li>
+                {{-- TODO: create a country column- not a simple attribute, we will need filtering based on that --}}
+                <li class="list-inline-item">{{ country_name_by_code('default')  }}</li>
+                <li class="list-inline-item">{{ translate('Company Type:') }} {{ $company->get_attribute_value_by_id(1)  }}</li>
             </ul>
 
             {{-- TODO: This should be shown only for sellers with active --}}
             @php
-                $seller_package = \App\Models\SellerPackage::find($company->user->seller->seller_package_id);
+                $seller_package = \App\Models\SellerPackage::find(1);
 
             @endphp
             @if ($seller_package != null)

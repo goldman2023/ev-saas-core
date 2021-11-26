@@ -1284,6 +1284,10 @@ function get_pricing_plans_array()
 
 function country_name_by_code($code)
 {
+    if(empty($code)) {
+        $code = 'default';
+    }
+
     $country = Country::where('code', '=', $code)->first();
     if ($country == null) {
         return $code;

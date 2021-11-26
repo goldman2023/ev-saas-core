@@ -7,76 +7,155 @@
     <div class="card-body">
         <h1> {{ $product->name }}</h1>
 
-        <strong>Actions:</strong>
+        <strong>{{ translate('Actions:') }}</strong>
+
+        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+            href="{{ route('product.single', $product->slug) }}" target="_blank">
+            @svg('heroicon-o-eye', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+            {{ translate('Preview') }}
+        </a>
 
         @if($product->useVariations())
-            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-               href="{{ route('ev-products.edit.stocks', $product->slug) }}">
-                {{ translate('Stock Management') }}
-            </a>
+        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+            href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+            @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+            {{ translate('Stock Management') }}
+        </a>
         @endif
 
         @if($product->useVariations())
-            <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                href="{{ route('ev-products.edit.variations', $product->slug) }}">
-                {{ translate('Variations') }}
-            </a>
+        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+            href="{{ route('ev-products.edit.variations', $product->slug) }}">
+            @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+            {{ translate('Variations') }}
+        </a>
         @endif
 
-        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center" href="{{ route('ev-products.edit', $product->slug) }}">
+        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
+            href="{{ route('ev-products.edit', $product->slug) }}">
             {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
-        <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete " href="javascript:void(0)">
+        <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete "
+            href="javascript:void(0)">
             {{ translate('Delete') }} @svg('heroicon-o-trash', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
 
         <div class="ev-product-preview mt-3">
             <div class="row">
 
-                <div class="col-6">
+                <div class="col-4" style="max-height: 400px;">
                     <h3>{{ translate('Product Preview') }} </h3>
+
                     <x-default.products.cards.product-card :product="$product">
                     </x-default.products.cards.product-card>
                 </div>
 
                 <div class="col-6">
+                    <!-- Leaflet (Map) -->
+                    Map
+                    <div id="map" class="leaflet-custom" class="min-h-450rem rounded" data-hs-leaflet-options='{
+  "map": {
+    "scrollWheelZoom": false,
+    "coords": [37.4040344, -122.0289704]
+  },
+  "marker": [
+    {
+      "coords": [37.4040344, -122.0289704],
+      "icon": {
+        "iconUrl": "../../assets/svg/components/map-pin.svg",
+        "iconSize": [50, 45]
+      },
+      "popup": {
+        "text": "Test text!"
+      }
+    }
+  ]
+ }'></div>
+                    <!-- End Leaflet (Map) -->
                     <h3>{{ translate('Product Stats') }} </h3>
 
                     <div class="row">
                         <div class="col-12 mb-3">
-                          <!-- Card -->
-                          <div class="card card-bordered shadow-none h-100">
-                            <div class="card-body">
-                              <h6 class="font-weight-normal mb-1">Interview experience:</h6>
-                              <h4 class="card-title">Favorable</h4>
+                            <!-- Card -->
+                            <div class="card card-bordered shadow-none h-100">
+                                <div class="card-body">
+                                    <h6 class="font-weight-normal mb-1">{{ translate("Product views") }}:</h6>
+                                    <h4 class="card-title">{{ $product->public_view_count() }}</h4>
+                                </div>
                             </div>
-                          </div>
-                          <!-- End Card -->
+                            <!-- End Card -->
                         </div>
 
                         <div class="col-12 mb-3">
-                          <!-- Card -->
-                          <div class="card card-bordered shadow-none h-100">
-                            <div class="card-body">
-                              <h6 class="font-weight-normal mb-1">Interview difficulty:</h6>
-                              <h4 class="card-title">Medium</h4>
+                            <!-- Card -->
+                            <div class="card card-bordered shadow-none h-100">
+                                <div class="card-body">
+                                    <h6 class="font-weight-normal mb-1">{{ translate('Product Categories') }}:</h6>
+                                    <h4 class="card-title">
+                                        @foreach($product->categories()->get() as $category)
+                                        <span class="badge badge-soft-primary p-2">
+                                            {{ $category->name }}
+                                        </span>
+                                        @endforeach
+                                        {{-- Assign Categories button --}}
+                                        <div class="mt-3">
+                                            <small>
+                                                <a href="{{ route('ev-products.edit', $product->slug) }}"
+                                                    target="_blank"> {{ translate('+ Assign Categories') }} </a>
+                                            </small>
+                                        </div>
+                                    </h4>
+                                </div>
                             </div>
-                          </div>
-                          <!-- End Card -->
+                            <!-- End Card -->
                         </div>
 
                         <div class="col-12 mb-3">
-                          <!-- Card -->
-                          <div class="card card-bordered shadow-none h-100">
-                            <div class="card-body">
-                              <h6 class="font-weight-normal mb-1">Interview process length:</h6>
-                              <h4 class="card-title">About a day or two</h4>
+                            <!-- Card -->
+                            <div class="card card-bordered shadow-none h-100">
+                                <div class="card-body">
+                                    <h6 class="font-weight-normal ">{{ translate("Price and Stock Management") }}</h6>
+                                    <h4 class="card-title">
+                                        <div>
+                                            {{ translate('Current Stock: ')}} {{ $product->current_stock}}
+                                        </div>
+                                        <div class="mb-3">
+                                            <small>
+                                                <a href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+                                                    {{ translate('+ Manage Stock') }}
+                                                </a>
+                                            </small>
+                                        </div>
+
+
+                                        <div>
+
+                                            <span
+                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
+                                                {{ svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success
+                                                mr-2']) }}
+                                                {{translate('Has Serial Numbers') }}
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            @if($product->useVariations())
+                                            <span
+                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
+                                                {{ svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success
+                                                mr-2']) }}
+                                                {{translate('Variable Product') }}
+                                            </span>
+                                            @endif
+
+
+                                    </h4>
+                                </div>
                             </div>
-                          </div>
-                          <!-- End Card -->
+                            <!-- End Card -->
                         </div>
-                      </div>
-                      <!-- End Row -->
+                    </div>
+                    <!-- End Row -->
                 </div>
             </div>
 

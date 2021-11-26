@@ -23,8 +23,8 @@
     @yield('meta')
 
     @if (!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
-        <x-default.system.og-meta>
-        </x-default.system.og-meta>
+    <x-default.system.og-meta>
+    </x-default.system.og-meta>
     @endif
 
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
@@ -76,7 +76,7 @@
     </x-default.system.tracking-pixels>
 
     @php
-        echo get_setting('header_script');
+    echo get_setting('header_script');
     @endphp
 
     @stack('head_scripts')
@@ -86,7 +86,7 @@
     <!-- aiz-main-wrapper -->
     <div class="">
 
-    {{-- @include('frontend.inc.nav') --}}
+        {{-- @include('frontend.inc.nav') --}}
         <x-default.headers.header>
         </x-default.headers.header>
 
@@ -94,18 +94,18 @@
             @yield('content')
         </div>
 
-    {{-- @include('frontend.inc.footer') --}}
+        {{-- @include('frontend.inc.footer') --}}
 
-    <x-default.footers.footer>
-    </x-default.footers.footer>
+        <x-default.footers.footer>
+        </x-default.footers.footer>
 
-</div>
+    </div>
 
-<x-default.system.cookies-agreement></x-default.system.cookies-agreement>
+    <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
-@include('frontend.partials.modal')
+    @include('frontend.partials.modal')
 
-<div class="
+    <div class="
         modal fade" id="addToCart">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size"
             role="document">
@@ -141,7 +141,9 @@
 
     @include('frontend.layouts.partials.app-js')
 
+    {{-- TODO: Move this to some logical place --}}
     <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
+    <script src="{{ static_asset('front/js/hs.leaflet.js') }}"></script>
 
     <!-- JS Plugins Init. -->
     <script>
@@ -153,12 +155,22 @@
             });
             var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
             console.log($.HSCore.components);
+            $(document).on('ready', function () {
+    // INITIALIZATION OF LEAFLET
+    // =======================================================
+    $('#map').each(function () {
+      var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
 
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        id: 'mapbox/light-v9'
+      }).addTo(leaflet);
+    });
+  });
         });
     </script>
 
     @php
-        echo get_setting('footer_script');
+    echo get_setting('footer_script');
     @endphp
 </body>
 

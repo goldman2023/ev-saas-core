@@ -800,7 +800,7 @@ class TenantSettingsTableSeeder extends Seeder
                     array(
                         'id' => 113,
                         'setting' => 'header_menu_labels',
-                        'value' => '["Home","News","Marketplace","Companies","Events","Calendar","Business For Sale","Investments","Jobs","Education"]',
+                        'value' => '["Home","News","Marketplace","Companies"',
                         'created_at' => '2021-02-16 04:43:11',
                         'updated_at' => '2021-04-10 11:57:02',
                     ),
@@ -808,7 +808,7 @@ class TenantSettingsTableSeeder extends Seeder
                     array(
                         'id' => 114,
                         'setting' => 'header_menu_links',
-                        'value' => '["\\/","\\/news","\\/search","\\/sellers","\\/events","\\/calendar","\\/business-for-sale","\\/investments","\\/jobs","\\/education"]',
+                        'value' => '["\\/","\\/news","\\/search","\\/sellers"',
                         'created_at' => '2021-02-16 04:43:11',
                         'updated_at' => '2021-05-10 09:12:27',
                     ),
