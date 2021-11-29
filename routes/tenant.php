@@ -375,7 +375,6 @@ Route::middleware([
     Route::get('/styleguide', 'PageController@styleguide')->name('styleguide.index');
 
     Route::get('/chat', 'ChatController@index')->name('chat.index');
-    Route::get('/early-bird', 'PageController@early_bird')->name('landing.early-bird');
     Route::get('/pricing', 'PageController@pricing')->name('landing.pricing');
 
 

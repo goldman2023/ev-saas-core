@@ -127,6 +127,9 @@
     <!-- Print SignUp Modal Component -->
     <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
+    {{-- Commet Chat Component --}}
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
+
     @yield('modal')
 
     @yield('script')

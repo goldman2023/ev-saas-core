@@ -49,6 +49,13 @@ class EVService
                         'is_active' => areActiveRoutes(['dashboard']),
                         'roles' => [], // empty array means ALL roles - admin/seller/customer
                     ],
+                    [
+                        'label' => translate('Chat'),
+                        'icon' => 'heroicon-o-chat',
+                        'route' => route('chat.index'),
+                        'is_active' => areActiveRoutes(['chat']),
+                        'roles' => [], // empty array means ALL roles - admin/seller/customer
+                    ],
                     // [
                     //     'label' => translate('Schedule'),
                     //     'icon' => 'heroicon-o-calendar',

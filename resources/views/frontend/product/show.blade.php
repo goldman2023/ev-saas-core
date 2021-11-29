@@ -16,6 +16,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 bg-white rounded card">
+                <x-default.calendar.calendly-widget></x-default.calendar.calendly-widget>
                 <x-default.products.single.product-details-tabs :product="$product">
                 </x-default.products.single.product-details-tabs>
             </div>
