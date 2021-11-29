@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Forms\Products;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
+use App\Rules\UniqueSKU;
 use DB;
 use EVS;
 use Categories;
@@ -20,6 +21,7 @@ class StockManagementForm extends Component
 
     public $product;
     public $edit_product;
+    public $variations;
     public $attributes;
     public $serial_numbers;
     public $serial_status;
@@ -48,6 +50,10 @@ class StockManagementForm extends Component
             'new_serial_numbers.*.status' => ['required', 'in:in_stock,out_of_stock,reserved'],
             'edit_serial_numbers.*.serial_number' => ['required'],
             'edit_serial_numbers.*.status' => ['required', 'in:'.SerialNumber::getStatusEnum(true)],
+            'variations.*.name' => [],
+            'variations.*.temp_sku' => ['required', 'filled', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.temp_sku' => $item]; }))],
+            'variations.*.low_stock_qty' => 'required|numeric|min:0',
+            'variations.*.current_stock' => 'required|numeric|min:0',
         ];
     }
 
@@ -55,7 +61,7 @@ class StockManagementForm extends Component
         return [
             'product.temp_sku.required' => translate('This field is required'),
             'product.temp_sku.filled' => translate('This field cannot be empty'),
-            'product.temp_sku.unique' => translate('SKU must be unique. Another model is using it already.'),
+            'product.temp_sku.unique' => translate('SKU must be unique. Another item is using it already.'),
             'product.temp_stock.unique' => translate('This SKU is already taken'),
             'product.current_stock.required' => translate('This field is required'),
             'product.current_stock.numeric' => translate('Quantity must be numeric'),
@@ -65,16 +71,27 @@ class StockManagementForm extends Component
             'product.low_stock_qty.min' => translate('Cannot be less than 0'),
             'product.stock_visibility_state.required' => translate('This field is required'),
             'product.stock_visibility_state.in' => translate('Must be one of the following: quantity, text, hide'),
+
             'new_serial_numbers.*.serial_number.required' => translate('This field is required'),
             'new_serial_numbers.*.serial_number.unique' => translate('Serial number already taken'),
             'new_serial_numbers.*.serial_number.distinct' => translate('This field has a duplicate value'),
             'new_serial_numbers.*.status.required' => translate('This field is required'),
             'new_serial_numbers.*.status.in' => translate('Value must be one of these: '.SerialNumber::getStatusEnum(true, ', ')),
+
             'edit_serial_numbers.*.serial_number.required' => translate('This field is required'),
             'edit_serial_numbers.*.serial_number.unique' => translate('Serial number already taken'),
             'edit_serial_numbers.*.serial_number.distinct' => translate('This field has a duplicate value'),
             'edit_serial_numbers.*.status.required' => translate('This field is required'),
             'edit_serial_numbers.*.status.in' => translate('Value must be one of these: '.SerialNumber::getStatusEnum(true, ', ')),
+
+            'variations.*.temp_sku.required' => translate('This field is required'),
+            'variations.*.temp_sku.filled' => translate('This field cannot be empty'),
+            'variations.*.current_stock.required' => translate('This field is required'),
+            'variations.*.current_stock.numeric' => translate('Quantity must be numeric'),
+            'variations.*.current_stock.min' => translate('Quantity cannot be less than 0'),
+            'variations.*.low_stock_qty.required' => translate('This field is required'),
+            'variations.*.low_stock_qty.numeric' => translate('Must be numeric'),
+            'variations.*.low_stock_qty.min' => translate('Cannot be less than 0'),
         ];
     }
 
@@ -90,6 +107,7 @@ class StockManagementForm extends Component
         // Set default params
         if($product) {
             $this->product = $product;
+            $this->variations = $this->product->variations;
             $this->edit_product = $this->product->toArray();
             $this->fetchSerialNumbers();
             $this->attributes = $this->product->variant_attributes();
@@ -250,34 +268,26 @@ class StockManagementForm extends Component
         }
     }
 
-    protected function updateVariationsStocks() {
-        //$this->validate($this->getRuleSet('product'));
+    public function updateVariationsStocks() {
+        $this->validate($this->getRuleSet('variations'));
 
         DB::beginTransaction();
 
         try {
-            // TODO: Write variations stocks update logic
-
-
-
+            foreach($this->variations as $variation) {
+                $product_stock = ProductStock::firstOrNew(['subject_id' => $variation->id, 'subject_type' => $variation::class]);
+                $product_stock->sku = $variation->temp_sku;
+                $product_stock->qty = $variation->current_stock;
+                $product_stock->low_stock_qty = $variation->low_stock_qty;
+                $product_stock->save();
+            }
             DB::commit();
 
-            $this->update_success = true;
-
-            //$this->dispatchBrowserEvent('toastIt', ['id' => '#product-updated-toast']);
-            $this->dispatchBrowserEvent('goToTop');
+            $this->dispatchBrowserEvent('toast', ['id' => 'stock-updated-toast', 'content' => translate('Variations stocks updated successfully!')]);
         } catch(\Exception $e) {
             DB::rollBack();
             dd($e);
         }
     }
-
-    /*protected function setProductStocks() {
-        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
-        $product_stock->sku = $this->product->temp_sku;
-        $product_stock->qty = $this->product->current_stock;
-        $product_stock->low_stock_qty = $this->product->low_stock_qty;
-        $product_stock->save();
-    }*/
 
 }

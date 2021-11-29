@@ -97,6 +97,38 @@ class ProductVariation extends EVBaseModel
         return $name;
     }
 
+    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-') {
+        $att_values_idx = [];
+        $name = '';
+
+        if(!empty($this->variant)) {
+            foreach($this->variant as $item) {
+                if(!empty($item['attribute_value_id'])) {
+                    $att_values_idx[] = $item['attribute_value_id'];
+                }
+            }
+
+            if(!empty($attributes)) {
+                $att_values = $attributes->map(function($item) use($att_values_idx) {
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx));
+                })->flatten()->unique()->values();
+            } else {
+                // If attributes are not provided as parameter, fetch from DB
+                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
+            }
+
+            foreach($att_values as $key => $value) {
+                if($slugified) {
+                    $name .= Str::slug($value->values.($key+1 !== $att_values->count() ? '-' : ''));
+                } else {
+                    $name .= $value->values.($key+1 !== $att_values->count() ? $value_separator : '');
+                }
+            }
+        }
+
+        return $name;
+    }
+
     public function setRemoveFlagAttribute($value)
     {
         $this->remove_flag = $value;

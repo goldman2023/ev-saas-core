@@ -78,7 +78,7 @@ class ProductVariationsDatatable extends DataTableComponent
      *
      * @return void
      */
-    public function mount($buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3', $class = '')
+    public function mount(&$product, $buttons = [], $wireTarget = null, $wireLoadingClass = 'opacity-3', $class = '')
     {
         parent::mount();
 
@@ -87,15 +87,9 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->bulkActionSetPricesID = 'ev-product-variations__set-prices';
         $this->bulkActionSetGenericSKUID = 'ev-product-variations__set-generic-sku';
 
-        $this->product = Product::where('slug', request()->slug)->first()->convertUploadModelsToIDs();
-        $this->attributes = collect($this->product->getMappedAttributes())->filter(function($att, $key) {
-            return ((object) $att)->for_variations === true;
-        }); // these attributes are only attributes used for_variations*/
-        $this->variations = collect($this->product->variations()->get()->map(function($item) {
-            return $item->convertUploadModelsToIDs();
-        })->keyBy(function($item) {
-            return ProductVariation::composeVariantKey($item['name']);
-        })->toArray());
+        $this->product = $product;
+        $this->attributes = collect($this->product->getMappedAttributes())->filter(fn($att, $key) => ((object) $att)->for_variations === true); // these attributes are only attributes used for_variations*/
+        $this->variations = collect($this->product->variations()->get()->map(fn($item) => $item->convertUploadModelsToIDs())->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']))->toArray());
 
         $this->all_combinations = collect([]);
         $this->rows = collect([]);

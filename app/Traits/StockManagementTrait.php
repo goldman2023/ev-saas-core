@@ -24,7 +24,12 @@ trait StockManagementTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model) {
-            $model->load('stock', 'serial_numbers');
+            if(!isset($model->stock)) {
+                $model->load('stock');
+            }
+            if(!isset($model->serial_numbers)) {
+                $model->load('serial_numbers');
+            }
 
             $model->getUseSerialAttribute();
             $model->getTempSkuAttribute();

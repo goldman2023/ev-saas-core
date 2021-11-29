@@ -24,11 +24,19 @@ class EVProductController extends Controller
     public function edit(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
 
+        if($product) {
+            $product->convertUploadModelsToIDs();
+        }
+
         return view('frontend.user.crud.products.edit')->with('product', $product);
     }
 
     public function edit_stocks(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
+
+        if($product) {
+            $product->convertUploadModelsToIDs();
+        }
 
         return view('frontend.user.crud.products.stocks')
             ->with('product', $product)
@@ -40,6 +48,10 @@ class EVProductController extends Controller
 
         $product = Product::where('slug', $slug)->first();
 
+        if($product) {
+            $product->convertUploadModelsToIDs();
+        }
+
         return view('frontend.user.crud.products.variations')
         ->with('product', $product)
         ->with('variations_attributes', $product->variant_attributes())
@@ -48,6 +60,10 @@ class EVProductController extends Controller
 
     public function product_details(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
+
+        if($product) {
+            $product->convertUploadModelsToIDs();
+        }
 
         return view('frontend.user.crud.products.details')->with('product', $product);
     }

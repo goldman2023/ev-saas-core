@@ -23,7 +23,9 @@ trait TranslationTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model) {
-            $model->load('translations');
+            if(!isset($model->translations)) {
+                $model->load('translations');
+            }
         });
     }
 

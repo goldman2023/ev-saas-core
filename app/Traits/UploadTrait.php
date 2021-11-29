@@ -22,7 +22,10 @@ trait UploadTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model): void {
-            $model->load('uploads');
+            if(!isset($model->uploads)) {
+                $model->load('uploads');
+            }
+
 
             // Initiate dynamic properties values
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {

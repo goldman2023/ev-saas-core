@@ -106,7 +106,7 @@ class ProductForm extends Component
      *
      * @return void
      */
-    public function mount($page = '', $product = null)
+    public function mount($page = '', &$product = null)
     {
         $this->rows = collect([]);
         $this->page = $page;
@@ -114,7 +114,7 @@ class ProductForm extends Component
 
         // Set default params
         if($product) {
-            $this->product = $product->convertUploadModelsToIDs();
+            $this->product = $product;
             $this->action = 'update';
             $this->selected_categories = $this->product->selected_categories('slug_path');
         } else {
