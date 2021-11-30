@@ -12,8 +12,7 @@
             <ul class="list-inline list-separator font-size-1 text-body d-flex">
                 <li class="list-inline-item align-items-center d-flex">
                     @svg('heroicon-s-eye', ["class" => 'ev-icon__xs mr-2'])
-                    {{-- TODO: make this dynamic --}}
-                    3 Views
+                    {{ translate('Views: ') }} {{ $product->public_view_count() }}
                 </li>
                 <li class="list-inline-item align-items-center d-flex">
                     @svg('heroicon-s-location-marker', ["class" => 'text-success ev-icon__xs mr-1'])
@@ -78,7 +77,7 @@
                 <div class="d-md-flex justify-content-md-center align-items-md-center">
                     @svg('heroicon-o-user-group', ['class' => 'ev-icon__xs mr-1'])
 
-                    {{ translate('Questions & Answers') }}
+                    {{ translate('Book a Reservation') }}
                 </div>
             </a>
         </li>
@@ -90,12 +89,14 @@
         <div class="tab-pane fade mt-6 show active" id="property-details" role="tabpanel"
             aria-labelledby="property-details-tab">
             <!-- View Info -->
+
+
             <div class="border-top border-bottom py-4 mt-4 mb-7">
                 <div class="row justify-content-sm-between">
                     <div class="col-sm-6 text-sm-right mb-2 mb-sm-0">
                         <div class="pr-md-4">
                             <span>Last 30 days:</span>
-                            <span class="text-dark font-weight-bold">920 page views</span>
+                            <span class="text-dark font-weight-bold">{{ $product->public_view_count() }} page views</span>
                         </div>
                     </div>
                     <div class="col-sm-6 column-divider-sm">
@@ -224,32 +225,11 @@
         <div class="tab-pane fade mt-6" id="property-market-stats" role="tabpanel"
             aria-labelledby="property-market-stats-tab">
             <!-- Stats -->
-            <div class="mb-5">
-                <h5>Sale activity</h5>
-                <p>Average estimated value for a flat in HG2:</p>
 
-                <h3 class="text-primary mb-0">£271,401</h3>
-                <i class="fas fa-angle-down text-danger"></i>
-                <span>£7,710 (-2.762%)</span>
-                <small class="text-muted ml-1">Over the last 12 months</small>
-            </div>
-            <!-- End Stats -->
 
             <!-- Stats -->
             <div class="mb-5">
-                <h5>In the last 12 months</h5>
-
-                <div class="row justify-content-sm-between">
-                    <div class="col-sm-6">
-                        <span class="d-block">Average sale price</span>
-                        <h3 class="text-primary mb-0">£267,606</h3>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <span class="d-block">Properties sold</span>
-                        <h3 class="text-primary mb-0">51</h3>
-                    </div>
-                </div>
+                <x-default.calendar.calendly-widget></x-default.calendar.calendly-widget>
                 <!-- End Row -->
             </div>
             <!-- End Stats -->

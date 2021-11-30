@@ -51,27 +51,6 @@
                 </div>
 
                 <div class="col-6">
-                    <!-- Leaflet (Map) -->
-                    Map
-                    <div id="map" class="leaflet-custom" class="min-h-450rem rounded" data-hs-leaflet-options='{
-  "map": {
-    "scrollWheelZoom": false,
-    "coords": [37.4040344, -122.0289704]
-  },
-  "marker": [
-    {
-      "coords": [37.4040344, -122.0289704],
-      "icon": {
-        "iconUrl": "../../assets/svg/components/map-pin.svg",
-        "iconSize": [50, 45]
-      },
-      "popup": {
-        "text": "Test text!"
-      }
-    }
-  ]
- }'></div>
-                    <!-- End Leaflet (Map) -->
                     <h3>{{ translate('Product Stats') }} </h3>
 
                     <div class="row">
@@ -79,8 +58,37 @@
                             <!-- Card -->
                             <div class="card card-bordered shadow-none h-100">
                                 <div class="card-body">
-                                    <h6 class="font-weight-normal mb-1">{{ translate("Product views") }}:</h6>
-                                    <h4 class="card-title">{{ $product->public_view_count() }}</h4>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h6 class="font-weight-normal mb-1">{{ translate("Product views today") }}:
+                                            </h6>
+                                            <h4 class="card-title">{{ $product->public_view_count() }}</h4>
+
+                                            <hr>
+                                            <h6 class="font-weight-normal mb-1">{{ translate("Product views total") }}:
+                                            </h6>
+                                            <h4 class="card-title">{{ $product->public_view_count() }}</h4>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <h6 class="font-weight-normal mb-1">{{ translate("Top Countries") }}:</h6>
+
+                                            @foreach (visits($product)->countries() as $key => $country)
+                                            {{ $key }} : {{ $country }}
+                                            @endforeach
+
+                                            <hr>
+
+                                            <h6 class="font-weight-normal mb-1">{{ translate("Top Sources") }}:</h6>
+
+                                            @foreach (visits($product)->refs() as $key => $country)
+                                            {{ $key }} : {{ $country }}
+                                            @endforeach
+
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
                             <!-- End Card -->

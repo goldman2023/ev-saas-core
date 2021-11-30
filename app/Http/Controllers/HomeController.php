@@ -437,6 +437,13 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
 
+            if(auth()->user()) {
+                visits($detailedProduct, 'user_' . auth()->user()->id)->forceIncrement();
+
+            } else {
+                visits($detailedProduct, 'guest')->forceIncrement();
+            }
+
             if ($detailedProduct->digital == 1) {
                 return view('frontend.digital_product_details', compact('detailedProduct', 'product'));
             } else {
