@@ -130,10 +130,11 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.single');
-    Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name('products.category');
-    Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
-    Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name('products.variant_price');
+    Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
+    Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.category');
+    Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
+    Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
+
     Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
@@ -244,7 +245,7 @@ Route::middleware([
         Route::resource('leads', 'LeadController');
 
 
-        /* TODO: Admin and seler only */
+        /* TODO: Admin and seller only */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
         Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
         Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');

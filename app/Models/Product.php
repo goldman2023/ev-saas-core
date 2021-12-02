@@ -141,6 +141,9 @@ class Product extends EVBaseModel
 
     use VariationTrait;
 
+    public const ROUTING_SINGULAR_NAME_PREFIX = 'product';
+    public const ROUTING_PLURAL_NAME_PREFIX = 'products';
+
     protected $table = 'products';
 
     /**

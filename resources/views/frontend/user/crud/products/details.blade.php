@@ -125,28 +125,28 @@
                                             </small>
                                         </div>
 
-
                                         <div>
-
-                                            <span
-                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
-                                                {{ svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success
-                                                mr-2']) }}
-                                                {{translate('Has Serial Numbers') }}
-                                            </span>
+                                            @if($product->use_serial)
+                                                <span class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
+                                                    @svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success mr-2'])
+                                                    {{translate('Has Serial Numbers') }}
+                                                </span>
+                                            @endif
                                         </div>
 
                                         <div>
                                             @if($product->useVariations())
-                                            <span
-                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
-                                                {{ svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success
-                                                mr-2']) }}
-                                                {{translate('Variable Product') }}
-                                            </span>
+                                                <span class="badge {{ $product->hasVariations() ? 'badge-soft-success':'badge-soft-warning' }} mr-2 w-auto d-flex align-items-center">
+                                                    {{ svg(($product->hasVariations() ? 'heroicon-o-check':'heroicon-o-exclamation'), ['class' => 'ev-icon__xs mr-2 '.($product->hasVariations() ? 'text-success':'text-warning')]) }}
+
+                                                    @if($product->hasVariations())
+                                                        {{translate('Variable Product') }}
+                                                    @else
+                                                        {{translate('Variable Product (but has no variations yet)') }}
+                                                    @endif
+                                                </span>
                                             @endif
-
-
+                                        </div>
                                     </h4>
                                 </div>
                             </div>
