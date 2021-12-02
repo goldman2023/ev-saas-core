@@ -1,3 +1,11 @@
+/* Generate square classes */
+@for $wh from 14 through 32 {
+    .square-#{$wh} {
+        width: $wh + px;
+        height: $wh + px;
+    }
+}
+
 /* Generate font-weight classes */
 @for $fw from 100 through 900 {
     .fw-#{$fw} {
@@ -6,9 +14,9 @@
 }
 
 /* Generate font-size classes */
-@for $s from 8 through 46 {
-    .text-#{$s} {
-        font-size: $s + px;
+@for $fs from 8 through 46 {
+    .text-#{$fs} {
+        font-size: $fs + px;
     }
 }
 

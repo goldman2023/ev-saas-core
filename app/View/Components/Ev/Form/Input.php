@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class Input extends Component
 {
+    public $x;
     public $class;
     public $id;
     public $name;
@@ -31,8 +32,9 @@ class Input extends Component
      *
      * @return void
      */
-    public function __construct($type = 'text', $quantityCounter = false, $name = '', $label = '', $value = '', $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $placeholder = '', $placement = 'prepend', $icon = null, $text = null, $merge = false, $errorBagName = null, $wireType = 'defer', $disabled = false)
+    public function __construct($x = false, $type = 'text', $quantityCounter = false, $name = '', $label = '', $value = '', $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $placeholder = '', $placement = 'prepend', $icon = null, $text = null, $merge = false, $errorBagName = null, $wireType = 'defer', $disabled = false)
     {
+        $this->x = $x;
         $this->type = $type;
         $this->quantityCounter = $quantityCounter;
         $this->label = $label;
@@ -62,6 +64,10 @@ class Input extends Component
      */
     public function render()
     {
+        if($this->x) {
+            return view('components.ev.form.alpine.input');
+        }
+
         return view('components.ev.form.input');
     }
 }

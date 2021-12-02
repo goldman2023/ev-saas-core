@@ -4,7 +4,7 @@
         @if($prependText)
             <span class="font-size-1 text-muted">{{ $prependText }}</span>
         @endif
-            <label class="toggle-switch mr-2" @if($id) for="{{ $id }}" @endif for="toggle-{{ $name }}">
+            <label class="toggle-switch mr-2 {{ $classLabel }}" @if($id) for="{{ $id }}" @endif for="toggle-{{ $name }}">
                 <input type="checkbox"
                        name="{{ $name }}"
                        id="toggle-{{ $name }}"
@@ -19,7 +19,7 @@
                 </span>
 
                 @if($appendText)
-                    <span class="font-size-1 text-muted">{{ $appendText }}</span>
+                    <span class="font-size-1 text-muted ml-2">{{ $appendText }}</span>
                 @endif
             </label>
     </div>

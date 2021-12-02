@@ -15,13 +15,11 @@
             {{ translate('Preview') }}
         </a>
 
-        @if($product->useVariations())
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
             href="{{ route('ev-products.edit.stocks', $product->slug) }}">
             @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
             {{ translate('Stock Management') }}
         </a>
-        @endif
 
         @if($product->useVariations())
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
@@ -51,26 +49,26 @@
                 </div>
 
                 <div class="col-6">
-                    <!-- Leaflet (Map) -->
-                    Map
-                    <div id="map" class="leaflet-custom" class="min-h-450rem rounded" data-hs-leaflet-options='{
-  "map": {
-    "scrollWheelZoom": false,
-    "coords": [37.4040344, -122.0289704]
-  },
-  "marker": [
-    {
-      "coords": [37.4040344, -122.0289704],
-      "icon": {
-        "iconUrl": "../../assets/svg/components/map-pin.svg",
-        "iconSize": [50, 45]
-      },
-      "popup": {
-        "text": "Test text!"
-      }
-    }
-  ]
- }'></div>
+{{--                    <!-- Leaflet (Map) -->--}}
+{{--                    Map--}}
+{{--                    <div id="map" class="leaflet-custom" class="min-h-450rem rounded" data-hs-leaflet-options='{--}}
+{{--                      "map": {--}}
+{{--                        "scrollWheelZoom": false,--}}
+{{--                        "coords": [37.4040344, -122.0289704]--}}
+{{--                      },--}}
+{{--                      "marker": [--}}
+{{--                        {--}}
+{{--                          "coords": [37.4040344, -122.0289704],--}}
+{{--                          "icon": {--}}
+{{--                            "iconUrl": "../../assets/svg/components/map-pin.svg",--}}
+{{--                            "iconSize": [50, 45]--}}
+{{--                          },--}}
+{{--                          "popup": {--}}
+{{--                            "text": "Test text!"--}}
+{{--                          }--}}
+{{--                        }--}}
+{{--                      ]--}}
+{{--                     }'></div>--}}
                     <!-- End Leaflet (Map) -->
                     <h3>{{ translate('Product Stats') }} </h3>
 
@@ -93,7 +91,7 @@
                                     <h6 class="font-weight-normal mb-1">{{ translate('Product Categories') }}:</h6>
                                     <h4 class="card-title">
                                         @foreach($product->categories()->get() as $category)
-                                        <span class="badge badge-soft-primary p-2">
+                                        <span class="badge badge-soft-primary p-2 mb-2">
                                             {{ $category->name }}
                                         </span>
                                         @endforeach

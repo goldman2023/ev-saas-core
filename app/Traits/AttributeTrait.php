@@ -186,12 +186,12 @@ trait AttributeTrait
 
                 if($return_object) {
                     $att_object->selected = true; // All attributes are selected by default
-                    $att_object->for_variations = !empty($subject->id ) ? ($att_object->for_variations ?? false) : false; // false if create, stays the same as previously defined on edit
+                    $att_object->for_variations = !empty($this->id ) ? ($att_object->for_variations ?? false) : false; // false if create, stays the same as previously defined on edit
                     $mapped[$att_object->id] = $att_object;
                 } else {
                     $mapped[$att->id] = (object) array_merge($att_object, [
                         'selected' => true, // All attributes are selected by default
-                        'for_variations' => !empty($subject->id) ? ($att_object['for_variations'] ?? false) : false,  // false if create, stays the same as previously defined on edit
+                        'for_variations' => !empty($this->id) ? ($att_object['for_variations'] ?? false) : false,  // false if create, stays the same as previously defined on edit
                     ]);
                 }
             }

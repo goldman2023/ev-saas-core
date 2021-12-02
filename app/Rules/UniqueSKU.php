@@ -3,7 +3,9 @@
 namespace App\Rules;
 
 use App\Models\ProductStock;
+use App\Models\ProductVariation;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Database\Eloquent\Model;
 
 class UniqueSKU implements Rule
 {
@@ -15,10 +17,23 @@ class UniqueSKU implements Rule
 
     public function passes($attribute, $value): bool
     {
-        if($this->items->has($attribute)) {
-            $variation = $this->items->get($attribute);
+        $exists = false;
 
-            $exists = ProductStock::where('sku', $value)->where('id', '!=', $variation->stock->id)->exists();
+        if($this->items->has($attribute)) {
+            $item = $this->items->get($attribute);
+
+            $exists = ProductStock::where([
+                ['sku', '=', $value],
+                ['subject_id', '!=', $item->id],
+                ['subject_type', '!=', $item::class]
+            ])->exists();
+
+
+//            ProductStock::where([
+//                ['sku', '=', $value],
+//                ['subject_id', '!=', $item->id],
+//                ['subject_type', '!=', $item::class]
+//            ])->dd();
         }
 
         return !$exists;

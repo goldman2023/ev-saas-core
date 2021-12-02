@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Toggle extends Component
 {
     public $class;
+    public $classLabel;
     public $id;
     public $name;
     public $prependText;
@@ -20,10 +21,11 @@ class Toggle extends Component
      *
      * @return void
      */
-    public function __construct($name = '', $id = null, $prependText = null, $appendText = null, $options = [], $selected = false, $class = '', $errorBagName = null)
+    public function __construct($name = '', $id = null, $prependText = null, $appendText = null, $options = [], $selected = false, $class = '', $classLabel = '', $errorBagName = null)
     {
         $this->name = $name;
         $this->class = $class;
+        $this->classLabel = $classLabel;
         $this->id = $id;
         $this->selected = $selected;
         $this->prependText = $prependText;

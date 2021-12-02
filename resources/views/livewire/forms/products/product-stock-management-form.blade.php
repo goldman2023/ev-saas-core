@@ -207,13 +207,13 @@
                                 x-bind:data-row-index="key"
                                 :class="'edit_serial_number_row_'+item.id"
                                 x-init="$watch('item.status', (value) => {
-                                              $(getStatusSelectIDTemplate(item.id)).val(value).trigger('change');
-                                            });
-                                            // When livewire changes html on first change, duplicate serial numbers are printed! This happens only on first html change. Prevent it manually by deleting wrong items!
-                                            if($('.edit_serial_number_row_'+item.id).length > 1) {
-                                                $('.edit_serial_number_row_'+item.id).last().remove();
-                                            }
-                                           "
+                                      $(getStatusSelectIDTemplate(item.id)).val(value).trigger('change');
+                                    });
+                                    // When livewire changes html on first change, duplicate serial numbers are printed! This happens only on first html change. Prevent it manually by deleting wrong items!
+                                    if($('.edit_serial_number_row_'+item.id).length > 1) {
+                                        $('.edit_serial_number_row_'+item.id).last().remove();
+                                    }
+                               "
                             >
 
                                 <td style="width: 240px;">
@@ -437,10 +437,10 @@
     <!-- END: Main Product CARD -->
 
     <!-- Product Variations CARD -->
-    @if($product->useVariations())
+    @if($product->useVariations() && $product->hasVariations())
     <div class="card container-fluid py-3 mt-3">
         <div class="card-header pl-2">
-            <h5 class="card-header-title">{{ translate('Product Variations') }}</h5>
+            <h5 class="card-header-title">{{ translate('Product Variations Stocks') }}</h5>
         </div>
 
         <div class="card-body px-0">

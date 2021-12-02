@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
+    public $x;
     public $isWired;
     public $class;
     public $id;
@@ -33,8 +34,9 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $selected = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null, $disabled = false)
+    public function __construct($x = false, $isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $selected = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null, $disabled = false)
     {
+        $this->x = $x;
         $this->isWired = $isWired;
         $this->type = $type;
         $this->label = $label;
@@ -85,6 +87,10 @@ class Select extends Component
      */
     public function render()
     {
+        if($this->x) {
+            return view('components.ev.form.alpine.select');
+        }
+
         return view('components.ev.form.select');
     }
 }

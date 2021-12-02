@@ -7,10 +7,6 @@ use App\Models\ProductVariation;
 
 trait VariationTrait
 {
-    /************************************
-     * Abstract Trait Methods *
-     ************************************/
-    abstract public function useVariations(): ?bool;
 
     /**
      * Boot the trait
@@ -27,6 +23,11 @@ trait VariationTrait
         });
     }
 
+    public function useVariations(): ?bool
+    {
+        return $this->variant_attributes()->count() > 0;
+    }
+
     /**
      * Checks if Model has any variations.
      * Use this function to determine logic for dependent traits, like:
@@ -37,10 +38,18 @@ trait VariationTrait
      */
     public function hasVariations(): bool
     {
-        return $this->useVariations() ? ($this->variations->isNotEmpty() ?? false) : false;
+        return $this->useVariations() && $this->variations->isNotEmpty() && $this->variant_attributes()->isNotEmpty();
     }
 
     public function variations() {
         return $this->hasMany(ProductVariation::class);
+    }
+
+    public function getMappedVariations($convert_uploads = true, $refresh = false) {
+        if($refresh) {
+            return $this->variations()->get()->map(fn($item) => $convert_uploads ? $item->convertUploadModelsToIDs() : $item )->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']));
+        }
+
+        return $this->variations->map(fn($item) => $convert_uploads ? $item->convertUploadModelsToIDs() : $item )->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']));
     }
 }

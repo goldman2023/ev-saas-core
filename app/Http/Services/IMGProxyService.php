@@ -96,6 +96,9 @@ class IMGProxyService
      * $data can be Upload model or string. If Upload, pass the $data->file_name, otherwise, pass the $data as a string
      * If filesystem IS NOT 'cloud', use ->asset() to get it from the local machine filesystem
      *
+     * If $data is numeric (possible ID), try to find Upload by ID and if no Upload with that ID is present, show Placeholder
+     * Otherwise, get Upload and pass it to Storage to get URL.
+     *
      * @param Upload|string $data
      * @param bool $static
      * @return array
@@ -107,6 +110,14 @@ class IMGProxyService
         }
 
         if ((!$static || $data instanceof Upload) && in_array($this->filesystem, $this->disk_types['cloud'], true)) {
+            if(is_numeric($data) && !$data instanceof Upload) {
+                try {
+                    $data = Upload::findOrFail($data);
+                } catch(\Exception $e) {
+                    return $this->getPlaceholder(false);
+                }
+            }
+
             $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? null) : $data);
         } else {
             $url = app('url')->asset($data, $this->secure);

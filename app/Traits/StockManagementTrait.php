@@ -10,10 +10,10 @@ use App\Models\SerialNumber;
  */
 trait StockManagementTrait
 {
-    public string $temp_sku;
-    public float|int $current_stock;
-    public float|int $low_stock_qty;
-    public bool $use_serial;
+    public $temp_sku;
+    public $current_stock;
+    public $low_stock_qty;
+    public $use_serial;
 
     /**
      * Boot the trait

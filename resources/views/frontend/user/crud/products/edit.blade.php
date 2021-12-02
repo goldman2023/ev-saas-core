@@ -4,7 +4,7 @@
 
 @push('head_scripts')
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+    <script src="https://unpkg.com/alpinejs@3.5.1/dist/cdn.min.js" defer></script>
 @endpush
 
 @section('panel_content')
@@ -31,4 +31,5 @@
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
     <script src="{{ static_asset('js/crud/product-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/product-variations-table.js', false, true, true) }}"></script>
 @endpush

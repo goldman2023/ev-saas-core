@@ -4,9 +4,10 @@
     @endif
 
     <select @if($isWired) wire:model.defer="{{ $name }}" @endif
+            @if(!$isWired) wire:ignore @endif
+            name="{{ $name }}"
             @if($id) id="{{ $id }}" @endif
             class="js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
-            name="{{ $name }}"
             size="1" style="opacity: 0;"
             @if($multiple) multiple @endif
             data-hs-select2-options='@json($options)'

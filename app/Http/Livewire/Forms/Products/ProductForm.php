@@ -18,6 +18,7 @@ use App\Rules\EVModelsExist;
 use DB;
 use EVS;
 use Categories;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Purifier;
@@ -34,9 +35,8 @@ class ProductForm extends Component
     public bool $update_success = false;
 
     public Product $product;
-    public array $attributes;
     public $rows;
-    public $productVariationsDatatableClass = 'ev-product-variations-component';
+    public array $attributes;
     public $categories;
     public $selected_categories;
 
@@ -108,7 +108,6 @@ class ProductForm extends Component
      */
     public function mount($page = '', &$product = null)
     {
-        $this->rows = collect([]);
         $this->page = $page;
         $this->categories = Categories::getAll();
 
@@ -320,14 +319,7 @@ class ProductForm extends Component
             $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
         }
 
-        // DONE: Sync thumbnail, gallery, meta_img and other dynamic uploads
-        $this->product->syncUploads();
-
         // SEO
-        if (empty($this->product->meta_img)) {
-            $this->product->meta_img = $this->product->thumbnail_img;
-        }
-
         if (empty($this->product->meta_title)) {
             $this->product->meta_img = $this->product->name;
         }
@@ -349,6 +341,9 @@ class ProductForm extends Component
 
         // Save product
         $this->product->save();
+
+        // DONE: Sync thumbnail, gallery, meta_img and other dynamic uploads
+        $this->product->syncUploads();
     }
 
     protected function setProductCategories() {

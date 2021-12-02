@@ -61,10 +61,6 @@ class EVProductController extends Controller
     public function product_details(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
 
-        if($product) {
-            $product->convertUploadModelsToIDs();
-        }
-
         return view('frontend.user.crud.products.details')->with('product', $product);
     }
 }
