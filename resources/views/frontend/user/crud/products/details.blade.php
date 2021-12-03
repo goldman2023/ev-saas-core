@@ -15,13 +15,11 @@
             {{ translate('Preview') }}
         </a>
 
-        @if($product->useVariations())
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
             href="{{ route('ev-products.edit.stocks', $product->slug) }}">
             @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
             {{ translate('Stock Management') }}
         </a>
-        @endif
 
         @if($product->useVariations())
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
@@ -51,6 +49,27 @@
                 </div>
 
                 <div class="col-6">
+{{--                    <!-- Leaflet (Map) -->--}}
+{{--                    Map--}}
+{{--                    <div id="map" class="leaflet-custom" class="min-h-450rem rounded" data-hs-leaflet-options='{--}}
+{{--                      "map": {--}}
+{{--                        "scrollWheelZoom": false,--}}
+{{--                        "coords": [37.4040344, -122.0289704]--}}
+{{--                      },--}}
+{{--                      "marker": [--}}
+{{--                        {--}}
+{{--                          "coords": [37.4040344, -122.0289704],--}}
+{{--                          "icon": {--}}
+{{--                            "iconUrl": "../../assets/svg/components/map-pin.svg",--}}
+{{--                            "iconSize": [50, 45]--}}
+{{--                          },--}}
+{{--                          "popup": {--}}
+{{--                            "text": "Test text!"--}}
+{{--                          }--}}
+{{--                        }--}}
+{{--                      ]--}}
+{{--                     }'></div>--}}
+                    <!-- End Leaflet (Map) -->
                     <h3>{{ translate('Product Stats') }} </h3>
 
                     <div class="row">
@@ -58,37 +77,8 @@
                             <!-- Card -->
                             <div class="card card-bordered shadow-none h-100">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <h6 class="font-weight-normal mb-1">{{ translate("Product views today") }}:
-                                            </h6>
-                                            <h4 class="card-title">{{ $product->public_view_count() }}</h4>
-
-                                            <hr>
-                                            <h6 class="font-weight-normal mb-1">{{ translate("Product views total") }}:
-                                            </h6>
-                                            <h4 class="card-title">{{ $product->public_view_count() }}</h4>
-                                        </div>
-
-                                        <div class="col-6">
-                                            <h6 class="font-weight-normal mb-1">{{ translate("Top Countries") }}:</h6>
-
-                                            @foreach (visits($product)->countries() as $key => $country)
-                                            {{ $key }} : {{ $country }}
-                                            @endforeach
-
-                                            <hr>
-
-                                            <h6 class="font-weight-normal mb-1">{{ translate("Top Sources") }}:</h6>
-
-                                            @foreach (visits($product)->refs() as $key => $country)
-                                            {{ $key }} : {{ $country }}
-                                            @endforeach
-
-                                        </div>
-                                    </div>
-
-
+                                    <h6 class="font-weight-normal mb-1">{{ translate("Product views") }}:</h6>
+                                    <h4 class="card-title">{{ $product->public_view_count() }}</h4>
                                 </div>
                             </div>
                             <!-- End Card -->
@@ -101,7 +91,7 @@
                                     <h6 class="font-weight-normal mb-1">{{ translate('Product Categories') }}:</h6>
                                     <h4 class="card-title">
                                         @foreach($product->categories()->get() as $category)
-                                        <span class="badge badge-soft-primary p-2">
+                                        <span class="badge badge-soft-primary p-2 mb-2">
                                             {{ $category->name }}
                                         </span>
                                         @endforeach
@@ -135,28 +125,28 @@
                                             </small>
                                         </div>
 
-
                                         <div>
-
-                                            <span
-                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
-                                                {{ svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success
-                                                mr-2']) }}
-                                                {{translate('Has Serial Numbers') }}
-                                            </span>
+                                            @if($product->use_serial)
+                                                <span class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
+                                                    @svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success mr-2'])
+                                                    {{translate('Has Serial Numbers') }}
+                                                </span>
+                                            @endif
                                         </div>
 
                                         <div>
                                             @if($product->useVariations())
-                                            <span
-                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
-                                                {{ svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success
-                                                mr-2']) }}
-                                                {{translate('Variable Product') }}
-                                            </span>
+                                                <span class="badge {{ $product->hasVariations() ? 'badge-soft-success':'badge-soft-warning' }} mr-2 w-auto d-flex align-items-center">
+                                                    {{ svg(($product->hasVariations() ? 'heroicon-o-check':'heroicon-o-exclamation'), ['class' => 'ev-icon__xs mr-2 '.($product->hasVariations() ? 'text-success':'text-warning')]) }}
+
+                                                    @if($product->hasVariations())
+                                                        {{translate('Variable Product') }}
+                                                    @else
+                                                        {{translate('Variable Product (but has no variations yet)') }}
+                                                    @endif
+                                                </span>
                                             @endif
-
-
+                                        </div>
                                     </h4>
                                 </div>
                             </div>

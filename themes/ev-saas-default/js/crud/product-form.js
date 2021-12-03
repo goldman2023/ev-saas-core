@@ -169,9 +169,16 @@ window.EVProductFormInit = function(event) {
     // ATTRIBUTES FOR VARIATIONS (remove modal)
     // =======================================================
     $('input[name$="for_variations"]:checked').each(function(index, element) {
-        let select = $(element).closest('.form-group').find('select[data-attribute-id]');
-        let variations_component = Livewire.find($(element).closest('.lw-form').find('.ev-product-variations-component').attr('wire:id'));
-        let modal = $('#remove-selected-attribute-modal');
+        try {
+            let select = $(element).closest('.form-group').find('select[data-attribute-id]');
+            let variations_component = Livewire.find($(element).closest('.lw-form').find('.ev-product-variations-component').attr('wire:id'));
+            let modal = $('#remove-selected-attribute-modal');
+        } catch(error) {
+            console.log(error);
+            console.log(element);
+            return;
+        }
+
 
         // Remove Flag
         select.on('select2:unselecting', function (e) {
@@ -232,6 +239,7 @@ document.addEventListener('set-variations-data', async function (event) {
 
     component.setVariationsData();
 });
+
 document.addEventListener('validate-step', async function (event) {
     let component = event.detail.component;
     let method = event.detail.method;
@@ -306,6 +314,7 @@ $(window).on('preventProductVariationsModalFade', function(event) {
         'z-index': 1050
     });
 });
+
 document.addEventListener('triggerModal', function (event) {
     let id = event.detail.id;
     $(id).modal('toggle');

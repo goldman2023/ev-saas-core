@@ -11,7 +11,7 @@
                     @if($attribute->attribute_values->isNotEmpty() && !empty($att_values_plucked = $attribute->attribute_values->pluck('values')))
                         <li class="list-group-item">
                             <label>{{ $attribute->name }}</label>
-                            <span>{{ implode(', ', $att_values_plucked) }}</span>
+                            <span>{{ $att_values_plucked->join(',') }}</span>
                         </li>
                     @endisset
                 @endforeach

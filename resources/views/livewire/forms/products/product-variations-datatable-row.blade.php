@@ -1,4 +1,4 @@
-@php $index = Str::slug($index); @endphp
+@php $index = Str::slug($index); $sranje= $row; @endphp
 
 <x-livewire-tables::bs4.table.cell>
     <x-ev.form.file-selector name="rows.{{ $index }}.image"
@@ -18,17 +18,19 @@
 @php
 if($this->attributes->isNotEmpty()) {
     foreach($this->attributes as $att) {
-        $att = (object) $att;
+        $selected = array_filter((array)$row->variant, function($item) use($att) { return $item['attribute_id'] === $att->id; });
+        $selected_key = array_keys($selected)[0] ?? 0;
+        $selected = reset($selected);
 @endphp
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.select name="rows.{{ $index }}.variant.{{ $att->id }}.attribute_value_id"
+    <x-ev.form.select name="rows.{{ $index }}.variant.{{ $selected_key }}.attribute_value_id"
                       error-bag-name="rows.{{ $index }}"
                       :items="$att->attribute_values"
                       value-property="id"
                       label-property="values"
                       :multiple="false"
                       data-attribute-id="{{ $att->id }}"
-                      selected="{{ $row->variant->{$att->id}->attribute_value_id }}"
+                      selected="{{ $selected['attribute_value_id'] }}"
                       data-type="{{ $att->type }}"
                       :disabled="true"
                       :is-wired="true">
@@ -44,24 +46,21 @@ if($this->attributes->isNotEmpty()) {
     <x-ev.form.input name="rows.{{ $index }}.price"
                      type="number"
                      min="0"
-                     value="{{ ($row->price ?? null) ?: 0 }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>
 
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.input name="rows.{{ $index }}.temp_stock.qty"
+    <x-ev.form.input name="rows.{{ $index }}.current_stock"
                      type="number"
                      min="0"
-                     value="{{ ($row->temp_stock->qty ?? null) ?: 0 }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>
 
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.input name="rows.{{ $index }}.temp_stock.sku"
+    <x-ev.form.input name="rows.{{ $index }}.temp_sku"
                      type="text"
-                     value="{{ ($row->temp_stock->sku ?? null) ?: '' }}"
                      wireType="defer">
     </x-ev.form.input>
 </x-livewire-tables::bs4.table.cell>

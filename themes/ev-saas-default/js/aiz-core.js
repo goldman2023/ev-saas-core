@@ -552,8 +552,10 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                         "</p>" +
                                         "</div>" +
                                         '<div class="remove">' +
-                                        '<button class="btn btn-sm btn-link remove-attachment" type="button">' +
-                                        '<i class="fas fa-close"></i>' +
+                                        '<button class="btn btn-sm btn-link d-flex align-items-center text-dark justify-content-center remove-attachment" type="button">' +
+                                        '<svg style="height: 16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>' +
+                                        '</svg>' +
                                         "</button>" +
                                         "</div>" +
                                         "</div>";

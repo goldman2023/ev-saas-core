@@ -141,6 +141,9 @@ class Product extends EVBaseModel
 
     use VariationTrait;
 
+    public const ROUTING_SINGULAR_NAME_PREFIX = 'product';
+    public const ROUTING_PLURAL_NAME_PREFIX = 'products';
+
     protected $table = 'products';
 
     /**
@@ -246,15 +249,6 @@ class Product extends EVBaseModel
         return 'unit_price';
     }
 
-    /**
-     * Returns true if this Model uses Variations
-     *
-     * @return bool|null
-     */
-    public function useVariations(): ?bool
-    {
-        return true;
-    }
 
     public function getTranslationModel(): ?string
     {

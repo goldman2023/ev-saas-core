@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Forms\Products;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductVariation;
+use App\Rules\UniqueSKU;
 use Arr;
 use DB;
 use EVS;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\View\Component;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,36 +42,37 @@ class ProductVariationsDatatable extends DataTableComponent
     public $bulkActionSetPricesID;
     public $bulkActionSetGenericSKUID;
 
-    protected $messages = [
-        'rows.*.price.required' => 'Price is required',
-        'rows.*.price.numeric' => 'Price must be numeric',
-        'rows.*.price.min' => 'Minimum value is :min',
+    protected function messages()
+    {
+        return [
+            'rows.*.price.required' => 'Price is required',
+            'rows.*.price.numeric' => 'Price must be numeric',
+            'rows.*.price.min' => 'Minimum value is :min',
 
-        'rows.*.temp_stock.sku.required' => 'SKU is required',
-        'rows.*.temp_stock.sku.unique' => 'SKU taken by another product',
+            'rows.*.temp_sku.required' => 'SKU is required',
+            'rows.*.temp_sku.unique' => 'SKU taken by another product',
 
-        'rows.*.temp_stock.qty.required' => 'Quantity is required',
-        'rows.*.temp_stock.qty.numeric' => 'Quantity must be numeric',
-        'rows.*.temp_stock.qty.min' => 'Minimum value is :min',
-    ];
+            'rows.*.current_stock.required' => 'Quantity is required',
+            'rows.*.current_stock.numeric' => 'Quantity must be numeric',
+            'rows.*.current_stock.min' => 'Minimum value is :min',
+        ];
+    }
 
     protected function rules() {
-        $rules = [];
-
-        foreach($this->rows as $key => $row) {
-            $data = (array) $row;
-            $data['temp_stock'] = (array) $data['temp_stock'];
-
-            if(isset($data['name']) && !empty($data['variant'] ?? null)) {
-                $stock_id = $data['temp_stock']['id'] ?? null;
-
-                $rules['rows.'.$key.'.price'] = 'required|numeric|min:1';
-                $rules['rows.'.$key.'.temp_stock.sku'] = ['required', Rule::unique('product_stocks', 'sku')->ignore($stock_id)];
-                $rules['rows.'.$key.'.temp_stock.qty'] = 'required|numeric|min:1';
-            }
-        }
-
-        return $rules;
+        return [
+            'all_combinations.*' => [],
+            'rows.*' => [],
+            'variations.*.variant' => [],
+            'variations.*.image' => [],
+            'variations.*.price' => 'required|numeric|min:1',
+            'variations.*.temp_sku' => ['required', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['rows.'.$key.'.temp_sku' => $item]; }))],
+            'variations.*.current_stock' => 'required|numeric|min:1',
+            'variations.*.remove_flag' => 'bool',
+            'variations.*.discount' => [],
+            'variations.*.discount_type' => [],
+            'variations.*.created_at' => [],
+            'variations.*.updated_at' => []
+        ];
     }
 
 
@@ -88,11 +91,10 @@ class ProductVariationsDatatable extends DataTableComponent
         $this->bulkActionSetGenericSKUID = 'ev-product-variations__set-generic-sku';
 
         $this->product = $product;
-        $this->attributes = collect($this->product->getMappedAttributes())->filter(fn($att, $key) => ((object) $att)->for_variations === true); // these attributes are only attributes used for_variations*/
-        $this->variations = collect($this->product->variations()->get()->map(fn($item) => $item->convertUploadModelsToIDs())->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']))->toArray());
+        $this->attributes = $this->product->variant_attributes(); // these attributes are only attributes used for_variations*/
+        $this->variations = $this->product->getMappedVariations();
 
-        $this->all_combinations = collect([]);
-        $this->rows = collect([]);
+        $this->rows = collect();
         $this->buttons = $buttons;
         $this->wireTarget = $wireTarget;
         $this->wireLoadingClass = $wireLoadingClass;
@@ -101,8 +103,6 @@ class ProductVariationsDatatable extends DataTableComponent
         // Create or Fetch all combinations.
         $this->createAllCombinations();
 
-        // TODO: Fix the logic to use all only on bulk action and ADD single variation addition
-        //$this->refreshRows();
     }
 
     public array $sortNames = [
@@ -124,16 +124,7 @@ class ProductVariationsDatatable extends DataTableComponent
 
     public function dehydrate()
     {
-        parent::dehydrate();
-        $this->dispatchBrowserEvent('initProductForm');
-    }
-
-    public function dehydrateRows()
-    {
-        $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
-    }
-    public function hydrateRows() {
-        $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
+        $this->dispatchBrowserEvent('EVProductVariationsTableFormInit');
     }
 
     // TODO: Don't forget to create a function that will merge $this->variations
@@ -142,36 +133,40 @@ class ProductVariationsDatatable extends DataTableComponent
      * For now, the moment anything regarding the attributes used for variations changes (switch att itself or add/remove it's value),
      * event is emitted to ProductVariationsDatatable to generate new set of all_combinations in the background.
      * Once you go to Variations step, generateAllVariations() is called which intersect previous variations with newly created set of
-     * all_combinations and and then merges values from previous variations to intersected variations and sorts them by key.
+     * all_combinations and then merges values from previous variations to intersected variations and sorts them by key.
 
      * This means that even if we change anything regarding the attribute values,
      * variants which were previously defined and are not touched by removing variant att value, stay in the table!
      */
     public function generateAllVariations() {
-        $this->variations = $this->variations->intersectByKeys($this->all_combinations);
-        $this->variations = $this->all_combinations->merge($this->variations)->map(function($item) {
-            $item['remove_flag'] = false;
+
+        if($this->variations->isEmpty()) {
+            $this->variations = $this->all_combinations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name))->sortKeys();
+        } else {
+            $this->variations = collect($this->variations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name)))
+                ->union(collect($this->all_combinations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name))));
+//            $this->variations = $this->all_combinations->union($this->variations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name))
+//                ->intersectByKeys($this->all_combinations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name))) )
+//                ->sortKeys();
+        }
+
+
+        $this->variations = $this->variations->map(function($item) {
+            $item->remove_flag = false;
             return $item;
         })->sortKeys();
 
-        // TODO: Because of $this->>rows structure we are getting the checksum error...Possible solutions:
-        // TODO: Try to convert rows to arrays always and use array notation in FE blade templates
-        $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object']);
+        $this->rows = collect($this->variations);
     }
 
-    public function refreshRows($generate_all = true) {
-        $this->rows = castCollectionItemsTo($this->variations, 'object', ['temp_stock' => 'object'])->filter(function ($row, $key) {
-            return $row->remove_flag === false;
-        })->sortKeys();
-    }
 
     public function createAllCombinations()
     {
-        $matrix = EVS::generateAllVariations($this->attributes);
-        $this->all_combinations = collect([]);
+        $matrix = EVS::generateAttributeValuesMatrix($this->attributes);
+        $this->all_combinations = new \Illuminate\Database\Eloquent\Collection();
 
         // Get all possible combinations
-        if(!empty($matrix)) {
+        if($matrix instanceof Collection && $matrix->isNotEmpty()) {
             foreach($matrix as $index => $combo) {
                 if(empty($combo)) {
                     continue;
@@ -183,33 +178,50 @@ class ProductVariationsDatatable extends DataTableComponent
 
                 $variant_data = [];
 
-                foreach($combo as $value) {
-                    $variant_data[$value['attribute_id']] = [
-                        'attribute_value_id' => $value['id'],
-                        'attribute_id' => $value['attribute_id'],
+                /*
+                 * Matrix can be consisted of array of arrays OR array of AttributeValues.
+                 * 1) Array of arrays - when there is more than one attribute used for variations
+                 * 2) Array of AttributeValues - when there is one attribute used for variations
+                 *
+                 * IMPORTANT: DO NOT STORE $variant_data items under $keys which are not default, like: $variant_data[$value->attribute_id]
+                 * REASON: When php data is printed in livewire component js, array keys will be reset, which produces different $variant data and throws checksum error
+                 * `17 => ['attribute_id' => 17, 'attribute_value_id' => 45]` becomes `0 => ['attribute_id' => 17, 'attribute_value_id' => 45]`
+                 * This is clearly different when JS data is sent to PHP and checksum error is thrown!!!
+                 * Use classic array keys (0,1,2...) OR string keys instead of integer IDs as keys because JS resets integer keys to go from 0!!!!! VERY IMPORTANT!!!!
+                 */
+                if($combo instanceof AttributeValue) {
+                    $variant_data[] = [
+                        'attribute_value_id' => $combo->id,
+                        'attribute_id' => $combo->attribute_id,
                     ];
+                } else {
+                    foreach($combo as $value) {
+                        $variant_data[] = [
+                            'attribute_value_id' => $value->id,
+                            'attribute_id' => $value->attribute_id,
+                        ];
+                    }
                 }
+
                 $variation->variant = $variant_data;
                 $variation->price = $this->product->unit_price ?? 0;
                 $variation->discount = 0;
                 $variation->discount_type = 'percent';
                 $variation->thumbnail = null;
-                $variation->temp_stock = new ProductStock();
-                $variation->temp_stock->qty = 0;
-                $variation->temp_stock->sku = '';
-                $this->all_combinations->push($variation->toArray()); // Turn the Model to Array!
+                $variation->stock = new ProductStock();
+                $variation->stock->qty = 0;
+                $variation->stock->sku = '';
+                $this->all_combinations->push($variation);
             }
         }
 
-        $this->all_combinations = $this->all_combinations->keyBy(function($item) {
-            return ProductVariation::composeVariantKey($item['name']);
-        })->sortKeys();
+        $this->all_combinations = $this->all_combinations->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
 
         // If $this->variations are empty (product doesn't have variations for now), make $this->variations to have $this->all_combinations
         if($this->variations->isEmpty()) {
             $this->variations = $this->all_combinations;
         } else {
-            $this->generateAllVariations();
+            $this->refreshRows();
         }
 
         //$this->rows = collect($this->variations);
@@ -238,8 +250,6 @@ class ProductVariationsDatatable extends DataTableComponent
 
         if($this->attributes->isNotEmpty()) {
             foreach($this->attributes as $att) {
-                $att = (object) $att;
-
                 $columns[] = Column::make($att->name, \Str::slug($att->name))
                     ->addClass('hidden md:table-cell');
             }
@@ -269,6 +279,7 @@ class ProductVariationsDatatable extends DataTableComponent
     }
 
     public function setVariationsData() {
+
         if($this->rows->isNotEmpty()) {
             // Remove flagged Variations
             foreach($this->variations as $key => $variation) {
@@ -283,37 +294,30 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
             }
 
-            // Validate rows
-            // Make each row an array instead of object, because validate method cannot use dot notation on array with objects!
-            $this->rows = castCollectionItemsTo($this->rows/*->filter(function($value, $key) {
-                $value = (array) $value; return (isset($value['name']) && !empty($value['variant'] ?? null));
-            })*/, 'array', ['temp_stock' => 'array']);
 
             try {
                 $this->validate();
-                $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
 
                 // Set Variations
-                $this->variations = collect([]);
+                $this->variations = new \Illuminate\Database\Eloquent\Collection();
 
                 DB::beginTransaction();
 
                 try {
-                    foreach ($this->rows as $index => $variation) {
+                    foreach ($this->variations as $index => $variation) {
+
                         if(empty($variation->id)) {
                             // New variation - Insert
-                            $temp_stock = $variation->temp_stock;
-                            unset($variation->temp_stock);
-
                             $variation_model = new ProductVariation();
                             $variation_model->fill((array) $variation);
                             $variation_model->save();
 
                             // Sync Uploads and update Stock
                             $variation_model->syncUploads(); // insert variation thumbnail
-                            $this->setProductVariationStocks(false, $variation_model, $temp_stock);
-                            $this->variations->push($variation_model->toArray());
+                            $this->setProductVariationStocks(false, $variation_model);
+                            $this->variations->push($variation_model);
                         } else {
+
                             // Old variation - Update or Delete
                             $variation_model = ProductVariation::find($variation->id);
                             $variation_model->price = !empty($variation->price) ? $variation->price : $variation_model->price;
@@ -321,8 +325,8 @@ class ProductVariationsDatatable extends DataTableComponent
 
                             // Sync Uploads and update Stock
                             $variation_model->syncUploads(); // insert variation thumbnail
-                            $this->setProductVariationStocks(false, $variation_model, $variation->temp_stock);
-                            $this->variations->push($variation_model->toArray());
+                            $this->setProductVariationStocks(false, $variation_model);
+                            $this->variations->push($variation_model);
                         }
                     }
 
@@ -333,10 +337,7 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
 
 
-                $this->variations = $this->variations->keyBy(function($item) {
-                    return ProductVariation::composeVariantKey($item['name']);
-                });
-                $this->refreshRows();
+                $this->variations = $this->variations->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']));
 
                 // Update Attributes (used for variations) selected values in DB, by emitting
                 //$this->emitUp('variationsUpdated');
@@ -349,36 +350,37 @@ class ProductVariationsDatatable extends DataTableComponent
             }
 
             // 2) Revert rows to collection of objects!
-            $this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
+            //$this->rows = castCollectionItemsTo($this->rows, 'object', ['temp_stock' => 'object']);
         }
     }
 
-    protected function setProductVariationStocks($iterate = false, $variation_model = [], $stock = []) {
-        if(!$iterate && !empty($variation_model) && !empty($stock)) {
+    protected function setProductVariationStocks($iterate = false, $variation_model = []) {
+        if(!$iterate && !empty($variation_model) ) {
             $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => ProductVariation::class]);
-            $product_stock->qty = (float) ($stock->qty ?? 0);
-            $product_stock->sku = $stock->sku;
+            $product_stock->qty = (float) ($variation_model->current_stock ?? 0);
+            $product_stock->sku = $variation_model->temp_sku;
             $product_stock->save();
         } else if($iterate) {
             if($this->rows->isNotEmpty()) {
                 foreach($this->rows as $index => $var) {
                     $product_stock = ProductStock::firstOrNew(['subject_id' => $var->id, 'subject_type' => ProductVariation::class]);
-                    $product_stock->qty = (float) $var->temp_stock->qty;
-                    $product_stock->sku = $var->temp_stock->sku;
+                    $product_stock->qty = (float) $var->current_stock;
+                    $product_stock->sku = $var->temp_sku;
                     $product_stock->save();
                 }
             }
         }
     }
 
-    public function setRemoveFlag($row_name) {
-        if(!empty($this->variations->get($row_name))) {
-            $this->variations = $this->variations->map(function($variation) use($row_name) {
-                if($row_name === $variation['name']) {
-                    $variation['remove_flag'] = true;
+    public function setRemoveFlag($index) {
+        if(!empty($this->variations->get($index))) {
+            $this->variations = $this->variations->map(function($variation, $key) use($index) {
+                if($key === (int) $index) {
+                    $variation->remove_flag = true;
                 }
                 return $variation;
             });
+
             $this->refreshRows();
         }
     }
@@ -420,7 +422,8 @@ class ProductVariationsDatatable extends DataTableComponent
                 }
             }
 
-            $this->variations = collect($data)->sortKeys();
+            $this->variations = (new \Illuminate\Database\Eloquent\Collection($data))->sortKeys();
+
             $this->refreshRows();
         }
     }
@@ -432,27 +435,35 @@ class ProductVariationsDatatable extends DataTableComponent
     public function setAllVariationsPrice($price) {
         if($this->variations->isNotEmpty()) {
             $this->variations = $this->variations->map(function($variation) use ($price) {
-                $variation['price'] = $price;
+                $variation->price = $price;
                 return $variation;
             });
-        }
 
-        $this->refreshRows();
+            $this->refreshRows();
+        }
     }
 
     public function setGenericSKUs() {
         if($this->variations->isNotEmpty()) {
             $this->variations = $this->variations->map(function($variation) {
-                $variation['temp_stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
+                $variation->temp_sku = $this->product->slug.'-'.Str::slug($variation->name).'-001';
                 return $variation;
             })->sortKeys();
-        }
 
-        $this->refreshRows();
+            $this->refreshRows();
+        }
     }
 
     public function modalsView(): string
     {
         return 'livewire.forms.products.product-variations-datatable-footer';
+    }
+
+    public function refreshRows(): void
+    {
+        $this->rows = collect($this->variations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name))
+        ->intersectByKeys($this->all_combinations->keyBy(fn($item) => ProductVariation::composeVariantKey($item->name)))
+        ->filter(fn($item) => !($item->remove_flag ?? false))
+        ->sortKeys());
     }
 }

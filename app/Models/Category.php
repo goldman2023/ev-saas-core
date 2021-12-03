@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\TranslationTrait;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;

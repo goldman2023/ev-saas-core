@@ -3,7 +3,6 @@
 @section('page_title', translate('Stock Management - ').$product->getTranslation('name'))
 
 @push('head_scripts')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-html5-2.0.1/fh-3.2.0/r-2.2.9/datatables.min.css"/>
     <script src="https://unpkg.com/alpinejs@3.5.1/dist/cdn.min.js" defer></script>
 @endpush
 

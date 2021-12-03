@@ -43,52 +43,54 @@ return [
      * To configure their behavior, see the config keys below.
      */
     'bootstrappers' => [
-    Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper::class,
-    Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
-    Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class,
-    Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class,
-    // Stancl\Tenancy\Bootstrappers\RedisTenancyBootstrapper::class, // Note: phpredis is needed
-],
+        Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper::class,
+        Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
+        Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class,
+        Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class,
+        // Stancl\Tenancy\Bootstrappers\RedisTenancyBootstrapper::class, // Note: phpredis is needed
+    ],
 
     /**
      * Database tenancy config. Used by DatabaseTenancyBootstrapper.
      */
     'database' => [
-    'central_connection' => env('DB_CONNECTION', 'central'),
+        'tenant_connection' => 'tenant',
 
-    /**
-     * Connection used as a "template" for the tenant database connection.
-     */
-    'template_tenant_connection' => null,
-
-    /**
-     * Tenant database names are created like this:
-     * prefix + tenant_id + suffix.
-     */
-    'prefix' => 'tenant',
-    'suffix' => '',
-
-    /**
-     * TenantDatabaseManagers are classes that handle the creation & deletion of tenant databases.
-     */
-    'managers' => [
-        'sqlite' => Stancl\Tenancy\TenantDatabaseManagers\SQLiteDatabaseManager::class,
-        'mysql' => Stancl\Tenancy\TenantDatabaseManagers\MySQLDatabaseManager::class,
-        'pgsql' => Stancl\Tenancy\TenantDatabaseManagers\PostgreSQLDatabaseManager::class,
+        'central_connection' => env('DB_CONNECTION', 'mysql'),
 
         /**
-         * Use this database manager for MySQL to have a DB user created for each tenant database.
-         * You can customize the grants given to these users by changing the $grants property.
+         * Connection used as a "template" for the tenant database connection.
          */
-        // 'mysql' => Stancl\Tenancy\TenantDatabaseManagers\PermissionControlledMySQLDatabaseManager::class,
+        'template_tenant_connection' => env('DB_CONNECTION', 'mysql'),
 
         /**
-         * Disable the pgsql manager above, and enable the one below if you
-         * want to separate tenant DBs by schemas rather than databases.
+         * Tenant database names are created like this:
+         * prefix + tenant_id + suffix.
          */
-        // 'pgsql' => Stancl\Tenancy\TenantDatabaseManagers\PostgreSQLSchemaManager::class, // Separate by schema instead of database
+        'prefix' => 'tenant',
+        'suffix' => '',
+
+        /**
+         * TenantDatabaseManagers are classes that handle the creation & deletion of tenant databases.
+         */
+        'managers' => [
+            'sqlite' => Stancl\Tenancy\TenantDatabaseManagers\SQLiteDatabaseManager::class,
+            'mysql' => Stancl\Tenancy\TenantDatabaseManagers\MySQLDatabaseManager::class,
+            'pgsql' => Stancl\Tenancy\TenantDatabaseManagers\PostgreSQLDatabaseManager::class,
+
+            /**
+             * Use this database manager for MySQL to have a DB user created for each tenant database.
+             * You can customize the grants given to these users by changing the $grants property.
+             */
+            // 'mysql' => Stancl\Tenancy\TenantDatabaseManagers\PermissionControlledMySQLDatabaseManager::class,
+
+            /**
+             * Disable the pgsql manager above, and enable the one below if you
+             * want to separate tenant DBs by schemas rather than databases.
+             */
+            // 'pgsql' => Stancl\Tenancy\TenantDatabaseManagers\PostgreSQLSchemaManager::class, // Separate by schema instead of database
+        ],
     ],
-],
 
     /**
      * Cache tenancy config. Used by CacheTenancyBootstrapper.
@@ -102,55 +104,55 @@ return [
      * You can clear cache selectively by specifying the tag.
      */
     'cache' => [
-    'tag_base' => 'tenant', // This tag_base, followed by the tenant_id, will form a tag that will be applied on each cache call.
-],
+        'tag_base' => 'tenant', // This tag_base, followed by the tenant_id, will form a tag that will be applied on each cache call.
+    ],
 
     /**
      * Filesystem tenancy config. Used by FilesystemTenancyBootstrapper.
      * https://tenancyforlaravel.com/docs/v3/tenancy-bootstrappers/#filesystem-tenancy-boostrapper.
      */
     'filesystem' => [
-    /**
-     * Each disk listed in the 'disks' array will be suffixed by the suffix_base, followed by the tenant_id.
-     */
-    'suffix_base' => 'tenant',
-    'disks' => [
-        'local',
-        'public',
-        // 's3',
+        /**
+         * Each disk listed in the 'disks' array will be suffixed by the suffix_base, followed by the tenant_id.
+         */
+        'suffix_base' => 'tenant',
+        'disks' => [
+            'local',
+            'public',
+            // 's3',
+        ],
+
+        /**
+         * Use this for local disks.
+         *
+         * See https://tenancyforlaravel.com/docs/v3/tenancy-bootstrappers/#filesystem-tenancy-boostrapper
+         */
+        'root_override' => [
+            // Disks whose roots should be overriden after storage_path() is suffixed.
+            'local' => '%storage_path%/app/',
+            'public' => '%storage_path%/app/public/',
+        ],
+
+        /**
+         * Should storage_path() be suffixed.
+         *
+         * Note: Disabling this will likely break local disk tenancy. Only disable this if you're using an external file storage service like S3.
+         *
+         * For the vast majority of applications, this feature should be enabled. But in some
+         * edge cases, it can cause issues (like using Passport with Vapor - see #196), so
+         * you may want to disable this if you are experiencing these edge case issues.
+         */
+        'suffix_storage_path' => true,
+
+        /**
+         * By default, asset() calls are made multi-tenant too. You can use global_asset() and mix()
+         * for global, non-tenant-specific assets. However, you might have some issues when using
+         * packages that use asset() calls inside the tenant app. To avoid such issues, you can
+         * disable asset() helper tenancy and explicitly use tenant_asset() calls in places
+         * where you want to use tenant-specific assets (product images, avatars, etc).
+         */
+        'asset_helper_tenancy' => false,
     ],
-
-    /**
-     * Use this for local disks.
-     *
-     * See https://tenancyforlaravel.com/docs/v3/tenancy-bootstrappers/#filesystem-tenancy-boostrapper
-     */
-    'root_override' => [
-        // Disks whose roots should be overriden after storage_path() is suffixed.
-        'local' => '%storage_path%/app/',
-        'public' => '%storage_path%/app/public/',
-    ],
-
-    /**
-     * Should storage_path() be suffixed.
-     *
-     * Note: Disabling this will likely break local disk tenancy. Only disable this if you're using an external file storage service like S3.
-     *
-     * For the vast majority of applications, this feature should be enabled. But in some
-     * edge cases, it can cause issues (like using Passport with Vapor - see #196), so
-     * you may want to disable this if you are experiencing these edge case issues.
-     */
-    'suffix_storage_path' => true,
-
-    /**
-     * By default, asset() calls are made multi-tenant too. You can use global_asset() and mix()
-     * for global, non-tenant-specific assets. However, you might have some issues when using
-     * packages that use asset() calls inside the tenant app. To avoid such issues, you can
-     * disable asset() helper tenancy and explicitly use tenant_asset() calls in places
-     * where you want to use tenant-specific assets (product images, avatars, etc).
-     */
-    'asset_helper_tenancy' => false,
-],
 
     /**
      * Redis tenancy config. Used by RedisTenancyBoostrapper.
@@ -162,11 +164,11 @@ return [
      * either using the Redis facade or by injecting it as a dependency.
      */
     'redis' => [
-    'prefix_base' => 'tenant', // Each key in Redis will be prepended by this prefix_base, followed by the tenant id.
-    'prefixed_connections' => [ // Redis connections whose keys are prefixed, to separate one tenant's keys from another.
-        // 'default',
+        'prefix_base' => 'tenant', // Each key in Redis will be prepended by this prefix_base, followed by the tenant id.
+        'prefixed_connections' => [ // Redis connections whose keys are prefixed, to separate one tenant's keys from another.
+            // 'default',
+        ],
     ],
-],
 
     /**
      * Features are classes that provide additional functionality
@@ -177,12 +179,12 @@ return [
      * understand which ones you want to enable.
      */
     'features' => [
-    Stancl\Tenancy\Features\UserImpersonation::class,
-    // Stancl\Tenancy\Features\TelescopeTags::class,
-    Stancl\Tenancy\Features\UniversalRoutes::class,
-    Stancl\Tenancy\Features\TenantConfig::class, // https://tenancyforlaravel.com/docs/v3/features/tenant-config
-    Stancl\Tenancy\Features\CrossDomainRedirect::class, // https://tenancyforlaravel.com/docs/v3/features/cross-domain-redirect
-],
+        Stancl\Tenancy\Features\UserImpersonation::class,
+        // Stancl\Tenancy\Features\TelescopeTags::class,
+        Stancl\Tenancy\Features\UniversalRoutes::class,
+        Stancl\Tenancy\Features\TenantConfig::class, // https://tenancyforlaravel.com/docs/v3/features/tenant-config
+        Stancl\Tenancy\Features\CrossDomainRedirect::class, // https://tenancyforlaravel.com/docs/v3/features/cross-domain-redirect
+    ],
 
     /**
      * Should tenancy routes be registered.
@@ -197,30 +199,30 @@ return [
      * Parameters used by the tenants:migrate command.
      */
     'migration_parameters' => [
-    '--force' => true, // This needs to be true to run migrations in production.
-    '--path' => [database_path('migrations/tenant')],
-    '--realpath' => true,
-],
+        '--force' => true, // This needs to be true to run migrations in production.
+        '--path' => [database_path('migrations/tenant')],
+        '--realpath' => true,
+    ],
 
     /**
      * Parameters used by the tenants:seed command.
      */
     'seeder_parameters' => [
-    '--class' => 'DatabaseSeeder', // root seeder class
-    // '--force' => true,
-],
+        '--class' => 'DatabaseSeeder', // root seeder class
+        // '--force' => true,
+    ],
 
     /**
      * Default Parameters used by the tenants:pull command.
      */
     'pull_parameters' => [
-    '--path' => [database_path('migrations/tenant')],
-    '--drop-views' => true,
-    '--drop-types' => true,
-    '--force' => true,
-    '--realpath' => true,
-    //'--type' => 'demo', // Demo creates a demo tenant, while Real fetches the Central App tenants
-    //'--fetch' => 'local' // If --type is "real", --fetch can be "local" or "production"
-    // '--force' => true,
-],
+        '--path' => [database_path('migrations/tenant')],
+        '--drop-views' => true,
+        '--drop-types' => true,
+        '--force' => true,
+        '--realpath' => true,
+        //'--type' => 'demo', // Demo creates a demo tenant, while Real fetches the Central App tenants
+        //'--fetch' => 'local' // If --type is "real", --fetch can be "local" or "production"
+        // '--force' => true,
+    ],
 ];

@@ -60,7 +60,7 @@ class MacrosServiceProvider extends ServiceProvider
             return $this->whenNotEmpty($recursive = function (&$items) use (&$recursive, $property_name, $method) {
 
                 if($items->isEmpty()) {
-                    return null;
+                    return [];
                 }
 
                 $items = $items->{$method['fn']}(...$method['params']);
@@ -72,6 +72,37 @@ class MacrosServiceProvider extends ServiceProvider
 
                 return $items;
             });
+        });
+
+        // Static version of `recursiveApply` function. Collections, arrays and objects can be used as $items!
+        Collection::macro('recursiveApplyStatic', function ($items, $property_name, $method = []) {
+            // If given $items are Collection type, call `recursiveApply` macro
+            if($items instanceof Collection) {
+                return $items->recursiveApply($property_name, $method);
+            }
+
+            $recursive = function (&$items, $property_name, $method) use (&$recursive) {
+
+                if(empty($items)) {
+                    return [];
+                }
+
+                $items = collect($items)->{$method['fn']}(...$method['params'])->all();
+
+                foreach($items as &$item) {
+                    if(is_object($item)) {
+                        $new_items = $item->$property_name;
+                        $item->$property_name = $recursive($new_items, $property_name, $method);
+                    } else if(is_array($item)) {
+                        $new_items = $item[$property_name];
+                        $item[$property_name] = $recursive($new_items, $property_name, $method);
+                    }
+                }
+
+                return $items;
+            };
+
+            return $recursive($items, $property_name, $method);
         });
 
         /* Add Collection RecursiveFind marco function */
@@ -112,6 +143,13 @@ class MacrosServiceProvider extends ServiceProvider
             }
 
             return $result;
+        });
+
+        // Change all Models `connection` property (usually needed for Livewire collections manipulations)
+        \Illuminate\Database\Eloquent\Collection::macro('setConnection', function() {
+            return $this->map(function($item, $key) {
+                return $item->setConnection(config('tenancy.database.tenant_connection'));
+            });
         });
     }
 

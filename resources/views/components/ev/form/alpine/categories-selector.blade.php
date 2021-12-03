@@ -1,11 +1,26 @@
-<div class="form-group categories-selector-wrapper {{ $class }}">
+<div class="form-group categories-selector-wrapper {{ $class }}"
+     x-init="
+        $.HSCore.components.HSSelect2.init($($refs['{{ $name }}']));
+
+        $($refs['{{ $name }}']).on('select2:select', (event) => {
+          {{ $name }} = event.target.value;
+        });
+
+        $watch('{{ $name }}', (value) => {
+          $($refs['{{ $name }}']).val(value).trigger('change');
+        });
+ ">
     @if (!empty(trim($label)))
         <label class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
     @endif
 
         <select
-            name="selected_categories"
-            class="categories-selector js-select2-custom custom-select @error($errorBagName) is-invalid @enderror"
+            x-model="{{ $name }}"
+            x-ref="{{ $name }}"
+            name="{{ $name }}"
+
+            class="categories-selector js-select2-custom custom-select"
+            :class="{'is-invalid' : validation_errors.hasOwnProperty('{{ $name }}')}"
             data-hs-select2-options='{!! $options !!}'
             size="1" style="opacity: 0;"
             data-level="0"
@@ -50,7 +65,8 @@
             @endforeach
         @endif
 
-    @error($errorBagName)
-        <div class="invalid-feedback d-block">{{ $message }}</div>
-    @enderror
+    <div class="invalid-feedback d-block"
+         x-show="validation_errors.hasOwnProperty('{{ $name }}')"
+         x-text="getSafe(() => validation_errors['{{ $name }}'][0], '')">
+    </div>
 </div>

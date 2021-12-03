@@ -31,7 +31,7 @@ use Str;
  * @property float $price
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * @mixin \Eloquent
+ * @mixin \Eloquentf
  */
 
 class ProductVariation extends EVBaseModel
@@ -52,7 +52,14 @@ class ProductVariation extends EVBaseModel
     use VariationTrait;
 
     /* Properties not saved in DB */
-    public bool $remove_flag;
+    public bool $remove_flag = false;
+
+    // Default atts
+    protected $attributes = [
+        'price' => 0,
+        'discount' => 0,
+    ];
+
 
     /**
      * The relationships that should always be loaded.
@@ -62,7 +69,7 @@ class ProductVariation extends EVBaseModel
      */
     protected $with = [];
 
-    protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type'];
+    protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type', 'created_at', 'updated_at'];
     //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'remove_flag'];
 
     protected $casts = [
@@ -168,11 +175,7 @@ class ProductVariation extends EVBaseModel
         return 'price';
     }
 
-    /**
-     * Returns true if this Model has Variations
-     *
-     * @return bool|null
-     */
+
     public function useVariations(): ?bool
     {
         return false;

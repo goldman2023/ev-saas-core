@@ -1,8 +1,9 @@
 @push('pre_head_scripts')
     <script>
-        let all_categories = @json($categories);
+        let all_categories = @json(Categories::getAllFormatted());
     </script>
 @endpush
+
 <div class="lw-form" x-data="{}">
 
     <!-- Message Body -->
@@ -23,22 +24,21 @@
         </div>
     </x-ev.alert>
 
-    @if($insert_success)
-        <div class="row">
-            <div class="col-12">
-                <h5>{{ translate('Your product preview:') }}</h5>
-            </div>
-            <div class="col-sm-4"></div>
-            <div class="col-sm-4">
-                <x-default.products.cards.product-card
-                    :product="$product"
-                >
-                </x-default.products.cards.product-card>
-            </div>
-            <div class="col-sm-4"></div>
-        </div>
-
-    @endif
+{{--    @if($insert_success)--}}
+{{--        <div class="row">--}}
+{{--            <div class="col-12">--}}
+{{--                <h5>{{ translate('Your product preview:') }}</h5>--}}
+{{--            </div>--}}
+{{--            <div class="col-sm-4"></div>--}}
+{{--            <div class="col-sm-4">--}}
+{{--                <x-default.products.cards.product-card--}}
+{{--                    :product="$product"--}}
+{{--                >--}}
+{{--                </x-default.products.cards.product-card>--}}
+{{--            </div>--}}
+{{--            <div class="col-sm-4"></div>--}}
+{{--        </div>--}}
+{{--    @endif--}}
     <!-- End Message Body -->
 
     <x-ev.toast id="product-updated-toast"
@@ -46,10 +46,14 @@
                 content="{{ translate('Product successfully updated!') }}"
                 class="bg-success border-success text-white h3"></x-ev.toast>
 
-    @if(!$insert_success)
-        <div class="card mb-3 mb-lg-5">
+
+    <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
+                <a href="{{ back()->getTargetUrl() }}" class="text-secondary mr-3" style="height: 24px;">
+                    @svg('heroicon-o-chevron-left', ['style' => 'height: 24px;'])
+                </a>
+
                 <h4 class="card-header-title">
                     @if(!empty($product->id))
                         {{ translate('Edit Product') }}
@@ -58,13 +62,32 @@
                     @endif
                 </h4>
 
-                @if(!empty($product->id))
-                    <button class="btn btn-primary btn-xs d-flex justify-content-center ml-auto"
-                            onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
-                        @svg('lineawesome-save', ['style' => 'width: 18px; height: 18px;', 'class' => 'mr-1'])
-                        <span>{{ translate('Save') }}</span>
-                    </button>
-                @endif
+                <div class="ml-auto d-flex align-items-center">
+                    @if(!empty($product->id))
+                        <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
+                           href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+                            @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                            {{ translate('Stock Management') }}
+                        </a>
+                    @endif
+
+                    @if(!empty($product->useVariations()))
+                        <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
+                           href="{{ route('ev-products.edit.variations', $product->slug) }}">
+                            @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                            {{ translate('Variations') }}
+                        </a>
+                    @endif
+
+                    @if(!empty($product->id))
+                        <button class="btn btn-primary btn-xs d-flex justify-content-center"
+                                onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
+                            @svg('lineawesome-save', ['style' => 'width: 18px; height: 18px;', 'class' => 'mr-1'])
+                            <span>{{ translate('Save') }}</span>
+                        </button>
+                    @endif
+                </div>
+
             </div>
             <!-- End Header -->
 
@@ -144,23 +167,23 @@
                                         </a>
                                     </li>
 
-                                    <li class="step-item {{ $page === 'variations' ? 'active':'' }}">
-                                        <a class="step-content-wrapper" href="javascript:;"
-                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', false, ['variations']]}}))"
-                                           wire:click="refreshVariationsDatatable()"
-                                        ><!-- wire:click="$set('page', 'variations')" -->
-                                            <span class="step-icon step-icon-soft-dark">5</span>
-                                            <div class="step-content">
-                                                <span class="step-title">{{ translate('Variations') }}</span>
-                                                <span class="step-title-description step-text font-size-1">{{ translate('Add product variations') }}</span>
-                                            </div>
-                                        </a>
-                                    </li>
+{{--                                    <li class="step-item {{ $page === 'variations' ? 'active':'' }}">--}}
+{{--                                        <a class="step-content-wrapper" href="javascript:;"--}}
+{{--                                           onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['variations', 'variations', false, ['variations']]}}))"--}}
+{{--                                           wire:click="refreshVariationsDatatable()"--}}
+{{--                                        ><!-- wire:click="$set('page', 'variations')" -->--}}
+{{--                                            <span class="step-icon step-icon-soft-dark">5</span>--}}
+{{--                                            <div class="step-content">--}}
+{{--                                                <span class="step-title">{{ translate('Variations') }}</span>--}}
+{{--                                                <span class="step-title-description step-text font-size-1">{{ translate('Add product variations') }}</span>--}}
+{{--                                            </div>--}}
+{{--                                        </a>--}}
+{{--                                    </li>--}}
 
                                     <li class="step-item {{ $page === 'seo' ? 'active':'' }}">
                                         <a class="step-content-wrapper" href="javascript:;"
                                            onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', 'seo', true]}}))">
-                                            <span class="step-icon step-icon-soft-dark">6</span>
+                                            <span class="step-icon step-icon-soft-dark">5</span>
                                             <div class="step-content">
                                                 <span class="step-title">{{ translate('SEO') }}</span>
                                                 <span class="step-title-description step-text font-size-1">{{ translate('Edit product SEO settings') }}</span>
@@ -185,13 +208,13 @@
                                             <h3 class="card-header-title">{{ translate('General') }}</h3>
                                         </div>
                                     </div>
-                                    <!-- End Header -->z
+                                    <!-- End Header -->
 
                                     <!-- Body -->
                                     <div class="">
                                         <x-ev.form.input name="product.name" type="text" label="{{ translate('Product name') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
 
-                                        <x-ev.form.categories-selector :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
+                                        <x-ev.form.categories-selector error-bag-name="selected_categories" :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
                                         <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" label="{{ translate('Brand') }}" :search="true" placeholder="{{ translate('Select Brand...') }}" />
 
@@ -305,6 +328,9 @@
 
                                         <x-ev.form.radio name="product.stock_visibility_state" :items="EVS::getMappedStockVisibilityOptions()" label="{{ translate('Stock visibility state') }}" value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
 
+                                        <x-ev.form.input name="product.unit_price" type="number" label="{{ translate('Unit price') }}" min="0" step="0.01">
+                                        </x-ev.form.input>
+
                                         <x-ev.form.input name="product.purchase_price" type="number" label="{{ translate('Purchase price') }}" min="0" step="0.01">
                                         </x-ev.form.input>
 
@@ -392,6 +418,7 @@
                                                                 @if($custom_properties->multiple ?? null)
                                                                     <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
                                                                                       class="mt-2 mb-2"
+                                                                                      class-label="d-flex align-items-center"
                                                                                       append-text="{{ translate('Used for variations') }}"
                                                                                       :selected="$attribute->for_variations ?? false">
                                                                     </x-ev.form.toggle>
@@ -439,7 +466,8 @@
                                                                                         :options="$options"
                                                                                         icon="heroicon-o-calendar"
                                                                                         data-type="{{ $attribute->type }}"
-                                                                                        wireType="defer">
+                                                                                        wireType="defer"
+                                                                                        style="text-indent: 25px;">
                                                             </x-ev.form.date-time-picker>
                                                         @elseif($attribute->type === 'checkbox')
                                                             <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
@@ -488,8 +516,7 @@
 
                                             <div class="ml-auto">
                                                 <button type="button" class="btn btn-primary"
-                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'variations', false, ['attributes']]}}))"
-                                                        wire:click="refreshVariationsDatatable()"
+                                                        onClick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['attributes', 'seo', false, ['attributes']]}}))"
                                                 >
                                                     {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
                                                 </button>
@@ -500,65 +527,54 @@
                                 </div>
 
 
-                                <div id="productStepVariations" class="{{ $page === 'variations' ? 'active':'' }}" style="{{ $page !== 'variations' ? "display: block !important;" : "" }}">
-                                    <!-- Header -->
-                                    <div class="border-bottom pb-2 mb-3">
-                                        <div class="flex-grow-1">
-                                            <span class="d-lg-none">{{ translate('Step 5 of 6') }}</span>
-                                            <h3 class="card-header-title">{{ translate('Variations') }}</h3>
-                                        </div>
-                                    </div>
-                                    <!-- End Header -->
+{{--                                <div id="productStepVariations" class="{{ $page === 'variations' ? 'active':'' }}" style="{{ $page !== 'variations' ? "display: block !important;" : "" }}">--}}
+{{--                                    <!-- Header -->--}}
+{{--                                    <div class="border-bottom pb-2 mb-3">--}}
+{{--                                        <div class="flex-grow-1">--}}
+{{--                                            <span class="d-lg-none">{{ translate('Step 5 of 6') }}</span>--}}
+{{--                                            <h3 class="card-header-title">{{ translate('Variations') }}</h3>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <!-- End Header -->--}}
 
-                                    <!-- Body -->
-                                    <div class="pb-4">
-                                        <div class="full-width product-variations-wrapper">
-                                            <x-ev.modal color="primary"
-                                                        id="product_variations_modal"
-                                                        dialog-class="modal-xl"
-                                                        body-class="d-flex flex-column"
-                                                        btn-text="{{ translate('Edit product variations') }}"
-                                                        header-title="{{ translate('Product Variations') }}"
-                                                        trigger-wire-click="">
-                                                <livewire:forms.products.product-variations-datatable
-                                                    class="{{ $productVariationsDatatableClass }}"
-                                                    :paginationEnabled="false"
-                                                    :showSearch="false"
-                                                    :emptyMessage="translate('Please generate all variations or add them manually.')"
-                                                    :product="$product"
-                                                    :variation-attributes="$this->variations_attributes"
-                                                    wire-target="setVariationsData">
-                                                </livewire:forms.products.product-variations-datatable>
-                                            </x-ev.modal>
+{{--                                    <!-- Body -->--}}
+{{--                                    <div class="pb-4">--}}
+{{--                                        <div class="full-width product-variations-wrapper">--}}
+{{--                                            <x-ev.modal color="primary"--}}
+{{--                                                        id="product_variations_modal"--}}
+{{--                                                        dialog-class="modal-xl"--}}
+{{--                                                        body-class="d-flex flex-column"--}}
+{{--                                                        btn-text="{{ translate('Edit product variations') }}"--}}
+{{--                                                        header-title="{{ translate('Product Variations') }}"--}}
+{{--                                                        trigger-wire-click="">--}}
+{{--                                            </x-ev.modal>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 
 
-                                        </div>
-                                    </div>
+{{--                                    <!-- Footer -->--}}
+{{--                                    <div class="border-top pt-3">--}}
+{{--                                        <div class="d-flex align-items-center">--}}
+{{--                                            <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"--}}
+{{--                                                    data-hs-step-form-prev-options='{--}}
+{{--                                                     "targetSelector": "#productStepAttributes"--}}
+{{--                                                   }'>--}}
+{{--                                                @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])--}}
+{{--                                                {{ translate('Previous step') }}--}}
+{{--                                            </button>--}}
 
-
-                                    <!-- Footer -->
-                                    <div class="border-top pt-3">
-                                        <div class="d-flex align-items-center">
-                                            <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
-                                                    data-hs-step-form-prev-options='{
-                                                     "targetSelector": "#productStepAttributes"
-                                                   }'>
-                                                @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
-                                                {{ translate('Previous step') }}
-                                            </button>
-
-                                            <div class="ml-auto">
-                                                <button type="button" class="btn btn-primary"
-                                                        data-hs-step-form-prev-options='{
-                                                         "targetSelector": "#productStepSEO"
-                                                       }'>
-                                                    {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- End Footer -->
-                                </div>
+{{--                                            <div class="ml-auto">--}}
+{{--                                                <button type="button" class="btn btn-primary"--}}
+{{--                                                        data-hs-step-form-prev-options='{--}}
+{{--                                                         "targetSelector": "#productStepSEO"--}}
+{{--                                                       }'>--}}
+{{--                                                    {{ translate('Continue') }} <i class="fas fa-angle-right ml-1"></i>--}}
+{{--                                                </button>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                    <!-- End Footer -->--}}
+{{--                                </div>--}}
 
                                 <div id="productStepSEO" class="{{ $page === 'seo' ? 'active':'' }}" style="{{ $page !== 'seo' ? "display: none;" : "" }}">
                                     <!-- Header -->
@@ -592,7 +608,7 @@
                                         <div class="d-flex align-items-center">
                                             <button type="button" class="btn btn-ghost-secondary d-flex align-items-center"
                                                     data-hs-step-form-prev-options='{
-                                             "targetSelector": "#productStepAttributesVariations"
+                                             "targetSelector": "#productStepAttributes"
                                            }'>
                                                 @svg('heroicon-o-chevron-left', ['style'=>'width:18px;'])
                                                 {{ translate('Previous step') }}
@@ -626,7 +642,6 @@
                 </form>
             </div>
         </div>
-    @endif
 
     @if($product->id)
     <!-- Attribute for variation used value removal modal -->
@@ -647,6 +662,7 @@
         </x-ev.modal>
         <!-- Attribute for variation used value removal modal -->
     @endif
+
 </div>
 
 

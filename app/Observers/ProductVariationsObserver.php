@@ -29,18 +29,42 @@ class ProductVariationsObserver
     }
 
     /**
-     * Handle the ProductVariation "deleting" event.
+     * Handle the ProductVariation "deleted" event.
      *
      * @param ProductVariation $product_variation
      * @return void
      */
-    public function deleting(ProductVariation $product_variation)
+    public function deleted(ProductVariation $product_variation)
     {
         // Remove variation stock when variation is deleted!
         $stock = $product_variation->stock()->first();
 
         if($stock) {
-            $stock->delete();
+            $stock->delete(); // soft delete
         }
+    }
+
+    /**
+     * Handle the User "forceDeleted" event.
+     *
+     * @param ProductVariation $product_variation
+     * @return void
+     */
+    public function forceDeleted(ProductVariation $product_variation)
+    {
+
+        // Remove variation stock when variation is deleted!
+        $stock = $product_variation->stock->first();
+
+        if($stock) {
+            $stock->forceDelete(); // full delete
+        }
+
+        // Detach uploads
+        $product_variation->uploads()->detach();
+
+        // Remove Translation
+        // TODO: Change ProductTranslations table to include foreign key on product_id and index!!!
+
     }
 }
