@@ -9,6 +9,7 @@ use App\Traits\Caching\SavesToCache;
 use App\Traits\GalleryTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
+use App\Traits\Purchasable;
 use App\Traits\StockManagementTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
@@ -46,6 +47,7 @@ class ProductVariation extends EVBaseModel
 
     use StockManagementTrait;
     use PriceTrait;
+    use Purchasable;
 
     use ReviewTrait; // TODO: Is this necessary?
 

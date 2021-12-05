@@ -1,0 +1,20 @@
+.tooltip {
+    &-lg {
+        .tooltip-inner {
+            max-width: 300px;
+        }
+    }
+
+    &-danger {
+        .arrow {
+            &:before {
+                border-top-color: $danger;
+                border-bottom-color: $danger;
+            }
+        }
+        .tooltip-inner {
+            background-color: $danger;
+            color: $white;
+        }
+    }
+}

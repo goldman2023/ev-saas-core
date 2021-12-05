@@ -109,13 +109,7 @@
                     <!-- Shopping Cart -->
                     <li class="list-inline-item">
                         <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-xs btn-icon btn-ghost-secondary" href="javascript:;"
-                                data-hs-unfold-options='{
-                                  "target": "#shoppingCartDropdown",
-                                  "type": "css-animation",
-                                  "event": "hover",
-                                  "hideOnScroll": "true"
-                                 }'>
+                            <a class="btn btn-xs btn-icon btn-ghost-secondary" href="javascript:;" x-data="" @click="$dispatch('display-cart')">
                                 @svg('heroicon-o-shopping-cart', ['style' => 'width:16px;'])
                             </a>
 

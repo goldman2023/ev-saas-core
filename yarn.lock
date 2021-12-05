@@ -2,6 +2,21 @@
 # yarn lockfile v1
 
 
+"@alpinejs/collapse@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@alpinejs/collapse/-/collapse-3.7.0.tgz#8be00cdcfea43c30890eae45c1c644369ef51200"
+  integrity sha512-ca/joTMBKCj5xw0lBScv2k0+kd+3m7tAiqueHvvWhxOHkQnL4cE+yEoWjQH6DVkxjFvmGOUJKxsRutA6yYy9UQ==
+
+"@alpinejs/intersect@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@alpinejs/intersect/-/intersect-3.7.0.tgz#daf9a7c801d4afe85f542543c6932027780c5dbb"
+  integrity sha512-PN3Rie+VOIJe0FFZcECYx2i/h1yahif1KYWJqJlbuXXg/qyDUULSZNVE4/smRlBomG5GAOyQjmSRn9NQgsmKcw==
+
+"@alpinejs/persist@^3.7.0":
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/@alpinejs/persist/-/persist-3.7.0.tgz#06d447f3953fef928797e7296dfed82d0ad6faf8"
+  integrity sha512-DFxOv4VGpZlVx8hI1PLGfwokiJlZ6U5SigiiBxP6naLrypQLZar0JDtITdYUibnlQx4ZR1La2YRmztfIQ9VvQA==
+
 "@babel/code-frame@7.10.4":
   version "7.10.4"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.10.4.tgz"
@@ -2566,12 +2581,19 @@
   optionalDependencies:
     prettier "^1.18.2"
 
-"@vue/reactivity@3.2.11", "@vue/reactivity@^3.0.2":
+"@vue/reactivity@3.2.11":
   version "3.2.11"
   resolved "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.2.11.tgz"
   integrity sha512-hEQstxPQbgGZq5qApzrvbDmRdK1KP96O/j4XrwT8fVkT1ytkFs4fH2xNEh9QKwXfybbQkLs77W7OfXCv5o6qbA==
   dependencies:
     "@vue/shared" "3.2.11"
+
+"@vue/reactivity@~3.1.1":
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.1.5.tgz#dbec4d9557f7c8f25c2635db1e23a78a729eb991"
+  integrity sha512-1tdfLmNjWG6t/CsPldh+foumYFo3cpyCHgBYQ34ylaMsJ+SNHQ1kApMIa8jN+i593zQuaw3AdWH0nJTARzCFhg==
+  dependencies:
+    "@vue/shared" "3.1.5"
 
 "@vue/runtime-core@3.2.11":
   version "3.2.11"
@@ -2590,9 +2612,14 @@
     "@vue/shared" "3.2.11"
     csstype "^2.6.8"
 
+"@vue/shared@3.1.5":
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.1.5.tgz#74ee3aad995d0a3996a6bb9533d4d280514ede03"
+  integrity sha512-oJ4F3TnvpXaQwZJNF3ZK+kLPHKarDmJjJ6jyzVNDKH9md1dptjC7lWR//jrGuLdek/U6iltWxqAnYOu8gCiOvA==
+
 "@vue/shared@3.2.11":
   version "3.2.11"
-  resolved "https://registry.npmjs.org/@vue/shared/-/shared-3.2.11.tgz"
+  resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.11.tgz#01899f54949caf1ac241de397bd17069632574de"
   integrity sha512-ovfXAsSsCvV9JVceWjkqC/7OF5HbgLOtCWjCIosmPGG8lxbPuavhIxRH1dTx4Dg9xLgRTNLvI3pVxG4ItQZekg==
 
 "@webassemblyjs/ast@1.11.1":
@@ -3041,12 +3068,12 @@ alphanum-sort@^1.0.0, alphanum-sort@^1.0.2:
   resolved "https://registry.npmjs.org/alphanum-sort/-/alphanum-sort-1.0.2.tgz"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-alpinejs@^3.2.3:
-  version "3.3.2"
-  resolved "https://registry.npmjs.org/alpinejs/-/alpinejs-3.3.2.tgz"
-  integrity sha512-JnED6Pp9v/m3M7S9p4+V5ztcfxcGi6PHrXt1Vjz4PGRkLKGsv5FU0dTZRO5A/QYaSwitzfCgnmjgrUeHaIea6Q==
+alpinejs@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/alpinejs/-/alpinejs-3.7.0.tgz#5aa4d286e69c2772b32be335129e81cac074a4ef"
+  integrity sha512-FL+DHOsO5gfE2YZqKoXUrNEOoaZnxta4Z+eZvJU6KEAwCW1ZnDEppUJ1Yo6MIBKLrVbB0ZnWphJyotX9khkm6A==
   dependencies:
-    "@vue/reactivity" "^3.0.2"
+    "@vue/reactivity" "~3.1.1"
 
 ansi-colors@^3.0.0:
   version "3.2.4"

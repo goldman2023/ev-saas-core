@@ -107,6 +107,7 @@ if(is_compiling_tenant) {
 } else {
     mix.js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
         .js(`${__dirname}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
+        .js(`${__dirname}/js/alpine.js`, `public/themes/${theme}/js`).version()
         .js(`${__dirname}/js/vue.js`, `public/themes/${theme}/js`)/*.vue({ version: 2 })*/.version() // Uses Vue v2 // TODO: Fix vue-loader version issue before using .vue()
         .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`, {
             sassOptions: {
@@ -119,54 +120,54 @@ if(is_compiling_tenant) {
         .copyDirectory(`${__dirname}/vendor`, `public/themes/${theme}/vendor`)
         .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)
         // TODO: Note that when .then() function is added, everything is compiled already, so no further compilings are possible!
-        .then(async () => {
-            //optimizeCSS(`public/themes/${theme}/css/app.css`);
-
-            // IMPORTANT NOTE: It's not possible to run file compiling for the same file used as earlier entry point
-            // This means that we cannot run .sass(`${__dirname}/scss/app.scss`) again, so we have to run mix cli processes with tenant_id option for each tenant which uses current theme!
-            // Compile all tenants (who use this theme) scss
-            if(process.env.DB_CONNECTION === 'mysql') {
-                let db = await mysql.createConnection({
-                    host: '127.0.0.1', // TODO: Don't forget to fix this once we move DBs to different servers!
-                    port: process.env.DB_MYSQL_PORT,
-                    user: process.env.DB_MYSQL_USERNAME,
-                    password: process.env.DB_PASSWORD,
-                    database: process.env.DB_DATABASE,
-                });
-                const [rows, fields] = await db.execute(`SELECT t.* FROM tenants AS t INNER JOIN domains AS d ON t.id=d.tenant_id WHERE d.theme = ?`, [theme]);
-
-                let compiled_tenants_ids = [];
-                for (const index in rows) {
-                    let row = rows[index];
-
-                    if(compiled_tenants_ids.indexOf(row.id) === -1) {
-                        compiled_tenants_ids.push(row.id);
-
-                        createTenantCustomStylingVarsFile(row.id, theme);
-
-                        // Compile tenant-theme scss
-
-                        // 1. First approach is not possible due to `Same entry point defined twice` error! Check: https://github.com/laravel-mix/laravel-mix/issues/1936
-                        /*mix.sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css/${row.id}.css`, {
-                            sassOptions: {
-                                processCssUrls: false
-                            },
-                            additionalData: fs.readFileSync(`resources/scss/tenants/${row.id}/_variables-${theme}.scss`).toString()
-                        }).version()*/
-
-                        // 2. Second approach is to run npx mix cli for each tenant separately in separate process
-                        const process = spawn(`npx mix watch --mix-config="themes/${theme}/webpack.mix.js" -- --env tenant_id=${row.id}`, {
-                            stdio: 'inherit',
-                            shell: true
-                        });
-                    }
-                }
-
-                await db.end();
-            } else if(process.env.DB_CONNECTION === 'pgsql') {
-                // TODO: Same logic as above but just for PostgresSQL
-            }
-        });
+        // .then(async () => {
+        //     //optimizeCSS(`public/themes/${theme}/css/app.css`);
+        //
+        //     // IMPORTANT NOTE: It's not possible to run file compiling for the same file used as earlier entry point
+        //     // This means that we cannot run .sass(`${__dirname}/scss/app.scss`) again, so we have to run mix cli processes with tenant_id option for each tenant which uses current theme!
+        //     // Compile all tenants (who use this theme) scss
+        //     if(process.env.DB_CONNECTION === 'mysql') {
+        //         let db = await mysql.createConnection({
+        //             host: '127.0.0.1', // TODO: Don't forget to fix this once we move DBs to different servers!
+        //             port: process.env.DB_MYSQL_PORT,
+        //             user: process.env.DB_MYSQL_USERNAME,
+        //             password: process.env.DB_PASSWORD,
+        //             database: process.env.DB_DATABASE,
+        //         });
+        //         const [rows, fields] = await db.execute(`SELECT t.* FROM tenants AS t INNER JOIN domains AS d ON t.id=d.tenant_id WHERE d.theme = ?`, [theme]);
+        //
+        //         let compiled_tenants_ids = [];
+        //         for (const index in rows) {
+        //             let row = rows[index];
+        //
+        //             if(compiled_tenants_ids.indexOf(row.id) === -1) {
+        //                 compiled_tenants_ids.push(row.id);
+        //
+        //                 createTenantCustomStylingVarsFile(row.id, theme);
+        //
+        //                 // Compile tenant-theme scss
+        //
+        //                 // 1. First approach is not possible due to `Same entry point defined twice` error! Check: https://github.com/laravel-mix/laravel-mix/issues/1936
+        //                 /*mix.sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css/${row.id}.css`, {
+        //                     sassOptions: {
+        //                         processCssUrls: false
+        //                     },
+        //                     additionalData: fs.readFileSync(`resources/scss/tenants/${row.id}/_variables-${theme}.scss`).toString()
+        //                 }).version()*/
+        //
+        //                 // 2. Second approach is to run npx mix cli for each tenant separately in separate process
+        //                 const process = spawn(`npx mix watch --mix-config="themes/${theme}/webpack.mix.js" -- --env tenant_id=${row.id}`, {
+        //                     stdio: 'inherit',
+        //                     shell: true
+        //                 });
+        //             }
+        //         }
+        //
+        //         await db.end();
+        //     } else if(process.env.DB_CONNECTION === 'pgsql') {
+        //         // TODO: Same logic as above but just for PostgresSQL
+        //     }
+        // });
 
 
 }

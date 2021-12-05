@@ -29,9 +29,9 @@
                 class="form-control {{ $class }} {{ $quantityCounter && !$disabled ? 'js-result input-group-quantity-counter-control': '' }}"
                 :class="{'is-invalid' : validation_errors.hasOwnProperty('{{ $name }}')}"
                 name="{{ $name }}"
+                aria-label="{{ $label }}"
                 @if($id) id="{{ $id }}" @endif
                 @if($placeholder) placeholder="{{ $placeholder }}" @endif
-                aria-label="{{ $label }}"
                 @if($disabled) disabled @endif
                 {{ $attributes }}
             >

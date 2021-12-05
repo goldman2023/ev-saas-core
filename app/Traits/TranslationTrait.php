@@ -36,7 +36,7 @@ trait TranslationTrait
      */
     public function initializeTranslationTrait(): void
     {
-        //$this->append(['brand_id']);
+
     }
 
     /************************************

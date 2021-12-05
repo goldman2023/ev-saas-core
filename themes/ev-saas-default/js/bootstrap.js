@@ -1,8 +1,6 @@
 import Sortable from 'sortablejs';
 import flatpickr from "flatpickr";
-/*import Alpine from 'alpinejs';
-import persist from '@alpinejs/persist';
-import intersect from '@alpinejs/intersect';*/
+require("./utility/multi-clamp");
 
 /**
  * Require custom prototypes
@@ -31,12 +29,6 @@ try {
     require('daterangepicker');
 
     require('bootstrap/dist/js/bootstrap.bundle.min.js'); // includes popper.js by default 1.16.1
-
-    /* eXtend Alpine and start it */
-    /*Alpine.plugin(persist);
-    Alpine.plugin(intersect);
-    window.Alpine = Alpine;
-    Alpine.start();*/
 } catch (e) {}
 
 /**
@@ -69,3 +61,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.EV = {};
 require('./IMG');
 require('./form');
+
+// Utilities
+$(window).on('load', function() {
+    window.initClamp();
+});

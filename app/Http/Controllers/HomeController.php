@@ -408,15 +408,11 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $detailedProduct  = Product::where('slug', $slug)->first()->load(['shop']);
-        $detailedProduct->variations = $detailedProduct->variations()->get();
-
-        $product  = $detailedProduct;
+        $product  = Product::where('slug', $slug)->first()->load(['shop']);
 
         //$this->log($product,"User viewed this product");
 
-        if (!empty($detailedProduct) && $detailedProduct->published) {
-            //updateCartSetup();
+        if (!empty($product) && $product->published) {
             if (
                 $request->has('product_referral_code') &&
                 \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first() != null &&
@@ -437,17 +433,10 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
 
-            if(auth()->user()) {
-                visits($detailedProduct, 'user_' . auth()->user()->id)->forceIncrement();
-
+            if ($product->digital == 1) {
+                return view('frontend.digital_product_details', compact( 'product'));
             } else {
-                visits($detailedProduct, 'guest')->forceIncrement();
-            }
-
-            if ($detailedProduct->digital == 1) {
-                return view('frontend.digital_product_details', compact('detailedProduct', 'product'));
-            } else {
-                return view('frontend.product.show', compact('detailedProduct', 'product'));
+                return view('frontend.product.show', compact('product'));
             }
             // return view('frontend.product_details', compact('detailedProduct'));
         }

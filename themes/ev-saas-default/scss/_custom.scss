@@ -1,8 +1,12 @@
 /* Generate square classes */
-@for $wh from 14 through 32 {
+@for $wh from 8 through 32 {
     .square-#{$wh} {
         width: $wh + px;
         height: $wh + px;
+    }
+    .square-#{$wh}-i {
+        width: $wh + px !important;
+        height: $wh + px !important;
     }
 }
 
@@ -18,6 +22,9 @@
     .text-#{$fs} {
         font-size: $fs + px;
     }
+    .text-#{$fs}-i {
+        font-size: $fs + px !important;
+    }
 }
 
 /* Generate opacity classes */
@@ -32,6 +39,10 @@
     .z-#{$zi} {
         z-index: $zi;
     }
+}
+
+.full-row {
+    width: calc(100% + 30px);
 }
 
 /* Absolute horizontal/vertical centering */
@@ -58,4 +69,37 @@
 
 .no-max-height {
     max-height: none !important;
+}
+
+.divider {
+    &-half-left, &-half-right, &-third-left, &-third-right {
+        &:before {
+            display: none;
+        }
+    }
+
+    &-half-left {
+        &:after {
+            flex: 0 0 50%;
+            margin-right: auto;
+        }
+    }
+    &-half-right {
+        &:after {
+            flex: 0 0 50%;
+            margin-left: auto;
+        }
+    }
+    &-third-left {
+        &:after {
+            flex: 0 0 33%;
+            margin-right: auto;
+        }
+    }
+    &-third-right {
+        &:after {
+            flex: 0 0 33%;
+            margin-left: auto;
+        }
+    }
 }

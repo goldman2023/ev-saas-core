@@ -10,10 +10,11 @@ use Session;
 
 class Price extends Component {
 
-    public $product;
-    public $unit;
-    public $last_price_class;
-    public $original_price_class;
+    public mixed $model;
+    public $totalPriceClass = '';
+    public $originalPriceClass = '';
+    public $withLabel = false;
+    public $wrapperClass = '';
 
     protected $listeners = ['changeVariation'];
 
@@ -22,18 +23,19 @@ class Price extends Component {
      *
      * @return void
      */
-    public function mount($product = null, $last_price_class = '', $original_price_class = '')
+    public function mount($model = null, $wrapperClass = '', $totalPriceClass = 'h2 fw-700 text-primary', $originalPriceClass = 'h3 fw-600 opacity-50 mr-1', $withLabel = false)
     {
-        $this->product = $product;
-        $this->last_price_class = $last_price_class;
-        $this->original_price_class = $original_price_class;
-        $this->unit = $product->unit;
+        $this->model = $model;
+        $this->wrapperClass = $wrapperClass;
+        $this->withLabel = $withLabel;
+        $this->totalPriceClass = $totalPriceClass;
+        $this->originalPriceClass = $originalPriceClass;
 
         //dd($this->attributes_for_variations);
     }
 
     public function changeVariation(ProductVariation $variation) {
-        $this->product = $variation;
+        $this->model = $variation;
     }
 
     public function render() {

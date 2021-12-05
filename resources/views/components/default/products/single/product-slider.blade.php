@@ -10,7 +10,7 @@
                         <div class="col-sm-8 px-sm-1 position-static">
                             <!-- Gallery -->
                             <a class="js-fancybox-item d-block" href="javascript:;" style="height: 400px;">
-                                <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getThumbnail() ?? ''">
+                                <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getThumbnail(['w'=>600]) ?? ''">
                                 </x-tenant.system.image>
                             </a>
                         </div>
@@ -22,7 +22,6 @@
                                 </x-tenant.system.image>
                                 @endforeach
                             </a>
-
                             <!-- End Gallery -->
                         </div>
                     </div>

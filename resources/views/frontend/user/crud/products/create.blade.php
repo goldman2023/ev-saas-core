@@ -4,7 +4,6 @@
 
 @push('head_scripts')
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
 @endpush
 
 @section('panel_content')

@@ -4,8 +4,9 @@
             <h1 class="h2 mb-0">{{ $product->getTranslation('name') }}</h1>
             <span class="d-block text-dark mb-3">
                 <div class="d-flex ml-auto">
-                    @for ($i = 0; $i < 5; $i++) @svg('heroicon-s-star', ["class"=> 'text-warning ev-icon__xs'])
-                        @endfor
+                    @for ($i = 0; $i < 5; $i++)
+                        @svg('heroicon-s-star', ["class"=> 'text-warning ev-icon__xs'])
+                    @endfor
                 </div>
             </span>
 
