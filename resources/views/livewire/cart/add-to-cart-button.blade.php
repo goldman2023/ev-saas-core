@@ -1,6 +1,6 @@
 <a class="btn btn-{{ $btnType }} d-flex justify-content-center align-items-center {{ $class }}"
    @click="
-    if(!processing) {
+    if(!processing && Number(qty) > 0) {
         processing = true; // start addToCart button processing
         $wire.emit('addToCart', model_id, model_type, qty, true);
     }"
