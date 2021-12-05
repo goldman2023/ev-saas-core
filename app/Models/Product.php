@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\BrandTrait;
 use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
+use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
@@ -136,6 +137,7 @@ class Product extends EVBaseModel
     use BrandTrait;
     use StockManagementTrait;
     use PriceTrait;
+    use Purchasable;
 
     use ReviewTrait;
 
@@ -155,8 +157,8 @@ class Product extends EVBaseModel
     protected $with = [];
 
 
-    protected $fillable = ['name', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'unit', 'slug', 'num_of_sale'];
+    protected $fillable = ['name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
+        'purchase_price', 'unit', 'slug', 'num_of_sale', 'meta_title', 'meta_description'];
 
     protected static function boot()
     {

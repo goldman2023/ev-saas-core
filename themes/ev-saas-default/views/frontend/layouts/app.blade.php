@@ -71,7 +71,6 @@
     <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
-
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>
 
@@ -83,7 +82,9 @@
 </head>
 
 <body>
-    <!-- aiz-main-wrapper -->
+    <!-- AlpineJS -->
+    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+
     <div class="">
 
         {{-- @include('frontend.inc.nav') --}}
@@ -105,27 +106,11 @@
 
     @include('frontend.partials.modal')
 
-    <div class="
-        modal fade" id="addToCart">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size"
-            role="document">
-            <div class="modal-content position-relative">
-                <div class="c-preloader text-center p-3">
-                    <i class="las la-spinner la-spin la-3x"></i>
-                </div>
-                <button type="button" class="close absolute-top-right btn-icon close z-1" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true" class="la-2x">&times;</span>
-                </button>
-                <div id="addToCart-modal-body">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Print SignUp Modal Component -->
     <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
+
+    <!-- Carts -->
+    <livewire:cart.cart template="flyout-cart" />
 
     @yield('modal')
 

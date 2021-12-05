@@ -3,7 +3,6 @@
 @section('page_title', translate('All Products'))
 
 @push('head_scripts')
-    <script src="https://unpkg.com/alpinejs@3.5.1/dist/cdn.min.js" defer></script>
 @endpush
 
 @section('panel_content')

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Services\AttributesService;
+use App\Http\Services\CartService;
 use App\Http\Services\IMGProxyService;
 use App\Http\Services\VendorService;
 use Illuminate\Database\Eloquent\Model;
@@ -60,6 +61,11 @@ class EVServiceProvider extends ServiceProvider
         // Register Vendor Singleton
         $this->app->singleton('vendor', function() {
             return new VendorService(fn () => Container::getInstance());
+        });
+
+        // Register Cart Singleton
+        $this->app->singleton('cart', function() {
+            return new CartService(fn () => Container::getInstance());
         });
     }
 

@@ -29,7 +29,8 @@ class EVService
             $url = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path));
         }
 
-        $this->tenantStylePath = $url;
+        // TODO: Think of a way to implement better vendor design pattern!
+        $this->tenantStylePath = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path)); //$url;
     }
 
     public function getThemeStyling() {

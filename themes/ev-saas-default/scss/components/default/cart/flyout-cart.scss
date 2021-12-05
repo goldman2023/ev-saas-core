@@ -1,0 +1,45 @@
+.c-flyout-cart {
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    top: 0;
+    transition: right 0.5s ease-in-out;
+    z-index: 1010;
+
+    @include mobile {
+        width: 100%;
+        right: -100%;
+    }
+
+    @include tablet-portrait-up {
+        width: 100%;
+    }
+
+    @include tablet-landscape-up {
+        width: 450px;
+        right: -451px;
+    }
+
+    &.show {
+        right: 0;
+    }
+
+    &__close {
+        top: 15px;
+        right: 15px;
+    }
+
+    &__items {
+        overflow-y: auto;
+    }
+
+    &__item {
+        &-thumb {
+            @include square(70px);
+
+            img {
+                @include square(70px);
+            }
+        }
+    }
+}

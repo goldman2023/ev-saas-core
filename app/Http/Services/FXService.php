@@ -39,6 +39,7 @@ class FXService
 
     public function convertPrice($price)
     {
+        // TODO: Create proper Currency Converter that will store FX rates in CENTRAL app and in non-tenant-related Cache
         $price = (float) $price / (float) $this->default_currency->exchange_rate;
         return (float) $price * (float) $this->currency->exchange_rate;
     }

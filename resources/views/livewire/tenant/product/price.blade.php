@@ -1,19 +1,19 @@
-<div class="d-flex align-items-center">
-    <span class="text-dark font-size-2 font-weight-bold">
-        {{ $product->getDiscountedPrice(true) }}
+<div class="d-block text-dark {{ $wrapperClass }}">
 
-        @if (!empty($product->unit))
-            <span class="o-70">/
-                {{ $product->getTranslation('unit') }}
+    @if($withLabel)
+        <h3 class="w-100 text-14 text-body mb-0">{{ translate('Total price:') }}</h3>
+    @endif
+
+    <div class="w-100 d-inline">
+        <span class="{{ $totalPriceClass }} mr-1 mb-0">
+            {{ $model->getTotalPrice(true) }}
+        </span>
+
+        @if ($model->getBasePrice() !== $model->getTotalPrice())
+            <span class="{{ $originalPriceClass }} mb-0">
+                <del>{{ $model->getBasePrice(true) }}</del>
             </span>
         @endif
-    </span>
+    </div>
 
-    @if ($product->getOriginalPrice() !== $product->getDiscountedPrice())
-        <span class="text-body ml-2"><del>{{ $product->getOriginalPrice(true) }}</del></span>
-    @endif
 </div>
-
-
-
-

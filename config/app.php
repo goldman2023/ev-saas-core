@@ -214,7 +214,6 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
 
-        //App\Providers\CartServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
 
         // EVServiceProvider
@@ -282,6 +281,7 @@ return [
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Vendor' => App\Facades\Vendor::class,
         'EVS' => App\Facades\EVS::class,
+        'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,

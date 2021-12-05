@@ -1,10 +1,10 @@
 @extends('frontend.layouts.' . $globalLayout)
 
-@section('meta_title'){{ $detailedProduct->meta_title }}@stop
+@section('meta_title'){{ $product->meta_title }}@stop
 
-@section('meta_description'){{ $detailedProduct->meta_description }}@stop
+@section('meta_description'){{ $product->meta_description }}@stop
 
-@section('meta_keywords'){{ $detailedProduct->tags }}@stop
+@section('meta_keywords'){{ $product->tags }}@stop
 
 @section('meta')
     <x-default.products.single.head-meta-tags :product="$product"></x-default.products.single.head-meta-tags>
@@ -27,7 +27,7 @@
     {{-- @include('frontend.components.benefits') --}}
     <section class="space-top-1">
         @php
-        $relatedProducts = null;
+          $relatedProducts = null;
         @endphp
 
         <x-default.products.product-list :products="$relatedProducts" class="products-slider" slider="true">
@@ -46,11 +46,11 @@
     @section('script')
     <script type="text/javascript">
         function show_chat_modal() {
-                    @if (Auth::check())
-                        $('#chat_modal').modal('show');
-                    @else
-                        $('#login_modal').modal('show');
-                    @endif
-                }
+            @if (Auth::check())
+                $('#chat_modal').modal('show');
+            @else
+                $('#login_modal').modal('show');
+            @endif
+        }
     </script>
     @endsection

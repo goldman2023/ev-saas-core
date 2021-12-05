@@ -3,6 +3,11 @@
 ------------------------------------*/
 
 @import "components";
+
+[x-cloak] {
+    display: none !important;
+}
+
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
