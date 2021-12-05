@@ -6,6 +6,7 @@ use App\Facades\EVS;
 use App\Models\Product;
 use Auth;
 use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
 
 class EVProductController extends Controller
 {
@@ -62,5 +63,14 @@ class EVProductController extends Controller
         $product = Product::where('slug', $slug)->first();
 
         return view('frontend.user.crud.products.details')->with('product', $product);
+    }
+
+    public function product_activity(Request $request, $slug) {
+        $product = Product::where('slug', $slug)->first();
+
+        $activity = Activity::all();
+
+        $activity = Activity::where('subject_type', 'App\Models\Product')->where('subject_id', $product->id)->first();
+        return view('frontend.user.crud.products.activity')->with('product', $product);
     }
 }

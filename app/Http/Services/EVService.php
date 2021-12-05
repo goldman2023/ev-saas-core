@@ -64,6 +64,13 @@ class EVService
                         'is_active' => areActiveRoutes(['']),
                         'roles' => [],
                     ],
+                    [
+                        'label' => translate('Activity'),
+                        'icon' => 'heroicon-o-status-online',
+                        'route' => route('activity.index'),
+                        'is_active' => areActiveRoutes(['']),
+                        'roles' => ['admin'],
+                    ],
 
 
                 ]

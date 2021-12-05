@@ -12,6 +12,33 @@
 // Bootstrap 4's main theme file
 @import "ev-saas";
 
+
+/* Group same frames together */
+@keyframes blink {
+    0%, 100% { opacity: 0; } /* more concise! */
+    50% { opacity: 1; }
+  }
+
+  .dot {
+    animation: blink 2s infinite;
+  }
+
+
+/* Blinking dot example */
+.dot--basic {
+    animation: blink 2s infinite;
+}
+
+/* Run animation once */
+.dot--once {
+    animation: blink 2s 1;
+}
+
+/* Wait 4s before running the animation */
+.dot--delayed {
+    animation: blink 2s infinite 4s;
+}
+
 .underline {
     border-bottom: 0.0625rem dashed #97a4af;
 }

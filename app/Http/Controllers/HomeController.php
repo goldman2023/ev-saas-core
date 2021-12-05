@@ -355,12 +355,11 @@ class HomeController extends Controller
             }
         }*/
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
-        if(Vendor::isVendorSite()) {
+        if (Vendor::isVendorSite()) {
             $shop = Vendor::getVendorShop();
             return view('frontend.company.profile', compact('shop'));
         } else {
             return view('frontend.index');
-
         }
     }
 
@@ -433,8 +432,21 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
 
+            if(auth()->check()) {
+                $user = auth()->user();
+
+            } else {
+                $user = null;
+            }
+
+            activity()
+                ->performedOn($product)
+                ->causedBy($user)
+                ->withProperties(['action' => 'viewed'])
+                ->log('User viewed a product');
+
             if ($product->digital == 1) {
-                return view('frontend.digital_product_details', compact( 'product'));
+                return view('frontend.digital_product_details', compact('product'));
             } else {
                 return view('frontend.product.show', compact('product'));
             }
@@ -607,7 +619,7 @@ class HomeController extends Controller
         $products = Product::where($conditions);
 
         /* TODO: This probably should be in brand controller and brand archive */
-        if($brand_id != null) {
+        if ($brand_id != null) {
             $products->where('brand_id', $brand_id);
         }
 

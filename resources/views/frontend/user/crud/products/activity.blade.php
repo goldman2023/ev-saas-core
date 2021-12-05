@@ -33,12 +33,6 @@
             href="{{ route('ev-products.edit', $product->slug) }}">
             {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
-
-        <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-            href="{{ route('ev-products.activity', $product->slug) }}">
-            {{ translate('Activity') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
-        </a>
-
         <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete "
             href="javascript:void(0)">
             {{ translate('Delete') }} @svg('heroicon-o-trash', ['style' => 'height: 16px;', 'class' => 'ml-2'])

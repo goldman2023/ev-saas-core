@@ -158,7 +158,7 @@
             </div>
         </div>
         <!-- End Topbar -->
-        <div id="logoAndNav" class="container">
+        <div id="logoAndNav" class="container pb-3">
             <!-- Nav -->
             <div class="row">
                 <div class="col-sm-3 col-6">

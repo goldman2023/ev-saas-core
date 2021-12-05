@@ -34,6 +34,7 @@ use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\Caching\SavesToCache;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Product
@@ -142,6 +143,9 @@ class Product extends EVBaseModel
     use ReviewTrait;
 
     use VariationTrait;
+
+    use LogsActivity;
+
 
     public const ROUTING_SINGULAR_NAME_PREFIX = 'product';
     public const ROUTING_PLURAL_NAME_PREFIX = 'products';

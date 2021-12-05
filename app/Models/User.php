@@ -9,6 +9,8 @@ use Laravel\Passport\HasApiTokens;
 use App\Models\Cart;
 use App\Notifications\EmailVerificationNotification;
 use Spark\Billable;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -16,6 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use Notifiable;
     use Billable;
+    use LogsActivity;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -169,5 +172,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function recently_viewed_products() {
+        $data = Activity::where('subject_type', 'App\Models\Product')
+        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+        ->groupBy('subject_id')
+        ->get();
+
+        return $data;
     }
 }
