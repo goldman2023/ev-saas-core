@@ -67,7 +67,6 @@ class ProductVariationsDatatable extends DataTableComponent
             'variations.*.price' => 'required|numeric|min:1',
             'variations.*.temp_sku' => ['required', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['rows.'.$key.'.temp_sku' => $item]; }))],
             'variations.*.current_stock' => 'required|numeric|min:1',
-            'variations.*.remove_flag' => 'bool',
             'variations.*.discount' => [],
             'variations.*.discount_type' => [],
             'variations.*.created_at' => [],

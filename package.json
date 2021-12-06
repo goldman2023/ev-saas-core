@@ -82,6 +82,7 @@
         "select2": "^4.1.0-rc.0",
         "slick-carousel": "^1.8.1",
         "sortablejs": "^1.14.0",
+        "sweetalert2": "^11.3.0",
         "swiper": "^7.0.1",
         "tailwindcss": "^2.1.2",
         "tailwindcss-pseudo-elements": "^2.0.0",

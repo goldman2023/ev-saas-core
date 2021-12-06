@@ -4,7 +4,9 @@ namespace App\Http\Services;
 
 use App\Models\Currency;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use Cache;
+use Illuminate\Support\Collection;
 use Qirolab\Theme\Theme;
 use EVS;
 use App\Models\Attribute;
@@ -335,22 +337,5 @@ class EVService
             'flat_rate' => translate('Flat rate'),
             'product_wise' => translate('Product wise shipping'),
         ];
-    }
-
-
-
-    public function generateAttributeValuesMatrix($attributes) {
-        $result = [];
-        $all_att_values = $attributes->pluck('attribute_values');
-
-        foreach ($all_att_values as $index => $group) {
-            if($index === 0) {
-                $result = $group;
-            } else {
-                $result = $result->crossJoin($group);
-            }
-        }
-
-        return $result;
     }
 }

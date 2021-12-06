@@ -8,12 +8,6 @@
              }"
              x-ref="js-quantity-counter"
              x-init="$nextTick(() => { (new window.EV.form.HSQuantityCounter()).init($($el)); });"
-
-{{--             @if(!$wired)--}}
-{{--                @reset-qty.window="if(Number($event.detail.id) === Number(model_id)) { qty = 0 }"--}}
-{{--             @else--}}
-{{--                @set-qty.window="if(Number($event.detail.id) === Number(model_id) && wired) { qty = $event.detail.qty }"--}}
-{{--             @endif--}}
         >
 
             <a class="js-minus btn square-20 btn-icon btn-outline-secondary rounded-circle" href="javascript:;">
@@ -43,11 +37,6 @@
          }"
          x-ref="js-quantity-counter"
          x-init="(new window.EV.form.HSQuantityCounter()).init($($el));"
-{{--         @if(!$wired)--}}
-{{--            @reset-qty.window="if(Number($event.detail.id) === Number(model_id)) { qty = 0 }"--}}
-{{--         @else--}}
-{{--            @set-qty.window="if(Number($event.detail.id) === Number(model_id) && wired) { qty = $event.detail.qty }"--}}
-{{--         @endif--}}
     >
 
         <div class="col-7">

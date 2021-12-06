@@ -53,9 +53,6 @@ class ProductVariation extends EVBaseModel
 
     use VariationTrait;
 
-    /* Properties not saved in DB */
-    public bool $remove_flag = false;
-
     // Default atts
     protected $attributes = [
         'price' => 0,
@@ -72,13 +69,13 @@ class ProductVariation extends EVBaseModel
     protected $with = [];
 
     protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type', 'created_at', 'updated_at'];
-    //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'remove_flag'];
+    //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'remove_flag'];
+    protected $appends = ['name'];
 
     public function product()
     {
@@ -138,16 +135,6 @@ class ProductVariation extends EVBaseModel
         return $name;
     }
 
-    public function setRemoveFlagAttribute($value)
-    {
-        $this->remove_flag = $value;
-    }
-
-    public function getRemoveFlagAttribute() {
-        return $this->remove_flag ?? false;
-    }
-
-
     protected function asJson($value)
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE);
@@ -186,5 +173,10 @@ class ProductVariation extends EVBaseModel
     public function getDynamicModelUploadProperties(): array
     {
         return [];
+    }
+
+    public function getVariationModelClass()
+    {
+        return null;
     }
 }
