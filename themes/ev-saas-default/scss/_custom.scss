@@ -27,6 +27,13 @@
     }
 }
 
+/* Generate line-height classes */
+@for $lh from 5 through 20 {
+    .lh-#{$lh} {
+        line-height: $lh / 10;
+    }
+}
+
 /* Generate opacity classes */
 @for $o from 0 through 10 {
     .opacity-#{$o} {
@@ -42,6 +49,10 @@
     .z-#{$zi} {
         z-index: $zi;
     }
+}
+
+.d-grid {
+    display: grid;
 }
 
 .full-row {

@@ -6,10 +6,13 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
+use App\Http\Controllers\EVCartController;
+use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
@@ -135,12 +138,34 @@ Route::middleware([
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
 
+    // Cart page
+    Route::get('/cart', [EVCartController::class, 'index'])->name('cart');
+
+    //Checkout Routes
+    Route::group(['middleware' => ['checkout']], function () {
+        Route::get('/checkout', [EVCheckoutController::class, 'index'])->name('checkout');
+
+//        Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
+//        Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
+//
+//        Route::get('/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
+//        Route::post('/payment', 'CheckoutController@checkout')->name('payment.checkout');
+//        Route::post('/get_pick_up_points', 'HomeController@get_pick_up_points')->name('shipping_info.get_pick_up_points');
+//        Route::get('/payment-select', 'CheckoutController@get_payment_info')->name('checkout.payment_info');
+//        Route::post('/apply_coupon_code', 'CheckoutController@apply_coupon_code')->name('checkout.apply_coupon_code');
+//        Route::post('/remove_coupon_code', 'CheckoutController@remove_coupon_code')->name('checkout.remove_coupon_code');
+//        //Club point
+//        Route::post('/apply-club-point', 'CheckoutController@apply_club_point')->name('checkout.apply_club_point');
+//        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
+    });
+
+    // Shop pages
     Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart');
+
     Route::post('/cart/nav-cart-items', [CartController::class, 'updateNavCart'])->name('cart.nav_cart');
     Route::post('/cart/show-cart-modal', [CartController::class, 'showCartModal'])->name('cart.showCartModal');
     Route::post('/cart/addtocart', [CartController::class, 'addToCart'])->name('cart.addToCart');
@@ -391,27 +416,12 @@ Route::middleware([
     Route::get('/feed/all', 'Integrations\GetStreamControler@index');
 
 
-    //Checkout Routes
-    Route::group(['middleware' => ['checkout']], function () {
-        Route::get('/checkout', 'CheckoutController@get_shipping_info')->name('checkout.shipping_info');
-        Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
-        Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
 
-        Route::get('/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
-        Route::post('/payment', 'CheckoutController@checkout')->name('payment.checkout');
-        Route::post('/get_pick_up_points', 'HomeController@get_pick_up_points')->name('shipping_info.get_pick_up_points');
-        Route::get('/payment-select', 'CheckoutController@get_payment_info')->name('checkout.payment_info');
-        Route::post('/apply_coupon_code', 'CheckoutController@apply_coupon_code')->name('checkout.apply_coupon_code');
-        Route::post('/remove_coupon_code', 'CheckoutController@remove_coupon_code')->name('checkout.remove_coupon_code');
-        //Club point
-        Route::post('/apply-club-point', 'CheckoutController@apply_club_point')->name('checkout.apply_club_point');
-        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
-    });
 
-    Route::resource('addresses', 'AddressController');
-    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
+//    Route::resource('addresses', 'AddressController');
+//    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+//    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+//    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');

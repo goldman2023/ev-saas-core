@@ -41,6 +41,12 @@
                 <div class="c-flyout-cart__items d-flex flex-column mb-1 flex-grow-1">
                     @if($items->isNotEmpty())
                         @foreach($items as $item)
+                            @php
+                                $hasVariations = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->hasVariations();
+                                $name = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->getTranslation('name');
+                                $excerpt = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
+                            @endphp
+
                             <div id="cart-item-{{ $item->id }}-{{ str_replace('\\','-',$item::class) }}"
                                  class="cart-item card p-3 d-flex flex-row align-items-start mb-3"
                                  x-data="{
@@ -83,11 +89,6 @@
                              });
 "
                             >
-                                @php
-                                    $hasVariations = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->hasVariations();
-                                    $name = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->getTranslation('name');
-                                    $excerpt = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
-                                @endphp
                                 <div class="row full-row">
 
                                     <div class="c-flyout-cart__item-thumb col-3">
@@ -99,7 +100,6 @@
 
                                         @if(!$hasVariations)
                                             <span class="clamp text-12 mb-2" data-clamp-lines="1">{{ $excerpt }}</span>
-                                            {{ $item->hasVariations() }}
                                         @else
                                             {{-- TODO: Display variation attributes here in one row: (Inspiration -> https://cdn.dribbble.com/users/4817709/screenshots/16356375/media/86177cbea95d2df2983700a6e54bac2f.png) --}}
 
@@ -129,7 +129,7 @@
                             </div>
                         @endforeach
                     @else
-                    <!-- Empty Cart Section -->
+                        <!-- Empty Cart Section -->
                         <div class="container-fluid space-2">
                             <div class="text-center mx-md-auto">
                                 <figure class="max-w-10rem max-w-sm-15rem mx-auto mb-3">
@@ -168,7 +168,7 @@
                             <strong class="text-dark">{{ $subtotalPrice['display'] }}</strong>
                         </div>
 
-                        <a href="{{ '#' }}" class="btn btn-primary mt-3">
+                        <a href="{{ route('checkout') }}" class="btn btn-primary mt-3">
                             {{ translate('Checkout') }}
                         </a>
                     </div>

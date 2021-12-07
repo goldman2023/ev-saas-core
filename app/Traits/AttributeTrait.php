@@ -78,17 +78,29 @@ trait AttributeTrait
         })->values();
     }
 
-    public function filterable_attributes() {
-        return $this->custom_attributes->filter(function($att, $index) {
+    public function filterable_attributes($key_by = null) {
+        $attributes = $this->custom_attributes->filter(function($att, $index) {
             return $att->filterable === 1;
         })->values();
+
+        if(!empty($key_by)) {
+            return $attributes->keyBy($key_by);
+        }
+
+        return $attributes;
     }
 
-    public function variant_attributes()
+    public function variant_attributes($key_by = null)
     {
-        return $this->custom_attributes->filter(function($att, $index) {
+        $attributes =  $this->custom_attributes->filter(function($att, $index) {
             return $att->pivot->for_variations === 1;
         })->values();
+
+        if(!empty($key_by)) {
+            return $attributes->keyBy($key_by);
+        }
+
+        return $attributes;
     }
 
     /**********************************

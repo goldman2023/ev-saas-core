@@ -103,7 +103,10 @@ class ProductVariation extends EVBaseModel
         return $name;
     }
 
-    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-', $as_collection = false) {
+    /*
+     * TODO: Think about moving this to a Trait because different ContentType Variations can use it!
+     */
+    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-', $as_collection = false, $key_by = null) {
         $att_values_idx = [];
         $name = '';
 
@@ -116,18 +119,22 @@ class ProductVariation extends EVBaseModel
 
             if(!empty($attributes)) {
                 $att_values = $attributes->map(function($item) use($att_values_idx) {
-                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx));
-                })->flatten()->unique()->values();
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
+                });
             } else {
-                // If attributes are not provided as parameter, fetch from DB
+                // If attributes are not provided as parameter, get variant_attributes from main
 //                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
-                $att_values = $this->main->variant_attributes()->map(function($item) use($att_values_idx) {
-                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx));
-                })->flatten()->unique()->values();
+                $att_values = $this->main->variant_attributes(key_by: ($key_by ?:null))->map(function($item) use($att_values_idx) {
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
+                });
+            }
+
+            if(!empty($key_by)) {
+                return $att_values->map(fn($item) => $item->values);
             }
 
             if($as_collection) {
-                return $att_values->pluck('values');
+                return $att_values->unique()->values()->pluck('values');
             }
 
             foreach($att_values as $key => $value) {
