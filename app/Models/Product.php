@@ -281,4 +281,9 @@ class Product extends EVBaseModel
             'foreign_key' => 'product_id'
         ];
     }
+
+    public function main()
+    {
+        return [];
+    }
 }

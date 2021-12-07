@@ -77,9 +77,9 @@ class ProductVariation extends EVBaseModel
 
     protected $appends = ['name'];
 
-    public function product()
+    public function main()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function getNameAttribute() {
@@ -103,7 +103,7 @@ class ProductVariation extends EVBaseModel
         return $name;
     }
 
-    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-') {
+    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-', $as_collection = false) {
         $att_values_idx = [];
         $name = '';
 
@@ -120,7 +120,14 @@ class ProductVariation extends EVBaseModel
                 })->flatten()->unique()->values();
             } else {
                 // If attributes are not provided as parameter, fetch from DB
-                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
+//                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
+                $att_values = $this->main->variant_attributes()->map(function($item) use($att_values_idx) {
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx));
+                })->flatten()->unique()->values();
+            }
+
+            if($as_collection) {
+                return $att_values->pluck('values');
             }
 
             foreach($att_values as $key => $value) {
@@ -130,6 +137,7 @@ class ProductVariation extends EVBaseModel
                     $name .= $value->values.($key+1 !== $att_values->count() ? $value_separator : '');
                 }
             }
+
         }
 
         return $name;

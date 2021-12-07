@@ -1,4 +1,4 @@
-<div class="c-product-variations-selector pb-3 {{ $class }}"
+<div class="c-product-variations-selector pb-1 {{ $class }}"
      x-data="{
         current: @entangle('current').defer,
         variations: @entangle('variations').defer,
@@ -8,7 +8,6 @@
         refresh() {
             this.current.variant.forEach((att_val_pair) => {
                 // Get missing variants of each attribute
-
                 let $missing = _.filter(this.missing_variants, function(missing_variant) {
                     return _.filter(missing_variant, function(missing_variant_combos) {
                         return missing_variant_combos.attribute_id === att_val_pair.attribute_id &&
@@ -31,8 +30,8 @@
         },
      }"
      x-init="refresh()"
-     @variation-changed.window="refresh()"
-     @select-variation-end.window="refresh()"
+     @variation-changed.window="refresh(); processing_variation_change = false;"
+     @select-variation-end.window="refresh(); processing_variation_change = false;"
 >
     @if(!empty($attributes_for_variations))
         @foreach($attributes_for_variations as $attribute)
@@ -47,7 +46,7 @@
                         @endphp
                         <li class="list-group-item px-3 py-2 border rounded mr-2 pointer {{ $active ? 'active':'' }}"
                             x-ref="c-product-variations-selector-{{ $attribute['id'] }}-{{ $value['id'] }}"
-                            @click="$wire.selectVariation({{ $attribute['id'] }}, {{ $value['id'] }})">
+                            @click="$wire.selectVariation({{ $attribute['id'] }}, {{ $value['id'] }}); processing_variation_change = true;">
                             {{ $value['values'] }}
                         </li>
                     @endforeach

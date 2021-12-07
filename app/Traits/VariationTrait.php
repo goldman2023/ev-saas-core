@@ -14,6 +14,7 @@ trait VariationTrait
      * Gets the class of the Variations Model (e.g. For Product Model, ProductVariation is the variation model class)
      */
     abstract public function getVariationModelClass();
+    abstract public function main();
 
     /**
      * Boot the trait

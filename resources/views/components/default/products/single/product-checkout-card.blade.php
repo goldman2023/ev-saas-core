@@ -1,11 +1,12 @@
 @php($first_variation = $product->getFirstVariation())
 
-<div class="card"
+<div class="card position-relative"
         x-data="{
             processing: false,
+            processing_variation_change: false,
             qty: 0,
-            model_id: {{ $product->id }},
-            model_type: '{!! addslashes($product::class) !!}',
+            model_id: {{  ($product->hasVariations()) ? $first_variation->id : $product->id }},
+            model_type: '{!!  ($product->hasVariations()) ? addslashes($first_variation::class) : addslashes($product::class) !!}',
             total_price: {{ ($product->hasVariations()) ? $first_variation->total_price : $product->total_price }},
             total_price_display: '{{ ($product->hasVariations()) ? $first_variation->getTotalPrice(true) : $product->getTotalPrice(true) }}',
             base_price: {{ ($product->hasVariations()) ? $first_variation->base_price : $product->base_price }},
@@ -30,7 +31,12 @@
             "
         @endif
 >
-    <div class="card-body">
+    <x-ev.loaders.spinner class="absolute-center z-10"
+                          x-show="processing_variation_change"
+                          x-cloak>
+    </x-ev.loaders.spinner>
+
+    <div class="card-body" :class="{'opacity-3':processing_variation_change}">
         <div class="row">
             <div class="col-sm-12 d-flex flex-column">
                 <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
