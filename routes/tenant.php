@@ -17,6 +17,7 @@ use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
+use App\Http\Controllers\EVWishlistController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
@@ -141,6 +142,7 @@ Route::middleware([
 
     // Cart page
     Route::get('/cart', [EVCartController::class, 'index'])->name('cart');
+    Route::get('/wishlist', [EVWishlistController::class, 'index'])->name('wishlist');
 
     //Checkout Routes
     Route::group(['middleware' => ['checkout']], function () {
