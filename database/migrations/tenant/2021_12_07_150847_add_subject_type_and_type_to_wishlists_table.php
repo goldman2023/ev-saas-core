@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSessionIdColumnToWishlistsTable extends Migration
+class AddSubjectTypeAndTypeToWishlistsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,9 @@ class AddSessionIdColumnToWishlistsTable extends Migration
     {
         Schema::table('wishlists', function (Blueprint $table) {
             //
-            if (!Schema::hasColumn('wishlists', 'session_id')) {
-                $table->string('user_id')->nullable()->change();
-                $table->string('session_id')->nullable();
+            if (!Schema::hasColumn('wishlists', 'subject_type')) {
+                $table->string('subject_type')->after('subject_id')->default('App\\\Models\\\Product');
+                $table->string('type')->after('subject_type');
             }
         });
     }
@@ -30,9 +30,8 @@ class AddSessionIdColumnToWishlistsTable extends Migration
     public function down()
     {
         Schema::table('wishlists', function (Blueprint $table) {
-            //
-            $table->dropColumn('session_id');
-            $table->string('user_id')->change();
+            $table->dropColumn('subject_type');
+            $table->dropColumn('type');
         });
     }
 }

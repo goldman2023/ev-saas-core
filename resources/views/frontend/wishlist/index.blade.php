@@ -32,7 +32,7 @@
                         @foreach($products as $product)
 
                         <div class="col-sm-4">
-                            <x-default.products.cards.product-card :product="$product->product"
+                            <x-default.products.cards.product-card :product="$product->subject"
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">
                             </x-default.products.cards.product-card>
                         </div>

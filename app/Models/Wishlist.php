@@ -37,8 +37,9 @@ class Wishlist extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product()
+
+    public function subject()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo('subject');
     }
 }

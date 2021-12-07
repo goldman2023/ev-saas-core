@@ -26,17 +26,17 @@ class WishlistButton extends Component
         if($this->checkIfProductExistsInWishlist()) {
             /* If product exists, toggle the database entry - delete if exists, create if does not exist */
             if(auth()->user()) {
-                $item = Wishlist::where('product_id', $this->product->id)
+                $item = Wishlist::where('subject_id', $this->product->id)
                     ->where('user_id', auth()->user()->id)
                     ->first()->delete();
             } else {
-                $item = Wishlist::where('product_id', $this->product->id)
+                $item = Wishlist::where('subject_id', $this->product->id)
                     ->where('session_id', session()->getId())
                     ->first()->delete();
             }
         } else {
             $item =  new Wishlist();
-            $item->product_id = $this->product->id;
+            $item->subject_id = $this->product->id;
             if(auth()->user()) {
                 $item->user_id = auth()->user()->id;
             } else {
@@ -54,11 +54,11 @@ class WishlistButton extends Component
 
     public function checkIfProductExistsInWishlist() {
         if(auth()->user()) {
-            $item = Wishlist::where('product_id', $this->product->id)
+            $item = Wishlist::where('subject_id', $this->product->id)
                 ->where('user_id', auth()->user()->id)
                 ->first();
         } else {
-            $item = Wishlist::where('product_id', $this->product->id)
+            $item = Wishlist::where('subject_id', $this->product->id)
                 ->where('session_id', session()->getId())
                 ->first();
         }

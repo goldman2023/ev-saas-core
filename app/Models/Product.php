@@ -231,8 +231,13 @@ class Product extends EVBaseModel
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function wishlists() {
-        return $this->hasMany(Wishlist::class);
+    // public function wishlists() {
+    //     return $this->hasMany(Wishlist::class);
+    // }
+
+    public function wishlists()
+    {
+        return $this->morphMany(Wishlist::class, 'subject');
     }
 
     public function taxes() {
@@ -279,10 +284,7 @@ class Product extends EVBaseModel
     }
 
 
-    public function visits()
-    {
-        return visits($this)->relation();
-    }
+
 
     public function getVariationModelClass()
     {

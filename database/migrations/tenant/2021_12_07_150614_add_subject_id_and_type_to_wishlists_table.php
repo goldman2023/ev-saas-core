@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeleteToProductStocksTable extends Migration
+class AddSubjectIdAndTypeToWishlistsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddSoftDeleteToProductStocksTable extends Migration
      */
     public function up()
     {
-        Schema::table('product_stocks', function (Blueprint $table) {
-            if (!Schema::hasColumn('product_stocks', 'deleted_at')) {
-                $table->softDeletes('deleted_at', 0);
-            }
+        Schema::table('wishlists', function (Blueprint $table) {
+            //
+            $table->renameColumn('product_id', 'subject_id');
         });
     }
 
@@ -27,8 +26,9 @@ class AddSoftDeleteToProductStocksTable extends Migration
      */
     public function down()
     {
-        Schema::table('product_stocks', function (Blueprint $table) {
-            $table->removeColumn('deleted_at');
+        Schema::table('wishlists', function (Blueprint $table) {
+            //
+            $table->renameColumn('subject_id', 'product_id');
         });
     }
 }

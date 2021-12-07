@@ -24,6 +24,7 @@ class EVWishlistController extends Controller
             $products = collect([]);
         }
 
+
         return view('frontend.wishlist.index', compact('products'));
     }
 
