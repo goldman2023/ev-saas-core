@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class RecentlyViewedProducts extends Component
 {
+    public $products;
     /**
      * Create a new component instance.
      *
@@ -14,6 +15,12 @@ class RecentlyViewedProducts extends Component
     public function __construct()
     {
         //
+        if(auth()->user()){
+            $this->products = auth()->user()->recently_viewed_products();
+        } else {
+            /* TODO: If user is guest save product's in session storage */
+            $this->products = collect([]);
+        }
     }
 
     /**

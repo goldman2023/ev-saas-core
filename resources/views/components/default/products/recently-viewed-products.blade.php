@@ -1,3 +1,4 @@
+@if($products->count() > 0)
 <div class="card">
     <div class="card-header">
 
@@ -7,7 +8,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            @foreach(auth()->user()->recently_viewed_products() as $productActivity)
+            @foreach($products as $productActivity)
 
             @php
             $product = $productActivity->subject;
@@ -24,3 +25,4 @@
 
     </div>
 </div>
+@endif
