@@ -6,7 +6,7 @@
         available_variants: @entangle('available_variants').defer,
         missing_variants: @entangle('missing_variants').defer,
         refresh() {
-            this.current.variant.forEach((att_val_pair) => {
+            Object.values(this.current.variant).forEach((att_val_pair) => {
                 // Get missing variants of each attribute
                 let $missing = _.filter(this.missing_variants, function(missing_variant) {
                     return _.filter(missing_variant, function(missing_variant_combos) {
@@ -37,14 +37,14 @@
         @foreach($attributes_for_variations as $attribute)
             <div class="full-width pb-2">
                 <strong>{{ $attribute['name'] }}</strong>
-                <ul class="d-flex list-group-horizontal align-items-center mb-1 mt-2 pl-0">
+                <ul class="d-flex flex-wrap list-group-horizontal align-items-center mb-0 mt-2 pl-0">
                     @foreach ($attribute['attribute_values'] as $value)
                         @php
                             $active = collect($this->current->variant)->filter(function($item, $key) use($value, $attribute) {
                                 return $item['attribute_value_id'] === $value['id'] && $item['attribute_id'] === $attribute['id'];
                             })->isNotEmpty();
                         @endphp
-                        <li class="list-group-item px-3 py-2 border rounded mr-2 pointer {{ $active ? 'active':'' }}"
+                        <li class="list-group-item px-3 py-2 border rounded mr-2 mb-2 pointer {{ $active ? 'active':'' }}"
                             x-ref="c-product-variations-selector-{{ $attribute['id'] }}-{{ $value['id'] }}"
                             @click="$wire.selectVariation({{ $attribute['id'] }}, {{ $value['id'] }}); processing_variation_change = true;">
                             {{ $value['values'] }}

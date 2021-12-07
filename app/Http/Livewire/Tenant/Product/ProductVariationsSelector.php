@@ -12,8 +12,7 @@ use App\Facades\CartService;
 use Session;
 use EVS;
 
-class ProductVariationsSelector extends Component
-{
+class ProductVariationsSelector extends Component {
 
     public Product $product;
     public $attributes_for_variations;
@@ -50,7 +49,7 @@ class ProductVariationsSelector extends Component
         $this->missing_variants = $this->product->getMissingVariations(true);
 
         // Get and select first variant
-        $this->current = $this->product->getFirstVariation();
+        $this->current = $this->product->variations->first();
 
         // THIS MUST NOT BE AN ELOQUENT/COLLECTION!!!!
         // Reason: If we leave attributes_for_variations as Eloquent/Collection and not turn it into the array/standard-collection,
@@ -65,19 +64,17 @@ class ProductVariationsSelector extends Component
         $this->attributes_for_variations = $product->variant_attributes()->toArray(); // <--- This must be an Array, NEVER...EVER...Eloquent/Collection!
     }
 
-    public function updatedCurrentVariant($value = null, $key = null)
-    {
+    public function updatedCurrentVariant($value = null, $key = null) {
         $this->current = $this->variations->where('variant', $this->current_variant)->first();
         $this->emitTo('tenant.product.price', 'changeVariation', $this->current);
     }
 
     // TODO: Disable att_values on FE for which there are no variations!!!
-    public function selectVariation($attribute_id, $attribute_value_id)
-    {
+    public function selectVariation($attribute_id, $attribute_value_id) {
         // Construct new variant based on current variant and new att and att_value ids
         $current_variant = $this->current->variant;
-        $selected_variant = collect($current_variant)->map(function ($item, $key) use ($attribute_id, $attribute_value_id) {
-            if ((int) $item['attribute_id'] === (int) $attribute_id) {
+        $selected_variant = collect($current_variant)->map(function($item, $key) use ($attribute_id, $attribute_value_id) {
+            if((int) $item['attribute_id'] === (int) $attribute_id) {
                 $item['attribute_value_id'] = (int) $attribute_value_id;
             }
             return $item;
@@ -86,10 +83,10 @@ class ProductVariationsSelector extends Component
         $current_variation = $this->product->getVariationByVariant($current_variant);
         $selected_variation = $this->product->getVariationByVariant($selected_variant);
 
-        if ($current_variation->id === $selected_variation->id) {
+        if($current_variation->id === $selected_variation->id) {
             $this->dispatchBrowserEvent('select-variation-end');
             return null;
-        } else if ($selected_variation->id) {
+        } else if($selected_variation->id) {
             // Select new current
             $this->current = $selected_variation;
 
@@ -98,8 +95,7 @@ class ProductVariationsSelector extends Component
         }
     }
 
-    public function emitVariationChangedEvent()
-    {
+    public function emitVariationChangedEvent() {
         $this->dispatchBrowserEvent('variation-changed', [
             'model_id' => $this->current->id,
             'model_type' => $this->current::class,
@@ -110,8 +106,7 @@ class ProductVariationsSelector extends Component
         ]);
     }
 
-    public function render()
-    {
+    public function render() {
         return view('livewire.tenant.product.product-variations-selector');
     }
 }

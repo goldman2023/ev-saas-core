@@ -1,4 +1,4 @@
-@php($first_variation = $product->getFirstVariation())
+@php($first_variation = $product->variations->first())
 
 <div class="card position-relative"
         x-data="{
@@ -61,14 +61,9 @@
                 </livewire:tenant.product.price>
 
                 {{-- Variations Selector --}}
-                <livewire:tenant.product.product-variations-selector
-                    :product="$product"
-                    class="mt-2"
-                >
-
-
-                </livewire:tenant.product.product-variations-selector>
-
+                @if($product->hasVariations())
+                    <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2"></livewire:tenant.product.product-variations-selector>
+                @endif
 
                 <x-default.forms.quantity-counter :model="$product" id=""></x-default.forms.quantity-counter>
             </div>

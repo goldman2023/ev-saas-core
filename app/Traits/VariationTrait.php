@@ -6,6 +6,7 @@ namespace App\Traits;
 use App\Models\AttributeValue;
 use App\Models\ProductVariation;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait VariationTrait
 {
@@ -15,6 +16,7 @@ trait VariationTrait
      */
     abstract public function getVariationModelClass();
     abstract public function main();
+
 
     /**
      * Boot the trait
@@ -61,27 +63,27 @@ trait VariationTrait
         return $this->variations->map(fn($item) => $convert_uploads ? $item->convertUploadModelsToIDs() : $item )->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']));
     }
 
-    public function getFirstVariation() {
-        $variant = [];
-        foreach($this->variant_attributes() as $attribute)  {
-            $variant[] = [
-                'attribute_value_id' => $attribute->attribute_values->first()->id, // Take the first attribute_value as initial selected variant
-                'attribute_id' => $attribute->id
-            ];
-        }
-
-        // Get the first ProductVariation
-        return $this->variations->filter(function($item, $key) use ($variant) {
-            $item_variant = array_values($item->variant); // reset keys just in case
-            $variant = array_values($variant); // reset keys just in case
-
-            array_multisort($item_variant); // sort item variant array
-            array_multisort($variant); // sort variant array
-
-            return serialize($item_variant) === serialize($variant); // check if these two are of same serialized value!
-            // NOTE: Only this approach works because we are NOT USING attribute_id as key of each element in variant array (cuz of livewire!) AND items inside `variant` can change place
-        })->first();
-    }
+//    public function getFirstVariation() {
+//        $variant = [];
+//        foreach($this->variant_attributes() as $attribute)  {
+//            $variant[] = [
+//                'attribute_value_id' => $attribute->attribute_values->first()->id, // Take the first attribute_value as initial selected variant
+//                'attribute_id' => $attribute->id
+//            ];
+//        }
+//        dd($this->variations);
+//        // Get the first ProductVariation
+//        return $this->variations->filter(function($item, $key) use ($variant) {
+//            $item_variant = array_values($item->variant); // reset keys just in case
+//            $variant = array_values($variant); // reset keys just in case
+//
+//            array_multisort($item_variant); // sort item variant array
+//            array_multisort($variant); // sort variant array
+//
+//            return serialize($item_variant) === serialize($variant); // check if these two are of same serialized value!
+//            // NOTE: Only this approach works because we are NOT USING attribute_id as key of each element in variant array (cuz of livewire!) AND items inside `variant` can change place
+//        })->first();
+//    }
 
     public function getVariationByVariant($variant) {
         // Get the first ProductVariation
@@ -180,5 +182,20 @@ trait VariationTrait
         }
 
         return $all_combinations;
+    }
+
+    /*
+     * Methods related to Main <--> Variation
+     */
+    public function getMain() {
+        return ($this->main() instanceof Relation) ? $this->main : null;
+    }
+
+    public function hasMain() {
+        return !empty($this->getMain());
+    }
+
+    public function isMain() {
+        return empty($this->getMain());
     }
 }

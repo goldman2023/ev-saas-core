@@ -23,7 +23,7 @@
             <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                                   wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
-            <div class="d-flex flex-column h-100" wire:loading.class="opacity-3">
+            <div class="d-flex flex-column h-100" wire:loading.class="opacity-3 ">
                 <div class="c-flyout-cart__close square-32 d-flex align-items-center justify-content-center position-absolute pointer" @click="show = false">
                     @svg('heroicon-o-x', ['class' => 'square-16'])
                 </div>
@@ -42,9 +42,9 @@
                     @if($items->isNotEmpty())
                         @foreach($items as $item)
                             @php
-                                $hasVariations = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->hasVariations();
-                                $name = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->getTranslation('name');
-                                $excerpt = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
+                                $hasVariations = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->hasVariations();
+                                $name = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->getTranslation('name');
+                                $excerpt = ($item->hasMain()) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
                             @endphp
 
                             <div id="cart-item-{{ $item->id }}-{{ str_replace('\\','-',$item::class) }}"
