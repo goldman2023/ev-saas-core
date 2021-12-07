@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Actions;
 
 use App\Models\Wishlist;
+use App\Notifications\WishlistItemAdded;
 use Livewire\Component;
 
 class WishlistButton extends Component
@@ -39,6 +40,8 @@ class WishlistButton extends Component
             $item->subject_id = $this->product->id;
             if(auth()->user()) {
                 $item->user_id = auth()->user()->id;
+                $this->product->user->notify(new WishlistItemAdded($item));
+
             } else {
                 $item->session_id = session()->getId();
             }
