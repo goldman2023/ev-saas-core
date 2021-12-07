@@ -50,7 +50,7 @@ class EVService
                         'icon' => 'heroicon-o-presentation-chart-bar',
                         'route' => route('dashboard'),
                         'is_active' => areActiveRoutes(['dashboard']),
-                        'roles' => [], // empty array means ALL roles - admin/seller/customer
+                        'roles' => ['admin', 'seller', 'customer'], // empty array means ALL roles - admin/seller/customer
                     ],
                     [
                         'label' => translate('Chat'),
@@ -174,7 +174,7 @@ class EVService
                         'icon' => 'heroicon-o-support',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin','seller',  'guest'],
                     ],
                 ]
             ],
@@ -193,14 +193,14 @@ class EVService
                         'icon' => 'heroicon-o-heart',
                         'route' => route('wishlist'),
                         'is_active' => areActiveRoutes(['wishlist']),
-                        'roles' => ['customer'],
+                        'roles' => ['customer',  'guest'],
                     ],
                     [
                         'label' => translate('My Viewed Items'),
                         'icon' => 'heroicon-o-eye',
                         'route' => route('wishlist.views'),
                         'is_active' => areActiveRoutes(['wishlist.views']),
-                        'roles' => ['customer','admin','seller'],
+                        'roles' => ['customer','admin','seller', 'guest'],
                     ]
                 ]
             ],
