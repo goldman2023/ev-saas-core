@@ -284,6 +284,6 @@ class Product extends EVBaseModel
 
     public function main()
     {
-        return [];
+        return null;
     }
 }

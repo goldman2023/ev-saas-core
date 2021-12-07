@@ -49,7 +49,7 @@ class ProductVariationsSelector extends Component {
         $this->missing_variants = $this->product->getMissingVariations(true);
 
         // Get and select first variant
-        $this->current = $this->product->getFirstVariation();
+        $this->current = $this->product->variations->first();
 
         // THIS MUST NOT BE AN ELOQUENT/COLLECTION!!!!
         // Reason: If we leave attributes_for_variations as Eloquent/Collection and not turn it into the array/standard-collection,
@@ -67,8 +67,6 @@ class ProductVariationsSelector extends Component {
     public function updatedCurrentVariant($value = null, $key = null) {
         $this->current = $this->variations->where('variant', $this->current_variant)->first();
         $this->emitTo('tenant.product.price', 'changeVariation', $this->current);
-
-
     }
 
     // TODO: Disable att_values on FE for which there are no variations!!!
@@ -109,7 +107,6 @@ class ProductVariationsSelector extends Component {
     }
 
     public function render() {
-        if($this->product->hasVariations())
-            return view('livewire.tenant.product.product-variations-selector');
+        return view('livewire.tenant.product.product-variations-selector');
     }
 }

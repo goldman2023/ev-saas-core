@@ -488,10 +488,10 @@
                                 @if($cart_items->isNotEmpty())
                                     @foreach($cart_items as $item)
                                         @php
-                                            $has_variations = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->hasVariations();
-                                            $name = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('name') : $item->getTranslation('name');
-                                            $excerpt = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
-                                            $permalink = ($item->main instanceof \App\Models\EVBaseModel) ? $item->main->permalink : $item->permalink;
+                                            $has_variations = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->hasVariations();
+                                            $name = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->getTranslation('name');
+                                            $excerpt = ($item->hasMain()) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
+                                            $permalink = ($item->hasMain()) ? $item->main->permalink : $item->permalink;
                                             $variant_name = $item->getVariantName(key_by: 'name');
                                         @endphp
 
