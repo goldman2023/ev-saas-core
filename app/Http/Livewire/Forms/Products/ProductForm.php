@@ -368,9 +368,9 @@ class ProductForm extends Component
         $product_translation->name = $this->product->name;
         $product_translation->unit = $this->product->unit;
         $product_translation->description = $this->product->description;
-        $product_translation->excerpt = $this->product->excerpt;
-        $product_translation->meta_title = $this->product->meta_title;
-        $product_translation->meta_description = $this->product->meta_description;
+        // $product_translation->excerpt = $this->product->excerpt;
+        // $product_translation->meta_title = $this->product->meta_title;
+        // $product_translation->meta_description = $this->product->meta_description;
         $product_translation->save();
     }
 

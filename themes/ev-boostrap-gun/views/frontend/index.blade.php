@@ -18,6 +18,17 @@
         {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
     </section>
 
+    <section>
+        <div class="container">
+<div class="row">
+    <div class="col-12">
+        <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
+
+    </div>
+</div>
+        </div>
+    </section>
+
     <section class="space-1">
         <x-default.products.product-list slider="true">
         </x-default.products.product-list>

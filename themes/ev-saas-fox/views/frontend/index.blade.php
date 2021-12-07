@@ -35,7 +35,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    {{-- <x-latest-products></x-latest-products> --}}
+                    <x-latest-products></x-latest-products>
                 </div>
             </div>
         </div>
