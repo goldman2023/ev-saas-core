@@ -106,6 +106,22 @@
                     </li>
                     <!-- End Search -->
 
+                     <!-- Wish List Cart -->
+                     <li class="list-inline-item">
+                        <div class="hs-unfold">
+                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="{{ route('wishlist') }}">
+                                @svg('heroicon-o-heart', ['class' => 'square-22'])
+                                <div class="position-absolute badge badge-primary circle-dynamic"
+                                     style="top: -6px; right: -6px; line-height: 0.8;   "
+                                     x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
+                                     x-text="Number(count) > 99 ? '99+':count"
+                                     x-cloak
+                                >
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+
                     <!-- Shopping Cart -->
                     <li class="list-inline-item">
                         <div class="hs-unfold">
