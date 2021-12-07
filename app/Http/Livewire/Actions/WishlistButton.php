@@ -24,6 +24,7 @@ class WishlistButton extends Component
     public function addToWishlist()
     {
         if($this->checkIfProductExistsInWishlist()) {
+            /* If product exists, toggle the database entry - delete if exists, create if does not exist */
             if(auth()->user()) {
                 $item = Wishlist::where('product_id', $this->product->id)
                     ->where('user_id', auth()->user()->id)
