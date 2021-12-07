@@ -111,9 +111,10 @@
                         <div class="hs-unfold">
                             <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="{{ route('wishlist') }}">
                                 @svg('heroicon-o-heart', ['class' => 'square-22'])
+                                {{-- TODO: Make count different, probably create a wishlist service like CartService --}}
                                 <div class="position-absolute badge badge-primary circle-dynamic"
                                      style="top: -6px; right: -6px; line-height: 0.8;   "
-                                     x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
+                                     x-data="{count: 2}"
                                      x-text="Number(count) > 99 ? '99+':count"
                                      x-cloak
                                 >
