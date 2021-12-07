@@ -43,6 +43,22 @@
 
                 </div>
             </div>
+            @else
+            <div class="card">
+                <div class="card-body text-center pt-3">
+                    <div class="text-center mx-md-auto">
+                        @svg('heroicon-o-eye', ['class' => 'text-dark', 'style' => 'width: 72px;'])
+
+                        <div class="mb-5">
+                            <h3 class="h3">{{ translate('No viewed items') }}</h3>
+                            <p>{{ translate('Before you can see your views you should explore the marketplace') }}</p>
+                        </div>
+                        <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('search') }}">
+                            {{ translate('Explore') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
             @endif
         </div>
     </div>
