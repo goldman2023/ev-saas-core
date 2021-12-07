@@ -23,6 +23,7 @@
             <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                                   wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
+{{--            TODO: Add loading class to prevent clicking items beneath--}}
             <div class="d-flex flex-column h-100" wire:loading.class="opacity-3 ">
                 <div class="c-flyout-cart__close square-32 d-flex align-items-center justify-content-center position-absolute pointer" @click="show = false">
                     @svg('heroicon-o-x', ['class' => 'square-16'])

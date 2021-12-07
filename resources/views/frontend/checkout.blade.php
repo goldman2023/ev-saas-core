@@ -492,7 +492,7 @@
                                             $name = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->getTranslation('name');
                                             $excerpt = ($item->hasMain()) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
                                             $permalink = ($item->hasMain()) ? $item->main->permalink : $item->permalink;
-                                            $variant_name = $item->getVariantName(key_by: 'name');
+                                            $variant_name = ($item->hasMain()) ? $item->getVariantName(key_by: 'name') : null;
                                         @endphp
 
                                         <!-- Cart Item -->
