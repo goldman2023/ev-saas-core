@@ -53,9 +53,6 @@ class ProductVariation extends EVBaseModel
 
     use VariationTrait;
 
-    /* Properties not saved in DB */
-    public bool $remove_flag = false;
-
     // Default atts
     protected $attributes = [
         'price' => 0,
@@ -72,17 +69,17 @@ class ProductVariation extends EVBaseModel
     protected $with = [];
 
     protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type', 'created_at', 'updated_at'];
-    //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'remove_flag'];
+    //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'remove_flag'];
+    protected $appends = ['name'];
 
-    public function product()
+    public function main()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function getNameAttribute() {
@@ -106,7 +103,10 @@ class ProductVariation extends EVBaseModel
         return $name;
     }
 
-    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-') {
+    /*
+     * TODO: Think about moving this to a Trait because different ContentType Variations can use it!
+     */
+    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-', $as_collection = false, $key_by = null) {
         $att_values_idx = [];
         $name = '';
 
@@ -119,11 +119,22 @@ class ProductVariation extends EVBaseModel
 
             if(!empty($attributes)) {
                 $att_values = $attributes->map(function($item) use($att_values_idx) {
-                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx));
-                })->flatten()->unique()->values();
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
+                });
             } else {
-                // If attributes are not provided as parameter, fetch from DB
-                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
+                // If attributes are not provided as parameter, get variant_attributes from main
+//                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
+                $att_values = $this->main->variant_attributes(key_by: ($key_by ?:null))->map(function($item) use($att_values_idx) {
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
+                });
+            }
+
+            if(!empty($key_by)) {
+                return $att_values->map(fn($item) => $item->values);
+            }
+
+            if($as_collection) {
+                return $att_values->unique()->values()->pluck('values');
             }
 
             foreach($att_values as $key => $value) {
@@ -133,20 +144,11 @@ class ProductVariation extends EVBaseModel
                     $name .= $value->values.($key+1 !== $att_values->count() ? $value_separator : '');
                 }
             }
+
         }
 
         return $name;
     }
-
-    public function setRemoveFlagAttribute($value)
-    {
-        $this->remove_flag = $value;
-    }
-
-    public function getRemoveFlagAttribute() {
-        return $this->remove_flag ?? false;
-    }
-
 
     protected function asJson($value)
     {
@@ -186,5 +188,10 @@ class ProductVariation extends EVBaseModel
     public function getDynamicModelUploadProperties(): array
     {
         return [];
+    }
+
+    public function getVariationModelClass()
+    {
+        return null;
     }
 }

@@ -461,7 +461,7 @@
                         @foreach($variations as $key => $variation)
                             <div class="row mb-3">
                                 <div class="col-3 d-flex align-items-center">
-                                    <strong style="max-width: 150px; overflow: hidden; whitespace:nowrap;">{{ $variation->getVariantName($attributes, false, ' | ') }}</strong>
+                                    <strong style="max-width: 150px; overflow: hidden; whitespace:nowrap;">{{ $variation->getVariantName(attributes: $attributes, slugified: false, separator: ' | ') }}</strong>
                                 </div>
                                 <div class="col-2 d-flex align-items-center">
                                     <x-ev.form.input groupclass="mb-0" name="variations.{{ $key }}.current_stock" :quantity_counter="true" type="number" :required="true" min="0" step="1">

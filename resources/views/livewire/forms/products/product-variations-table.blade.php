@@ -5,7 +5,6 @@
 
     <div class="d-flex flex-column" id="productVariationsAccordion">
         @foreach($variations as $index => $row)
-            @if($row->remove_flag ?? null) @continue @endif
             @php $index = Str::slug($index); @endphp
             <div class="d-flex flex-column mb-2 position-relative" id="variation-{{$index}}">
 

@@ -69,26 +69,38 @@ trait AttributeTrait
     public function seo_attributes() {
         return $this->custom_attributes->filter(function($att, $index) {
             return $att->is_schema === 1;
-        })->keyBy('id');
+        })->values();
     }
 
     public function admin_attributes() {
         return $this->custom_attributes->filter(function($att, $index) {
             return $att->is_admin === 1;
-        })->keyBy('id');
+        })->values();
     }
 
-    public function filterable_attributes() {
-        return $this->custom_attributes->filter(function($att, $index) {
+    public function filterable_attributes($key_by = null) {
+        $attributes = $this->custom_attributes->filter(function($att, $index) {
             return $att->filterable === 1;
-        })->keyBy('id');
+        })->values();
+
+        if(!empty($key_by)) {
+            return $attributes->keyBy($key_by);
+        }
+
+        return $attributes;
     }
 
-    public function variant_attributes()
+    public function variant_attributes($key_by = null)
     {
-        return $this->custom_attributes->filter(function($att, $index) {
+        $attributes =  $this->custom_attributes->filter(function($att, $index) {
             return $att->pivot->for_variations === 1;
-        })->keyBy('id');
+        })->values();
+
+        if(!empty($key_by)) {
+            return $attributes->keyBy($key_by);
+        }
+
+        return $attributes;
     }
 
     /**********************************
@@ -201,12 +213,33 @@ trait AttributeTrait
     }
 
 
+    /*
+     * Matrix can be consisted of array of arrays OR array of AttributeValues.
+     * 1) Array of arrays - when there is more than one attribute used for variations
+     * 2) Array of AttributeValues - when there is one attribute used for variations
+     *
+     * IMPORTANT: DO NOT STORE $variant_data items under $keys which are not default, like: $variant_data[$value->attribute_id]
+     * REASON: When php data is printed in livewire component js, array keys will be reset, which produces different $variant data and throws checksum error
+     * `17 => ['attribute_id' => 17, 'attribute_value_id' => 45]` becomes `0 => ['attribute_id' => 17, 'attribute_value_id' => 45]`
+     * This is clearly different when JS data is sent to PHP and checksum error is thrown!!!
+     * Use classic array keys (0,1,2...) OR string keys instead of integer IDs as keys because JS resets integer keys to go from 0!!!!! VERY IMPORTANT!!!!
+     */
+    public function generateVariantAttributeValuesMatrix() {
+        $result = [];
+        $all_att_values = $this->variant_attributes()->pluck('attribute_values');
+
+        foreach ($all_att_values as $index => $group) {
+            if($index === 0) {
+                $result = $group;
+            } else {
+                $result = $result->crossJoin($group);
+            }
+        }
+
+        return $result;
+    }
+
     function get_attribute_value_by_id($id) {
-
-       $attributeValue =  AttributeValue::where('attribute_id', $id)->get();
-
-       return $attributeValue;
-
-
+       return AttributeValue::where('attribute_id', $id)->get();
     }
 }

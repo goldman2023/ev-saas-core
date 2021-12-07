@@ -27,9 +27,19 @@
     }
 }
 
+/* Generate line-height classes */
+@for $lh from 5 through 20 {
+    .lh-#{$lh} {
+        line-height: $lh / 10;
+    }
+}
+
 /* Generate opacity classes */
-@for $o from 1 through 10 {
+@for $o from 0 through 10 {
     .opacity-#{$o} {
+        opacity: $o / 10;
+    }
+    .opacity-#{$o}-i {
         opacity: $o / 10;
     }
 }
@@ -39,6 +49,10 @@
     .z-#{$zi} {
         z-index: $zi;
     }
+}
+
+.d-grid {
+    display: grid;
 }
 
 .full-row {
@@ -101,5 +115,46 @@
             flex: 0 0 33%;
             margin-left: auto;
         }
+    }
+}
+
+.circle-dynamic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1em;
+    border-radius: 50%;
+    vertical-align: middle;
+
+    &:before {
+        content:'';
+        float: left;
+        width: auto;
+        padding-bottom: 100%;
+    }
+}
+
+
+.transition {
+    transition-property: all;
+
+    &.ease-out {
+        transition-timing-function: ease-out;
+    }
+    &.ease-in {
+        transition-timing-function: ease-in;
+    }
+
+    &.duration-300 {
+        transition-duration: 300ms
+    }
+    &.duration-500 {
+        transition-duration: 500ms
+    }
+    &.duration-800 {
+        transition-duration: 800ms
+    }
+    &.duration-1000 {
+        transition-duration: 1000ms
     }
 }

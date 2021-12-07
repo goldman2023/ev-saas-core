@@ -1,9 +1,16 @@
-<div class="card"
+@php($first_variation = $product->getFirstVariation())
+
+<div class="card position-relative"
         x-data="{
-            qty: 0,
             processing: false,
-            model_id: {{ $product->id }},
-            model_type: '{!! addslashes($product::class) !!}'
+            processing_variation_change: false,
+            qty: 0,
+            model_id: {{  ($product->hasVariations()) ? $first_variation->id : $product->id }},
+            model_type: '{!!  ($product->hasVariations()) ? addslashes($first_variation::class) : addslashes($product::class) !!}',
+            total_price: {{ ($product->hasVariations()) ? $first_variation->total_price : $product->total_price }},
+            total_price_display: '{{ ($product->hasVariations()) ? $first_variation->getTotalPrice(true) : $product->getTotalPrice(true) }}',
+            base_price: {{ ($product->hasVariations()) ? $first_variation->base_price : $product->base_price }},
+            base_price_display: '{{ ($product->hasVariations()) ? $first_variation->getBasePrice(true) : $product->getBasePrice(true) }}',
         }"
         @cart-processing-ending.window="
             if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
@@ -11,8 +18,25 @@
                 processing = false;
                 $dispatch('display-cart');
             }
-        ">
-    <div class="card-body">
+        "
+        @if($product->hasVariations())
+            @variation-changed.window="
+                qty = 0;
+                model_id = $event.detail.model_id;
+                model_type = $event.detail.model_type;
+                total_price = $event.detail.total_price;
+                total_price_display = $event.detail.total_price_display;
+                base_price = $event.detail.base_price;
+                base_price_display = $event.detail.base_price_display;
+            "
+        @endif
+>
+    <x-ev.loaders.spinner class="absolute-center z-10"
+                          x-show="processing_variation_change"
+                          x-cloak>
+    </x-ev.loaders.spinner>
+
+    <div class="card-body" :class="{'opacity-3':processing_variation_change}">
         <div class="row">
             <div class="col-sm-12 d-flex flex-column">
                 <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
@@ -30,10 +54,20 @@
                 <livewire:tenant.product.price
                     :model="$product"
                     :with_label="true"
+                    :with-discount-label="true"
                     original-price-class="text-body text-16"
                     total-price-class="text-24 fw-700 text-primary"
                 >
                 </livewire:tenant.product.price>
+
+                {{-- Variations Selector --}}
+                <livewire:tenant.product.product-variations-selector
+                    :product="$product"
+                    class="mt-2"
+                >
+
+
+                </livewire:tenant.product.product-variations-selector>
 
 
                 <x-default.forms.quantity-counter :model="$product" id=""></x-default.forms.quantity-counter>

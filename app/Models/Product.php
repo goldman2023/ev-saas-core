@@ -283,4 +283,17 @@ class Product extends EVBaseModel
     {
         return visits($this)->relation();
     }
+
+    public function getVariationModelClass()
+    {
+        return [
+            'class' => ProductVariation::class,
+            'foreign_key' => 'product_id'
+        ];
+    }
+
+    public function main()
+    {
+        return [];
+    }
 }

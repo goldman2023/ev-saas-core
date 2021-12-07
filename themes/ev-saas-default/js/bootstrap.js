@@ -24,6 +24,7 @@ try {
     window.flatpickr = flatpickr;
     window.Sortable = Sortable;
     window.Quill = require('quill');
+    window.Swal = require('sweetalert2');
     require('slick-carousel');
     require('ion-rangeslider');
     require('daterangepicker');

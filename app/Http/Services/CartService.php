@@ -68,7 +68,7 @@ class CartService
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
-                $warnings[] = translate('There is not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
+                $warnings[] = translate('There are not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
 
                 $qty = $stock->qty;
             }
@@ -171,7 +171,9 @@ class CartService
 
             $mapped = $mapped->map(function($data, $content_type) use (&$count) {
                 $ids = $data->pluck('id');
-                $items = app($content_type)::findMany($ids);
+
+                // TODO: Eager load translations and parent (if these relations are available) - think of a way to do it
+                $items = app($content_type)->findMany($ids);
 
                 return $items->map(function($model, $index) use($data, &$count) {
                     $qty = $data->firstWhere('id', $model->id)['qty'] ?? 1;

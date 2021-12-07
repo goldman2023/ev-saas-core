@@ -32,6 +32,10 @@ class CheckoutController extends Controller
         //
     }
 
+    public function index(Request $request) {
+
+    }
+
     //check the selected payment gateway and redirect to that controller accordingly
     public function checkout(Request $request)
     {
