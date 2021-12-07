@@ -3,9 +3,9 @@
         title="{{ translate('Add To Wishlist') }}">
 
         @if($added)
-        {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-white']) }}
+        {{ svg('heroicon-s-heart', ['class'=> 'ev-icon__xs text-white']) }}
         @else
-        {{ svg('heroicon-s-heart', ['class'=> 'ev-icon__xs text-black']) }}
+        {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-black']) }}
         @endif
 
     </button>
