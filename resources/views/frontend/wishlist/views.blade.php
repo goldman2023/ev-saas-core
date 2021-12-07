@@ -24,7 +24,7 @@
                 <div class="card-header">
 
                     <h5>
-                        {{ translate('Your Wishlist') }}
+                        {{ translate('Your Viewed Items') }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -32,7 +32,7 @@
                         @foreach($products as $product)
 
                         <div class="col-4">
-                            <x-default.products.cards.product-card :product="$product->product"
+                            <x-default.products.cards.product-card :product="$product->subject"
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">
                             </x-default.products.cards.product-card>
                         </div>

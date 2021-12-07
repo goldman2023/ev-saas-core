@@ -187,6 +187,20 @@ class EVService
                         'route' => route('purchase_history.index'),
                         'is_active' => areActiveRoutes(['purchase_history']),
                         'roles' => ['customer'],
+                    ],
+                    [
+                        'label' => translate('My Wishlist'),
+                        'icon' => 'heroicon-o-heart',
+                        'route' => route('wishlist'),
+                        'is_active' => areActiveRoutes(['wishlist']),
+                        'roles' => ['customer'],
+                    ],
+                    [
+                        'label' => translate('My Viewed Items'),
+                        'icon' => 'heroicon-o-eye',
+                        'route' => route('wishlist.views'),
+                        'is_active' => areActiveRoutes(['wishlist.views']),
+                        'roles' => ['customer','admin','seller'],
                     ]
                 ]
             ],
