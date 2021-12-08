@@ -17,10 +17,10 @@
                 ->get();
         @endphp
         @foreach ($companies as $company)
-            <div class="col-sm-6 col-lg-4 px-2 mb-3">
+            <div class="col-sm-4">
                 <!-- Team -->
-                <x-default.companies.cards.company-card :company="$company">
-                </x-default.companies.cards.company-card>
+                <x-company.company-card :company="$company">
+                </x-company.company-card>
                 <!-- End Team -->
             </div>
         @endforeach

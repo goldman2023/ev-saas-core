@@ -36,7 +36,7 @@
             <tbody>
                 @foreach($categories as $key => $category)
                 <tr>
-                    <td>{{ ($key+1) + ($categories->currentPage() - 1)*$categories->perPage() }}</td>
+                    <td>{{ ($key) + ($categories->currentPage() - 1)*$categories->perPage() }}</td>
                     <td>{{ $category->name }}</td>
                     <td class="text-right">
                         <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{url('admin/blog-category/'.$category->id.'/edit')}}" title="{{ translate('Edit') }}">

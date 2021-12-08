@@ -43,7 +43,7 @@
             <tbody>
                 @foreach($categories as $key => $category)
                     <tr>
-                        <td>{{ ($key+1) + ($categories->currentPage() - 1)*$categories->perPage() }}</td>
+                        <td>{{ $category->id }}</td>
                         <td>{{ $category->getTranslation('name') }}</td>
                         <td>
                             @php
@@ -93,7 +93,7 @@
             </tbody>
         </table>
         <div class="aiz-pagination">
-            {{ $categories->links() }}
+            {{-- {{ $categories->links() }} --}}
             {{-- {{ $categories->appends(request()->input())->links() }} --}}
         </div>
     </div>

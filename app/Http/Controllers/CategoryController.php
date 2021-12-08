@@ -23,11 +23,11 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $sort_search = null;
-//        $categories = Category::orderBy('name', 'asc');
+        $categories = Category::orderBy('name', 'asc');
         $categories = Category::orderBy('order_level', 'desc');
         if ($request->has('search')) {
             $sort_search = strtolower($request->search);
-            $categories = $categories->where(DB::raw('lower(name)'), 'like', '%'.$sort_search.'%');
+            $categories = $categories->where(DB::raw('lower(name)'), 'like', '%' . $sort_search . '%');
         }
         $categories = $categories->paginate(15);
         return view('backend.product.categories.index', compact('categories', 'sort_search'));
@@ -56,7 +56,7 @@ class CategoryController extends Controller
         $category = new Category;
         $category->name = $request->name;
         $category->order_level = 0;
-        if($request->order_level != null) {
+        if ($request->order_level != null) {
             $category->order_level = $request->order_level;
         }
         $category->digital = $request->digital;
@@ -69,8 +69,8 @@ class CategoryController extends Controller
             $category->parent_id = $request->parent_id;
 
             $parent = Category::find($request->parent_id);
-            if(isset($parent->level )) {
-                $category->level = $parent->level + 1 ;
+            if (isset($parent->level)) {
+                $category->level = $parent->level + 1;
             } else {
                 $category->level = 1;
             }
@@ -115,7 +115,7 @@ class CategoryController extends Controller
         $lang = $request->lang;
         $category = Category::findOrFail($id);
         $categories = EVS::getMappedCategories();
-            /*Category::where('parent_id', 0)
+        /*Category::where('parent_id', 0)
             ->with('childrenCategories')
             ->whereNotIn('id', CategoryUtility::children_ids($category->id, true))
             ->where('id', '!=' , $category->id)
@@ -135,10 +135,10 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
-        if($request->lang == config('app.locale')){
+        if ($request->lang == config('app.locale')) {
             $category->name = $request->name;
         }
-        if($request->order_level != null) {
+        if ($request->order_level != null) {
             $category->order_level = $request->order_level;
         }
         $category->digital = $request->digital;
@@ -149,20 +149,19 @@ class CategoryController extends Controller
 
         $previous_level = $category->level;
 
-        if ($request->parent_id != "0" && $request->parent_id != null ) {
+        if ($request->parent_id != "0" && $request->parent_id != null) {
             $category->parent_id = $request->parent_id;
 
             $parent = Category::find($request->parent_id);
-            $category->level = $parent->level + 1 ;
+            $category->level = $parent->level + 1;
         } else {
             $category->parent_id = null;
             $category->level = null;
         }
 
-        if($category->level > $previous_level){
+        if ($category->level > $previous_level) {
             CategoryUtility::move_level_down($category->id);
-        }
-        elseif ($category->level < $previous_level) {
+        } elseif ($category->level < $previous_level) {
             CategoryUtility::move_level_up($category->id);
         }
 
@@ -210,7 +209,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($request->id);
         $category->featured = $request->status;
-        if($category->save()){
+        if ($category->save()) {
             return 1;
         }
         return 0;

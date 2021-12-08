@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Facades\Categories;
 use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductVariation;

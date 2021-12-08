@@ -1,7 +1,4 @@
-<div class="col-sm-6">
-
-
-    <div class="card border h-100">
+<div class="card border h-100">
         <div class="card-img-top position-relative">
             <img class="card-img-top"
                 src="{{ $company->get_company_cover() }}"
@@ -72,5 +69,3 @@
             </div>
         </div>
     </div>
-
-</div>

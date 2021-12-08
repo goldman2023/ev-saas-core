@@ -2,6 +2,29 @@
 
 @section('content')
     <section id="archive-hero">
+        <!-- Hero Section -->
+<div class="bg-img-hero-center bg-primary" style="background-image: url(https://htmlstream.com/preview/front-v3.1.1/assets/img/1920x800/img8.jpg);">
+    <div class="container space-1 space-lg-1">
+      <div class="w-md-65 w-lg-35">
+        <div class="mb-4">
+            <a class="navbar-brand" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
+                @php
+                $header_logo = get_setting('header_logo');
+                @endphp
+                @if ($header_logo != null)
+                <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
+                @else
+                <img src="{{ static_asset('tenancy/assets/img/logo.jpg') }}" alt="{{ env('APP_NAME') }}">
+                @endif
+            </a>
+          <h2 class="h1 text-white">Wear your pride</h2>
+          <p class="text-white">Outdo the sun and refresh your workout with greys, whites and dark brights.</p>
+        </div>
+        <a class="btn btn-light btn-pill transition-3d-hover px-5" href="#">Shop the Collection</a>
+      </div>
+    </div>
+  </div>
+  <!-- End Hero Section -->
     </section>
     <section>
         <div class="container">
@@ -15,11 +38,11 @@
                     </li>
                     @if (!isset($category_id))
                         <li class="breadcrumb-item fw-600  text-dark">
-                            <a class="text-reset" href="{{ route('search') }}">"{{ translate('All Industries') }}"</a>
+                            <a class="text-reset" href="{{ route('search') }}">"{{ translate('All Categories') }}"</a>
                         </li>
                     @else
                         <li class="breadcrumb-item opacity-50">
-                            <a class="text-reset" href="{{ route('search') }}">{{ translate('All Industries') }}</a>
+                            <a class="text-reset" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
                     @endif
                     @if (isset($category_id))
@@ -64,9 +87,15 @@
                         <div class="mb-3">
                         </div>
                         @if (count($shops) > 0)
+                        <div class="row">
                             @foreach ($shops as $key => $shop)
+                            <div class="col-4">
                                 <x-company.company-card :company="$shop"></x-company.company-card>
-                            @endforeach
+
+                            </div>
+                        @endforeach
+                        </div>
+
                         @else
                             <x-empty-state-company-archive> </x-empty-state-company-archive>
                         @endif
