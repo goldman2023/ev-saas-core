@@ -7,16 +7,6 @@
     <div class="container space-1 space-lg-1">
       <div class="w-md-65 w-lg-35">
         <div class="mb-4">
-            <a class="navbar-brand" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
-                @php
-                $header_logo = get_setting('header_logo');
-                @endphp
-                @if ($header_logo != null)
-                <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
-                @else
-                <img src="{{ static_asset('tenancy/assets/img/logo.jpg') }}" alt="{{ env('APP_NAME') }}">
-                @endif
-            </a>
           <h2 class="h1 text-white">Wear your pride</h2>
           <p class="text-white">Outdo the sun and refresh your workout with greys, whites and dark brights.</p>
         </div>

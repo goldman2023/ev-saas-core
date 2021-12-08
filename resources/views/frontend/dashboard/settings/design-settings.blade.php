@@ -20,9 +20,11 @@
                                 <img class="img-fluid" src="/assets/svg/icons/icon-45.svg" alt="SVG">
                               </figure>
                               <div class="media-body">
-                                <h4 class="mb-0">Product Page Design</h4>
+                                <h4 class="mb-0">{{ translate('Website Theme')  }}</h4>
                                 <div class="d-none d-lg-block mt-2">
-                                  <p class="text-body mb-0">You can work with your existing website.</p>
+                                  <p class="text-body mb-0">
+                                      You can work with your existing website.
+                                  </p>
                                 </div>
                               </div>
                             </div>
