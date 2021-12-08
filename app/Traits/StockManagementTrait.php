@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
+use Illuminate\Support\Facades\Log;
 
 /**
  * We'll combine classic stock management with serial numbers stock management in this trait.
@@ -24,12 +25,25 @@ trait StockManagementTrait
     {
         // When model data is retrieved, populate model stock data!
         static::retrieved(function ($model) {
+
             if(!isset($model->stock)) {
                 $model->load('stock');
             }
+
+            if(empty($model->stock)) {
+                $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
+                $product_stock->sku = $model->slug.'-001';
+                $product_stock->qty = 1;
+                $product_stock->low_stock_qty = 1;
+                $product_stock->save();
+                $model->load('stock');
+            }
+
             if(!isset($model->serial_numbers)) {
                 $model->load('serial_numbers');
             }
+
+            Log::debug($model);
 
             $model->getUseSerialAttribute();
             $model->getTempSkuAttribute();
