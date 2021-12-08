@@ -69,6 +69,12 @@ Example usage
 
 ```
 
+<x-ev.link-button :href="ev_dynamic_translate('#button1')"
+:label="ev_dynamic_translate('Button 1')" class="ev-button">
+</x-ev.link-button>
+
+```
+
 * Dynamic Images
 
 Example usage

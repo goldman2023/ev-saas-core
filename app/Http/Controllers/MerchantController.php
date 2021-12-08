@@ -14,6 +14,11 @@ class MerchantController extends Controller
     //
     use LoggingTrait;
 
+    public function index() {
+
+        return view('frontend.shop_listing');
+    }
+
     public function shop($slug)
     {
         $shop = Shop::where('slug', $slug)->first();

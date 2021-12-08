@@ -53,6 +53,25 @@
                                 {{ translate('Login') }}
                             </button>
                         </form>
+
+                        <div class="text-center mt-3">
+                            <span class="small text-muted">Do not have an account?</span>
+                            <a class="js-animation-link small font-weight-bold"
+                                href="{{ route('user.registration') }}" data-hs-show-animation-options='{
+                                         "targetSelector": "#signup",
+                                         "groupName": "idForm",
+                                         "animationType": "css-animation",
+                                         "animationIn": "slideInUp",
+                                         "duration": 400
+                                       }'>
+                                {{ translate('Sign Up') }}
+                            </a>
+                            /
+                            <a class="js-animation-link small font-weight-bold"
+                                href="{{ route('business.register') }}">
+                                {{ translate('Business Sign Up') }}
+                            </a>
+                        </div>
                         @if (env("DEMO_MODE") == "On")
                             <div class="mt-4">
                                 <table class="table table-bordered">

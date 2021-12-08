@@ -165,6 +165,7 @@ Route::middleware([
 
     // Shop pages
     Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
+    Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
