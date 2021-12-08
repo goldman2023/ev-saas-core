@@ -92,7 +92,7 @@
         </x-default.headers.header>
 
         <div class="space-top-lg-4 space-top-3">
-            <x-default.system.promo-alert></x-default.system.promo-alert>
+            {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
 
             @yield('content')
         </div>
