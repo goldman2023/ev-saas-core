@@ -269,6 +269,7 @@ Route::middleware([
 
         /* TODO : Admin only */
         Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
+        Route::post('/ev-design-settings', [EVSaaSController::class, 'design_settings_store'])->name('ev.settings.design.store');
         Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
         /* Leads Management - BY EIM */
         Route::get('leads/success', 'LeadController@success')->name('leads.success');
