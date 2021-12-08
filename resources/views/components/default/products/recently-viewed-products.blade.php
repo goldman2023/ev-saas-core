@@ -15,7 +15,7 @@
             @endphp
 
             @if($product)
-            <div class="col-4">
+            <div class="col-4 mb-3">
                 <x-default.products.cards.product-card :product="$product"
                     style="{{ ev_dynamic_translate('product-card', true)->value }}">
                 </x-default.products.cards.product-card>

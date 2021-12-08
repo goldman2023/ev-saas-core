@@ -178,7 +178,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $data = Activity::where('subject_type', 'App\Models\Product')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')
-        ->get();
+        ->get()->take(6);
 
         return $data;
     }
