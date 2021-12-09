@@ -159,7 +159,7 @@ class EVService
                         'is_active' => areActiveRoutes(['conversations.index', 'conversations.show']),
                         'roles' => ['admin','seller', 'customer'],
                     ],
-                    [
+                    /* [
                         'label' => translate('Customers'),
                         'icon' => 'heroicon-o-user-group',
                         'route' => '',
@@ -179,7 +179,7 @@ class EVService
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
                         'roles' => ['admin','seller',  'guest'],
-                    ],
+                    ], */
                 ]
             ],
             [
@@ -223,6 +223,13 @@ class EVService
                         'icon' => 'heroicon-o-cog',
                         'route' => route('profile'),
                         'is_active' => areActiveRoutes(['profile']),
+
+                    ],
+                    [
+                        'label' => translate('Shop settings'),
+                        'icon' => 'heroicon-o-cog',
+                        'route' => route('shop.index'),
+                        'is_active' => areActiveRoutes(['shop']),
 
                     ],
                     // [

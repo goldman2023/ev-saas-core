@@ -67,7 +67,7 @@ if (empty($banner3->refer_url)) {
                                     </button>
                                 </div>
 
-                                <x-categories-sidebar :categoryId="$category_id" type="companies"></x-categories-sidebar>
+                                {{-- <x-categories-sidebar :categoryId="$category_id" type="companies"></x-categories-sidebar> --}}
 
                                 <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
 
