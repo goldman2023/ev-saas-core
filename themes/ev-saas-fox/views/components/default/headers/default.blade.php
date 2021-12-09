@@ -1,179 +1,14 @@
 <!-- ========== HEADER ========== -->
 <header id="header" class="header bg-primary shadow-lg">
-    <div class="header-section ">
+    <div class="header-section">
         <!-- Topbar -->
         <div class="container header-hide-content pt-2">
-            <div class="d-flex align-items-center ev-top-bar ">
-                <div>
-                    <!-- Language -->
-                    @if (get_setting('show_language_switcher') == 'on')
-                    @php
-                    if (Session::has('locale')) {
-                    $locale = Session::get('locale', Config::get('app.locale'));
-                    } else {
-                    $locale = 'en';
-                    }
-                    @endphp
-                    <div class="hs-unfold">
-                        <a class="js-hs-unfold-invoker dropdown-nav-link dropdown-toggle d-flex align-items-center"
-                            href="javascript:;" data-hs-unfold-options='{
-                              "target": "#languageDropdown",
-                              "type": "css-animation",
-                              "event": "hover",
-                              "hideOnScroll": "true"
-                             }'>
-                            <img class="dropdown-item-icon mr-2"
-                                src="{{ global_asset('assets/img/flags/' . $locale . '.png') }}" alt="SVG">
-                            <span class="d-inline-block d-sm-none">{{ $locale }}</span>
-                            <span class="d-none d-sm-inline-block">{{ $locale }}</span>
-                        </a>
 
-                        <div id="languageDropdown" class="hs-unfold-content dropdown-menu">
-                            @foreach (\App\Models\Language::all() as $key => $language)
-                            <a href="javascript:void(0)" data-flag="{{ $language->code }}"
-                                class="dropdown-item @if ($locale == $language) active @endif">
-                                <img class="dropdown-item-icon mr-2"
-                                    src="{{ global_asset('assets/img/flags/' . $language->code . '.png') }}" alt="SVG">
-
-                                {{ $language->name }}
-                            </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-                    <!-- End Language -->
-                </div>
-                <div class="ml-4">
-                    {{-- Currency --}}
-                    @if (get_setting('show_currency_switcher') == 'on')
-                    @php
-                    if (Session::has('currency_code')) {
-                    $currency_code = Session::get('currency_code', Config::get('app.currency_code'));
-                    } else {
-                    $currency_code = 'USD';
-                    }
-                    @endphp
-                    <div class="hs-unfold">
-                        <a class="js-hs-unfold-invoker dropdown-nav-link dropdown-toggle d-flex align-items-center"
-                            href="javascript:;" data-hs-unfold-options='{
-                              "target": "#currencyDropdown",
-                              "type": "css-animation",
-                              "event": "hover",
-                              "hideOnScroll": "true"
-                             }'>
-                            <span class="d-inline-block d-sm-none">{{ $currency_code }}</span>
-                            <span class="d-none d-sm-inline-block">{{ $currency_code }}</span>
-                        </a>
-
-                        <div id="currencyDropdown" class="hs-unfold-content dropdown-menu">
-                            @foreach (\App\Models\Currency::all() as $key => $currency)
-                            <a href="javascript:void(0)" data-flag="{{ $currency->code }}"
-                                class="dropdown-item d-flex justify-content-between @if ($currency_code == $currency) active @endif">
-                                <div class="mr-3">{{ $currency->name }}</div>
-                                <div>{{ $currency->symbol }}</div>
-                            </a>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
-                    {{-- End Currency --}}
-                </div>
-
-                <div class="ml-auto">
-
-
-                    <!-- Links -->
-                    {{-- <div class="nav nav-sm nav-y-0 d-none d-sm-flex ml-sm-auto">
-                        <a class="nav-link" href="#">Help</a>
-                        <a class="nav-link" href="#">Contacts</a>
-                    </div> --}}
-                    <!-- End Links -->
-                </div>
-
-                <ul class="list-inline ml-2 mb-0">
-                    <!-- Search -->
-                    <li class="list-inline-item">
-                        <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-xs btn-icon btn-ghost-secondary" href="javascript:;"
-                                data-hs-unfold-options='{
-                                  "target": "#searchPushTop",
-                                  "type": "jquery-slide",
-                                  "contentSelector": ".search-push-top"
-                                 }'>
-                                @svg('heroicon-o-search', ['class' => 'square-22'])
-                            </a>
-                        </div>
-                    </li>
-                    <!-- End Search -->
-
-                     <!-- Wish List Cart -->
-                     <li class="list-inline-item">
-                        <div class="hs-unfold">
-                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="{{ route('wishlist') }}">
-                                @svg('heroicon-o-heart', ['class' => 'square-22'])
-                                {{-- TODO: Make count different, probably create a wishlist service like CartService --}}
-                                <div class="position-absolute badge badge-primary circle-dynamic"
-                                     style="top: -6px; right: -6px; line-height: 0.8;   "
-                                     x-data="{count: 2}"
-                                     x-text="Number(count) > 99 ? '99+':count"
-                                     x-cloak
-                                >
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-
-                    <!-- Shopping Cart -->
-                    <li class="list-inline-item">
-                        <div class="hs-unfold">
-                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="javascript:;" x-data="" @click="$dispatch('display-cart')">
-                                @svg('heroicon-o-shopping-cart', ['class' => 'square-22'])
-                                <div class="position-absolute badge badge-primary circle-dynamic"
-                                     style="top: -6px; right: -6px; line-height: 0.8;   "
-                                     x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
-                                     x-text="Number(count) > 99 ? '99+':count"
-                                     x-cloak
-                                     @refresh-cart-items-count.window="count = $event.detail.count">
-                                </div>
-                            </a>
-                        </div>
-                    </li>
-                    <!-- End Shopping Cart -->
-
-                    <!-- Account Login -->
-                    @auth
-                    <li class="list-inline-item">
-                        <div class="hs-unfold">
-                            <a href="{{ route('user.logout') }}" class="text-reset py-2 d-inline-block opacity-60">{{
-                                translate('Logout') }}</a>
-                        </div>
-                    </li>
-                    @else
-                    <li class="list-inline-item">
-                        <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary"
-                                href="{{ route('business.login') }}">
-                                <!--data-toggle="modal" data-target="#signupModal">-->
-                                @svg('heroicon-s-user-circle', ['class' => 'square-2'])
-                            </a>
-                        </div>
-                    </li>
-
-                    <li class="list-inline-item">
-                        <a href="{{ route('business.login') }}" data-test="header.login">
-                            {{ translate('Login') }}
-                        </a>
-                    </li>
-
-                    @endauth
-                    <!-- End Account Login -->
-                </ul>
-            </div>
         </div>
         <!-- End Topbar -->
-        <div id="logoAndNav" class="container pb-3">
+        <div id="logoAndNav" class="container">
             <!-- Nav -->
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-sm-3 col-6">
                     <a class="navbar-brand" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
                         @php
@@ -189,11 +24,165 @@
                 <div class="col-sm-6 align-items-center d-none d-sm-block">
                     <x-b2-b-search></x-b2-b-search>
                 </div>
-                <div class="col-sm-3 col-6 justify-content-end align-items-end text-right">
-                    <x-join-button>
-                    </x-join-button>
+                <div class="d-flex align-items-center ev-top-bar ">
+                    <div>
+                        <!-- Language -->
+                        @if (get_setting('show_language_switcher') == 'on')
+                        @php
+                        if (Session::has('locale')) {
+                        $locale = Session::get('locale', Config::get('app.locale'));
+                        } else {
+                        $locale = 'en';
+                        }
+                        @endphp
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker dropdown-nav-link dropdown-toggle d-flex align-items-center"
+                                href="javascript:;" data-hs-unfold-options='{
+                                  "target": "#languageDropdown",
+                                  "type": "css-animation",
+                                  "event": "hover",
+                                  "hideOnScroll": "true"
+                                 }'>
+                                <img class="dropdown-item-icon mr-2"
+                                    src="{{ global_asset('assets/img/flags/' . $locale . '.png') }}" alt="SVG">
+                                <span class="d-inline-block d-sm-none">{{ $locale }}</span>
+                                <span class="d-none d-sm-inline-block">{{ $locale }}</span>
+                            </a>
+
+                            <div id="languageDropdown" class="hs-unfold-content dropdown-menu">
+                                @foreach (\App\Models\Language::all() as $key => $language)
+                                <a href="javascript:void(0)" data-flag="{{ $language->code }}"
+                                    class="dropdown-item @if ($locale == $language) active @endif">
+                                    <img class="dropdown-item-icon mr-2"
+                                        src="{{ global_asset('assets/img/flags/' . $language->code . '.png') }}" alt="SVG">
+
+                                    {{ $language->name }}
+                                </a>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+                        <!-- End Language -->
+                    </div>
+                    <div class="ml-4">
+                        {{-- Currency --}}
+                        @if (get_setting('show_currency_switcher') == 'on')
+                        @php
+                        if (Session::has('currency_code')) {
+                        $currency_code = Session::get('currency_code', Config::get('app.currency_code'));
+                        } else {
+                        $currency_code = 'USD';
+                        }
+                        @endphp
+                        <div class="hs-unfold">
+                            <a class="js-hs-unfold-invoker dropdown-nav-link dropdown-toggle d-flex align-items-center"
+                                href="javascript:;" data-hs-unfold-options='{
+                                  "target": "#currencyDropdown",
+                                  "type": "css-animation",
+                                  "event": "hover",
+                                  "hideOnScroll": "true"
+                                 }'>
+                                <span class="d-inline-block d-sm-none">{{ $currency_code }}</span>
+                                <span class="d-none d-sm-inline-block">{{ $currency_code }}</span>
+                            </a>
+
+                            <div id="currencyDropdown" class="hs-unfold-content dropdown-menu">
+                                @foreach (\App\Models\Currency::all() as $key => $currency)
+                                <a href="javascript:void(0)" data-flag="{{ $currency->code }}"
+                                    class="dropdown-item d-flex justify-content-between @if ($currency_code == $currency) active @endif">
+                                    <div class="mr-3">{{ $currency->name }}</div>
+                                    <div>{{ $currency->symbol }}</div>
+                                </a>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+                        {{-- End Currency --}}
+                    </div>
+
+                    <div class="ml-auto">
+
+
+                        <!-- Links -->
+                        {{-- <div class="nav nav-sm nav-y-0 d-none d-sm-flex ml-sm-auto">
+                            <a class="nav-link" href="#">Help</a>
+                            <a class="nav-link" href="#">Contacts</a>
+                        </div> --}}
+                        <!-- End Links -->
+                    </div>
+
+                    <ul class="list-inline ml-2 mb-0">
+                        <!-- Search -->
+                        <li class="list-inline-item">
+                            <div class="hs-unfold">
+                                <a class="js-hs-unfold-invoker btn btn-xs btn-icon btn-secondary" href="javascript:;"
+                                    data-hs-unfold-options='{
+                                      "target": "#searchPushTop",
+                                      "type": "jquery-slide",
+                                      "contentSelector": ".search-push-top"
+                                     }'>
+                                    @svg('heroicon-o-search', ['class' => 'square-22'])
+                                </a>
+                            </div>
+                        </li>
+                        <!-- End Search -->
+
+                         <!-- Wish List Cart -->
+                         <li class="list-inline-item">
+                            <div class="hs-unfold">
+                                <a class="btn btn-xs btn-icon btn-secondary position-relative" href="{{ route('wishlist') }}">
+                                    @svg('heroicon-o-heart', ['class' => 'square-22'])
+                                    {{-- TODO: Make count different, probably create a wishlist service like CartService --}}
+                                    <div class="position-absolute badge badge-primary circle-dynamic"
+                                         style="top: -6px; right: -6px; line-height: 0.8;   "
+                                         x-data="{count: 2}"
+                                         x-text="Number(count) > 99 ? '99+':count"
+                                         x-cloak
+                                    >
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+
+                        <!-- Shopping Cart -->
+                        <li class="list-inline-item">
+                            <div class="hs-unfold">
+                                <a class="btn btn-xs btn-icon btn-secondary position-relative" href="javascript:;" x-data="" @click="$dispatch('display-cart')">
+                                    @svg('heroicon-o-shopping-cart', ['class' => 'square-22'])
+                                    <div class="position-absolute badge badge-primary circle-dynamic"
+                                         style="top: -6px; right: -6px; line-height: 0.8;   "
+                                         x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
+                                         x-text="Number(count) > 99 ? '99+':count"
+                                         x-cloak
+                                         @refresh-cart-items-count.window="count = $event.detail.count">
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        <!-- End Shopping Cart -->
+
+                        <!-- Account Login -->
+                        @auth
+                        <li class="list-inline-item">
+                            <div class="hs-unfold">
+                                <a href="{{ route('user.logout') }}" class="text-reset py-2 d-inline-block opacity-60">{{
+                                    translate('Logout') }}</a>
+                            </div>
+                        </li>
+                        @else
+                        <li class="list-inline-item">
+                            <div class="hs-unfold">
+                                <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-secondary"
+                                    href="{{ route('business.login') }}">
+                                    <!--data-toggle="modal" data-target="#signupModal">-->
+                                    @svg('heroicon-s-user-circle', ['class' => 'square-2'])
+                                </a>
+                            </div>
+                        </li>
+                        @endauth
+                        <!-- End Account Login -->
+                    </ul>
                 </div>
-                <!-- End Nav -->
             </div>
 
         </div>
