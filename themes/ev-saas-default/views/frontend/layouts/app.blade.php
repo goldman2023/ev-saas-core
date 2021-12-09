@@ -103,7 +103,8 @@
         </x-default.footers.footer>
 
     </div>
-
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
     @include('frontend.partials.modal')

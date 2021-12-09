@@ -57,6 +57,7 @@
 
                         @if(!empty($section['items']))
                             <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 mb-4">
+
                                 @foreach($section['items'] as $item)
                                     <li class="nav-item">
                                         <a class="nav-link {{ $item['is_active'] }}" href="{{ $item['route'] }}">
