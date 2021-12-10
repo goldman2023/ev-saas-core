@@ -213,7 +213,7 @@
                 <div id="navBar" class="collapse navbar-collapse">
 
                     <ul class="navbar-nav ml-0 mr-0">
-                        <!-- Home -->
+                        {{-- <!-- Home -->
                         <li class="category-dropdown-toggle">
 
                             <a href="#" class="nav-link text-white d-flex align-items-center fw-600">
@@ -222,16 +222,20 @@
 
                                 </span>{{ translate('Browse Categories') }}
                             </a>
-                        </li>
+                        </li> --}}
                         @if (get_setting('header_menu_labels') != null)
 
 
                         @foreach (get_setting('header_menu_labels') as $key => $value)
                         @php
                         $target = '_self';
+                        $url = get_setting('header_menu_links')[$key];
+                        if(Str::length($url) > 1) {
+                          $url = ltrim($url, '/');
+                        }
 
                         @endphp
-                        <li class="position-static">
+                        <li class="position-static {{ request()->is($url) ? 'category-dropdown-toggle' : '' }}">
                             {{-- TODO: Add active menu indicators --}}
                             <a class="nav-link text-white" style="font-weight: 600; font-size: 16px;"
                                 target="{{ $target }}" href="{{ get_setting('header_menu_links')[$key] }}">
