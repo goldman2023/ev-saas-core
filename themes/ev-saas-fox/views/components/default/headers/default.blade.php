@@ -54,7 +54,8 @@
                                 <a href="javascript:void(0)" data-flag="{{ $language->code }}"
                                     class="dropdown-item @if ($locale == $language) active @endif">
                                     <img class="dropdown-item-icon mr-2"
-                                        src="{{ global_asset('assets/img/flags/' . $language->code . '.png') }}" alt="SVG">
+                                        src="{{ global_asset('assets/img/flags/' . $language->code . '.png') }}"
+                                        alt="SVG">
 
                                     {{ $language->name }}
                                 </a>
@@ -127,18 +128,17 @@
                         </li>
                         <!-- End Search -->
 
-                         <!-- Wish List Cart -->
-                         <li class="list-inline-item">
+                        <!-- Wish List Cart -->
+                        <li class="list-inline-item">
                             <div class="hs-unfold">
-                                <a class="btn btn-xs btn-icon btn-secondary position-relative" href="{{ route('wishlist') }}">
+                                <a class="btn btn-xs btn-icon btn-secondary position-relative"
+                                    href="{{ route('wishlist') }}">
                                     @svg('heroicon-o-heart', ['class' => 'square-22'])
-                                    {{-- TODO: Make count different, probably create a wishlist service like CartService --}}
+                                    {{-- TODO: Make count different, probably create a wishlist service like CartService
+                                    --}}
                                     <div class="position-absolute badge badge-primary circle-dynamic"
-                                         style="top: -6px; right: -6px; line-height: 0.8;   "
-                                         x-data="{count: 2}"
-                                         x-text="Number(count) > 99 ? '99+':count"
-                                         x-cloak
-                                    >
+                                        style="top: -6px; right: -6px; line-height: 0.8;   " x-data="{count: 2}"
+                                        x-text="Number(count) > 99 ? '99+':count" x-cloak>
                                     </div>
                                 </a>
                             </div>
@@ -147,14 +147,14 @@
                         <!-- Shopping Cart -->
                         <li class="list-inline-item">
                             <div class="hs-unfold">
-                                <a class="btn btn-xs btn-icon btn-secondary position-relative" href="javascript:;" x-data="" @click="$dispatch('display-cart')">
+                                <a class="btn btn-xs btn-icon btn-secondary position-relative" href="javascript:;"
+                                    x-data="" @click="$dispatch('display-cart')">
                                     @svg('heroicon-o-shopping-cart', ['class' => 'square-22'])
                                     <div class="position-absolute badge badge-primary circle-dynamic"
-                                         style="top: -6px; right: -6px; line-height: 0.8;   "
-                                         x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
-                                         x-text="Number(count) > 99 ? '99+':count"
-                                         x-cloak
-                                         @refresh-cart-items-count.window="count = $event.detail.count">
+                                        style="top: -6px; right: -6px; line-height: 0.8;   "
+                                        x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
+                                        x-text="Number(count) > 99 ? '99+':count" x-cloak
+                                        @refresh-cart-items-count.window="count = $event.detail.count">
                                     </div>
                                 </a>
                             </div>
@@ -163,11 +163,103 @@
 
                         <!-- Account Login -->
                         @auth
+
                         <li class="list-inline-item">
+                            <!-- Account -->
                             <div class="hs-unfold">
-                                <a href="{{ route('user.logout') }}" class="text-reset py-2 d-inline-block opacity-60">{{
-                                    translate('Logout') }}</a>
+                                <a class="js-hs-unfold-invoker navbar-dropdown-account-wrapper hs-active"
+                                    href="javascript:;" data-hs-unfold-options="{
+                                   &quot;target&quot;: &quot;#accountNavbarDropdown&quot;,
+                                   &quot;type&quot;: &quot;css-animation&quot;
+                                 }" data-hs-unfold-target="#accountNavbarDropdown" data-hs-unfold-invoker="">
+                                    <div class="avatar avatar-sm avatar-circle">
+                                        <img class="avatar-img" src="{{ auth()->user()->getAvatar() }}"
+                                            alt="Image Description">
+                                        <span
+                                            class="avatar-status avatar-sm-status avatar-status-success bg-success"></span>
+                                    </div>
+                                </a>
+
+                                <div id="accountNavbarDropdown"
+                                    class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right navbar-dropdown-menu navbar-dropdown-account hs-unfold-content-initialized hs-unfold-css-animation animated slideInUp"
+                                    style="width: 16rem; animation-duration: 300ms;" data-hs-target-height="403.344"
+                                    data-hs-unfold-content="" data-hs-unfold-content-animation-in="slideInUp"
+                                    data-hs-unfold-content-animation-out="fadeOut">
+                                    <div class="dropdown-item-text">
+                                        <div class="media align-items-center">
+                                            <div class="avatar avatar-sm avatar-circle mr-2">
+                                                <img class="avatar-img" src="{{ auth()->user()->getAvatar() }}"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="media-body">
+                                                <span class="card-title h5">{{ auth()->user()->name }}</span>
+                                                <span class="card-text">{{ auth()->user()->email }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <!-- Unfold -->
+                                    <div class="hs-unfold w-100">
+                                        <a class="js-hs-unfold-invoker navbar-dropdown-submenu-item dropdown-item d-flex align-items-center"
+                                            href="javascript:;" data-hs-unfold-options="{
+                                       &quot;target&quot;: &quot;#navSubmenuPagesAccountDropdown1&quot;,
+                                       &quot;event&quot;: &quot;hover&quot;
+                                     }" data-hs-unfold-target="#navSubmenuPagesAccountDropdown1"
+                                            data-hs-unfold-invoker="">
+                                            <span class="text-truncate pr-2" title="Set status">Set status</span>
+                                            <i
+                                                class="tio-chevron-right navbar-dropdown-submenu-item-invoker ml-auto"></i>
+                                        </a>
+
+                                        <div id="navSubmenuPagesAccountDropdown1"
+                                            class="hs-unfold-content hs-unfold-has-submenu dropdown-unfold dropdown-menu navbar-dropdown-sub-menu hs-unfold-hidden hs-unfold-content-initialized hs-unfold-simple"
+                                            data-hs-target-height="0" data-hs-unfold-content="">
+                                            <a class="dropdown-item" href="#">
+                                                <span class="legend-indicator bg-success mr-1"></span>
+                                                <span class="text-truncate pr-2" title="Available">Available</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="legend-indicator bg-danger mr-1"></span>
+                                                <span class="text-truncate pr-2" title="Busy">Busy</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="legend-indicator bg-warning mr-1"></span>
+                                                <span class="text-truncate pr-2" title="Away">Away</span>
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="text-truncate pr-2" title="Reset status">Reset
+                                                    status</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- End Unfold -->
+
+                                    <a class="dropdown-item" href="{{ route('profile') }}">
+                                        <span class="text-truncate pr-2" title="Profile &amp; account">Profile &amp;
+                                            account</span>
+                                    </a>
+
+                                    <a class="dropdown-item" href="#">
+                                        <span class="text-truncate pr-2" title="Settings">Settings</span>
+                                    </a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="#">
+                                        <span class="text-truncate pr-2" title="Manage team">Manage team</span>
+                                    </a>
+
+                                    <div class="dropdown-divider"></div>
+                                    <a href="{{ route('user.logout') }}" class="dropdown-item">
+                                        {{ translate('Logout') }}
+                                    </a>
+
+                                </div>
                             </div>
+                            <!-- End Account -->
                         </li>
                         @else
                         <li class="list-inline-item">
@@ -213,7 +305,8 @@
                 <div id="navBar" class="collapse navbar-collapse">
 
                     <ul class="navbar-nav ml-0 mr-0">
-                        {{-- <!-- Home -->
+                        {{--
+                        <!-- Home -->
                         <li class="category-dropdown-toggle">
 
                             <a href="#" class="nav-link text-white d-flex align-items-center fw-600">
@@ -231,7 +324,7 @@
                         $target = '_self';
                         $url = get_setting('header_menu_links')[$key];
                         if(Str::length($url) > 1) {
-                          $url = ltrim($url, '/');
+                        $url = ltrim($url, '/');
                         }
 
                         @endphp

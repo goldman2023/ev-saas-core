@@ -59,6 +59,7 @@
             </div>
         </div>
 
+        @if(auth()->user()->isAdmin())
         <div class="col-md-6">
             <div class="card bg-white p-4 text-center">
                 {{-- TODO : make this company name dynamic --}}
@@ -67,6 +68,7 @@
                 <a href="/admin" class="btn btn-soft-primary">{{ translate('Manage your website') }}</a>
             </div>
         </div>
+        @endif
 
         <div class="col-md-6">
             {{-- <x-company.company-onboarding-wizard></x-company.company-onboarding-wizard> --}}
@@ -98,6 +100,8 @@
     </div>
 </section>
 <section>
+
+    @if(auth()->user()->isAdmin())
     <div class="row">
         <div class="col-6">
             <x-default.dashboard.widgets.integration-stats-widget url="#" title="Google Analytics"
@@ -115,6 +119,7 @@
             </x-default.dashboard.widgets.integration-stats-widget>
         </div>
     </div>
+    @endif
 </section>
 
 <section class="stats mb-3">
@@ -128,7 +133,6 @@
             <div class="row">
                 <div class="col-12">
                     <x-default.dashboard.widgets.integrations-widget>
-
                     </x-default.dashboard.widgets.integrations-widget>
                 </div>
             </div>

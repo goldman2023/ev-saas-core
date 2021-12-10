@@ -152,8 +152,8 @@
         </div>
       </div>
 
-      <div class="col-md-7 col-lg-8">
-        <div class="ml-lg-6">
+      <div class="col-md-7 col-lg-8 card">
+        <div class=" card-body">
           <div class="mb-3 mb-sm-0 mr-2">
             <h2>{{ $shop->name }}</h2>
           </div>
@@ -187,53 +187,11 @@
 
             <!-- Course -->
             <div class="pt-0 mt-0">
-              <a class="card shadow-none" href="#">
-                <div class="card-body p-0">
-                  <div class="row">
-                    <div class="col-sm-5 col-lg-3 mb-3 mb-sm-0">
-                      <img class="img-fluid rounded" src="../../assets/svg/components/graphics-4.svg" alt="Image Description">
-                    </div>
-                    <div class="col-sm-7 col-lg-9">
-                      <div class="row">
-                        <div class="col-lg-6 mb-2 mb-lg-0">
-                          <h5 class="text-hover-primary">Get started with Vue.js</h5>
-                          <div class="d-flex align-items-center flex-wrap">
-                            <ul class="list-inline mt-n1 mb-0 mr-2">
-                              <li class="list-inline-item mx-0"><img src="../../assets/svg/illustrations/star.svg" alt="Review rating" width="16"></li>
-                              <li class="list-inline-item mx-0"><img src="../../assets/svg/illustrations/star.svg" alt="Review rating" width="16"></li>
-                              <li class="list-inline-item mx-0"><img src="../../assets/svg/illustrations/star.svg" alt="Review rating" width="16"></li>
-                              <li class="list-inline-item mx-0"><img src="../../assets/svg/illustrations/star.svg" alt="Review rating" width="16"></li>
-                              <li class="list-inline-item mx-0"><img src="../../assets/svg/illustrations/star-muted.svg" alt="Review rating" width="16"></li>
-                            </ul>
-                            <span class="d-inline-block">
-                              <span class="text-dark font-size-1 mr-1">4.95</span>
-                            </span>
-                          </div>
-                        </div>
+                @foreach($shop->products as $product)
+                <x-default.products.cards.product-card :product="$product">
+                </x-default.products.cards.product-card>
+                @endforeach
 
-                        <div class="col-lg-6">
-                          <div class="row">
-                            <div class="col-7">
-                              <div class="small text-muted mb-2">
-                                <i class="fas fa-book-reader mr-1"></i>
-                                10 lessons
-                              </div>
-                              <div class="small text-muted">
-                                <i class="fas fa-clock mr-1"></i>
-                                3h 25m
-                              </div>
-                            </div>
-                            <div class="col-5 text-right">
-                              <small class="d-block text-muted text-lh-sm"><del>$78.00</del></small>
-                              <span class="d-block h5 text-primary text-lh-sm mb-0">$73.00</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </a>
             </div>
             <!-- End Course -->
 

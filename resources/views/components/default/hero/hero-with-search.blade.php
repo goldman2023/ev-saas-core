@@ -14,10 +14,6 @@
           <h1 class="display-3 mb-3">
             <x-ev.label tag="span" class="text-info" :label="ev_dynamic_translate('Unlock your potential')">
             </x-ev.label>
-            <br>
-            <span class="text-primary font-weight-bold">
-              <span class="js-text-animation"></span>
-            </span>
           </h1>
             <x-ev.label tag="p" class="text-info lead" :label="ev_dynamic_translate('With our platform, you can quantify your skills, grow in your role and stay relevant on critical topics.')">
             </x-ev.label>

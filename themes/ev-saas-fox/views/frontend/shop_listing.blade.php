@@ -3,17 +3,7 @@
 @section('content')
     <section id="archive-hero">
         <!-- Hero Section -->
-<div class="bg-img-hero-center bg-primary" style="background-image: url(https://htmlstream.com/preview/front-v3.1.1/assets/img/1920x800/img8.jpg);">
-    <div class="container space-1 space-lg-1">
-      <div class="w-md-65 w-lg-35">
-        <div class="mb-4">
-          <h2 class="h1 text-white">Wear your pride</h2>
-          <p class="text-white">Outdo the sun and refresh your workout with greys, whites and dark brights.</p>
-        </div>
-        <a class="btn btn-light btn-pill transition-3d-hover px-5" href="#">Shop the Collection</a>
-      </div>
-    </div>
-  </div>
+        <x-default.category.category-hero></x-default.category.category-hero>
   <!-- End Hero Section -->
     </section>
     <section>
