@@ -33,7 +33,6 @@ use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
-use App\Traits\Caching\SavesToCache;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
@@ -279,11 +278,8 @@ class Product extends EVBaseModel
 
     function public_view_count() {
         /* TODO: Implement some view libeary, i'm looking into two different ones */
-
         return visits($this)->count();
     }
-
-
 
 
     public function getVariationModelClass()

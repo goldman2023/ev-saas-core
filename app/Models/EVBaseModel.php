@@ -55,10 +55,35 @@ class EVBaseModel extends Model
 
     protected function getPropertyMutatorName($name, $inverse = false) {
         if($inverse) {
-            return Str::snake(ltrim(rtrim($name, 'Attribute'), 'get'));
+            return Str::snake(s($name)->replaceFirst('get','')->replaceLast('Attribute','')->__toString());
         }
 
         return 'get'.Str::studly($name).'Attribute';
+    }
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * NOTE: we need to include Core properties too!
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return array_merge(parent::toArray(), $this->corePropertiesToArray());
+    }
+
+    /*
+     * Append core properties to Array along with attributes and relations properties!
+     */
+    public function corePropertiesToArray(): array
+    {
+        $core_properties = [];
+        foreach($this->getCorePropertiesMutators() as $core_property_mutator) {
+            $core_properties[$this->getPropertyMutatorName($core_property_mutator, true)] = $this->{$core_property_mutator}();
+        }
+
+        return $core_properties;
     }
 
     /**

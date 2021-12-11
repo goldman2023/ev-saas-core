@@ -29,13 +29,15 @@
             <div class="tab-pane fade  @if ($key == 0) show active @endif" id="pills-one-code-features-{{ $key }}"
                 role="tabpanel" aria-labelledby="pills-one-code-features-{{ $key }}-tab">
                 <div class="row">
-                    @foreach ($category->products as $product)
-                        <div class="col-sm-4">
-                            <x-default.products.cards.product-card :product="$product"
-                                style="{{ ev_dynamic_translate('product-card', true)->value }}">
-                            </x-default.products.cards.product-card>
-                        </div>
-                    @endforeach
+                    @if($category->products->isNotEmpty())
+                        @foreach ($category->products as $product)
+                            <div class="col-sm-4">
+                                <x-default.products.cards.product-card :product="$product"
+                                                                       style="{{ ev_dynamic_translate('product-card', true)->value }}">
+                                </x-default.products.cards.product-card>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
 
 

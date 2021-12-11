@@ -19,8 +19,8 @@
     </h2>
 </div>
 
-<livewire:forms.products.stock-management-form :product="$product">
-</livewire:forms.products.stock-management-form>
+<livewire:dashboard.forms.products.stock-management-form :product="$product">
+</livewire:dashboard.forms.products.stock-management-form>
 
 @endsection
 

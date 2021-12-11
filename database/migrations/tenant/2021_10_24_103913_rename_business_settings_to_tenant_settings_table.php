@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Shop;
 use App\Models\TenantSetting;
 use App\Models\ShopSetting;
 use Illuminate\Database\Migrations\Migration;
@@ -45,15 +46,19 @@ class RenameBusinessSettingsToTenantSettingsTable extends Migration
         DB::table('shop_settings')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        /* TODO: Properly define which settings are for tenant and which are for vendor!!! Also, when new tenant is created add tenant-settings, do the same when shop is created but with shop-settings */
         $settings = TenantSetting::all();
-        foreach($settings as $setting) {
-            try {
-                $shop_settings = new ShopSetting();
-                $shop_settings->shop_id = 5;
-                $shop_settings->setting = $setting->setting;
-                $shop_settings->value = is_array($setting->value) ? json_encode($setting->value) : $setting->value;
-                $shop_settings->save();
-            } catch(\Exception $e) {}
+        $shops = Shop::all();
+        foreach($shops as $shop) {
+            foreach ($settings as $setting) {
+                try {
+                    $shop_settings = new ShopSetting();
+                    $shop_settings->shop_id = $shop->id;
+                    $shop_settings->setting = $setting->setting;
+                    $shop_settings->value = is_array($setting->value) ? json_encode($setting->value) : $setting->value;
+                    $shop_settings->save();
+                } catch (\Exception $e) { }
+            }
         }
     }
 

@@ -8,8 +8,7 @@
 
 @section('panel_content')
     <section id="app">
-        {{-- $form->render() --}}
-        <livewire:forms.products.product-form page="general" />
+        <livewire:dashboard.forms.products.product-form page="general" :product="$product"/>
     </section>
 @endsection
 
@@ -31,4 +30,5 @@
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
     <script src="{{ static_asset('js/crud/product-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/product-variations-table.js', false, true, true) }}"></script>
 @endpush

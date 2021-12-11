@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\EVS;
+use EVS;
 use App\Models\Product;
 use Auth;
 use Illuminate\Http\Request;
@@ -14,11 +14,11 @@ class EVProductController extends Controller
     public function index(Request $request) {
         $products = Auth::user()->products()->orderBy('created_at','desc')->paginate(20);
 
-        return view('frontend.user.crud.products.index')->with('products', $products);
+        return view('frontend.dashboard.products.index')->with('products', $products);
     }
 
     public function create(Request $request) {
-        return view('frontend.user.crud.products.create');
+        return view('frontend.dashboard.products.create');
     }
 
     /* TODO: Add middleware for owner */
@@ -29,7 +29,7 @@ class EVProductController extends Controller
             $product->convertUploadModelsToIDs();
         }
 
-        return view('frontend.user.crud.products.edit')->with('product', $product);
+        return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
     public function edit_stocks(Request $request, $slug) {
@@ -39,30 +39,27 @@ class EVProductController extends Controller
             $product->convertUploadModelsToIDs();
         }
 
-        return view('frontend.user.crud.products.stocks')
+        return view('frontend.dashboard.products.stocks')
             ->with('product', $product)
             ->with('variations_attributes', $product->variant_attributes());
     }
 
     public function edit_variations(Request $request, $slug) {
-        $productVariationsDatatableClass = 'ev-product-variations-component';
-
         $product = Product::where('slug', $slug)->first();
 
         if($product) {
             $product->convertUploadModelsToIDs();
         }
 
-        return view('frontend.user.crud.products.variations')
+        return view('frontend.dashboard.products.variations')
         ->with('product', $product)
-        ->with('variations_attributes', $product->variant_attributes())
-        ->with('productVariationsDatatableClass', $productVariationsDatatableClass);
+        ->with('variations_attributes', $product->variant_attributes());
     }
 
     public function product_details(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
 
-        return view('frontend.user.crud.products.details')->with('product', $product);
+        return view('frontend.dashboard.products.details')->with('product', $product);
     }
 
     public function product_activity(Request $request, $slug) {
@@ -71,6 +68,6 @@ class EVProductController extends Controller
         $activity = Activity::all();
 
         $activity = Activity::where('subject_type', 'App\Models\Product')->where('subject_id', $product->id)->first();
-        return view('frontend.user.crud.products.activity')->with('product', $product);
+        return view('frontend.dashboard.products.activity')->with('product', $product);
     }
 }

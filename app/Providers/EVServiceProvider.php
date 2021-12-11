@@ -5,16 +5,17 @@ namespace App\Providers;
 use App\Http\Services\AttributesService;
 use App\Http\Services\CartService;
 use App\Http\Services\IMGProxyService;
+use App\Http\Services\MyShopService;
 use App\Http\Services\VendorService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container;
 use App\Http\Services\CategoryService;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Services\EVService;
 use App\Http\Services\TenantSettingsService;
 use App\Http\Services\FXService;
-use Blade;
 
 class EVServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,11 @@ class EVServiceProvider extends ServiceProvider
     {
         // Add EV dynamic components to EV namespace
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
+
+        // Register IMG (IMGProxy) Singleton
+        $this->app->singleton('myshop', function() {
+            return new MyShopService(fn () => Container::getInstance());
+        });
 
         // Register IMG (IMGProxy) Singleton
         $this->app->singleton('imgproxy', function() {

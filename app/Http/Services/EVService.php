@@ -212,15 +212,21 @@ class EVService
                         'icon' => 'heroicon-o-cog',
                         'route' => route('ev.settings.design'),
                         'is_active' => areActiveRoutes(['ev.settings.design']),
-
+                        'roles' => ['admin','seller'],
                     ],
                     [
                         'label' => translate('Account settings'),
                         'icon' => 'heroicon-o-cog',
                         'route' => route('profile'),
                         'is_active' => areActiveRoutes(['profile']),
-
                     ],
+                     [
+                         'label' => translate('Payment settings'),
+                         'icon' => 'heroicon-o-cash',
+                         'route' => route('ev.settings.payment_methods'),
+                         'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
+                         'roles' => ['admin','seller'],
+                     ],
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',

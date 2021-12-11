@@ -39,7 +39,7 @@ class TenantSettingsService
         return $this->settings;
     }
 
-    public function setAll() {
+    protected function setAll() {
         $cache_key = tenant('id') . '_tenant_settings';
         $settings = Cache::get($cache_key, null);
         $default = [];

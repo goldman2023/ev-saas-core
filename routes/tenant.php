@@ -12,6 +12,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
+use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EventController;
@@ -267,8 +268,7 @@ Route::middleware([
         Route::get('/', 'HomeController@dashboard')->name('dashboard');
 
         /* TODO : Admin only */
-        Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
-        Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
+
         /* Leads Management - BY EIM */
         Route::get('leads/success', 'LeadController@success')->name('leads.success');
         Route::resource('leads', 'LeadController');
@@ -279,6 +279,8 @@ Route::middleware([
 
 
         /* TODO: Admin and seller only */
+
+        // ---------------------------------------------------- //
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
         Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
         Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');
@@ -287,6 +289,10 @@ Route::middleware([
         Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
         Route::get('/ev-products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('ev-products.edit.stocks');
 
+        Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
+        Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
+        Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
+        // ---------------------------------------------------- //
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');
@@ -413,7 +419,6 @@ Route::middleware([
     Route::get('/pricing', 'PageController@pricing')->name('landing.pricing');
 
 
-
     // Mailchimp subscriptions routes
     Route::post('/subscribe/{type}', 'Integrations\MailchimpController@subscribe')
         ->name('mailchimp.subscribe');
@@ -424,12 +429,10 @@ Route::middleware([
     Route::get('/feed/all', 'Integrations\GetStreamControler@index');
 
 
-
-
-   Route::resource('addresses', 'AddressController');
-   Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-   Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-   Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
+//   Route::resource('addresses', 'AddressController');
+//   Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+//   Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+//   Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');

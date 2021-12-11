@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Forms\Products;
+namespace App\Http\Livewire\Dashboard\Forms\Products;
 
 use App\Models\AttributeValue;
 use App\Models\Product;
@@ -87,7 +87,7 @@ class ProductVariationsTable extends \Livewire\Component
 
     public function render()
     {
-        return view('livewire.forms.products.product-variations-table');
+        return view('livewire.dashboard.forms.products.product-variations-table');
     }
 
 

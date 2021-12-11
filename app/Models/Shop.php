@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Traits\AttributeTrait;
+use App\Traits\Caching\RegeneratesCache;
 use App\Traits\ReviewTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,6 +47,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shop extends Model
 {
+    use RegeneratesCache;
+
     use AttributeTrait;
     use ReviewTrait;
 
@@ -53,9 +56,7 @@ class Shop extends Model
 
     public function seller()
     {
-        $seller = Seller::where('user_id', $this->morphToMany(User::class, 'subject', 'user_relationships')->get()->first(function ($value, $key) {
-            return $value->user_type === 'seller';
-        })->id ?? null)->first();
+        $seller = Seller::where('user_id', $this->morphToMany(User::class, 'subject', 'user_relationships')->get()->first(fn($value, $key) => $value->user_type === 'seller')->id ?? null)->first();
 
         return !empty($seller->id ?? null) ? $seller : null;
     }
@@ -94,6 +95,19 @@ class Shop extends Model
     {
         return $this->hasMany(Tax::class, 'business_id', 'id');
     }
+
+    public function payment_methods_universal()
+    {
+        return $this->belongsToMany(PaymentMethodUniversal::class, 'payment_methods_universal_relationships', 'shop_id', 'upm_id')
+            ->withPivot('enabled');
+    }
+
+    public function payment_methods()
+    {
+        return $this->hasMany(PaymentMethod::class, 'shop_id');
+    }
+
+
 
     public static function companies_count_rounded()
     {

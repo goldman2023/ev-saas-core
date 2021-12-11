@@ -4,8 +4,9 @@
         x-data="{
             show: false,
             content: '{{ $content }}',
+            type: '{{ $type }}'
         }"
-        :class="{ 'opacity-10': show }"
+        :class="{ 'opacity-10': show, 'bg-success border-success': type === 'success', 'bg-danger border-danger': type === 'danger' }"
 
     @endif
     {{ $attributes }}
