@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Forms\Products;
+namespace App\Http\Livewire\Dashboard\Forms\Products;
 
 use App\Models\Product;
 use App\Models\ProductStock;
@@ -124,7 +124,7 @@ class StockManagementForm extends Component
 
     public function render()
     {
-        return view('livewire.forms.products.product-stock-management-form');
+        return view('livewire.dashboard.forms.products.product-stock-management-form');
     }
 
     protected function mapEditingSerialNumbers() {

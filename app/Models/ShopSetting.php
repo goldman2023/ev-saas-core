@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class ShopSetting extends Model
 {
-    use Cachable;
     use Notifiable;
 
     protected $table = 'shop_settings';

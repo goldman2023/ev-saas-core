@@ -31,7 +31,7 @@
                                 <form class="needs-validation" novalidate>
                                     <div class="row g-3">
                                         <div class="col-sm-6">
-                                            <label for="firstNameShopCheckout" class="form-label">First name</label>
+                                            <label for="firstNameShopCheckout" class="form-label">{{ translate('First name') }}</label>
                                             <input type="text" class="form-control" id="firstNameShopCheckout" placeholder="" value="" required>
                                             <div class="invalid-feedback">
                                                 Valid first name is required.
@@ -71,6 +71,34 @@
                                             <input type="text" class="form-control " id="address2ShopCheckout" placeholder="Apartment or suite">
                                         </div>
                                         <!-- End Col -->
+
+                                        <!-- Add Phone number -->
+                                        <div id="addSerialNumberTemplate" class="w-100" style="display: none;">
+                                            <div class="d-flex flex-row align-items-start w-100 pb-2">
+                                                <div class="input-group-add-field mt-0 pr-3">
+                                                    <input type="text" name="serial_number" class="form-control" value="" />
+                                                </div>
+                                                <div class="input-group-add-field mt-1 mr-3">
+                                                    <select class="js-custom-select-dynamic" name="serial_number_status" data-hs-select2-options='{
+                                                              "minimumResultsForSearch": "Infinity",
+                                                              "customClass": "custom-select custom-select-sm",
+                                                              "dropdownAutoWidth": true,
+                                                              "width": true
+                                                    }'>
+                                                        <option value="in_stock" >{{ translate('In stock') }}</option>
+                                                        <option value="out_of_stock" >{{ translate('Out of stock') }}</option>
+                                                        <option value="reserved" >{{ translate('Reserved') }}</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="input-group-add-field " style="margin-top: 12px;">
+                                                    <button type="button" class="btn btn-danger btn-xs p-1 rounded js-delete-field d-inline-flex">
+                                                        @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- End Add Serial Number Template -->
 
                                         <div class="col-md-5 mt-2">
                                             <label for="countryShopCheckout" class="form-label">Country</label>

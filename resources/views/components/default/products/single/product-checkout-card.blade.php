@@ -65,6 +65,7 @@
                     <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2"></livewire:tenant.product.product-variations-selector>
                 @endif
 
+                {{-- TODO: Disable add to cart button and quantity counter if available stock is <= 0 --}}
                 <x-default.forms.quantity-counter :model="$product" id=""></x-default.forms.quantity-counter>
             </div>
 
@@ -72,6 +73,7 @@
             <div class="col-12">
                 <div class="row">
                     <div class="col-8 pr-2">
+                        {{-- TODO: Disable add to cart button and quantity counter if available stock is <= 0 --}}
                         <livewire:cart.add-to-cart-button
                             :model="$product"
                             icon="heroicon-o-shopping-cart"
@@ -82,8 +84,7 @@
                         </livewire:cart.add-to-cart-button>
                     </div>
                     <div class="col-4 pl-2">
-                        <a
-                            class="btn btn-secondary align-items-center d-flex justify-content-center align-items-center">
+                        <a class="btn btn-secondary align-items-center d-flex justify-content-center align-items-center">
                             {{ svg('heroicon-o-heart', ['class' => 'ev-icon__xs mr-2']) }}
                             {{ translate('Like') }}
                         </a>

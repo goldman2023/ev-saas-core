@@ -39,12 +39,12 @@
             <h5 class="card-header-title">{{ translate('Product Variations') }}</h5>
         </div>
 
-        <livewire:forms.products.product-variations-table
+        <livewire:dashboard.forms.products.product-variations-table
             class="ev-product-variations-component"
             :emptyMessage="translate('Please generate all variations or add them manually.')"
             :product="$product"
         >
-        </livewire:forms.products.product-variations-table>
+        </livewire:dashboard.forms.products.product-variations-table>
     </div>
 </div>
 @endsection

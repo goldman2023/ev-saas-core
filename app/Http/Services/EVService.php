@@ -2,7 +2,6 @@
 
 namespace App\Http\Services;
 
-use App\Facades\Categories;
 use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductVariation;
@@ -34,9 +33,6 @@ class EVService
 
         // TODO: Think of a way to implement better vendor design pattern!
         $this->tenantStylePath = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path)); //$url;
-
-        /* Make dynamic colors work */
-        $this->tenantStylePath = $url;
     }
 
     public function getThemeStyling() {
@@ -159,7 +155,7 @@ class EVService
                         'is_active' => areActiveRoutes(['conversations.index', 'conversations.show']),
                         'roles' => ['admin','seller', 'customer'],
                     ],
-                    /* [
+                    [
                         'label' => translate('Customers'),
                         'icon' => 'heroicon-o-user-group',
                         'route' => '',
@@ -179,7 +175,7 @@ class EVService
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
                         'roles' => ['admin','seller',  'guest'],
-                    ], */
+                    ],
                 ]
             ],
             [
@@ -216,22 +212,21 @@ class EVService
                         'icon' => 'heroicon-o-cog',
                         'route' => route('ev.settings.design'),
                         'is_active' => areActiveRoutes(['ev.settings.design']),
-
+                        'roles' => ['admin','seller'],
                     ],
                     [
                         'label' => translate('Account settings'),
                         'icon' => 'heroicon-o-cog',
                         'route' => route('profile'),
                         'is_active' => areActiveRoutes(['profile']),
-
                     ],
-                    [
-                        'label' => translate('Shop settings'),
-                        'icon' => 'heroicon-o-cog',
-                        'route' => route('shop.index'),
-                        'is_active' => areActiveRoutes(['shop']),
-
-                    ],
+                     [
+                         'label' => translate('Payment settings'),
+                         'icon' => 'heroicon-o-cash',
+                         'route' => route('ev.settings.payment_methods'),
+                         'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
+                         'roles' => ['admin','seller'],
+                     ],
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',

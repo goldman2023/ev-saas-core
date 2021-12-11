@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Forms\Products;
+namespace App\Http\Livewire\Dashboard\Forms\Products;
 
 use App\Models\Attribute;
 use App\Models\AttributeRelationship;
@@ -167,7 +167,7 @@ class ProductForm extends Component
 
     public function render()
     {
-        return view('livewire.forms.products.product-form');
+        return view('livewire.dashboard.forms.products.product-form');
     }
 
     public function refreshVariationsDatatable() {

@@ -25,19 +25,22 @@
                 @if (!$slider)
                     <div class="row">
                 @endif
-                @foreach ($products as $product)
-                    <div class="ev-slider-slide  @if ($slider) slick-slide @else col-sm-3 @endif mb-3 p-3">
-                        <div class="w-100 h-100">
-                            <x-default.products.cards.product-card :product="$product" style="product-card-detailed-2"
-                                style="{{ ev_dynamic_translate('product-card', true)->value }}">
-                            </x-default.products.cards.product-card>
-                        </div>
-                    </div>
 
-                @endforeach
+                @if($products->isNotEmpty())
+                    @foreach ($products as $product)
+                        <div class="ev-slider-slide  @if ($slider) slick-slide @else col-sm-3 @endif mb-3 p-3">
+                            <div class="w-100 h-100">
+                                <x-default.products.cards.product-card :product="$product" class="product-card-detailed-2"
+                                                                       style="{{ ev_dynamic_translate('product-card', true)->value }}">
+                                </x-default.products.cards.product-card>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
+
                 @if (!$slider)
-            </div>
-            @endif
+                    </div>
+                @endif
 
             <!-- End Product -->
         </div>

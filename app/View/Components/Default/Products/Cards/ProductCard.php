@@ -7,14 +7,14 @@ use Illuminate\View\Component;
 
 class ProductCard extends Component
 {
-    public Product $product;
+    public ?Product $product;
     public string $style; // Available styles now: product-card / product-card-detailed
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(Product $product, string $style = 'product-card')
+    public function __construct(?Product $product = null, string $style = 'product-card')
     {
         //
         $this->style = $style;

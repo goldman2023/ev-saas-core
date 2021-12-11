@@ -216,7 +216,7 @@ return [
 
         Mews\Purifier\PurifierServiceProvider::class,
 
-        // EVServiceProvider
+        // EVServiceProviders
         App\Providers\EVServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
@@ -274,12 +274,14 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PaytmWallet' => Anand\LaravelPaytmWallet\Facades\PaytmWallet::class,
         'Str' => Illuminate\Support\Str::class,
+        'Stringy' => App\Support\Stringy::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'MyShop' => App\Facades\MyShop::class,
         'Vendor' => App\Facades\Vendor::class,
         'EVS' => App\Facades\EVS::class,
         'CartService' => App\Facades\CartService::class,

@@ -50,8 +50,8 @@
     <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
-                <a href="{{ back()->getTargetUrl() }}" class="text-secondary mr-3" style="height: 24px;">
-                    @svg('heroicon-o-chevron-left', ['style' => 'height: 24px;'])
+                <a href="{{ route('ev-products.details', $product->slug) }}" class="text-secondary mr-3" style="height: 24px;">
+                    @svg('heroicon-o-chevron-left', ['class' => 'square-24'])
                 </a>
 
                 <h4 class="card-header-title">
@@ -65,8 +65,14 @@
                 <div class="ml-auto d-flex align-items-center">
                     @if(!empty($product->id))
                         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
+                           href="{{ route('ev-products.details', $product->slug) }}">
+                            @svg('heroicon-o-eye', ['class' => 'square-16 mr-2'])
+                            {{ translate('Details') }}
+                        </a>
+
+                        <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
                            href="{{ route('ev-products.edit.stocks', $product->slug) }}">
-                            @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                            @svg('heroicon-o-archive', ['class' => 'square-16 mr-2'])
                             {{ translate('Stock Management') }}
                         </a>
                     @endif
@@ -74,7 +80,7 @@
                     @if(!empty($product->useVariations()))
                         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
                            href="{{ route('ev-products.edit.variations', $product->slug) }}">
-                            @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
+                            @svg('heroicon-o-variable', ['class' => 'square-16 mr-2'])
                             {{ translate('Variations') }}
                         </a>
                     @endif
@@ -82,7 +88,7 @@
                     @if(!empty($product->id))
                         <button class="btn btn-primary btn-xs d-flex justify-content-center"
                                 onclick="document.dispatchEvent(new CustomEvent('validate-step', {detail: {component: @this, params: ['seo', @this.page, true]}}))">
-                            @svg('lineawesome-save', ['style' => 'width: 18px; height: 18px;', 'class' => 'mr-1'])
+                            @svg('lineawesome-save', ['class' => 'square-18 mr-1'])
                             <span>{{ translate('Save') }}</span>
                         </button>
                     @endif
