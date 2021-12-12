@@ -172,7 +172,7 @@
                                    &quot;target&quot;: &quot;#accountNavbarDropdown&quot;,
                                    &quot;type&quot;: &quot;css-animation&quot;
                                  }" data-hs-unfold-target="#accountNavbarDropdown" data-hs-unfold-invoker="">
-                                    <div class="avatar avatar-sm avatar-circle">
+                                    <div class="avatar avatar-sm avatar-circle bg-light">
                                         <img class="avatar-img" src="{{ auth()->user()->getAvatar() }}"
                                             alt="Image Description">
                                         <span
@@ -187,7 +187,7 @@
                                     data-hs-unfold-content-animation-out="fadeOut">
                                     <div class="dropdown-item-text">
                                         <div class="media align-items-center">
-                                            <div class="avatar avatar-sm avatar-circle mr-2">
+                                            <div class="avatar avatar-sm avatar-circle bg-light mr-2">
                                                 <img class="avatar-img" src="{{ auth()->user()->getAvatar() }}"
                                                     alt="Image Description">
                                             </div>
@@ -197,6 +197,12 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}">
+                                        <span class="text-truncate pr-2" title="Profile &amp; account">
+                                            {{ translate('Dashboard') }}
+                                        </span>
+                                    </a>
 
                                     <div class="dropdown-divider"></div>
 

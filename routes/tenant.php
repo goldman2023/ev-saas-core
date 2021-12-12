@@ -433,10 +433,10 @@ Route::middleware([
     Route::get('/feed/all', 'Integrations\GetStreamControler@index');
 
 
-//   Route::resource('addresses', 'AddressController');
-//   Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-//   Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-//   Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
+    Route::resource('addresses', 'AddressController');
+    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
