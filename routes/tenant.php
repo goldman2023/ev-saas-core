@@ -96,6 +96,9 @@ Route::middleware([
 
 
     Route::resource('shops', 'ShopController');
+    Route::resource('courses', 'CoursesController');
+    Route::resource('ev-social-commerce', 'SocialCommerceController');
+    Route::resource('ev-tutorials', 'TutorialController');
 
     Route::get('/business/register', 'ShopController@create')->name('business.register');
 
