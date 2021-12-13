@@ -145,8 +145,8 @@ class EVService
                     ],
                     [
                         'label' => translate('Tutorials'),
-                        'icon' => 'heroicon-o-qrcode',
-                        'route' => route('ev.tutorials'),
+                        'icon' => 'heroicon-o-academic-cap',
+                        'route' => route('ev-tutorials.index'),
                         'is_active' => areActiveRoutes(['ev.settings.domains']),
                         'roles' => ['admin','seller'],
                     ]
