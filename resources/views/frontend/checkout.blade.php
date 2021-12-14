@@ -11,7 +11,8 @@
 @section('content')
     <section class="checkout position-relative mb-5"
         x-data="{
-            selected_shipping_method: 0
+            selected_shipping_method: 0,
+            same_billing_shipping: {{ (request()->old('same_billing_shipping') === 'off') ? 'false' : 'true' }}
         }"
     >
         <div class="container">
@@ -28,462 +29,458 @@
                             <div class="container">
 
                                 <!-- Form -->
-                                <form class="needs-validation" novalidate>
+                                <form method="POST" action="" name="checkout-form">
+                                    @csrf
                                     <div class="row g-3">
-                                        <div class="col-sm-6">
-                                            <label for="firstNameShopCheckout" class="form-label">{{ translate('First name') }}</label>
-                                            <input type="text" class="form-control" id="firstNameShopCheckout" placeholder="" value="" required>
-                                            <div class="invalid-feedback">
-                                                Valid first name is required.
-                                            </div>
+                                        <div class="col-12 ">
+                                            <label for="checkout_email" class="form-label">{{ translate('Email') }}</label>
+                                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="checkout_email" value="{{ request()->old('email') }}" placeholder="you@example.com">
+                                            @error('email')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- End Col -->
 
-                                        <div class="col-sm-6">
-                                            <label for="lastNameShopCheckout" class="form-label">Last name</label>
-                                            <input type="text" class="form-control" id="lastNameShopCheckout" placeholder="" value="" required>
-                                            <div class="invalid-feedback">
-                                                Valid last name is required.
-                                            </div>
+                                        <!-- Billing info -->
+
+                                        <div class="col-sm-6 mt-3">
+                                            <label for="checkout_billing_first_name" class="form-label">{{ translate('First name') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('billing_first_name') is-invalid @enderror" name="billing_first_name" id="checkout_billing_first_name" value="{{ request()->old('billing_first_name') }}"  placeholder="" value="" required>
+                                            @error('billing_first_name')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- End Col -->
 
-                                        <div class="col-12 mt-2">
-                                            <label for="emailShopCheckout" class="form-label">Email</label>
-                                            <input type="email" class="form-control " id="emailShopCheckout" placeholder="you@example.com">
-                                            <div class="invalid-feedback">
-                                                Please enter a valid email address for shipping updates.
-                                            </div>
+                                        <div class="col-sm-6 mt-3">
+                                            <label for="checkout_billing_last_name" class="form-label">{{ translate('Last name') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('billing_last_name') is-invalid @enderror" name="billing_last_name" id="checkout_billing_last_name" value="{{ request()->old('billing_last_name') }}" placeholder="" required>
+                                            @error('billing_last_name')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- End Col -->
 
-                                        <div class="col-12 mt-2">
-                                            <label for="addressShopCheckout" class="form-label">Address</label>
-                                            <input type="text" class="form-control " id="addressShopCheckout" placeholder="1234 Main St" required>
-                                            <div class="invalid-feedback">
-                                                Please enter your shipping address.
-                                            </div>
+                                        <div class="col-12 mt-3">
+                                            <label for="checkout_billing_company" class="form-label"> {{ translate('Company (optional)') }}</label>
+                                            <input type="text" class="form-control @error('billing_company') is-invalid @enderror" name="billing_company" id="checkout_billing_company" value="{{ request()->old('billing_company') }}">
+                                            @error('billing_company')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- End Col -->
 
-                                        <div class="col-12 mt-2">
-                                            <label for="address2ShopCheckout" class="form-label">Address 2 <span class="form-label-secondary">(Optional)</span></label>
-                                            <input type="text" class="form-control " id="address2ShopCheckout" placeholder="Apartment or suite">
+                                        <div class="col-12 mt-3">
+                                            <label for="checkout_billing_address" class="form-label">{{ translate('Address') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('billing_address') is-invalid @enderror" name="billing_address" id="checkout_billing_address" value="{{ request()->old('billing_address') }}" placeholder="1234 Main St" required>
+                                            @error('billing_address')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
                                         <!-- End Col -->
+
+{{--                                        <div class="col-6 mt-3">--}}
+{{--                                            <label for="checkout_billing_address_2" class="form-label"> {{ translate('Apartment number, suite etc. ') }}--}}
+{{--                                                <span class="form-label-secondary">{{ translate('Optional') }}</span></label>--}}
+{{--                                            <input type="text" class="form-control " name="billing_address_2"  id="checkout_billing_address_2" value="{{ request()->old('billing_address 2') }}" placeholder="Apartment or suite">--}}
+{{--                                        </div>--}}
+{{--                                        <!-- End Col -->--}}
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_billing_country" class="form-label">{{ translate('Country') }} <span class="text-danger">*</span></label>
+
+                                            <!-- Select -->
+                                            <select class="form-control custom-select @error('billing_country') is-invalid @enderror" name="billing_country" id="checkout_billing_country"
+                                                     required>
+                                                <option value="">{{ translate('Choose...') }}</option>
+                                                @foreach(\Countries::getAll() as $country)
+                                                    <option value="{{ $country->code }}" {{ request()->old('billing_country') === $country->code ? 'selected':'' }}>{{ $country->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <!-- End Select -->
+
+                                            @error('billing_country')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_billing_state" class="form-label">{{ translate('State') }} <span class="text-danger">*</span></label>
+
+                                            <!-- Input -->
+                                            <input type="text" class="form-control @error('billing_state') is-invalid @enderror" name="billing_state" id="checkout_billing_state"
+                                                   value="{{ request()->old('billing_state') }}" placeholder="(write country if there's no state)" required>
+                                            <!-- End Input -->
+
+                                            @error('billing_state')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_billing_city" class="form-label" >{{ translate('City') }}<span class="text-danger">*</span></label>
+
+                                            <!-- Input -->
+                                            <input type="text" class="form-control @error('billing_city') is-invalid @enderror" name="billing_city" id="checkout_billing_city"
+                                                   value="{{ request()->old('billing_city') }}" placeholder="" required>
+                                            <!-- End Input -->
+
+                                            @error('billing_city')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_billing_zip" class="form-label ">{{ translate('ZIP') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('billing_zip') is-invalid @enderror" name="billing_zip" id="checkout_billing_zip"
+                                                   value="{{ request()->old('billing_zip') }}" placeholder="" required>
+
+                                            @error('billing_zip')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <!-- END Billing info -->
+
 
                                         <!-- Add Phone number -->
-                                        <div id="addSerialNumberTemplate" class="w-100" style="display: none;">
-                                            <div class="d-flex flex-row align-items-start w-100 pb-2">
-                                                <div class="input-group-add-field mt-0 pr-3">
-                                                    <input type="text" name="serial_number" class="form-control" value="" />
-                                                </div>
-                                                <div class="input-group-add-field mt-1 mr-3">
-                                                    <select class="js-custom-select-dynamic" name="serial_number_status" data-hs-select2-options='{
-                                                              "minimumResultsForSearch": "Infinity",
-                                                              "customClass": "custom-select custom-select-sm",
-                                                              "dropdownAutoWidth": true,
-                                                              "width": true
-                                                    }'>
-                                                        <option value="in_stock" >{{ translate('In stock') }}</option>
-                                                        <option value="out_of_stock" >{{ translate('Out of stock') }}</option>
-                                                        <option value="reserved" >{{ translate('Reserved') }}</option>
-                                                    </select>
-                                                </div>
+                                        <!-- TODO: Add a proper phone validation rules and error msgs (has to be integrated with HSAddField) -->
+                                        <div class="col-12 js-add-field mt-3" data-hs-add-field-options='{
+                                            "template": "#addPhoneNumberTemplate",
+                                            "container": "#addPhoneNumberContainer",
+                                            "defaultCreated": 1,
+                                            "limit": 3
+                                          }'>
 
-                                                <div class="input-group-add-field " style="margin-top: 12px;">
-                                                    <button type="button" class="btn btn-danger btn-xs p-1 rounded js-delete-field d-inline-flex">
+                                            <label for="address2ShopCheckout" class="form-label">
+                                                {{ translate('Phone(s)') }} <span class="text-danger">*</span>
+                                            </label>
+
+                                            <div id="addPhoneNumberContainer">
+
+                                            </div>
+
+                                            <div class="w-100 d-flex justify-content-between align-items-center mt-1">
+                                                <a href="javascript:;" class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary mt-0 d-inline-flex align-items-center">
+                                                    @svg('heroicon-s-plus', ['class' => 'square-14 mr-1'])
+                                                    <span>{{ translate('Add phone number') }}</span>
+                                                </a>
+                                            </div>
+
+                                            @error('phone_numbers')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Add Phone number Template -->
+                                        <div id="addPhoneNumberTemplate" class="w-100" style="display: none;">
+                                            <div class="d-flex flex-row align-items-center w-100 pb-2">
+                                                <div class="input-group-add-field mt-0 pr-3 w-50">
+                                                    <input type="text" name="phone_numbers[]" class="form-control" placeholder="{{ translate('Phone number (mobile, home, office...)') }}" />
+                                                </div>
+                                                <div class="input-group-add-field mt-0" >
+                                                    <button type="button" class="btn btn-soft-danger btn-xs p-1 rounded js-delete-field d-inline-flex">
                                                         @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- End Add Serial Number Template -->
-
-                                        <div class="col-md-5 mt-2">
-                                            <label for="countryShopCheckout" class="form-label">Country</label>
-
-                                            <!-- Select -->
-                                            <select class="form-select" id="country ShopCheckout" required>
-                                                <option value="">Choose...</option>
-                                                <option value="">Select country</option>
-                                                <option value="AF">Afghanistan</option>
-                                                <option value="AX">Åland Islands</option>
-                                                <option value="AL">Albania</option>
-                                                <option value="DZ">Algeria</option>
-                                                <option value="AS">American Samoa</option>
-                                                <option value="AD">Andorra</option>
-                                                <option value="AO">Angola</option>
-                                                <option value="AI">Anguilla</option>
-                                                <option value="AQ">Antarctica</option>
-                                                <option value="AG">Antigua and Barbuda</option>
-                                                <option value="AR">Argentina</option>
-                                                <option value="AM">Armenia</option>
-                                                <option value="AW">Aruba</option>
-                                                <option value="AU">Australia</option>
-                                                <option value="AT">Austria</option>
-                                                <option value="AZ">Azerbaijan</option>
-                                                <option value="BS">Bahamas</option>
-                                                <option value="BH">Bahrain</option>
-                                                <option value="BD">Bangladesh</option>
-                                                <option value="BB">Barbados</option>
-                                                <option value="BY">Belarus</option>
-                                                <option value="BE">Belgium</option>
-                                                <option value="BZ">Belize</option>
-                                                <option value="BJ">Benin</option>
-                                                <option value="BM">Bermuda</option>
-                                                <option value="BT">Bhutan</option>
-                                                <option value="BO">Bolivia, Plurinational State of</option>
-                                                <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
-                                                <option value="BA">Bosnia and Herzegovina</option>
-                                                <option value="BW">Botswana</option>
-                                                <option value="BV">Bouvet Island</option>
-                                                <option value="BR">Brazil</option>
-                                                <option value="IO">British Indian Ocean Territory</option>
-                                                <option value="BN">Brunei Darussalam</option>
-                                                <option value="BG">Bulgaria</option>
-                                                <option value="BF">Burkina Faso</option>
-                                                <option value="BI">Burundi</option>
-                                                <option value="KH">Cambodia</option>
-                                                <option value="CM">Cameroon</option>
-                                                <option value="CA">Canada</option>
-                                                <option value="CV">Cape Verde</option>
-                                                <option value="KY">Cayman Islands</option>
-                                                <option value="CF">Central African Republic</option>
-                                                <option value="TD">Chad</option>
-                                                <option value="CL">Chile</option>
-                                                <option value="CN">China</option>
-                                                <option value="CX">Christmas Island</option>
-                                                <option value="CC">Cocos (Keeling) Islands</option>
-                                                <option value="CO">Colombia</option>
-                                                <option value="KM">Comoros</option>
-                                                <option value="CG">Congo</option>
-                                                <option value="CD">Congo, the Democratic Republic of the</option>
-                                                <option value="CK">Cook Islands</option>
-                                                <option value="CR">Costa Rica</option>
-                                                <option value="CI">Côte d'Ivoire</option>
-                                                <option value="HR">Croatia</option>
-                                                <option value="CU">Cuba</option>
-                                                <option value="CW">Curaçao</option>
-                                                <option value="CY">Cyprus</option>
-                                                <option value="CZ">Czech Republic</option>
-                                                <option value="DK">Denmark</option>
-                                                <option value="DJ">Djibouti</option>
-                                                <option value="DM">Dominica</option>
-                                                <option value="DO">Dominican Republic</option>
-                                                <option value="EC">Ecuador</option>
-                                                <option value="EG">Egypt</option>
-                                                <option value="SV">El Salvador</option>
-                                                <option value="GQ">Equatorial Guinea</option>
-                                                <option value="ER">Eritrea</option>
-                                                <option value="EE">Estonia</option>
-                                                <option value="ET">Ethiopia</option>
-                                                <option value="FK">Falkland Islands (Malvinas)</option>
-                                                <option value="FO">Faroe Islands</option>
-                                                <option value="FJ">Fiji</option>
-                                                <option value="FI">Finland</option>
-                                                <option value="FR">France</option>
-                                                <option value="GF">French Guiana</option>
-                                                <option value="PF">French Polynesia</option>
-                                                <option value="TF">French Southern Territories</option>
-                                                <option value="GA">Gabon</option>
-                                                <option value="GM">Gambia</option>
-                                                <option value="GE">Georgia</option>
-                                                <option value="DE">Germany</option>
-                                                <option value="GH">Ghana</option>
-                                                <option value="GI">Gibraltar</option>
-                                                <option value="GR">Greece</option>
-                                                <option value="GL">Greenland</option>
-                                                <option value="GD">Grenada</option>
-                                                <option value="GP">Guadeloupe</option>
-                                                <option value="GU">Guam</option>
-                                                <option value="GT">Guatemala</option>
-                                                <option value="GG">Guernsey</option>
-                                                <option value="GN">Guinea</option>
-                                                <option value="GW">Guinea-Bissau</option>
-                                                <option value="GY">Guyana</option>
-                                                <option value="HT">Haiti</option>
-                                                <option value="HM">Heard Island and McDonald Islands</option>
-                                                <option value="VA">Holy See (Vatican City State)</option>
-                                                <option value="HN">Honduras</option>
-                                                <option value="HK">Hong Kong</option>
-                                                <option value="HU">Hungary</option>
-                                                <option value="IS">Iceland</option>
-                                                <option value="IN">India</option>
-                                                <option value="ID">Indonesia</option>
-                                                <option value="IR">Iran, Islamic Republic of</option>
-                                                <option value="IQ">Iraq</option>
-                                                <option value="IE">Ireland</option>
-                                                <option value="IM">Isle of Man</option>
-                                                <option value="IL">Israel</option>
-                                                <option value="IT">Italy</option>
-                                                <option value="JM">Jamaica</option>
-                                                <option value="JP">Japan</option>
-                                                <option value="JE">Jersey</option>
-                                                <option value="JO">Jordan</option>
-                                                <option value="KZ">Kazakhstan</option>
-                                                <option value="KE">Kenya</option>
-                                                <option value="KI">Kiribati</option>
-                                                <option value="KP">Korea, Democratic People's Republic of</option>
-                                                <option value="KR">Korea, Republic of</option>
-                                                <option value="KW">Kuwait</option>
-                                                <option value="KG">Kyrgyzstan</option>
-                                                <option value="LA">Lao People's Democratic Republic</option>
-                                                <option value="LV">Latvia</option>
-                                                <option value="LB">Lebanon</option>
-                                                <option value="LS">Lesotho</option>
-                                                <option value="LR">Liberia</option>
-                                                <option value="LY">Libya</option>
-                                                <option value="LI">Liechtenstein</option>
-                                                <option value="LT">Lithuania</option>
-                                                <option value="LU">Luxembourg</option>
-                                                <option value="MO">Macao</option>
-                                                <option value="MK">Macedonia, the former Yugoslav Republic of</option>
-                                                <option value="MG">Madagascar</option>
-                                                <option value="MW">Malawi</option>
-                                                <option value="MY">Malaysia</option>
-                                                <option value="MV">Maldives</option>
-                                                <option value="ML">Mali</option>
-                                                <option value="MT">Malta</option>
-                                                <option value="MH">Marshall Islands</option>
-                                                <option value="MQ">Martinique</option>
-                                                <option value="MR">Mauritania</option>
-                                                <option value="MU">Mauritius</option>
-                                                <option value="YT">Mayotte</option>
-                                                <option value="MX">Mexico</option>
-                                                <option value="FM">Micronesia, Federated States of</option>
-                                                <option value="MD">Moldova, Republic of</option>
-                                                <option value="MC">Monaco</option>
-                                                <option value="MN">Mongolia</option>
-                                                <option value="ME">Montenegro</option>
-                                                <option value="MS">Montserrat</option>
-                                                <option value="MA">Morocco</option>
-                                                <option value="MZ">Mozambique</option>
-                                                <option value="MM">Myanmar</option>
-                                                <option value="NA">Namibia</option>
-                                                <option value="NR">Nauru</option>
-                                                <option value="NP">Nepal</option>
-                                                <option value="NL">Netherlands</option>
-                                                <option value="NC">New Caledonia</option>
-                                                <option value="NZ">New Zealand</option>
-                                                <option value="NI">Nicaragua</option>
-                                                <option value="NE">Niger</option>
-                                                <option value="NG">Nigeria</option>
-                                                <option value="NU">Niue</option>
-                                                <option value="NF">Norfolk Island</option>
-                                                <option value="MP">Northern Mariana Islands</option>
-                                                <option value="NO">Norway</option>
-                                                <option value="OM">Oman</option>
-                                                <option value="PK">Pakistan</option>
-                                                <option value="PW">Palau</option>
-                                                <option value="PS">Palestinian Territory, Occupied</option>
-                                                <option value="PA">Panama</option>
-                                                <option value="PG">Papua New Guinea</option>
-                                                <option value="PY">Paraguay</option>
-                                                <option value="PE">Peru</option>
-                                                <option value="PH">Philippines</option>
-                                                <option value="PN">Pitcairn</option>
-                                                <option value="PL">Poland</option>
-                                                <option value="PT">Portugal</option>
-                                                <option value="PR">Puerto Rico</option>
-                                                <option value="QA">Qatar</option>
-                                                <option value="RE">Réunion</option>
-                                                <option value="RO">Romania</option>
-                                                <option value="RU">Russian Federation</option>
-                                                <option value="RW">Rwanda</option>
-                                                <option value="BL">Saint Barthélemy</option>
-                                                <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
-                                                <option value="KN">Saint Kitts and Nevis</option>
-                                                <option value="LC">Saint Lucia</option>
-                                                <option value="MF">Saint Martin (French part)</option>
-                                                <option value="PM">Saint Pierre and Miquelon</option>
-                                                <option value="VC">Saint Vincent and the Grenadines</option>
-                                                <option value="WS">Samoa</option>
-                                                <option value="SM">San Marino</option>
-                                                <option value="ST">Sao Tome and Principe</option>
-                                                <option value="SA">Saudi Arabia</option>
-                                                <option value="SN">Senegal</option>
-                                                <option value="RS">Serbia</option>
-                                                <option value="SC">Seychelles</option>
-                                                <option value="SL">Sierra Leone</option>
-                                                <option value="SG">Singapore</option>
-                                                <option value="SX">Sint Maarten (Dutch part)</option>
-                                                <option value="SK">Slovakia</option>
-                                                <option value="SI">Slovenia</option>
-                                                <option value="SB">Solomon Islands</option>
-                                                <option value="SO">Somalia</option>
-                                                <option value="ZA">South Africa</option>
-                                                <option value="GS">South Georgia and the South Sandwich Islands</option>
-                                                <option value="SS">South Sudan</option>
-                                                <option value="ES">Spain</option>
-                                                <option value="LK">Sri Lanka</option>
-                                                <option value="SD">Sudan</option>
-                                                <option value="SR">Suriname</option>
-                                                <option value="SJ">Svalbard and Jan Mayen</option>
-                                                <option value="SZ">Swaziland</option>
-                                                <option value="SE">Sweden</option>
-                                                <option value="CH">Switzerland</option>
-                                                <option value="SY">Syrian Arab Republic</option>
-                                                <option value="TW">Taiwan, Province of China</option>
-                                                <option value="TJ">Tajikistan</option>
-                                                <option value="TZ">Tanzania, United Republic of</option>
-                                                <option value="TH">Thailand</option>
-                                                <option value="TL">Timor-Leste</option>
-                                                <option value="TG">Togo</option>
-                                                <option value="TK">Tokelau</option>
-                                                <option value="TO">Tonga</option>
-                                                <option value="TT">Trinidad and Tobago</option>
-                                                <option value="TN">Tunisia</option>
-                                                <option value="TR">Turkey</option>
-                                                <option value="TM">Turkmenistan</option>
-                                                <option value="TC">Turks and Caicos Islands</option>
-                                                <option value="TV">Tuvalu</option>
-                                                <option value="UG">Uganda</option>
-                                                <option value="UA">Ukraine</option>
-                                                <option value="AE">United Arab Emirates</option>
-                                                <option value="GB">United Kingdom</option>
-                                                <option value="US">United States</option>
-                                                <option value="UM">United States Minor Outlying Islands</option>
-                                                <option value="UY">Uruguay</option>
-                                                <option value="UZ">Uzbekistan</option>
-                                                <option value="VU">Vanuatu</option>
-                                                <option value="VE">Venezuela, Bolivarian Republic of</option>
-                                                <option value="VN">Viet Nam</option>
-                                                <option value="VG">Virgin Islands, British</option>
-                                                <option value="VI">Virgin Islands, U.S.</option>
-                                                <option value="WF">Wallis and Futuna</option>
-                                                <option value="EH">Western Sahara</option>
-                                                <option value="YE">Yemen</option>
-                                                <option value="ZM">Zambia</option>
-                                                <option value="ZW">Zimbabwe</option>
-                                            </select>
-                                            <!-- End Select -->
-
-                                            <div class="invalid-feedback">
-                                                Please select a valid country.
-                                            </div>
-                                        </div>
-                                        <!-- End Col -->
-
-                                        <div class="col-md-4 mt-2">
-                                            <label for="stateShopCheckout" class="form-label">State</label>
-
-                                            <!-- Select -->
-                                            <select class="form-select" id="stateShopCheckout" required>
-                                                <option value="">Choose...</option>
-                                                <option>California</option>
-                                            </select>
-                                            <!-- End Select -->
-
-                                            <div class="invalid-feedback">
-                                                Please provide a valid state.
-                                            </div>
-                                        </div>
-                                        <!-- End Col -->
-
-                                        <div class="col-md-3 mt-2">
-                                            <label for="zipShopCheckout" class="form-label">Zip</label>
-                                            <input type="text" class="form-control " id="zipShopCheckout" placeholder="" required>
-                                            <div class="invalid-feedback">
-                                                Zip code required.
-                                            </div>
-                                        </div>
-                                        <!-- End Col -->
+                                        <!-- End Add Phone number Template -->
                                     </div>
 
                                     <hr class="my-3">
 
                                     <div class="d-flex flex-column">
-                                        <!-- Check -->
-                                        <div class="form-check mb-1">
-                                            <input type="checkbox" class="form-check-input" id="sameAddressShopCheckout">
-                                            <label class="form-check-label" for="sameAddressShopCheckout">Shipping address is the same as my billing address</label>
+                                        <!-- Checkbox -->
+                                        <div class="js-form-message mb-2">
+                                            <div class="custom-control custom-checkbox d-flex align-items-center text-muted">
+                                                <input type="checkbox" class="custom-control-input" id="same_billing_shipping" name="same_billing_shipping"
+                                                       x-model="same_billing_shipping">
+                                                <label class="custom-control-label" for="same_billing_shipping">
+                                                    <small>{{ translate('My billing and delivery information are the same.') }}</small>
+                                                </label>
+                                            </div>
                                         </div>
-                                        <!-- End Check -->
 
-                                        <!-- Check -->
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="saveInfoShopCheckout">
-                                            <label class="form-check-label" for="saveInfoShopCheckout">Save this information for next time</label>
+                                        <div class="custom-control custom-checkbox d-flex align-items-center text-muted">
+                                            <input type="checkbox" class="custom-control-input" id="checkout_newsletter" name="newsletter" value="{{ request()->old('billing_zip') }}">
+                                            <label class="custom-control-label" for="checkout_newsletter">
+                                                <small>{{ translate('Please send me emails with exclusive gear offers, athlete info and expeditions updates from Front') }}</small>
+                                            </label>
                                         </div>
-                                        <!-- End Check -->
+                                        <!-- End Checkbox -->
                                     </div>
 
                                     <hr class="my-3">
 
-                                    <h4 class="mb-3">Payment</h4>
+                                    <!-- Shipping info -->
+                                    <div class="row pb-3" x-show="!same_billing_shipping">
+                                        <h5 class="col-12 ">{{ translate('Shipping address') }}</h5>
 
-                                    <div class="my-3">
-                                        <!-- Check -->
-                                        <div class="form-check">
-                                            <input id="creditShopCheckout" name="paymentMethod" type="radio" class="form-check-input" checked required>
-                                            <label class="form-check-label" for="creditShopCheckout">Credit card</label>
-                                        </div>
-                                        <!-- End Check -->
+                                        <div class="col-sm-6 mt-3">
+                                            <label for="checkout_shipping_first_name" class="form-label">{{ translate('First name') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('shipping_first_name') is-invalid @enderror" name="shipping_first_name" id="checkout_shipping_first_name" value="{{ request()->old('shipping_first_name') }}"  placeholder="" >
 
-                                        <!-- Check -->
-                                        <div class="form-check">
-                                            <input id="debitShopCheckout" name="paymentMethod" type="radio" class="form-check-input" required>
-                                            <label class="form-check-label" for="debitShopCheckout">Debit card</label>
+                                            @error('shipping_first_name')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                        <!-- End Check -->
+                                        <!-- End Col -->
 
-                                        <!-- Check -->
-                                        <div class="form-check">
-                                            <input id="paypalShopCheckout" name="paymentMethod" type="radio" class="form-check-input" required>
-                                            <label class="form-check-label" for="paypalShopCheckout">PayPal</label>
+                                        <div class="col-sm-6 mt-3">
+                                            <label for="checkout_shipping_last_name" class="form-label">{{ translate('Last name') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('shipping_last_name') is-invalid @enderror" name="shipping_last_name" id="checkout_shipping_last_name" value="{{ request()->old('shipping_last_name') }}" placeholder="" >
+                                            @error('shipping_last_name')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                        <!-- End Check -->
+                                        <!-- End Col -->
+
+                                        <div class="col-12 mt-3">
+                                            <label for="checkout_shipping_company" class="form-label"> {{ translate('Company (optional)') }}</label>
+                                            <input type="text" class="form-control @error('shipping_company') is-invalid @enderror" name="shipping_company" id="checkout_shipping_company" value="{{ request()->old('shipping_company') }}">
+                                            @error('shipping_company')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-12 mt-3">
+                                            <label for="checkout_shipping_address" class="form-label">{{ translate('Address') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('shipping_address') is-invalid @enderror" name="shipping_address" id="checkout_shipping_address" value="{{ request()->old('shipping_address') }}" placeholder="1234 Main St" >
+                                            @error('shipping_address')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_shipping_country" class="form-label">{{ translate('Country') }} <span class="text-danger">*</span></label>
+
+                                            <!-- Select -->
+                                            <select class="form-control custom-select" name="shipping_country" id="checkout_shipping_country">
+                                                <option value="">{{ translate('Choose...') }}</option>
+                                                @foreach(\Countries::getAll() as $country)
+                                                    <option value="{{ $country->code }}" {{ request()->old('billing_country') === $country->code ? 'selected':'' }}>{{ $country->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <!-- End Select -->
+
+                                            @error('shipping_country')
+                                                <div class="invalid-feedback d-block">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_shipping_state" class="form-label">{{ translate('State') }} <span class="text-danger">*</span></label>
+
+                                            <!-- Input -->
+                                            <input type="text" class="form-control @error('shipping_state') is-invalid @enderror" name="shipping_state" id="checkout_shipping_state"
+                                                   value="{{ request()->old('shipping_state') }}" placeholder="(write country if there's no state)" >
+                                            <!-- End Input -->
+
+                                            @error('shipping_state')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_shipping_city" class="form-label">{{ translate('City') }}<span class="text-danger">*</span></label>
+
+                                            <!-- Input -->
+                                            <input type="text" class="form-control @error('shipping_city') is-invalid @enderror" name="shipping_city" id="checkout_shipping_city"
+                                                   value="{{ request()->old('shipping_city') }}" placeholder="" >
+                                            <!-- End Input -->
+
+                                            @error('shipping_city')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-6 mt-3">
+                                            <label for="checkout_shipping_zip" class="form-label">{{ translate('ZIP') }} <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control @error('shipping_zip') is-invalid @enderror" name="shipping_zip" id="checkout_shipping_zip"
+                                                   value="{{ request()->old('shipping_zip') }}" placeholder="" >
+
+                                            @error('shipping_zip')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <!-- End Col -->
                                     </div>
+                                    <!-- END Shipping info -->
 
-                                    <div class="row gy-3">
-                                        <div class="col-md-6">
-                                            <label for="ccNameShopCheckout" class="form-label">Name on card</label>
-                                            <input type="text" class="form-control " id="ccNameShopCheckout" placeholder="" required>
-                                            <small class="text-muted">Full name as displayed on card</small>
-                                            <div class="invalid-feedback">
-                                                Name on card is required
+                                    <hr class="my-3 mb-4" x-show="!same_billing_shipping" x-cloak>
+
+
+                                    <!-- Payment Methods -->
+                                    <div class="mb-10">
+                                        <h4 class="mb-3">{{ translate('Payment methods') }}</h4>
+
+                                        <!-- Radio Checkbox Group -->
+                                        <div class="row mx-n2">
+                                            <div class="col-6 col-md-3 px-2 mb-3 mb-md-0">
+                                                <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
+                                                    <input type="radio" id="checkout_payment_wire_transfer" name="payment_method" value="wire_transfer" class="custom-control-input checkbox-outline-input checkbox-icon-input" {{ request()->old('payment_method') == 'wire_transfer' ? 'checked':'' }}>
+                                                    <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_wire_transfer">
+                                                        <img class="img-fluid w-75 mb-3" src="{{ static_asset(path: 'images/wire-transfer-logo-transparent.png', theme: true) }}" alt="SVG" >
+                                                        <span class="d-block">{{ translate('Wire Transfer') }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3 px-2 mb-3 mb-md-0">
+                                                <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
+                                                    <input type="radio" id="checkout_payment_stripe" name="payment_method" value="stripe" class="custom-control-input checkbox-outline-input checkbox-icon-input" {{ request()->old('payment_method') == 'stripe' ? 'checked':'' }}>
+                                                    <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_stripe">
+                                                        <img class="img-fluid w-75 mb-3" src="{{ static_asset(path: 'images/stripe-logo-transparent-512.png', theme: true) }}" alt="SVG" >
+                                                        <span class="d-block">{{ translate('Stripe') }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3 px-2">
+                                                <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
+                                                    <input type="radio" id="checkout_payment_paypal" name="payment_method" value="paysera" class="custom-control-input checkbox-outline-input checkbox-icon-input" {{ request()->old('payment_method') == 'paypal' ? 'checked':'' }}>
+                                                    <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_paypal">
+                                                        <img class="img-fluid w-75 mb-3" src="{{ static_asset(path: 'images/paypal-logo-transparent-512.png', theme: true) }}" alt="SVG" >
+                                                        <span class="d-block">{{ translate('Paypal') }}</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 col-md-3 px-2">
+                                                <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
+                                                    <input type="radio" id="checkout_payment_paysera" name="payment_method" value="paysera" class="custom-control-input checkbox-outline-input checkbox-icon-input" {{ request()->old('payment_method') == 'paysera' ? 'checked':'' }}>
+                                                    <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_paysera">
+                                                        <img class="img-fluid w-75 mb-3" src="{{ static_asset(path: 'images/paysera-logo-transparent-512.png', theme: true) }}" alt="SVG" >
+                                                        <span class="d-block">{{ translate('Paysera') }}</span>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
-                                        <!-- End Col -->
+                                        <!-- End Radio Checkbox Group -->
 
-                                        <div class="col-md-6">
-                                            <label for="ccNumberShopCheckout" class="form-label">Credit card number</label>
-                                            <input type="text" class="form-control " id="ccNumberShopCheckout" placeholder="" required>
-                                            <div class="invalid-feedback">
-                                                Credit card number is required
+                                        @error('payment_method')
+                                            <div class="invalid-feedback btn btn-danger btn-xs mt-3 ml-auto w-50">
+                                                {{ $message }}
                                             </div>
-                                        </div>
-                                        <!-- End Col -->
-
-                                        <div class="col-md-3 mt-2">
-                                            <label for="ccExpirationShopCheckout" class="form-label">Expiration</label>
-                                            <input type="text" class="form-control " id="ccExpirationShopCheckout" placeholder="" required>
-                                            <div class="invalid-feedback">
-                                                Expiration date required
-                                            </div>
-                                        </div>
-                                        <!-- End Col -->
-
-                                        <div class="col-md-3 mt-2">
-                                            <label for="ccCvvShopCheckout" class="form-label">CVV</label>
-                                            <input type="text" class="form-control " id="ccCvvShopCheckout" placeholder="" required>
-                                            <div class="invalid-feedback">
-                                                Security code required
-                                            </div>
-                                        </div>
-                                        <!-- End Col -->
+                                        @enderror
                                     </div>
+                                    <!-- End Payment Methods -->
+
+
+{{--                                    <div class="row gy-3" x-show="">--}}
+{{--                                        <div class="col-md-6">--}}
+{{--                                            <label for="ccNameShopCheckout" class="form-label">Name on card</label>--}}
+{{--                                            <input type="text" class="form-control " id="ccNameShopCheckout" placeholder="" required>--}}
+{{--                                            <small class="text-muted">Full name as displayed on card</small>--}}
+{{--                                            <div class="invalid-feedback">--}}
+{{--                                                Name on card is required--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <!-- End Col -->--}}
+
+{{--                                        <div class="col-md-6">--}}
+{{--                                            <label for="ccNumberShopCheckout" class="form-label">Credit card number</label>--}}
+{{--                                            <input type="text" class="form-control " id="ccNumberShopCheckout" placeholder="" required>--}}
+{{--                                            <div class="invalid-feedback">--}}
+{{--                                                Credit card number is required--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <!-- End Col -->--}}
+
+{{--                                        <div class="col-md-3 mt-3">--}}
+{{--                                            <label for="ccExpirationShopCheckout" class="form-label">Expiration</label>--}}
+{{--                                            <input type="text" class="form-control " id="ccExpirationShopCheckout" placeholder="" required>--}}
+{{--                                            <div class="invalid-feedback">--}}
+{{--                                                Expiration date required--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <!-- End Col -->--}}
+
+{{--                                        <div class="col-md-3 mt-3">--}}
+{{--                                            <label for="ccCvvShopCheckout" class="form-label">CVV</label>--}}
+{{--                                            <input type="text" class="form-control " id="ccCvvShopCheckout" placeholder="" required>--}}
+{{--                                            <div class="invalid-feedback">--}}
+{{--                                                Security code required--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                        <!-- End Col -->--}}
+{{--                                    </div>--}}
                                     <!-- End Row -->
 
                                     <hr class="my-4">
 
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-6 order-sm-1 mb-3 mb-sm-0">
-                                            <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary">Place order</button>
+                                    <div class="row pb-3">
+                                        <div class="col-12">
+                                            <label for="checkout_note" class="form-label">{{ translate('Additional information (for courier, for shop etc.)') }}</label>
+                                            <textarea type="text" class="form-control @error('note') is-invalid @enderror" name="note" id="checkout_note">{{ request()->old('note') }}</textarea>
+                                            @error('note')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
                                             </div>
+                                            @enderror
                                         </div>
+                                        <!-- End Col -->
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    <!-- Placing order Actions -->
+                                    <div class="row align-items-center">
+                                        @if(\CartService::getTotalItemsCount() > 0)
+                                            <div class="col-sm-6 order-sm-1 mb-3 mb-sm-0">
+                                                <div class="d-grid">
+                                                    <button type="submit" class="btn btn-primary">{{ translate('Place order') }}</button>
+                                                    <input type="hidden" name="place_an_order" value="1" />
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="col-sm-6 order-sm-1 mb-3 mb-sm-0">
+                                                <div class="d-grid">
+                                                    <div class="btn btn-secondary">{{ translate('No items in cart...') }}</div>
+                                                </div>
+                                            </div>
+                                        @endif
                                         <!-- End Col -->
 
                                         <div class="col-sm text-left d-flex">
@@ -611,7 +608,7 @@
                                                 <!-- End Check -->
 
                                                 <!-- Check -->
-                                                <div class="form-check pointer mt-2">
+                                                <div class="form-check pointer mt-3">
                                                     <input class="form-check-input" type="radio" name="deliveryRadioName" id="deliveryRadio2Eg2"
                                                            x-bind:checked="selected_shipping_method === 1"
                                                            @click="selected_shipping_method=1">
@@ -672,10 +669,21 @@
                         </div>
                     </div>
                 </div>
-                <!-- End Order SUmmary -->
+                <!-- End Order Summary -->
             </div>
         </div>
     </section>
 @endsection
 
 @section('modal')
+
+@endsection
+
+@push('footer_scripts')
+    <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>
+    <script src="{{ static_asset('vendor/hs-toggle-switch/dist/hs-toggle-switch.min.js', false, true) }}"></script>
+
+    <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
+
+    <script src="{{ static_asset('js/crud/checkout-form.js', false, true, true) }}"></script>
+@endpush

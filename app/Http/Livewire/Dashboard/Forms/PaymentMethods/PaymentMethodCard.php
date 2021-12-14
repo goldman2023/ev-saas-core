@@ -68,7 +68,13 @@ class PaymentMethodCard extends Component
         $this->dispatchBrowserEvent('initPaymentMethodForm');
     }
 
+//    public function updatingPaymentMethodEnabled($value) {
+//        $this->validate();
+//    }
+
     public function updatedPaymentMethodEnabled($value) {
+        $this->paymentMethod->save();
+
         $msg = $value ? $this->paymentMethod->name.' '.translate('method enabled!') : $this->paymentMethod->name.' '.translate('method disabled!');
         $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $msg, 'type' => $value ? 'success' : 'danger' ]);
     }

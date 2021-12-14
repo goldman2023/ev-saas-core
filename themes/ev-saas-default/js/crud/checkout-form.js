@@ -31,6 +31,15 @@ window.initCheckoutForm = function(event) {
     $('.js-add-field').each(function () {
         $(this).off();
 
+        new HSAddField($(this), {
+            addedField: function() {
+
+            },
+            deletedField: function() {
+                // Hide save btn if there are no fields!
+            }
+        }).init();
+
     });
 
 

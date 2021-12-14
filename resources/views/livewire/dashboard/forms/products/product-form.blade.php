@@ -50,7 +50,7 @@
     <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
-                <a href="{{ route('ev-products.details', $product->slug) }}" class="text-secondary mr-3" style="height: 24px;">
+                <a href="{{ $product->id ? route('ev-products.details', $product->slug) : route('ev-products.index') }}" class="text-secondary mr-3" style="height: 24px;">
                     @svg('heroicon-o-chevron-left', ['class' => 'square-24'])
                 </a>
 

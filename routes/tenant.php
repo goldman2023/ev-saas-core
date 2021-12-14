@@ -149,6 +149,9 @@ Route::middleware([
     //Checkout Routes
     Route::group(['middleware' => ['checkout']], function () {
         Route::get('/checkout', [EVCheckoutController::class, 'index'])->name('checkout');
+        Route::post('/checkout', [EVCheckoutController::class, 'store'])->name('checkout.post');
+
+        Route::get('/order-received/{id}', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
 
 //        Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
 //        Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');

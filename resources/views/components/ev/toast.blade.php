@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <div class="toast-body" @if($isX) x-html="content" @endif>
+    <div class="toast-body text-center" @if($isX) x-html="content" @endif>
         {{ $content }}
     </div>
 </div>
