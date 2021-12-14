@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d05f619e851e6f15ffe3eff9b5725447",
+    "content-hash": "9c21d3799c71815c53471a2d2f7686d0",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -13972,6 +13972,43 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.10.0"
             },
             "time": "2021-03-09T10:59:23+00:00"
+        },
+        {
+            "name": "webtopay/libwebtopay",
+            "version": "1.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paysera/lib-webtopay.git",
+                "reference": "d502d1e1d4a89742f78563ead2c4fa0fde82f262"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paysera/lib-webtopay/zipball/d502d1e1d4a89742f78563ead2c4fa0fde82f262",
+                "reference": "d502d1e1d4a89742f78563ead2c4fa0fde82f262",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Paysera",
+                    "homepage": "https://www.paysera.com/"
+                }
+            ],
+            "description": "PHP Library for Paysera payment gateway integration",
+            "support": {
+                "issues": "https://github.com/paysera/lib-webtopay/issues",
+                "source": "https://github.com/paysera/lib-webtopay/tree/1.6.3"
+            },
+            "time": "2018-09-21T07:39:02+00:00"
         }
     ],
     "packages-dev": [
@@ -16421,5 +16458,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

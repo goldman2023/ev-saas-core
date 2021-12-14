@@ -4,9 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Category;
 use App\Models\CategoryRelationship;
-use App\Models\Product;
 use Cache;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Str;
 

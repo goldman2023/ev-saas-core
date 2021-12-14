@@ -18,6 +18,7 @@ use App\Rules\EVModelsExist;
 use DB;
 use EVS;
 use Categories;
+use MyShop;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -122,6 +123,7 @@ class ProductForm extends Component
             $this->selected_categories = collect([]);
 
             $this->product->slug = '';
+            $this->product->shop_id = MyShop::getShop()->id;
             $this->product->is_quantity_multiplied = 1;
             $this->product->shipping_type = 'product_wise';
             $this->product->stock_visibility_state = 'quantity';

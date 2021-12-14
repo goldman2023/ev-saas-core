@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Models\Shop;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
@@ -27,7 +28,7 @@ class CartService
     }
 
     public function getItems() {
-        return $this->items;
+        return $this->items->setConnection();
     }
 
     public function getOriginalPrice() {
@@ -43,6 +44,22 @@ class CartService
         return $this->count;
     }
 
+    public function getShop($as_id = false) {
+        // TODO: This function will have to support purchasing items from different shops in the future
+        // TODO: Logic should be to generate multiple orders for each shop containing items bought from that shop (maybe)
+        // For now just retrieve the shop (or shop_id) of the first item
+        $shop_id = $this->items->pluck('shop_id')->filter(fn($item) => !empty($item))->first();
+
+        if(empty($shop_id)) {
+            // This most probably means that there are no items in cart OR items in cart do not have shop_id property (like ProductVariations)
+            $main = $this->items->first()->main ?? null;
+
+            return $as_id ? $main->shop_id : $main->shop;
+        }
+
+        return $as_id ? $shop_id : Shop::find($shop_id);
+    }
+
     public function addToCart($model, $model_type, $qty, $append_qty = true) {
         $warnings = [];
 
@@ -54,9 +71,6 @@ class CartService
 
         // Add to cart only if Model is purchasable
         if(isset($model->is_purchasable) && $model->is_purchasable) {
-            // Get $model stock
-            $stock = $model->stock()->first();
-
             $desired_item_in_cart = $cart_items->first(fn($item, $key) => $item['id'] === $model->id && $item['content_type'] === $model::class);
 
             if(!empty($desired_item_in_cart) && $append_qty) {
@@ -64,13 +78,13 @@ class CartService
                 $qty +=  $desired_item_in_cart['qty'];
             }
 
-            if($stock->qty < $qty) {
+            if($model->current_stock < $qty) {
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
                 $warnings[] = translate('There are not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
 
-                $qty = $stock->qty;
+                $qty = $model->current_stock;
             }
 
             // Construct $model data for cart session storage
@@ -185,7 +199,7 @@ class CartService
 
             // sort by initial order and calculate subtotal
             $ids_order = $cart_items->pluck('id');
-            $this->items = new Collection();
+            $this->items = new \App\Support\Eloquent\Collection(); // THIS IS ULTIMATELY IMPORTANT!!! Otherwise, only one model type can be in standard Eloquent/Collection
 
             foreach($ids_order as $id) {
                 $this->items->push($found_item = $mapped->firstWhere('id', $id));
@@ -206,8 +220,13 @@ class CartService
         }
     }
 
+    public function fullCartReset() {
+        Session::put('cart', collect([]));
+        $this->resetCart();
+    }
+
     protected function resetCart() {
-        $this->items = new Collection(); // Eloquent Collection
+        $this->items = new \App\Support\Eloquent\Collection(); // THIS IS ULTIMATELY IMPORTANT!!! Otherwise, only one model type can be in standard Eloquent/Collection
         $this->count = 0;
 
         $this->resetStats();

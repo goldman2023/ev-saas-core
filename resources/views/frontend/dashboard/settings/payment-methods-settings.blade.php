@@ -10,7 +10,7 @@
         <div class="card-body">
             @if(auth()->user()->isAdmin())
                 @if($universal_payment_methods->isNotEmpty())
-                    @foreach($universal_payment_methods as $payment_method)
+                    @foreach($universal_payment_methods as $key => $payment_method)
                         <livewire:dashboard.forms.payment-methods.payment-method-card
                             :payment-method="$payment_method" type="universal" class="mb-2">
                         </livewire:dashboard.forms.payment-methods.payment-method-card>

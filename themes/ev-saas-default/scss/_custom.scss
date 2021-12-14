@@ -71,6 +71,10 @@
     cursor: pointer;
 }
 
+.prevent-pointer-events {
+    pointer-events: none;
+}
+
 .avatar, .fit-cover {
     object-fit: cover;
 }

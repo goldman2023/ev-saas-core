@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Services\AttributesService;
 use App\Http\Services\CartService;
+use App\Http\Services\CountryService;
 use App\Http\Services\IMGProxyService;
 use App\Http\Services\MyShopService;
 use App\Http\Services\VendorService;
@@ -72,6 +73,11 @@ class EVServiceProvider extends ServiceProvider
         // Register Cart Singleton
         $this->app->singleton('cart', function() {
             return new CartService(fn () => Container::getInstance());
+        });
+
+        // Register Countries Singleton
+        $this->app->singleton('ev_countries', function() {
+            return new CountryService(fn () => Container::getInstance());
         });
     }
 

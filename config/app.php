@@ -288,6 +288,7 @@ return [
         'TenantSettings' => App\Facades\TenantSettings::class,
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,
+        'Countries' => App\Facades\Countries::class,
         'Categories' => App\Facades\Categories::class,
         'AttributesService' => App\Facades\AttributesService::class,
         'Theme' => Qirolab\Theme\Theme::class,

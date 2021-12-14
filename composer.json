@@ -66,7 +66,8 @@
         "stancl/tenancy": "^3.4",
         "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
-        "twilio/sdk": "^6.1"
+        "twilio/sdk": "^6.1",
+        "webtopay/libwebtopay": "^1.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",

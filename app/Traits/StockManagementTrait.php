@@ -135,6 +135,35 @@ trait StockManagementTrait
         return $this->low_stock_qty;
     }
 
+
+    /**********************************
+     * Stock Management Functions *
+     **********************************/
+    public function reduceStock($quantity = null) {
+        $quantity = (!empty($quantity) && $quantity > 0) ? $quantity : $this->purchase_quantity;
+
+        if($this->current_stock >= $quantity) {
+            if($this->use_serial) {
+                // If item uses serial numbers, assign X available serial numbers to the Order item and change their status to reserved
+                $in_stock_serial_numbers = $this->getInStockSerials()->slice(0, $quantity); // get first X in_stock serial numbers
+
+                // Change selected serial numbers statuses to reserved
+                $in_stock_serial_numbers->each(function($item, $key) {
+                    $item->status = 'reserved';
+                    $item->save();
+                });
+
+                return $in_stock_serial_numbers->pluck('serial_number')->toArray(); // pluck serial_numbers and transform to array
+            } else {
+                $stock = $this->stock;
+                $stock->qty -= $quantity;
+                $stock->save();
+
+                return true;
+            }
+        }
+    }
+
     /**********************************
      * Serial Numbers Stock Functions *
      **********************************/
