@@ -107,6 +107,11 @@ class Shop extends Model
         return $this->hasMany(PaymentMethod::class, 'shop_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'shop_id');
+    }
+
 
 
     public static function companies_count_rounded()

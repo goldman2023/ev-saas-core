@@ -62,4 +62,8 @@ class FXService
 
         return $formatted_price . $this->currency_symbol;
     }
+
+    public function reductionPercentage($full, $part) {
+        return 100-($part*100/$full);
+    }
 }

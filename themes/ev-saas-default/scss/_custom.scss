@@ -1,3 +1,10 @@
+/* Generate max-width classes */
+@for $mw from 1 through 10 {
+    .max-w-#{$mw*10} {
+        max-width: round(percentage($mw/10));
+    }
+}
+
 /* Generate square classes */
 @for $wh from 8 through 32 {
     .square-#{$wh} {
@@ -161,4 +168,8 @@
     &.duration-1000 {
         transition-duration: 1000ms
     }
+}
+
+.list-style-none {
+    list-style: none;
 }

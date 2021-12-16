@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Cart;
 use App\Notifications\EmailVerificationNotification;
@@ -19,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use Billable;
     use LogsActivity;
+    use UploadTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -172,6 +174,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'avatar', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+                'relation_type' => 'avatar', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+            ]
+        ];
     }
 
     public function recently_viewed_products() {

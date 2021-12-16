@@ -43,7 +43,7 @@
                     @if($items->isNotEmpty())
                         @foreach($items as $item)
                             @php
-                                $hasVariations = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->hasVariations();
+                                $hasVariations = ($item->hasMain()) ? $item->main->hasVariations() : $item->hasVariations();
                                 $name = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->getTranslation('name');
                                 $excerpt = ($item->hasMain()) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
                             @endphp

@@ -59,6 +59,17 @@ trait UploadTrait
         });
     }
 
+    /*
+     * Gets the Upload URL
+     *
+     * @param array $options If IMGProxy is enabled, $options will be used to generate proxified image URL
+     * @return mixed
+     */
+    public function getUpload($property_name, array $options = []): mixed
+    {
+        return IMG::get($this->{$property_name}, IMG::mergeWithDefaultOptions($options, 'thumbnail'));
+    }
+
     /**
      * Converts gallery properties from Upload model(s) to Upload ID(s)
      *

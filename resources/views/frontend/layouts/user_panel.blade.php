@@ -39,12 +39,12 @@
         </div>
     </section>
 
-    <section class="container space-1 space-top-lg-0 space-bottom-lg-2 mt-lg-n10">
+    <section class="c-dashboard-panel container space-1 space-top-lg-0 space-bottom-lg-2 mt-lg-n10">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="c-user-side-nav">
                 @include('frontend.inc.user_side_nav')
             </div>
-            <div class="col-lg-9 aiz-user-panel">
+            <div class="aiz-user-panel c-user-panel">
                 @yield('panel_content')
             </div>
         </div>

@@ -148,6 +148,23 @@ img {
 
 /**
  * ==============================================
+ * Datatables
+ * ==============================================
+ */
+.datatable-custom {
+    .dataTables_info, .dataTables_length, .dataTables_paginate {
+        display: none;
+    }
+
+    .ordersDatatable_wrapper {
+        > .row:first-child {
+            display: none;
+        }
+    }
+}
+
+/**
+ * ==============================================
  * Select2 dropdown
  * ==============================================
  */
