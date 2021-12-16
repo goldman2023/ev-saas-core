@@ -19,8 +19,20 @@ class Order extends Model
     protected $casts = [
         'phone_numbers' => 'array',
         'same_billing_shipping' => 'boolean',
-        'viewed' => 'boolean'
+        'viewed' => 'boolean',
+        'created_at' => 'datetime:d.m.Y H:i',
+        'updated_at' => 'datetime:d.m.Y H:i',
     ];
+
+    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid'];
+    public const PAYMENT_STATUS_UNPAID = 'unpaid';
+    public const PAYMENT_STATUS_PENDING = 'pending';
+    public const PAYMENT_STATUS_PAID = 'paid';
+
+    public const SHIPPING_STATUS = ['not_sent', 'sent', 'delivered']; // TODO: Should consider more statuses!
+    public const SHIPPING_STATUS_NOT_SENT = 'not_sent';
+    public const SHIPPING_STATUS_SENT = 'sent';
+    public const SHIPPING_STATUS_DELIVERED = 'delivered';
 
     public function user()
     {
@@ -36,6 +48,9 @@ class Order extends Model
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
+    public static function count() {
+        return self::where('shop_id', )->count();
+    }
 
 //    public function refund_requests()
 //    {

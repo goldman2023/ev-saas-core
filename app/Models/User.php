@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Cart;
 use App\Notifications\EmailVerificationNotification;
@@ -19,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     use Billable;
     use LogsActivity;
+    use UploadTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -41,71 +43,67 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
     protected $fillable = [
         'name', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function isAdmin()
-    {
+    public function isAdmin() {
         return $this->user_type === 'admin';
     }
 
-    public function isSeller()
-    {
+    public function isSeller() {
         return $this->user_type === 'seller';
     }
 
-    public function isStaff()
-    {
+    public function isStaff() {
         return $this->user_type === 'staff';
     }
 
-    public function isCustomer()
-    {
+    public function isCustomer() {
         return $this->user_type === 'customer';
     }
 
     public function wishlists()
     {
-        return $this->hasMany(Wishlist::class);
+    return $this->hasMany(Wishlist::class);
     }
 
     public function customer()
     {
-        return $this->hasOne(Customer::class);
+    return $this->hasOne(Customer::class);
     }
 
     public function seller()
     {
-        return $this->hasOne(Seller::class);
+    return $this->hasOne(Seller::class);
     }
 
     public function affiliate_user()
     {
-        return $this->hasOne(AffiliateUser::class);
+    return $this->hasOne(AffiliateUser::class);
     }
 
     public function affiliate_withdraw_request()
     {
-        return $this->hasMany(AffiliateWithdrawRequest::class);
+    return $this->hasMany(AffiliateWithdrawRequest::class);
     }
 
     public function products()
     {
-        return $this->hasMany(Product::class);
+    return $this->hasMany(Product::class);
     }
 
     public function shop()
@@ -115,22 +113,22 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function staff()
     {
-        return $this->hasOne(Staff::class);
+    return $this->hasOne(Staff::class);
     }
 
     public function orders()
     {
-        return $this->hasMany(Order::class);
+    return $this->hasMany(Order::class);
     }
 
     public function wallets()
     {
-        return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
+    return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
     }
 
     public function club_point()
     {
-        return $this->hasOne(ClubPoint::class);
+    return $this->hasOne(ClubPoint::class);
     }
 
     public function customer_package()
@@ -178,21 +176,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Event::class);
     }
 
-    public function recently_viewed_products()
-    {
-        $data = Activity::where('subject_type', 'App\Models\Product')
-            ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
-            ->groupBy('subject_id')
-            ->get()->take(6);
 
-        return $data;
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'avatar', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+                'relation_type' => 'avatar', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+            ]
+        ];
     }
 
-    public function getAvatar()
-    {
-        /* TODO: Make avatar update function */
-        $logo = "https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png";
+    public function recently_viewed_products() {
+        $data = Activity::where('subject_type', 'App\Models\Product')
+        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+        ->groupBy('subject_id')
+        ->get();
 
-        return $logo;
+        return $data;
     }
 }

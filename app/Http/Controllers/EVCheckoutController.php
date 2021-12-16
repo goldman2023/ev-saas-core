@@ -126,7 +126,7 @@ class EVCheckoutController extends Controller
             $order->note = $data['note'];
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
-            // shipping_status - `pending` by default (this is changed manually in Order management pages by company staff)
+            // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)
             // viewed - is 0 by default (if it's not viewed by company stuff, it'll be marked as `New` in company dashboard)
             $order->save();
 
@@ -151,10 +151,10 @@ class EVCheckoutController extends Controller
                         $order_item->serial_numbers = $data; // reduceStockBy returns serial numbers in array if $item uses serials
                     }
 
-                    $order_item->base_price = $item->purchase_quantity * $item->base_price;
-                    $order_item->discount_amount = $item->purchase_quantity * ($item->base_price - $item->total_price);
-                    $order_item->subtotal_price = $item->purchase_quantity * $item->total_price; // TODO: This should use subtotal_price instead of total_price
-                    $order_item->total_price = $item->purchase_quantity * $item->total_price;
+                    $order_item->base_price = $item->base_price;
+                    $order_item->discount_amount = ($item->base_price - $item->total_price);
+                    $order_item->subtotal_price = $item->total_price; // TODO: This should use subtotal_price instead of total_price
+                    $order_item->total_price = $item->total_price;
                     $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
 
                     $order_item->save();

@@ -16,6 +16,7 @@ use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\EVWishlistController;
@@ -291,6 +292,8 @@ Route::middleware([
         /* TODO: Admin and seller only */
 
         // ---------------------------------------------------- //
+
+        /* Products */
         Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
         Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
         Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');
@@ -299,9 +302,22 @@ Route::middleware([
         Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
         Route::get('/ev-products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('ev-products.edit.stocks');
 
+        /* Orders */
+        Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
+        Route::get('/order/{id}', [EVOrderController::class, 'details'])->name('order.details');
+//        Route::resource('orders', 'EVOrderController')->parameters([
+//            'orders' => 'id',
+//        ])->except(['destroy']);
+        Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+        Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+        Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+        Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+
         Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
+
+
         // ---------------------------------------------------- //
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
@@ -315,13 +331,7 @@ Route::middleware([
 
         Route::get('invoice/{order_id}', 'InvoiceController@invoice_download')->name('invoice.download');
 
-        Route::resource('orders', 'OrderController')->parameters([
-            'orders' => 'id',
-        ])->except(['destroy']);
-        Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
-        Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
-        Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
-        Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+
 
         Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
         /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */

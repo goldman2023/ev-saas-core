@@ -19,7 +19,8 @@ class OrderItem extends Model
         'phone_numbers' => 'array',
         'serial_numbers' => 'array',
         'same_billing_shipping' => 'boolean',
-        'viewed' => 'boolean'
+        'viewed' => 'boolean',
+        'variant' => 'array',
     ];
 
     public function order()
