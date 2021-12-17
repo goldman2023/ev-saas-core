@@ -68,7 +68,7 @@
 
         // INITIALIZATION OF UNFOLD
         // =======================================================
-        var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
+        //var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
 
         $('.category-nav-element').each(function(i, el) {
             $(el).on('mouseover', function() {
