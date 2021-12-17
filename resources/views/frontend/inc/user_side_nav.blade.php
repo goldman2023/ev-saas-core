@@ -28,7 +28,6 @@
                 @auth
                 <div class="d-none d-lg-block text-center mb-5">
                     <div class="avatar avatar-xxl avatar-circle mb-3">
-
                         {{-- TODO: Make this store logo, but think that users can have this --}}
                         <img class="avatar-img" src="{{ Auth::user()->getUpload('avatar') ?: 'https://htmlstream.com/front/assets/img/160x160/img1.jpg' }}" alt="Image Description">
                         <img class="avatar-status avatar-lg-status" src="assets/svg/illustrations/top-vendor.svg" alt="Image Description" data-toggle="tooltip" data-placement="top" title="Verified user">
@@ -57,6 +56,7 @@
 
                         @if(!empty($section['items']))
                             <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 mb-4">
+
                                 @foreach($section['items'] as $item)
                                     <li class="nav-item">
                                         <a class="nav-link {{ $item['is_active'] }}" href="{{ $item['route'] }}">

@@ -33,6 +33,7 @@ class EVService
 
         // TODO: Think of a way to implement better vendor design pattern!
         $this->tenantStylePath = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path)); //$url;
+        $this->tenantStylePath = $url;
     }
 
     public function getThemeStyling() {
@@ -88,6 +89,13 @@ class EVService
                         'roles' => ['admin','seller'],
                     ],
                     [
+                        'label' => translate('Courses'),
+                        'icon' => 'heroicon-o-academic-cap',
+                        'route' => route('courses.index'),
+                        'is_active' => areActiveRoutes(['courses.index']),
+                        'roles' => ['admin','seller'],
+                    ],
+                    [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('orders.index'),
@@ -132,6 +140,13 @@ class EVService
                         'label' => translate('Website'),
                         'icon' => 'heroicon-o-qrcode',
                         'route' => route('ev.settings.domains'),
+                        'is_active' => areActiveRoutes(['ev.settings.domains']),
+                        'roles' => ['admin','seller'],
+                    ],
+                    [
+                        'label' => translate('Tutorials'),
+                        'icon' => 'heroicon-o-academic-cap',
+                        'route' => route('ev-tutorials.index'),
                         'is_active' => areActiveRoutes(['ev.settings.domains']),
                         'roles' => ['admin','seller'],
                     ]

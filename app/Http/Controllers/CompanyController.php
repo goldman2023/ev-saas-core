@@ -93,6 +93,8 @@ class CompanyController extends Controller
         }
 
         $shops = Shop::paginate(12);
+        $all = Shop::all();
+        // dd($all);
         return view('frontend.shop_listing', compact('shops', 'attributes', 'category_id', 'filters', 'title'));
     }
 

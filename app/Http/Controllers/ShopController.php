@@ -102,7 +102,6 @@ class ShopController extends Controller
 
 
         $user->save();
-        if (Shop::where('user_id', $user->id)->first() == null) {
             $shop = new Shop;
             $shop->name = $request->company_name;
             $shop->address = $request->address;
@@ -128,7 +127,6 @@ class ShopController extends Controller
                 $user->user_type == 'customer';
                 $user->save();
             }
-        }
 
         flash(translate('Sorry! Something went wrong.'))->error();
         return back();

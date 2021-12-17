@@ -2,6 +2,9 @@
 
 @section('content')
     <section id="archive-hero">
+        <!-- Hero Section -->
+        <x-default.category.category-hero></x-default.category.category-hero>
+  <!-- End Hero Section -->
     </section>
     <section>
         <div class="container">
@@ -15,11 +18,11 @@
                     </li>
                     @if (!isset($category_id))
                         <li class="breadcrumb-item fw-600  text-dark">
-                            <a class="text-reset" href="{{ route('search') }}">"{{ translate('All Industries') }}"</a>
+                            <a class="text-reset" href="{{ route('search') }}">"{{ translate('All Categories') }}"</a>
                         </li>
                     @else
                         <li class="breadcrumb-item opacity-50">
-                            <a class="text-reset" href="{{ route('search') }}">{{ translate('All Industries') }}</a>
+                            <a class="text-reset" href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
                     @endif
                     @if (isset($category_id))
@@ -64,9 +67,15 @@
                         <div class="mb-3">
                         </div>
                         @if (count($shops) > 0)
+                        <div class="row">
                             @foreach ($shops as $key => $shop)
+                            <div class="col-4">
                                 <x-company.company-card :company="$shop"></x-company.company-card>
-                            @endforeach
+
+                            </div>
+                        @endforeach
+                        </div>
+
                         @else
                             <x-empty-state-company-archive> </x-empty-state-company-archive>
                         @endif

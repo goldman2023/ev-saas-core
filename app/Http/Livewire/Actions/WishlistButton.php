@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Actions;
 
 use App\Models\Wishlist;
+use App\Notifications\WishlistItemAdded;
 use Livewire\Component;
 
 class WishlistButton extends Component
@@ -39,6 +40,10 @@ class WishlistButton extends Component
             $item->subject_id = $this->product->id;
             if(auth()->user()) {
                 $item->user_id = auth()->user()->id;
+                 /* TODO: I think notifications should be defined in events on Wishlist item created outside of controller/component logic
+                    so we can have clear entry points for all notificaitons */
+                $this->product->user->notify(new WishlistItemAdded($item));
+
             } else {
                 $item->session_id = session()->getId();
             }

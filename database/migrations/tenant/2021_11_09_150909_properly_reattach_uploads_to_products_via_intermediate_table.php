@@ -21,15 +21,22 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
                 $table->integer('order')->after('type')->default(0)->nullable();
             }
         });
+
+        Schema::table('uploads_content_relationships', function (Blueprint $table) {
+            if(Schema::hasColumn('uploads_content_relationships', 'type')) {
+                $table->renameColumn('type', 'relation_type');
+            }
+        });
+
         /* TODO: Fix when creating new tenant and running migrations on the first initialization */
         // Reattach uploads from `products` columns to uploads_content_relationships table
-        /* $products = Product::get();
+        $products = Product::get();
         $uploads = [];
         foreach($products as $product) {
 
             if(!empty($product->thumbnail_img) && Upload::where('id', $product->thumbnail_img)->exists()) {
-                $product->uploads()->attach($product->thumbnail_img, ['type' => 'thumbnail']);
-                $product->uploads()->attach($product->thumbnail_img, ['type' => 'meta_img']);
+                $product->uploads()->attach($product->thumbnail_img, ['relation_type' => 'thumbnail']);
+                $product->uploads()->attach($product->thumbnail_img, ['relation_type' => 'meta_img']);
             }
 
             $gallery = collect(explode(',', $product->photos))->filter(function($item, $key) {
@@ -37,7 +44,7 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
             })->map(function ($item, $key) {
                 return [
                     'id' => (int) $item,
-                    'type' => 'gallery',
+                    'relation_type' => 'gallery',
                     'order' => $key
                 ];
             })->keyBy('id')->forget('id')->transform(function ($item, $key) {
@@ -52,9 +59,9 @@ class ProperlyReattachUploadsToProductsViaIntermediateTable extends Migration
             }
 
             if(!empty($product->pdf) && Upload::where('id', $product->pdf)->exists()) {
-                $product->uploads()->attach($product->pdf, ['type' => 'pdf']);
+                $product->uploads()->attach($product->pdf, ['relation_type' => 'pdf']);
             }
-        } */
+        }
 
         // Remove unnecessary columns from `products` (thumbnail_img, photos, meta_img, pdf)
         Schema::table('products', function (Blueprint $table) {

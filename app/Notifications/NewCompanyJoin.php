@@ -79,7 +79,7 @@ class NewCompanyJoin extends Notification
         return [
             "subject_type" => "User",
             "subject_id" => $this->user->id,
-            "message" => $this->user->shop->name . " has been joined to B2BWood Club."
+            "message" => $this->user->email . " has joined to" . get_site_name()
         ];
     }
 
@@ -92,6 +92,6 @@ class NewCompanyJoin extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-                    ->content($this->user->shop->name . " has been joined to" . get_site_name());
+                    ->content($this->user->email . " has joined to" . get_site_name());
     }
 }

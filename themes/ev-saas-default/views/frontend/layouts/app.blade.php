@@ -91,7 +91,9 @@
         <x-default.headers.header>
         </x-default.headers.header>
 
-        <div class="space-top-lg-4 space-top-3">
+        <div class="space-top-lg-3 space-top-3">
+            {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
+
             @yield('content')
         </div>
 
@@ -101,6 +103,10 @@
         </x-default.footers.footer>
 
     </div>
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
+
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
 
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
@@ -138,9 +144,6 @@
             $('.js-slick-carousel').each(function() {
                 var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
             });
-
-            var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
-
             $(document).on('ready', function () {
     // INITIALIZATION OF LEAFLET
     // =======================================================

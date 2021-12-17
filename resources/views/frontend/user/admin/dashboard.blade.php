@@ -3,9 +3,7 @@
 @section('panel_content')
 
 
-<section>
-  <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
-</section>
+
 
 <section>
     <div class="row">
@@ -142,17 +140,6 @@
 </section>
 
 <section>
-    <div class="row">
-        <div class="col-sm-6">
-
-        </div>
-    </div>
+    <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
 </section>
-
-
-
-
-
-
-
 @endsection

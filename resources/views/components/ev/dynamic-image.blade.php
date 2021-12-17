@@ -13,6 +13,7 @@
 'src' => $src,
 'href' => $href
 ])
+<x-tenant.system.image :image="$src->value" :dataSrcSet="$dataSrcSet"></x-tenant.system.image>
 
 @else
 <x-tenant.system.image :image="$src->value" :dataSrcSet="$dataSrcSet"></x-tenant.system.image>

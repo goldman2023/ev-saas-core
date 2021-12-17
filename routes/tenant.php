@@ -97,6 +97,9 @@ Route::middleware([
 
 
     Route::resource('shops', 'ShopController');
+    Route::resource('courses', 'CoursesController');
+    Route::resource('ev-social-commerce', 'SocialCommerceController');
+    Route::resource('ev-tutorials', 'TutorialController');
 
     Route::get('/business/register', 'ShopController@create')->name('business.register');
 
@@ -170,6 +173,7 @@ Route::middleware([
 
     // Shop pages
     Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
+    Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
@@ -272,6 +276,9 @@ Route::middleware([
         Route::get('/', 'HomeController@dashboard')->name('dashboard');
 
         /* TODO : Admin only */
+        Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
+        Route::post('/ev-design-settings', [EVSaaSController::class, 'design_settings_store'])->name('ev.settings.design.store');
+        Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
 
         /* Leads Management - BY EIM */
         Route::get('leads/success', 'LeadController@success')->name('leads.success');
@@ -442,10 +449,10 @@ Route::middleware([
     Route::get('/feed/all', 'Integrations\GetStreamControler@index');
 
 
-//   Route::resource('addresses', 'AddressController');
-//   Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-//   Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-//   Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
+    Route::resource('addresses', 'AddressController');
+    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');

@@ -376,6 +376,7 @@ class ProductForm extends Component
         $product_translation->save();
     }
 
+    /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
         $product_stock->sku = $this->product->temp_sku;
