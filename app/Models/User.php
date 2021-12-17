@@ -188,6 +188,11 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function getAvatar() {
+        /* TODO: Change this to actual avatar */
+        return "https://images.ev-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/5b44c8f1-449e-4c53-99c8-c0d5830d6bb8/1639386850_146116463_10214744684528961_7086910719888382018_n.jpeg@webp";
+    }
+
     public function recently_viewed_products() {
         $data = Activity::where('subject_type', 'App\Models\Product')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
