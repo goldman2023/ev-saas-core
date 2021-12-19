@@ -489,18 +489,10 @@
 
     <script>
         $(window).on('load', function () {
-            // INITIALIZATION OF DATATABLES
-            // =======================================================
-
             $('.js-select2-custom').each(function () {
                 var select2 = $.HSCore.components.HSSelect2.init($(this));
             });
 
-            // INITIALIZATION OF UNFOLD
-            // =======================================================
-            $('.js-hs-unfold-invoker').each(function () {
-                var unfold = new HSUnfold($(this)).init();
-            });
         });
     </script>
 @endpush

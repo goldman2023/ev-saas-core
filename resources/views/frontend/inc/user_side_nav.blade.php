@@ -28,10 +28,9 @@
                 @auth
                 <div class="d-none d-lg-block text-center mb-5">
                     <div class="avatar avatar-xxl avatar-circle mb-3">
-
                         {{-- TODO: Make this store logo, but think that users can have this --}}
-                        <img class="avatar-img" src="{{ Auth::user()->avatar ?: 'https://htmlstream.com/front/assets/img/160x160/img1.jpg' }}" alt="Image Description">
-                        <img class="avatar-status avatar-lg-status" src="/assets/svg/illustrations/top-vendor.svg" alt="Image Description" data-toggle="tooltip" data-placement="top" title="Verified user">
+                        <img class="avatar-img" src="{{ Auth::user()->getUpload('avatar') ?: 'https://htmlstream.com/front/assets/img/160x160/img1.jpg' }}" alt="Image Description">
+                        <img class="avatar-status avatar-lg-status" src="assets/svg/illustrations/top-vendor.svg" alt="Image Description" data-toggle="tooltip" data-placement="top" title="Verified user">
                     </div>
 
                     {{-- TODO: Show Business info here instead of user info! (for both single-vendor and multi-vendor apps) --}}
