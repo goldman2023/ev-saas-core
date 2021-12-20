@@ -16,6 +16,16 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.design-settings');
     }
 
+    public function design_settings_store(Request $request)
+    {
+        $domain = tenant()->domains()->first();
+        $domain->theme = $request->theme;
+        $domain->save();
+
+
+        return redirect()->back();
+    }
+
     public function domain_settings()
     {
         return view('frontend.dashboard.settings.domain-settings');
