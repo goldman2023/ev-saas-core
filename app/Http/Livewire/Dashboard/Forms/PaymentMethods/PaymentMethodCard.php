@@ -41,12 +41,12 @@ class PaymentMethodCard extends Component
 
     protected function messages()
     {
-        $rules = [
+        $messages = [
             'paymentMethod.enabled.boolean' => translate('Payment methods can be either enabled or disabled'),
             'paymentMethod.gateway.in' => translate('Only available gateways for now are: '.implode(',', PaymentMethodUniversal::$available_gateways)),
         ];
 
-        return array_merge($rules, $this->paymentMethod->getPaymentMethodValidationMessages('paymentMethod'));
+        return array_merge($messages, $this->paymentMethod->getPaymentMethodValidationMessages('paymentMethod'));
     }
 
     /**

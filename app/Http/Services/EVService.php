@@ -271,6 +271,20 @@ class EVService
                         'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
                         'roles' => ['admin', 'seller'],
                     ],
+                     [
+                         'label' => translate('Payment settings'),
+                         'icon' => 'heroicon-o-cash',
+                         'route' => route('ev.settings.payment_methods'),
+                         'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
+                         'roles' => ['admin','seller'],
+                     ],
+                    [
+                        'label' => translate('Users settings'),
+                        'icon' => 'heroicon-s-user-group',
+                        'route' => route('ev.settings.users_settings'),
+                        'is_active' => areActiveRoutes(['ev.settings.users_settings']),
+                        'roles' => ['admin','seller'],
+                    ],
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',

@@ -1,4 +1,4 @@
-window.initPaymentMethodForm = function(event) {
+window.initUserSettingsForm = function(event) {
     // INITIALIZATION OF UNFOLD
     // =======================================================
     var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
@@ -43,5 +43,5 @@ window.initPaymentMethodForm = function(event) {
 }
 
 
-$(window).on('load', window.initPaymentMethodForm);
-$(window).on('initPaymentMethodForm', window.initPaymentMethodForm);
+$(window).on('load', window.initUserSettingsForm);
+$(window).on('initUserSettingsForm', window.initUserSettingsForm);

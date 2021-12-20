@@ -6,8 +6,8 @@ use App\Traits\UploadTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
-use App\Models\Cart;
 use App\Notifications\EmailVerificationNotification;
 use Spark\Billable;
 use Spatie\Activitylog\Models\Activity;
@@ -16,6 +16,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasApiTokens;
+    use HasRoles;
     use HasApiTokens;
     use Notifiable;
     use Billable;
@@ -24,7 +25,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
+        'banned' => 'boolean'
     ];
+
+    public static array $user_types = ['admin','moderator','seller','staff'];
+    public static array $tenant_user_types = ['admin','moderator'];
+    public static array $vendor_user_types = ['seller','staff'];
 
     public function sendEmailVerificationNotification()
     {
@@ -188,9 +194,16 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function getAvatar() {
-        /* TODO: Change this to actual avatar */
-        return "https://images.ev-saas.com/insecure/fill/350/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/5b44c8f1-449e-4c53-99c8-c0d5830d6bb8/1639386850_146116463_10214744684528961_7086910719888382018_n.jpeg@webp";
+    public function getAvatar(array $options = []) {
+        return $this->getUpload('avatar', $options);
+    }
+
+    public static function getAvailableUserTypes($only_vendor_types = true) {
+        // Vendor types ar: Seller and Staff. Admin and moderator are tenant user types!
+        return collect($only_vendor_types ? self::$vendor_user_types : self::$user_types)
+            ->keyBy(fn($item, $key) => $item)
+            ->map(fn($item) => ucfirst($item))
+            ->toArray();
     }
 
     public function recently_viewed_products() {

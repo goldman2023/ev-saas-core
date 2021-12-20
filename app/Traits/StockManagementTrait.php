@@ -30,14 +30,14 @@ trait StockManagementTrait
                 $model->load('stock');
             }
 
-            if(empty($model->stock)) {
-                $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
-                $product_stock->sku = $model->slug.'-001';
-                $product_stock->qty = 1;
-                $product_stock->low_stock_qty = 1;
-                $product_stock->save();
-                $model->load('stock');
-            }
+//            if(empty($model->stock)) {
+//                $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
+//                $product_stock->sku = $model->hasMain() ? $model->main->slug.'-001' : $model->slug.'-001';
+//                $product_stock->qty = 1;
+//                $product_stock->low_stock_qty = 1;
+//                $product_stock->save();
+//                $model->load('stock');
+//            }
 
             if(!isset($model->serial_numbers)) {
                 $model->load('serial_numbers');

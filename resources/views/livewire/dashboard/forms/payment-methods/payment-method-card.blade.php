@@ -12,7 +12,7 @@
                           wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
     <div class="card-header d-flex align-items-center justify-content-start pointer"  wire:loading.class="opacity-3 prevent-pointer-events" @click="show = !show">
-        @svg('heroicon-o-chevron-right', ['class' => 'square-16 mr-2'])
+        @svg('heroicon-o-chevron-right', ['class' => 'square-16 mr-2', ':style' => "show && {transform: 'rotate(90deg)'}"])
         <h4 class="h5 mb-0">{{ $paymentMethod->name }}</h4>
 
         <span class="badge badge-soft-success d-flex align-items-center px-2 py-1 ml-3 text-12 text-success"

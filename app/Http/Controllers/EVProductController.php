@@ -6,6 +6,7 @@ use EVS;
 use App\Models\Product;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
 
 class EVProductController extends Controller
