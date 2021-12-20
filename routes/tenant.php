@@ -276,9 +276,6 @@ Route::middleware([
         Route::get('/', 'HomeController@dashboard')->name('dashboard');
 
         /* TODO : Admin only */
-        Route::get('/ev-design-settings', [EVSaaSController::class, 'design_settings'])->name('ev.settings.design');
-        Route::post('/ev-design-settings', [EVSaaSController::class, 'design_settings_store'])->name('ev.settings.design.store');
-        Route::get('/domain-settings', [EVSaaSController::class, 'domain_settings'])->name('ev.settings.domains');
 
         /* Leads Management - BY EIM */
         Route::get('leads/success', 'LeadController@success')->name('leads.success');
@@ -316,7 +313,7 @@ Route::middleware([
         Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
-
+        Route::get('/users-settings', [EVAccountController::class, 'users_settings'])->name('ev.settings.users_settings');
 
         // ---------------------------------------------------- //
 
@@ -449,10 +446,10 @@ Route::middleware([
     Route::get('/feed/all', 'Integrations\GetStreamControler@index');
 
 
-    Route::resource('addresses', 'AddressController');
-    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
+//    Route::resource('addresses', 'AddressController');
+//    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
+//    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
+//    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');

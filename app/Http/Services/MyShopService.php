@@ -12,9 +12,6 @@ use Session;
 use EVS;
 use FX;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
 class MyShopService
 {
     protected $shop = null;

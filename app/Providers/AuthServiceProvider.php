@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Services\PermissionsService;
+use App\Models\Product;
+use App\Policies\ProductPolicy;
+use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
    * @var array
    */
   protected $policies = [
-    // 'App\Model' => 'App\Policies\ModelPolicy',
+     Product::class => ProductPolicy::class,
   ];
 
   /**
@@ -25,6 +29,15 @@ class AuthServiceProvider extends ServiceProvider
   {
     $this->registerPolicies();
 
-    //
+      // Implicitly grant "Super Admin" role all permissions
+      // This works in the app by using gate-related functions like auth()->user->can() and @can()
+//      Gate::before(function ($user, $ability) {
+//          return $user->hasRole('Super Admin') ? true : null;
+//      });
+
+      // Register Permissions Service Singleton
+      $this->app->singleton('permissions', function() {
+          return new PermissionsService(fn () => Container::getInstance());
+      });
   }
 }

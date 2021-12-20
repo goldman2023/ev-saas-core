@@ -59,6 +59,7 @@
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-backup": "^6.16",
         "spatie/laravel-newsletter": "^4.10",
+        "spatie/laravel-permission": "^5.4",
         "spatie/laravel-sluggable": "^2.6",
         "spatie/laravel-validation-rules": "^3.1",
         "spatie/once": "^3.0",
