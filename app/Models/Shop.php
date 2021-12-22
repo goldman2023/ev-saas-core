@@ -7,6 +7,7 @@ use App\Traits\AttributeTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\ReviewTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\PermalinkTrait;
 
 /**
  * App\Models\Shop
@@ -136,7 +137,9 @@ class Shop extends Model
         return $website;
     }
 
-    public function getPermalink() {
+    public function getPermalinkAttribute() {
+        /* TODO: Make this consistent with naming convention
+        Overiding for custom route names */
         return route('shop.visit', $this->slug);
     }
 
