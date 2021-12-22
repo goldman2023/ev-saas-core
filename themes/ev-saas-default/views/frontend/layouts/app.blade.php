@@ -124,26 +124,23 @@
 
     @livewireScripts
 
-    {{-- TODO: Include this properly --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
-
     @stack('footer_scripts')
 
     @include('frontend.layouts.partials.app-js')
 
     {{-- TODO: Move this to some logical place --}}
-    <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
     <script src="{{ static_asset('front/js/hs.leaflet.js') }}"></script>
 
     <!-- JS Plugins Init. -->
+
     <script>
         $(function() {
-            // INITIALIZATION OF SLICK CAROUSEL
             // =======================================================
-            $('.js-slick-carousel').each(function() {
-                var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
+            $('.js-hs-unfold-invoker').each(function () {
+                var unfold = new HSUnfold($(this)).init();
             });
+
+
             $(document).on('ready', function () {
     // INITIALIZATION OF LEAFLET
     // =======================================================

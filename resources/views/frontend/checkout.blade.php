@@ -574,10 +574,12 @@
                                                     <dd class="col-sm-6 text-right mb-0 "><strong>{{ $originalPrice['display'] }}</strong></dd>
                                                 </dl>
 
+                                                @isset($discountedAmount)
                                                 <dl class="row mb-1">
                                                     <dt class="col-sm-6">{{ translate('Discount') }}</dt>
                                                     <dd class="col-sm-6 text-right text-success mb-0"><strong>-{{ $discountedAmount['display'] }}</strong></dd>
                                                 </dl>
+                                                @endisset
 
                                                 {{-- TODO: Add Shipping Cost (and shipping  and VAT cost. Is discount calculated when VAT is included in price or not? --}}
 

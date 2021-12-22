@@ -178,7 +178,7 @@ class EVCheckoutController extends Controller
         // Full Cart reset (with resetting session cart data)
         \CartService::fullCartReset();
 
-        return redirect()->route('checkout.order-received', $order);
+        return redirect()->route('checkout.order.received', $order);
     }
 
     public function orderReceived(Request $request, Order $order)

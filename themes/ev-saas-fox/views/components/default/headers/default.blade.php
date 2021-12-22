@@ -65,7 +65,7 @@
                         @endif
                         <!-- End Language -->
                     </div>
-                    <div class="ml-4">
+                    <div class="ml-4 d-none">
                         {{-- Currency --}}
                         @if (get_setting('show_currency_switcher') == 'on')
                         @php
@@ -285,7 +285,7 @@
 
         </div>
     </div>
-    <div class="sub-header">
+    <div class="sub-header d-none d-sm-block">
         <div class="container">
             <nav class="navbar navbar-expand-lg">
                 <!-- Responsive Toggle Button -->

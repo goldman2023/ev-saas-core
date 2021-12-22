@@ -7,7 +7,7 @@
         </h5>
     </div>
     <div class="card-body">
-        <div class="row">
+        <div class="row flex-nowrap ev-horizontal-slider" style="overflow: scroll;">
             @foreach($products as $productActivity)
 
             @php
@@ -15,7 +15,7 @@
             @endphp
 
             @if($product)
-            <div class="col-4 mb-3">
+            <div class="col-10 col-sm-4 mb-3">
                 <x-default.products.cards.product-card :product="$product"
                     style="{{ ev_dynamic_translate('product-card', true)->value }}">
                 </x-default.products.cards.product-card>

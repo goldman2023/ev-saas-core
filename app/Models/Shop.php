@@ -136,6 +136,10 @@ class Shop extends Model
         return $website;
     }
 
+    public function getPermalink() {
+        return route('shop.visit', $this->slug);
+    }
+
     public function get_company_logo()
     {
 

@@ -30,7 +30,8 @@
     display:block;
     font-weight:500;
     font-size:0.8rem;
-    color:#adb5bd
+    color:#adb5bd;
+    line-height: 1;
 }
 .nav-bottom .nav-link.active{
     color:#0d6efd
