@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\PaymentMethodUniversal;
 use CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -84,6 +86,8 @@ class EVCheckoutController extends Controller
 
         DB::beginTransaction();
 
+        $payment_method = PaymentMethodUniversal::where('gateway', $data['payment_method'])->first();
+
         try {
             // Save Order and order items
             $order = new Order();
@@ -122,7 +126,9 @@ class EVCheckoutController extends Controller
             $order->shipping_cost = 0;
             $order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
 
-            $order->payment_method = $data['payment_method'];
+            $order->payment_method_type = PaymentMethodUniversal::class;
+            $order->payment_method_id = $payment_method->id ?? null; // TODO: Change this to use ID
+
             $order->note = $data['note'];
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
@@ -171,14 +177,14 @@ class EVCheckoutController extends Controller
         // TODO: Check if newsletter is checked and based on that add email to mailing list (CRM)
         // $subscribe_newsletter
 
-//        if($data['payment_method'] === 'wire_transfer') {
-//            // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-//        }
 
         // Full Cart reset (with resetting session cart data)
         \CartService::fullCartReset();
 
-        return redirect()->route('checkout.order-received', $order);
+        // Depending on payment method, do actions
+        $this->executePayment($request, $order);
+
+        return redirect()->route('checkout.order.received', $order);
     }
 
     public function orderReceived(Request $request, Order $order)
@@ -190,5 +196,16 @@ class EVCheckoutController extends Controller
         }
 
         return view('frontend.order-received', compact('order'));
+    }
+
+    public function executePayment(Request $request, $order_id) {
+        $order = Order::find($order_id);
+
+        if($order->payment_method->gateway === 'wire_transfer') {
+            // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
+        } else if($order->payment_method->gateway === 'paysera') {
+            $paysera = new PayseraGateway(order: $order, payment_method: $order->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
+            $paysera->pay();
+        }
     }
 }

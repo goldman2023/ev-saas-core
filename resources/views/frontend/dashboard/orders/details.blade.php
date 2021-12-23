@@ -75,19 +75,13 @@
 
                             <div id="moreOptionsDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu mt-1 hs-unfold-hidden hs-unfold-content-initialized hs-unfold-css-animation animated" data-hs-target-height="195.984" data-hs-unfold-content="" data-hs-unfold-content-animation-in="slideInUp" data-hs-unfold-content-animation-out="fadeOut" style="animation-duration: 300ms;">
                                 <a class="dropdown-item" href="#">
-                                    <i class="tio-copy dropdown-item-icon"></i> Duplicate
+                                    <i class="tio-copy dropdown-item-icon"></i> {{ translate('Duplicate') }}
                                 </a>
                                 <a class="dropdown-item" href="#">
-                                    <i class="tio-clear dropdown-item-icon"></i> Cancel order
+                                    <i class="tio-clear dropdown-item-icon"></i> {{ translate('Cancel order') }}
                                 </a>
                                 <a class="dropdown-item" href="#">
-                                    <i class="tio-archive dropdown-item-icon"></i> Archive
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="tio-visible dropdown-item-icon"></i> View order status page
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="tio-edit dropdown-item-icon"></i> Edit order
+                                    <i class="tio-archive dropdown-item-icon"></i> {{ translate('Archive') }}
                                 </a>
                             </div>
                         </div>
@@ -315,13 +309,19 @@
                             <h5>{{ translate('Payment method') }}</h5>
                         </div>
 
-                        <div class="d-flex flex-column text-14">
+                        <div class="d-flex flex-column text-14 justify-content-start">
                             <div>
-                                <span>{{ translate('Method') }}:</span> <strong>{{ ucfirst(\Str::replace('_', ' ', $order->payment_method)) }}</strong>
+                                <span>{{ translate('Method') }}:</span> <strong>{{ $order->payment_method->name }}</strong>
                             </div>
-{{--                            <div>--}}
-{{--                                <span>{{ translate('State') }}:</span> <strong>{{ $order->billing_state }}</strong>--}}
-{{--                            </div>--}}
+                            @if($order->payment_status === 'unpaid')
+                                <form action="{{ route('checkout.execute.payment', ['id' => $order->id]) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary btn-xs mt-2 mr-auto">
+                                        {{ translate('Pay now') }}
+                                    </button>
+                                </form>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -489,9 +489,12 @@
 
     <script>
         $(window).on('load', function () {
+            var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
+
             $('.js-select2-custom').each(function () {
                 var select2 = $.HSCore.components.HSSelect2.init($(this));
             });
+
 
         });
     </script>

@@ -8,20 +8,74 @@ use App\Models\TenantSetting;
 use App\Models\User;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Session;
 use EVS;
 use FX;
 
 class PermissionsService
 {
+    // This class is the main source of truth for all permissions and roles across the whole App!
+    // IMPORTANT: After adding/removing/changing permissions, run `php artisan cache:forget spatie.permission.cache`
+    protected $permissions;
 
     // Create a script that will feed the DB permissions table with all these permissions. Each time script is called, it should NOT update existing permissions, just add new!
-    public function __construct($app = null)
+    public function __construct($app = null, $init = true)
     {
+        if($init) {
+            $this->permissions = app(config('permission.models.permission'))->select(['id','name','guard_name'])->get();
+        }
 
     }
 
-    public function getAllPermissions() {
+    public function getPermissions() {
+        return $this->permissions;
+    }
+
+    public function getUserPermissions(User|int|null $user, $key_by = 'name') {
+        if(empty($user))
+            return collect();
+
+        if(is_int($user))
+            $user = User::find($user);
+
+        $user_permissions = DB::table(config('permission.table_names.model_has_permissions'))
+                                ->where('model_id', '=', $user->id)
+                                ->where('model_type', '=', $user::class)
+                                ->get()->keyBy('permission_id')->toArray();
+
+        return collect($this->permissions->toArray())
+                ->map(fn($item) => array_merge($item, ['selected' => isset($user_permissions[$item['id']])]))->keyBy($key_by);
+    }
+
+    public function getRoles($only_role_names = false, $from_db = true) {
+        if($from_db) {
+            $data = app(config('permission.models.role'))->with('permissions')->get();
+
+            if($only_role_names) {
+                return $data->pluck('name');
+            }
+        } else {
+            $data = collect([
+                'Owner' => $this->getAllPossiblePermissions(),
+                'Editor' => array_merge($this->getProductPermissions(), $this->getBlogPermissions(), $this->getReviewsPermissions(), $this->getOrdersPermissions()),
+                'HR' => array_merge($this->getStaffPermissions(), $this->getReviewsPermissions(), [
+                    'view_shop_data' => 'View shop data',
+                    'view_shop_settings' => 'View shop settings',
+                    'browse_shop_domains' => 'Browse shop domains',
+                ]),
+                // More roles should be added later, like: Marketer, Manager of XZY, {whatever} etc.
+            ]);
+
+            if($only_role_names) {
+                return $data->keys();
+            }
+        }
+
+        return $data;
+    }
+
+    public function getAllPossiblePermissions() {
         return collect(array_merge(
             $this->getShopPermissions(),
             $this->getStaffPermissions(),
@@ -59,7 +113,8 @@ class PermissionsService
 
     public function getProductPermissions() {
         return [
-            'see_all_products' => 'See all shop\'s products',
+            'crud_others_products' => 'Allow managing other users products',
+            'browse_products' => 'Browse products',
             'view_product' => 'View product',
             'update_product' => 'Update product',
             'insert_product' => 'Create product',
@@ -88,6 +143,7 @@ class PermissionsService
 
     public function getBlogPermissions() {
         return [
+            'crud_others_posts' => 'Allow managing other users posts',
             'browse_posts' => 'Browse posts',
             'view_post' => 'View post',
             'insert_post' => 'Create post',
