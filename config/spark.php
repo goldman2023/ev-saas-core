@@ -19,7 +19,7 @@ return [
     |
     */
 
-    'path' => 'dashboard/subscriptions',
+    'path' => 'spark',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,8 +34,8 @@ return [
 
     'middleware' => [
         'web',
-        InitializeTenancyByDomainAndVendorDomains::class,
-        VendorMode::class,
+        'universal',
+        InitializeTenancyByDomain::class, // or whatever tenancy middleware you use
     ],
 
     /*
@@ -82,7 +82,7 @@ return [
     'features' => [
         Features::billingAddressCollection(),
         Features::mustAcceptTerms(),
-        Features::euVatCollection(['home-country' => 'BE']),
+        Features::euVatCollection(['home-country' => 'LT']),
         Features::receiptEmails(['custom-addresses' => true]),
         Features::paymentNotificationEmails(),
     ],
