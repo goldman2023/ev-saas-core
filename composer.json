@@ -88,7 +88,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Http/Helpers.php"
+            "app/Http/Helpers.php",
+            "vendor/webtopay/libwebtopay/WebToPay.php"
         ]
     },
     "autoload-dev": {

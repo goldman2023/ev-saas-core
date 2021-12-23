@@ -31,6 +31,7 @@ use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
 use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
+use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
@@ -317,6 +318,12 @@ Route::middleware([
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
         Route::get('/users-settings', [EVAccountController::class, 'users_settings'])->name('ev.settings.users_settings');
 
+        // Payment Methods callback routes
+        Route::get('/checkout/paysera/accepted/{id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
+        Route::get('/checkout/paysera/canceled/{id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
+        Route::get('/checkout/paysera/callback/{id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
+
+        Route::post('/checkout/execute/payment/{id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
         // ---------------------------------------------------- //
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');

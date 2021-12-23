@@ -51,6 +51,8 @@ class EVAccountController extends Controller
         // Basically, if user has permissions to change other users permissions
 
         $users = MyShop::getShop()->users;
-        return view('frontend.dashboard.settings.users-settings', compact('users'));
+        $all_roles = \Permissions::getRoles(from_db: true);
+
+        return view('frontend.dashboard.settings.users-settings', compact('users', 'all_roles'));
     }
 }

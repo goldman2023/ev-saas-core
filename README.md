@@ -52,6 +52,15 @@ All Central app routes should be located in `routes/web.php`
 In config you need to define `FILESYSTEM_DRIVER` to `s3` , but it's actually using DigitalOcean Spaces
 Access Details can be found in `.env.example` file
 
+# User Permissions
+All permissions are added inside `App\Http\Services\PermissionsService.php`.
+After permissions are added to the service class, they have to be added to the DB using:
+- `php artisan permissions:populate --tenant_id={tenant_id}`
+
+IMPORTANT: After adding/removing/changing permissions, run: 
+- `php artisan cache:forget spatie.permission.cache`
+- `php artisan cache:clear`
+
 # Dynamic Components for Label/Image/Button
 
 -   Labels

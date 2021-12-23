@@ -318,4 +318,5 @@ trait IsPaymentMethod
             'authorize' => 'Authorize'
         ];
     }
+
 }

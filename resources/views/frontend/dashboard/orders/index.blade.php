@@ -100,6 +100,7 @@
                     <th>{{ translate('Date') }}</th>
                     <th>{{ translate('Customer') }}</th>
                     <th>{{ translate('Payment status') }}</th>
+                    <th>{{ translate('Shipping status') }}</th>
 {{--                    <th>{{ translate('Payment method') }}</th>--}}
                     <th>{{ translate('Total') }}</th>
                     <th>{{ translate('Actions') }}</th>
@@ -126,12 +127,31 @@
                                   <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($order->payment_status) }}
                                 </span>
                             @elseif($order->payment_status === App\Models\Order::PAYMENT_STATUS_PENDING)
-                                <span class="badge badge-soft-warning">
-                                  <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($order->payment_status) }}
+                                <span class="badge badge-soft-info">
+                                  <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($order->payment_status) }}
                                 </span>
                             @elseif($order->payment_status === App\Models\Order::PAYMENT_STATUS_UNPAID)
                                 <span class="badge badge-soft-danger">
                                   <span class="legend-indicator bg-danger mr-1"></span> {{ ucfirst($order->payment_status) }}
+                                </span>
+                            @elseif($order->payment_status === App\Models\Order::PAYMENT_STATUS_CANCELED)
+                                <span class="badge badge-soft-warning">
+                                  <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($order->payment_status) }}
+                                </span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($order->shipping_status === App\Models\Order::SHIPPING_STATUS_DELIVERED)
+                                <span class="badge badge-soft-success">
+                                  <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($order->shipping_status) }}
+                                </span>
+                            @elseif($order->shipping_status === App\Models\Order::SHIPPING_STATUS_SENT)
+                                <span class="badge badge-soft-warning">
+                                  <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($order->shipping_status) }}
+                                </span>
+                            @elseif($order->shipping_status === App\Models\Order::SHIPPING_STATUS_NOT_SENT)
+                                <span class="badge badge-soft-danger">
+                                  <span class="legend-indicator bg-danger mr-1"></span> {{ \Str::replace('_', ' ', ucfirst($order->shipping_status)) }}
                                 </span>
                             @endif
                         </td>

@@ -20,13 +20,17 @@ class Order extends Model
         'phone_numbers' => 'array',
         'same_billing_shipping' => 'boolean',
         'viewed' => 'boolean',
+        'meta' => 'array',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
 
-    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid'];
+    protected $with = ['payment_method'];
+
+    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
     public const PAYMENT_STATUS_UNPAID = 'unpaid';
     public const PAYMENT_STATUS_PENDING = 'pending';
+    public const PAYMENT_STATUS_CANCELED = 'canceled';
     public const PAYMENT_STATUS_PAID = 'paid';
 
     public const SHIPPING_STATUS = ['not_sent', 'sent', 'delivered']; // TODO: Should consider more statuses!
@@ -46,6 +50,10 @@ class Order extends Model
 
     public function order_items() {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
+    }
+
+    public function payment_method() {
+        return $this->morphTo('payment_method');
     }
 
     public static function count() {
