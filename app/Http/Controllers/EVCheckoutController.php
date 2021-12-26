@@ -182,7 +182,7 @@ class EVCheckoutController extends Controller
         \CartService::fullCartReset();
 
         // Depending on payment method, do actions
-        $this->executePayment($request, $order);
+        $this->executePayment($request, $order->id);
 
         return redirect()->route('checkout.order.received', $order);
     }
