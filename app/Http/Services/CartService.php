@@ -20,10 +20,9 @@ class CartService
     public function __construct($app)
     {
         if(!Session::has('cart') || count(Session::get('cart')) <= 0) {
-            Session::put('cart', collect([]));
+            Session::put('cart', collect());
         }
 
-        $this->resetCart();
         $this->refresh();
     }
 
@@ -221,7 +220,8 @@ class CartService
     }
 
     public function fullCartReset() {
-        Session::put('cart', collect([]));
+        Session::put('cart', collect());
+
         $this->resetCart();
     }
 
