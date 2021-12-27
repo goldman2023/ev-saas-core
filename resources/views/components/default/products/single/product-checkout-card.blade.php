@@ -5,7 +5,9 @@
             processing: false,
             processing_variation_change: false,
             qty: 0,
-            model_id: {{  ($product->hasVariations()) ? $first_variation->id : $product->id }},
+            current_stock: {{ ($product->hasVariations()) ? $first_variation->current_stock : $product->current_stock }},
+            is_low_stock: {{ ($product->hasVariations()) ? ($first_variation->isLowStock() ? 'true':'false') : ($product->isLowStock() ? 'true':'false') }},
+            model_id: {{ ($product->hasVariations()) ? $first_variation->id : $product->id }},
             model_type: '{!!  ($product->hasVariations()) ? addslashes($first_variation::class) : addslashes($product::class) !!}',
             total_price: {{ ($product->hasVariations()) ? $first_variation->total_price : $product->total_price }},
             total_price_display: '{{ ($product->hasVariations()) ? $first_variation->getTotalPrice(true) : $product->getTotalPrice(true) }}',
@@ -22,6 +24,8 @@
         @if($product->hasVariations())
             @variation-changed.window="
                 qty = 0;
+                current_stock = $event.detail.current_stock;
+                is_low_stock = $event.detail.is_low_stock;
                 model_id = $event.detail.model_id;
                 model_type = $event.detail.model_type;
                 total_price = $event.detail.total_price;
@@ -30,6 +34,7 @@
                 base_price_display = $event.detail.base_price_display;
             "
         @endif
+
 >
     <x-ev.loaders.spinner class="absolute-center z-10"
                           x-show="processing_variation_change"
@@ -37,7 +42,7 @@
     </x-ev.loaders.spinner>
 
     <div class="card-body" :class="{'opacity-3':processing_variation_change}">
-        <div class="row">
+        <div class="row ">
             <div class="col-sm-12 d-flex flex-column">
                 <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
 
@@ -60,27 +65,39 @@
                 >
                 </livewire:tenant.product.price>
 
+
                 {{-- Variations Selector --}}
                 @if($product->hasVariations())
                     <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2"></livewire:tenant.product.product-variations-selector>
                 @endif
 
-                {{-- TODO: Disable add to cart button and quantity counter if available stock is <= 0 --}}
+                <p class="py-2 mb-0">{{ translate('Stock quantity:') }} <strong x-text="current_stock+' {{ $product->unit }}'"></strong></p>
+
+                {{-- Out of stock / Low stock notifications --}}
+                <template x-if="current_stock <= 0">
+                    <p class="text-14 p-2 px-3 bg-danger text-white rounded mt-1" >{{ translate('This item is not currently in stocks...') }}</p>
+                </template>
+                <template x-if="current_stock > 0 && is_low_stock">
+                    <p class="text-14 p-2 px-3 bg-warning text-white rounded mt-1" >{{ translate('This item is low in stocks. Hurry up!') }}</p>
+                </template>
+
+                {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}}
                 <x-default.forms.quantity-counter :model="$product" id=""></x-default.forms.quantity-counter>
             </div>
 
 
             <div class="col-12">
                 <div class="row">
+
                     <div class="col-8 pr-2">
                         {{-- TODO: Disable add to cart button and quantity counter if available stock is <= 0 --}}
                         <livewire:cart.add-to-cart-button
                             :model="$product"
                             icon="heroicon-o-shopping-cart"
                             label="{{ translate('Add to cart') }}"
+                            label-not-in-stock="{{ translate('Not in stock') }}"
                             btn-type="primary"
                         >
-
                         </livewire:cart.add-to-cart-button>
                     </div>
                     <div class="col-4 pl-2">

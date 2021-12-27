@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Shop;
+use App\Rules\MatchPassword;
 use DebugBar\DebugBar;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
@@ -25,8 +27,7 @@ class AppServiceProvider extends ServiceProvider
     Paginator::useBootstrap();
 
 
-
-
+    $this->registerCustomValidaionRules();
 
   }
 
@@ -42,5 +43,11 @@ class AppServiceProvider extends ServiceProvider
       }else{
           \Debugbar::disable();
       }
+  }
+
+  public function registerCustomValidaionRules() {
+      Validator::extend('match_password', function ($attribute, $value, $parameters, $validator) {
+          return (new MatchPassword($parameters, $validator))->passes($attribute, $value);
+      });
   }
 }

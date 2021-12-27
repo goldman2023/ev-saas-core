@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public static array $user_types = ['admin','moderator','seller','staff'];
     public static array $tenant_user_types = ['admin','moderator'];
     public static array $vendor_user_types = ['seller','staff'];
+    public static string $customer_type = 'customer';
 
     public function sendEmailVerificationNotification()
     {

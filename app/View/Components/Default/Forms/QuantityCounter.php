@@ -10,6 +10,7 @@ class QuantityCounter extends Component
     public $wired;
     public $mini;
     public $model;
+    public $disabled;
 
     /**
      * Create a new component instance.
@@ -22,6 +23,7 @@ class QuantityCounter extends Component
         $this->model = $model;
         $this->wired = $wired;
         $this->mini = $mini;
+        $this->disabled = !$model->isInStock();
     }
 
     /**

@@ -8,25 +8,29 @@ use Livewire\Component;
 use App\Facades\CartService;
 use Session;
 
-class AddToCartButton extends Component {
-
+class AddToCartButton extends Component
+{
     public $model;
     public $class;
     public $btnType;
     public $icon;
     public $label;
+    public $labelNotInStock;
     public $qty;
     public $processing;
+    public $disabled;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount($model = null, $btnType = 'primary', $class = '', $icon = '', $label = 'Add to cart')
+    public function mount($model = null, $btnType = 'primary', $class = '', $icon = '', $label = 'Add to cart', $labelNotInStock = 'Not in stock...')
     {
         $this->model = $model;
+        $this->disabled = !$model->isInStock();
         $this->label = $label;
+        $this->labelNotInStock = $labelNotInStock;
         $this->class = $class;
         $this->btnType = $btnType;
         $this->icon = $icon;
