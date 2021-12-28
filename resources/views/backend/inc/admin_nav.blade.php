@@ -45,8 +45,6 @@
             @php
                 $orders = DB::table('orders')
                             ->orderBy('code', 'desc')
-                            ->join('order_details', 'orders.id', '=', 'order_details.order_id')
-                            ->where('order_details.seller_id', \App\Models\User::where('user_type', 'admin')->first()->id)
                             ->where('orders.viewed', 0)
                             ->select('orders.id')
                             ->distinct()

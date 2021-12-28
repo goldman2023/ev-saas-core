@@ -22,7 +22,7 @@ class DynamicAttributeValue extends Component
         $this->attribute = $attribute;
 
         $this->attribute_value = $this->data
-            ->attributes()
+            ->custom_attributes()
             ->where('attribute_id', $this->attribute->value)->first();
     }
 

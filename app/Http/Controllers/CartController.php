@@ -129,7 +129,7 @@ class CartController extends Controller
             'raw' => $price,
             'display' => format_price(convert_price($price))
         ];
-        $data['images'] = $product->images;
+        $data['images'] = $product->getAllImages();
         $data['permalink'] = $product->permalink;
         $data['tax'] = $tax;
         $data['shipping'] = 0;

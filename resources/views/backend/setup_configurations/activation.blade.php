@@ -11,7 +11,7 @@
             </div>
             <div class="card-body text-center">
                 <label class="aiz-switch aiz-switch-success mb-0">
-                    <input type="checkbox" onchange="updateSettings(this, 'FORCE_HTTPS')" <?php if(env('FORCE_HTTPS') == 'On') echo "checked";?>>
+                    <input type="checkbox" onchange="updateSettings(this, 'FORCE_HTTPS')" <?php if(config('app.force_https')) echo "checked";?>>
                     <span class="slider round"></span>
                 </label>
             </div>

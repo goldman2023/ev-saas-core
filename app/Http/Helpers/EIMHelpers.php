@@ -1,14 +1,18 @@
 <?php
 
-
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Shop;
+use App\Support\Stringy;
 use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+
+function s($str, $charset = 'UTF-8') {
+    return new Stringy($str, $charset);
+}
 
 function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null) {
     if(!empty($data)) {

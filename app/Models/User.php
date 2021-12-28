@@ -2,25 +2,35 @@
 
 namespace App\Models;
 
+use App\Traits\UploadTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
-use App\Models\Cart;
 use App\Notifications\EmailVerificationNotification;
 use Spark\Billable;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasApiTokens;
+    use HasRoles;
     use HasApiTokens;
     use Notifiable;
     use Billable;
+    use LogsActivity;
+    use UploadTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
+        'banned' => 'boolean'
     ];
 
+    public static array $user_types = ['admin','moderator','seller','staff'];
+    public static array $tenant_user_types = ['admin','moderator'];
+    public static array $vendor_user_types = ['seller','staff'];
 
     public function sendEmailVerificationNotification()
     {
@@ -170,5 +180,38 @@ class User extends Authenticatable implements MustVerifyEmail
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'avatar', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+                'relation_type' => 'avatar', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+            ]
+        ];
+    }
+
+    public function getAvatar(array $options = []) {
+        return $this->getUpload('avatar', $options);
+    }
+
+    public static function getAvailableUserTypes($only_vendor_types = true) {
+        // Vendor types ar: Seller and Staff. Admin and moderator are tenant user types!
+        return collect($only_vendor_types ? self::$vendor_user_types : self::$user_types)
+            ->keyBy(fn($item, $key) => $item)
+            ->map(fn($item) => ucfirst($item))
+            ->toArray();
+    }
+
+    public function recently_viewed_products() {
+        $data = Activity::where('subject_type', 'App\Models\Product')
+        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+        ->groupBy('subject_id')
+        ->get();
+
+        return $data;
     }
 }

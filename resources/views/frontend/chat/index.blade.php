@@ -1,16 +1,14 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.user_panel')
 
-@section('content')
-<h1>Chat</h1>
+@section('panel_content')
+<div class="container">
+    <div class="row">
+        <div class="col-12 mb-3">
+            <x-default.chat.main-chat></x-default.chat.main-chat>
 
-  <div id="app">
-  </div>
-
-
-
+        </div>
+    </div>
+</div>
 @endsection
 
 
-@section('script')
-    <script src="{{ asset('js/app.js') }}" ></script>
-@endsection

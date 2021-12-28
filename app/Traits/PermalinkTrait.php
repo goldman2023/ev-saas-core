@@ -18,9 +18,10 @@ trait PermalinkTrait
         // When model data is retrieved, populate $permalink
         static::retrieved(function ($model) {
             $routeKeyName = method_exists($model, 'getRouteKeyName') ? $model->getRouteKeyName() : 'slug';
+            $routeName = app($model::class)::ROUTING_SINGULAR_NAME_PREFIX.'.single';
 
-            if (!empty($model->attributes[$routeKeyName] ?? null) && Route::has(get_class($model).'.single')) {
-                $model->permalink = route(get_class($model).'.single', $model->attributes[$routeKeyName]);
+            if (!empty($model->attributes[$routeKeyName] ?? null) && Route::has($routeName)) {
+                $model->permalink = route($routeName, $model->attributes[$routeKeyName]);
             }
         });
     }

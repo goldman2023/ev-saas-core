@@ -2,81 +2,82 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Order
- *
- * @property int $id
- * @property int|null $user_id
- * @property int|null $guest_id
- * @property string|null $shipping_address
- * @property string|null $payment_type
- * @property string|null $payment_status
- * @property string|null $payment_details
- * @property float|null $grand_total
- * @property float $coupon_discount
- * @property string|null $code
- * @property int $date
- * @property int $viewed
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereCouponDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereGrandTotal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereGuestId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order wherePaymentDetails($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order wherePaymentStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order wherePaymentType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereShippingAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order whereViewed($value)
- * @mixin \Eloquent
  */
-
 class Order extends Model
 {
-    protected $guarded = [];
+    use SoftDeletes;
 
-    public function refund_requests()
-    {
-        return $this->hasMany(RefundRequest::class);
-    }
+    protected $table = 'orders';
+
+    protected $guarded = ['id'];
+
+    protected $casts = [
+        'phone_numbers' => 'array',
+        'same_billing_shipping' => 'boolean',
+        'viewed' => 'boolean',
+        'meta' => 'array',
+        'created_at' => 'datetime:d.m.Y H:i',
+        'updated_at' => 'datetime:d.m.Y H:i',
+    ];
+
+    protected $with = ['payment_method'];
+
+    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
+    public const PAYMENT_STATUS_UNPAID = 'unpaid';
+    public const PAYMENT_STATUS_PENDING = 'pending';
+    public const PAYMENT_STATUS_CANCELED = 'canceled';
+    public const PAYMENT_STATUS_PAID = 'paid';
+
+    public const SHIPPING_STATUS = ['not_sent', 'sent', 'delivered']; // TODO: Should consider more statuses!
+    public const SHIPPING_STATUS_NOT_SENT = 'not_sent';
+    public const SHIPPING_STATUS_SENT = 'sent';
+    public const SHIPPING_STATUS_DELIVERED = 'delivered';
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    public function seller()
+
+    public function shop()
     {
-        return $this->hasOne(Shop::class, 'user_id', 'seller_id');
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 
-    public function pickup_point()
-    {
-        return $this->belongsTo(PickupPoint::class);
-    }
-    public function orderDetails()
-    {
-        return $this->hasMany(OrderDetail::class);
-    }
-    public function affiliate_log()
-    {
-        return $this->hasMany(AffiliateLog::class);
+    public function order_items() {
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
-    public function club_point()
-    {
-        return $this->hasMany(ClubPoint::class);
+    public function payment_method() {
+        return $this->morphTo('payment_method');
     }
+
+    public static function count() {
+        return self::where('shop_id', )->count();
+    }
+
+//    TODO: ORDER TRACKING NUMBER!!!
+//    public function refund_requests()
+//    {
+//        return $this->hasMany(RefundRequest::class);
+//    }
+//    public function pickup_point()
+//    {
+//        return $this->belongsTo(PickupPoint::class);
+//    }
+//    public function affiliate_log()
+//    {
+//        return $this->hasMany(AffiliateLog::class);
+//    }
+//
+//    public function club_point()
+//    {
+//        return $this->hasMany(ClubPoint::class);
+//    }
 
 
     public static function trend($period = 30)

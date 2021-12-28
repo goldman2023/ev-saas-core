@@ -1,5 +1,16 @@
 <!-- Toast -->
-<div @if($id) id="{{ $id }}" @endif class="toast {{ $position }} {{ $class }}" role="alert" aria-live="assertive" aria-atomic="true">
+<div @if($id) id="{{ $id }}" @endif class="toast {{ $position }} {{ $class }} " role="alert" aria-live="assertive" aria-atomic="true"
+    @if($isX)
+        x-data="{
+            show: false,
+            content: '{{ $content }}',
+            type: '{{ $type }}'
+        }"
+        :class="{ 'opacity-10': show, 'bg-success border-success': type === 'success', 'bg-danger border-danger': type === 'danger' }"
+
+    @endif
+    {{ $attributes }}
+>
     @if($title)
         <div class="toast-header">
             @if($icon)
@@ -15,10 +26,9 @@
             @endif
         </div>
     @endif
-    @if($content)
-        <div class="toast-body">
-            {{ $content }}
-        </div>
-    @endif
+
+    <div class="toast-body text-center" @if($isX) x-html="content" @endif>
+        {{ $content }}
+    </div>
 </div>
 <!-- End Toast -->

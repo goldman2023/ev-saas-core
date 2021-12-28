@@ -39,15 +39,17 @@
         >
           {{-- <h3 class="h4">{{ $category->name }}</h3> --}}
           <div class="row">
-            @foreach ($category->products() as $product)
-            <div class="col-sm-6 mb-3">
-                @if($product)
-                <x-default.products.cards.product-card :product="$product"
-                    style="{{ ev_dynamic_translate('product-card', true)->value }}">
-                </x-default.products.cards.product-card>
-                @endif
-            </div>
-        @endforeach
+              @if($category->products->isNotEmpty())
+                  @foreach ($category->products as $product)
+                      <div class="col-sm-6 mb-3">
+                          @if($product)
+                              <x-default.products.cards.product-card :product="$product"
+                                                                     style="{{ ev_dynamic_translate('product-card', true)->value }}">
+                              </x-default.products.cards.product-card>
+                          @endif
+                      </div>
+                  @endforeach
+              @endif
           </div>
 
         </div>

@@ -3,6 +3,11 @@
 ------------------------------------*/
 
 @import "components";
+
+[x-cloak] {
+    display: none !important;
+}
+
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -139,6 +144,23 @@ img {
 /* Fix For Equal height columns while ussing swiper option: autoHeight: true, */
 .swiper-autoheight, .swiper-autoheight .swiper-slide {
     height: 100% !important;
+}
+
+/**
+ * ==============================================
+ * Datatables
+ * ==============================================
+ */
+.datatable-custom {
+    .dataTables_info, .dataTables_length, .dataTables_paginate {
+        display: none;
+    }
+
+    .ordersDatatable_wrapper {
+        > .row:first-child {
+            display: none;
+        }
+    }
 }
 
 /**
@@ -527,6 +549,24 @@ img {
     right: auto;
 }
 
+/*------------------------------------
+  Table
+------------------------------------*/
+.table-th-cell {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-width: 0;
+}
+
+/*------------------------------------
+  Form Control
+------------------------------------*/
+.form-control {
+    &:disabled, &[readonly] {
+        opacity: 0.5;
+    }
+}
 
 /*------------------------------------
   Product Form
@@ -541,6 +581,7 @@ img {
         min-width: 9.4375rem;
     }
 }
+
 
 /*------------------------------------
   Specifications

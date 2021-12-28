@@ -100,35 +100,42 @@
                                   "type": "jquery-slide",
                                   "contentSelector": ".search-push-top"
                                  }'>
-                                @svg('heroicon-o-search', ['style' => 'width:16px;'])
+                                @svg('heroicon-o-search', ['class' => 'square-22'])
                             </a>
                         </div>
                     </li>
                     <!-- End Search -->
 
+                     <!-- Wish List Cart -->
+                     <li class="list-inline-item">
+                        <div class="hs-unfold">
+                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="{{ route('wishlist') }}">
+                                @svg('heroicon-o-heart', ['class' => 'square-22'])
+                                {{-- TODO: Make count different, probably create a wishlist service like CartService --}}
+                                <div class="position-absolute badge badge-primary circle-dynamic"
+                                     style="top: -6px; right: -6px; line-height: 0.8;   "
+                                     x-data="{count: 2}"
+                                     x-text="Number(count) > 99 ? '99+':count"
+                                     x-cloak
+                                >
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+
                     <!-- Shopping Cart -->
                     <li class="list-inline-item">
                         <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-xs btn-icon btn-ghost-secondary" href="javascript:;"
-                                data-hs-unfold-options='{
-                                  "target": "#shoppingCartDropdown",
-                                  "type": "css-animation",
-                                  "event": "hover",
-                                  "hideOnScroll": "true"
-                                 }'>
-                                @svg('heroicon-o-shopping-cart', ['style' => 'width:16px;'])
+                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="javascript:;" x-data="" @click="$dispatch('display-cart')">
+                                @svg('heroicon-o-shopping-cart', ['class' => 'square-22'])
+                                <div class="position-absolute badge badge-primary circle-dynamic"
+                                     style="top: -6px; right: -6px; line-height: 0.8;   "
+                                     x-data="{count: {{ \CartService::getTotalItemsCount() }}}"
+                                     x-text="Number(count) > 99 ? '99+':count"
+                                     x-cloak
+                                     @refresh-cart-items-count.window="count = $event.detail.count">
+                                </div>
                             </a>
-
-                            <div id="shoppingCartDropdown"
-                                class="hs-unfold-content dropdown-menu dropdown-menu-right text-center p-7"
-                                style="min-width: 250px;">
-                                <figure class="max-w-9rem mx-auto mb-3">
-                                    @svg('heroicon-o-shopping-cart')
-                                </figure>
-                                <span class="d-block">
-                                    {{ translate('Your Cart is Empty') }}
-                                </span>
-                            </div>
                         </div>
                     </li>
                     <!-- End Shopping Cart -->
@@ -147,7 +154,7 @@
                             <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary"
                                 href="{{ route('business.login') }}">
                                 <!--data-toggle="modal" data-target="#signupModal">-->
-                                @svg('heroicon-s-user-circle', ['style' => 'width:16px;'])
+                                @svg('heroicon-s-user-circle', ['class' => 'square-2'])
                             </a>
                         </div>
                     </li>
@@ -164,7 +171,7 @@
             </div>
         </div>
         <!-- End Topbar -->
-        <div id="logoAndNav" class="container">
+        <div id="logoAndNav" class="container pb-3">
             <!-- Nav -->
             <div class="row">
                 <div class="col-sm-3 col-6">

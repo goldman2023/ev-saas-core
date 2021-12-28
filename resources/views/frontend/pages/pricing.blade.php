@@ -7,7 +7,11 @@
     <div class="overflow-hidden space-bottom-2">
         <h1 class="display-1">
             {{ translate('Pricing') }}
+
         </h1>
+        <p>
+            lorem ipsum
+        </p>
     </div>
 @endsection
 

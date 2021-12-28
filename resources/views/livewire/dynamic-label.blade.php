@@ -1,13 +1,14 @@
-<div class="ev-dynamic-label-container z-index-100">
+<div class="ev-dynamic-label-container z-index-100"
+>
 
     <span class="underline">{!! $label->value !!}</span>
     @if ($show_input_field)
-        <div style="z-index: 999"
-            class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-card hs-unfold-content-initialized hs-unfold-css-animation animated slideInUp hs-unfold-reverse-y">
+        <div style="position: fixed; top: 0; height: 100%; right: 0; background: #efefef; width: 350px;"
+            class="">
             {{-- TODO: Improve UX and UI of this element --}}
-            <div class="card ev-dynamic-input-field">
+            <div class="card ev-dynamic-input-field h-100">
 
-                <div class="card-header">
+                <div class="card-header" style="padding-top: 250px;">
                     {{ translate('Edit Label') }}
                 </div>
 

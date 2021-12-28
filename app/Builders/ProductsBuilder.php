@@ -10,15 +10,20 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
+use App\Traits\Eloquent\Cacher;
 use Illuminate\Support\Collection;
 use Vendor;
 
 class ProductsBuilder extends Builder
 {
-    public const FULL_FETCH_SCOPE_IDENTIFIER = 'FULL_FETCH';
+    use Cacher;
+
     protected string $stocks_table_name;
     protected string $serial_numbers_table_name;
     protected string $flash_deals_table_name;
+
+    // Regarding `double scopes apply` issue, check the fix here: https://github.com/GeneaLabs/laravel-model-caching/pull/358
+    // Point is to check if scopes are already applied before applying them again!
 
     public function __construct(QueryBuilder $query)
     {
@@ -45,29 +50,12 @@ class ProductsBuilder extends Builder
             });
         }
 
-        // Always inner join ProductStock 1:1 relationship with Product Model and sort keys
-        /*$this->withGlobalScope(self::FULL_FETCH_SCOPE_IDENTIFIER, function (Builder $builder) {
-            $table_name = $builder->getModel()->getTable();
-
-            $builder->unfoldSelectColumns(
-                ['name' => $table_name, 'ignore' => ['deleted_at']],
-                ['name' => $this->stocks_table_name, 'ignore' => ['created_at','updated_at']],
-            );
-
-            // Join Product<->Stock 1:1 Relationship
-            $builder->leftJoin($this->stocks_table_name, $table_name.'.id', '=', $this->stocks_table_name.'.subject_id')
-                ->where(function($query) {
-                    $query->where($this->stocks_table_name.'.subject_type', '=', Product::class)
-                        ->orWhere($this->stocks_table_name.'.subject_type', '=', '')
-                        ->orWhereNull($this->stocks_table_name.'.subject_type');
-                });
-
-            // Join Product<->Stock 1:1 Relationship
-        });*/
-
+        // Cacher is initially disabled! Where you want to use cached data, chain `->fromCache()` to the builder query!
+        //$this->enableCacher();
     }
 
     /**
+     * TODO: This one is not used for now, but logic may be useful in future...
      * Based on given tables, gets the column names and adds proper aliases to each column.
      * It can also ignore specified columns for each table.
      *
@@ -95,37 +83,7 @@ class ProductsBuilder extends Builder
         return $this;
     }
 
-    /**
-     * Create a collection of models from plain arrays.
-     *
-     * @param  array  $items
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function hydrate(array $items)
-    {
-        return parent::hydrate($items);
-        // If FULL_FETCH_SCOPE is removed, use standard hydrate() from Eloquent/Builder
-        if(in_array(self::FULL_FETCH_SCOPE_IDENTIFIER, $this->removedScopes(), true)) {
-            return parent::hydrate($items);
-        }
-
-        /*$instance = $this->newModelInstance();
-
-        return $instance->newCollection(array_map(function ($item) use ($items, $instance) {
-            $model = $instance->newFromBuilder($this->filterByKeyPrefix($this->getModel()->getTable(), $item, 'object', true));
-
-            dd($this->filterByKeyPrefix($this->getModel()->getTable(), $item, 'object', true));
-
-            // Hydrate Stock data
-
-            if (count($items) > 1) {
-                $model->preventsLazyLoading = Model::preventsLazyLoading();
-            }
-
-            return $model;
-        }, $items));*/
-    }
-
+    // * TODO: This one is not used for now, but logic may be useful in future...
     protected function filterByKeyPrefix($prefix, $item, $cast_type = 'object', $remove_prefix = true): mixed
     {
         if(is_object($item)) {

@@ -726,6 +726,17 @@ function translate($key, $lang = null)
     if ($lang == null) {
         $lang = App::getLocale();
     }
+
+    /*
+     * TODO: Make Translation Singleton in which we'll get all translations in assoc array:
+     * [
+     *      lang_key => [`$lang` => ['id' => `$id`, value => `$lang_value`]]
+     *      ...
+     * ]
+     *
+     * TODO: Refactor this function to get translation for the $key from assoc array in singleton
+     * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
+     */
     $translation_def = Cache::remember($key . $lang, 60, function () use ($key) {
         return Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
     });
@@ -927,7 +938,7 @@ if (!function_exists('isHttps')) {
 if (!function_exists('getBaseURL')) {
     function getBaseURL()
     {
-        if (env('FORCE_HTTPS') == false) {
+        if (config('app.force_https') === false) {
             return route('home');
         } else {
             return  secure_url('/');
@@ -936,15 +947,11 @@ if (!function_exists('getBaseURL')) {
 }
 
 
-if (!function_exists('getFileBaseURL')) {
-    function getFileBaseURL()
+if (!function_exists('getStorageBaseURL')) {
+    function getStorageBaseURL()
     {
-        if (config('filesystems.default') == 's3') {
-            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.config('filesystems.disks.s3.subdomain_endpoint'). '/';
-
-            return $proxy_image;
-            /* TODO: Refactor this to support S3 AND Digital Ocean, right now digital ocean is used */
-            return config('AWS_URL') . '/';
+        if (config('filesystems.default') === 's3') {
+            return config('filesystems.disks.s3.subdomain_endpoint'). '/';
         } else {
             return getBaseURL();
         }
@@ -953,11 +960,8 @@ if (!function_exists('getFileBaseURL')) {
 
 if (!function_exists('getBucketBaseURL')) {
     function getBucketBaseURL() {
-        if (config('filesystems.default') == 's3') {
-            $proxy_image = config('imgproxy.host').'/insecure/fill/0/0/ce/0/plain/'.config('filesystems.disks.s3.subdomain_endpoint'). '/';
-
-            return $proxy_image;
-            return env('AWS_URL') . '/';
+        if (config('filesystems.default') === 's3') {
+            return config('filesystems.disks.s3.subdomain_endpoint'). '/';
         } else {
             return getBaseURL();
         }
@@ -1280,6 +1284,10 @@ function get_pricing_plans_array()
 
 function country_name_by_code($code)
 {
+    if(empty($code)) {
+        $code = 'default';
+    }
+
     $country = Country::where('code', '=', $code)->first();
     if ($country == null) {
         return $code;

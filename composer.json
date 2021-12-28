@@ -37,6 +37,7 @@
         "laravel/passport": "^10.1",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/socialite": "^5.2",
+        "laravel/spark-stripe": "^1.0",
         "laravel/ui": "^3.2",
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
@@ -53,10 +54,12 @@
         "rappasoft/laravel-livewire-tables": "^1.20",
         "razorpay/razorpay": "^2.7.0",
         "romanzipp/laravel-seo": "^2.2",
-        "sentry/sentry-laravel": "^2.7.0",
+        "sentry/sentry-laravel": "^2.10",
+        "shetabit/visitor": "^3.1",
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-backup": "^6.16",
         "spatie/laravel-newsletter": "^4.10",
+        "spatie/laravel-permission": "^5.4",
         "spatie/laravel-sluggable": "^2.6",
         "spatie/laravel-validation-rules": "^3.1",
         "spatie/once": "^3.0",
@@ -65,7 +68,7 @@
         "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
         "twilio/sdk": "^6.1",
-        "laravel/spark-stripe": "^1.0"
+        "webtopay/libwebtopay": "^1.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -85,7 +88,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Http/Helpers.php"
+            "app/Http/Helpers.php",
+            "vendor/webtopay/libwebtopay/WebToPay.php"
         ]
     },
     "autoload-dev": {

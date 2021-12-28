@@ -107,6 +107,7 @@ if(is_compiling_tenant) {
 } else {
     mix.js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
         .js(`${__dirname}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
+        .js(`${__dirname}/js/alpine.js`, `public/themes/${theme}/js`).version()
         .js(`${__dirname}/js/vue.js`, `public/themes/${theme}/js`)/*.vue({ version: 2 })*/.version() // Uses Vue v2 // TODO: Fix vue-loader version issue before using .vue()
         .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`, {
             sassOptions: {
@@ -142,20 +143,22 @@ if(is_compiling_tenant) {
                     if(compiled_tenants_ids.indexOf(row.id) === -1) {
                         compiled_tenants_ids.push(row.id);
 
+
+
                         createTenantCustomStylingVarsFile(row.id, theme);
 
                         // Compile tenant-theme scss
 
                         // 1. First approach is not possible due to `Same entry point defined twice` error! Check: https://github.com/laravel-mix/laravel-mix/issues/1936
-                        /*mix.sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css/${row.id}.css`, {
-                            sassOptions: {
-                                processCssUrls: false
-                            },
-                            additionalData: fs.readFileSync(`resources/scss/tenants/${row.id}/_variables-${theme}.scss`).toString()
-                        }).version()*/
+                        // mix.sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css/${row.id}.css`, {
+                        //     sassOptions: {
+                        //         processCssUrls: false
+                        //     },
+                        //     additionalData: fs.readFileSync(`resources/scss/tenants/${row.id}/_variables-${theme}.scss`).toString()
+                        // }).version()
 
                         // 2. Second approach is to run npx mix cli for each tenant separately in separate process
-                        const process = spawn(`npx mix watch --mix-config="themes/${theme}/webpack.mix.js" -- --env tenant_id=${row.id}`, {
+                        const process = spawn(`npx mix --mix-config="themes/${theme}/webpack.mix.js" -- --env tenant_id=${row.id}`, {
                             stdio: 'inherit',
                             shell: true
                         });

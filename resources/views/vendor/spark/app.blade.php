@@ -19,7 +19,7 @@
         {!! file_get_contents($cssPath) !!}
     </style>
 
-    @if (strpos(config('spark.brand.color'), '#') === 0)
+    @if (str_contains(config('spark.brand.color'), '#'))
     <style>
         .bg-custom-hex {
             background-color: {!! config('spark.brand.color') !!};

@@ -67,7 +67,7 @@ if (empty($banner3->refer_url)) {
                                     </button>
                                 </div>
 
-                                <x-categories-sidebar :categoryId="$category_id" type="companies"></x-categories-sidebar>
+                                {{-- <x-categories-sidebar :categoryId="$category_id" type="companies"></x-categories-sidebar> --}}
 
                                 <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
 
@@ -80,29 +80,10 @@ if (empty($banner3->refer_url)) {
                     </div>
 
                     <div class="col-xl-9">
-                        <div class="mb-3">
-                            <x-affiliate-single-banner :banner="$banner1"> </x-affiliate-single-banner>
-                        </div>
+
                         @if (count($shops) > 0)
                             @foreach ($shops as $key => $shop)
-                                @if ($key === 5)
-                                    <div class="row mb-3">
 
-                                        <div class="col-sm-4">
-                                            <x-affiliate-single-banner :banner="$banner1"></x-affiliate-single-banner>
-
-                                        </div>
-
-                                        <div class="col-sm-4">
-                                            <x-affiliate-single-banner :banner="$banner2"></x-affiliate-single-banner>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <x-affiliate-single-banner :banner="$banner3"></x-affiliate-single-banner>
-
-                                        </div>
-                                    </div>
-
-                                @endif
                                 <x-company.company-card :company="$shop"></x-company.company-card>
                             @endforeach
                         @else

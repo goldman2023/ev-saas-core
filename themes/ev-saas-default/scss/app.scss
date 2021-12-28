@@ -1,5 +1,6 @@
 // Bootstrap setup
 @import '~bootstrap/scss/functions';
+@import 'user-variables';
 
 // Front setup
 // IMPORTANT NOTE 1: Variables file (either theme default or tenant-theme) is prepended on webpack compile! Check `additionalData` option in .sass `pluginOptions` argument in webpack.mix.js (for more info, check: https://webpack.js.org/loaders/sass-loader/#additionaldata)!
@@ -13,7 +14,6 @@
 
 @import 'front-dashboard/variables';
 
-@import 'user-variables';
 
 // Bootstrap core
 @import '~bootstrap/scss/bootstrap';
@@ -39,8 +39,10 @@
   * Licensed under Bootstrap Themes (https://themes.getbootstrap.com/licenses/)
 ------------------------------------------------------------------------*/
 @import 'front/front';
+@import 'front-dashboard/front-dashboard';
 
 // Custom core
+@import 'mixins';
 @import 'user';
 @import 'custom';
 

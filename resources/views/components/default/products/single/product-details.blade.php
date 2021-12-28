@@ -91,7 +91,7 @@
             {{-- End Seller Info --}}
 
             <!-- Product: Variations -->
-            @if ($product->has_variations())
+            @if ($product->hasVariations())
                 <livewire:tenant.product.product-variations-selector :product="$product">
                 </livewire:tenant.product.product-variations-selector>
             @endif

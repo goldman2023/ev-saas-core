@@ -322,13 +322,44 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $products = Product::fromCache()->paginate(12);
+        /*$uploads = [];
+        foreach($products as $product) {
+
+            if(!empty($product->thumbnail_img) && Upload::where('id', $product->thumbnail_img)->exists()) {
+                $product->uploads()->attach($product->thumbnail_img, ['type' => 'thumbnail']);
+                $product->uploads()->attach($product->thumbnail_img, ['type' => 'meta_img']);
+            }
+
+            $gallery = collect(explode(',', $product->photos))->filter(function($item, $key) {
+                return ctype_digit($item);
+            })->map(function ($item, $key) {
+                return [
+                    'id' => (int) $item,
+                    'type' => 'gallery',
+                    'order' => $key
+                ];
+            })->keyBy('id')->forget('id')->transform(function ($item, $key) {
+                unset($item['id']);
+                return $item;
+            });
+
+            foreach($gallery as $upload_id => $pivotData) {
+                if(Upload::where('id', $upload_id)->exists()) { // skip uploads that don't exist
+                    $product->uploads()->attach($upload_id, $pivotData);
+                }
+            }
+
+            if(!empty($product->pdf) && Upload::where('id', $product->pdf)->exists()) {
+                $product->uploads()->attach($product->pdf, ['type' => 'pdf']);
+            }
+        }*/
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
-        if(Vendor::isVendorSite()) {
+        if (Vendor::isVendorSite()) {
             $shop = Vendor::getVendorShop();
             return view('frontend.company.profile', compact('shop'));
         } else {
             return view('frontend.index');
-
         }
     }
 
@@ -376,15 +407,11 @@ class HomeController extends Controller
     public function product(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $detailedProduct  = Product::where('slug', $slug)->first()->load(['shop', 'flash_deals', 'variations', 'stock']);
-        $detailedProduct->variations = $detailedProduct->variations()->with(['flash_deals', 'product'])->get();
-
-        $product  = $detailedProduct;
+        $product  = Product::where('slug', $slug)->first()->load(['shop']);
 
         //$this->log($product,"User viewed this product");
 
-        if (!empty($detailedProduct) && $detailedProduct->published) {
-            //updateCartSetup();
+        if (!empty($product) && $product->published) {
             if (
                 $request->has('product_referral_code') &&
                 \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first() != null &&
@@ -405,10 +432,23 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
 
-            if ($detailedProduct->digital == 1) {
-                return view('frontend.digital_product_details', compact('detailedProduct', 'product'));
+            if(auth()->check()) {
+                $user = auth()->user();
+
             } else {
-                return view('frontend.product.show', compact('detailedProduct', 'product'));
+                $user = null;
+            }
+
+            activity()
+                ->performedOn($product)
+                ->causedBy($user)
+                ->withProperties(['action' => 'viewed'])
+                ->log('User viewed a product');
+
+            if ($product->digital == 1) {
+                return view('frontend.digital_product_details', compact('product'));
+            } else {
+                return view('frontend.product.show', compact('product'));
             }
             // return view('frontend.product_details', compact('detailedProduct'));
         }
@@ -579,16 +619,9 @@ class HomeController extends Controller
         $products = Product::where($conditions);
 
         /* TODO: This probably should be in brand controller and brand archive */
-        if($brand_id != null) {
+        if ($brand_id != null) {
             $products->where('brand_id', $brand_id);
-            $brand = Brand::where('id', $brand_id)->get()->first();
-        } else {
-            $brand = null;
         }
-
-
-
-
 
         if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             $products->restrictByCategories($selected_categories);
@@ -627,7 +660,7 @@ class HomeController extends Controller
 
             $attributeIds = array();
             foreach ($contents->get() as $item) {
-                $attributeIds = array_unique(array_merge($attributeIds, $item->attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
+                $attributeIds = array_unique(array_merge($attributeIds, $item->custom_attributes()->pluck('attribute_id')->toArray()), SORT_REGULAR);
             }
             $attributes = Attribute::whereIn('id', $attributeIds)->where('type', '<>', 'image')->where('filterable', true)->get();
 
@@ -687,8 +720,9 @@ class HomeController extends Controller
         $products = $products->paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
+
         $selected_category = !empty($selected_categories) ? $selected_categories->toTree()->first() : null;
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters', 'brand'));
+        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
     public function home_settings(Request $request)

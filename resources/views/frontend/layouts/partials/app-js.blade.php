@@ -4,7 +4,7 @@
     AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
         appUrl: $('meta[name="app-url"]').attr("content"),
-        fileBaseUrl: $('meta[name="file-bucket-url"]').attr("content"),
+        storageBaseUrl: $('meta[name="storage-base-url"]').attr("content"),
     };
 </script>
 <script>
@@ -68,7 +68,7 @@
 
         // INITIALIZATION OF UNFOLD
         // =======================================================
-        var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
+        //var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
 
         $('.category-nav-element').each(function(i, el) {
             $(el).on('mouseover', function() {
@@ -181,9 +181,32 @@
         });
     });
 
-    $('#search').on('keyup', function() {
+    /**
+* Execute a function given a delay time
+*
+* @param {type} func
+* @param {type} wait
+* @param {type} immediate
+* @returns {Function}
+*/
+var debounce = function (func, wait, immediate) {
+     var timeout;
+     return function() {
+         var context = this, args = arguments;
+         var later = function() {
+                 timeout = null;
+                 if (!immediate) func.apply(context, args);
+         };
+         var callNow = immediate && !timeout;
+         clearTimeout(timeout);
+         timeout = setTimeout(later, wait);
+         if (callNow) func.apply(context, args);
+     };
+};
+
+    $('#search').on('keyup',  debounce(function() {
         search();
-    });
+    }, 200));
 
     $('#search').on('focus', function() {
         search();
@@ -204,7 +227,7 @@
         }
     }
 
-    function search() {
+    var search = function() {
         var searchKey = $('#search').val();
         $('body').addClass("typed-search-box-shown");
         $('.typed-search-box').removeClass('d-none');

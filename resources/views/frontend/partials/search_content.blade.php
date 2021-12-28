@@ -7,7 +7,7 @@
                     <a class="text-reset" href="{{ $product->permalink }}">
                         <div class="d-flex search-product align-items-center">
                             <div class="mr-3">
-                                <img class="w-25 img-fit rounded" src="{{ uploaded_asset($product->thumbnail_img) }}">
+                                <img class="w-25 img-fit rounded" src="{{ $product->getThumbnail(['w' => 100])}}">
                             </div>
                             <div class="">
                                 <div class="product-name text-truncate fs-14 mb-5px">

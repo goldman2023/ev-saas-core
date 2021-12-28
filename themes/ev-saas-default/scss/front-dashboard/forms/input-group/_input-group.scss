@@ -1,0 +1,50 @@
+/*------------------------------------
+  Input Group
+------------------------------------*/
+
+// Text
+.input-group-text {
+  border-color: $input-group-text-border-color;
+}
+
+// Input Label
+.input-label {
+  display: block;
+  color: $input-label-color;
+  font-size: $input-label-font-size;
+}
+
+.input-label-secondary {
+  color: $input-label-secondary-color;
+  font-size: $input-label-secondary-font-size;
+  margin-left: $input-label-secondary-margin-x;
+}
+
+// Prepend and append rounded corners
+.input-group .input-group-prepend,
+.input-group .input-group-append {
+  z-index: $input-addon-z-index;
+}
+
+.input-group > .input-group-prepend .custom-select {
+  @include border-right-radius(0);
+}
+
+.input-group > .input-group-append .custom-select {
+  @include border-left-radius(0);
+}
+
+.input-group > .input-group-prepend:first-child .select2-custom:not(:first-child) .custom-select {
+  @include border-left-radius(0);
+}
+
+.input-group > .input-group-append:last-child .select2-custom:not(:last-child) .custom-select {
+  @include border-right-radius(0);
+}
+
+// Small Devices
+@include media-breakpoint-down(xs) {
+  .input-group-append-last-sm-down-none.input-group-append:last-child .select2-custom:not(:last-child) .custom-select {
+    @include border-right-radius($input-border-radius);
+  }
+}

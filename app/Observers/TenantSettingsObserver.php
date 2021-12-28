@@ -19,7 +19,7 @@ class TenantSettingsObserver
     /**
      * Handle the Business Settings "saved" event.
      *
-     * @param  \App\Models\TenantSetting  $setting
+     * @param TenantSetting $setting
      * @return void
      */
     public function saved(TenantSetting $setting)

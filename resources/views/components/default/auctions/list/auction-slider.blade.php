@@ -26,10 +26,8 @@
                 @foreach ($products as $key => $product)
                     <div class="text-center slick-slide position-relative">
                         <a href="{{ $product->permalink }}" class="d-block rounded hov-shadow-md">
-
-
                             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
-                                class="lazyload mx-auto h-70px mw-100 bg-white" :image="$product->thumbnail_img">
+                                class="lazyload mx-auto h-70px mw-100 bg-white" :image="$product->getThumbnail()">
                             </x-tenant.system.image>
                             @if ($key < 2)
                                 <span class="badge badge-pill badge-success mt-2 ev-auction-badge">

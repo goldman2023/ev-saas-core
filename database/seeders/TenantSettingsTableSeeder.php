@@ -22,7 +22,7 @@ class TenantSettingsTableSeeder extends Seeder
                 0 =>
                     array(
                         'id' => 1,
-                        'type' => 'home_default_currency',
+                        'setting' => 'home_default_currency',
                         'value' => '9',
                         'created_at' => '2018-10-16 04:35:52',
                         'updated_at' => '2021-04-08 12:02:45',
@@ -30,7 +30,7 @@ class TenantSettingsTableSeeder extends Seeder
                 1 =>
                     array(
                         'id' => 2,
-                        'type' => 'system_default_currency',
+                        'setting' => 'system_default_currency',
                         'value' => '9',
                         'created_at' => '2018-10-16 04:36:58',
                         'updated_at' => '2021-04-08 12:02:45',
@@ -38,7 +38,7 @@ class TenantSettingsTableSeeder extends Seeder
                 2 =>
                     array(
                         'id' => 3,
-                        'type' => 'currency_format',
+                        'setting' => 'currency_format',
                         'value' => '1',
                         'created_at' => '2018-10-17 06:01:59',
                         'updated_at' => '2018-10-17 06:01:59',
@@ -46,7 +46,7 @@ class TenantSettingsTableSeeder extends Seeder
                 3 =>
                     array(
                         'id' => 4,
-                        'type' => 'symbol_format',
+                        'setting' => 'symbol_format',
                         'value' => '1',
                         'created_at' => '2018-10-17 06:01:59',
                         'updated_at' => '2019-01-20 04:10:55',
@@ -54,7 +54,7 @@ class TenantSettingsTableSeeder extends Seeder
                 4 =>
                     array(
                         'id' => 5,
-                        'type' => 'no_of_decimals',
+                        'setting' => 'no_of_decimals',
                         'value' => '3',
                         'created_at' => '2018-10-17 06:01:59',
                         'updated_at' => '2020-03-04 02:57:16',
@@ -62,7 +62,7 @@ class TenantSettingsTableSeeder extends Seeder
                 5 =>
                     array(
                         'id' => 6,
-                        'type' => 'product_activation',
+                        'setting' => 'product_activation',
                         'value' => '1',
                         'created_at' => '2018-10-28 03:38:37',
                         'updated_at' => '2019-02-04 03:11:41',
@@ -70,7 +70,7 @@ class TenantSettingsTableSeeder extends Seeder
                 6 =>
                     array(
                         'id' => 7,
-                        'type' => 'vendor_system_activation',
+                        'setting' => 'vendor_system_activation',
                         'value' => '1',
                         'created_at' => '2018-10-28 09:44:16',
                         'updated_at' => '2019-02-04 03:11:38',
@@ -78,7 +78,7 @@ class TenantSettingsTableSeeder extends Seeder
                 7 =>
                     array(
                         'id' => 8,
-                        'type' => 'show_vendors',
+                        'setting' => 'show_vendors',
                         'value' => '1',
                         'created_at' => '2018-10-28 09:44:47',
                         'updated_at' => '2019-02-04 03:11:13',
@@ -86,7 +86,7 @@ class TenantSettingsTableSeeder extends Seeder
                 8 =>
                     array(
                         'id' => 9,
-                        'type' => 'paypal_payment',
+                        'setting' => 'paypal_payment',
                         'value' => '1',
                         'created_at' => '2018-10-28 09:45:16',
                         'updated_at' => '2021-04-08 12:59:12',
@@ -94,7 +94,7 @@ class TenantSettingsTableSeeder extends Seeder
                 9 =>
                     array(
                         'id' => 10,
-                        'type' => 'stripe_payment',
+                        'setting' => 'stripe_payment',
                         'value' => '1',
                         'created_at' => '2018-10-28 09:45:47',
                         'updated_at' => '2021-04-08 12:59:08',
@@ -102,7 +102,7 @@ class TenantSettingsTableSeeder extends Seeder
                 10 =>
                     array(
                         'id' => 11,
-                        'type' => 'cash_payment',
+                        'setting' => 'cash_payment',
                         'value' => '1',
                         'created_at' => '2018-10-28 09:46:05',
                         'updated_at' => '2019-01-24 05:40:18',
@@ -110,7 +110,7 @@ class TenantSettingsTableSeeder extends Seeder
                 11 =>
                     array(
                         'id' => 12,
-                        'type' => 'payumoney_payment',
+                        'setting' => 'payumoney_payment',
                         'value' => '0',
                         'created_at' => '2018-10-28 09:46:27',
                         'updated_at' => '2019-03-05 07:41:36',
@@ -118,7 +118,7 @@ class TenantSettingsTableSeeder extends Seeder
                 12 =>
                     array(
                         'id' => 13,
-                        'type' => 'best_selling',
+                        'setting' => 'best_selling',
                         'value' => '1',
                         'created_at' => '2018-12-24 10:13:44',
                         'updated_at' => '2019-02-14 07:29:13',
@@ -126,7 +126,7 @@ class TenantSettingsTableSeeder extends Seeder
                 13 =>
                     array(
                         'id' => 14,
-                        'type' => 'paypal_sandbox',
+                        'setting' => 'paypal_sandbox',
                         'value' => '0',
                         'created_at' => '2019-01-16 14:44:18',
                         'updated_at' => '2019-01-16 14:44:18',
@@ -134,7 +134,7 @@ class TenantSettingsTableSeeder extends Seeder
                 14 =>
                     array(
                         'id' => 15,
-                        'type' => 'sslcommerz_sandbox',
+                        'setting' => 'sslcommerz_sandbox',
                         'value' => '1',
                         'created_at' => '2019-01-16 14:44:18',
                         'updated_at' => '2019-03-14 02:07:26',
@@ -142,7 +142,7 @@ class TenantSettingsTableSeeder extends Seeder
                 15 =>
                     array(
                         'id' => 16,
-                        'type' => 'sslcommerz_payment',
+                        'setting' => 'sslcommerz_payment',
                         'value' => '0',
                         'created_at' => '2019-01-24 11:39:07',
                         'updated_at' => '2019-01-29 08:13:46',
@@ -150,7 +150,7 @@ class TenantSettingsTableSeeder extends Seeder
                 16 =>
                     array(
                         'id' => 17,
-                        'type' => 'vendor_commission',
+                        'setting' => 'vendor_commission',
                         'value' => '20',
                         'created_at' => '2019-01-31 08:18:04',
                         'updated_at' => '2019-04-13 09:49:26',
@@ -158,15 +158,15 @@ class TenantSettingsTableSeeder extends Seeder
                 17 =>
                     array(
                         'id' => 18,
-                        'type' => 'verification_form',
-                        'value' => '[{"type":"text","label":"Your name"},{"type":"text","label":"Shop name"},{"type":"text","label":"Email"},{"type":"text","label":"License No"},{"type":"text","label":"Full Address"},{"type":"text","label":"Phone Number"},{"type":"file","label":"Tax Papers"}]',
+                        'setting' => 'verification_form',
+                        'value' => '[{"setting":"text","label":"Your name"},{"setting":"text","label":"Shop name"},{"setting":"text","label":"Email"},{"setting":"text","label":"License No"},{"setting":"text","label":"Full Address"},{"setting":"text","label":"Phone Number"},{"setting":"file","label":"Tax Papers"}]',
                         'created_at' => '2019-02-03 13:36:58',
                         'updated_at' => '2019-02-16 08:14:42',
                     ),
                 18 =>
                     array(
                         'id' => 19,
-                        'type' => 'google_analytics',
+                        'setting' => 'google_analytics',
                         'value' => '0',
                         'created_at' => '2019-02-06 14:22:35',
                         'updated_at' => '2019-02-06 14:22:35',
@@ -174,7 +174,7 @@ class TenantSettingsTableSeeder extends Seeder
                 19 =>
                     array(
                         'id' => 20,
-                        'type' => 'facebook_login',
+                        'setting' => 'facebook_login',
                         'value' => '1',
                         'created_at' => '2019-02-07 14:51:59',
                         'updated_at' => '2021-04-08 12:59:23',
@@ -182,7 +182,7 @@ class TenantSettingsTableSeeder extends Seeder
                 20 =>
                     array(
                         'id' => 21,
-                        'type' => 'google_login',
+                        'setting' => 'google_login',
                         'value' => '1',
                         'created_at' => '2019-02-07 14:52:10',
                         'updated_at' => '2021-04-08 12:59:24',
@@ -190,7 +190,7 @@ class TenantSettingsTableSeeder extends Seeder
                 21 =>
                     array(
                         'id' => 22,
-                        'type' => 'twitter_login',
+                        'setting' => 'twitter_login',
                         'value' => '1',
                         'created_at' => '2019-02-07 14:52:20',
                         'updated_at' => '2021-04-08 12:59:25',
@@ -198,7 +198,7 @@ class TenantSettingsTableSeeder extends Seeder
                 22 =>
                     array(
                         'id' => 23,
-                        'type' => 'payumoney_payment',
+                        'setting' => 'payumoney_payment',
                         'value' => '1',
                         'created_at' => '2019-03-05 13:38:17',
                         'updated_at' => '2019-03-05 13:38:17',
@@ -206,7 +206,7 @@ class TenantSettingsTableSeeder extends Seeder
                 23 =>
                     array(
                         'id' => 24,
-                        'type' => 'payumoney_sandbox',
+                        'setting' => 'payumoney_sandbox',
                         'value' => '1',
                         'created_at' => '2019-03-05 13:38:17',
                         'updated_at' => '2019-03-05 07:39:18',
@@ -214,7 +214,7 @@ class TenantSettingsTableSeeder extends Seeder
                 24 =>
                     array(
                         'id' => 36,
-                        'type' => 'facebook_chat',
+                        'setting' => 'facebook_chat',
                         'value' => '0',
                         'created_at' => '2019-04-15 14:45:04',
                         'updated_at' => '2019-04-15 14:45:04',
@@ -222,7 +222,7 @@ class TenantSettingsTableSeeder extends Seeder
                 25 =>
                     array(
                         'id' => 37,
-                        'type' => 'email_verification',
+                        'setting' => 'email_verification',
                         'value' => '0',
                         'created_at' => '2019-04-30 10:30:07',
                         'updated_at' => '2019-04-30 10:30:07',
@@ -230,7 +230,7 @@ class TenantSettingsTableSeeder extends Seeder
                 26 =>
                     array(
                         'id' => 38,
-                        'type' => 'wallet_system',
+                        'setting' => 'wallet_system',
                         'value' => '1',
                         'created_at' => '2019-05-19 11:05:44',
                         'updated_at' => '2021-04-08 12:58:55',
@@ -238,7 +238,7 @@ class TenantSettingsTableSeeder extends Seeder
                 27 =>
                     array(
                         'id' => 39,
-                        'type' => 'coupon_system',
+                        'setting' => 'coupon_system',
                         'value' => '1',
                         'created_at' => '2019-06-11 12:46:18',
                         'updated_at' => '2021-04-08 12:59:03',
@@ -246,7 +246,7 @@ class TenantSettingsTableSeeder extends Seeder
                 28 =>
                     array(
                         'id' => 40,
-                        'type' => 'current_version',
+                        'setting' => 'current_version',
                         'value' => '4.3',
                         'created_at' => '2019-06-11 12:46:18',
                         'updated_at' => '2019-06-11 12:46:18',
@@ -254,7 +254,7 @@ class TenantSettingsTableSeeder extends Seeder
                 29 =>
                     array(
                         'id' => 41,
-                        'type' => 'instamojo_payment',
+                        'setting' => 'instamojo_payment',
                         'value' => '0',
                         'created_at' => '2019-07-06 12:58:03',
                         'updated_at' => '2019-07-06 12:58:03',
@@ -262,7 +262,7 @@ class TenantSettingsTableSeeder extends Seeder
                 30 =>
                     array(
                         'id' => 42,
-                        'type' => 'instamojo_sandbox',
+                        'setting' => 'instamojo_sandbox',
                         'value' => '1',
                         'created_at' => '2019-07-06 12:58:43',
                         'updated_at' => '2019-07-06 12:58:43',
@@ -270,7 +270,7 @@ class TenantSettingsTableSeeder extends Seeder
                 31 =>
                     array(
                         'id' => 43,
-                        'type' => 'razorpay',
+                        'setting' => 'razorpay',
                         'value' => '0',
                         'created_at' => '2019-07-06 12:58:43',
                         'updated_at' => '2019-07-06 12:58:43',
@@ -278,7 +278,7 @@ class TenantSettingsTableSeeder extends Seeder
                 32 =>
                     array(
                         'id' => 44,
-                        'type' => 'paystack',
+                        'setting' => 'paystack',
                         'value' => '0',
                         'created_at' => '2019-07-21 16:00:38',
                         'updated_at' => '2019-07-21 16:00:38',
@@ -286,7 +286,7 @@ class TenantSettingsTableSeeder extends Seeder
                 33 =>
                     array(
                         'id' => 45,
-                        'type' => 'pickup_point',
+                        'setting' => 'pickup_point',
                         'value' => '1',
                         'created_at' => '2019-10-17 14:50:39',
                         'updated_at' => '2021-04-08 12:59:37',
@@ -294,7 +294,7 @@ class TenantSettingsTableSeeder extends Seeder
                 34 =>
                     array(
                         'id' => 46,
-                        'type' => 'maintenance_mode',
+                        'setting' => 'maintenance_mode',
                         'value' => '0',
                         'created_at' => '2019-10-17 14:51:04',
                         'updated_at' => '2019-10-17 14:51:04',
@@ -302,7 +302,7 @@ class TenantSettingsTableSeeder extends Seeder
                 35 =>
                     array(
                         'id' => 47,
-                        'type' => 'voguepay',
+                        'setting' => 'voguepay',
                         'value' => '0',
                         'created_at' => '2019-10-17 14:51:24',
                         'updated_at' => '2019-10-17 14:51:24',
@@ -310,7 +310,7 @@ class TenantSettingsTableSeeder extends Seeder
                 36 =>
                     array(
                         'id' => 48,
-                        'type' => 'voguepay_sandbox',
+                        'setting' => 'voguepay_sandbox',
                         'value' => '0',
                         'created_at' => '2019-10-17 14:51:38',
                         'updated_at' => '2019-10-17 14:51:38',
@@ -318,7 +318,7 @@ class TenantSettingsTableSeeder extends Seeder
                 37 =>
                     array(
                         'id' => 50,
-                        'type' => 'category_wise_commission',
+                        'setting' => 'category_wise_commission',
                         'value' => '0',
                         'created_at' => '2020-01-21 09:22:47',
                         'updated_at' => '2020-01-21 09:22:47',
@@ -326,7 +326,7 @@ class TenantSettingsTableSeeder extends Seeder
                 38 =>
                     array(
                         'id' => 51,
-                        'type' => 'conversation_system',
+                        'setting' => 'conversation_system',
                         'value' => '1',
                         'created_at' => '2020-01-21 09:23:21',
                         'updated_at' => '2020-01-21 09:23:21',
@@ -334,7 +334,7 @@ class TenantSettingsTableSeeder extends Seeder
                 39 =>
                     array(
                         'id' => 52,
-                        'type' => 'guest_checkout_active',
+                        'setting' => 'guest_checkout_active',
                         'value' => '1',
                         'created_at' => '2020-01-22 09:36:38',
                         'updated_at' => '2020-01-22 09:36:38',
@@ -342,7 +342,7 @@ class TenantSettingsTableSeeder extends Seeder
                 40 =>
                     array(
                         'id' => 53,
-                        'type' => 'facebook_pixel',
+                        'setting' => 'facebook_pixel',
                         'value' => '0',
                         'created_at' => '2020-01-22 13:43:58',
                         'updated_at' => '2020-01-22 13:43:58',
@@ -350,7 +350,7 @@ class TenantSettingsTableSeeder extends Seeder
                 41 =>
                     array(
                         'id' => 55,
-                        'type' => 'classified_product',
+                        'setting' => 'classified_product',
                         'value' => '1',
                         'created_at' => '2020-05-13 16:01:05',
                         'updated_at' => '2021-04-08 12:58:57',
@@ -358,7 +358,7 @@ class TenantSettingsTableSeeder extends Seeder
                 42 =>
                     array(
                         'id' => 56,
-                        'type' => 'pos_activation_for_seller',
+                        'setting' => 'pos_activation_for_seller',
                         'value' => '1',
                         'created_at' => '2020-06-11 12:45:02',
                         'updated_at' => '2020-06-11 12:45:02',
@@ -366,7 +366,7 @@ class TenantSettingsTableSeeder extends Seeder
                 43 =>
                     array(
                         'id' => 57,
-                        'type' => 'shipping_type',
+                        'setting' => 'shipping_setting',
                         'value' => 'product_wise_shipping',
                         'created_at' => '2020-07-01 16:49:56',
                         'updated_at' => '2020-07-01 16:49:56',
@@ -374,7 +374,7 @@ class TenantSettingsTableSeeder extends Seeder
                 44 =>
                     array(
                         'id' => 58,
-                        'type' => 'flat_rate_shipping_cost',
+                        'setting' => 'flat_rate_shipping_cost',
                         'value' => '0',
                         'created_at' => '2020-07-01 16:49:56',
                         'updated_at' => '2020-07-01 16:49:56',
@@ -382,7 +382,7 @@ class TenantSettingsTableSeeder extends Seeder
                 45 =>
                     array(
                         'id' => 59,
-                        'type' => 'shipping_cost_admin',
+                        'setting' => 'shipping_cost_admin',
                         'value' => '0',
                         'created_at' => '2020-07-01 16:49:56',
                         'updated_at' => '2020-07-01 16:49:56',
@@ -390,7 +390,7 @@ class TenantSettingsTableSeeder extends Seeder
                 46 =>
                     array(
                         'id' => 60,
-                        'type' => 'payhere_sandbox',
+                        'setting' => 'payhere_sandbox',
                         'value' => '0',
                         'created_at' => '2020-07-30 21:23:53',
                         'updated_at' => '2020-07-30 21:23:53',
@@ -398,7 +398,7 @@ class TenantSettingsTableSeeder extends Seeder
                 47 =>
                     array(
                         'id' => 61,
-                        'type' => 'payhere',
+                        'setting' => 'payhere',
                         'value' => '0',
                         'created_at' => '2020-07-30 21:23:53',
                         'updated_at' => '2020-07-30 21:23:53',
@@ -406,7 +406,7 @@ class TenantSettingsTableSeeder extends Seeder
                 48 =>
                     array(
                         'id' => 62,
-                        'type' => 'google_recaptcha',
+                        'setting' => 'google_recaptcha',
                         'value' => '0',
                         'created_at' => '2020-08-17 10:13:37',
                         'updated_at' => '2020-08-17 10:13:37',
@@ -414,7 +414,7 @@ class TenantSettingsTableSeeder extends Seeder
                 49 =>
                     array(
                         'id' => 63,
-                        'type' => 'ngenius',
+                        'setting' => 'ngenius',
                         'value' => '0',
                         'created_at' => '2020-09-22 13:58:21',
                         'updated_at' => '2020-09-22 13:58:21',
@@ -422,7 +422,7 @@ class TenantSettingsTableSeeder extends Seeder
                 51 =>
                     array(
                         'id' => 65,
-                        'type' => 'show_language_switcher',
+                        'setting' => 'show_language_switcher',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 12:17:57',
@@ -430,7 +430,7 @@ class TenantSettingsTableSeeder extends Seeder
                 52 =>
                     array(
                         'id' => 66,
-                        'type' => 'show_currency_switcher',
+                        'setting' => 'show_currency_switcher',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 12:17:57',
@@ -438,7 +438,7 @@ class TenantSettingsTableSeeder extends Seeder
                 53 =>
                     array(
                         'id' => 67,
-                        'type' => 'header_stikcy',
+                        'setting' => 'header_stikcy',
                         'value' => 'on',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -447,7 +447,7 @@ class TenantSettingsTableSeeder extends Seeder
                 55 =>
                     array(
                         'id' => 69,
-                        'type' => 'about_us_description',
+                        'setting' => 'about_us_description',
                         'value' => 'Your business idea description',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:34:42',
@@ -455,7 +455,7 @@ class TenantSettingsTableSeeder extends Seeder
                 56 =>
                     array(
                         'id' => 70,
-                        'type' => 'contact_address',
+                        'setting' => 'contact_address',
                         'value' => 'Your Address',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:52',
@@ -463,7 +463,7 @@ class TenantSettingsTableSeeder extends Seeder
                 57 =>
                     array(
                         'id' => 71,
-                        'type' => 'contact_phone',
+                        'setting' => 'contact_phone',
                         'value' => '+37061187792',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:52',
@@ -471,7 +471,7 @@ class TenantSettingsTableSeeder extends Seeder
                 58 =>
                     array(
                         'id' => 72,
-                        'type' => 'contact_email',
+                        'setting' => 'contact_email',
                         'value' => 'support@ev-saas.com',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:52',
@@ -479,7 +479,7 @@ class TenantSettingsTableSeeder extends Seeder
                 59 =>
                     array(
                         'id' => 73,
-                        'type' => 'widget_one_labels',
+                        'setting' => 'widget_one_labels',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -487,7 +487,7 @@ class TenantSettingsTableSeeder extends Seeder
                 60 =>
                     array(
                         'id' => 74,
-                        'type' => 'widget_one_links',
+                        'setting' => 'widget_one_links',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -495,7 +495,7 @@ class TenantSettingsTableSeeder extends Seeder
                 61 =>
                     array(
                         'id' => 75,
-                        'type' => 'widget_one',
+                        'setting' => 'widget_one',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -503,7 +503,7 @@ class TenantSettingsTableSeeder extends Seeder
                 62 =>
                     array(
                         'id' => 76,
-                        'type' => 'frontend_copyright_text',
+                        'setting' => 'frontend_copyright_text',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -511,7 +511,7 @@ class TenantSettingsTableSeeder extends Seeder
                 63 =>
                     array(
                         'id' => 77,
-                        'type' => 'show_social_links',
+                        'setting' => 'show_social_links',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -519,7 +519,7 @@ class TenantSettingsTableSeeder extends Seeder
                 64 =>
                     array(
                         'id' => 78,
-                        'type' => 'facebook_link',
+                        'setting' => 'facebook_link',
                         'value' => 'https://www.facebook.com/',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:02:50',
@@ -527,7 +527,7 @@ class TenantSettingsTableSeeder extends Seeder
                 65 =>
                     array(
                         'id' => 79,
-                        'type' => 'twitter_link',
+                        'setting' => 'twitter_link',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -535,7 +535,7 @@ class TenantSettingsTableSeeder extends Seeder
                 66 =>
                     array(
                         'id' => 80,
-                        'type' => 'instagram_link',
+                        'setting' => 'instagram_link',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -543,7 +543,7 @@ class TenantSettingsTableSeeder extends Seeder
                 67 =>
                     array(
                         'id' => 81,
-                        'type' => 'youtube_link',
+                        'setting' => 'youtube_link',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -551,7 +551,7 @@ class TenantSettingsTableSeeder extends Seeder
                 68 =>
                     array(
                         'id' => 82,
-                        'type' => 'linkedin_link',
+                        'setting' => 'linkedin_link',
                         'value' => '#',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:02:50',
@@ -559,7 +559,7 @@ class TenantSettingsTableSeeder extends Seeder
                 69 =>
                     array(
                         'id' => 83,
-                        'type' => 'payment_method_images',
+                        'setting' => 'payment_method_images',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -567,7 +567,7 @@ class TenantSettingsTableSeeder extends Seeder
                 70 =>
                     array(
                         'id' => 84,
-                        'type' => 'home_slider_images',
+                        'setting' => 'home_slider_images',
                         'value' => '["24"]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 14:38:00',
@@ -575,7 +575,7 @@ class TenantSettingsTableSeeder extends Seeder
                 71 =>
                     array(
                         'id' => 85,
-                        'type' => 'home_slider_links',
+                        'setting' => 'home_slider_links',
                         'value' => '["https:\\/\\/ev-saas.com"]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:43:09',
@@ -583,7 +583,7 @@ class TenantSettingsTableSeeder extends Seeder
                 72 =>
                     array(
                         'id' => 86,
-                        'type' => 'home_banner1_images',
+                        'setting' => 'home_banner1_images',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 14:37:21',
@@ -591,7 +591,7 @@ class TenantSettingsTableSeeder extends Seeder
                 73 =>
                     array(
                         'id' => 87,
-                        'type' => 'home_banner1_links',
+                        'setting' => 'home_banner1_links',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 14:37:21',
@@ -599,7 +599,7 @@ class TenantSettingsTableSeeder extends Seeder
                 74 =>
                     array(
                         'id' => 88,
-                        'type' => 'home_banner2_images',
+                        'setting' => 'home_banner2_images',
                         'value' => '[]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -607,7 +607,7 @@ class TenantSettingsTableSeeder extends Seeder
                 75 =>
                     array(
                         'id' => 89,
-                        'type' => 'home_banner2_links',
+                        'setting' => 'home_banner2_links',
                         'value' => '[]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -615,7 +615,7 @@ class TenantSettingsTableSeeder extends Seeder
                 76 =>
                     array(
                         'id' => 90,
-                        'type' => 'home_categories',
+                        'setting' => 'home_categories',
                         'value' => '[]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -623,7 +623,7 @@ class TenantSettingsTableSeeder extends Seeder
                 77 =>
                     array(
                         'id' => 91,
-                        'type' => 'top10_categories',
+                        'setting' => 'top10_categories',
                         'value' => '["1","2","3","5","6"]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 14:37:18',
@@ -631,7 +631,7 @@ class TenantSettingsTableSeeder extends Seeder
                 78 =>
                     array(
                         'id' => 92,
-                        'type' => 'top10_brands',
+                        'setting' => 'top10_brands',
                         'value' => '["1"]',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:43:40',
@@ -639,7 +639,7 @@ class TenantSettingsTableSeeder extends Seeder
                 79 =>
                     array(
                         'id' => 93,
-                        'type' => 'website_name',
+                        'setting' => 'website_name',
                         'value' => 'EV SaaS App',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:04',
@@ -647,7 +647,7 @@ class TenantSettingsTableSeeder extends Seeder
                 80 =>
                     array(
                         'id' => 94,
-                        'type' => 'site_motto',
+                        'setting' => 'site_motto',
                         'value' => 'Perfect canvas for your great business idea',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:04',
@@ -655,7 +655,7 @@ class TenantSettingsTableSeeder extends Seeder
                 81 =>
                     array(
                         'id' => 95,
-                        'type' => 'site_icon',
+                        'setting' => 'site_icon',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -663,7 +663,7 @@ class TenantSettingsTableSeeder extends Seeder
                 82 =>
                     array(
                         'id' => 96,
-                        'type' => 'base_color',
+                        'setting' => 'base_color',
                         'value' => '#cfa16d',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:35:59',
@@ -671,7 +671,7 @@ class TenantSettingsTableSeeder extends Seeder
                 83 =>
                     array(
                         'id' => 97,
-                        'type' => 'base_hov_color',
+                        'setting' => 'base_hov_color',
                         'value' => '#032c2a',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:04',
@@ -679,7 +679,7 @@ class TenantSettingsTableSeeder extends Seeder
                 84 =>
                     array(
                         'id' => 98,
-                        'type' => 'meta_title',
+                        'setting' => 'meta_title',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -687,7 +687,7 @@ class TenantSettingsTableSeeder extends Seeder
                 85 =>
                     array(
                         'id' => 99,
-                        'type' => 'meta_description',
+                        'setting' => 'meta_description',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -695,7 +695,7 @@ class TenantSettingsTableSeeder extends Seeder
                 86 =>
                     array(
                         'id' => 100,
-                        'type' => 'meta_keywords',
+                        'setting' => 'meta_keywords',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -703,7 +703,7 @@ class TenantSettingsTableSeeder extends Seeder
                 87 =>
                     array(
                         'id' => 101,
-                        'type' => 'meta_image',
+                        'setting' => 'meta_image',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -711,7 +711,7 @@ class TenantSettingsTableSeeder extends Seeder
                 88 =>
                     array(
                         'id' => 102,
-                        'type' => 'site_name',
+                        'setting' => 'site_name',
                         'value' => 'EV-SaaS Demo',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 12:58:39',
@@ -719,7 +719,7 @@ class TenantSettingsTableSeeder extends Seeder
                 89 =>
                     array(
                         'id' => 103,
-                        'type' => 'system_logo_white',
+                        'setting' => 'system_logo_white',
                         'value' => '9',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 12:58:39',
@@ -727,7 +727,7 @@ class TenantSettingsTableSeeder extends Seeder
                 90 =>
                     array(
                         'id' => 104,
-                        'type' => 'system_logo_black',
+                        'setting' => 'system_logo_black',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -735,7 +735,7 @@ class TenantSettingsTableSeeder extends Seeder
                 91 =>
                     array(
                         'id' => 105,
-                        'type' => 'timezone',
+                        'setting' => 'timezone',
                         'value' => NULL,
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2020-11-16 09:26:36',
@@ -743,7 +743,7 @@ class TenantSettingsTableSeeder extends Seeder
                 92 =>
                     array(
                         'id' => 106,
-                        'type' => 'admin_login_background',
+                        'setting' => 'admin_login_background',
                         'value' => '10',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 12:58:39',
@@ -751,7 +751,7 @@ class TenantSettingsTableSeeder extends Seeder
                 93 =>
                     array(
                         'id' => 107,
-                        'type' => 'iyzico_sandbox',
+                        'setting' => 'iyzico_sandbox',
                         'value' => '1',
                         'created_at' => '2020-12-30 18:45:56',
                         'updated_at' => '2020-12-30 18:45:56',
@@ -759,7 +759,7 @@ class TenantSettingsTableSeeder extends Seeder
                 94 =>
                     array(
                         'id' => 108,
-                        'type' => 'iyzico',
+                        'setting' => 'iyzico',
                         'value' => '1',
                         'created_at' => '2020-12-30 18:45:56',
                         'updated_at' => '2020-12-30 18:45:56',
@@ -767,7 +767,7 @@ class TenantSettingsTableSeeder extends Seeder
                 95 =>
                     array(
                         'id' => 109,
-                        'type' => 'decimal_separator',
+                        'setting' => 'decimal_separator',
                         'value' => '1',
                         'created_at' => '2020-12-30 18:45:56',
                         'updated_at' => '2020-12-30 18:45:56',
@@ -775,7 +775,7 @@ class TenantSettingsTableSeeder extends Seeder
                 96 =>
                     array(
                         'id' => 110,
-                        'type' => 'nagad',
+                        'setting' => 'nagad',
                         'value' => '0',
                         'created_at' => '2021-01-22 12:30:03',
                         'updated_at' => '2021-01-22 12:30:03',
@@ -783,7 +783,7 @@ class TenantSettingsTableSeeder extends Seeder
                 97 =>
                     array(
                         'id' => 111,
-                        'type' => 'bkash',
+                        'setting' => 'bkash',
                         'value' => '0',
                         'created_at' => '2021-01-22 12:30:03',
                         'updated_at' => '2021-01-22 12:30:03',
@@ -791,7 +791,7 @@ class TenantSettingsTableSeeder extends Seeder
                 98 =>
                     array(
                         'id' => 112,
-                        'type' => 'bkash_sandbox',
+                        'setting' => 'bkash_sandbox',
                         'value' => '1',
                         'created_at' => '2021-01-22 12:30:03',
                         'updated_at' => '2021-01-22 12:30:03',
@@ -799,23 +799,23 @@ class TenantSettingsTableSeeder extends Seeder
                 99 =>
                     array(
                         'id' => 113,
-                        'type' => 'header_menu_labels',
-                        'value' => '["Home","News","Marketplace","Companies","Events","Calendar","Business For Sale","Investments","Jobs","Education"]',
+                        'setting' => 'header_menu_labels',
+                        'value' => '["Home","News","Marketplace","Companies"]',
                         'created_at' => '2021-02-16 04:43:11',
                         'updated_at' => '2021-04-10 11:57:02',
                     ),
                 100 =>
                     array(
                         'id' => 114,
-                        'type' => 'header_menu_links',
-                        'value' => '["\\/","\\/news","\\/search","\\/sellers","\\/events","\\/calendar","\\/business-for-sale","\\/investments","\\/jobs","\\/education"]',
+                        'setting' => 'header_menu_links',
+                        'value' => '["\\/","\\/news","\\/search","\\/sellers"]',
                         'created_at' => '2021-02-16 04:43:11',
                         'updated_at' => '2021-05-10 09:12:27',
                     ),
                 101 =>
                     array(
                         'id' => 115,
-                        'type' => 'product_manage_by_admin',
+                        'setting' => 'product_manage_by_admin',
                         'value' => '1',
                         'created_at' => '2021-04-08 12:59:02',
                         'updated_at' => '2021-04-08 12:59:02',

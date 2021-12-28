@@ -57,7 +57,7 @@ export default class HSAddField {
         var settings = params;
 
         if (this.fieldsCount < settings.limit) {
-            let field = $(settings.template).clone().removeAttr('id').css({display: ''}).appendTo($(settings.container))
+            let field = $(settings.template).clone().removeAttr('id').css({display: 'flex'}).appendTo($(settings.container))
 
             this.__updateFieldsCount();
             this.__renderName();

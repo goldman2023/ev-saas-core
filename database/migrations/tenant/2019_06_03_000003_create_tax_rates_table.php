@@ -13,12 +13,14 @@ class CreateTaxRatesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tax_rates', function (Blueprint $table) {
-            $table->id();
-            $table->string('stripe_id')->index();
-            $table->double('percentage')->index();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('tax_rates')) {
+            Schema::create('tax_rates', function (Blueprint $table) {
+                $table->id();
+                $table->string('stripe_id')->index();
+                $table->double('percentage')->index();
+                $table->timestamps();
+            });
+        }
     }
 
     /**

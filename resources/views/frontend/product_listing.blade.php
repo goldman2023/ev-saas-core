@@ -174,14 +174,17 @@ $meta_description = get_setting('site_motto');
                         {{-- END Sub Categories Display --}}
                         @if ($products->count() > 0)
 
-                        <div class="row gutters-5 mt-2">
-                            @foreach ($products as $key => $product)
-                            <div class="col-sm-4 mb-3">
-                                <x-default.products.cards.product-card :product="$product" class="product-card">
-                                </x-default.products.cards.product-card>
+                        @if($products->isNotEmpty())
+                            <div class="row gutters-5 mt-2">
+                                @foreach ($products as $key => $product)
+                                    <div class="col-sm-4 mb-3">
+                                        <x-default.products.cards.product-card :product="$product" class="product-card">
+                                        </x-default.products.cards.product-card>
+                                    </div>
+                                @endforeach
                             </div>
-                            @endforeach
-                        </div>
+                        @endif
+
                         @if ($content == 'product' || !empty($selected_category))
                         <hr />
                         <div class="d-flex ev-pagination justify-content-center mt-3">

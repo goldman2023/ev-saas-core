@@ -6,8 +6,11 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
-    <meta name="file-base-url" content="{{ getFileBaseURL() }}">
-    <meta name="file-bucket-url" content="{{ getBucketBaseURL() }}">
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
+    <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
 
     <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
 
@@ -20,8 +23,8 @@
     @yield('meta')
 
     @if (!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
-        <x-default.system.og-meta>
-        </x-default.system.og-meta>
+    <x-default.system.og-meta>
+    </x-default.system.og-meta>
     @endif
 
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
@@ -68,61 +71,52 @@
     <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
-
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>
 
     @php
-        echo get_setting('header_script');
+    echo get_setting('header_script');
     @endphp
 
     @stack('head_scripts')
 </head>
 
 <body>
-    <!-- aiz-main-wrapper -->
+    <!-- AlpineJS -->
+    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+
     <div class="">
 
-    {{-- @include('frontend.inc.nav') --}}
+        {{-- @include('frontend.inc.nav') --}}
         <x-default.headers.header>
         </x-default.headers.header>
 
-        <div class="space-top-lg-4 space-top-3">
+        <div class="space-top-lg-3 space-top-3">
+            {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
+
             @yield('content')
         </div>
 
-    {{-- @include('frontend.inc.footer') --}}
+        {{-- @include('frontend.inc.footer') --}}
 
-    <x-default.footers.footer>
-    </x-default.footers.footer>
+        <x-default.footers.footer>
+        </x-default.footers.footer>
 
-</div>
-
-<x-default.system.cookies-agreement></x-default.system.cookies-agreement>
-
-@include('frontend.partials.modal')
-
-<div class="
-        modal fade" id="addToCart">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size"
-            role="document">
-            <div class="modal-content position-relative">
-                <div class="c-preloader text-center p-3">
-                    <i class="las la-spinner la-spin la-3x"></i>
-                </div>
-                <button type="button" class="close absolute-top-right btn-icon close z-1" data-dismiss="modal"
-                    aria-label="Close">
-                    <span aria-hidden="true" class="la-2x">&times;</span>
-                </button>
-                <div id="addToCart-modal-body">
-
-                </div>
-            </div>
-        </div>
     </div>
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
+
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
+
+    <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
+
+    @include('frontend.partials.modal')
 
     <!-- Print SignUp Modal Component -->
     <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
+
+    <!-- Carts -->
+    <livewire:cart.cart template="flyout-cart" />
 
     @yield('modal')
 
@@ -130,32 +124,39 @@
 
     @livewireScripts
 
-    {{-- TODO: Include this propertly --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" rel="stylesheet">
-
     @stack('footer_scripts')
 
     @include('frontend.layouts.partials.app-js')
 
-    <script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
+    {{-- TODO: Move this to some logical place --}}
+    <script src="{{ static_asset('front/js/hs.leaflet.js') }}"></script>
 
     <!-- JS Plugins Init. -->
+
     <script>
         $(function() {
-            // INITIALIZATION OF SLICK CAROUSEL
             // =======================================================
-            $('.js-slick-carousel').each(function() {
-                var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
+            $('.js-hs-unfold-invoker').each(function () {
+                var unfold = new HSUnfold($(this)).init();
             });
-            var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
-            console.log($.HSCore.components);
 
+
+            $(document).on('ready', function () {
+    // INITIALIZATION OF LEAFLET
+    // =======================================================
+    $('#map').each(function () {
+      var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
+
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+        id: 'mapbox/light-v9'
+      }).addTo(leaflet);
+    });
+  });
         });
     </script>
 
     @php
-        echo get_setting('footer_script');
+    echo get_setting('footer_script');
     @endphp
 </body>
 

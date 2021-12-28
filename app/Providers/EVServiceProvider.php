@@ -2,17 +2,21 @@
 
 namespace App\Providers;
 
+use App\Http\Services\AttributesService;
+use App\Http\Services\CartService;
+use App\Http\Services\CountryService;
 use App\Http\Services\IMGProxyService;
+use App\Http\Services\MyShopService;
 use App\Http\Services\VendorService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container;
 use App\Http\Services\CategoryService;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Services\EVService;
 use App\Http\Services\TenantSettingsService;
 use App\Http\Services\FXService;
-use Blade;
 
 class EVServiceProvider extends ServiceProvider
 {
@@ -25,6 +29,11 @@ class EVServiceProvider extends ServiceProvider
     {
         // Add EV dynamic components to EV namespace
         Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
+
+        // Register IMG (IMGProxy) Singleton
+        $this->app->singleton('myshop', function() {
+            return new MyShopService(fn () => Container::getInstance());
+        });
 
         // Register IMG (IMGProxy) Singleton
         $this->app->singleton('imgproxy', function() {
@@ -41,6 +50,11 @@ class EVServiceProvider extends ServiceProvider
             return new CategoryService(fn () => Container:: getInstance());
         });
 
+        // Register Attributes Service Singleton
+        $this->app->singleton('ev_attributes', function() {
+            return new AttributesService(fn () => Container:: getInstance());
+        });
+
         // Register FX Singleton
         $this->app->singleton('fx', function() {
             return new FXService(fn () => Container::getInstance());
@@ -54,6 +68,16 @@ class EVServiceProvider extends ServiceProvider
         // Register Vendor Singleton
         $this->app->singleton('vendor', function() {
             return new VendorService(fn () => Container::getInstance());
+        });
+
+        // Register Cart Singleton
+        $this->app->singleton('cart', function() {
+            return new CartService(fn () => Container::getInstance());
+        });
+
+        // Register Countries Singleton
+        $this->app->singleton('ev_countries', function() {
+            return new CountryService(fn () => Container::getInstance());
         });
     }
 

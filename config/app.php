@@ -78,6 +78,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | FORCE HTTPS
+    |--------------------------------------------------------------------------
+    |
+    | Wheter to force using secure connection.
+    | This should be always true on production.
+    | While local development depends on setup and configuration.
+    |
+    */
+
+    'force_https' => env('FORCE_HTTPS', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
@@ -168,6 +181,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         // Laracon21\Timezones\TimezonesServiceProvider::class,
@@ -193,6 +207,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\SparkServiceProvider::class,
        // App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Stancl\Tenancy\TenancyServiceProvider::class,
@@ -200,17 +215,13 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
 
-        //App\Providers\CartServiceProvider::class,
         Mews\Purifier\PurifierServiceProvider::class,
 
-        // EVServiceProvider
+        // EVServiceProviders
         App\Providers\EVServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
-
-
-        // Laravel Spark
-        App\Providers\SparkServiceProvider::class,
-
+        App\Providers\ViewServiceProvider::class,
+        App\Providers\PaymentMethodsProvider::class,
     ],
 
     /*
@@ -238,6 +249,7 @@ return [
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
+        'EVBaseModel' => App\Models\EVBaseModel::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
@@ -264,18 +276,25 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PaytmWallet' => Anand\LaravelPaytmWallet\Facades\PaytmWallet::class,
         'Str' => Illuminate\Support\Str::class,
+        'Stringy' => App\Support\Stringy::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'Permissions' => App\Facades\Permissions::class,
+        'MyShop' => App\Facades\MyShop::class,
         'Vendor' => App\Facades\Vendor::class,
         'EVS' => App\Facades\EVS::class,
+        'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,
+        'PaymentMethodsUniversal' => App\Facades\PaymentMethodsUniversal::class,
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,
+        'Countries' => App\Facades\Countries::class,
         'Categories' => App\Facades\Categories::class,
+        'AttributesService' => App\Facades\AttributesService::class,
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Wishlist
@@ -26,6 +27,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wishlist extends Model
 {
+    use LogsActivity;
+
+
     protected $guarded = [];
 
     public function user()
@@ -33,8 +37,9 @@ class Wishlist extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product()
+
+    public function subject()
     {
-        return $this->belongsTo(Product::class);
+        return $this->morphTo('subject');
     }
 }

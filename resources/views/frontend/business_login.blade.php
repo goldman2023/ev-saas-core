@@ -12,13 +12,55 @@
                                 @csrf
 
                                 <!-- Login -->
-                                <div id="login">
+                                <div id="login" class="card-body">
                                     <!-- Title -->
-                                    <div class="text-center mb-7">
+                                    <div class="text-center mb-3">
                                         <h3 class="mb-0">{{ translate('Sign In to Business Account') }}</h3>
                                         <p>{{ translate('Login to manage your account.') }}</p>
                                     </div>
                                     <!-- End Title -->
+
+                                    @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
+
+                                    <ul class="list-inline social colored text-center mb-5">
+
+                                        @if (get_setting('google_login') == 1)
+                                            <a class="btn btn-sm btn-danger btn-block mb-2"
+                                            target="_blank"
+                                            href="{{ route('social.login', ['provider' => 'google']) }}">
+                                                <span class="d-flex justify-content-center align-items-center">
+                                                    @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
+                                                   {{ translate('Sign In with Google') }}
+                                                </span>
+                                            </a>
+                                        @endif
+                                        @if (get_setting('facebook_login') == 1)
+                                            <a class="btn btn-sm btn-primary btn-block mb-2"
+                                            target="_blank"
+
+                                            href="{{ route('social.login', ['provider' => 'facebook']) }}">
+                                                <span class="d-flex justify-content-center align-items-center">
+                                                    @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
+                                                    {{ translate('Sign In with Facebook') }}
+                                                </span>
+                                            </a>
+                                        @endif
+                                        @if (get_setting('twitter_login') == 1)
+                                            <a class="btn btn-sm btn-info  btn-block mb-2"
+                                            target="_blank"
+                                            href="{{ route('social.login', ['provider' => 'twitter']) }}">
+                                                <span class="d-flex justify-content-center align-items-center">
+                                                    @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
+                                                    {{ translate('Sign In with Twitter') }}
+                                                </span>
+                                            </a>
+                                        @endif
+                                    </ul>
+
+                                    <div class="text-center mb-3">
+                                        <span class="divider divider-text">{{ translate('OR') }}</span>
+                                    </div>
+                                @endif
 
                                     @error('incorrect')
                                         <small class="text-danger">{{ $message }}</small>
@@ -85,45 +127,13 @@
                                             class="btn btn-sm btn-primary btn-block">{{ translate('Login') }}</button>
                                     </div>
 
-                                    <div class="text-center mb-3">
-                                        <span class="divider divider-text">OR</span>
-                                    </div>
 
-                                    @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
-                                        <div class="separator mb-3">
-                                            <span
-                                                class="bg-white px-3 opacity-60">{{ translate('Or Login With') }}</span>
-                                        </div>
-                                        <ul class="list-inline social colored text-center mb-5">
 
-                                            @if (get_setting('google_login') == 1)
-                                                <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'google']) }}">
-                                                    <span class="d-flex justify-content-center align-items-center">
-                                                        @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Google
-                                                    </span>
-                                                </a>
-                                            @endif
-                                            @if (get_setting('facebook_login') == 1)
-                                                <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'facebook']) }}">
-                                                    <span class="d-flex justify-content-center align-items-center">
-                                                        @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Facebook
-                                                    </span>
-                                                </a>
-                                            @endif
-                                            @if (get_setting('twitter_login') == 1)
-                                                <a class="btn btn-sm btn-ghost-secondary btn-block mb-2"  href="{{ route('social.login', ['provider' => 'twitter']) }}">
-                                                    <span class="d-flex justify-content-center align-items-center">
-                                                        @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
-                                                        Sign In with Twitter
-                                                    </span>
-                                                </a>
-                                            @endif
-                                        </ul>
-                                    @endif
+
                                     <div class="text-center">
-                                        <span class="small text-muted">Do not have an account?</span>
+                                        <span class="small text-muted">
+                                            {{ translate('Do not have an account?') }}
+                                        </span>
                                         <a class="js-animation-link small font-weight-bold" href="{{ route('business.register') }}"
                                             data-hs-show-animation-options='{
                                                  "targetSelector": "#signup",
@@ -131,7 +141,7 @@
                                                  "animationType": "css-animation",
                                                  "animationIn": "slideInUp",
                                                  "duration": 400
-                                               }'>Sign Up
+                                               }'> {{ translate('Sign Up') }}
                                         </a>
                                     </div>
                                 </div>

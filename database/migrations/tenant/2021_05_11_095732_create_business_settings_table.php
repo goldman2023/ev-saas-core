@@ -15,7 +15,7 @@ class CreateBusinessSettingsTable extends Migration
     {
         Schema::create('business_settings', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('type', 30);
+            $table->string('type');
             $table->longText('value')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrent();

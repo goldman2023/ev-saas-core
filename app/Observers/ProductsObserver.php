@@ -23,6 +23,7 @@ class ProductsObserver
      */
     public function saved(Product $product)
     {
-
+        // When product is saved - invalidate the cache!
+        $product->cache()->invalidate(true);
     }
 }

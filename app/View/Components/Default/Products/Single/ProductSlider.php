@@ -17,7 +17,7 @@ class ProductSlider extends Component
      */
     public function __construct(Product $product)
     {
-        $this->images = $product->images;
+        $this->images = $product->getAllImages();
         $this->product = $product;
     }
 

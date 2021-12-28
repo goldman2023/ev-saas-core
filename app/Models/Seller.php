@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Attribute;
 use App\Models\AttributeValue;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\AttributeTrait;
 use App\Traits\GalleryTrait;
@@ -65,11 +66,13 @@ use App\Models\User;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Seller whereVerificationStatus($value)
  * @mixin \Eloquent
  */
-class Seller extends Model
+class Seller extends EVBaseModel
 {
     use AttributeTrait;
+    use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
+
     protected $fillable = ['admin_to_pay'];
 
     public function user()
@@ -85,7 +88,7 @@ class Seller extends Model
     public function get_attribute_label_by_id($id)
     {
         $attribute = $this
-          ->attributes()
+          ->custom_attributes()
           ->where('attribute_id', '=', $id)
           ->first();
 
@@ -107,7 +110,7 @@ class Seller extends Model
     public function get_attribute_value_by_id($id)
     {
         $attribute = $this
-          ->attributes()
+          ->custom_attributes()
           ->where('attribute_id', '=', $id)
           ->first();
 
@@ -129,16 +132,16 @@ class Seller extends Model
             $this->user->shop->youtube;
 
         foreach($this->seo_attributes as $relation) {
-            $schema_value = $relation->attributes()->first()->schema_value ?: $relation->attribute_value->values;
+            $schema_value = $relation->custom_attributes()->first()->schema_value ?: $relation->attribute_value->values;
 
-            if ($relation->attributes()->first()->type === 'checkbox') {
-                $schema_value = implode(",", $relation->attributes()->first()->attribute_values->pluck('values')->toArray());
+            if ($relation->custom_attributes()->first()->type === 'checkbox') {
+                $schema_value = implode(",", $relation->custom_attributes()->first()->attribute_values->pluck('values')->toArray());
             }
 
-            if (in_array($relation->attributes()->first()->name, default_schema_attributes(Seller::class))) {
-                $default_properties[$relation->attributes()->first()->name] = $schema_value;
+            if (in_array($relation->custom_attributes()->first()->name, default_schema_attributes(Seller::class))) {
+                $default_properties[$relation->custom_attributes()->first()->name] = $schema_value;
             } else {
-                $extra_properties[$relation->attributes()->first()->schema_key] = $schema_value;
+                $extra_properties[$relation->custom_attributes()->first()->schema_key] = $schema_value;
             }
         }
 
@@ -164,5 +167,11 @@ class Seller extends Model
         $schema->address($postalAddress);
 
         return $schema;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+        ];
     }
 }

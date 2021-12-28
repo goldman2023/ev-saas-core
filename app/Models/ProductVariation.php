@@ -3,13 +3,23 @@
 namespace App\Models;
 
 use App\Events\Products\ProductVariationDeleting;
-use App\Facades\FX;
 use App\Traits\AttributeTrait;
+use App\Traits\Caching\RegeneratesCache;
+use App\Traits\Caching\SavesToCache;
+use App\Traits\GalleryTrait;
+use App\Traits\PermalinkTrait;
+use App\Traits\PriceTrait;
+use App\Traits\Purchasable;
+use App\Traits\StockManagementTrait;
+use App\Traits\UploadTrait;
+use App\Traits\VariationTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\ReviewTrait;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Sluggable\HasSlug;
 use Str;
 
 /**
@@ -22,66 +32,54 @@ use Str;
  * @property float $price
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * @mixin \Eloquent
+ * @mixin \Eloquentf
  */
 
-class ProductVariation extends Model
+class ProductVariation extends EVBaseModel
 {
-    use ReviewTrait;
-    use AttributeTrait;
     use Notifiable;
+    use SoftDeletes;
 
-    /* Properties not saved in DB */
-    public bool $remove_flag;
-    public $current_stock;
-    public $low_stock_qty;
-    public $total_price;
-    public $discounted_price;
-    public $base_price;
+    use AttributeTrait;
+
+    use UploadTrait;
+    use GalleryTrait;
+
+    use StockManagementTrait;
+    use PriceTrait;
+    use Purchasable;
+
+    use ReviewTrait; // TODO: Is this necessary?
+
+    use VariationTrait;
+
+    // Default atts
+    protected $attributes = [
+        'price' => 0,
+        'discount' => 0,
+    ];
+
 
     /**
      * The relationships that should always be loaded.
+     * NOTE: Uploads, Attribute, Price and Stock traits are eager loading all relationships by default
      *
      * @var array
      */
-    protected $with = ['stock', 'flash_deals'];
+    protected $with = [];
 
-    protected $fillable = ['product_id', 'variant', 'image', 'price', 'remove_flag', 'discount', 'discount_type'];
-    protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name', 'temp_stock', 'remove_flag', 'total_price'];
+    protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type', 'created_at', 'updated_at'];
+    //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name'];
 
     protected $casts = [
         'variant' => 'array',
     ];
 
-    protected $appends = ['name', 'image_url', 'temp_stock', 'remove_flag', 'current_stock', 'low_stock_qty', 'category_id', 'total_price', 'discounted_price', 'base_price'];
+    protected $appends = ['name'];
 
-    protected $dispatchesEvents = [
-        'deleting' => ProductVariationDeleting::class,
-    ];
-
-    public function product()
+    public function main()
     {
-        return $this->belongsTo(Product::class);
-    }
-
-    public function stock()
-    {
-        return $this->morphOne(ProductStock::class, 'subject');
-    }
-
-    public function flash_deals() {
-        // TODO: Add indicies to start_date and end_date!
-        return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
-            ->where([
-                ['status', '=', 1],
-                ['start_date', '<=', time()],
-                ['end_date', '>', time()],
-            ])->orderBy('created_at', 'desc')->withPivot('include_variations');
-    }
-
-    protected function asJson($value)
-    {
-        return json_encode($value, JSON_UNESCAPED_UNICODE);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function getNameAttribute() {
@@ -95,220 +93,67 @@ class ProductVariation extends Model
                 }
             }
 
+            // TODO: Fix this to use parent product attribute values, so we don't have to query this part!
             $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
             foreach($att_values as $key => $value) {
-                $name .= $value->name.($key+1 !== $att_values->count() ? '-' : '');
+                $name .= Str::slug($value->name.($key+1 !== $att_values->count() ? '-' : ''));
             }
         }
 
         return $name;
     }
 
-    public function setTempStockAttribute($value)
-    {
-        $this->attributes['temp_stock'] = $value;
-    }
-
-    public function getTempStockAttribute() {
-        if(!isset($this->attributes['temp_stock'])) {
-            $stock = $this->stock()->first();
-
-            return $stock ?: collect([
-                'qty' => 0,
-                'sku' => ''
-            ]);
-        }
-
-        return $this->attributes['temp_stock'];
-    }
-
-    public function getImageUrlAttribute() {
-        if(!empty($this->attributes['image'] ?? null)) {
-            return uploaded_asset($this->attributes['image']);
-        }
-
-        return '';
-    }
-
-    public function setRemoveFlagAttribute($value)
-    {
-        $this->remove_flag = $value;
-    }
-
-    public function getRemoveFlagAttribute() {
-        return $this->remove_flag ?? false;
-    }
-
-    // START PRICES
-
-    /**
-     * Get product total price with tax
-     *
-     * NOTE: Total price is a price of the product after all discounts and with Tax included
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return mixed
+    /*
+     * TODO: Think about moving this to a Trait because different ContentType Variations can use it!
      */
-    public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
-    {
-        if(empty($this->total_price)) {
-            $this->total_price = $this->attributes['price'];
+    public function getVariantName($attributes = [], $slugified = false, $value_separator = '-', $as_collection = false, $key_by = null) {
+        $att_values_idx = [];
+        $name = '';
 
-            // TODO: If Main Product of this variation is under a FlashDeal, take that Flash Deal into consideration too!
-            // TODO: For now only flash deals which are directly related to specific ProductVariation are taken into consideration!!!
-            $flash_deal = $this->flash_deals->first();
-
-            // NOTE: If FlashDeal is present for current product variation, DO NOT take ProductVariation's discount into consideration!
-            if(!empty($flash_deal)) {
-                if ($flash_deal->discount_type === 'percent') {
-                    $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
-                    $this->total_price -= $flash_deal->discount;
+        if(!empty($this->variant)) {
+            foreach($this->variant as $item) {
+                if(!empty($item['attribute_value_id'])) {
+                    $att_values_idx[] = $item['attribute_value_id'];
                 }
+            }
+
+            if(!empty($attributes)) {
+                $att_values = $attributes->map(function($item) use($att_values_idx) {
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
+                });
             } else {
-                if ($this->attributes['discount'] && $this->attributes['discount_type'] === 'percent') {
-                    $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                } elseif ($this->attributes['discount'] && $this->attributes['discount_type'] === 'amount') {
-                    $this->total_price -= $this->attributes['discount'];
-                }
+                // If attributes are not provided as parameter, get variant_attributes from main
+//                $att_values = AttributeValue::whereIn('id', $att_values_idx)->select('values AS name')->get();
+                $att_values = $this->main->variant_attributes(key_by: ($key_by ?:null))->map(function($item) use($att_values_idx) {
+                    return $item->attribute_values->filter(fn($val) => in_array($val->id, $att_values_idx))->first();
+                });
             }
 
-            // TODO: Create tax_relationship table and link it to subjects and taxes!
-            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
+            if(!empty($key_by)) {
+                return $att_values->map(fn($item) => $item->values);
+            }
 
-            // NOTE: For now, taxes related to the Main Product are applied to each variation too!!!
-            if(!empty($this->product->tax)) {
-                if ($this->product->tax_type === 'percent') {
-                    $this->total_price += ($this->total_price * $this->product->tax) / 100;
-                } elseif ($this->product->tax_type === 'amount') {
-                    $this->total_price += $this->product->tax;
+            if($as_collection) {
+                return $att_values->unique()->values()->pluck('values');
+            }
+
+            foreach($att_values as $key => $value) {
+                if($slugified) {
+                    $name .= Str::slug($value->values.($key+1 !== $att_values->count() ? '-' : ''));
+                } else {
+                    $name .= $value->values.($key+1 !== $att_values->count() ? $value_separator : '');
                 }
             }
 
         }
 
-        if ($both_formats) {
-            return [
-                'raw' => $this->total_price,
-                'display' => FX::formatPrice($this->total_price)
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->total_price) : $this->total_price;
+        return $name;
     }
 
-    public function getTotalPriceAttribute() {
-        return $this->getTotalPrice();
-    }
-
-    /**
-     * Get Discounted price
-     *
-     * NOTE: Discounted price is a price of the product after all discounts, but without Tax included
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return mixed
-     */
-    public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
+    protected function asJson($value)
     {
-        if(empty($this->discounted_price)) {
-            $this->discounted_price = $this->attributes['price'];
-
-            // TODO: If Main Product of this variation is under a FlashDeal, take that Flash Deal into consideration too!
-            // TODO: For now only flash deals which are directly related to specific ProductVariation are taken into consideration!!!
-            $flash_deal = $this->flash_deals->first();
-
-            // NOTE: If FlashDeal is present for current product variation, DO NOT take ProductVariation's discount into consideration!
-            if(!empty($flash_deal)) {
-                if ($flash_deal->discount_type === 'percent') {
-                    $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
-                    $this->total_price -= $flash_deal->discount;
-                }
-            } else {
-                if ($this->attributes['discount'] && $this->attributes['discount_type'] === 'percent') {
-                    $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                } elseif ($this->attributes['discount'] && $this->attributes['discount_type'] === 'amount') {
-                    $this->total_price -= $this->attributes['discount'];
-                }
-            }
-        }
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->discounted_price,
-                'display' => FX::formatPrice($this->discounted_price)
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
+        return json_encode($value, JSON_UNESCAPED_UNICODE);
     }
-
-    public function getDiscountedPriceAttribute() {
-        return $this->getDiscountedPrice();
-    }
-
-    /**
-     * Get Base price
-     *
-     * NOTE: Base price is the price of the product with product related taxes
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return float
-     */
-    public function getBasePrice(bool $display = false, bool $both_formats = false): mixed{
-        if(empty($this->base_price)) {
-            $this->base_price = $this->attributes['price'];
-
-            // TODO: Create tax_relationship table and link it to subjects and taxes!
-            // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if(!empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === 'percent') {
-                    $this->base_price += ($this->base_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === 'amount') {
-                    $this->base_price += $this->attributes['tax'];
-                }
-            }
-        }
-
-        if ($both_formats) {
-            return [
-                'raw' => $this->base_price,
-                'display' => FX::formatPrice($this->base_price)
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->base_price) : $this->base_price;
-    }
-
-    public function getBasePriceAttribute() {
-        return $this->getBasePrice();
-    }
-
-    /**
-     * Get Original price
-     *
-     * NOTE: Original price is the `price` of the ProductVariation (without flash-deals/discounts/taxes etc.)
-     *
-     * @param bool $display
-     * @param bool $both_formats
-     * @return float
-     */
-    public function getOriginalPrice(bool $display = false, bool $both_formats = false): mixed {
-        if ($both_formats) {
-            return [
-                'raw' => $this->attributes['price'],
-                'display' => FX::formatPrice($this->attributes['price'])
-            ];
-        }
-
-        return $display ? FX::formatPrice($this->attributes['price']) : $this->attributes['price'];
-    }
-
-    // END PRICES
 
     // START: Casts section
     // If $value is null or empty, value should always be empty array!
@@ -322,5 +167,31 @@ class ProductVariation extends Model
     // MISC
     public static function composeVariantKey($key) {
         return Str::slug(Str::replace('.', ',', $key));
+    }
+
+    /**
+     * Returns column name of the price
+     *
+     * @return string
+     */
+    public function getPriceColumn(): string
+    {
+        return 'price';
+    }
+
+
+    public function useVariations(): ?bool
+    {
+        return false;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [];
+    }
+
+    public function getVariationModelClass()
+    {
+        return null;
     }
 }

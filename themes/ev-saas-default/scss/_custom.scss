@@ -1,3 +1,22 @@
+/* Generate max-width classes */
+@for $mw from 1 through 10 {
+    .max-w-#{$mw*10} {
+        max-width: round(percentage($mw/10));
+    }
+}
+
+/* Generate square classes */
+@for $wh from 8 through 32 {
+    .square-#{$wh} {
+        width: $wh + px;
+        height: $wh + px;
+    }
+    .square-#{$wh}-i {
+        width: $wh + px !important;
+        height: $wh + px !important;
+    }
+}
+
 /* Generate font-weight classes */
 @for $fw from 100 through 900 {
     .fw-#{$fw} {
@@ -5,9 +24,29 @@
     }
 }
 
+/* Generate font-size classes */
+@for $fs from 8 through 46 {
+    .text-#{$fs} {
+        font-size: $fs + px;
+    }
+    .text-#{$fs}-i {
+        font-size: $fs + px !important;
+    }
+}
+
+/* Generate line-height classes */
+@for $lh from 5 through 20 {
+    .lh-#{$lh} {
+        line-height: $lh / 10;
+    }
+}
+
 /* Generate opacity classes */
-@for $o from 1 through 9 {
+@for $o from 0 through 10 {
     .opacity-#{$o} {
+        opacity: $o / 10;
+    }
+    .opacity-#{$o}-i {
         opacity: $o / 10;
     }
 }
@@ -17,6 +56,14 @@
     .z-#{$zi} {
         z-index: $zi;
     }
+}
+
+.d-grid {
+    display: grid;
+}
+
+.full-row {
+    width: calc(100% + 30px);
 }
 
 /* Absolute horizontal/vertical centering */
@@ -31,6 +78,10 @@
     cursor: pointer;
 }
 
+.prevent-pointer-events {
+    pointer-events: none;
+}
+
 .avatar, .fit-cover {
     object-fit: cover;
 }
@@ -39,4 +90,86 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.no-max-height {
+    max-height: none !important;
+}
+
+.divider {
+    &-half-left, &-half-right, &-third-left, &-third-right {
+        &:before {
+            display: none;
+        }
+    }
+
+    &-half-left {
+        &:after {
+            flex: 0 0 50%;
+            margin-right: auto;
+        }
+    }
+    &-half-right {
+        &:after {
+            flex: 0 0 50%;
+            margin-left: auto;
+        }
+    }
+    &-third-left {
+        &:after {
+            flex: 0 0 33%;
+            margin-right: auto;
+        }
+    }
+    &-third-right {
+        &:after {
+            flex: 0 0 33%;
+            margin-left: auto;
+        }
+    }
+}
+
+.circle-dynamic {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1em;
+    border-radius: 50%;
+    vertical-align: middle;
+
+    &:before {
+        content:'';
+        float: left;
+        width: auto;
+        padding-bottom: 100%;
+    }
+}
+
+
+.transition {
+    transition-property: all;
+
+    &.ease-out {
+        transition-timing-function: ease-out;
+    }
+    &.ease-in {
+        transition-timing-function: ease-in;
+    }
+
+    &.duration-300 {
+        transition-duration: 300ms
+    }
+    &.duration-500 {
+        transition-duration: 500ms
+    }
+    &.duration-800 {
+        transition-duration: 800ms
+    }
+    &.duration-1000 {
+        transition-duration: 1000ms
+    }
+}
+
+.list-style-none {
+    list-style: none;
 }

@@ -13,9 +13,12 @@ A complete solution for E-commerce Business with exclusive features & super resp
 -   Compiling webpack for both central and themes: `yarn dev` (not in watch mode)
 -   Compiling for central: `npx mix --mix-config="webpack.mix.js` (from root directory)
 -   Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
--   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"`
--   Compiling specific theme-tenant-combo: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js" -- --env tenant_id={id}` (Note: running npx mix on specific theme compiles 1) default theme and 2) all tenants main scss who use that theme)
+-   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"` / Compiling EV-SaaS Default theme: `npx mix watch --mix-config="themes/ev-saas-default/webpack.mix.js"`
+-   Compiling specific theme-tenant-combo: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js" -- --env tenant_id={id}` (Note: running npx mix on specific theme compiles 1) default theme and 2) all tenants main scss who use that theme)
 
+## Compiling for Default theme
+
+- `npx mix --mix-config="themes/ev-saas-default/webpack.mix.js"`
 
 # Running docker
 
@@ -49,6 +52,15 @@ All Central app routes should be located in `routes/web.php`
 In config you need to define `FILESYSTEM_DRIVER` to `s3` , but it's actually using DigitalOcean Spaces
 Access Details can be found in `.env.example` file
 
+# User Permissions
+All permissions are added inside `App\Http\Services\PermissionsService.php`.
+After permissions are added to the service class, they have to be added to the DB using:
+- `php artisan permissions:populate --tenant_id={tenant_id}`
+
+IMPORTANT: After adding/removing/changing permissions, run: 
+- `php artisan cache:forget spatie.permission.cache`
+- `php artisan cache:clear`
+
 # Dynamic Components for Label/Image/Button
 
 -   Labels
@@ -63,6 +75,12 @@ Example usage
 -   Buttons and links
 
 Example usage
+
+```
+
+<x-ev.link-button :href="ev_dynamic_translate('#button1')"
+:label="ev_dynamic_translate('Button 1')" class="ev-button">
+</x-ev.link-button>
 
 ```
 
@@ -92,6 +110,43 @@ Example Component usage:
 # Components
 
 Please see Components.md file, for more information, right now we add any dynamic and component usage examples in Components.md file
+
+# Usage Of The Images
+All Images that have `galleryTrait` can have access 
+* You must add `uploadTrait ` to utilize `galleryTrait`
+
+### Example Of Gallery usage 
+
+```
+$options = [
+    'w' => 100,
+    'h' => 100, // Auto height can be set if you remove 'h' property
+]
+```
+
+*getGallery($options)* 
+
+```
+@foreach($product->getGallery(['w' => 300]) as $item)
+    <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$item ?? ''">
+    </x-tenant.system.image>
+@endforeach
+```
+
+*getThumbnail($options)*
+
+```
+  <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getThumbnail() ?? ''">
+  </x-tenant.system.image>
+```
+
+*getCover($options)*
+```
+<x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getCover() ?? ''">
+</x-tenant.system.image>
+```
+
+and *get
 
 # Image Optimization and dynamic images
 

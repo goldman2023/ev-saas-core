@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class CategoriesSelector extends Component
 {
+    public $x;
     public $class;
     public $appendToName;
     public $name;
@@ -27,8 +28,9 @@ class CategoriesSelector extends Component
      *
      * @return void
      */
-    public function __construct($items = [], $name = '', $appendToName = false, $selectedCategories = [], $label = '',  $multiple = false, $placeholder = '', $required = false,  $class = '', $icon = null, $merge = false, $errorBagName = null)
+    public function __construct($x = false, $items = [], $name = '', $appendToName = false, $selectedCategories = [], $label = '',  $multiple = false, $placeholder = '', $required = false,  $class = '', $icon = null, $merge = false, $errorBagName = null)
     {
+        $this->x = $x;
         $this->items = $items;
         $this->label = $label;
         $this->name = $name;
@@ -53,6 +55,10 @@ class CategoriesSelector extends Component
      */
     public function render()
     {
+        if($this->x) {
+            return view('components.ev.form.alpine.categories-selector');
+        }
+
         return view('components.ev.form.categories-selector');
     }
 }

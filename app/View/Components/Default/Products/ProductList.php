@@ -11,20 +11,13 @@ class ProductList extends Component
     public $items;
     public bool $slider;
     public $sliderOptions;
-    public $style = 'product-list'; // Available styles products-list/ top-products-slider / products-slider
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
+    public $style = 'product-list'; // Available styles: products-list/ top-products-slider / products-slider
+
+
     public function __construct($items = 8, $slider = false, $products = null, $style = 'product-list')
     {
-        if($products != null) {
-            $this->products = $products;
-        } else {
-            $products = Product::paginate($items);
-        }
-        $this->products = $products;
+
+        $this->products = !empty($products) ? $products : Product::fromCache()->paginate($items);
         $this->slider = $slider;
         $this->style = $style;
     }

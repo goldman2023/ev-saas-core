@@ -18,26 +18,41 @@ services:
     networks:
       - sail
     depends_on:
-      - pgsql
+      - mysql
 
-  pgsql:
-    image: 'postgres'
+  mysql:
+    image: mysql:latest
     ports:
-      - '${DB_DOCKER_PORT_EXTERNAL:-5432}:5432'
+      - '${DB_MYSQL_DOCKER_PORT_EXTERNAL:-3306}:3306'
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     environment:
-      PGUSER: '${DB_PGSQL_USERNAME:-postgres}'
-      PGPASSWORD: '${DB_PASSWORD:-123456}'
-      POSTGRES_DB: '${DB_DATABASE:-evsaas}'
-      POSTGRES_USER: '${DB_PGSQL_USERNAME:-postgres}'
-      POSTGRES_PASSWORD: '${DB_PASSWORD:-123456}'
+      MYSQL_DATABASE: '${DB_DATABASE:-evsaas}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-123456}'
+      #MYSQL_USER: '${DB_MYSQL_USERNAME:-root}'
+      MYSQL_PASSWORD: '${DB_PASSWORD:-123456}'
     volumes:
-      - 'sailpgsql:/var/lib/postgresql/data'
+      - 'sail2mysql:/var/lib/mysql'
     networks:
-      - sail
-    healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_PGSQL_USERNAME}"]
-      retries: 3
-      timeout: 5s
+      - sail2
+#  pgsql:
+#    image: 'postgres'
+#    ports:
+#      - '${DB_DOCKER_PORT_EXTERNAL:-5432}:5432'
+#    environment:
+#      PGUSER: '${DB_PGSQL_USERNAME:-postgres}'
+#      PGPASSWORD: '${DB_PASSWORD:-123456}'
+#      POSTGRES_DB: '${DB_DATABASE:-evsaas}'
+#      POSTGRES_USER: '${DB_PGSQL_USERNAME:-postgres}'
+#      POSTGRES_PASSWORD: '${DB_PASSWORD:-123456}'
+#    volumes:
+#      - 'sailpgsql:/var/lib/postgresql/data'
+#    networks:
+#      - sail
+#    healthcheck:
+#      test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_PGSQL_USERNAME}"]
+#      retries: 3
+#      timeout: 5s
 
   cache:
     image: 'redis:alpine'
@@ -52,23 +67,23 @@ services:
       retries: 3
       timeout: 5s
 
-  imgproxy:
-    image: darthsim/imgproxy:latest
-    ports:
-      - 39001:8080 # host use 39001 to access the imgproxy
-    environment: #For more config envs: https://docs.imgproxy.net/configuration
-      IMGPROXY_USE_S3: 'true'
-      #IMGPROXY_KEY: 6d1ac226357a834aa0ddda01e7697c0a93ce7dcc22b0620568efaadeb8681b5ddf1086b39ba358910e9009738efca8eced958b570149189c618688f4c6e9d290
-      #IMGPROXY_SALT: d6582e38a7bfe441518fa8c7ee3613563a47a37615acfe8640d19af38cc1e786f3141232cdd9117362c60077f382ef02473b3fe36c223a1cd2139c87322fcb87
-      IMGPROXY_IGNORE_SSL_VERIFICATION: '${IMGPROXY_IGNORE_SSL_VERIFICATION}'
-      IMGPROXY_ENABLE_WEBP_DETECTION: '${IMGPROXY_ENABLE_WEBP_DETECTION}'
-      IMGPROXY_S3_ENDPOINT: '${DIGITALOCEAN_SPACES_ENDPOINT}'
-      AWS_ACCESS_KEY_ID: '${DIGITALOCEAN_SPACES_KEY}'
-      AWS_SECRET_ACCESS_KEY: '${DIGITALOCEAN_SPACES_SECRET}'
-      AWS_REGION: '${DIGITALOCEAN_SPACES_REGION}'
-    restart: on-failure
-    networks:
-      - sail
+#  imgproxy:
+#    image: darthsim/imgproxy:latest
+#    ports:
+#      - 39001:8080 # host use 39001 to access the imgproxy
+#    environment: #For more config envs: https://docs.imgproxy.net/configuration
+#      IMGPROXY_USE_S3: 'true'
+#      #IMGPROXY_KEY: 6d1ac226357a834aa0ddda01e7697c0a93ce7dcc22b0620568efaadeb8681b5ddf1086b39ba358910e9009738efca8eced958b570149189c618688f4c6e9d290
+#      #IMGPROXY_SALT: d6582e38a7bfe441518fa8c7ee3613563a47a37615acfe8640d19af38cc1e786f3141232cdd9117362c60077f382ef02473b3fe36c223a1cd2139c87322fcb87
+#      IMGPROXY_IGNORE_SSL_VERIFICATION: '${IMGPROXY_IGNORE_SSL_VERIFICATION}'
+#      IMGPROXY_ENABLE_WEBP_DETECTION: '${IMGPROXY_ENABLE_WEBP_DETECTION}'
+#      IMGPROXY_S3_ENDPOINT: '${DIGITALOCEAN_SPACES_ENDPOINT}'
+#      AWS_ACCESS_KEY_ID: '${DIGITALOCEAN_SPACES_KEY}'
+#      AWS_SECRET_ACCESS_KEY: '${DIGITALOCEAN_SPACES_SECRET}'
+#      AWS_REGION: '${DIGITALOCEAN_SPACES_REGION}'
+#    restart: on-failure
+#    networks:
+#      - sail
 
 #  nginx:
 #    depends_on:

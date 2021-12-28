@@ -22,7 +22,6 @@ class ShopsTableSeeder extends Seeder
                 0 =>
                     array(
                         'id' => 1,
-                        'user_id' => 2,
                         'name' => 'Demo Shop',
                         'logo' => NULL,
                         'sliders' => NULL,
@@ -35,7 +34,16 @@ class ShopsTableSeeder extends Seeder
                         'meta_title' => 'Demo Shop',
                         'meta_description' => 'Demo description',
                         'pick_up_point_id' => NULL,
-                        'shipping_cost' => 0.0,
+                    ),
+            ));
+
+            \DB::table('user_relationships')->insert(array(
+                0 =>
+                    array(
+                        'id' => 1,
+                        'user_id' => 1,
+                        'subject_id' => 1,
+                        'subject_type' => 'App\\Models\\Shop',
                     ),
             ));
 

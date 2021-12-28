@@ -24,6 +24,13 @@ class ActivityController extends Controller
         return view('backend.activities.index', compact('activities'));
     }
 
+
+    public function index_frontend()
+    {
+        $activities = Activity::orderBy('created_at', 'desc')->paginate(10);
+        return view('frontend.activities.index', compact('activities'));
+    }
+
     /**
      * Display a list of the current authenticated user activities
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View

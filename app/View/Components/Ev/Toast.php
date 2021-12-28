@@ -16,14 +16,16 @@ class Toast extends Component
     public $content;
     public $close;
     public $position;
+    public $isX;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($class = '', $titleClass = '', $contentClass = '', $id = '', $type = 'primary', $icon = '', $title = '', $content = '', $close = false, $position = 'bottom-center')
+    public function __construct($isX = false, $class = '', $titleClass = '', $contentClass = '', $id = '', $type = 'primary', $icon = '', $title = '', $content = '', $close = false, $position = 'bottom-center')
     {
+        $this->isX = $isX;
         $this->class = $class;
         $this->titleClass = $titleClass;
         $this->contentClass = $contentClass;

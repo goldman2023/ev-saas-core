@@ -13,20 +13,22 @@ class CreateSubscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->string('name');
-            $table->string('stripe_id');
-            $table->string('stripe_status');
-            $table->string('stripe_plan')->nullable();
-            $table->integer('quantity')->nullable();
-            $table->timestamp('trial_ends_at')->nullable();
-            $table->timestamp('ends_at')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('subscriptions')) {
+            Schema::create('subscriptions', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id');
+                $table->string('name');
+                $table->string('stripe_id');
+                $table->string('stripe_status');
+                $table->string('stripe_plan')->nullable();
+                $table->integer('quantity')->nullable();
+                $table->timestamp('trial_ends_at')->nullable();
+                $table->timestamp('ends_at')->nullable();
+                $table->timestamps();
 
-            $table->index(['user_id', 'stripe_status']);
-        });
+                $table->index(['user_id', 'stripe_status']);
+            });
+        }
     }
 
     /**

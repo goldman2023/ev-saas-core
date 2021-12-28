@@ -17,7 +17,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
     window.AIZ.data = {
         csrf: $('meta[name="csrf-token"]').attr("content"),
         appUrl: $('meta[name="app-url"]').attr("content"),
-        fileBaseUrl: $('meta[name="file-bucket-url"]').attr("content"),
+        storageBaseUrl: $('meta[name="storage-base-url"]').attr("content"),
     };
 
     window.AIZ.uploader = {
@@ -405,8 +405,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                         if (data[i].type === "image") {
                             thumb =
                                 '<img src="' +
-                                window.AIZ.data.fileBaseUrl +
-                                data[i].file_name +
+                                window.EV.IMG.url(data[i].file_name, {w:400}) +
                                 '" class="img-fit">';
                         } else {
                             thumb = '<i class="la la-file-text"></i>';
@@ -424,7 +423,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             // "</a>" +
                             // '<div class="dropdown-menu dropdown-menu-right">' +
                             // '<a href="' +
-                            // window.AIZ.data.fileBaseUrl +
+                            // window.AIZ.data.storageBaseUrl +
                             // data[i].file_name +
                             // '" target="_blank" download="' +
                             // data[i].file_original_name +
@@ -520,8 +519,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                     if (data[i].type === "image") {
                                         thumb =
                                             '<img src="' +
-                                            window.AIZ.data.fileBaseUrl +
-                                            data[i].file_name +
+                                            window.EV.IMG.url(data[i].file_name, {w:100}) +
                                             '" class="img-fit">';
                                     } else {
                                         thumb = '<i class="la la-file-text"></i>';
@@ -554,15 +552,17 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                         "</p>" +
                                         "</div>" +
                                         '<div class="remove">' +
-                                        '<button class="btn btn-sm btn-link remove-attachment" type="button">' +
-                                        '<i class="fas fa-close"></i>' +
+                                        '<button class="btn btn-sm btn-link d-flex align-items-center text-dark justify-content-center remove-attachment" type="button">' +
+                                        '<svg style="height: 16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">' +
+                                        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>' +
+                                        '</svg>' +
                                         "</button>" +
                                         "</div>" +
                                         "</div>";
 
                                     elem.next(".file-preview").append(html);
                                 } else if(template == 'avatar') {
-                                    elem.find(".avatar-img").attr('src', window.AIZ.data.fileBaseUrl + data[i].file_name);
+                                    elem.find(".avatar-img").attr('src', window.EV.IMG.url(data[i].file_name, {w:150}));
                                 }
 
 
@@ -651,8 +651,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                     if (window.AIZ.uploader.data.allFiles[index].type === "image") {
                         thumb =
                             '<img src="' +
-                            window.AIZ.data.fileBaseUrl +
-                            window.AIZ.uploader.data.allFiles[index].file_name +
+                            window.EV.IMG.url(window.AIZ.uploader.data.allFiles[index].file_name, {w:100}) +
                             '">';
                         elem[0].insertHTML(thumb);
                         // console.log(elem);
@@ -809,8 +808,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                     if (data[i].type === "image") {
                                         thumb =
                                             '<img src="' +
-                                            window.AIZ.data.fileBaseUrl +
-                                            data[i].file_name +
+                                            window.EV.IMG.url(data[i].file_name, {w:100}) +
                                             '" class="img-fit">';
                                     } else {
                                         thumb = '<i class="la la-file-text"></i>';
