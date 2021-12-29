@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\PaymentMethods\PayseraGateway;
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentMethodUniversal;
+use App\Models\User;
 use CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,14 +22,15 @@ class EVCheckoutController extends Controller
         $total_items_count = CartService::getTotalItemsCount();
 
         $originalPrice = CartService::getOriginalPrice();
-        $discountedAmount = CartService::getDiscountedAmount();
+        $discountAmount = CartService::getdiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
-        return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountedAmount','subtotalPrice'));
+        return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'));
     }
 
     public function store(Request $request)
     {
+
         $cart_items = CartService::getItems();
         $total_items_count = CartService::getTotalItemsCount();
 
@@ -37,7 +41,7 @@ class EVCheckoutController extends Controller
         }
 
         $originalPrice = CartService::getOriginalPrice();
-        $discountAmount = CartService::getDiscountedAmount();
+        $discountAmount = CartService::getdiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
         $same_billing_shipping = !empty($request->input('same_billing_shipping'));
@@ -60,6 +64,7 @@ class EVCheckoutController extends Controller
             'newsletter' => 'nullable'
         ];
 
+        // If billing and shipping address are not the same
         if(empty($request->input('same_billing_shipping'))) {
             $data_to_validate = array_merge($data_to_validate, [
                 'shipping_first_name' => 'required|min:3',
@@ -84,10 +89,40 @@ class EVCheckoutController extends Controller
         // Retrieve the validated input...
         $data = $validator->validated();
 
+
+        // Validate password again
+        // If user is not logged in and `create account` is set to TRUE
+        $new_user = User::where('email', $data['email'])->first();
+        if(empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on') {
+            // Check if user with email is not already registered user.
+
+            if($new_user instanceof User && !empty($new_user->id ?? null)) {
+                // Registered user
+                $account_password_rules = 'match_password:App\Models\User,email';
+            } else {
+                // Not registered user
+                $account_password_rules = 'required|confirmed|min:6';
+            }
+
+            if (($password_validator = Validator::make($request->all(), [
+                'account_password' => $account_password_rules,
+            ], [
+                'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.')
+            ]))->fails()) {
+                session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
+                return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
+                    ->withErrors($password_validator);
+            }
+
+            $password_data = $password_validator->validated();
+        }
+
+
         DB::beginTransaction();
 
         $payment_method = PaymentMethodUniversal::where('gateway', $data['payment_method'])->first();
 
+        $phone_numbers = array_values(array_filter($data['phone_numbers']));
         try {
             // Save Order and order items
             $order = new Order();
@@ -103,7 +138,7 @@ class EVCheckoutController extends Controller
             $order->billing_city = $data['billing_city'];
             $order->billing_zip = $data['billing_zip'];
 
-            $order->phone_numbers = array_values(array_filter($data['phone_numbers']));
+            $order->phone_numbers = $phone_numbers;
             $order->same_billing_shipping = $same_billing_shipping;
 
             if(!$same_billing_shipping) {
@@ -151,10 +186,11 @@ class EVCheckoutController extends Controller
                     $order_item->quantity = $item->purchase_quantity;
 
                     // Reduce the stock quantity of an $item
-                    $data = $item->reduceStock();
+                    $serial_numbers = $item->reduceStock();
 
+                    // Serial Numbers only work for Simple Products. TODO: Make Product Variations support serial numbers!
                     if($item->use_serial) {
-                        $order_item->serial_numbers = $data; // reduceStockBy returns serial numbers in array if $item uses serials
+                        $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
                     }
 
                     $order_item->base_price = $item->base_price;
@@ -164,6 +200,61 @@ class EVCheckoutController extends Controller
                     $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
 
                     $order_item->save();
+                }
+            }
+
+
+            // If user is not logged in and `create account` is set to TRUE - Create account if it doesn't exist
+            if(empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on') {
+                if(!empty($new_user->id ?? null) && Hash::check($data['account_password'], $new_user->password)) { // check password again just in case
+                    // There is a user under given Email AND passwords match -> LOG IN USER
+                    auth()->login($new_user, true); // log the user in
+                } else {
+                    // Create user 'cuz there's no user under this email and password validation passed
+
+                    // TODO: Move to some RegistrationService or something so we can reuse it throughout the app!
+
+                    // Create user
+                    $new_user = User::create([
+                        'name' => $data['billing_first_name'].' '.$data['billing_last_name'],
+                        'user_type' => User::$customer_type,
+                        'email' => $data['email'],
+                        'password' => bcrypt($password_data['account_password'])
+                    ]);
+
+
+                    // Create address
+                    $address_billing = Address::create([
+                        'user_id' => $new_user->id,
+                        'address' => $data['billing_address'],
+                        'address_2' => '',
+                        'country' => $data['billing_country'],
+                        'state' => empty($data['billing_state']) ? $data['billing_country'] : $data['billing_state'],
+                        'city' => $data['billing_city'],
+                        'zip_code' => $data['billing_zip'],
+                        'phones' => $phone_numbers,
+                        'set_default' => 1
+                    ]);
+
+                    if(!$same_billing_shipping) {
+                        // Create another address with shipping info
+                        $address_shipping = Address::create([
+                            'user_id' => $new_user->id,
+                            'address' => $data['shipping_address'],
+                            'address_2' => '',
+                            'country' => $data['shipping_country'],
+                            'state' => empty($data['shipping_state']) ? $data['shipping_country'] : $data['shipping_state'],
+                            'city' => $data['shipping_city'],
+                            'zip_code' => $data['shipping_zip'],
+                            'phones' => $phone_numbers,
+                            'set_default' => 1
+                        ]);
+
+                        $address_billing->set_default = 0;
+                        $address_billing->save();
+                    }
+
+
                 }
             }
 
@@ -183,6 +274,9 @@ class EVCheckoutController extends Controller
 
         // Depending on payment method, do actions
         $this->executePayment($request, $order->id);
+
+
+        // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
 
         return redirect()->route('checkout.order.received', $order);
     }

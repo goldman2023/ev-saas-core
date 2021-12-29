@@ -33,7 +33,7 @@ class CartService
     public function getOriginalPrice() {
         return $this->originalPrice;
     }
-    public function getDiscountedAmount() {
+    public function getdiscountAmount() {
         return $this->discountAmount;
     }
     public function getSubtotalPrice() {
@@ -77,11 +77,13 @@ class CartService
                 $qty +=  $desired_item_in_cart['qty'];
             }
 
+
             if($model->current_stock < $qty) {
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
-                $warnings[] = translate('There are not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
+                $model_name = $model->hasMain() ? $model->getMain()->name.' ('.$model->getVariantName(key_by: 'name')->map(fn($item, $key) => $key.': '.$item)->join(', ').')' : $model->name;
+                $warnings[] = '<strong>'.$model_name.':</strong> '.translate('There are not enough items in stock to fulfill desired quantity. All available items in stock are added to the cart.');
 
                 $qty = $model->current_stock;
             }

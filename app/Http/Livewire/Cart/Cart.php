@@ -13,7 +13,7 @@ class Cart extends Component
     public $items;
     public $totalItemsCount;
     public $originalPrice;
-    public $discountedAmount;
+    public $discountAmount;
     public $subtotalPrice;
     public $processing;
 
@@ -44,7 +44,7 @@ class Cart extends Component
         $this->totalItemsCount = CartService::getTotalItemsCount();
 
         $this->originalPrice = CartService::getOriginalPrice();
-        $this->discountedAmount = CartService::getDiscountedAmount();
+        $this->discountAmount = CartService::getdiscountAmount();
         $this->subtotalPrice = CartService::getSubtotalPrice();
 
         // Event to refresh cart items count (all over the page, where needed)

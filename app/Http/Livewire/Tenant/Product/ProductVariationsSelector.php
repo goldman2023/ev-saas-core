@@ -54,7 +54,7 @@ class ProductVariationsSelector extends Component {
         // THIS MUST NOT BE AN ELOQUENT/COLLECTION!!!!
         // Reason: If we leave attributes_for_variations as Eloquent/Collection and not turn it into the array/standard-collection,
         // we'll encounter hydration problems. Mainly, there is memo.dataMeta property in every livewire request which stores the data about
-        // eloquent content, lieke types/models/eloquent-collections etc. Problem happens in Livewire\HydrationMiddleware\hydrate() where
+        // eloquent content, like types/models/eloquent-collections etc. Problem happens in Livewire\HydrationMiddleware\hydrate() where
         // all Eloquent data (and other data-types) are reconstructed, BUT USING THE memo.dataMeta parameters from request.
         // In this case where we want to hydrate Attributes, their Values and Relationships, such behavior is contra-productive because
         // livewire hydrate will use Models (Attribute, AttributeRelationships, AttributeValues) and query by them, not by Product relations.
@@ -97,6 +97,8 @@ class ProductVariationsSelector extends Component {
 
     public function emitVariationChangedEvent() {
         $this->dispatchBrowserEvent('variation-changed', [
+            'current_stock' => $this->current->current_stock,
+            'is_low_stock' => $this->current->isLowStock(),
             'model_id' => $this->current->id,
             'model_type' => $this->current::class,
             'total_price' => $this->current->total_price,

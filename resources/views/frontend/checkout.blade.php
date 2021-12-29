@@ -12,7 +12,8 @@
     <section class="checkout position-relative mb-5"
         x-data="{
             selected_shipping_method: 0,
-            same_billing_shipping: {{ (request()->old('same_billing_shipping') === 'off') ? 'false' : 'true' }}
+            same_billing_shipping: {{ (request()->old('same_billing_shipping') === 'off') ? 'false' : 'true' }},
+            create_account: {{ (request()->old('create_account') === 'off') ? 'false' : 'true' }},
         }"
     >
         <div class="container">
@@ -169,7 +170,7 @@
                                         <div class="col-12 js-add-field mt-3" data-hs-add-field-options='{
                                             "template": "#addPhoneNumberTemplate",
                                             "container": "#addPhoneNumberContainer",
-                                            "defaultCreated": 1,
+                                            @if(count($phone_numbers = array_filter(request()->old('phone_numbers') ?? [])) > 0) "phone_numbers": @json($phone_numbers), @endif
                                             "limit": 3
                                           }'>
 
@@ -224,17 +225,66 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <!-- End Checkbox -->
 
-                                        <div class="custom-control custom-checkbox d-flex align-items-center text-muted">
-                                            <input type="checkbox" class="custom-control-input" id="checkout_newsletter" name="newsletter" value="{{ request()->old('billing_zip') }}">
-                                            <label class="custom-control-label" for="checkout_newsletter">
-                                                <small>{{ translate('Please send me emails with exclusive gear offers, athlete info and expeditions updates from Front') }}</small>
-                                            </label>
+                                        <div class="js-form-message mb-2">
+                                            <div class="custom-control custom-checkbox d-flex align-items-center text-muted">
+                                                <input type="checkbox" class="custom-control-input" id="checkout_newsletter" name="newsletter">
+                                                <label class="custom-control-label" for="checkout_newsletter">
+                                                    <small>{{ translate('Please send me emails with exclusive info') }}</small>
+                                                </label>
+                                                </div>
                                         </div>
                                         <!-- End Checkbox -->
+
+                                        @guest
+                                            <div class="js-form-message mb-2">
+                                                <div class="custom-control custom-checkbox d-flex align-items-center text-muted">
+                                                    <input type="checkbox" class="custom-control-input" id="checkout_create_account" name="create_account"
+                                                           x-model="create_account">
+                                                    <label class="custom-control-label" for="checkout_create_account">
+                                                        <small>{{ translate('Create account for easier shopping in the future?') }}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        <!-- End Checkbox -->
+                                        @endguest
                                     </div>
 
                                     <hr class="my-3">
+
+                                    <!-- Create account -->
+                                    @guest
+                                    <div class="row pb-3" x-show="create_account">
+                                        <h5 class="col-12 ">{{ translate('Create account') }}</h5>
+
+                                        <div class="col-sm-6 mt-3">
+                                            <label for="checkout_account_password" class="form-label">{{ translate('Password') }} <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control @error('account_password') is-invalid @enderror" name="account_password" id="checkout_account_password" value="{{ request()->old('shipping_first_name') }}"  required >
+
+                                            @error('account_password')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-sm-6 mt-3">
+                                            <label for="checkout_account_password_confirmation" class="form-label">{{ translate('Confirm password') }} <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control @error('account_password_confirmation') is-invalid @enderror" name="account_password_confirmation" id="checkout_account_password_confirmation" value="{{ request()->old('shipping_first_name') }}"  required >
+
+                                            @error('account_password_confirmation')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-3" x-show="create_account">
+                                    @endguest
+
+
 
                                     <!-- Shipping info -->
                                     <div class="row pb-3" x-show="!same_billing_shipping">
@@ -577,7 +627,7 @@
                                                 @isset($discountedAmount)
                                                 <dl class="row mb-1">
                                                     <dt class="col-sm-6">{{ translate('Discount') }}</dt>
-                                                    <dd class="col-sm-6 text-right text-success mb-0"><strong>-{{ $discountedAmount['display'] }}</strong></dd>
+                                                    <dd class="col-sm-6 text-right text-success mb-0"><strong>-{{ $discountAmount['display'] }}</strong></dd>
                                                 </dl>
                                                 @endisset
 
