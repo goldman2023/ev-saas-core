@@ -39,6 +39,9 @@
                             'width: 16px;'])
 
                             {{ translate('Follow') }}
+
+            <livewire:actions.wishlist-button :object="$shop" />
+
                         </a>
                     </div>
                     <!-- End User Content -->

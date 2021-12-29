@@ -2,19 +2,23 @@
 
 namespace App\Http\Livewire\Actions;
 
+use App\Models\Product;
 use App\Models\Wishlist;
 use App\Notifications\WishlistItemAdded;
 use Livewire\Component;
 
 class WishlistButton extends Component
 {
-    public $product;
+    public $object;
     public $added = false;
+    public $model_class;
 
-    public function mount($product)
+    public function mount($object, $subject_type = 'App\Models\Product')
     {
-        $this->product = $product;
+        $this->model_class = $object->getMorphClass();
+        $this->object = $object;
         $this->added = $this->checkIfProductExistsInWishlist();
+
     }
 
     public function render()
@@ -24,25 +28,28 @@ class WishlistButton extends Component
 
     public function addToWishlist()
     {
-        if($this->checkIfProductExistsInWishlist()) {
+        if ($this->checkIfProductExistsInWishlist()) {
             /* If product exists, toggle the database entry - delete if exists, create if does not exist */
-            if(auth()->user()) {
-                $item = Wishlist::where('subject_id', $this->product->id)
+            if (auth()->user()) {
+                $item = Wishlist::where('subject_id', $this->object->id)
+                    ->where('subject_type', $this->model_class)
                     ->where('user_id', auth()->user()->id)
                     ->first()->delete();
             } else {
-                $item = Wishlist::where('subject_id', $this->product->id)
+                $item = Wishlist::where('subject_id', $this->object->id)
+                    ->where('subject_type', $this->model_class)
                     ->where('session_id', session()->getId())
                     ->first()->delete();
             }
         } else {
             $item =  new Wishlist();
-            $item->subject_id = $this->product->id;
-            if(auth()->user()) {
+            $item->subject_type = $this->model_class;
+            $item->subject_id = $this->object->id;
+            if (auth()->user()) {
                 $item->user_id = auth()->user()->id;
-                 /* TODO: I think notifications should be defined in events on Wishlist item created outside of controller/component logic
+                /* TODO: I think notifications should be defined in events on Wishlist item created outside of controller/component logic
                     so we can have clear entry points for all notificaitons */
-                $this->product->user->notify(new WishlistItemAdded($item));
+                // $this->object->user->notify(new WishlistItemAdded($item));
 
             } else {
                 $item->session_id = session()->getId();
@@ -54,21 +61,23 @@ class WishlistButton extends Component
         }
 
         $this->added = $this->checkIfProductExistsInWishlist();
-
     }
 
-    public function checkIfProductExistsInWishlist() {
-        if(auth()->user()) {
-            $item = Wishlist::where('subject_id', $this->product->id)
+    public function checkIfProductExistsInWishlist()
+    {
+        if (auth()->user()) {
+            $item = Wishlist::where('subject_id', $this->object->id)
+                ->where('subject_type', $this->model_class)
                 ->where('user_id', auth()->user()->id)
                 ->first();
         } else {
-            $item = Wishlist::where('subject_id', $this->product->id)
+            $item = Wishlist::where('subject_id', $this->object->id)
+                ->where('subject_type', $this->model_class)
                 ->where('session_id', session()->getId())
                 ->first();
         }
 
-        if($item) {
+        if ($item) {
             return true;
         } else {
             return false;

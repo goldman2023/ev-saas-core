@@ -50,7 +50,12 @@ class EVService
         $vendorMenu = collect($vendorMenu)->map(function ($item) use ($role) {
 
             return collect($item['items'])->filter(function ($child) use ($role, $item) {
-                return in_array($role, $child['roles']);
+                if(isset($child['roles'])) {
+                    return in_array($role, $child['roles']);
+
+                } else {
+                    return true;
+                }
             })->count() > 0 ? $item : null;
 
         })->filter()->toArray();
