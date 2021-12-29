@@ -61,6 +61,9 @@ IMPORTANT: After adding/removing/changing permissions, run:
 - `php artisan cache:forget spatie.permission.cache`
 - `php artisan cache:clear`
 
+# Seeding universal payment methods
+Run: UniversalPaymentMethodsTableSeeder.php
+
 # Dynamic Components for Label/Image/Button
 
 -   Labels
