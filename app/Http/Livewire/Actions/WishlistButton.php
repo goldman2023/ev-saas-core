@@ -48,6 +48,12 @@ class WishlistButton extends Component
                     ->where('session_id', session()->getId())
                     ->first()->delete();
             }
+            $this->dispatchBrowserEvent('toastIt', [
+                'id' => "#global-toast",
+            'content' => "Item removed from wishlist",
+            'type' => 'success'
+        ]);
+
         } else {
             $item =  new Wishlist();
             $item->subject_type = $this->model_class;
@@ -61,9 +67,8 @@ class WishlistButton extends Component
             } else {
                 $item->session_id = session()->getId();
             }
-
             $item->save();
-
+            $this->dispatchBrowserEvent('toastIt', ['id' => "#global-toast", 'content' => "Item added to wishlist"]);
             $this->emit('addedToWishlist');
         }
 

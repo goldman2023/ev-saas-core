@@ -93,50 +93,70 @@
 
         {{-- <div class="space-top-lg-3 space-top-3"> --}}
             <div>
-            {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
+                {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
 
-            @yield('content')
+                @yield('content')
+            </div>
+
+            {{-- @include('frontend.inc.footer') --}}
+
+            <x-default.footers.footer>
+            </x-default.footers.footer>
+
         </div>
+        <x-default.footers.app-bar>
+        </x-default.footers.app-bar>
 
-        {{-- @include('frontend.inc.footer') --}}
+        {{-- <x-default.chat.widget-chat></x-default.chat.widget-chat> --}}
 
-        <x-default.footers.footer>
-        </x-default.footers.footer>
+        <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
-    </div>
-    <x-default.footers.app-bar>
-    </x-default.footers.app-bar>
+        @include('frontend.partials.modal')
 
-    {{-- <x-default.chat.widget-chat></x-default.chat.widget-chat> --}}
+        <!-- Print SignUp Modal Component -->
+        <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
-    <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
+        <!-- Carts -->
+        <livewire:cart.cart template="flyout-cart" />
+        <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success h3" :is_x="true"
+            x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
+            @toast.window="if(event.detail.id == 'global-toast') {
+        content = event.detail.content;
+        show = true;
+    }">
+        </x-ev.toast>
+        <script>
+            document.addEventListener('toastIt', async function (event) {
+    let content = event.detail.content;
+    let id = event.detail.id;
 
-    @include('frontend.partials.modal')
+    $(id).find('.toast-body').text(content);
 
-    <!-- Print SignUp Modal Component -->
-    <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
+    $(id).toast({
+        delay: 3000
+    });
 
-    <!-- Carts -->
-    <livewire:cart.cart template="flyout-cart" />
-    <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+    $(id).toast('show');
+});
+        </script>
+        @yield('modal')
 
-    @yield('modal')
+        @yield('script')
 
-    @yield('script')
+        @livewireScripts
 
-    @livewireScripts
+        @stack('footer_scripts')
 
-    @stack('footer_scripts')
+        @include('frontend.layouts.partials.app-js')
 
-    @include('frontend.layouts.partials.app-js')
+        {{-- TODO: Move this to some logical place --}}
+        <script src="{{ static_asset('front/js/hs.leaflet.js') }}"></script>
 
-    {{-- TODO: Move this to some logical place --}}
-    <script src="{{ static_asset('front/js/hs.leaflet.js') }}"></script>
+        <!-- JS Plugins Init. -->
 
-    <!-- JS Plugins Init. -->
-
-    <script>
-        $(function() {
+        <script>
+            $(function() {
             // =======================================================
             $('.js-hs-unfold-invoker').each(function () {
                 var unfold = new HSUnfold($(this)).init();
@@ -155,11 +175,11 @@
     });
   });
         });
-    </script>
+        </script>
 
-    @php
-    echo get_setting('footer_script');
-    @endphp
+        @php
+        echo get_setting('footer_script');
+        @endphp
 </body>
 
 </html>
