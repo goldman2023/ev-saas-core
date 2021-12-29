@@ -62,7 +62,9 @@ IMPORTANT: After adding/removing/changing permissions, run:
 - `php artisan cache:clear`
 
 # Seeding universal payment methods
-Run: UniversalPaymentMethodsTableSeeder.php
+Run: UniversalPaymentMethodsTableSeeder.php: 
+
+`php artisan tenants:seed --class=UniversalPaymentMethodsTableSeeder`
 
 # Dynamic Components for Label/Image/Button
 
