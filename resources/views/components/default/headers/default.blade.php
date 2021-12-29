@@ -1,5 +1,5 @@
 <!-- ========== HEADER ========== -->
-<header id="header" class="header shadow-lg">
+<header id="header" class="header shadow-lg" style="position: relative;">
     <div class="header-section">
         <!-- Topbar -->
         <div class="container header-hide-content pt-2">

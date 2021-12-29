@@ -5,10 +5,15 @@
         :class="{ 'show': show }"
         x-data="{
             processing: @entangle('processing').defer,
-            targetItem: null
+            targetItem: null,
+            has_warnings: false,
+            hideWarnings() {
+                this.has_warnings = false;
+                $($refs['c-flyout-cart__warnings-text']).html('');
+            }
         }"
         x-init="$watch('show', (value) => {
-            (!value) ? $('.cart-item').tooltip('dispose'): '';
+            (!value) ? hideWarnings() : '';
         })"
         x-effect="window.initClamp('.c-flyout-cart');"
         @toggle-cart.window="show = !show"
@@ -33,10 +38,17 @@
                 <h3 class="h4 mb-3 pb-2 border-bottom d-flex align-items-center">
                     <span>{{ translate('Cart') }}</span>
                     <span class="badge badge-soft-warning d-flex align-items-center px-2 py-1 ml-3 text-12 text-warning">
-                    @svg('heroicon-s-shopping-bag', ['class' => 'square-14 mr-2'])
-                    {{ str_replace('%x%', $totalItemsCount, translate('You have %x% items in your cart.')) }}
-                </span>
+                        @svg('heroicon-s-shopping-bag', ['class' => 'square-14 mr-2'])
+                        {{ str_replace('%x%', $totalItemsCount, translate('You have %x% item(s) in your cart.')) }}
+                    </span>
                 </h3>
+
+                <!-- Cart Warnings -->
+                <div class="c-flyout-cart__warnings flex-column mb-3" x-show="has_warnings" :class="{'d-flex':has_warnings}">
+                    <div class="bg-danger text-white rounded text-14 p-2" x-ref="c-flyout-cart__warnings-text">
+
+                    </div>
+                </div>
 
                 <!-- Cart Items -->
                 <div class="c-flyout-cart__items d-flex flex-column mb-1 flex-grow-1">
@@ -50,15 +62,17 @@
 
                             <div id="cart-item-{{ $item->id }}-{{ str_replace('\\','-',$item::class) }}"
                                  class="cart-item card p-3 d-flex flex-row align-items-start mb-3"
+                                 :class="{ 'prevent-pointer-events': processing }"
                                  x-data="{
                                     qty: {{ $item->purchase_quantity }},
                                     model_id: {{ $item->id }},
-                                    model_type: '{!! addslashes($item::class) !!}'
+                                    model_type: '{!! addslashes($item::class) !!}',
                                  }"
                                  x-init="
                                     $watch('qty', function(value) {
                                         if(!processing) {
-                                            $($el).tooltip('dispose');
+                                            $('.c-flyout-cart__items .cart-item').addClass('prevent-pointer-events'); // manually prevent pointer events while processing
+                                            hideWarnings();
                                             $wire.addToCart(model_id, model_type, value, false);
                                         }
                                      });
@@ -67,28 +81,20 @@
                                     if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
                                         qty = $event.detail.qty;
                                     }
+
+                                    $('.c-flyout-cart__items .cart-item').removeClass('prevent-pointer-events'); // manually remove prevent-pointer-events class
                                 "
                                  @cart-item-warnings.window="
-                                 {{-- TODO: Think of a way to determine if Cart is in transition(show: false -> true) and display warnings ONLY AFTER transition is over! --}}
-                                     $nextTick(() => {
-                                             if($event.detail.warnings.length > 0 && Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
-                                                 $($el).tooltip({
-                                                     placement: 'bottom',
-                                                     html: true,
-                                                     title: $event.detail.warnings[0].split('\\n').map(text => '<span>' + text + '</span><br>').join(''),
-                                                     customClass: 'tooltip-danger tooltip-lg',
-                                                     trigger: 'manual'
-                                                 });
-                                                 $($el).tooltip('show');
+                                    $nextTick(() => {
+                                        if($event.detail.warnings.length > 0) {
+                                            has_warnings = true;
+                                             $($refs['c-flyout-cart__warnings-text']).html($event.detail.warnings[0].split('\\n').map(text => '<span>' + text + '</span><br>').join(''));
 
-    {{-- TODO: Use clearTimeout() somehow to take care of issue when + or - are clicked few times in a row in less than 4s --}}
-                                         setTimeout(() => {
-                                             $($el).tooltip('hide');
-                                             setTimeout(() => $($el).tooltip('dispose'), 1000);
-                                         }, 4000);
-                                     }
-                             });
-"
+                                             setTimeout(() => {
+                                                hideWarnings();
+                                             }, 5000);
+                                        }
+                                    });"
                             >
                                 <div class="row full-row">
 
@@ -102,8 +108,6 @@
                                         @if(!$hasVariations)
                                             <span class="clamp text-12 mb-2" data-clamp-lines="1">{{ $excerpt }}</span>
                                         @else
-                                            {{-- TODO: Display variation attributes here in one row: (Inspiration -> https://cdn.dribbble.com/users/4817709/screenshots/16356375/media/86177cbea95d2df2983700a6e54bac2f.png) --}}
-
                                             <ul class="c-flyout-cart__item-variations-name-list d-flex mb-0">
                                                 @foreach($item->getVariantName(as_collection: true) as $name)
                                                     <li>{{ $name }}</li>
@@ -159,7 +163,7 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <span>{{ translate('Discounts:') }}</span>
-                            <strong class="text-success">-{{ $discountedAmount['display'] }}</strong>
+                            <strong class="text-success">-{{ $discountAmount['display'] }}</strong>
                         </div>
 
                         <span class="divider divider-third-right py-2"></span>

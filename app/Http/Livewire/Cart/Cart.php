@@ -13,7 +13,7 @@ class Cart extends Component
     public $items;
     public $totalItemsCount;
     public $originalPrice;
-    public $discountedAmount;
+    public $discountAmount;
     public $subtotalPrice;
     public $processing;
 
@@ -44,7 +44,7 @@ class Cart extends Component
         $this->totalItemsCount = CartService::getTotalItemsCount();
 
         $this->originalPrice = CartService::getOriginalPrice();
-        $this->discountedAmount = CartService::getDiscountedAmount();
+        $this->discountAmount = CartService::getdiscountAmount();
         $this->subtotalPrice = CartService::getSubtotalPrice();
 
         // Event to refresh cart items count (all over the page, where needed)
@@ -72,6 +72,12 @@ class Cart extends Component
         if(is_numeric($model)) {
             $model = app($model_type)::find($model);
         }
+
+        activity()
+            ->performedOn($model)
+            ->causedBy(auth()->user())
+            ->withProperties(['action' => 'add_to_cart'])
+            ->log('User added a product to cart');
 
         // Add $model and $qty to cart (do not append qty if $model is already in cart) because:
         // addToCart function in Cart.php is called on quantity change event inside cart, which means that given $qty is always the desired qty!

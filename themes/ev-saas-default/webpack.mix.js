@@ -43,6 +43,8 @@ if(argv.env !== undefined && argv.env.indexOf('tenant_id=') !== -1) {
 // NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
 let theme = 'ev-saas-default';
+
+let childThemes = ['ev-saas-fox', 'ev-saas-gun'];
 mix.setPublicPath(`public/themes/${theme}`)
     .webpackConfig({
         resolve: {

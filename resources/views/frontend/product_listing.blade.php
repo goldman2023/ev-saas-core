@@ -80,6 +80,11 @@ $meta_description = get_setting('site_motto');
                 </div>
             </div>
             <div class="col-sm-4">
+                 {{-- Sub Categories Display --}}
+                 @if(!empty($selected_category))
+                 <x-default.categories.sub-category-cards :categories="$selected_category">
+                 </x-default.categories.sub-category-cards>
+                 @endif
                 {{-- <x-b2-b-search></x-b2-b-search> --}}
 
                 @isset($brand)
@@ -117,7 +122,7 @@ $meta_description = get_setting('site_motto');
                                     <i class="las la-times la-2x"></i>
                                 </button>
                             </div>
-                            <div class="">
+                            <div class="d-none d-sm-block">
                                 <x-default.categories.category-list :selectedCategory="$selected_category"
                                     style="category-list-sidebar"></x-default.categories.category-list>
 
@@ -131,7 +136,7 @@ $meta_description = get_setting('site_motto');
                     </div>
                 </div>
                 <div class="col-xl-9">
-
+{{-- TODO: add category slider here --}}
                     @if ($content == 'product' || $content == null)
                     <div>
                         <div class="text-left">
@@ -166,18 +171,14 @@ $meta_description = get_setting('site_motto');
                                 </div>
                             </div>
                         </div>
-                        {{-- Sub Categories Display --}}
-                        @if(!empty($selected_category))
-                        <x-default.categories.sub-category-cards :categories="$selected_category">
-                        </x-default.categories.sub-category-cards>
-                        @endif
+
                         {{-- END Sub Categories Display --}}
                         @if ($products->count() > 0)
 
                         @if($products->isNotEmpty())
                             <div class="row gutters-5 mt-2">
                                 @foreach ($products as $key => $product)
-                                    <div class="col-sm-4 mb-3">
+                                    <div class="col-sm-4 col-12 mb-3">
                                         <x-default.products.cards.product-card :product="$product" class="product-card">
                                         </x-default.products.cards.product-card>
                                     </div>

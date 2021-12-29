@@ -259,6 +259,10 @@ class Product extends EVBaseModel
         return 'unit_price';
     }
 
+    public function getLikesCount() {
+        return $this->likes()->count();
+    }
+
 
     public function getTranslationModel(): ?string
     {

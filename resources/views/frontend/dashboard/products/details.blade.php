@@ -54,28 +54,7 @@
                     </x-default.products.cards.product-card>
                 </div>
 
-                <div class="col-6">
-{{--                    <!-- Leaflet (Map) -->--}}
-{{--                    Map--}}
-{{--                    <div id="map" class="leaflet-custom" class="min-h-450rem rounded" data-hs-leaflet-options='{--}}
-{{--                      "map": {--}}
-{{--                        "scrollWheelZoom": false,--}}
-{{--                        "coords": [37.4040344, -122.0289704]--}}
-{{--                      },--}}
-{{--                      "marker": [--}}
-{{--                        {--}}
-{{--                          "coords": [37.4040344, -122.0289704],--}}
-{{--                          "icon": {--}}
-{{--                            "iconUrl": "../../assets/svg/components/map-pin.svg",--}}
-{{--                            "iconSize": [50, 45]--}}
-{{--                          },--}}
-{{--                          "popup": {--}}
-{{--                            "text": "Test text!"--}}
-{{--                          }--}}
-{{--                        }--}}
-{{--                      ]--}}
-{{--                     }'></div>--}}
-                    <!-- End Leaflet (Map) -->
+                <div class="col-4">
                     <h3>{{ translate('Product Stats') }} </h3>
 
                     <div class="row">
@@ -89,6 +68,34 @@
                             </div>
                             <!-- End Card -->
                         </div>
+
+                        <!-- Card -->
+                        <div class="col-12 mb-3">
+                            <div class="card card-bordered shadow-none h-100">
+                                <div class="card-body">
+                                    <h6 class="font-weight-normal mb-1">{{ translate("Product activity") }}:</h6>
+                                    <h4 class="card-title">
+                                        @php
+                                        $activity_count = \Spatie\Activitylog\Models\Activity::where('subject_id',
+                                        $product->id)->orderBy(
+                                        'created_at',
+                                        'desc'
+                                        )->count();
+
+                                        $activity_count_today =
+                                        \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)
+                                        ->whereDate('created_at', Carbon::today())
+                                        ->count();
+                                        @endphp
+
+                                        {{ $activity_count }} / <small> {{ $activity_count_today }} {{
+                                            translate('Today') }} </small>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- End Card -->
 
                         <div class="col-12 mb-3">
                             <!-- Card -->
@@ -105,7 +112,8 @@
                                         <div class="mt-3">
                                             <small>
                                                 <a href="{{ route('ev-products.edit', $product->slug) }}"
-                                                    target="_blank"> {{ translate('+ Assign Categories') }} </a>
+                                                    target="_blank">
+                                                    {{ translate('+ Assign Categories') }} </a>
                                             </small>
                                         </div>
                                     </h4>
@@ -133,24 +141,28 @@
 
                                         <div>
                                             @if($product->use_serial)
-                                                <span class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
-                                                    @svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success mr-2'])
-                                                    {{translate('Has Serial Numbers') }}
-                                                </span>
+                                            <span
+                                                class="badge badge-soft-success mr-2 w-auto d-flex align-items-center mb-3">
+                                                @svg('heroicon-o-check', ['class' => 'ev-icon__xs text-success mr-2'])
+                                                {{translate('Has Serial Numbers') }}
+                                            </span>
                                             @endif
                                         </div>
 
                                         <div>
                                             @if($product->useVariations())
-                                                <span class="badge {{ $product->hasVariations() ? 'badge-soft-success':'badge-soft-warning' }} mr-2 w-auto d-flex align-items-center">
-                                                    {{ svg(($product->hasVariations() ? 'heroicon-o-check':'heroicon-o-exclamation'), ['class' => 'ev-icon__xs mr-2 '.($product->hasVariations() ? 'text-success':'text-warning')]) }}
+                                            <span
+                                                class="badge {{ $product->hasVariations() ? 'badge-soft-success':'badge-soft-warning' }} mr-2 w-auto d-flex align-items-center">
+                                                {{ svg(($product->hasVariations() ?
+                                                'heroicon-o-check':'heroicon-o-exclamation'), ['class' => 'ev-icon__xs
+                                                mr-2 '.($product->hasVariations() ? 'text-success':'text-warning')]) }}
 
-                                                    @if($product->hasVariations())
-                                                        {{translate('Variable Product') }}
-                                                    @else
-                                                        {{translate('Variable Product (but has no variations yet)') }}
-                                                    @endif
-                                                </span>
+                                                @if($product->hasVariations())
+                                                {{translate('Variable Product') }}
+                                                @else
+                                                {{translate('Variable Product (but has no variations yet)') }}
+                                                @endif
+                                            </span>
                                             @endif
                                         </div>
                                     </h4>
@@ -161,7 +173,17 @@
                     </div>
                     <!-- End Row -->
                 </div>
+
+                <div class="col-4">
+                    <h3>{{ translate('Product Activity') }} </h3>
+                    <livewire:product-activity :product="$product" />
+
+                    {{-- <x-default.products.details.activity :product="$product"></x-default.products.details.activity>
+                    --}}
+                </div>
             </div>
+
+
 
             {{-- Product orders --}}
             <div class="row">
@@ -312,7 +334,8 @@
 
                                     <div class="d-flex justify-content-end">
                                         <a class="btn btn-xs btn-white" href="#"><i
-                                                class="fas fa-file-download mr-1"></i> PDF</a>
+                                                class="fas fa-file-download mr-1"></i>
+                                            PDF</a>
                                         <span class="mx-1"></span>
                                         <a class="btn btn-xs btn-white" href="#"><i class="fas fa-print mr-1"></i> Print
                                             Details</a>

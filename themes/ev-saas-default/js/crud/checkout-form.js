@@ -30,13 +30,16 @@ window.initCheckoutForm = function(event) {
     // =======================================================
     $('.js-add-field').each(function () {
         $(this).off();
-
+        let phone_numbers = $(this).data('hs-add-field-options').phone_numbers ?? [];
+        let i = 0;
+        let add_filed = $(this);
         new HSAddField($(this), {
             addedField: function() {
-
+                $(add_filed.find('.form-control').get(i)).val(phone_numbers[i] ?? '');
+                i += 1;
             },
             deletedField: function() {
-                // Hide save btn if there are no fields!
+
             }
         }).init();
 

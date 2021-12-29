@@ -113,7 +113,7 @@ trait StockManagementTrait
 
     public function getCurrentStockAttribute() {
         if(!isset($this->current_stock)) {
-            if($this->use_serial ?? null) {
+            if($this->getUseSerialAttribute()) {
                 $this->current_stock = (int) $this->serial_numbers()->where('status', 'in_stock')->count(); // Get the count of all IN_STOCK serial_numbers of the targeted model
             } else {
                 $this->current_stock = (float) (empty($this->stock) ? null : ($this->stock->qty ?? 0));
@@ -139,6 +139,14 @@ trait StockManagementTrait
     /**********************************
      * Stock Management Functions *
      **********************************/
+    public function isInStock() {
+        return $this->getCurrentStockAttribute() > 0;
+    }
+
+    public function isLowStock() {
+        return $this->getCurrentStockAttribute() <= $this->getLowStockQtyAttribute();
+    }
+
     public function reduceStock($quantity = null) {
         $quantity = (!empty($quantity) && $quantity > 0) ? $quantity : $this->purchase_quantity;
 

@@ -1,5 +1,5 @@
-<div>
-    <button type="button" class="btn btn-xs p-1 btn-icon btn-danger rounded-circle " wire:click="addToWishlist()"
+<div wire:click="addToWishlist()">
+    <button type="button" class="btn btn-xs p-1 btn-icon btn-danger rounded-circle "
         title="{{ translate('Add To Wishlist') }}">
 
         @if($added)

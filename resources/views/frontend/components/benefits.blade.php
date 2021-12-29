@@ -1,25 +1,8 @@
 <!-- Features Section -->
 <div class="border-bottom bg-white">
     <div class="container space-lg-1 space-1">
-        <div class="js-slick-carousel slick"  data-hs-slick-carousel-options='{
-            "infinite": true,
-            "autoplay": true,
-            "autoplaySpeed": 2000,
-            "slidesToShow": 3,
-            "responsive": [{
-                "breakpoint": 992,
-                  "settings": {
-                    "slidesToShow": 2
-                  }
-                }, {
-                "breakpoint": 768,
-                "settings": {
-                  "slidesToShow": 1
-                }
-              }]
-            }'>
-            @for($i = 0; $i < 3; $i++)
-            <div class="mb-0">
+        <div class="row flex-nowrap ev-horizontal-slider" style="overflow: scroll;">            @for($i = 0; $i < 3; $i++)
+            <div class="col-sm-4 col-8 mb-0">
                 <!-- Contacts -->
 {{--             TODO: Make this somehow dynamic    --}}
                 <div class="media d-flex align-items-center">

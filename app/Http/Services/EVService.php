@@ -50,7 +50,12 @@ class EVService
         $vendorMenu = collect($vendorMenu)->map(function ($item) use ($role) {
 
             return collect($item['items'])->filter(function ($child) use ($role, $item) {
-                return in_array($role, $child['roles']);
+                if(isset($child['roles'])) {
+                    return in_array($role, $child['roles']);
+
+                } else {
+                    return true;
+                }
             })->count() > 0 ? $item : null;
 
         })->filter()->toArray();
@@ -226,10 +231,10 @@ class EVService
                 'items' => [
                     [
                         'label' => translate('My Purchases'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => route('purchase_history.index'),
-                        'is_active' => areActiveRoutes(['purchase_history']),
-                        'roles' => ['customer'],
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('my.purchases.all'),
+                        'is_active' => areActiveRoutes(['my.purchases.all']),
+                        //'roles' => ['admin','seller', 'customer'],
                     ],
                     [
                         'label' => translate('My Wishlist'),

@@ -26,7 +26,7 @@
                                                     "startPoint": "#stickyBlockStartPoint2",
                                                     "endPoint": "#stickyBlockEndPoint2",
                                                     "stickyOffsetBottom": 20,
-                                                    "stickyOffsetTop": 95
+                                                    "stickyOffsetTop": 20
                                                   }'>
 
                         <x-default.products.single.product-checkout-card :product="$product">

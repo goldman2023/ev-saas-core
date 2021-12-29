@@ -31,6 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public static array $user_types = ['admin','moderator','seller','staff'];
     public static array $tenant_user_types = ['admin','moderator'];
     public static array $vendor_user_types = ['seller','staff'];
+    public static string $customer_type = 'customer';
 
     public function sendEmailVerificationNotification()
     {
@@ -208,6 +209,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function recently_viewed_products() {
         $data = Activity::where('subject_type', 'App\Models\Product')
+        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+        ->groupBy('subject_id')
+        ->get();
+
+        return $data;
+    }
+
+    public function recently_viewed_shops() {
+        $data = Activity::where('subject_type', 'App\Models\Shop')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')
         ->get();
