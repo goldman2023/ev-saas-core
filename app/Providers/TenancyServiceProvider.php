@@ -126,6 +126,11 @@ class TenancyServiceProvider extends ServiceProvider
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/tenant.php'));
         }
+
+        if (file_exists(base_path('routes/dashboard.php'))) {
+            Route::namespace(static::$controllerNamespace)
+                ->group(base_path('routes/dashboard.php'));
+        }
     }
 
     protected function makeTenancyMiddlewareHighestPriority()
