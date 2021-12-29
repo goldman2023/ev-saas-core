@@ -225,6 +225,13 @@ class EVService
                 'label' => translate('Customer zone'),
                 'items' => [
                     [
+                        'label' => translate('Account'),
+                        'icon' => 'heroicon-o-user',
+                        'route' => route('my.account.settings'),
+                        'is_active' => areActiveRoutes(['my.account.settings']),
+                        'roles' => ['all'],
+                    ],
+                    [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
