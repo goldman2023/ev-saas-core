@@ -14,34 +14,32 @@ class EVWishlistController extends Controller
         'App\Models\Product' => 'Product',
         'App\Models\Shop' => 'Shop',
     ];
+    public $wishlists;
 
     public function index()
     {
-        $wishlists = [];
         foreach($this->availableWishlistItems as $key => $type) {
             if (auth()->user()) {
-                $wishlists[$type] = Wishlist::where('user_id', auth()->user()->id)
+                $this->wishlists[$type] = Wishlist::where('user_id', auth()->user()->id)
                     ->where('subject_type', $key)
                     ->get();
             } else {
                 $session_id = session()->getId();
-                $wishlists[$type] = Wishlist::where('session_id', $session_id)
+                $this->wishlists[$type] = Wishlist::where('session_id', $session_id)
                     ->where('subject_type', $key)
                     ->get();
             }
 
 
 
-            if ($wishlists[$type] === null) {
-                $wishlists[$type] = collect([]);
+            if ($this->wishlists[$type] === null) {
+                $this->wishlists[$type] = collect([]);
             }
         }
 
-
-
-
-
-        return view('frontend.wishlist.index', compact('wishlists'));
+        return view('frontend.wishlist.index', [
+            'wishlists' => $this->wishlists,
+        ]);
     }
 
     public function views()

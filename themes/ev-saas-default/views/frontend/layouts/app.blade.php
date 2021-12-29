@@ -118,6 +118,7 @@
 
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
+    <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
 
     @yield('modal')
 

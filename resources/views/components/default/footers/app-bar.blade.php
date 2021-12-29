@@ -54,10 +54,10 @@
         @svg('heroicon-o-home', ['style' => 'width: 24px;'])
         <span class="text">{{ translate('Home') }}</span>
     </a>
-    <a href="{{ route('categories.all') }}" class="nav-link text-dark">
+    <span x-data="" @click="$dispatch('display-wishlist')" class="nav-link text-dark">
         @svg('heroicon-o-view-grid', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Categories') }}</span>
-    </a>
+    </span>
     <span x-data="" @click="$dispatch('display-cart')"  class="nav-link text-dark">
         @svg('heroicon-o-shopping-bag', ['style' => 'width: 24px;'])
         <span class="text text-dark">My cart</span>

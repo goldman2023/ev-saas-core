@@ -19,22 +19,35 @@
             @endif
         </div>
         <div class="col-sm-12">
-            @if($wishlists['Product']->count() > 0)
-            <div class="card">
+            @foreach ($wishlists as $key => $wishlist)
+
+
+            @if($wishlist->count() > 0)
+            <div class="card mb-3">
                 <div class="card-header">
 
                     <h5>
-                        {{ translate('Your Wishlist') }}
+                        {{ translate('Your Wishlist') }} : {{ $key }}
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        @foreach($wishlists['Product'] as $product)
+                        @foreach($wishlist as $item)
 
                         <div class="col-sm-4 mb-3">
-                            <x-default.products.cards.product-card :product="$product->subject"
+                            @if($item->subject->getMorphClass() == 'App\Models\Product')
+                            <x-default.products.cards.product-card :product="$item->subject"
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">
                             </x-default.products.cards.product-card>
+                            @endif
+
+                            @if($item->subject->getMorphClass() == 'App\Models\Shop')
+                            <x-company.company-card :company="$item->subject"></x-company.company-card>
+
+                            @endif
+
+
+
                         </div>
                         @endforeach
 
@@ -60,6 +73,8 @@
                     </div>
                 </div>
             @endif
+            @endforeach
+
 
 
         </div>
