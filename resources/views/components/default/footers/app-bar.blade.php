@@ -30,7 +30,8 @@
     display:block;
     font-weight:500;
     font-size:0.8rem;
-    color:#adb5bd
+    color:#adb5bd;
+    line-height: 1;
 }
 .nav-bottom .nav-link.active{
     color:#0d6efd
@@ -53,16 +54,21 @@
         @svg('heroicon-o-home', ['style' => 'width: 24px;'])
         <span class="text">{{ translate('Home') }}</span>
     </a>
-    <a href="{{ route('categories.all') }}" class="nav-link text-dark">
+    <span x-data="" @click="$dispatch('display-wishlist')" class="nav-link text-dark">
         @svg('heroicon-o-view-grid', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Categories') }}</span>
-    </a>
-    <a href="{{ route('cart') }}" class="nav-link text-dark">
+    </span>
+    <span x-data="" @click="$dispatch('display-cart')"  class="nav-link text-dark">
         @svg('heroicon-o-shopping-bag', ['style' => 'width: 24px;'])
         <span class="text text-dark">My cart</span>
-    </a>
+    </span>
     <a href="{{ route('dashboard') }}" class="nav-link text-dark">
-        @svg('heroicon-o-shopping-bag', ['style' => 'width: 24px;'])
+        @svg('heroicon-o-user-circle', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Profile') }}</span>
     </a>
+
+    <span  @click="$dispatch('display-menu')" class="nav-link text-dark">
+        @svg('heroicon-o-menu', ['style' => 'width: 24px;'])
+        <span class="text">{{ translate('Menu') }}</span>
+    </span>
 </nav>

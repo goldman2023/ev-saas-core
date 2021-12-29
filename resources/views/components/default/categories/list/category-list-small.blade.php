@@ -10,10 +10,10 @@
             </x-ev.label>
         </div>
         <!-- End Title -->
-        <div class="row mb-2 @if ($slider) ev-slick @endif">
+        <div class="row mb-2 @if ($slider) ev-horizontal-slider flex-nowrap @endif" style="overflow: auto;">
             @foreach ($categories as $category)
                 <!-- Card -->
-                <div class="col-sm-4 mb-3">
+                <div class="col-sm-4 col-10 mb-3">
                     <a class="card card-bordered card-hover-shadow h-100" href="{{ route('products.category', $category->slug) }}">
                         <div class="card-body">
                             <div class="media align-items-center">

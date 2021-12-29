@@ -1,5 +1,5 @@
 <!-- Responsive Toggle Button -->
-<button type="button" class="navbar-toggler btn btn-icon btn-sm rounde-circle d-lg-none"
+{{-- <button type="button" class="navbar-toggler btn btn-icon btn-sm rounde-circle d-lg-none"
         aria-label="Toggle navigation"
         aria-expanded="false"
         aria-controls="sidebarNav"
@@ -15,7 +15,7 @@
       <path fill="currentColor" d="M11.5,9.5l5-5c0.2-0.2,0.2-0.6-0.1-0.9l-1-1c-0.3-0.3-0.7-0.3-0.9-0.1l-5,5l-5-5C4.3,2.3,3.9,2.4,3.6,2.6l-1,1 C2.4,3.9,2.3,4.3,2.5,4.5l5,5l-5,5c-0.2,0.2-0.2,0.6,0.1,0.9l1,1c0.3,0.3,0.7,0.3,0.9,0.1l5-5l5,5c0.2,0.2,0.6,0.2,0.9-0.1l1-1 c0.3-0.3,0.3-0.7,0.1-0.9L11.5,9.5z"/>
     </svg>
   </span>
-</button>
+</button> --}}
 <!-- End Responsive Toggle Button -->
 
 <!-- Navbar -->
@@ -30,7 +30,7 @@
                     <div class="avatar avatar-xxl avatar-circle mb-3">
                         {{-- TODO: Make this store logo, but think that users can have this --}}
                         <img class="avatar-img" src="{{ Auth::user()->getUpload('avatar') ?: 'https://htmlstream.com/front/assets/img/160x160/img1.jpg' }}" alt="Image Description">
-                        <img class="avatar-status avatar-lg-status" src="assets/svg/illustrations/top-vendor.svg" alt="Image Description" data-toggle="tooltip" data-placement="top" title="Verified user">
+                        <img class="avatar-status avatar-lg-status" src="/assets/svg/illustrations/top-vendor.svg" alt="Image Description" data-toggle="tooltip" data-placement="top" title="Verified user">
                     </div>
 
                     {{-- TODO: Show Business info here instead of user info! (for both single-vendor and multi-vendor apps) --}}
@@ -46,7 +46,7 @@
                 {{-- TODO: Add role-dependent menu items for Sellers(multi-vendor). --}}
                 {{-- IMPORTANT: Do not add admin-dependent menu items, like global SaaS settings and all sellers CRUD etc. We already have this in Admin panel! --}}
 
-                @if($menu = \EVS::getVendorMenu())
+                @if($menu = \EVS::getVendorMenuByRole('admin'))
                     @foreach($menu as $section)
                         @if($section['label'] === 'hr')
                             <div class="dropdown-divider"></div>

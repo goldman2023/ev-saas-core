@@ -15,7 +15,7 @@
             </a>
 
             <input class="js-result form-control h-auto border-0 py-0 px-1 text-center"
-                   type="text"
+                   type="number"
                    min="0"
                    x-ref="quantity-counter-input-{{ $model->id }}"
                     {{-- TODO: .lazy does not trigger change of data on input change from quantity-counter js. Think of a solution that will support both 1) input manual change, 2) quantity-counter +/- change --}}

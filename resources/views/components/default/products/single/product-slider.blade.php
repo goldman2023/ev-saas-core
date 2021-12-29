@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row ">
                 <div class="col-md-8 rounded-lg pl-sm-0 position-relative mb-3 mb-sm-0"
-                     style="height: 400px; overflow: hidden;">
+                     style="overflow: hidden;">
                     <div class="row ">
                         <div class="col-sm-8 px-sm-1 position-static">
                             <!-- Gallery -->
@@ -31,11 +31,11 @@
                 <div class="col-md-4 " id="stickyBlockStartPoint2">
                     <div class="js-sticky-block" data-hs-sticky-block-options='{
                                                     "parentSelector": "#stickyBlockStartPoint2",
-                                                    "breakpoint": "lg",
+                                                    "breakpoint": "xl",
                                                     "startPoint": "#stickyBlockStartPoint2",
                                                     "endPoint": "#stickyBlockEndPoint2",
                                                     "stickyOffsetBottom": 20,
-                                                    "stickyOffsetTop": 95
+                                                    "stickyOffsetTop": 20
                                                   }'>
 
                         <x-default.products.single.product-checkout-card :product="$product">

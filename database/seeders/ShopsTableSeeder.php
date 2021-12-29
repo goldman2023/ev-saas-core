@@ -37,6 +37,16 @@ class ShopsTableSeeder extends Seeder
                     ),
             ));
 
+            \DB::table('user_relationships')->insert(array(
+                0 =>
+                    array(
+                        'id' => 1,
+                        'user_id' => 1,
+                        'subject_id' => 1,
+                        'subject_type' => 'App\\Models\\Shop',
+                    ),
+            ));
+
         }
     }
 }

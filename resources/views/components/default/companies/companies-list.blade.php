@@ -9,15 +9,14 @@
     </div>
     <!-- End Title -->
 
-    <div class="row mx-n2 mb-5">
-        @php
+    <div class="row flex-nowrap ev-horizontal-slider" style="overflow: scroll;">        @php
             $companies = App\Models\Shop
                 ::orderBy('created_at', 'DESC')
                 ->take('5')
                 ->get();
         @endphp
         @foreach ($companies as $company)
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-10">
                 <!-- Team -->
                 <x-company.company-card :company="$company">
                 </x-company.company-card>

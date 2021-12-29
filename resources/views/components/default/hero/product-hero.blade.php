@@ -10,7 +10,7 @@
                         </x-ev.label>
                     </p>
 
-                    <div>
+                    <div class="d-flex">
                         <x-ev.link-button :href="ev_dynamic_translate('#hero-cta-button')"
                         :label="ev_dynamic_translate('Get Started')"
                         class="ev-button btn btn-primary mr-3 mb-3">
@@ -18,27 +18,27 @@
 
                         <x-ev.link-button :href="ev_dynamic_translate('#hero-shop-button')"
                         :label="ev_dynamic_translate('Explore our Catalogue')"
-                        class="ev-button btn btn-outline-primary mb-3">
+                        class="ev-button btn bg-white btn-outline-primary mb-3">
                         </x-ev.link-button>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4 mb-3 mb-md-0">
+                <div class="row flex-nowrap d-flex" style="overflow: auto;">
+                    <div class="col-md-4 col-10 mb-3 mb-md-0">
                         <!-- Card -->
                        <x-default.cards.hero-benefit-card id="benefit-card-1">
                        </x-default.cards.hero-benefit-card>
                         <!-- End Card -->
                     </div>
 
-                    <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="col-md-4 col-10 mb-3 mb-md-0">
                         <!-- Card -->
                         <x-default.cards.hero-benefit-card id="benefit-card-2">
                         </x-default.cards.hero-benefit-card>
                         <!-- End Card -->
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-10">
                         <!-- Card -->
                         <x-default.cards.hero-benefit-card id="benefit-card-3">
 

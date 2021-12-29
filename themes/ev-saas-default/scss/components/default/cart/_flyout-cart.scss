@@ -13,6 +13,7 @@
 
     @include tablet-portrait-up {
         width: 100%;
+        right: -100%;
     }
 
     @include tablet-landscape-up {

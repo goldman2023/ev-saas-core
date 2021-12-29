@@ -215,4 +215,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $data;
     }
+
+    public function recently_viewed_shops() {
+        $data = Activity::where('subject_type', 'App\Models\Shop')
+        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+        ->groupBy('subject_id')
+        ->get();
+
+        return $data;
+    }
 }

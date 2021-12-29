@@ -21,6 +21,13 @@
         <x-default.categories.category-list :categories="$categories" slider="true"> </x-default.categories.category-list>
     </section>
 
+    <section class="">
+        <div class="container">
+            {{-- TODO: Document this component for dynamic use for different kind of recently viewed content types --}}
+            <x-default.dynamic-blocks.recently-viewed type="Shop"> </x-default.categories.category-list>
+        </div>
+    </section>
+
     {{-- TODO: Refactor this to blade components --}}
     <section class="bg-light">
     @include('frontend.components.benefits')

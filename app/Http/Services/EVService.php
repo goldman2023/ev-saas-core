@@ -27,17 +27,45 @@ class EVService
 
         if(file_exists($tenant_css_path)) {
             $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
+
         } else {
-            $url = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path));
+            $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
         }
 
         // TODO: Think of a way to implement better vendor design pattern!
-        $this->tenantStylePath = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path)); //$url;
+        $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path)); //$url;
         $this->tenantStylePath = $url;
     }
 
-    public function getThemeStyling() {
+    public function getThemeStyling()
+    {
         return $this->tenantStylePath;
+    }
+
+    public function getVendorMenuByRole($role = 'customer')
+    {
+        $vendorMenu = $this->getVendorMenu();
+
+        $vendorMenu = collect($vendorMenu)->map(fn($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
+            if(isset($child['roles'])) {
+                return in_array($role, $child['roles']);
+
+            } else {
+                return true;
+            }
+        })->count() > 0 ? $item : null)->filter()->toArray();
+
+        return $vendorMenu;
+
+        /*  foreach($vendorMenu as $item) {
+            foreach($item['items'] as $key => $subItem) {
+                if(in_array($role, $subItem['roles'])) {
+
+                } else {
+                    unset($subItem[$key]);  // $arr = ['b', 'c']
+                }
+            }
+        } */
     }
 
     public function getVendorMenu(): array
@@ -86,21 +114,21 @@ class EVService
                         'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('ev-products.index'),
                         'is_active' => areActiveRoutes(['ev-products.index']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Courses'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('courses.index'),
                         'is_active' => areActiveRoutes(['courses.index']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('orders.index'),
                         'is_active' => areActiveRoutes(['orders.index']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Leads'),
@@ -134,21 +162,21 @@ class EVService
                         'icon' => 'heroicon-o-newspaper',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Website'),
                         'icon' => 'heroicon-o-qrcode',
                         'route' => route('ev.settings.domains'),
                         'is_active' => areActiveRoutes(['ev.settings.domains']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Tutorials'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('ev-tutorials.index'),
                         'is_active' => areActiveRoutes(['ev.settings.domains']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ]
                     // [
                     //     'label' => translate('Subscriptions'),
@@ -168,28 +196,28 @@ class EVService
                         'icon' => 'heroicon-o-chat',
                         'route' => route('conversations.index'),
                         'is_active' => areActiveRoutes(['conversations.index', 'conversations.show']),
-                        'roles' => ['admin','seller', 'customer'],
+                        'roles' => ['admin', 'seller', 'customer'],
                     ],
                     [
                         'label' => translate('Customers'),
                         'icon' => 'heroicon-o-user-group',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Reviews'),
                         'icon' => 'heroicon-o-star',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Support'),
                         'icon' => 'heroicon-o-support',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin','seller',  'guest'],
+                        'roles' => ['admin', 'seller',  'guest'],
                     ],
                 ]
             ],
@@ -215,7 +243,7 @@ class EVService
                         'icon' => 'heroicon-o-eye',
                         'route' => route('wishlist.views'),
                         'is_active' => areActiveRoutes(['wishlist.views']),
-                        'roles' => ['customer','admin','seller', 'guest'],
+                        'roles' => ['customer', 'admin', 'seller', 'guest'],
                     ]
                 ]
             ],
@@ -227,13 +255,21 @@ class EVService
                         'icon' => 'heroicon-o-cog',
                         'route' => route('ev.settings.design'),
                         'is_active' => areActiveRoutes(['ev.settings.design']),
-                        'roles' => ['admin','seller'],
+                        'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Account settings'),
                         'icon' => 'heroicon-o-cog',
                         'route' => route('profile'),
                         'is_active' => areActiveRoutes(['profile']),
+                        'roles' => ['admin', 'seller'],
+                    ],
+                    [
+                        'label' => translate('Payment settings'),
+                        'icon' => 'heroicon-o-cash',
+                        'route' => route('ev.settings.payment_methods'),
+                        'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
+                        'roles' => ['admin', 'seller'],
                     ],
                      [
                          'label' => translate('Payment settings'),
@@ -306,13 +342,16 @@ class EVService
                         'icon' => 'heroicon-o-logout',
                         'route' => route('user.logout'),
                         'is_active' => false,
+                        'roles' => ['admin', 'seller'],
+
                     ],
                 ]
             ]
         ];
     }
 
-    public function getMappedCategories() {
+    public function getMappedCategories()
+    {
         /*$categories = Category::where('parent_id', 0)
             ->where('digital', 0)
             ->with('childrenCategories')
@@ -322,24 +361,24 @@ class EVService
 
         $mapped = [];
 
-        $recursion = function($child_category) use (&$recursion, &$mapped) {
+        $recursion = function ($child_category) use (&$recursion, &$mapped) {
             $value = str_repeat('--', $child_category['level']);
 
-            $mapped[$child_category['id']] = $value." ".$child_category['name'];
+            $mapped[$child_category['id']] = $value . " " . $child_category['name'];
 
-            if(isset($child_category['children'])) {
+            if (isset($child_category['children'])) {
                 foreach ($child_category['children'] as $childCategory) {
                     $recursion($childCategory);
                 }
             }
         };
 
-        if($categories->isNotEmpty()) {
-            foreach($categories as $category) {
+        if ($categories->isNotEmpty()) {
+            foreach ($categories as $category) {
                 $mapped[$category['id']] = $category['name'];
 
-                if($category['children']) {
-                    foreach($category['children'] as $childCategory) {
+                if ($category['children']) {
+                    foreach ($category['children'] as $childCategory) {
                         $recursion($childCategory);
                     }
                 }
@@ -349,11 +388,12 @@ class EVService
         return $mapped;
     }
 
-    public function getMappedBrands() {
+    public function getMappedBrands()
+    {
         $brands = Brand::all();
         $mapped = [];
 
-        if($brands->isNotEmpty()) {
+        if ($brands->isNotEmpty()) {
             foreach (\App\Models\Brand::all() as $brand) {
                 $mapped[$brand->id] = $brand->getTranslation('name');
             }
@@ -362,7 +402,8 @@ class EVService
         return $mapped;
     }
 
-    public function getMappedUnits() {
+    public function getMappedUnits()
+    {
         return [
             'pc' => 'Pc',
             'kg' => 'kg',
@@ -371,7 +412,8 @@ class EVService
         ];
     }
 
-    public function getMappedVideoProviders() {
+    public function getMappedVideoProviders()
+    {
         return [
             'youtube' => 'Youtube',
             'vimeo' => 'Vimeo',
@@ -379,7 +421,8 @@ class EVService
         ];
     }
 
-    public function getMappedStockVisibilityOptions() {
+    public function getMappedStockVisibilityOptions()
+    {
         return [
             'quantity' => translate('Show stock quantity'),
             'text' => translate('Show stock with text only'),
@@ -387,7 +430,8 @@ class EVService
         ];
     }
 
-    public function getMappedShippingTypePerProduct() {
+    public function getMappedShippingTypePerProduct()
+    {
         return [
             'free' => translate('Free shipping'),
             'flat_rate' => translate('Flat rate'),

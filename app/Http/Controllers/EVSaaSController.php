@@ -39,18 +39,4 @@ class EVSaaSController extends Controller
 
         dd($tenant1);
     }
-
-
-    public function design_settings_store(Request $request)
-    {
-        $domain = tenant()->domains()->first();
-        $domain->theme = $request->theme;
-        $domain->save();
-
-
-        return redirect()->back();
-    }
-
-
-
 }

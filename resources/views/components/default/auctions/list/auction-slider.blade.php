@@ -1,3 +1,31 @@
+<style>
+    .ev-auction-badge {
+        position: absolute;
+        top: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .ev-brands-slider img {
+        width: 100px;
+        height: 100px;
+        padding: 10px;
+        border-radius: 100%;
+        background: white;
+        object-fit: scale-down;
+        border: 2px solid red;
+    }
+
+    @media(max-width: 768px) {
+        .ev-brands-slider img {
+            width: 65px;
+            height: 65px;
+            padding: 3px;
+        }
+    }
+
+</style>
+
 <div class="container">
 
     <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3 d-none">
@@ -7,24 +35,12 @@
 
     <div class="ev-brands-swiper">
         <div class="ev-brands-slider">
-            <div class="js-slick-carousel" data-hs-slick-carousel-options='{
-                "slidesToShow" : 6,
-                "fade": false,
-                "infinite": false,
-                "autoplay": true,
-                "autoplaySpeed": 7000,
-                "responsive": [{
-                    "breakpoint": 768,
-                    "settings": {
-                    "slidesToShow": 3,
-                      "arrows": false
-                    }}]
-                }'>
+            <div class="row d-flex flex-nowrap" style="overflow: auto;">
                 <!-- Product -->
 
 
                 @foreach ($products as $key => $product)
-                    <div class="text-center slick-slide position-relative">
+                    <div class="col-3 col-sm text-center slick-slide position-relative">
                         <a href="{{ $product->permalink }}" class="d-block rounded hov-shadow-md">
                             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
                                 class="lazyload mx-auto h-70px mw-100 bg-white" :image="$product->getThumbnail()">
@@ -65,36 +81,9 @@
         // INITIALIZATION OF COUNTDOWNS
         // =======================================================
         $('.js-countdown').each(function() {
-            console.log('count');
             var countdown = $.HSCore.components.HSCountdown.init($(this));
         });
     </script>
-    <style>
-        .ev-auction-badge {
-            position: absolute;
-            top: 0;
-            margin-left: auto;
-            margin-right: auto;
-        }
 
-        .ev-brands-slider img {
-            width: 100px;
-            height: 100px;
-            padding: 10px;
-            border-radius: 100%;
-            background: white;
-            object-fit: scale-down;
-            border: 2px solid red;
-        }
-
-        @media(max-width: 768px) {
-            .ev-brands-slider img {
-                width: 65px;
-                height: 65px;
-                padding: 3px;
-            }
-        }
-
-    </style>
 
 @endpush

@@ -247,12 +247,12 @@
             <!-- Media -->
             <div class="media">
                 <span class="avatar avatar-lg avatar-soft-danger avatar-circle mr-3">
-                    <span class="avatar-initials">MT</span>
+                    <span class="avatar-initials">{{ $product->shop->name }}</span>
                 </span>
 
                 <div class="media-body">
                     <h4 class="mb-1">
-                        <a class="text-dark" href="#">MTBaltic</a>
+                        <a class="text-dark" href="{{ $product->shop->permalink }}">{{ $product->shop->name }}</a>
                     </h4>
 
 

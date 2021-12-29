@@ -14,7 +14,7 @@
             </span>
         </div>
         <div class="position-absolute top-0 right-0 pt-3 pr-3">
-            <livewire:actions.wishlist-button :product="$product" />
+            <livewire:actions.wishlist-button :object="$product" />
         </div>
     </div>
 

@@ -25,6 +25,7 @@ class ProductsTableSeeder extends Seeder
                         'name' => 'Demo Product',
                         'added_by' => 'admin',
                         'user_id' => 1,
+                        'shop_id' => 1,
                         'brand_id' => 1,
                         'video_provider' => 'vimeo',
                         'video_link' => 'https://google.com',
