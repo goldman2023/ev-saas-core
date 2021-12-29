@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
@@ -25,7 +26,8 @@ Route::middleware([
         'middleware' => ['auth'],
         'prefix' => 'dashboard'
     ], function () {
-        Route::get('/', 'HomeController@dashboard')->name('dashboard');
+        Route::get('/index', 'HomeController@dashboard')->name('dashboard');
+
 
         /* TODO : Admin only */
 

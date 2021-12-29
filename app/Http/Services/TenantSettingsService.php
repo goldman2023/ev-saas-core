@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Services;
+use App\Models\Central\CentralSetting;
 use App\Models\TenantSetting;
 use Cache;
 
@@ -40,12 +41,13 @@ class TenantSettingsService
     }
 
     protected function setAll() {
-        $cache_key = tenant('id') . '_tenant_settings';
+        $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
         $settings = Cache::get($cache_key, null);
         $default = [];
 
+
         if (empty($settings)) {
-            $settings = TenantSetting::select('id','setting','value')->get()->keyBy('setting')->toArray();
+            $settings  = app(CentralSetting::class)->select('id','setting','value')->get()->keyBy('setting')->toArray();
 
             // Cache the settings if they are found in DB
             if (!empty($settings)) {

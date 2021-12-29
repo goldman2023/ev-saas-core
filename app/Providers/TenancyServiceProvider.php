@@ -14,6 +14,7 @@ use Stancl\Tenancy\Events;
 use Stancl\Tenancy\Jobs;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
+use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 class TenancyServiceProvider extends ServiceProvider
 {
@@ -103,8 +104,27 @@ class TenancyServiceProvider extends ServiceProvider
     {
         $this->bootEvents();
         $this->mapRoutes();
+//        $this->enableTenantCacheLookup();
 
         $this->makeTenancyMiddlewareHighestPriority();
+    }
+
+    /**
+     * avoid making a query to the central database on each tenant request — for tenant identification.
+     * Even though the queries are very simple, the app has to establish a connection with the central database which is expensive.
+     *
+     *
+     */
+    public function enableTenantCacheLookup() {
+        // enable cache lookup
+        DomainTenantResolver::$shouldCache = true;
+
+        // seconds, 3600 is the default value
+        DomainTenantResolver::$cacheTTL = 3600;
+
+        // specify some cache store
+        // null resolves to the default cache store
+        DomainTenantResolver::$cacheStore = 'redis';
     }
 
     protected function bootEvents()

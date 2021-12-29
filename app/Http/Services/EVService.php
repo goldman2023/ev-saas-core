@@ -21,12 +21,12 @@ class EVService
     protected $tenantStylePath;
 
     public function __construct($app) {
-        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant()->id.'.css');
+        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant('id').'.css');
         $default_css_path = public_path('themes/'.Theme::parent().'/css/app.css');
         $styling_url = '';
 
         if(file_exists($tenant_css_path)) {
-            $url = asset('themes/'.Theme::parent().'/css/'.tenant()->id.'.css?ver='.filemtime($tenant_css_path));
+            $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
         } else {
             $url = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path));
         }
