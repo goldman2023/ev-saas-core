@@ -2,7 +2,7 @@
 <div class="border-bottom bg-white">
     <div class="container space-lg-1 space-1">
         <div class="row flex-nowrap ev-horizontal-slider" style="overflow: scroll;">            @for($i = 0; $i < 3; $i++)
-            <div class="col-sm-4 col-5 mb-0">
+            <div class="col-sm-4 col-8 mb-0">
                 <!-- Contacts -->
 {{--             TODO: Make this somehow dynamic    --}}
                 <div class="media d-flex align-items-center">

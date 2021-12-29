@@ -91,7 +91,8 @@
         <x-default.headers.header>
         </x-default.headers.header>
 
-        <div class="space-top-lg-3 space-top-3">
+        {{-- <div class="space-top-lg-3 space-top-3"> --}}
+            <div>
             {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
 
             @yield('content')
