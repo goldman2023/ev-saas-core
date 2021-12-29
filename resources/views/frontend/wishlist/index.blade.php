@@ -19,7 +19,7 @@
             @endif
         </div>
         <div class="col-sm-12">
-            @if($products->count() > 0)
+            @if($wishlists['Product']->count() > 0)
             <div class="card">
                 <div class="card-header">
 
@@ -29,7 +29,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        @foreach($products as $product)
+                        @foreach($wishlists['Product'] as $product)
 
                         <div class="col-sm-4 mb-3">
                             <x-default.products.cards.product-card :product="$product->subject"

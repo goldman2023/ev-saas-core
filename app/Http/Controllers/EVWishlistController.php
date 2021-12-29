@@ -10,26 +10,43 @@ use Illuminate\Http\Request;
 class EVWishlistController extends Controller
 {
     //
+    public $availableWishlistItems = [
+        'App\Models\Product' => 'Product',
+        'App\Models\Shop' => 'Shop',
+    ];
 
     public function index()
     {
-        if(auth()->user()) {
-            $products = Wishlist::where('user_id', auth()->user()->id)->get();
-        } else {
-            $session_id = session()->getId();
-            $products = Wishlist::where('session_id', $session_id)->get();
+        $wishlists = [];
+        foreach($this->availableWishlistItems as $key => $type) {
+            if (auth()->user()) {
+                $wishlists[$type] = Wishlist::where('user_id', auth()->user()->id)
+                    ->where('subject_type', $key)
+                    ->get();
+            } else {
+                $session_id = session()->getId();
+                $wishlists[$type] = Wishlist::where('session_id', $session_id)
+                    ->where('subject_type', $key)
+                    ->get();
+            }
+
+
+
+            if ($wishlists[$type] === null) {
+                $wishlists[$type] = collect([]);
+            }
         }
 
-        if($products === null) {
-            $products = collect([]);
-        }
 
 
-        return view('frontend.wishlist.index', compact('products'));
+
+
+        return view('frontend.wishlist.index', compact('wishlists'));
     }
 
-    public function views() {
-        if(auth()->user()){
+    public function views()
+    {
+        if (auth()->user()) {
             $products = auth()->user()->recently_viewed_products();
         } else {
             /* TODO: If user is guest save product's in session storage */
