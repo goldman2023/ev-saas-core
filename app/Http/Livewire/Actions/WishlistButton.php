@@ -12,9 +12,11 @@ class WishlistButton extends Component
     public $object;
     public $added = false;
     public $model_class;
+    public $template = 'default'; // wishlist-button-detailed
 
-    public function mount($object, $subject_type = 'App\Models\Product')
+    public function mount($object, $template = 'default')
     {
+        $this->template = $template;
         $this->model_class = $object->getMorphClass();
         $this->object = $object;
         $this->added = $this->checkIfProductExistsInWishlist();
@@ -23,7 +25,12 @@ class WishlistButton extends Component
 
     public function render()
     {
-        return view('livewire.actions.wishlist-button');
+        if($this->template == 'default') {
+            return view('livewire.actions.wishlist-button');
+
+        } else {
+            return view('livewire.actions.wishlist-buttons.'. $this->template);
+        }
     }
 
     public function addToWishlist()
