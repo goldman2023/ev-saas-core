@@ -106,7 +106,7 @@
     <x-default.footers.app-bar>
     </x-default.footers.app-bar>
 
-    <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    {{-- <x-default.chat.widget-chat></x-default.chat.widget-chat> --}}
 
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
