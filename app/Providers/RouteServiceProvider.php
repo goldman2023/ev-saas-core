@@ -63,6 +63,7 @@ class RouteServiceProvider extends ServiceProvider
     //$this->mapUpdateRoutes();
   }
 
+
   /**
    * Define the "seller package" routes for the application.
    *

@@ -293,7 +293,7 @@ class EVCheckoutController extends Controller
     }
 
     public function executePayment(Request $request, $order_id) {
-        $order = Order::find($order_id);
+        $order = Order::with('payment_method')->find($order_id);
 
         if($order->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)

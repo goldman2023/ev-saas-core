@@ -22,4 +22,11 @@ class EVOrderController extends Controller
 
         return view('frontend.dashboard.orders.details',  compact('order', 'order_items', 'user'));
     }
+
+    public function my_purchases(Request $request) {
+        $orders = MyShop::getShop()->orders()->orderBy('created_at','desc')->paginate(20);
+        $orders_count = MyShop::getShop()->orders()->count();
+
+        return view('frontend.dashboard.orders.index',  compact('orders','orders_count'));
+    }
 }

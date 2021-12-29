@@ -171,7 +171,7 @@
 {{--                            @endif--}}
 {{--                        </td>--}}
                         <td>
-                            <span class="text-14">{{ \FX::formatPrice($order->total_price) }}</span>
+                            <strong class="text-14">{{ \FX::formatPrice($order->total_price) }}</strong>
                         </td>
                         <td>
                             <div class="btn-group" role="group">
