@@ -73,6 +73,12 @@ class Cart extends Component
             $model = app($model_type)::find($model);
         }
 
+        activity()
+            ->performedOn($model)
+            ->causedBy(auth()->user())
+            ->withProperties(['action' => 'add_to_cart'])
+            ->log('User added a product to cart');
+
         // Add $model and $qty to cart (do not append qty if $model is already in cart) because:
         // addToCart function in Cart.php is called on quantity change event inside cart, which means that given $qty is always the desired qty!
         // This is not the case for Add to cart button because qty counter is reset once addToButton is clicked!

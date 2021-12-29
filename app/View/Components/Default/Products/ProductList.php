@@ -17,7 +17,7 @@ class ProductList extends Component
     public function __construct($items = 8, $slider = false, $products = null, $style = 'product-list')
     {
 
-        $this->products = !empty($products) ? $products : Product::fromCache()->paginate($items);
+        $this->products = !empty($products) ? $products : Product::orderBy('created_at')->fromCache()->paginate($items);
         $this->slider = $slider;
         $this->style = $style;
     }

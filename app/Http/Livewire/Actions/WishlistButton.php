@@ -73,6 +73,11 @@ class WishlistButton extends Component
                 $item->session_id = session()->getId();
             }
             $item->save();
+            activity()
+            ->performedOn($item->subject)
+            ->causedBy(auth()->user())
+            ->withProperties(['action' => 'liked'])
+            ->log('User liked a product');
             $this->dispatchBrowserEvent('toastIt', ['id' => "#global-toast", 'content' => "Item added to wishlist"]);
             $this->emit('addedToWishlist');
         }

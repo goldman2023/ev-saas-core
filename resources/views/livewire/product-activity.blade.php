@@ -1,8 +1,4 @@
-@php
-$activity = \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)->orderBy('created_at',
-'desc')->take(5)->get();
-@endphp
-<ul class="step step-icon-xs">
+<ul class="step step-icon-xs" wire:poll.5s>
     @foreach($activity as $item)
     @if($item->causer)
     <li class="step-item">
@@ -12,7 +8,11 @@ $activity = \Spatie\Activitylog\Models\Activity::where('subject_id', $product->i
             <div class="step-content">
                 <h5 class="mb-1">
                     <span class="text-dark" href="#">
+                        @isset($item->properties['action'])
                         Product {{ $item->properties['action'] }}
+                        @else
+                        Product {{ $item->description }}
+                        @endisset
                     </span>
                 </h5>
 
@@ -29,3 +29,5 @@ $activity = \Spatie\Activitylog\Models\Activity::where('subject_id', $product->i
     @endforeach
 
 </ul>
+
+
