@@ -198,10 +198,10 @@ class EVService
                 'items' => [
                     [
                         'label' => translate('My Purchases'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => route('purchase_history.index'),
-                        'is_active' => areActiveRoutes(['purchase_history']),
-                        'roles' => ['customer'],
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('my.purchases.all'),
+                        'is_active' => areActiveRoutes(['my.purchases.all']),
+                        //'roles' => ['admin','seller', 'customer'],
                     ],
                     [
                         'label' => translate('My Wishlist'),
