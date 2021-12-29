@@ -67,6 +67,7 @@ Route::middleware([
 
         /* Settings pages*/
         Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
+        Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('ev.settings.design.store');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
         Route::get('/users-settings', [EVAccountController::class, 'users_settings'])->name('ev.settings.users_settings');
