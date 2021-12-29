@@ -69,6 +69,34 @@
                             <!-- End Card -->
                         </div>
 
+                        <!-- Card -->
+                        <div class="col-12 mb-3">
+                            <div class="card card-bordered shadow-none h-100">
+                                <div class="card-body">
+                                    <h6 class="font-weight-normal mb-1">{{ translate("Product activity") }}:</h6>
+                                    <h4 class="card-title">
+                                        @php
+                                        $activity_count = \Spatie\Activitylog\Models\Activity::where('subject_id',
+                                        $product->id)->orderBy(
+                                        'created_at',
+                                        'desc'
+                                        )->count();
+
+                                        $activity_count_today =
+                                        \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)
+                                        ->whereDate('created_at', Carbon::today())
+                                        ->count();
+                                        @endphp
+
+                                        {{ $activity_count }} / <small> {{ $activity_count_today }} {{
+                                            translate('Today') }} </small>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- End Card -->
+
                         <div class="col-12 mb-3">
                             <!-- Card -->
                             <div class="card card-bordered shadow-none h-100">
@@ -84,7 +112,8 @@
                                         <div class="mt-3">
                                             <small>
                                                 <a href="{{ route('ev-products.edit', $product->slug) }}"
-                                                    target="_blank"> {{ translate('+ Assign Categories') }} </a>
+                                                    target="_blank">
+                                                    {{ translate('+ Assign Categories') }} </a>
                                             </small>
                                         </div>
                                     </h4>
@@ -147,8 +176,10 @@
 
                 <div class="col-4">
                     <h3>{{ translate('Product Activity') }} </h3>
+                    <livewire:product-activity :product="$product" />
 
-                    <x-default.products.details.activity :product="$product"></x-default.products.details.activity>
+                    {{-- <x-default.products.details.activity :product="$product"></x-default.products.details.activity>
+                    --}}
                 </div>
             </div>
 
@@ -303,7 +334,8 @@
 
                                     <div class="d-flex justify-content-end">
                                         <a class="btn btn-xs btn-white" href="#"><i
-                                                class="fas fa-file-download mr-1"></i> PDF</a>
+                                                class="fas fa-file-download mr-1"></i>
+                                            PDF</a>
                                         <span class="mx-1"></span>
                                         <a class="btn btn-xs btn-white" href="#"><i class="fas fa-print mr-1"></i> Print
                                             Details</a>
