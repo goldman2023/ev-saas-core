@@ -13,23 +13,29 @@ class WishlistButton extends Component
     public $added = false;
     public $model_class;
     public $template = 'default'; // wishlist-button-detailed
+    public $available_actions = [
+        'Like' => 'Liked',
+        'Follow' => 'Followed',
+        'Save' => 'Saved',
+    ];
 
-    public function mount($object, $template = 'default')
+    public $action = 'Like';
+
+    public function mount($object, $template = 'default', $action = 'Like')
     {
         $this->template = $template;
         $this->model_class = $object->getMorphClass();
         $this->object = $object;
         $this->added = $this->checkIfProductExistsInWishlist();
-
+        $this->action = $action;
     }
 
     public function render()
     {
-        if($this->template == 'default') {
+        if ($this->template == 'default') {
             return view('livewire.actions.wishlist-button');
-
         } else {
-            return view('livewire.actions.wishlist-buttons.'. $this->template);
+            return view('livewire.actions.wishlist-buttons.' . $this->template);
         }
     }
 
@@ -50,10 +56,9 @@ class WishlistButton extends Component
             }
             $this->dispatchBrowserEvent('toastIt', [
                 'id' => "#global-toast",
-            'content' => "Item removed from wishlist",
-            'type' => 'success'
-        ]);
-
+                'content' => "Item removed from wishlist",
+                'type' => 'success'
+            ]);
         } else {
             $item =  new Wishlist();
             $item->subject_type = $this->model_class;

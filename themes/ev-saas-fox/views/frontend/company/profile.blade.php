@@ -26,23 +26,16 @@
                     <span class="d-block text-body font-size-1 mt-3">{{ translate('Last active') }} {{
                         $shop->created_at->diffForHumans() }}</span>
 
-                    <div class="mt-3">
-                        <a class="btn btn-sm btn-outline-primary transition-3d-hover" href="#">
+                    <div class="mt-3 d-flex align-items-center justify-content-center">
+                        <a class="btn btn btn-outline-primary transition-3d-hover mr-3" href="#">
                             @svg('heroicon-o-chat', ['class' => 'd-block d-sm-inline-block mb-sm-0 mr-1', 'style' =>
                             'width: 16px;'])
 
                             {{ translate('Send Message') }}
                         </a>
 
-                        <a class="btn btn-sm btn-outline-primary transition-3d-hover" href="#">
-                            @svg('heroicon-o-heart', ['class' => 'd-block d-sm-inline-block mb-sm-0 mr-1', 'style' =>
-                            'width: 16px;'])
+                        <livewire:actions.wishlist-button :object="$shop" :action="translate('Follow')" template="wishlist-button-detailed" />
 
-                            {{ translate('Follow') }}
-
-            <livewire:actions.wishlist-button :object="$shop" />
-
-                        </a>
                     </div>
                     <!-- End User Content -->
                 </div>
@@ -205,87 +198,98 @@
 
                 <div class="js-nav-scroller hs-nav-scroller-horizontal">
                     <span class="hs-nav-scroller-arrow-prev" style="display: none;">
-                      <a class="hs-nav-scroller-arrow-link" href="javascript:;">
-                        <i class="bi-chevron-left"></i>
-                      </a>
+                        <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+                            <i class="bi-chevron-left"></i>
+                        </a>
                     </span>
 
                     <span class="hs-nav-scroller-arrow-next" style="display: flex;">
-                      <a class="hs-nav-scroller-arrow-link" href="javascript:;">
-                        <i class="bi-chevron-right"></i>
-                      </a>
+                        <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+                            <i class="bi-chevron-right"></i>
+                        </a>
                     </span>
 
                     <!-- Nav -->
                     <ul class="nav nav-segment nav-fill mb-7" id="propertyOverviewNavTab" role="tablist">
-                      <li class="nav-item" role="presentation">
-                        <a class="nav-link active" href="#propertyOverviewNavOne" id="propertyOverviewNavOne-tab" data-bs-toggle="tab" data-bs-target="#propertyOverviewNavOne" role="tab" aria-controls="propertyOverviewNavOne" aria-selected="true" style="min-width: 7rem;">
-                            {{ translate('Products') }}
-                        </a>
-                      </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" href="#propertyOverviewNavOne" id="propertyOverviewNavOne-tab"
+                                data-bs-toggle="tab" data-bs-target="#propertyOverviewNavOne" role="tab"
+                                aria-controls="propertyOverviewNavOne" aria-selected="true" style="min-width: 7rem;">
+                                {{ translate('Products') }}
+                            </a>
+                        </li>
 
-                      <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="#propertyOverviewNavTwo" id="propertyOverviewNavTwo-tab" data-bs-toggle="tab" data-bs-target="#propertyOverviewNavTwo" role="tab" aria-controls="propertyOverviewNavTwo" aria-selected="false" style="min-width: 7rem;">
-                            {{ translate('Activity') }}
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="#propertyOverviewNavTwo" id="propertyOverviewNavTwo-tab"
+                                data-bs-toggle="tab" data-bs-target="#propertyOverviewNavTwo" role="tab"
+                                aria-controls="propertyOverviewNavTwo" aria-selected="false" style="min-width: 7rem;">
+                                {{ translate('Activity') }}
 
-                        </a>
-                      </li>
+                            </a>
+                        </li>
 
-                      <li class="nav-item" role="presentation">
-                        <a class="nav-link" href="#propertyOverviewNavThree" id="propertyOverviewNavThree-tab" data-bs-toggle="tab" data-bs-target="#propertyOverviewNavThree" role="tab" aria-controls="propertyOverviewNavThree" aria-selected="false" style="min-width: 7rem;">
-                            {{ translate('Reviews') }}
-                        </a>
-                      </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="#propertyOverviewNavThree" id="propertyOverviewNavThree-tab"
+                                data-bs-toggle="tab" data-bs-target="#propertyOverviewNavThree" role="tab"
+                                aria-controls="propertyOverviewNavThree" aria-selected="false" style="min-width: 7rem;">
+                                {{ translate('Reviews') }}
+                            </a>
+                        </li>
 
                     </ul>
                     <!-- End Nav -->
-                  </div>
+                </div>
 
-                  <div class="tab-content">
-                    <div class="tab-pane fade active show" id="propertyOverviewNavOne" role="tabpanel" aria-labelledby="propertyOverviewNavOne-tab">
-                      <div class="mb-4">
-                        <h3 class="mb-4">{{ $shop->name }} {{ translate('Products') }}</h3>
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="propertyOverviewNavOne" role="tabpanel"
+                        aria-labelledby="propertyOverviewNavOne-tab">
+                        <div class="mb-4">
+                            <h3 class="mb-4">{{ $shop->name }} {{ translate('Products') }}</h3>
 
-                        <!-- Course -->
-                        <div class="row pt-0 mt-0 ev-horizontal-slider d-flex flex-nowrap pb-5" style="overflow-x: auto;">
-                            @foreach($shop->products as $product)
-                            <div class="col-10 col-sm-5">
-                                <x-default.products.cards.product-card :product="$product">
-                                </x-default.products.cards.product-card>
+                            <!-- Course -->
+                            <div class="row pt-0 mt-0 ev-horizontal-slider d-flex flex-nowrap pb-5"
+                                style="overflow-x: auto;">
+                                @foreach($shop->products as $product)
+                                <div class="col-10 col-sm-5">
+                                    <x-default.products.cards.product-card :product="$product">
+                                    </x-default.products.cards.product-card>
+                                </div>
+
+                                @endforeach
+
                             </div>
+                            <!-- End Course -->
 
-                            @endforeach
-
+                            <div class="text-right font-size-1 mt-6">
+                                <a class="font-weight-bold" href="courses-listing.html">See all Courses <i
+                                        class="fas fa-angle-right fa-sm ml-1"></i></a>
+                            </div>
                         </div>
-                        <!-- End Course -->
-
-                        <div class="text-right font-size-1 mt-6">
-                            <a class="font-weight-bold" href="courses-listing.html">See all Courses <i
-                                    class="fas fa-angle-right fa-sm ml-1"></i></a>
-                        </div>
-                      </div>
 
 
-                      <!-- Collapse Link -->
+                        <!-- Collapse Link -->
 
-                      <!-- End Collapse Link -->
+                        <!-- End Collapse Link -->
 
 
-                      <!-- End Row -->
+                        <!-- End Row -->
                     </div>
 
-                    <div class="tab-pane fade" id="propertyOverviewNavTwo" role="tabpanel" aria-labelledby="propertyOverviewNavTwo-tab">
-                       </div>
+                    <div class="tab-pane fade" id="propertyOverviewNavTwo" role="tabpanel"
+                        aria-labelledby="propertyOverviewNavTwo-tab">
+                    </div>
 
-                    <div class="tab-pane fade" id="propertyOverviewNavThree" role="tabpanel" aria-labelledby="propertyOverviewNavThree-tab">
-                      <!-- Gmap -->
+                    <div class="tab-pane fade" id="propertyOverviewNavThree" role="tabpanel"
+                        aria-labelledby="propertyOverviewNavThree-tab">
+                        <!-- Gmap -->
 
                     </div>
 
-                    <div class="tab-pane fade" id="propertyOverviewNavFour" role="tabpanel" aria-labelledby="propertyOverviewNavFour-tab">
+                    <div class="tab-pane fade" id="propertyOverviewNavFour" role="tabpanel"
+                        aria-labelledby="propertyOverviewNavFour-tab">
 
                     </div>
-                  </div>
+                </div>
 
 
                 <!-- End Courses -->
