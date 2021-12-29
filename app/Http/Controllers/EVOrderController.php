@@ -24,9 +24,9 @@ class EVOrderController extends Controller
     }
 
     public function my_purchases(Request $request) {
-        $orders = MyShop::getShop()->orders()->orderBy('created_at','desc')->paginate(20);
-        $orders_count = MyShop::getShop()->orders()->count();
+        $orders = auth()->user()->orders()->orderBy('created_at','desc')->paginate(20);
+        $orders_count = auth()->user()->orders()->count();
 
-        return view('frontend.dashboard.orders.index',  compact('orders','orders_count'));
+        return view('frontend.dashboard.my-purchases.index',  compact('orders','orders_count'));
     }
 }

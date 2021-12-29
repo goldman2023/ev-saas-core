@@ -65,6 +65,7 @@ Route::middleware([
         /* My Purchases */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
 
+        /* Settings pages*/
         Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');

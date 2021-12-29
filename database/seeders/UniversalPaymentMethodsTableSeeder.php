@@ -21,19 +21,35 @@ class UniversalPaymentMethodsTableSeeder extends Seeder
             \DB::table('payment_methods_universal')->insert([
                 [
                     'name' => 'Wire Transfer',
-                    'permissions' => 'wire_transfer',
+                    'gateway' => 'wire_transfer',
+                    'description' => '',
+                    'instructions' => '',
+                    'data' => '',
+                    'enabled' => 0
                 ],
                 [
                     'name' => 'Paypal',
-                    'permissions' => 'paypal',
+                    'gateway' => 'paypal',
+                    'description' => '',
+                    'instructions' => '',
+                    'data' => '',
+                    'enabled' => 0
                 ],
                 [
                     'name' => 'Stripe',
-                    'permissions' => 'stripe',
+                    'gateway' => 'stripe',
+                    'description' => '',
+                    'instructions' => '',
+                    'data' => '',
+                    'enabled' => 0
                 ],
                 [
                     'name' => 'Paysera',
-                    'permissions' => 'paysera',
+                    'gateway' => 'paysera',
+                    'description' => '',
+                    'instructions' => '',
+                    'data' => '',
+                    'enabled' => 0
                 ],
             ]);
         }
