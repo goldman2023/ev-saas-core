@@ -1,4 +1,5 @@
-<div x-data="{ show: false }" x-cloak
+<div x-data="{ show: false,
+ }" x-cloak
      x-init="$(document).on('keyup', function(e) { if (e.key == 'Escape' && show) {show = false} });">
     <section
         class="c-flyout-cart position-fixed bg-white shadow-lg"

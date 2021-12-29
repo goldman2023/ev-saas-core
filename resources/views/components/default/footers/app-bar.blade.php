@@ -63,7 +63,12 @@
         <span class="text text-dark">My cart</span>
     </span>
     <a href="{{ route('dashboard') }}" class="nav-link text-dark">
-        @svg('heroicon-o-shopping-bag', ['style' => 'width: 24px;'])
+        @svg('heroicon-o-user-circle', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Profile') }}</span>
     </a>
+
+    <span  @click="$dispatch('display-menu')" class="nav-link text-dark">
+        @svg('heroicon-o-menu', ['style' => 'width: 24px;'])
+        <span class="text">{{ translate('Menu') }}</span>
+    </span>
 </nav>
