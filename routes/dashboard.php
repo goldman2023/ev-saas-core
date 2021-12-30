@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
@@ -26,7 +27,8 @@ Route::middleware([
         'middleware' => ['auth'],
         'prefix' => 'dashboard'
     ], function () {
-        Route::get('/', 'HomeController@dashboard')->name('dashboard');
+        Route::get('/index', 'HomeController@dashboard')->name('dashboard');
+
 
         /* TODO : Admin only */
 
@@ -63,8 +65,12 @@ Route::middleware([
         Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
         Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
-        /* My Purchases */
+        /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
+
+        /* My account */
+        Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
+        Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
 
         /* Settings pages*/
         Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
@@ -72,6 +78,7 @@ Route::middleware([
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
         Route::get('/users-settings', [EVAccountController::class, 'users_settings'])->name('ev.settings.users_settings');
+
 
 // Payment Methods callback routes
         Route::get('/checkout/paysera/accepted/{id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');

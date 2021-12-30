@@ -48,7 +48,7 @@ class MacrosServiceProvider extends ServiceProvider
         // Reason for that is: We cannot register macros to CacheManager class (Cache facade), only Cache\Repository class (Cache::store() object/class) - #justLaravelThings
 
         Repository::macro('getModelCacheKey', function($model_class, $model_id) {
-            return tenant()->id.'-'.($model_class).'-'.$model_id;
+            return tenant('id').'-'.($model_class).'-'.$model_id;
             // e.g. 5469dff5-3707-417d-b152-d9950de45daf-App\Models\Product-7
         });
     }

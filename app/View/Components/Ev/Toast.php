@@ -17,15 +17,17 @@ class Toast extends Component
     public $close;
     public $position;
     public $isX;
+    public $timeout;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($isX = false, $class = '', $titleClass = '', $contentClass = '', $id = '', $type = 'primary', $icon = '', $title = '', $content = '', $close = false, $position = 'bottom-center')
+    public function __construct($isX = false, $timeout = 4000, $class = '', $titleClass = '', $contentClass = '', $id = '', $type = 'primary', $icon = '', $title = '', $content = '', $close = false, $position = 'bottom-center')
     {
         $this->isX = $isX;
+        $this->timeout = (int) $timeout;
         $this->class = $class;
         $this->titleClass = $titleClass;
         $this->contentClass = $contentClass;

@@ -20,14 +20,14 @@ class EVService
 {
     protected $tenantStylePath;
 
-    public function __construct($app)
-    {
-        $tenant_css_path = public_path('themes/' . Theme::parent() . '/css/' . tenant()->id . '.css');
-        $default_css_path = public_path('themes/' . Theme::parent() . '/css/app.css');
+    public function __construct($app) {
+        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant('id').'.css');
+        $default_css_path = public_path('themes/'.Theme::parent().'/css/app.css');
         $styling_url = '';
 
-        if (file_exists($tenant_css_path)) {
-            $url = asset('themes/' . Theme::parent() . '/css/' . tenant()->id . '.css?ver=' . filemtime($tenant_css_path));
+        if(file_exists($tenant_css_path)) {
+            $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
+
         } else {
             $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
         }
@@ -44,21 +44,16 @@ class EVService
 
     public function getVendorMenuByRole($role = 'customer')
     {
-        $vendorMenu = [];
         $vendorMenu = $this->getVendorMenu();
 
-        $vendorMenu = collect($vendorMenu)->map(function ($item) use ($role) {
+        $vendorMenu = collect($vendorMenu)->map(fn($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
+            if(isset($child['roles'])) {
+                return in_array($role, $child['roles']);
 
-            return collect($item['items'])->filter(function ($child) use ($role, $item) {
-                if(isset($child['roles'])) {
-                    return in_array($role, $child['roles']);
-
-                } else {
-                    return true;
-                }
-            })->count() > 0 ? $item : null;
-
-        })->filter()->toArray();
+            } else {
+                return true;
+            }
+        })->count() > 0 ? $item : null)->filter()->toArray();
 
         return $vendorMenu;
 
@@ -229,6 +224,13 @@ class EVService
             [
                 'label' => translate('Customer zone'),
                 'items' => [
+                    [
+                        'label' => translate('Account'),
+                        'icon' => 'heroicon-o-user',
+                        'route' => route('my.account.settings'),
+                        'is_active' => areActiveRoutes(['my.account.settings']),
+                        'roles' => ['all'],
+                    ],
                     [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-document-text',

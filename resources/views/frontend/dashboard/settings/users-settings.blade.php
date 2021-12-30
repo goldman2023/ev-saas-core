@@ -1,9 +1,9 @@
 @extends('frontend.layouts.user_panel')
-@section('page_title', translate('Manage Design'))
+@section('page_title', translate('Manage Users'))
+@section('meta_title', translate('Manage Users'))
 
 @section('panel_content')
 
-    <!-- Basic Info-->
     <div class="card mb-3">
         <div class="card-header">
             <h4 class="mb-0 h4">{{ translate('Users/Staff Settings')}}</h4>

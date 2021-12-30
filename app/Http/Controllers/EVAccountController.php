@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use MyShop;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
@@ -11,6 +12,23 @@ use Cookie;
 
 class EVAccountController extends Controller
 {
+    public function user_profile(Request $request, $id) {
+        try {
+            $user = User::findOrFail($id);
+
+            return view('frontend.dashboard.users.account-settings', compact('user'));
+        } catch(\Exception $e) {
+            // Create error handling for not found exception to go to 404 page...
+        }
+    }
+
+    public function account_settings()
+    {
+        $me = auth()->user();
+
+        return view('frontend.dashboard.settings.account-settings', compact('me'));
+    }
+
     public function design_settings()
     {
         return view('frontend.dashboard.settings.design-settings');
