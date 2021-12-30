@@ -41,7 +41,7 @@
         "laravel/ui": "^3.2",
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
-        "maatwebsite/excel": "^3.1.31",
+        "maatwebsite/excel": "^3.1",
         "mediconesystems/livewire-datatables": "^0.6.8",
         "mews/purifier": "^3.3",
         "nao-pon/flysystem-google-drive": "~1.1",

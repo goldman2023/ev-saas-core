@@ -4,6 +4,7 @@ use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -169,6 +170,12 @@ Route::middleware([
 //    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
         Route::get('/jobs/destroy/{id}', 'JobController@destroy')->name('jobs.destroy');
     });
+
+
+    // Integrations
+    Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');
+
+    Route::get('/integrations/facebook-business-export', 'Integrations\FacebookBusinessController@export')->name('integrations.facebook-business.export');
 
 
 

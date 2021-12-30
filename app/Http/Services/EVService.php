@@ -323,13 +323,13 @@ class EVService
             [
                 'label' => translate('Other'),
                 'items' => [
-                    // [
-                    //     'label' => translate('Plans & billing'),
-                    //     'icon' => 'heroicon-o-credit-card',
-                    //     'route' => '',
-                    //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
-                    // ],
+                    [
+                        'label' => translate('Integrations'),
+                        'icon' => 'heroicon-o-credit-card',
+                        'route' => route('integrations.index'),
+                        'is_active' => areActiveRoutes(['']),
+                        'roles' => ['admin','seller'],
+                    ],
                     // [
                     //     'label' => translate('Uploaded media'),
                     //     'icon' => 'heroicon-o-upload',
