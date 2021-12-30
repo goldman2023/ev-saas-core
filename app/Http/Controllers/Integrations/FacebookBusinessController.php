@@ -13,7 +13,8 @@ class FacebookBusinessController extends Controller
 {
     public function export()
     {
-        return Excel::download(new ProductsExport, 'products.csv');
+        return Excel::download((new ProductsExport), 'products.csv');
+
     }
 
     public function success() {

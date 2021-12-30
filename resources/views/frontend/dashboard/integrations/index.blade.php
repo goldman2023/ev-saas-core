@@ -19,6 +19,14 @@
                 <a class="btn btn-primary" href="{{ route('integrations.facebook-business.export') }}">
                     {{ translate('Facebook Business Shop Export') }}
                 </a>
+                <small class='text-center'>
+                    {{ translate('Export your Facebook Business Shop data to a CSV file.') }}
+
+                    {{-- TODO: Add a documentation and tutorial link to how to add items to fb business manager from csv file --}}
+                    <a href="#">
+                        {{ translate('Learn more') }}
+                    </a>
+                </small>
             </div>
             <div class='col-4'>
                 <a class="btn btn-primary" href="{{ route('integrations.facebook-business.export') }}">
