@@ -36,8 +36,16 @@
 
             <div class='col-4'>
                 <a class="btn btn-primary" href="{{ route('integrations.facebook-business.export') }}">
-                    {{ translate('TikTok Shop Export') }}
+                    {{ translate('Google Merchant Center Export') }}
                 </a>
+                <small class='text-center'>
+                    {{ translate('Export your Google Merchant Center data to a Google Sheets file.') }}
+
+                    {{-- TODO: Add a documentation and tutorial link to how to add items to fb business manager from csv file --}}
+                    <a href="#">
+                        {{ translate('Learn more') }}
+                    </a>
+                </small>
             </div>
         </div>
 

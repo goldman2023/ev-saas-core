@@ -7,11 +7,11 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ProductsExport implements FromCollection, WithMapping, WithHeadings
+class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHeadings
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return Product::all();
@@ -36,9 +36,15 @@ class ProductsExport implements FromCollection, WithMapping, WithHeadings
     public function map($product): array
     {
         $brand = "inhouse";
-        if(isset($product->brand)) {
+        if (isset($product->brand)) {
             $brand = $product->brand->name;
         }
+
+        $first_variation = $product->variations->first();
+
+        $price = 0;
+        $price = ($product->hasVariations()) ? $first_variation->total_price : $product->total_price;
+
         return [
             $product->id,
             substr($product->name, 0, 149),
@@ -47,7 +53,7 @@ class ProductsExport implements FromCollection, WithMapping, WithHeadings
             'in stock',
             'new',
             /*  TODO: Make currency dynamic */
-            $product->total_price,
+            $price,
             $product->permalink,
             $product->getThumbnail(),
             $brand

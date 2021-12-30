@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Integrations;
 
-use App\Exports\ProductsExport;
+use App\Exports\ProductsExportFacebookBasic;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -13,7 +13,7 @@ class FacebookBusinessController extends Controller
 {
     public function export()
     {
-        return Excel::download((new ProductsExport), 'products.csv');
+        return Excel::download((new ProductsExportFacebookBasic), 'products.csv');
 
     }
 

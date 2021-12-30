@@ -35,7 +35,7 @@
 
                 <span class="dropdown-header">Feedback</span>
 
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="">
                     <i class="tio-chat-outlined dropdown-item-icon"></i> Report
                 </a>
             </div>
@@ -72,8 +72,8 @@
                                 </div>
 
                                 <div class="col-auto">
-                                    <a class="btn btn-sm btn-primary" href="#" title="Launch importer" target="_blank">
-                                        Launch <span class="d-none d-sm-inline-block">importer</span>
+                                    <a class="btn btn-sm btn-primary" href="{{ route('integrations.index') }}" title="Launch importer" target="_blank">
+                                        {{ translate('Launch importer') }}
                                         <i class="tio-open-in-new ml-1"></i>
                                     </a>
                                 </div>
