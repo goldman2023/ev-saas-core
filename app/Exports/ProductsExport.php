@@ -47,7 +47,7 @@ class ProductsExport implements FromCollection, WithMapping, WithHeadings
             'in stock',
             'new',
             /*  TODO: Make currency dynamic */
-            $product->total_price . " €",
+            $product->total_price,
             $product->permalink,
             $product->getThumbnail(),
             $brand
