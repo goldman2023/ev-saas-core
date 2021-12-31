@@ -582,6 +582,14 @@ img {
     }
 }
 
+/*------------------------------------
+  Modal/Dialog general
+------------------------------------*/
+.modal-top-cover-avatar, .modal-top-cover-icon {
+    position: relative;
+    z-index: 2;
+    margin-top: -2.5rem;
+}
 
 /*------------------------------------
   Specifications

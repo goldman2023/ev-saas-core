@@ -474,7 +474,9 @@
         <!-- Addresses -->
         <div class="card mb-3 mb-lg-5 position-relative"
              id="addressesSection"
-             x-data="{}">
+             x-data="{
+                currentAddress: @js($this->me->addresses->first())
+             }">
 
             <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                                   wire:target="saveAddresses"
@@ -491,8 +493,19 @@
                 >
                     @if(!empty($this->me->addresses))
                         @foreach($this->me->addresses as $address)
-                            <div class="col-4 px-2">
-                                <div class="card w-100 pointer">
+                            <div class="col-4 px-2 mb-3">
+                                <div class="card w-100 pointer"
+                                     data-toggle="modal"
+                                     data-target="#updateAddressModal"
+                                     x-data="{
+                                        address: @js($address)
+                                     }"
+                                     @click="
+                                        currentAddress = address;
+                                         $('#updateAddressModal .js-toggle-switch').each(function () {
+                                            var addressToggleSwitch = new HSToggleSwitch($(this)).init();
+                                        });
+                                    ">
                                     <div class="card-body">
                                         <h6 class="card-subtitle">{{ \Countries::get(code: $address->country)->name ?? translate('Unknown') }}</h6>
                                         <h3 class="card-title text-18">{{ $address->address }}</h3>
@@ -508,7 +521,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         @endforeach
                     @endif
                 </div>
@@ -522,6 +534,122 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Address change Modal -->
+            <template x-if="currentAddress">
+                <div id="updateAddressModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <!-- Header -->
+                            <div class="modal-top-cover bg-dark text-center">
+                                <figure class="position-absolute right-0 bottom-0 left-0" style="margin-bottom: -1px;">
+                                    <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 100.1"
+                                         style="vertical-align: middle;">
+                                        <path fill="#fff" d="M0,0c0,0,934.4,93.4,1920,0v100.1H0L0,0z"/>
+                                    </svg>
+                                </figure>
+
+                                <div class="modal-close">
+                                    <button type="button" class="btn btn-icon btn-sm btn-ghost-light" data-dismiss="modal" aria-label="Close">
+                                        <svg width="16" height="16" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill="currentColor" d="M11.5,9.5l5-5c0.2-0.2,0.2-0.6-0.1-0.9l-1-1c-0.3-0.3-0.7-0.3-0.9-0.1l-5,5l-5-5C4.3,2.3,3.9,2.4,3.6,2.6l-1,1 C2.4,3.9,2.3,4.3,2.5,4.5l5,5l-5,5c-0.2,0.2-0.2,0.6,0.1,0.9l1,1c0.3,0.3,0.7,0.3,0.9,0.1l5-5l5,5c0.2,0.2,0.6,0.2,0.9-0.1l1-1 c0.3-0.3,0.3-0.7,0.1-0.9L11.5,9.5z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- End Header -->
+
+                            <div class="modal-top-cover-icon">
+                            <span class="icon icon-md icon-light icon-circle d-flex mx-auto shadow-soft">
+                              @svg('heroicon-o-home', ['class' => 'square-24'])
+                            </span>
+                            </div>
+
+                            <div class="modal-body row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="input-label " for="modal_address_address">{{ translate('Address') }}</label>
+                                        <input type="text"
+                                               id="modal_address_address"
+                                               name="model_address_address"
+                                               x-model="currentAddress.address"
+                                               class="form-control"
+                                               placeholder="Your address...">
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <label class="input-label " for="modal_address_country">{{ translate('Country') }}</label>
+                                    <select class="form-control custom-select" name="modal_address_country" id="modal_address_country"
+                                            data-hs-select2-options='{
+                                              "minimumResultsForSearch": -1,
+                                              "placeholder": "Select country..."
+                                            }'>
+                                        <option label="empty"></option>
+                                        @foreach(\Countries::getAll() as $country)
+                                            <option value="{{ $country->code }}" x-bind:selected="'{{ $country->code }}' === currentAddress.country">
+                                                {{ $country->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="input-label" for="modal_address_city">{{ translate('City') }}</label>
+                                        <input type="text"
+                                               id="modal_address_city"
+                                               name="model_address_city"
+                                               x-model="currentAddress.city"
+                                               class="form-control"
+                                               placeholder="City...">
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="input-label" for="modal_address_state">{{ translate('State') }}</label>
+                                        <input type="text"
+                                               id="modal_address_state"
+                                               name="model_address_state"
+                                               x-model="currentAddress.state"
+                                               class="form-control"
+                                               placeholder="State...">
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="input-label" for="modal_address_zip_code">{{ translate('Zip Code') }}</label>
+                                        <input type="text"
+                                               id="modal_address_zip_code"
+                                               name="model_address_zip_code"
+                                               x-model="currentAddress.zip_code"
+                                               class="form-control"
+                                               placeholder="Zip code...">
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="toggle-switch mx-2" for="customSwitchModalEg">
+                                        <input type="checkbox" x-model="currentAddress.set_default" class="js-toggle-switch toggle-switch-input" id="customSwitchModalEg">
+                                        <span class="toggle-switch-label">
+                                      <span class="toggle-switch-indicator"></span>
+                                    </span>
+
+                                        <span class="ml-3">{{ translate('Default address') }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-dismiss="modal">{{ translate('Close') }}</button>
+                                <button type="button" class="btn btn-primary">{{ translate('Save') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <!-- End Modal -->
         </div>
         <!-- END Addresses -->
     </div>
