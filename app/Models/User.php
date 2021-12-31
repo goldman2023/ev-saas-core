@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Billable;
     use LogsActivity;
     use UploadTrait;
+    use GalleryTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -187,16 +189,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getDynamicModelUploadProperties(): array
     {
         return [
-            [
-                'property_name' => 'avatar', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
-                'relation_type' => 'avatar', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
-                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
-            ]
+
         ];
     }
 
     public function getAvatar(array $options = []) {
-        return $this->getUpload('avatar', $options);
+        return $this->getUpload('thumbnail', $options);
     }
 
     public static function getAvailableUserTypes($only_vendor_types = true) {

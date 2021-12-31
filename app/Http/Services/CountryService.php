@@ -33,9 +33,9 @@ class CountryService
 
     public function get($id = null, $code = null) {
         if($id) {
-            return $this->firstWhere('id', $id);
+            return $this->countries->firstWhere('id', $id);
         } else if($code) {
-            return $this->firstWhere('code', $code);
+            return $this->countries->firstWhere('code', $code);
         } else {
             return null;
         }

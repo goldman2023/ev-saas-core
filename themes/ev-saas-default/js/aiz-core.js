@@ -514,7 +514,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                 // Check which template we are using:
                                 let template = elem.data('template');
 
-                                if(template == 'input') {
+                                if(template === 'input') {
                                     var thumb = "";
                                     if (data[i].type === "image") {
                                         thumb =
@@ -561,11 +561,17 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                                         "</div>";
 
                                     elem.next(".file-preview").append(html);
-                                } else if(template == 'avatar') {
+                                } else if(template === 'avatar') {
                                     elem.find(".avatar-img").attr('src', window.EV.IMG.url(data[i].file_name, {w:150}));
                                 }
 
-
+                                // Dispatch event that file is selected in AIZ uploader
+                                window.dispatchEvent(new CustomEvent('aiz-selected', {
+                                    detail: {
+                                        name: elem.find('.selected-files').attr('name'),
+                                        imageURL: window.EV.IMG.url(data[i].file_name, { w: elem.find('.selected-files').data('preview-width') } )
+                                    }
+                                }));
                             }
                         } else {
                             elem.find(".file-amount").html(window.AIZ.local.choose_file);

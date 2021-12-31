@@ -16,6 +16,7 @@ class EVAccountController extends Controller
         try {
             $user = User::findOrFail($id);
 
+
             return view('frontend.dashboard.users.account-settings', compact('user'));
         } catch(\Exception $e) {
             // Create error handling for not found exception to go to 404 page...
