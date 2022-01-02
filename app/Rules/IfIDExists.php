@@ -11,7 +11,7 @@ use Illuminate\Contracts\Validation\ValidatorAwareRule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
-class MatchPassword implements Rule, ValidatorAwareRule, DataAwareRule
+class IfIDExists implements Rule, ValidatorAwareRule, DataAwareRule
 {
 
     protected $parameters;
@@ -27,15 +27,19 @@ class MatchPassword implements Rule, ValidatorAwareRule, DataAwareRule
 
     public function passes($attribute, $value): bool
     {
-        $model_type = $this->parameters[0] ?? User::class;
+        $model_type = $this->parameters[0] ?? null;
         $model_identificator = $this->parameters[1];
-        $data_key = $this->parameters[2] ?? null;
 
-        // Check if user with email is not already registered.
-        $model = app($model_type)::where($model_identificator, (!empty($data_key)) ? $this->data[$data_key][$model_identificator] : $this->data[$model_identificator])->first();
+        $value = $value instanceof Model ? $value->id : $value;
 
-        // If user already exists, check if provided password is the password for that user
-        return $model instanceof User && !empty($model->id ?? null) && Hash::check($value, $model->password);
+        if(!empty($model_type)) {
+            // Check if user with email is not already registered.
+            $model = app($model_type)::where($model_identificator, $value)->first();
+
+            return !empty($model->id ?? null);
+        }
+
+        return false;
     }
 
     public function validate($attribute, $value) {
@@ -44,7 +48,7 @@ class MatchPassword implements Rule, ValidatorAwareRule, DataAwareRule
 
     public function message()
     {
-        return translate('Password does not match a User with a given email.');
+        return translate('Item under ID doesn\'t exist');
     }
 
     public function setValidator($validator)

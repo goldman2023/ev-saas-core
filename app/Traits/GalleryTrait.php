@@ -62,6 +62,26 @@ trait GalleryTrait
         $this->gallery = implode(',', array_unique($gallery_ids));
     }
 
+    /**
+     * Converts gallery properties from Upload ID(s) to Upload model(s)
+     *
+     * @return void
+     */
+//    public function convertGalleryIDsToModels() {
+//        $this->thumbnail = (is_int($this->thumbnail)) ? ($this->thumbnail->id ?? null) : $this->thumbnail;
+//        $this->cover = (is_int($this->cover)) ? ($this->cover->id ?? null) : $this->cover;
+//        $this->meta_img = (is_int($this->meta_img)) ? ($this->meta_img->id ?? null) : $this->meta_img;
+//
+//        $gallery_ids = [];
+//        if(($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && !empty($this->gallery))) {
+//            foreach($this->gallery as $img) {
+//                $gallery_ids[] = ($img instanceof Upload) ? ($img->id ?? null) : $img;
+//            }
+//        }
+//
+//        $this->gallery = implode(',', array_unique($gallery_ids));
+//    }
+
     /******* START THUMBNAIL *******/
     public function getThumbnailAttribute() {
         if(!isset($this->thumbnail)) {
@@ -224,6 +244,7 @@ trait GalleryTrait
             $this->uploads()->wherePivot('relation_type', $property)->sync($sync_array);
         }
     }
+
 
     // Upload Groups Relations functions
     public function uploads_groups() {
