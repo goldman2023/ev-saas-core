@@ -63,6 +63,7 @@ Route::middleware([
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
 
     Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
+    Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
 
     // Route to show after creating new tenant:
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');

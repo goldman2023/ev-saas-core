@@ -104,11 +104,11 @@
     @if(auth()->user()->isAdmin())
     <div class="row">
         <div class="col-sm-6">
-            <x-default.dashboard.widgets.integration-stats-widget url="#" title="Google Analytics"
-                img="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png?hl=ar">
-                {{ translate('Track your website statictics') }}
+            <x-default.dashboard.widgets.integration-stats-widget url="{{ route('analytics.index') }}" title="Website Analytics"
+            img="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png?hl=ar">
+            {{ translate('Track your website statictics') }}
 
-            </x-default.dashboard.widgets.integration-stats-widget>
+        </x-default.dashboard.widgets.integration-stats-widget>
         </div>
 
         <div class="col-sm-6">
