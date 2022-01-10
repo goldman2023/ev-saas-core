@@ -89,7 +89,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="mb-0">{{ translate('Your ' . {{ get_site_name() }} . ' Membership') }}</h6>
+                        <h6 class="mb-0">{{ translate('Your Membership') }}</h6>
                     </div>
                     <div class="card-body text-center">
                         @php
