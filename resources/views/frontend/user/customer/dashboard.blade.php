@@ -1,5 +1,4 @@
 @extends('frontend.layouts.user_panel')
-@section('page_title', translate('All Products'))
 
 @section('panel_content')
 
@@ -11,30 +10,111 @@
     </h2>
 </div>
 <div class="row">
-    <div class="col-sm-4 mb-3">
-        <x-default.dashboard.customer.current-plan>
-            @slot('title')
-                AdeoWeb - Headache Free Website
-            @endslot
+    <div class="col-8">
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <x-default.dashboard.customer.current-plan>
+                    @slot('title')
+                        AdeoWeb - Headache Free Website
+                    @endslot
 
-            @slot('image')
-            <img src="https://images.ev-saas.com/insecure/fill/1200/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/95729fac-ae52-44ea-824e-b634d8100c54/1641824421_Screenshot%202022-01-10%20at%2013.46.00.png@webp" />
-            @endslot
-        </x-default.dashboard.customer.current-plan>
+                    @slot('image')
+                    <img src="https://images.ev-saas.com/insecure/fill/1200/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/95729fac-ae52-44ea-824e-b634d8100c54/1641824421_Screenshot%202022-01-10%20at%2013.46.00.png@webp" />
+                    @endslot
+                </x-default.dashboard.customer.current-plan>
+            </div>
+
+        <div class="col-sm-6 mb-3">
+            <x-default.dashboard.customer.current-plan>
+                @slot('title')
+                PassCamp - Headache Free Website
+                @endslot
+
+                @slot('image')
+                <img src="https://images.ev-saas.com/insecure/fill/1200/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/95729fac-ae52-44ea-824e-b634d8100c54/1641824541_Screenshot%202022-01-10%20at%2016.22.00.png@webp" />
+                @endslot
+
+            </x-default.dashboard.customer.current-plan>
+
+
+
+        </div>
+
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                        <div class="card">
+                            <!-- Header -->
+                            <div class="card-header">
+                                <h5 class="card-header-title">Your Invoices</h5>
+                            </div>
+                            <!-- End Header -->
+
+                            <!-- Table -->
+                            <div class="table-responsive">
+                                <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Reference</th>
+                                            <th>Status</th>
+                                            <th>Amount</th>
+                                            <th>Updated</th>
+                                            <th>Invoice</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td><a href="#">#3682303</a></td>
+                                            <td><span class="badge bg-soft-warning text-warning">Pending</span></td>
+                                            <td>$264</td>
+                                            <td>22/04/2020</td>
+                                            <td><a class="btn btn-white btn-xs" href="./page-invoice.html"><i
+                                                        class="bi-file-earmark-arrow-down-fill me-1"></i> PDF</a></td>
+                                            <td><a class="btn btn-white btn-xs" href="javascript:;" data-bs-toggle="modal"
+                                                    data-bs-target="#accountInvoiceReceiptModal"><i class="bi-eye-fill me-1"></i> Quick
+                                                    view</a></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><a href="#">#2333234</a></td>
+                                            <td><span class="badge bg-soft-success text-success">Successful</span></td>
+                                            <td>$264</td>
+                                            <td>22/04/2019</td>
+                                            <td><a class="btn btn-white btn-xs" href="./page-invoice.html"><i
+                                                        class="bi-file-earmark-arrow-down-fill me-1"></i> PDF</a></td>
+                                            <td><a class="btn btn-white btn-xs" href="javascript:;" data-bs-toggle="modal"
+                                                    data-bs-target="#accountInvoiceReceiptModal"><i class="bi-eye-fill me-1"></i> Quick
+                                                    view</a></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><a href="#">#9834283</a></td>
+                                            <td><span class="badge bg-soft-success text-success">Successful</span></td>
+                                            <td>$264</td>
+                                            <td>22/04/2018</td>
+                                            <td><a class="btn btn-white btn-xs" href="./page-invoice.html"><i
+                                                        class="bi-file-earmark-arrow-down-fill me-1"></i> PDF</a></td>
+                                            <td><a class="btn btn-white btn-xs" href="javascript:;" data-bs-toggle="modal"
+                                                    data-bs-target="#accountInvoiceReceiptModal"><i class="bi-eye-fill me-1"></i> Quick
+                                                    view</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- End Table -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="col-sm-4 mb-3">
-        <x-default.dashboard.customer.current-plan>
-            @slot('title')
-            PassCamp - Headache Free Website
-            @endslot
+</div>
 
-            @slot('image')
-            <img src="https://images.ev-saas.com/insecure/fill/1200/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/95729fac-ae52-44ea-824e-b634d8100c54/1641824541_Screenshot%202022-01-10%20at%2016.22.00.png@webp" />
-            @endslot
 
-        </x-default.dashboard.customer.current-plan>
-    </div>
+
+
 
     <div class="col-sm-4">
          <x-default.dashboard.customer.support-agent>
@@ -93,83 +173,8 @@
 
         </div>
 
-        <div class="col-sm-6 mb-3">
 
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="h6 mb-0">{{ translate('Knowledge base and Resources') }}</h3>
-                </div>
-                <div class="card-body">
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/1rEZA9tJWnw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-                </div>
-            </div>
-        </div>
-
-    <div class="col-12 mb-3">
-        <div class="card">
-            <!-- Header -->
-            <div class="card-header">
-                <h5 class="card-header-title">Order history</h5>
-            </div>
-            <!-- End Header -->
-
-            <!-- Table -->
-            <div class="table-responsive">
-                <table class="table table-borderless table-thead-bordered table-nowrap table-align-middle">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Reference</th>
-                            <th>Status</th>
-                            <th>Amount</th>
-                            <th>Updated</th>
-                            <th>Invoice</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td><a href="#">#3682303</a></td>
-                            <td><span class="badge bg-soft-warning text-warning">Pending</span></td>
-                            <td>$264</td>
-                            <td>22/04/2020</td>
-                            <td><a class="btn btn-white btn-xs" href="./page-invoice.html"><i
-                                        class="bi-file-earmark-arrow-down-fill me-1"></i> PDF</a></td>
-                            <td><a class="btn btn-white btn-xs" href="javascript:;" data-bs-toggle="modal"
-                                    data-bs-target="#accountInvoiceReceiptModal"><i class="bi-eye-fill me-1"></i> Quick
-                                    view</a></td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="#">#2333234</a></td>
-                            <td><span class="badge bg-soft-success text-success">Successful</span></td>
-                            <td>$264</td>
-                            <td>22/04/2019</td>
-                            <td><a class="btn btn-white btn-xs" href="./page-invoice.html"><i
-                                        class="bi-file-earmark-arrow-down-fill me-1"></i> PDF</a></td>
-                            <td><a class="btn btn-white btn-xs" href="javascript:;" data-bs-toggle="modal"
-                                    data-bs-target="#accountInvoiceReceiptModal"><i class="bi-eye-fill me-1"></i> Quick
-                                    view</a></td>
-                        </tr>
-
-                        <tr>
-                            <td><a href="#">#9834283</a></td>
-                            <td><span class="badge bg-soft-success text-success">Successful</span></td>
-                            <td>$264</td>
-                            <td>22/04/2018</td>
-                            <td><a class="btn btn-white btn-xs" href="./page-invoice.html"><i
-                                        class="bi-file-earmark-arrow-down-fill me-1"></i> PDF</a></td>
-                            <td><a class="btn btn-white btn-xs" href="javascript:;" data-bs-toggle="modal"
-                                    data-bs-target="#accountInvoiceReceiptModal"><i class="bi-eye-fill me-1"></i> Quick
-                                    view</a></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- End Table -->
-        </div>
-    </div>
 </div>
 
 

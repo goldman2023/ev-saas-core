@@ -9,10 +9,11 @@
     <!-- End Header -->
 
     <!-- Body -->
+    {{ $image }}
+
     <div class="card-body">
         <div class="row">
             <div class="col-md mb-4 mb-md-0">
-                {{ $image }}
                 <div class="mt-3">
 
 

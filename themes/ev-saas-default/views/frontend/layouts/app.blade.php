@@ -62,7 +62,7 @@
 
 
     @livewireStyles
-    <link rel="stylesheet" href="{{ static_asset('/front/icon-set/style.css') }}">
+    <link rel="stylesheet" href="{{ global_asset('dynamic-colors/app-dynamic.css', false, true) }}">
 
     @stack('pre_head_scripts')
 

@@ -25,43 +25,17 @@
       </div>
    </li>
 
-   <li>
-     <i class="tio-user-outlined nav-icon"></i>
-     Ella Lauda
-   </li>
-   <li>
-     <i class="tio-briefcase-outlined nav-icon"></i>
-     No department
-   </li>
-   <li>
-     <i class="tio-city nav-icon"></i>
-     Htmlstream
-   </li>
-
    <li class="pt-2 pb-0">
      <small class="card-subtitle">Contacts</small>
    </li>
 
    <li>
      <i class="tio-online nav-icon"></i>
-     ella@example.com
+     eim@eim.solutions
    </li>
    <li>
      <i class="tio-android-phone-vs nav-icon"></i>
-     +1 (609) 972-22-22
-   </li>
-
-   <li class="pt-2 pb-0">
-     <small class="card-subtitle">Teams</small>
-   </li>
-
-   <li>
-     <i class="tio-group-equal nav-icon"></i>
-     Member of 7 teams
-   </li>
-   <li>
-     <i class="tio-briefcase-outlined nav-icon"></i>
-     Working on 8 projects
+     +370 63867507
    </li>
  </ul>
 </div>
