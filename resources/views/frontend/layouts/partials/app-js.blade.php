@@ -176,9 +176,9 @@
 
         // INITIALIZATION OF HS-ADD-FIELD
         // =======================================================
-        $('.js-add-field').each(function() {
-            new HSAddField($(this)).init();
-        });
+        // $('.js-add-field').each(function() {
+        //     new HSAddField($(this)).init();
+        // });
     });
 
     /**

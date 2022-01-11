@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AffiliateBannerController;
 use App\Http\Controllers\AizUploadController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
@@ -116,8 +117,12 @@ Route::middleware([
     Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
     Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');
 
-    Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
-    Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
+
+    Route::get('/social-login/redirect/{provider}', [SocialController::class, 'redirectLoginToProvider'])->name('social.login');
+    Route::get('/social-login/{provider}/callback', [SocialController::class, 'handleProviderLoginCallback'])->name('social.login.callback');
+    Route::get('/social-connect/redirect/{provider}', [SocialController::class, 'redirectConnectToProvider'])->name('social.connect');
+    Route::get('/social-connect/{provider}/callback', [SocialController::class, 'handleProviderConnectCallback'])->name('social.connect.callback');
+
     Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
     Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
     Route::get('/users/login', [HomeController::class, 'login_users'])->name('user.login');

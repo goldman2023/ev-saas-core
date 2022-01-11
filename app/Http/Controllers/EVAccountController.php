@@ -25,7 +25,7 @@ class EVAccountController extends Controller
 
     public function account_settings()
     {
-        $me = auth()->user();
+        $me = auth()->user()->load('social_accounts');
 
         return view('frontend.dashboard.settings.account-settings', compact('me'));
     }
@@ -73,5 +73,11 @@ class EVAccountController extends Controller
         $all_roles = \Permissions::getRoles(from_db: true);
 
         return view('frontend.dashboard.settings.users-settings', compact('users', 'all_roles'));
+    }
+
+    public function shop_settings(Request $request) {
+        $shop = MyShop::getShop();
+
+        return view('frontend.dashboard.settings.shop-settings', compact('shop'));
     }
 }

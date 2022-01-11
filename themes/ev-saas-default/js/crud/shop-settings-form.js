@@ -1,4 +1,4 @@
-window.initAccountSettingsFormInit = function(event) {
+window.initShopSettingsFormInit = function(event) {
     // INITIALIZATION OF SELECT2
     // =======================================================
     $('.custom-select').each(function () {
@@ -66,8 +66,8 @@ window.initAccountSettingsFormInit = function(event) {
 
 }
 
-$(window).on('load', window.initAccountSettingsFormInit);
-$(window).on('initAccountSettingsFormInit', window.initAccountSettingsFormInit);
+$(window).on('load', window.initShopSettingsFormInit);
+$(window).on('initAccountSettingsFormInit', window.initShopSettingsFormInit);
 
 // document.addEventListener('toastIt', async function (event) {
 //     let content = event.detail.content;

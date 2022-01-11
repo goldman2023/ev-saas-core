@@ -37,8 +37,8 @@ class LoginController extends Controller
     /**
       * Redirect the user to the Google authentication page.
       *
-      * @return \Illuminate\Http\Response
-      */
+      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function redirectToProvider($provider)
     {
         return Socialite::driver($provider)->redirect();
@@ -65,7 +65,7 @@ class LoginController extends Controller
 
         // check if they're an existing user
         $existingUser = User::where('provider_id', $user->id)->orWhere('email', $user->email)->first();
-
+        dd($existingUser);
         if($existingUser){
             // log them in
             auth()->login($existingUser, true);
@@ -117,7 +117,6 @@ class LoginController extends Controller
             // CoreComponentRepository::instantiateShopRepository();
             return redirect()->route('admin.dashboard');
         } else {
-
             if(session('link') != null){
                 return redirect(session('link'));
             }

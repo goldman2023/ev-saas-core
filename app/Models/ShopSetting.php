@@ -16,13 +16,15 @@ class ShopSetting extends Model
     }
 
     public function getValueAttribute($value) {
-        $decoded = json_decode($value, true);
+        if(is_array($value)) {
+            return $value;
+        } else if(is_string($value)) {
+            $decoded = json_decode($value, true);
 
-        if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-            return $decoded;
-        }
-
-        if(ctype_digit($value)) {
+            if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+        } else if(ctype_digit($value)) {
             $int = (int) $value;
             $float = (float) $value;
 

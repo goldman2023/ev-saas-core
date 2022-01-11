@@ -167,15 +167,15 @@ class EVService
                     [
                         'label' => translate('Website'),
                         'icon' => 'heroicon-o-qrcode',
-                        'route' => route('ev.settings.domains'),
-                        'is_active' => areActiveRoutes(['ev.settings.domains']),
+                        'route' => route('settings.domains'),
+                        'is_active' => areActiveRoutes(['settings.domains']),
                         'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Tutorials'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('ev-tutorials.index'),
-                        'is_active' => areActiveRoutes(['ev.settings.domains']),
+                        'is_active' => areActiveRoutes(['settings.domains']),
                         'roles' => ['admin', 'seller'],
                     ]
                     // [
@@ -258,40 +258,34 @@ class EVService
                 'label' => translate('Settings'),
                 'items' => [
                     [
+                        'label' => translate('Shop settings'),
+                        'icon' => 'heroicon-o-office-building',
+                        'route' => route('settings.shop_settings'),
+                        'is_active' => areActiveRoutes(['settings.shop_settings']),
+                        'roles' => ['admin','seller'],
+                    ],
+                    [
                         'label' => translate('Design settings'),
                         'icon' => 'heroicon-o-cog',
-                        'route' => route('ev.settings.design'),
-                        'is_active' => areActiveRoutes(['ev.settings.design']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-                    [
-                        'label' => translate('Account settings'),
-                        'icon' => 'heroicon-o-cog',
-                        'route' => route('profile'),
-                        'is_active' => areActiveRoutes(['profile']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-                    [
-                        'label' => translate('Payment settings'),
-                        'icon' => 'heroicon-o-cash',
-                        'route' => route('ev.settings.payment_methods'),
-                        'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
+                        'route' => route('settings.design'),
+                        'is_active' => areActiveRoutes(['settings.design']),
                         'roles' => ['admin', 'seller'],
                     ],
                      [
                          'label' => translate('Payment settings'),
                          'icon' => 'heroicon-o-cash',
-                         'route' => route('ev.settings.payment_methods'),
-                         'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
+                         'route' => route('settings.payment_methods'),
+                         'is_active' => areActiveRoutes(['settings.payment_methods']),
                          'roles' => ['admin','seller'],
                      ],
                     [
                         'label' => translate('Users settings'),
                         'icon' => 'heroicon-s-user-group',
-                        'route' => route('ev.settings.users_settings'),
-                        'is_active' => areActiveRoutes(['ev.settings.users_settings']),
+                        'route' => route('settings.users_settings'),
+                        'is_active' => areActiveRoutes(['settings.users_settings']),
                         'roles' => ['admin','seller'],
                     ],
+
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',
@@ -299,13 +293,7 @@ class EVService
                     //     'is_active' => areActiveRoutes(['attributes']),
                     //     'roles' => ['admin','seller'],
                     // ],
-                    // [
-                    //     'label' => translate('Shop settings'),
-                    //     'icon' => 'heroicon-o-office-building',
-                    //     'route' => route('shops.index'),
-                    //     'is_active' => areActiveRoutes(['shops']),
-                    //     'roles' => ['admin','seller'],
-                    // ],
+
                     // [
                     //     'label' => translate('Shipping settings'),
                     //     'icon' => 'heroicon-o-truck',
