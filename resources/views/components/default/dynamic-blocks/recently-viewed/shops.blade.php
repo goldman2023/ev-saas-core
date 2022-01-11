@@ -1,3 +1,4 @@
+@if($shops->count() > 0)
 <div class="card mt-3 mb-3">
     <div class="card-header">
 
@@ -25,3 +26,4 @@
 
     </div>
 </div>
+@endif
