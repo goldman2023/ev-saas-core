@@ -50,7 +50,8 @@
 }
 </style>
 <nav class="nav-bottom text-dark" id="ev-app-bar">
-    <a href="/" class="nav-link active">
+    {{--  --}}
+    <a href="{{ route('dashboard') }}" class="nav-link active">
         @svg('heroicon-o-home', ['style' => 'width: 24px;'])
         <span class="text">{{ translate('Home') }}</span>
     </a>
