@@ -31,6 +31,9 @@
         },
         saveContactDetails() {
             $wire.saveContactDetails(settings.contact_details, this.currentContact);
+        },
+        removeContactDetails() {
+            $wire.removeContactDetails(settings.contact_details, this.currentContact);
         }
      }"
      @contact-details-modal-hide.window="hideModal()"
@@ -75,6 +78,12 @@
                             </template>
                         </div>
                     </div>
+                </div>
+            </template>
+
+            <template x-if="settings.contact_details.length <= 0">
+                <div class="col-12">
+                    <span>{{ translate('There are no contact details yet...') }}</span>
                 </div>
             </template>
         </div>
@@ -126,8 +135,8 @@
                         <div class="form-group">
                             <label class="input-label " for="modal_contact_details_department_name">{{ translate('Department name') }}</label>
                             <input type="text"
-                                   id="modal_address_address"
-                                   name="model_address_address"
+                                   id="modal_contact_details_department_name"
+                                   name="modal_contact_details_department_name"
                                    x-model="currentContact.department_name"
                                    class="form-control">
                         </div>
@@ -210,6 +219,14 @@
 
                 </div>
                 <div class="modal-footer">
+                    <template x-if="settings.contact_details.length > 1">
+                        <button type="button"
+                                class="btn btn-primary mr-auto d-flex align-items-center justify-content-center"
+                                @click="removeContactDetails()">
+                            @svg('heroicon-o-trash', ['class' => 'square-22'])
+                        </button>
+                    </template>
+
                     <button type="button" class="btn btn-white" data-dismiss="modal" @click="reset()">{{ translate('Close') }}</button>
                     <button type="button" class="btn btn-primary" @click="saveContactDetails()">{{ translate('Save') }}</button>
                 </div>

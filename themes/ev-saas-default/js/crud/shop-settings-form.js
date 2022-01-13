@@ -64,6 +64,11 @@ window.initShopSettingsFormInit = function(event) {
     });
 
 
+    // INITIALIZATION OF LEAFLET
+    // =======================================================
+    // $('#address_map').each(function () {
+    //
+    // });
 }
 
 $(window).on('load', window.initShopSettingsFormInit);

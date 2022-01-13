@@ -7,6 +7,7 @@
             domains: @entangle('domains').defer,
             showToast($el, $event) {
                 if($($el).attr('id') === $event.detail.id) {
+
                     $($el).find('.toast-body').text($event.detail.content);
                     $($el).addClass('d-block opacity-10');
                     setTimeout(function() {
@@ -393,5 +394,10 @@
         <!-- ContactDetails Card -->
         @include('frontend.dashboard.settings.partials.shop-settings.contact-details')
         <!-- END ContactDetails Card -->
+
+        <!-- Addresses -->
+        <livewire:dashboard.forms.addresses.addresses-form :addresses="$shop->addresses" toast_id="my-shop-updated-toast">
+        </livewire:dashboard.forms.addresses.addresses-form>
+        <!-- END Addresses -->
     </div>
 </div>

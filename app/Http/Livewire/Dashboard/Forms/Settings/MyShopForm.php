@@ -7,6 +7,7 @@ use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Models\Shop;
 use App\Rules\UniqueSKU;
+use App\Traits\Livewire\DispatchSupport;
 use DB;
 use EVS;
 use Categories;
@@ -20,13 +21,12 @@ use App\Traits\Livewire\RulesSets;
 class MyShopForm extends Component
 {
     use RulesSets;
+    use DispatchSupport;
 
     public $shop;
     public $settings;
     public $addresses;
     public $domains;
-
-    protected $toast_id = 'my-shop-updated-toast';
 
     protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
@@ -84,12 +84,13 @@ class MyShopForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($toast_id = 'my-shop-updated-toast')
     {
         $this->shop = auth()->user()->shop()->first();
         $this->settings = $this->shop->settings->keyBy('setting')->map(fn($item) => $item['value'])->toArray();
         $this->addresses = $this->shop->addresses;
         $this->domains = $this->shop->domains;
+        $this->toast_id = $toast_id;
     }
 
     public function updatingShop(&$shop, $key) {
@@ -105,19 +106,14 @@ class MyShopForm extends Component
 
     public function render()
     {
-
         return view('livewire.dashboard.forms.settings.my-shop-form');
-    }
-
-
-    protected function toastify($msg = '', $type = 'info') {
-        $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
     }
 
     public function saveBasicInformation() {
         $rules = $this->getRuleSet('basic');
+
         $this->validate($rules);
-        $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TI THE MODEL ATTRIBUTES LIST????
+        $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TO THE MODEL ATTRIBUTES LIST????
 
         $this->shop->syncUploads();
         $this->shop->content = Purifier::clean($this->shop->content); // TODO: Fix purifier to prevent XSS
@@ -161,5 +157,36 @@ class MyShopForm extends Component
 
         $this->dispatchBrowserEvent('contact-details-modal-hide');
         $this->toastify(translate('Contact details successfully updated.', 'success'));
+    }
+
+    public function removeContactDetails($contacts, $current = null) {
+        $contact_details = $this->shop->settings->keyBy('setting')->get('contact_details');
+
+        foreach($contacts as $key => $contact) {
+            if($contact == $current) {
+                unset($contacts[$key]);
+            }
+        }
+
+        $contacts = array_values($contacts);
+
+        $has_primary = false;
+        foreach($contacts as $key => $contact) {
+            if($contact['is_primary'] ?? false) {
+                $has_primary = true;
+            }
+        }
+
+        if(!$has_primary && isset($contacts[0])) {
+            $contacts[0]['is_primary'] = true;
+        }
+
+        $contact_details->value = json_encode(array_values($contacts));
+        $contact_details->save();
+
+        $this->settings['contact_details'] = $contact_details->value;
+
+        $this->dispatchBrowserEvent('contact-details-modal-hide');
+        $this->toastify(translate('Contact details successfully removed.', 'success'));
     }
 }
