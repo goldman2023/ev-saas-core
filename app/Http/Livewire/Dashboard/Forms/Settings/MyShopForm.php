@@ -84,12 +84,13 @@ class MyShopForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($toast_id = 'my-shop-updated-toast')
     {
         $this->shop = auth()->user()->shop()->first();
         $this->settings = $this->shop->settings->keyBy('setting')->map(fn($item) => $item['value'])->toArray();
         $this->addresses = $this->shop->addresses;
         $this->domains = $this->shop->domains;
+        $this->toast_id = $toast_id;
     }
 
     public function updatingShop(&$shop, $key) {
@@ -105,7 +106,6 @@ class MyShopForm extends Component
 
     public function render()
     {
-
         return view('livewire.dashboard.forms.settings.my-shop-form');
     }
 
