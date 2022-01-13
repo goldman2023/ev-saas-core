@@ -3,6 +3,7 @@
 namespace App\Models\Central;
 
 use App\Exceptions\NoPrimaryDomainException;
+use App\Models\SocialAccount;
 use Laravel\Cashier\Billable;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
@@ -104,5 +105,16 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     public function getCanUseAppAttribute(): bool
     {
         return $this->onTrial() || $this->subscribed('default');
+    }
+
+    public function setSocialServiceMappings() {
+        $social_template = collect(config('services'))->filter(fn($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
+
+        foreach($social_template as $provider => $data) {
+            foreach($data as $key => $value) {
+                $this->{$provider.'_'.$key} =  \TenantSettings::get($provider.'_'.$key);
+            }
+        }
+
     }
 }

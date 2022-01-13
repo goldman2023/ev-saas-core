@@ -41,6 +41,7 @@
                 let editor = new toastui.Editor(settings);
                 editor.on('change', function() {
                     $input.val(editor.getHTML());
+                    $input.get(0).dispatchEvent(new Event('input'));
                 });
 
                 /*let newQuill = new Quill(element, settings);

@@ -29,6 +29,11 @@ class IfIDExists implements Rule, ValidatorAwareRule, DataAwareRule
     {
         $model_type = $this->parameters[0] ?? null;
         $model_identificator = $this->parameters[1];
+        $pass_if_empty = $this->parameters[2] ?? false;
+
+        if($pass_if_empty && empty($value)) {
+            return true;
+        }
 
         $value = $value instanceof Model ? $value->id : $value;
 

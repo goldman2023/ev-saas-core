@@ -2,6 +2,15 @@
      x-data="{
             current: 'basicInformation',
             me: @entangle('me').defer,
+            showToast($el, $event) {
+                if($($el).attr('id') === $event.detail.id) {
+                    $($el).find('.toast-body').text($event.detail.content);
+                    $($el).addClass('d-block opacity-10');
+                    setTimeout(function() {
+                        $($el).removeClass('d-block opacity-10');
+                    }, 4000);
+                }
+            },
             fileChosen(event, property_name) {
               this.fileToDataUrl(event, src => this[property_name] = src)
             },
@@ -20,6 +29,13 @@
                 scrollTop: $('#'+value).offset().top - $('#header').outerHeight()
             }, 500);
         })">
+
+    <x-ev.toast id="my-account-updated-toast"
+                position="bottom-center"
+                content="{{ translate('My account successfully updated!') }}"
+                class="bg-success border-success text-white h3"
+                @toastit.window="showToast($el, $event)"></x-ev.toast>
+
     <div class="col-lg-3">
         <!-- Navbar -->
         <div class="navbar-vertical navbar-expand-lg mb-3 mb-lg-5">
@@ -56,13 +72,13 @@
                             <i class="tio-user-outlined nav-icon"></i> {{ translate('Basic information') }}
                         </a>
                     </li>
-                    <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer"
-                           :class="{'active': current === 'emailSection'}"
-                           @click="current = 'emailSection';">
-                            <i class="tio-online nav-icon"></i> {{ translate('Email') }}
-                        </a>
-                    </li>
+{{--                    <li class="nav-item w-100">--}}
+{{--                        <a class="nav-link py-3 pointer"--}}
+{{--                           :class="{'active': current === 'emailSection'}"--}}
+{{--                           @click="current = 'emailSection';">--}}
+{{--                            <i class="tio-online nav-icon"></i> {{ translate('Email') }}--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                     <li class="nav-item w-100">
                         <a class="nav-link py-3 pointer"
                            :class="{'active': current === 'passwordSection'}"
@@ -107,16 +123,16 @@
                     </li>
                     <li class="nav-item w-100">
                         <a class="nav-link py-3 pointer"
-                           :class="{'active': current === 'connectedAccountsSection'}"
-                           @click="current = 'connectedAccountsSection';">
-                            <i class="tio-node-multiple-outlined nav-icon"></i> {{ translate('Connected accounts') }}
+                           :class="{'active': current === 'socialAccountsSection'}"
+                           @click="current = 'socialAccountsSection';">
+                            <i class="tio-instagram nav-icon"></i> {{ translate('Social accounts') }}
                         </a>
                     </li>
                     <li class="nav-item w-100">
                         <a class="nav-link py-3 pointer"
-                           :class="{'active': current === 'socialAccountsSection'}"
-                           @click="current = 'socialAccountsSection';">
-                            <i class="tio-instagram nav-icon"></i> {{ translate('Social accounts') }}
+                           :class="{'active': current === 'connectedAccountsSection'}"
+                           @click="current = 'connectedAccountsSection';">
+                            <i class="tio-node-multiple-outlined nav-icon"></i> {{ translate('Connected accounts') }}
                         </a>
                     </li>
                     <li class="nav-item w-100">
@@ -139,7 +155,6 @@
              id="basicInformation"
              x-data="{}"
         >
-
             <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                                   wire:target="saveBasicInformation"
                                   wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
@@ -307,53 +322,53 @@
         <!-- END Thumbnail & Cover Card -->
 
 
-        <!-- Email -->
-        <div class="card mb-3 mb-lg-5 position-relative"
-             id="emailSection"
-             x-data="{}">
+{{--        <!-- Email -->--}}
+{{--        <div class="card mb-3 mb-lg-5 position-relative"--}}
+{{--             id="emailSection"--}}
+{{--             x-data="{}">--}}
 
-            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                  wire:target="saveEmail"
-                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+{{--            <x-ev.loaders.spinner class="absolute-center z-10 d-none"--}}
+{{--                                  wire:target="saveEmail"--}}
+{{--                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>--}}
 
-            <div class="card-header">
-                <h2 class="card-title h4">{{ translate('Email') }}</h2>
-            </div>
+{{--            <div class="card-header">--}}
+{{--                <h2 class="card-title h4">{{ translate('Email') }}</h2>--}}
+{{--            </div>--}}
 
-            <div class=""
-                 wire:loading.class="opacity-3 prevent-pointer-events"
-                 wire:target="saveEmail"
-            >
-                <div class="card-body">
-                    <p>{{ translate('Your current email address is:') }} <span class="font-weight-bold">{{ $me->email }}</span></p>
+{{--            <div class=""--}}
+{{--                 wire:loading.class="opacity-3 prevent-pointer-events"--}}
+{{--                 wire:target="saveEmail"--}}
+{{--            >--}}
+{{--                <div class="card-body">--}}
+{{--                    <p>{{ translate('Your current email address is:') }} <span class="font-weight-bold">{{ $me->email }}</span></p>--}}
 
-                    <!-- Form Group -->
-                    <div class="row form-group">
-                        <label for="newEmailLabel" class="col-sm-3 col-form-label input-label">{{ translate('New email address') }}</label>
+{{--                    <!-- Form Group -->--}}
+{{--                    <div class="row form-group">--}}
+{{--                        <label for="newEmailLabel" class="col-sm-3 col-form-label input-label">{{ translate('New email address') }}</label>--}}
 
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control @error('me.email') is-invalid @enderror"
-                                   name="me.email" id="me-v" placeholder="{{ translate('Your new email') }}"
-                                   wire:model.defer="me.email">
-                        </div>
+{{--                        <div class="col-sm-9">--}}
+{{--                            <input type="text" class="form-control @error('me.email') is-invalid @enderror"--}}
+{{--                                   name="me.email" id="me-v" placeholder="{{ translate('Your new email') }}"--}}
+{{--                                   wire:model.defer="me.email">--}}
+{{--                        </div>--}}
 
-                        @error('me.email')
-                            <div class="invalid-feedback d-block px-3 py-2 rounded">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <!-- End Form Group -->
-                </div>
-            </div>
+{{--                        @error('me.email')--}}
+{{--                            <div class="invalid-feedback d-block px-3 py-2 rounded">{{ $message }}</div>--}}
+{{--                        @enderror--}}
+{{--                    </div>--}}
+{{--                    <!-- End Form Group -->--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
-            <div class="card-footer">
-                <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveEmail()">
-                        {{ translate('Save') }}
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- END Email -->
+{{--            <div class="card-footer">--}}
+{{--                <div class="col-12 d-flex">--}}
+{{--                    <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveEmail()">--}}
+{{--                        {{ translate('Save') }}--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--        <!-- END Email -->--}}
 
         <!-- Password -->
         <div class="card mb-3 mb-lg-5 position-relative"
@@ -470,187 +485,251 @@
         </div>
         <!-- END Password -->
 
-
         <!-- Addresses -->
-        <div class="card mb-3 mb-lg-5 position-relative"
-             id="addressesSection"
-             x-data="{
-                currentAddress: @js($this->me->addresses->first())
-             }">
+        <livewire:dashboard.forms.addresses.addresses-form :addresses="$this->me->addresses" toast_it="my-account-updated-toast">
+        </livewire:dashboard.forms.addresses.addresses-form>
+        <!-- END Addresses -->
 
-            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                  wire:target="saveAddresses"
-                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
-
+        <!-- Social accounts -->
+        <div id="socialAccountsSection" class="card mb-3 mb-lg-5">
             <div class="card-header">
-                <h2 class="card-title h4">{{ translate('Addresses') }}</h2>
+                <h4 class="card-title">{{ translate('Social accounts') }}</h4>
             </div>
 
+            <!-- Body -->
             <div class="card-body">
-                <div class="row"
-                     wire:loading.class="opacity-3 prevent-pointer-events"
-                     wire:target="saveAddresses"
-                >
-                    @if(!empty($this->me->addresses))
-                        @foreach($this->me->addresses as $address)
-                            <div class="col-4 px-2 mb-3">
-                                <div class="card w-100 pointer"
-                                     data-toggle="modal"
-                                     data-target="#updateAddressModal"
-                                     x-data="{
-                                        address: @js($address)
-                                     }"
-                                     @click="
-                                        currentAddress = address;
-                                         $('#updateAddressModal .js-toggle-switch').each(function () {
-                                            var addressToggleSwitch = new HSToggleSwitch($(this)).init();
-                                        });
-                                    ">
-                                    <div class="card-body">
-                                        <h6 class="card-subtitle">{{ \Countries::get(code: $address->country)->name ?? translate('Unknown') }}</h6>
-                                        <h3 class="card-title text-18">{{ $address->address }}</h3>
-                                        <p class="card-text mb-2">{{ $address->city }}, {{ $address->zip_code }}</p>
+                <div class="list-group list-group-lg list-group-flush list-group-no-gutters">
 
-                                        @if(!empty($address->phones))
-                                            <div class="d-flex align-items-center ">
-                                                @foreach($address->phones as $address_phone)
-                                                    <span class="badge badge-info mr-2">{{ $address_phone }}</span>
-                                                @endforeach
+                    <!-- List Item -->
+                    @if(!empty(\App\Models\SocialAccount::$available_providers))
+                        @foreach(\App\Models\SocialAccount::$available_providers as $key => $provider)
+                            <div class="list-group-item">
+                                <div class="media d-flex align-items-center">
+                                    <div class="pl-2">
+                                        @switch($key)
+                                            @case('google')
+                                            <i class="tio-google list-group-icon mt-1"></i>
+                                            @break
+
+                                            @case('facebook')
+                                            <i class="tio-facebook list-group-icon mt-1"></i>
+                                            @break
+
+                                            @case('twitter')
+                                            <i class="tio-twitter list-group-icon mt-1"></i>
+                                            @break
+
+                                            @case('linkedin')
+                                            <i class="tio-linkedin list-group-icon mt-1"></i>
+                                            @break
+
+                                            @case('pinterest')
+                                            <i class="tio-pinterest list-group-icon mt-1"></i>
+                                            @break
+
+                                            @case('github')
+                                            <i class="tio-github list-group-icon mt-1"></i>
+                                            @break
+                                        @endswitch
+                                    </div>
+
+                                    <div class="media-body">
+                                        <div class="d-flex align-items-center">
+                                            @php
+                                                $social_account = $me->getSocialAccount($key);
+                                            @endphp
+                                            <div class="col-sm mb-2 mb-sm-0">
+                                                <h5 class="mb-0 d-flex align-items-center">
+                                                    <strong class="mr-3">{{ $provider }}</strong>
+                                                    @if($social_account->connected ?? null)
+                                                        <span class="badge badge-success text-12">{{ translate('active') }}</span>
+                                                    @else
+                                                        <span class="badge badge-danger text-12">{{ translate('inactive') }}</span>
+                                                    @endif
+                                                </h5>
+                                                @if($social_account)
+                                                    <a class="font-size-sm" href="#">{{ $social_account->profile_url ?? '' }}</a>
+                                                @endif
                                             </div>
-                                        @endif
+
+                                            <div class="col-sm-auto">
+                                                <a class="btn btn-sm btn-{{ ($social_account->connected ?? null) ? 'danger':'white' }}" href="{{ ($social_account->connected ?? null) ? '#' : route('social.connect', $key) }}" target="_blank">
+                                                    {{ ($social_account->connected ?? null) ? translate('Disconnect') : translate('Connect') }}
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- End List Item -->
                         @endforeach
                     @endif
+
                 </div>
             </div>
+            <!-- End Body -->
+        </div>
+        <!-- END Social accounts -->
 
-
-            <div class="card-footer">
-                <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveEmail()">
-                        {{ translate('Save') }}
-                    </button>
-                </div>
+        <!-- Connected accounts -->
+        <div id="connectedAccountsSection" class="card mb-3 mb-lg-5">
+            <div class="card-header">
+                <h4 class="card-title">{{ translate('Connected accounts') }}</h4>
             </div>
 
-            <!-- Address change Modal -->
-            <template x-if="currentAddress">
-                <div id="updateAddressModal" class="modal fade" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <!-- Header -->
-                            <div class="modal-top-cover bg-dark text-center">
-                                <figure class="position-absolute right-0 bottom-0 left-0" style="margin-bottom: -1px;">
-                                    <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 1920 100.1"
-                                         style="vertical-align: middle;">
-                                        <path fill="#fff" d="M0,0c0,0,934.4,93.4,1920,0v100.1H0L0,0z"/>
-                                    </svg>
-                                </figure>
+            <!-- Body -->
+            <div class="card-body">
+                <p class="card-text">{{ translate('Integrated features from these accounts make it easier to fulfil your day-to-day business activities.') }}</p>
 
-                                <div class="modal-close">
-                                    <button type="button" class="btn btn-icon btn-sm btn-ghost-light" data-dismiss="modal" aria-label="Close">
-                                        <svg width="16" height="16" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill="currentColor" d="M11.5,9.5l5-5c0.2-0.2,0.2-0.6-0.1-0.9l-1-1c-0.3-0.3-0.7-0.3-0.9-0.1l-5,5l-5-5C4.3,2.3,3.9,2.4,3.6,2.6l-1,1 C2.4,3.9,2.3,4.3,2.5,4.5l5,5l-5,5c-0.2,0.2-0.2,0.6,0.1,0.9l1,1c0.3,0.3,0.7,0.3,0.9,0.1l5-5l5,5c0.2,0.2,0.6,0.2,0.9-0.1l1-1 c0.3-0.3,0.3-0.7,0.1-0.9L11.5,9.5z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- End Header -->
+                <!-- Form -->
+                <form>
+                    <div class="list-group list-group-lg list-group-flush list-group-no-gutters">
+                        <!-- List Item -->
+                        <div class="list-group-item">
+                            <div class="media">
+{{--                                <img class="avatar avatar-xs mt-1 mr-3" src="./assets/svg/brands/google.svg" alt="Image Description">--}}
 
-                            <div class="modal-top-cover-icon">
-                            <span class="icon icon-md icon-light icon-circle d-flex mx-auto shadow-soft">
-                              @svg('heroicon-o-home', ['class' => 'square-24'])
-                            </span>
-                            </div>
+                                <div class="media-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="mb-0">Google</h5>
+                                            <p class="font-size-sm mb-0">Calendar and contacts</p>
+                                        </div>
 
-                            <div class="modal-body row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="input-label " for="modal_address_address">{{ translate('Address') }}</label>
-                                        <input type="text"
-                                               id="modal_address_address"
-                                               name="model_address_address"
-                                               x-model="currentAddress.address"
-                                               class="form-control"
-                                               placeholder="Your address...">
+                                        <div class="col-auto">
+                                            <!-- Checkbox Switch -->
+                                            <label class="toggle-switch" for="connectedAccounts1">
+                                                <input id="connectedAccounts1" type="checkbox" class="toggle-switch-input">
+                                                <span class="toggle-switch-label">
+                                  <span class="toggle-switch-indicator"></span>
+                                </span>
+                                            </label>
+                                            <!-- End Checkbox Switch -->
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="col-6">
-                                    <label class="input-label " for="modal_address_country">{{ translate('Country') }}</label>
-                                    <select class="form-control custom-select" name="modal_address_country" id="modal_address_country"
-                                            data-hs-select2-options='{
-                                              "minimumResultsForSearch": -1,
-                                              "placeholder": "Select country..."
-                                            }'>
-                                        <option label="empty"></option>
-                                        @foreach(\Countries::getAll() as $country)
-                                            <option value="{{ $country->code }}" x-bind:selected="'{{ $country->code }}' === currentAddress.country">
-                                                {{ $country->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label class="input-label" for="modal_address_city">{{ translate('City') }}</label>
-                                        <input type="text"
-                                               id="modal_address_city"
-                                               name="model_address_city"
-                                               x-model="currentAddress.city"
-                                               class="form-control"
-                                               placeholder="City...">
-                                    </div>
-                                </div>
-
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label class="input-label" for="modal_address_state">{{ translate('State') }}</label>
-                                        <input type="text"
-                                               id="modal_address_state"
-                                               name="model_address_state"
-                                               x-model="currentAddress.state"
-                                               class="form-control"
-                                               placeholder="State...">
-                                    </div>
-                                </div>
-
-                                <div class="col-4">
-                                    <div class="form-group">
-                                        <label class="input-label" for="modal_address_zip_code">{{ translate('Zip Code') }}</label>
-                                        <input type="text"
-                                               id="modal_address_zip_code"
-                                               name="model_address_zip_code"
-                                               x-model="currentAddress.zip_code"
-                                               class="form-control"
-                                               placeholder="Zip code...">
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="toggle-switch mx-2" for="customSwitchModalEg">
-                                        <input type="checkbox" x-model="currentAddress.set_default" class="js-toggle-switch toggle-switch-input" id="customSwitchModalEg">
-                                        <span class="toggle-switch-label">
-                                      <span class="toggle-switch-indicator"></span>
-                                    </span>
-
-                                        <span class="ml-3">{{ translate('Default address') }}</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-white" data-dismiss="modal">{{ translate('Close') }}</button>
-                                <button type="button" class="btn btn-primary">{{ translate('Save') }}</button>
                             </div>
                         </div>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <div class="list-group-item">
+                            <div class="media">
+{{--                                <img class="avatar avatar-xs mt-1 mr-3" src="./assets/svg/brands/spec.svg" alt="Image Description">--}}
+
+                                <div class="media-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="mb-0">Spec</h5>
+                                            <p class="font-size-sm mb-0">Project management</p>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <!-- Checkbox Switch -->
+                                            <label class="toggle-switch" for="connectedAccounts2">
+                                                <input id="connectedAccounts2" type="checkbox" class="toggle-switch-input">
+                                                <span class="toggle-switch-label">
+                                  <span class="toggle-switch-indicator"></span>
+                                </span>
+                                            </label>
+                                            <!-- End Checkbox Switch -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <div class="list-group-item">
+                            <div class="media">
+{{--                                <img class="avatar avatar-xs mt-1 mr-3" src="./assets/svg/brands/slack.svg" alt="Image Description">--}}
+
+                                <div class="media-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="mb-0">Slack</h5>
+                                            <p class="font-size-sm mb-0">Communication <a class="link" href="#">Learn more</a></p>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <!-- Checkbox Switch -->
+                                            <label class="toggle-switch" for="connectedAccounts3">
+                                                <input id="connectedAccounts3" type="checkbox" class="toggle-switch-input" checked="">
+                                                <span class="toggle-switch-label">
+                                  <span class="toggle-switch-indicator"></span>
+                                </span>
+                                            </label>
+                                            <!-- End Checkbox Switch -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <div class="list-group-item">
+                            <div class="media">
+{{--                                <img class="avatar avatar-xs mt-1 mr-3" src="./assets/svg/brands/mailchimp.svg" alt="Image Description">--}}
+
+                                <div class="media-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="mb-0">Mailchimp</h5>
+                                            <p class="font-size-sm mb-0">Email marketing service</p>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <!-- Checkbox Switch -->
+                                            <label class="toggle-switch" for="connectedAccounts4">
+                                                <input id="connectedAccounts4" type="checkbox" class="toggle-switch-input" checked="">
+                                                <span class="toggle-switch-label">
+                                  <span class="toggle-switch-indicator"></span>
+                                </span>
+                                            </label>
+                                            <!-- End Checkbox Switch -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End List Item -->
+
+                        <!-- List Item -->
+                        <div class="list-group-item">
+                            <div class="media">
+{{--                                <img class="avatar avatar-xs mt-1 mr-3" src="./assets/svg/brands/google-webdev.svg" alt="Image Description">--}}
+
+                                <div class="media-body">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="mb-0">Google Webdev</h5>
+                                            <p class="font-size-sm mb-0">Tools for Web Developers <a class="link" href="#">Learn more</a></p>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <!-- Checkbox Switch -->
+                                            <label class="toggle-switch" for="connectedAccounts5">
+                                                <input id="connectedAccounts5" type="checkbox" class="toggle-switch-input">
+                                                <span class="toggle-switch-label">
+                                  <span class="toggle-switch-indicator"></span>
+                                </span>
+                                            </label>
+                                            <!-- End Checkbox Switch -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End List Item -->
                     </div>
-                </div>
-            </template>
-            <!-- End Modal -->
+                </form>
+                <!-- End Form -->
+            </div>
+            <!-- End Body -->
         </div>
-        <!-- END Addresses -->
+        <!-- END Connected accounts -->
+
     </div>
 </div>

@@ -36,23 +36,50 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+
     'google' => [
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect'      => env('APP_URL').'/social-login/google/callback',
+        'redirect_login'      => env('APP_URL').'/social-login/google/callback',
+        'redirect_connect' => env('APP_URL').'/social-login/google/callback',
     ],
 
     'facebook' => [
         'client_id'     => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
-        'redirect'      => env('APP_URL').'/social-login/facebook/callback',
+        'redirect_login'      => env('APP_URL').'/social-login/facebook/callback',
+        'redirect_connect' => env('APP_URL').'/social-login/facebook/callback',
     ],
 
     'twitter' => [
         'client_id'     => env('TWITTER_CLIENT_ID'),
         'client_secret' => env('TWITTER_CLIENT_SECRET'),
-        'redirect'      => env('APP_URL').'/social-login/twitter/callback',
+        'redirect_login'      => env('APP_URL').'/social-login/twitter/callback',
+        'redirect_connect' => env('APP_URL').'/social-login/twitter/callback',
     ],
+
+    'linkedin' => [
+        'client_id'     => env('LINKEDIN_CLIENT_ID'),
+        'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
+        'redirect_login'      => env('APP_URL').'/social-login/linkedin/callback',
+        'redirect_connect' => env('APP_URL').'/social-login/linkedin/callback',
+    ],
+
+    'pinterest' => [
+        'client_id'     => env('PINTEREST_CLIENT_ID'),
+        'client_secret' => env('PINTEREST_CLIENT_SECRET'),
+        'redirect_login'      => env('APP_URL').'/social-login/pinterest/callback',
+        'redirect_connect' => env('APP_URL').'/social-login/pinterest/callback',
+    ],
+
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect_login' => env('APP_URL').'/social-login/github/callback',
+        'redirect_connect' => env('APP_URL').'/social-login/github/callback',
+    ],
+
+
 
     'paytm-wallet' => [
         'env' => env('PAYTM_ENVIRONMENT'),

@@ -183,7 +183,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class,
+        App\Providers\SocialiteServiceProvider::class,
         // Laracon21\Timezones\TimezonesServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         // MehediIitdu\CoreComponentRepository\CoreComponentRepositoryServiceProvider::class,

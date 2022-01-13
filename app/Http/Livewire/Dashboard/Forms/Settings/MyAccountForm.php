@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Dashboard\Forms\Account;
+namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
 use App\Models\Product;
 use App\Models\ProductStock;
@@ -98,7 +98,7 @@ class MyAccountForm extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.forms.account.my-account-form');
+        return view('livewire.dashboard.forms.settings.my-account-form');
     }
 
 

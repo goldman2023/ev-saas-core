@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
+use App\Traits\SocialAccounts;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
@@ -24,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;
+    use SocialAccounts;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -87,7 +89,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function wishlists()
     {
-    return $this->hasMany(Wishlist::class);
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function social_accounts()
+    {
+        return $this->hasMany(SocialAccount::class);
     }
 
     public function customer()
@@ -107,8 +114,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function affiliate_withdraw_request()
     {
-    return $this->hasMany(AffiliateWithdrawRequest::class);
+        return $this->hasMany(AffiliateWithdrawRequest::class);
     }
+
 
     public function products()
     {

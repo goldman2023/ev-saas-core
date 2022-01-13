@@ -20,14 +20,14 @@ class EVService
 {
     protected $tenantStylePath;
 
-    public function __construct($app)
-    {
-        $tenant_css_path = public_path('themes/' . Theme::parent() . '/css/' . tenant('id') . '.css');
-        $default_css_path = public_path('themes/' . Theme::parent() . '/css/app.css');
+    public function __construct($app) {
+        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant('id').'.css');
+        $default_css_path = public_path('themes/'.Theme::parent().'/css/app.css');
         $styling_url = '';
 
-        if (file_exists($tenant_css_path)) {
-            $url = asset('themes/' . Theme::parent() . '/css/' . tenant('id') . '.css?ver=' . filemtime($tenant_css_path));
+        if(file_exists($tenant_css_path)) {
+            $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
+
         } else {
             $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
         }
@@ -46,9 +46,10 @@ class EVService
     {
         $vendorMenu = $this->getVendorMenu();
 
-        $vendorMenu = collect($vendorMenu)->map(fn ($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
-            if (isset($child['roles'])) {
+        $vendorMenu = collect($vendorMenu)->map(fn($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
+            if(isset($child['roles'])) {
                 return in_array($role, $child['roles']);
+
             } else {
                 return true;
             }
@@ -166,22 +167,15 @@ class EVService
                     [
                         'label' => translate('Website'),
                         'icon' => 'heroicon-o-qrcode',
-                        'route' => route('ev.settings.domains'),
-                        'is_active' => areActiveRoutes(['ev.settings.domains']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-                    [
-                        'label' => translate('Analytics'),
-                        'icon' => 'heroicon-o-chart-bar',
-                        'route' => route('analytics.index'),
-                        'is_active' => areActiveRoutes(['analytics.index']),
+                        'route' => route('settings.domains'),
+                        'is_active' => areActiveRoutes(['settings.domains']),
                         'roles' => ['admin', 'seller'],
                     ],
                     [
                         'label' => translate('Tutorials'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('ev-tutorials.index'),
-                        'is_active' => areActiveRoutes(['ev.settings.domains']),
+                        'is_active' => areActiveRoutes(['settings.domains']),
                         'roles' => ['admin', 'seller'],
                     ]
                     // [
@@ -264,41 +258,34 @@ class EVService
                 'label' => translate('Settings'),
                 'items' => [
                     [
+                        'label' => translate('Shop settings'),
+                        'icon' => 'heroicon-o-office-building',
+                        'route' => route('settings.shop_settings'),
+                        'is_active' => areActiveRoutes(['settings.shop_settings']),
+                        'roles' => ['admin','seller'],
+                    ],
+                    [
                         'label' => translate('Design settings'),
                         'icon' => 'heroicon-o-cog',
-                        'route' => route('ev.settings.design'),
-                        'is_active' => areActiveRoutes(['ev.settings.design']),
+                        'route' => route('settings.design'),
+                        'is_active' => areActiveRoutes(['settings.design']),
                         'roles' => ['admin', 'seller'],
                     ],
-                    [
-                        'label' => translate('Account settings'),
-                        'icon' => 'heroicon-o-cog',
-                        'route' => route('profile'),
-                        'is_active' => areActiveRoutes(['profile']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-
-                    [
-                        'label' => translate('Menu'),
-                        'icon' => 'heroicon-o-cog',
-                        'route' => route('menu.index'),
-                        'is_active' => areActiveRoutes(['profile']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-                    [
-                        'label' => translate('Payment settings'),
-                        'icon' => 'heroicon-o-cash',
-                        'route' => route('ev.settings.payment_methods'),
-                        'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
-                        'roles' => ['admin', 'seller'],
-                    ],
+                     [
+                         'label' => translate('Payment settings'),
+                         'icon' => 'heroicon-o-cash',
+                         'route' => route('settings.payment_methods'),
+                         'is_active' => areActiveRoutes(['settings.payment_methods']),
+                         'roles' => ['admin','seller'],
+                     ],
                     [
                         'label' => translate('Users settings'),
                         'icon' => 'heroicon-s-user-group',
-                        'route' => route('ev.settings.users_settings'),
-                        'is_active' => areActiveRoutes(['ev.settings.users_settings']),
-                        'roles' => ['admin', 'seller'],
+                        'route' => route('settings.users_settings'),
+                        'is_active' => areActiveRoutes(['settings.users_settings']),
+                        'roles' => ['admin','seller'],
                     ],
+
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',
@@ -306,13 +293,7 @@ class EVService
                     //     'is_active' => areActiveRoutes(['attributes']),
                     //     'roles' => ['admin','seller'],
                     // ],
-                    // [
-                    //     'label' => translate('Shop settings'),
-                    //     'icon' => 'heroicon-o-office-building',
-                    //     'route' => route('shops.index'),
-                    //     'is_active' => areActiveRoutes(['shops']),
-                    //     'roles' => ['admin','seller'],
-                    // ],
+
                     // [
                     //     'label' => translate('Shipping settings'),
                     //     'icon' => 'heroicon-o-truck',
@@ -332,13 +313,13 @@ class EVService
             [
                 'label' => translate('Other'),
                 'items' => [
-                    [
-                        'label' => translate('Integrations'),
-                        'icon' => 'heroicon-o-credit-card',
-                        'route' => route('integrations.index'),
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin', 'seller'],
-                    ],
+                    // [
+                    //     'label' => translate('Plans & billing'),
+                    //     'icon' => 'heroicon-o-credit-card',
+                    //     'route' => '',
+                    //     'is_active' => areActiveRoutes(['']),
+                    //     'roles' => ['admin','seller'],
+                    // ],
                     // [
                     //     'label' => translate('Uploaded media'),
                     //     'icon' => 'heroicon-o-upload',

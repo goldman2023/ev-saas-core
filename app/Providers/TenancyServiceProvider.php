@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Listeners\Tenancy\StorageToConfigMapping;
 use App\Models\Shop;
+use App\Models\SocialAccount;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -15,6 +17,7 @@ use Stancl\Tenancy\Jobs;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
+use Stancl\Tenancy\Features\TenantConfig;
 
 class TenancyServiceProvider extends ServiceProvider
 {
@@ -81,7 +84,9 @@ class TenancyServiceProvider extends ServiceProvider
             ],
 
             Events\BootstrappingTenancy::class => [],
-            Events\TenancyBootstrapped::class => [],
+            Events\TenancyBootstrapped::class => [
+                StorageToConfigMapping::class
+            ],
             Events\RevertingToCentralContext::class => [],
             Events\RevertedToCentralContext::class => [],
 
@@ -102,11 +107,14 @@ class TenancyServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->mapStorageToConfig();
         $this->bootEvents();
         $this->mapRoutes();
 //        $this->enableTenantCacheLookup();
 
         $this->makeTenancyMiddlewareHighestPriority();
+
+
     }
 
     /**
@@ -151,6 +159,36 @@ class TenancyServiceProvider extends ServiceProvider
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/dashboard.php'));
         }
+    }
+
+    protected function mapStorageToConfig()
+    {
+        $social_template = collect(config('services'))->filter(fn($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
+        $mapping = [];
+
+        /**
+         * Explanation:
+         *
+         * $mappings is consisted of Tenant Model properties and corresponding config properties which we want to override when Tenant is bootstrapped.
+         * Please remember that Tenant Model properties DO NOT EXIST YET, BUT WILL BE ADDED ON TenancyBootstrapped event (inside StorageToConfigMapping listener).
+         * Function responsible for populating Tenant model properties is: tenant()->setSocialServiceMappings(); (inside StorageToConfigMapping listener)
+         *
+         * Flow:
+         * 1. mapStorageToConfig() - where just tenant model property names are mapped to desired config settings (only names, not values, cuz tenancy is not even initialized here)
+         * 2. TenancyInitialized
+         * 3. TenancyBootstrapped
+         * 4. StorageToConfigMapping (tenant()->setSocialServiceMappings()) - desired values from tenant_settings are assigned to custom Tenant model properties
+         * 5. TenantConfig::$storageToConfigMap - finally, VALUES under mapped tenant model property NAMES are assigned to config data
+         *
+         * BOOM: config('{something}') returns data for current Tenant, not global data!
+         */
+        foreach($social_template as $provider => $data) {
+            foreach($data as $key => $value) {
+                $mapping[$provider.'_'.$key] = 'services.'.$provider.'.'.$key;
+            }
+        }
+
+        TenantConfig::$storageToConfigMap = $mapping;
     }
 
     protected function makeTenancyMiddlewareHighestPriority()

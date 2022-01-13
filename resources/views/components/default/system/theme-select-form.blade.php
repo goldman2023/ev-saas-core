@@ -1,4 +1,4 @@
-<form action="{{ route('ev.settings.design.store') }}" method="POST">
+<form action="{{ route('settings.design.store') }}" method="POST">
     @csrf
 
     <div class="row">
