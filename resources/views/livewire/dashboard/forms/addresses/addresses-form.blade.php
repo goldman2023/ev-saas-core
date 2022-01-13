@@ -55,10 +55,11 @@
         },
         setAddressMarker(location) {
             if(location !== null && location.hasOwnProperty('lat') && location.hasOwnProperty('lng')) {
-                this.map.setView(L.latLng(location));
-
-                this.marker_layer_group.clearLayers();
-                L.marker(L.latLng(location)).addTo(this.marker_layer_group);
+                try {
+                    this.map.setView(L.latLng(location));
+                    this.marker_layer_group.clearLayers();
+                    L.marker(L.latLng(location)).addTo(this.marker_layer_group);
+                } catch(error) {}
             }
         }
      }"
@@ -69,11 +70,10 @@
         });
         $($el).on('hidden.bs.modal', function (e) {
           map.remove();
-
         });
-         $watch('currentAddress.location', function(value) {
+        $watch('currentAddress.location', function(value) {
             setAddressMarker(value);
-         });"
+        });"
     @display-address-modal.window="showModal()">
     <!-- Addresses -->
 

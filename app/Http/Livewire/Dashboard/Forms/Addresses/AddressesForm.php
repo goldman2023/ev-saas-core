@@ -110,6 +110,10 @@ class AddressesForm extends Component
 
 
         $this->dispatchBrowserEvent('display-address-modal');
-        $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => "Address successfully updated!"]);
+        $this->toastify('Address successfully updated!', 'success');
+    }
+
+    protected function toastify($msg = '', $type = 'info') {
+        $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
     }
 }
