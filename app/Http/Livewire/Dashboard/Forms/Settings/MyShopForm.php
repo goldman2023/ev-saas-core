@@ -7,6 +7,7 @@ use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Models\Shop;
 use App\Rules\UniqueSKU;
+use App\Traits\Livewire\DispatchSupport;
 use DB;
 use EVS;
 use Categories;
@@ -20,13 +21,12 @@ use App\Traits\Livewire\RulesSets;
 class MyShopForm extends Component
 {
     use RulesSets;
+    use DispatchSupport;
 
     public $shop;
     public $settings;
     public $addresses;
     public $domains;
-
-    protected $toast_id = 'my-shop-updated-toast';
 
     protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
@@ -109,15 +109,11 @@ class MyShopForm extends Component
         return view('livewire.dashboard.forms.settings.my-shop-form');
     }
 
-
-    protected function toastify($msg = '', $type = 'info') {
-        $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
-    }
-
     public function saveBasicInformation() {
         $rules = $this->getRuleSet('basic');
+
         $this->validate($rules);
-        $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TI THE MODEL ATTRIBUTES LIST????
+        $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TO THE MODEL ATTRIBUTES LIST????
 
         $this->shop->syncUploads();
         $this->shop->content = Purifier::clean($this->shop->content); // TODO: Fix purifier to prevent XSS

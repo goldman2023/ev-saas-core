@@ -145,7 +145,7 @@
          x-data="{
             errors: {}
          }"
-        @validation-errors.window="errors = $event.detail.errors;"
+        @validation-errors.window="errors = getSafe(() => $event.detail.errors);"
          @display-address-modal.window="errors = {}">
         <div class="modal-dialog modal-dialog-centered" role="document"
              wire:target="saveAddress()"
@@ -408,10 +408,23 @@
                         </label>
                     </div>
 
+                    <template x-if="errors.hasOwnProperty('general')">
+                        <div class="col-12 mt-4">
+                            <div class="d-block py-2 px-2 bg-danger rounded text-white text-14" x-text="getSafe(() => errors['general'][0])"></div>
+                        </div>
+                    </template>
                 </div>
                 <div class="modal-footer">
+{{--                    <template x-if="1=1">--}}
+                        <button type="button"
+                                class="btn btn-primary mr-auto d-flex align-items-center justify-content-center"
+                                @click="$wire.removeAddress()">
+                            @svg('heroicon-o-trash', ['class' => 'square-22'])
+                        </button>
+{{--                    </template>--}}
+
                     <button type="button" class="btn btn-white" data-dismiss="modal">{{ translate('Close') }}</button>
-                    <button type="button" class="btn btn-primary" @click="$wire.saveAddress().then(result => console.log(result))">{{ translate('Save') }}</button>
+                    <button type="button" class="btn btn-primary" @click="$wire.saveAddress()">{{ translate('Save') }}</button>
                 </div>
             </div>
         </div>
