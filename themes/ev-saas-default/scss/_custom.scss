@@ -82,6 +82,10 @@
     pointer-events: none;
 }
 
+.noselect {
+    user-select: none;
+}
+
 .avatar, .fit-cover {
     object-fit: cover;
 }

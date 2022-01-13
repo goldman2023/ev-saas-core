@@ -3,7 +3,9 @@
 namespace App\Http\Livewire\Dashboard\Forms\Addresses;
 
 
+use App\Facades\MyShop;
 use App\Models\Address;
+use App\Models\ShopAddress;
 use DB;
 use EVS;
 use Categories;
@@ -17,7 +19,7 @@ class AddressesForm extends Component
     use RulesSets;
 
     public $addresses;
-    public ?Address $currentAddress;
+    public ShopAddress|Address|null $currentAddress;
     public $toast_id;
 
     /**
@@ -42,14 +44,22 @@ class AddressesForm extends Component
             'currentAddress.city' => ['required'],
             'currentAddress.state' => ['required'],
             'currentAddress.zip_code' => ['required'],
-            'currentAddress.phones' => ['required'],
-            'currentAddress.set_default' => ['required'],
+            'currentAddress.phones' => ['check_array:1,4'],
+            'currentAddress.is_primary' => ['required'],
+            'currentAddress.is_billing' => ['required'],
+            'currentAddress.location' => [],
+            'currentAddress.features' => [],
         ];
     }
 
     public function updatingCurrentAddress(&$address, $key) {
-        if(!$address instanceof Address) {
-            $address = new Address($address); // alpinejs passes arrays as data instead of Model type. This is the reason why we have to convert it to Address model.
+        if(!$address instanceof Address && !$address instanceof ShopAddress) {
+            // alpinejs passes arrays as data instead of Model type. This is the reason why we have to convert it to ShopAddress|Address model.
+            if(isset($address['features'], $address['location'])) {
+                $address = new ShopAddress($address); // only ShopAddress has features and location
+            } else {
+                $address = new Address($address);
+            }
         }
     }
 
@@ -61,7 +71,12 @@ class AddressesForm extends Component
     protected function messages()
     {
         return [
-
+            'currentAddress.address.required' => translate('Address is required'),
+            'currentAddress.country.required' => translate('Country is required'),
+            'currentAddress.city.required' => translate('City is required'),
+            'currentAddress.state.required' => translate('State is required'),
+            'currentAddress.zip_code.required' => translate('Zip Code is required'),
+            'currentAddress.phones.check_array' => translate('Must have at least one phone number with min 4 numbers'),
         ];
     }
 
@@ -71,16 +86,28 @@ class AddressesForm extends Component
     }
 
     public function saveAddress() {
-        $this->validate();
-
-        $address = Address::find($this->currentAddress->id)->fill($this->currentAddress->toArray());
-        $address->save();
-
-        if($address->set_default) {
-            Address::where('id', '!=', $address->id)->update(['set_default' => 0]);
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchBrowserEvent('validation-errors', ['errors' => $e->validator->messages()->toArray()]);
+            $this->validate();
         }
 
-        $this->addresses = auth()->user()->addresses()->get(); // re-init addresses
+        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
+
+        $address->save();
+
+
+        if($address->is_primary) {
+            app($this->currentAddress::class)::where('id', '!=', $address->id)->update(['is_primary' => 0]);
+        }
+
+        if($this->currentAddress instanceof ShopAddress) {
+            $this->addresses = MyShop::getShop()->addresses()->get(); // re-init shop addresses
+        } else if($this->currentAddress instanceof Address) {
+            $this->addresses = auth()->user()->addresses()->get(); // re-init user addresses
+        }
+
 
         $this->dispatchBrowserEvent('display-address-modal');
         $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => "Address successfully updated!"]);

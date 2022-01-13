@@ -162,4 +162,35 @@ class MyShopForm extends Component
         $this->dispatchBrowserEvent('contact-details-modal-hide');
         $this->toastify(translate('Contact details successfully updated.', 'success'));
     }
+
+    public function removeContactDetails($contacts, $current = null) {
+        $contact_details = $this->shop->settings->keyBy('setting')->get('contact_details');
+
+        foreach($contacts as $key => $contact) {
+            if($contact == $current) {
+                unset($contacts[$key]);
+            }
+        }
+
+        $contacts = array_values($contacts);
+
+        $has_primary = false;
+        foreach($contacts as $key => $contact) {
+            if($contact['is_primary'] ?? false) {
+                $has_primary = true;
+            }
+        }
+
+        if(!$has_primary && isset($contacts[0])) {
+            $contacts[0]['is_primary'] = true;
+        }
+
+        $contact_details->value = json_encode(array_values($contacts));
+        $contact_details->save();
+
+        $this->settings['contact_details'] = $contact_details->value;
+
+        $this->dispatchBrowserEvent('contact-details-modal-hide');
+        $this->toastify(translate('Contact details successfully removed.', 'success'));
+    }
 }

@@ -3,18 +3,77 @@
      x-data="{
         currentAddress: @entangle('currentAddress').defer,
         addresses: @entangle('addresses'),
-        showModal() {
+        available_features: @js(\App\Models\ShopAddress::getAvailableFeatures()),
+        map: null,
+        marker_layer_group: L.layerGroup(),
+        async showModal() {
             $('#updateAddressModal').modal('toggle');
-            this.initToggleSwitch();
-
-            console.log();
         },
         initToggleSwitch() {
             $('#updateAddressModal').find('.js-toggle-switch').each(function () {
                 var addressToggleSwitch = new HSToggleSwitch($(this)).init();
             });
+        },
+        async initLocationMap() {
+            if(this.currentAddress.hasOwnProperty('location')) {
+                this.map = L.map('modal_address_map', {
+                    'scrollWheelZoom': false
+                }).setView([0, 0], 17);
+
+                L.tileLayer.provider('OpenStreetMap.Mapnik', {
+                    attribution: '&copy; <a href=\'https://www.openstreetmap.org/copyright\'>OpenStreetMap</a> contributors'
+                }).addTo(this.map);
+
+                this.marker_layer_group.addTo(this.map); // add marker layer group to map
+
+                this.setAddressMarker(this.currentAddress.location);
+
+                setTimeout(() => {
+                    //this.map.invalidateSize();
+                }, 500);
+
+                // Locate
+                if(this.currentAddress.hasOwnProperty('location') && this.currentAddress.location == null) {
+                    this.locateAddressByText();
+                }
+
+                this.map.on('click', (e) => {
+                    this.setAddressMarker(e.latlng);
+                });
+            }
+        },
+        async locateAddressByText() {
+            if(this.currentAddress.hasOwnProperty('location')) {
+                let result = await window.EV.leaflet.geosearch.getResults(this.currentAddress.address+' '+this.currentAddress.city+' '+this.currentAddress.country);
+                if(result[0] !== undefined) {
+                    this.currentAddress.location = {
+                        lat: result[0]['y'],
+                        lng: result[0]['x']
+                    };
+                }
+            }
+        },
+        setAddressMarker(location) {
+            if(location !== null && location.hasOwnProperty('lat') && location.hasOwnProperty('lng')) {
+                this.map.setView(L.latLng(location));
+
+                this.marker_layer_group.clearLayers();
+                L.marker(L.latLng(location)).addTo(this.marker_layer_group);
+            }
         }
      }"
+     x-init="
+        $($el).on('shown.bs.modal', async function(event) {
+            initToggleSwitch();
+            await initLocationMap();
+        });
+        $($el).on('hidden.bs.modal', function (e) {
+          map.remove();
+
+        });
+         $watch('currentAddress.location', function(value) {
+            setAddressMarker(value);
+         });"
     @display-address-modal.window="showModal()">
     <!-- Addresses -->
 
@@ -48,9 +107,9 @@
                                                   wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
                             <div class="card-body position-relative">
-                                @if($address->set_default)
+                                @if($address->is_primary)
                                     <span class="position-absolute badge badge-primary text-10" style="right: 10px; top: 10px;">
-                                        {{ translate('Default') }}
+                                        {{ translate('Primary') }}
                                     </span>
                                 @endif
                                 <h6 class="card-subtitle">{{ \Countries::get(code: $address->country)->name ?? translate('Unknown') }}</h6>
@@ -73,19 +132,21 @@
     </div>
 
 
-    <div class="card-footer">
-        <div class="col-12 d-flex">
-            <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveEmail()">
-                {{ translate('Save') }}
-            </button>
-        </div>
-    </div>
+{{--    <div class="card-footer">--}}
+{{--        <div class="col-12 d-flex">--}}
+{{--            <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveEmail()">--}}
+{{--                {{ translate('Save') }}--}}
+{{--            </button>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
     <!-- Address change Modal -->
-    <div id="updateAddressModal" class="modal fade" tabindex="-1" role="dialog"
+    <div id="updateAddressModal" wire:ignore class="modal fade" tabindex="-1" role="dialog"
          x-data="{
-
-         }">
+            errors: {}
+         }"
+        @validation-errors.window="errors = $event.detail.errors;"
+         @display-address-modal.window="errors = {}">
         <div class="modal-dialog modal-dialog-centered" role="document"
              wire:target="saveAddress()"
              wire:loading.class="prevent-pointer-events opacity-4"
@@ -126,10 +187,14 @@
                             <label class="input-label " for="modal_address_address">{{ translate('Address') }}</label>
                             <input type="text"
                                    id="modal_address_address"
-                                   name="model_address_address"
+                                   name="modal_address_address"
                                    x-model="currentAddress.address"
                                    class="form-control"
                                    placeholder="Your address...">
+
+                            <template x-if="errors.hasOwnProperty('currentAddress.address')">
+                                <div class="invalid-feedback d-block mt-2" x-text="getSafe(() => errors['currentAddress.address'][0])"></div>
+                            </template>
                         </div>
                     </div>
 
@@ -163,10 +228,14 @@
                             <label class="input-label" for="modal_address_city">{{ translate('City') }}</label>
                             <input type="text"
                                    id="modal_address_city"
-                                   name="model_address_city"
+                                   name="modal_address_city"
                                    x-model="currentAddress.city"
                                    class="form-control"
                                    placeholder="City...">
+
+                            <template x-if="errors.hasOwnProperty('currentAddress.city')">
+                                <div class="invalid-feedback d-block mt-2" x-text="getSafe(() => errors['currentAddress.city'][0])"></div>
+                            </template>
                         </div>
                     </div>
 
@@ -175,10 +244,14 @@
                             <label class="input-label" for="modal_address_state">{{ translate('State') }}</label>
                             <input type="text"
                                    id="modal_address_state"
-                                   name="model_address_state"
+                                   name="modal_address_state"
                                    x-model="currentAddress.state"
                                    class="form-control"
                                    placeholder="State...">
+
+                            <template x-if="errors.hasOwnProperty('currentAddress.state')">
+                                <div class="invalid-feedback d-block mt-2" x-text="getSafe(() => errors['currentAddress.state'][0])"></div>
+                            </template>
                         </div>
                     </div>
 
@@ -187,10 +260,14 @@
                             <label class="input-label" for="modal_address_zip_code">{{ translate('Zip Code') }}</label>
                             <input type="text"
                                    id="modal_address_zip_code"
-                                   name="model_address_zip_code"
+                                   name="modal_address_zip_code"
                                    x-model="currentAddress.zip_code"
                                    class="form-control"
                                    placeholder="Zip code...">
+
+                            <template x-if="errors.hasOwnProperty('currentAddress.zip_code')">
+                                <div class="invalid-feedback d-block mt-2" x-text="getSafe(() => errors['currentAddress.zip_code'][0])"></div>
+                            </template>
                         </div>
                     </div>
 
@@ -242,26 +319,99 @@
                                         <i class="tio-add"></i> {{ translate('Add phone') }}
                                     </a>
                                 </template>
+
+                                <template x-if="errors.hasOwnProperty('currentAddress.phones')">
+                                    <div class="invalid-feedback d-block mt-3" x-text="getSafe(() => errors['currentAddress.phones'][0])"></div>
+                                </template>
                             </div>
                         </div>
                         <!-- End Form Group -->
                     </div>
 
+                    <!-- Features -->
+                    <template x-if="currentAddress.features">
+                        <div class="col-12"
+                             x-data="{
+                                toggleFeature(key) {
+                                    if(currentAddress.features.indexOf(key) === -1) {
+                                        currentAddress.features.push(key);
+                                    } else {
+                                        currentAddress.features.splice(currentAddress.features.indexOf(key), 1);
+                                    }
+                                }
+                             }">
+                            <!-- Form Group -->
+                            <div class="row form-group">
+                                <label class="col-sm-3 col-form-label input-label">
+                                    {{ translate('Features') }}
+                                </label>
+
+                                <div class="col-sm-9">
+                                    <template x-if="available_features">
+                                        <template x-for="[key, value] of Object.entries(available_features)">
+                                            <span class="badge mr-2 mb-1 pointer noselect" x-text="value"
+                                                :class="{'badge-success': currentAddress.features.indexOf(key) !== -1, 'badge-dark': currentAddress.features.indexOf(key) === -1}"
+                                                @click="toggleFeature(key)"
+                                            ></span>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <!-- END Features -->
+
+
+                    <!-- Location -->
+                    <template x-if="currentAddress.hasOwnProperty('location')">
+                        <div class="col-12"
+                             x-data="{
+
+                             }">
+                            <!-- Form Group -->
+                            <div class="row form-group">
+                                <label class="col-sm-12 col-form-label input-label">
+                                    {{ translate('Set location marker') }}
+                                </label>
+
+                                <div class="col-sm-12">
+                                    <div class="map-container" >
+                                        <div class="map-frame w-100 h-100" >
+                                            <div id="modal_address_map" class="leaflet-custom rounded w-100" style="height: 300px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
                     <div class="col-12">
-                        <label class="toggle-switch mx-2" for="customSwitchModalEg">
-                            <input type="checkbox" x-model="currentAddress.set_default" class="js-toggle-switch toggle-switch-input" id="customSwitchModalEg">
+                        <label class="toggle-switch mx-2" for="customSwitchIsPrimary">
+                            <input type="checkbox" x-model="currentAddress.is_primary" class="js-toggle-switch toggle-switch-input" id="customSwitchIsPrimary">
                             <span class="toggle-switch-label">
                                 <span class="toggle-switch-indicator"></span>
                             </span>
 
-                            <span class="ml-3">{{ translate('Use as default address') }}</span>
+                            <span class="ml-3">{{ translate('Use as primary address') }}</span>
+                        </label>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <label class="toggle-switch mx-2" for="customSwitchIsBilling">
+                            <input type="checkbox" x-model="currentAddress.is_billing" class="js-toggle-switch toggle-switch-input" id="customSwitchIsBilling">
+                            <span class="toggle-switch-label">
+                                <span class="toggle-switch-indicator"></span>
+                            </span>
+
+                            <span class="ml-3">{{ translate('Use as default billing address') }}</span>
                         </label>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">{{ translate('Close') }}</button>
-                    <button type="button" class="btn btn-primary" wire:click="saveAddress()">{{ translate('Save') }}</button>
+                    <button type="button" class="btn btn-primary" @click="$wire.saveAddress().then(result => console.log(result))">{{ translate('Save') }}</button>
                 </div>
             </div>
         </div>

@@ -54,5 +54,9 @@ class AppServiceProvider extends ServiceProvider
       Validator::extend('if_id_exists', function ($attribute, $value, $parameters, $validator) {
           return (new IfIDExists($parameters, $validator))->passes($attribute, $value);
       });
+
+      Validator::extend('check_array', function ($attribute, $value, $parameters, $validator) {
+          return count(array_filter($value, function($var) use ($parameters) { return ( $var && $var >= $parameters[0] && strlen($var) >= $parameters[1]); }));
+      });
   }
 }

@@ -9,11 +9,12 @@ class Address extends Model
 
     protected $table = 'addresses';
 
-    protected $fillable = ['id', 'user_id', 'address','country','city', 'zip_code','phones','set_default','state','address_2'];
+    protected $fillable = ['id', 'user_id', 'address','country','city', 'zip_code','phones','is_primary', 'is_billing','state','address_2'];
 
     protected $casts = [
 //        'phones' => 'array',
-        'set_default' => 'boolean'
+        'is_primary' => 'boolean',
+        'is_billing' => 'boolean'
     ];
 
     public function user() {

@@ -11,19 +11,21 @@ class ShopAddress extends Model
 
     protected $table = 'shop_addresses';
 
-    protected $fillable = ['id', 'shop_id', 'address', 'country', 'city', 'state', 'zip_code', 'phones', 'features', 'location', 'is_primary'];
+    protected $fillable = ['id', 'shop_id', 'address', 'country', 'city', 'state', 'zip_code', 'phones', 'features', 'location', 'is_primary', 'is_billing'];
 
-    protected $available_features = [
+    public static $available_features = [
         'pet_friendly' => 'Pet friendly',
         'outdoor' => 'Outdoor',
         'smoking_allowed' => 'Allowed smoking',
         'delivery' => 'Delivery',
+        'wifi' => 'Free WiFi'
     ];
 
     protected $casts = [
         'location' => 'array',
         'features' => 'array',
-        'set_default' => 'boolean'
+        'is_primary' => 'boolean',
+        'is_billing' => 'boolean'
     ];
 
     public function shop()
@@ -37,5 +39,9 @@ class ShopAddress extends Model
         }
 
         return is_array($value) ? $value : json_decode($value, true);
+    }
+
+    public static function getAvailableFeatures() {
+        return self::$available_features;
     }
 }
