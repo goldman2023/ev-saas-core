@@ -18,7 +18,7 @@ use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
 
-class UserSettingsCard extends Component
+class StaffSettingsCard extends Component
 {
     use RulesSets;
 
@@ -118,7 +118,7 @@ class UserSettingsCard extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.forms.users.user-settings-card');
+        return view('livewire.dashboard.forms.users.staff-settings-card');
     }
 
 }

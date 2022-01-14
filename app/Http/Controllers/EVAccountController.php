@@ -65,14 +65,14 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.payment-methods-settings', compact('universal_payment_methods', 'my_universal_payment_methods', 'custom_payment_methods'));
     }
 
-    public function users_settings(Request $request) {
+    public function staff_settings(Request $request) {
         // Allow access to this page only if current user is Admin or Seller (admin of the current shop).
         // Basically, if user has permissions to change other users permissions
 
         $users = MyShop::getShop()->users;
         $all_roles = \Permissions::getRoles(from_db: true);
 
-        return view('frontend.dashboard.settings.users-settings', compact('users', 'all_roles'));
+        return view('frontend.dashboard.settings.staff-settings', compact('users', 'all_roles'));
     }
 
     public function shop_settings(Request $request) {

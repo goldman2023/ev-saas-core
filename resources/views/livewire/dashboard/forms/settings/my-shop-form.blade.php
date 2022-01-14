@@ -58,31 +58,43 @@
                        "stickyOffsetTop": 20
                      }'>
                     <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer"
+                        <a class="nav-link py-3 pointer active d-flex align-items-center "
                            :class="{'active': current === 'basicInformation'}"
                            @click="current = 'basicInformation';">
-                            <i class="tio-user-outlined nav-icon"></i> {{ translate('Basic information') }}
+                            @svg('heroicon-o-information-circle', ['class' => 'square-20 mr-2'])
+                            {{ translate('Basic info') }}
                         </a>
                     </li>
                     <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer"
+                        <a class="nav-link py-3 pointer d-flex align-items-center"
+                           :class="{'active': current === 'companyInfoSection'}"
+                           @click="current = 'companyInfoSection';" >
+                            @svg('heroicon-o-office-building', ['class' => 'square-20 mr-2'])
+                            {{ translate('Company info') }}
+                        </a>
+                    </li>
+                    <li class="nav-item w-100">
+                        <a class="nav-link py-3 pointer d-flex align-items-center"
                            :class="{'active': current === 'contactDetailsSection'}"
                            @click="current = 'contactDetailsSection';" >
-                            <i class="tio-mobile-outlined nav-icon"></i> {{ translate('Contact details') }}
+                            @svg('heroicon-o-phone-incoming', ['class' => 'square-20 mr-2'])
+                            {{ translate('Contact details') }}
                         </a>
                     </li>
                     <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer"
+                        <a class="nav-link py-3 pointer d-flex align-items-center"
                            :class="{'active': current === 'addressesSection'}"
                            @click="current = 'addressesSection';" >
-                            <i class="tio-home-outlined nav-icon"></i> {{ translate('Addresses') }}
+                            @svg('heroicon-o-location-marker', ['class' => 'square-20 mr-2'])
+                            {{ translate('Addresses') }}
                         </a>
                     </li>
                     <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer"
-                           :class="{'active': current === 'addressesSection'}"
-                           @click="current = 'addressesSection';" >
-                            <i class="tio-world-outlined nav-icon"></i> {{ translate('Domains') }}
+                        <a class="nav-link py-3 pointer d-flex align-items-center"
+                           :class="{'active': current === 'domainsSection'}"
+                           @click="current = 'domainsSection';" >
+                            @svg('heroicon-o-globe-alt', ['class' => 'square-20 mr-2'])
+                            {{ translate('Domains') }}
                         </a>
                     </li>
                 </ul>
@@ -390,6 +402,69 @@
         </div>
         <!-- END BasicInformation -->
 
+
+        <!-- Company Info Card -->
+        <div class="card mb-3 mb-lg-5 position-relative"
+             id="companyInfoSection"
+             x-data="{}"
+        >
+            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+                                  wire:target="saveBasicInformation"
+                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+
+            <div class="card-header">
+                <h2 class="card-title h4">{{ translate('Company information') }}</h2>
+            </div>
+
+            <div class=""
+                 wire:loading.class="opacity-3 prevent-pointer-events"
+                 wire:target="saveBasicInformation"
+            >
+                <div class="card-body">
+
+                    <!-- Settings Tax number -->
+                    <div class="row form-group">
+                        <label for="shop-name" class="col-sm-3 col-form-label input-label">{{ translate('Company TAX number') }}</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm-down-break">
+                                <input type="text" class="form-control @error('settings.tax_number') is-invalid @enderror" name="settings.tax_number" id="settings-tax_number" placeholder="{{ translate('Your company Tax number') }}"
+                                       x-model="settings.tax_number">
+                            </div>
+
+                            @error('settings.tax_number')
+                                <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Shop Tagline/motto -->
+                    <div class="row form-group">
+                        <label for="shop-name" class="col-sm-3 col-form-label input-label">{{ translate('Company registration number') }}</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group input-group-sm-down-break">
+                                <input type="text" class="form-control @error('settings.registration_number') is-invalid @enderror" name="settings.registration_number" id="settings-registration_number" placeholder="{{ translate('Your company Registration number') }}"
+                                       x-model="settings.registration_number">
+                            </div>
+
+                            @error('settings.registration_number')
+                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="col-12 d-flex">
+                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$wire.saveCompanyInfo()">
+                            {{ translate('Save') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Company Info -->
 
         <!-- ContactDetails Card -->
         @include('frontend.dashboard.settings.partials.shop-settings.contact-details')

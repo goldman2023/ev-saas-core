@@ -11,9 +11,9 @@
         <div class="card-body">
             @if($users->isNotEmpty())
                 @foreach($users as $key => $user)
-                    <livewire:dashboard.forms.users.user-settings-card
+                    <livewire:dashboard.forms.users.staff-settings-card
                         :user="$user" :all_roles="$all_roles" class="mb-2">
-                    </livewire:dashboard.forms.users.user-settings-card>
+                    </livewire:dashboard.forms.users.staff-settings-card>
                 @endforeach
             @endif
         </div>
@@ -40,5 +40,5 @@
     <!-- JS Front -->
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
 
-    <script src="{{ static_asset('js/crud/user-settings-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/staff-settings-form.js', false, true, true) }}"></script>
 @endpush

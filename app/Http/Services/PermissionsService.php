@@ -58,7 +58,7 @@ class PermissionsService
         } else {
             $data = collect([
                 'Owner' => $this->getAllPossiblePermissions(),
-                'Editor' => array_merge($this->getProductPermissions(), $this->getBlogPermissions(), $this->getReviewsPermissions(), $this->getOrdersPermissions()),
+                'Editor' => array_merge($this->getProductPermissions(), $this->getBlogPermissions(), $this->getReviewsPermissions(), $this->getOrdersPermissions(), $this->getLeadsPermissions()),
                 'HR' => array_merge($this->getStaffPermissions(), $this->getReviewsPermissions(), [
                     'view_shop_data' => 'View shop data',
                     'view_shop_settings' => 'View shop settings',
@@ -82,10 +82,31 @@ class PermissionsService
             $this->getOrdersPermissions(),
             $this->getProductPermissions(),
             $this->getReviewsPermissions(),
-            $this->getBlogPermissions()
+            $this->getBlogPermissions(),
+            $this->getCustomersPermissions(),
+            $this->getPaymentMethodsUniversalPermissions(),
+            $this->getDesignsPermissions(),
+            $this->getLeadsPermissions()
         ));
     }
 
+    public function getAllPermissionsGroupsFunctionNames() {
+        return [
+            translate('Shop') => 'getShopPermissions',
+            translate('Staff') => 'getStaffPermissions',
+            translate('Customers') => 'getCustomersPermissions',
+            translate('Orders') => 'getOrdersPermissions',
+            translate('Products') => 'getProductPermissions',
+            translate('Blog') => 'getBlogPermissions',
+            translate('Reviews') => 'getReviewsPermissions',
+            translate('Leads') => 'getLeadsPermissions',
+            translate('Payment Methods Universal') => [
+                'fname' => 'getPaymentMethodsUniversalPermissions',
+                'user_types' => User::$tenant_user_types
+            ],
+            translate('Design') => 'getDesignsPermissions'
+        ];
+    }
 
     public function getShopPermissions() {
         return [
@@ -113,7 +134,7 @@ class PermissionsService
 
     public function getProductPermissions() {
         return [
-            'crud_others_products' => 'Allow managing other users products',
+            'all_products' => 'Allow managing all products',
             'browse_products' => 'Browse products',
             'view_product' => 'View product',
             'update_product' => 'Update product',
@@ -143,7 +164,7 @@ class PermissionsService
 
     public function getBlogPermissions() {
         return [
-            'crud_others_posts' => 'Allow managing other users posts',
+            'all_posts' => 'Allow managing all posts',
             'browse_posts' => 'Browse posts',
             'view_post' => 'View post',
             'insert_post' => 'Create post',
@@ -166,6 +187,42 @@ class PermissionsService
             'delete_review' => 'Delete review',
             'approve_review' => 'Approve review',
             'disapprove_review' => 'Disapprove review',
+        ];
+    }
+
+    public function getCustomersPermissions() {
+        return [
+            'all_customers' => 'Allow managing all customers',
+            'browse_customers' => 'Browse customers',
+            'view_customer' => 'View customer'
+        ];
+    }
+
+    public function getDesignsPermissions() {
+        return [
+            'browse_designs' => 'Browse designs',
+
+        ];
+    }
+
+    public function getPaymentMethodsUniversalPermissions() {
+        return [
+            'browse_uni_payment_methods' => 'Browse uni. payment methods',
+            'view_uni_payment_methods' => 'View uni. payment method',
+            'insert_uni_payment_methods' => 'Insert uni. payment methods',
+            'update_uni_payment_methods' => 'Update uni. payment methods',
+            'delete_uni_payment_methods' => 'Delete uni. payment methods',
+        ];
+    }
+
+    public function getLeadsPermissions() {
+        return [
+            'all_leads' => 'All leads',
+            'browse_leads' => 'Browse leads',
+            'view_lead' => 'View lead',
+            'insert_leads' => 'Create leads',
+            'update_leads' => 'Update leads',
+            'delete_leads' => 'Delete leads',
         ];
     }
 }

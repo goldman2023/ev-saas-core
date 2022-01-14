@@ -32,9 +32,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'banned' => 'boolean'
     ];
 
-    public static array $user_types = ['admin','moderator','seller','staff'];
+    public static array $user_types = ['admin','moderator','seller','staff','customer'];
     public static array $tenant_user_types = ['admin','moderator'];
     public static array $vendor_user_types = ['seller','staff'];
+    public static array $non_customer_user_types = ['admin','moderator','seller','staff'];
     public static string $customer_type = 'customer';
 
     public function sendEmailVerificationNotification()
