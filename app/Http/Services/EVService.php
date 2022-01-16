@@ -58,11 +58,7 @@ class EVService
     public function getDashboardMenu() {
         return collect($this->getDashboardMenuTemplate())->map(function($group) {
             $group['items'] = collect($group['items'])->filter(function($child) use($group) {
-                return (
-                    in_array(auth()->user()->user_type ?? null, $child['user_types'], true) // check if user_type can see menu-item
-                    &&
-                    (empty($child['permissions']) || auth()->user()->hasAnyDirectPermission($child['permissions'])) // check if user has correct permissions to access menu-item
-                );
+                return \Permissions::canAccess($child['user_types'], $child['permissions']);
             })->toArray();
             return  $group;
         })->filter(fn($group) => !empty($group['items']))->toArray();

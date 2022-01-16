@@ -225,4 +225,19 @@ class PermissionsService
             'delete_leads' => 'Delete leads',
         ];
     }
+
+
+    public function canAccess(string|array $allowed_user_types, string|array $allowed_permissions, bool $abort = true) {
+        // Super admin has the access to all pages!
+        if(auth()->user()->user_type === 'admin') {
+            return true;
+        }
+
+        if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
+            (empty($allowed_permissions) || auth()->user()->hasAnyDirectPermission($allowed_permissions))) {
+            return true;
+        }
+
+        return $abort ? abort(403) : false;
+    }
 }

@@ -7,6 +7,7 @@ use MyShop;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
 use Illuminate\Http\Request;
+use Permissions;
 use Session;
 use Cookie;
 
@@ -76,6 +77,8 @@ class EVAccountController extends Controller
     }
 
     public function shop_settings(Request $request) {
+        Permissions::canAccess(User::$non_customer_user_types, ['view_shop_data', 'view_shop_settings']);
+
         $shop = MyShop::getShop();
 
         return view('frontend.dashboard.settings.shop-settings', compact('shop'));

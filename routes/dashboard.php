@@ -7,6 +7,7 @@ use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
+use App\Models\User;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;

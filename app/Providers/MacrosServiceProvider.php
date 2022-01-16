@@ -6,6 +6,7 @@ use App\Builders\ProductsBuilder;
 use App\Models\Product;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +22,6 @@ class MacrosServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->setRouteMacros();
         $this->setEloquentBuilderMacros();
         $this->setEloquentRelationMacros();
         $this->setCollectionMacros();
@@ -38,10 +38,7 @@ class MacrosServiceProvider extends ServiceProvider
 
     }
 
-    protected function setRouteMacros(): void
-    {
 
-    }
 
     protected function setCacheRepositoryMacros(): void {
         // These macros are used like this: Cache::store()->{macro()}; (NOT like this: Cache::{macro()})
