@@ -92,7 +92,7 @@
         </x-default.headers.header>
 
         {{-- <div class="space-top-lg-3 space-top-3"> --}}
-            <div>
+            <div class="app-layout-container d-flex" style="flex-basis: 100%; flex-wrap: wrap; flex-direction: column;">
                 {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
 
                 @yield('content')
