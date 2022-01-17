@@ -324,6 +324,8 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
+    Route::resource('knowledge-base', 'KnowledgeBaseController');
+
 
     // Tenant Management routes - added from SaaS Boilerplate
 
