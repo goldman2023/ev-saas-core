@@ -43,6 +43,10 @@ class MyShopForm extends Component
                 'settings.company_email' => ['required', ], //'email:rfs,dns'
                 'settings.websites' => ['required'],
             ],
+            'company_info' => [
+                'settings.tax_number' => [''],
+                'settings.registration_number' => ['']
+            ],
             'settings' => [
                 'settings.*' => [],
 
@@ -120,21 +124,21 @@ class MyShopForm extends Component
 
         $this->shop->save();
 
-        // Save data in settings table
-        $old_settings = $this->shop->settings()->get()->keyBy('setting');
-
-        foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
-            $setting_key = explode('.', $key)[1];
-
-            if(!empty($setting_key) && $setting_key !== '*') {
-                $setting = $old_settings->get($setting_key);
-                $setting->value = $this->settings[$setting_key];
-                $setting->save();
-            }
-
-        }
+        $this->saveSettings($rules);
 
         $this->toastify(translate('Basic shop information successfully updated.', 'success'));
+    }
+
+
+
+    public function saveCompanyInfo() {
+        $rules = $this->getRuleSet('company_info');
+
+        $this->validate($rules);
+
+        $this->saveSettings($rules);
+
+        $this->toastify(translate('Company info successfully updated.', 'success'));
     }
 
     public function saveContactDetails($contacts, $current = null) {
@@ -188,5 +192,23 @@ class MyShopForm extends Component
 
         $this->dispatchBrowserEvent('contact-details-modal-hide');
         $this->toastify(translate('Contact details successfully removed.', 'success'));
+    }
+
+    /*
+     * Saves all settings provided in $rules variable.
+     */
+    protected function saveSettings($rules) {
+        // Save data in settings table
+        $old_settings = $this->shop->settings()->get()->keyBy('setting');
+
+        foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
+            $setting_key = explode('.', $key)[1];
+
+            if(!empty($setting_key) && $setting_key !== '*') {
+                $setting = $old_settings->get($setting_key);
+                $setting->value = $this->settings[$setting_key];
+                $setting->save();
+            }
+        }
     }
 }

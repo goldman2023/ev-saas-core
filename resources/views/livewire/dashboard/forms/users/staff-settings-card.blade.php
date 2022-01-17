@@ -1,6 +1,6 @@
 <div class="lw-form card rounded position-relative {{ $class }}"
-     wire:key="user-settings-{{ $user->id }}"
-     key="user-settings-{{ $user->id }}"
+     wire:key="staff-settings-{{ $user->id }}"
+     key="staff-settings-{{ $user->id }}"
      x-cloak
      x-data="{
         show: false,
@@ -144,95 +144,33 @@
 
                 </div>
 
-                <div class="col-3">
-                    <h5 class="text-18 fw-700 mb-3">{{ translate('Shop') }}</h5>
-                    @foreach(\Permissions::getShopPermissions() as $key => $name)
-                        <div class="form-group">
-                            <!-- Checkbox -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
-                                       wire:model.defer="permissions.{{ $key }}.selected">
-                                <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
-                            </div>
-                            <!-- End Checkbox -->
-                        </div>
-                    @endforeach
-                </div>
+                @if(!empty($function_names = \Permissions::getAllPermissionsGroupsFunctionNames()))
+                    @foreach($function_names as $label => $item)
+                        @php
+                            $fname = is_array($item) ? $item['fname'] : $item;
+                            $user_types = is_array($item) ? ($item['user_types'] ?? \App\Models\User::$user_types) : \App\Models\User::$user_types;
+                        @endphp
 
-                <div class="col-3 column-divider">
-                    <h5 class="text-18 fw-700 mb-3">{{ translate('Staff') }}</h5>
-                    @foreach(\Permissions::getStaffPermissions() as $key => $name)
-                        <div class="form-group">
-                            <!-- Checkbox -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
-                                       wire:model.defer="permissions.{{ $key }}.selected">
-                                <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
+                        @if(in_array(auth()->user()->user_type, $user_types, true))
+                            <div class="col-3 mb-3">
+                                <h5 class="text-18 fw-700 mb-3">{{ $label }}</h5>
+                                @foreach(\Permissions::{$fname}() as $key => $name)
+                                    <div class="form-group">
+                                        <!-- Checkbox -->
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
+                                                   wire:model.defer="permissions.{{ $key }}.selected">
+                                            <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
+                                        </div>
+                                        <!-- End Checkbox -->
+                                    </div>
+                                @endforeach
                             </div>
-                            <!-- End Checkbox -->
-                        </div>
+                        @endif
                     @endforeach
-                </div>
 
-                <div class="col-3 column-divider">
-                    <h5 class="text-18 fw-700 mb-3">{{ translate('Products') }}</h5>
-                    @foreach(\Permissions::getProductPermissions() as $key => $name)
-                        <div class="form-group">
-                            <!-- Checkbox -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
-                                       wire:model.defer="permissions.{{ $key }}.selected">
-                                <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
-                            </div>
-                            <!-- End Checkbox -->
-                        </div>
-                    @endforeach
-                </div>
+                @endif
 
-                <div class="col-3 column-divider">
-                    <h5 class="text-18 fw-700 mb-3">{{ translate('Orders') }}</h5>
-                    @foreach(\Permissions::getOrdersPermissions() as $key => $name)
-                        <div class="form-group">
-                            <!-- Checkbox -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
-                                       wire:model.defer="permissions.{{ $key }}.selected">
-                                <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
-                            </div>
-                            <!-- End Checkbox -->
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="col-3 ">
-                    <h5 class="text-18 fw-700 mb-3">{{ translate('Blog Posts') }}</h5>
-                    @foreach(\Permissions::getBlogPermissions() as $key => $name)
-                        <div class="form-group">
-                            <!-- Checkbox -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
-                                       wire:model.defer="permissions.{{ $key }}.selected">
-                                <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
-                            </div>
-                            <!-- End Checkbox -->
-                        </div>
-                    @endforeach
-                </div>
-
-                <div class="col-3 column-divider">
-                    <h5 class="text-18 fw-700 mb-3">{{ translate('Reviews') }}</h5>
-                    @foreach(\Permissions::getReviewsPermissions() as $key => $name)
-                        <div class="form-group">
-                            <!-- Checkbox -->
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="user-{{ $user->id }}-permission-{{ $key }}" class="custom-control-input"
-                                       wire:model.defer="permissions.{{ $key }}.selected">
-                                <label class="custom-control-label" for="user-{{ $user->id }}-permission-{{ $key }}">{{ $name }}</label>
-                            </div>
-                            <!-- End Checkbox -->
-                        </div>
-                    @endforeach
-                </div>
             </div>
         </div>
 

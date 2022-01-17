@@ -8,6 +8,7 @@ use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
+use App\Models\User;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
@@ -77,7 +78,7 @@ Route::middleware([
         Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('settings.design.store');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('settings.domains');
-        Route::get('/users-settings', [EVAccountController::class, 'users_settings'])->name('settings.users_settings');
+        Route::get('/staff-settings', [EVAccountController::class, 'staff_settings'])->name('settings.staff_settings');
         Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
 
 

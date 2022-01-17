@@ -46,7 +46,7 @@
                 {{-- TODO: Add role-dependent menu items for Sellers(multi-vendor). --}}
                 {{-- IMPORTANT: Do not add admin-dependent menu items, like global SaaS settings and all sellers CRUD etc. We already have this in Admin panel! --}}
 
-                @if($menu = \EVS::getVendorMenuByRole('admin'))
+                @if($menu = \EVS::getDashboardMenu())
                     @foreach($menu as $section)
                         @if($section['label'] === 'hr')
                             <div class="dropdown-divider"></div>

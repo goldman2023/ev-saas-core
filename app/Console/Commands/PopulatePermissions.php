@@ -48,6 +48,10 @@ class PopulatePermissions extends Command
         // init tenant
         tenancy()->initialize($tenant);
 
+        $this->info('Removing permissions cache...');
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions(); // remove permissions cache
+        $this->info('Permissions cache removed...');
+
         // Populate Permissions
         $permissions = new PermissionsService(init: true);
         $all_permissions = $permissions->getAllPossiblePermissions();
