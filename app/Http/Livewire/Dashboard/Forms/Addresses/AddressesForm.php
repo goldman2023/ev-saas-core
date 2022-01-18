@@ -28,11 +28,10 @@ class AddressesForm extends Component
      *
      * @return void
      */
-    public function mount($addresses, $currentAddress = null, $toast_id = 'my-account-updated-toast')
+    public function mount($addresses, $currentAddress = null)
     {
         $this->addresses = $addresses;
         $this->currentAddress = !empty($currentAddress) ? $currentAddress : $addresses->first();
-        $this->toast_id = $toast_id;
     }
 
     protected function rules()

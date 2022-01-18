@@ -62,6 +62,12 @@
                                         <a class="nav-link {{ $item['is_active'] }}" href="{{ $item['route'] }}">
                                             @svg($item['icon'], ['class' => 'nav-icon'])
                                             {{ $item['label'] }}
+
+                                            @if(($item['badge'] ?? null) && $item['badge']['content'] instanceof \Closure)
+                                                <span class="badge {{ $item['badge']['class'] }} text-12 ml-2 rounded">
+                                                    {{ $item['badge']['content']() ?? '' }}
+                                                </span>
+                                            @endif
                                         </a>
                                     </li>
                                 @endforeach

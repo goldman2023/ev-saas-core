@@ -18,18 +18,6 @@
             @endif
         </div>
     </div>
-
-    <x-ev.toast id="user-updated-toast"
-                position="bottom-center"
-                class="bg-success border-success text-white h3"
-                :is_x="true"
-                x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
-                @toast.window="if(event.detail.id == 'user-updated-toast') {
-                    content = event.detail.content;
-                    type = event.detail.type;
-                    show = true;
-                }"
-    ></x-ev.toast>
 @endsection
 
 

@@ -79,6 +79,20 @@ class Order extends Model
 //        return $this->hasMany(ClubPoint::class);
 //    }
 
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) => $query->where('billing_first_name', 'like', '%'.$term.'%')
+                ->orWhere('billing_last_name', 'like', '%'.$term.'%')
+                ->orWhere('payment_status', 'like', '%'.$term.'%')
+                ->orWhere('shipping_status', 'like', '%'.$term.'%')
+                ->orWhere('total_price', 'like', '%'.$term.'%')
+        );
+    }
+
 
     public static function trend($period = 30)
     {

@@ -34,18 +34,6 @@
 
         </div>
     </section>
-
-    <x-ev.toast id="payment-method-updated-toast"
-                position="bottom-center"
-                class="text-white h3"
-                :is_x="true"
-                x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
-                @toast.window="if(event.detail.id == 'payment-method-updated-toast') {
-                    content = event.detail.content;
-                    show = true;
-                    type = event.detail.type;
-                }"
-    ></x-ev.toast>
 @endsection
 
 @push('footer_scripts')

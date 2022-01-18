@@ -119,27 +119,29 @@
         <!-- Carts -->
         <livewire:cart.cart template="flyout-cart" />
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
-        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success h3" :is_x="true"
-            x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
-            @toast.window="if(event.detail.id == 'global-toast') {
-        content = event.detail.content;
-        show = true;
-    }">
+
+        <x-ev.toast id="global-toast"
+                    position="bottom-center"
+                    class="bg-success border-success text-white h3"
+                    :is_x="true"
+                    :timeout="4000">
         </x-ev.toast>
-        <script>
+
+    <script>
             document.addEventListener('toastIt', async function (event) {
-    let content = event.detail.content;
-    let id = event.detail.id;
+                let content = event.detail.content;
+                let id = event.detail.id;
 
-    $(id).find('.toast-body').text(content);
+                $(id).find('.toast-body').text(content);
 
-    $(id).toast({
-        delay: 3000
-    });
+                $(id).toast({
+                    delay: 3000
+                });
 
-    $(id).toast('show');
-});
+                $(id).toast('show');
+            });
         </script>
+
         @yield('modal')
 
         @yield('script')
@@ -163,17 +165,17 @@
             });
 
 
-            $(document).on('ready', function () {
-    // INITIALIZATION OF LEAFLET
-    // =======================================================
-    $('#map').each(function () {
-      var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
-
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        id: 'mapbox/light-v9'
-      }).addTo(leaflet);
-    });
-  });
+            // $(document).on('ready', function () {
+            //     // INITIALIZATION OF LEAFLET
+            //     // =======================================================
+            //     $('#map').each(function () {
+            //       var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
+            //
+            //       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            //         id: 'mapbox/light-v9'
+            //       }).addTo(leaflet);
+            //     });
+            //   });
         });
         </script>
 
