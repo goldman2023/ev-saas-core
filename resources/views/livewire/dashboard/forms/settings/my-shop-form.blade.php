@@ -22,12 +22,6 @@
             }, 500);
         })">
 
-    <x-ev.toast id="my-shop-updated-toast"
-                position="bottom-center"
-                content="{{ translate('My shop successfully updated!') }}"
-                class="bg-success border-success text-white h3"
-                @toastit.window="showToast($el, $event)"></x-ev.toast>
-
     <div class="col-lg-3">
         <!-- Navbar -->
         <div class="navbar-vertical navbar-expand-lg mb-3 mb-lg-5">

@@ -25,8 +25,6 @@ class MyAccountForm extends Component
     public $newPassword = '';
     public $newPassword_confirmation = '';
 
-    protected $toast_id = 'my-account-updated-toast';
-
     protected function getRuleSet($set = null) {
         $rulesSets = collect([
             // Basic information rules

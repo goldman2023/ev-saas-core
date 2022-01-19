@@ -88,13 +88,12 @@ class MyShopForm extends Component
      *
      * @return void
      */
-    public function mount($toast_id = 'my-shop-updated-toast')
+    public function mount()
     {
         $this->shop = auth()->user()->shop()->first();
         $this->settings = $this->shop->settings->keyBy('setting')->map(fn($item) => $item['value'])->toArray();
         $this->addresses = $this->shop->addresses;
         $this->domains = $this->shop->domains;
-        $this->toast_id = $toast_id;
     }
 
     public function updatingShop(&$shop, $key) {

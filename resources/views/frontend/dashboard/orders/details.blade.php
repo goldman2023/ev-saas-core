@@ -119,7 +119,7 @@
                                         qty: {{ $item->quantity }},
                                         model_id: {{ $item->subject_id }},
                                         model_type: '{!! addslashes($item->subject_type) !!}'
-                                    }">
+                                 }">
                                 <div class="row full-row">
 
                                     <div class="col-3">
@@ -487,15 +487,4 @@
     <script src="{{ static_asset('vendor/hs.datatables.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
-    <script>
-        $(window).on('load', function () {
-            var unfold = new HSUnfold('.js-hs-unfold-invoker').init();
-
-            $('.js-select2-custom').each(function () {
-                var select2 = $.HSCore.components.HSSelect2.init($(this));
-            });
-
-
-        });
-    </script>
 @endpush

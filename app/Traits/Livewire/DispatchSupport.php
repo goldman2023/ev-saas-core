@@ -4,7 +4,7 @@ namespace App\Traits\Livewire;
 
 trait DispatchSupport
 {
-    public string $toast_id;
+    public string $toast_id = 'global-toast';
 
     protected function toastify($msg = '', $type = 'info') {
         $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);

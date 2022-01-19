@@ -20,6 +20,12 @@ class EVOrderController extends Controller
         $order_items = $order->order_items;
         $user = $order->user;
 
+        // If order was not viewed, mark it as viewed!
+        if(!$order->viewed) {
+            $order->viewed = true;
+            $order->save();
+        }
+
         return view('frontend.dashboard.orders.details',  compact('order', 'order_items', 'user'));
     }
 

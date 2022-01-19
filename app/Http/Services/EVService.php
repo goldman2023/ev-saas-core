@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Facades\MyShop;
 use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductVariation;
@@ -58,7 +59,7 @@ class EVService
     public function getDashboardMenu() {
         return collect($this->getDashboardMenuTemplate())->map(function($group) {
             $group['items'] = collect($group['items'])->filter(function($child) use($group) {
-                return \Permissions::canAccess($child['user_types'], $child['permissions']);
+                return \Permissions::canAccess($child['user_types'], $child['permissions'], false);
             })->toArray();
             return  $group;
         })->filter(fn($group) => !empty($group['items']))->toArray();
@@ -66,6 +67,7 @@ class EVService
 
     protected function getDashboardMenuTemplate(): array
     {
+        // In order to show/hide certain items based on user type and permissions, you need to define user_types and permissions for each item
         return [
             [
                 'label' => translate('General'),
@@ -129,7 +131,13 @@ class EVService
                         'route' => route('orders.index'),
                         'is_active' => areActiveRoutes(['orders.index']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['browse_orders']
+                        'permissions' => ['browse_orders'],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function() {
+                                return MyShop::getShop()->orders()->where('viewed', 0)->count();
+                            }
+                        ]
                     ],
                     [
                         'label' => translate('Leads'),
