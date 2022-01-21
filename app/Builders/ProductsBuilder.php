@@ -14,7 +14,7 @@ use App\Traits\Eloquent\Cacher;
 use Illuminate\Support\Collection;
 use Vendor;
 
-class ProductsBuilder extends Builder
+class ProductsBuilder extends BaseBuilder
 {
     use Cacher;
 

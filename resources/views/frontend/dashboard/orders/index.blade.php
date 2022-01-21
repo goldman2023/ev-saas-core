@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('All Products'))
+@section('page_title', translate('All Orders'))
 
 @push('head_scripts')
 {{--    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.11.3/b-2.1.1/b-colvis-2.1.1/b-html5-2.1.1/b-print-2.1.1/date-1.1.1/fh-3.2.0/r-2.2.9/sl-1.3.4/datatables.min.css"/>--}}
@@ -12,65 +12,8 @@
         <!-- Header -->
         <div class="card-header">
             <h5 class="card-header-title">{{ translate('All Orders') }}</h5>
-{{--            <a href="{{ route('ev-products.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>--}}
+            <a href="{{ route('ev-products.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
 
-            <!-- Unfold -->
-            <div class="hs-unfold">
-                <a class="js-hs-unfold-invoker btn btn-icon btn-sm btn-ghost-secondary rounded-circle" href="javascript:;"
-                   data-hs-unfold-options='{
-                       "target": "#showHideDropdown",
-                       "type": "css-animation"
-                     }'>
-                    <i class="tio-table"></i>
-                </a>
-
-{{--                <div id="showHideDropdown" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right dropdown-card" style="width: 15rem;">--}}
-{{--                    <div class="card card-sm">--}}
-{{--                        <div class="card-body">--}}
-{{--                            <div class="d-flex justify-content-between align-items-center mb-3">--}}
-{{--                                <span class="mr-2">Country</span>--}}
-
-{{--                                <!-- Checkbox Switch -->--}}
-{{--                                <label class="toggle-switch toggle-switch-sm" for="toggleColumn_country">--}}
-{{--                                    <input type="checkbox" class="toggle-switch-input" id="toggleColumn_country" checked>--}}
-{{--                                    <span class="toggle-switch-label">--}}
-{{--                                      <span class="toggle-switch-indicator"></span>--}}
-{{--                                    </span>--}}
-{{--                                </label>--}}
-{{--                                <!-- End Checkbox Switch -->--}}
-{{--                            </div>--}}
-
-{{--                            <div class="d-flex justify-content-between align-items-center mb-3">--}}
-{{--                                <span class="mr-2">Position</span>--}}
-
-{{--                                <!-- Checkbox Switch -->--}}
-{{--                                <label class="toggle-switch toggle-switch-sm" for="toggleColumn_position">--}}
-{{--                                    <input type="checkbox" class="toggle-switch-input" id="toggleColumn_position" checked>--}}
-{{--                                    <span class="toggle-switch-label">--}}
-{{--                                      <span class="toggle-switch-indicator"></span>--}}
-{{--                                    </span>--}}
-{{--                                </label>--}}
-{{--                                <!-- End Checkbox Switch -->--}}
-{{--                            </div>--}}
-
-{{--                            <div class="d-flex justify-content-between align-items-center">--}}
-{{--                                <span class="mr-2">Status</span>--}}
-
-{{--                                <!-- Checkbox Switch -->--}}
-{{--                                <label class="toggle-switch toggle-switch-sm" for="toggleColumn_status">--}}
-{{--                                    <input type="checkbox" class="toggle-switch-input" id="toggleColumn_status" checked>--}}
-{{--                                    <span class="toggle-switch-label">--}}
-{{--                                      <span class="toggle-switch-indicator"></span>--}}
-{{--                                    </span>--}}
-{{--                                </label>--}}
-{{--                                <!-- End Checkbox Switch -->--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            --}}
-            </div>
-            <!-- End Unfold -->
         </div>
         <!-- End Header -->
 
