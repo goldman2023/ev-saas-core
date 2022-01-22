@@ -16,8 +16,12 @@ class EVOrderController extends Controller
         return view('frontend.dashboard.orders.index',  compact('orders_count'));
     }
 
+    public function create() {
+        return view('frontend.dashboard.orders.create');
+    }
+
     public function details(Request $request, $order_id) {
-        $order = Order::find($order_id);
+        $order = Order::findOrFail($order_id);
         $order_items = $order->order_items;
         $user = $order->user;
 

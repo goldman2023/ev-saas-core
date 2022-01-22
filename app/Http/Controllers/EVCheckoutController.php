@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\PaymentMethodUniversal;
 use App\Models\User;
 use CartService;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -52,40 +53,88 @@ class EVCheckoutController extends Controller
             'billing_first_name' => 'required|min:3',
             'billing_last_name' => 'required|min:3',
             'billing_company' => 'nullable',
+            'payment_method' => ['required', Rule::in(\App\Models\PaymentMethodUniversal::$available_gateways)],
+            'note' => 'nullable',
+            'same_billing_shipping' => 'nullable',
+            'newsletter' => 'nullable',
+            'buyers_consent' => 'required',
+            'selected_billing_address_id' => ''
+        ];
+
+        $address_rules = [
             'billing_address' => 'required|min:5',
             'billing_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
             'billing_state' => 'nullable',
             'billing_city' => 'required|min:3',
             'billing_zip' => 'required|min:2',
             'phone_numbers' => 'array|required', // TODO: Consider changing this to phone_number.* in order to specify which phone number is not valid
-            'payment_method' => ['required', Rule::in(\App\Models\PaymentMethodUniversal::$available_gateways)],
-            'note' => 'nullable',
-            'same_billing_shipping' => 'nullable',
-            'newsletter' => 'nullable'
         ];
 
-        // If billing and shipping address are not the same
-        if(empty($request->input('same_billing_shipping'))) {
-            $data_to_validate = array_merge($data_to_validate, [
-                'shipping_first_name' => 'required|min:3',
-                'shipping_last_name' => 'required|min:3',
-                'shipping_company' => 'nullable',
-                'shipping_address' => 'required|min:5',
-                'shipping_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
-                'shipping_state' => 'nullable',
-                'shipping_city' => 'required|min:3',
-                'shipping_zip' => 'required|min:2',
-            ]);
+        $shipping_rules = [
+            'shipping_first_name' => 'required|min:3',
+            'shipping_last_name' => 'required|min:3',
+            'shipping_company' => 'nullable',
+            'shipping_address' => 'required|min:5',
+            'shipping_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
+            'shipping_state' => 'nullable',
+            'shipping_city' => 'required|min:3',
+            'shipping_zip' => 'required|min:2',
+        ];
+
+        $add_billing_shipping_rules = function() use($request, &$data_to_validate, $address_rules, $shipping_rules) {
+            $data_to_validate = array_merge($data_to_validate, $address_rules);
+
+            if(empty($request->input('same_billing_shipping'))) {
+                if((int) $request->input('selected_shipping_address_id') === -1) {
+                    // Shipping address IS NOT a selected address, but a manually added address!
+                    $data_to_validate = array_merge($data_to_validate, $shipping_rules);
+                } else {
+                    // Shipping address IS a selected address
+                    $data_to_validate = array_merge($data_to_validate, [
+                        'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
+                    ]);
+                }
+            }
+        };
+
+        if(Auth::check()) {
+            if((int) $request->input('selected_billing_address_id') === -1) {
+                // Always validate billing info when user IS logged in AND DID NOT select billing address
+                $add_billing_shipping_rules();
+            } else {
+                $data_to_validate = array_merge($data_to_validate, [
+                    'selected_billing_address_id' => 'required|if_id_exists:App\Models\Address,id',
+                ]);
+
+                if(!$same_billing_shipping) {
+                    // shipping address IS NOT the same as the billing address
+
+                    if((int) $request->input('selected_shipping_address_id') === -1) {
+                        // Shipping address IS NOT a selected address, but a manually added address!
+                        $data_to_validate = array_merge($data_to_validate, $shipping_rules);
+                    } else {
+                        // Shipping address IS a selected address
+                        $data_to_validate = array_merge($data_to_validate, [
+                            'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
+                        ]);
+                    }
+                }
+            }
+        } else {
+            // Always validate bislling info when user is not authenticated
+            $add_billing_shipping_rules();
         }
 
+        // If billing and shipping address are not the same
         $validator = Validator::make($request->all(), $data_to_validate);
 
         if ($validator->fails()) {
+            //dd($data_to_validate);
             session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
             return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
                 ->withErrors($validator);
         }
-
+        dd($validator);
         // Retrieve the validated input...
         $data = $validator->validated();
 
@@ -95,7 +144,6 @@ class EVCheckoutController extends Controller
         $new_user = User::where('email', $data['email'])->first();
         if(empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on') {
             // Check if user with email is not already registered user.
-
             if($new_user instanceof User && !empty($new_user->id ?? null)) {
                 // Registered user
                 $account_password_rules = 'match_password:App\Models\User,email';

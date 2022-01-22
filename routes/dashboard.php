@@ -56,7 +56,8 @@ Route::middleware([
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
-        Route::get('/order/{id}', [EVOrderController::class, 'details'])->name('order.details');
+        Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
+        Route::get('/order/view/{id}', [EVOrderController::class, 'details'])->name('order.details');
 //        Route::resource('orders', 'EVOrderController')->parameters([
 //            'orders' => 'id',
 //        ])->except(['destroy']);

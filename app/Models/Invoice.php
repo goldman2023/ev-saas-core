@@ -51,6 +51,22 @@ class Invoice extends EVBaseModel
         return $this->morphTo('payment_method');
     }
 
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) => $query->where('id', 'like', '%'.$term.'%')
+                ->orWhere('invoice_number', 'like', '%'.$term.'%')
+                ->orWhere('email', 'like', '%'.$term.'%')
+                ->orWhere('billing_first_name', 'like', '%'.$term.'%')
+                ->orWhere('billing_last_name', 'like', '%'.$term.'%')
+                ->orWhere('payment_status', 'like', '%'.$term.'%')
+                ->orWhere('total_price', 'like', '%'.$term.'%')
+        );
+    }
+
 
 //    TODO: ORDER TRACKING NUMBER!!!
 //    public function refund_requests()
@@ -71,34 +87,4 @@ class Invoice extends EVBaseModel
 //        return $this->hasMany(ClubPoint::class);
 //    }
 
-    /*
-     * Scope searchable parameters
-     */
-    public function scopeSearch($query, $term)
-    {
-        return $query->where(
-            fn ($query) => $query->where('id', 'like', '%'.$term.'%')
-                ->orWhere('billing_first_name', 'like', '%'.$term.'%')
-                ->orWhere('billing_last_name', 'like', '%'.$term.'%')
-                ->orWhere('payment_status', 'like', '%'.$term.'%')
-                ->orWhere('total_price', 'like', '%'.$term.'%')
-        );
-    }
-
-
-    public static function trend($period = 30)
-    {
-        $present = Order::where('created_at', '>=', \Carbon::now()->subdays($period))->count();
-
-        $past = Order::where('created_at', '<=', \Carbon::now()->subdays($period))->count();
-
-        if ($present == 0) {
-            $present = 1;
-        }
-
-        $percentChange = (1 - $past / $present) * 100;
-
-
-        return $percentChange;
-    }
 }

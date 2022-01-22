@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('All Products'))
+@section('page_title', translate('Order #').($order->id??'').translate('details'))
 
 @push('head_scripts')
 

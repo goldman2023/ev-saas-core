@@ -34,6 +34,11 @@ class Order extends EVBaseModel
 
     protected $with = ['order_items', 'invoices'];
 
+    public const TYPES = ['standard', 'installments', 'subscription'];
+    public const TYPE_STANDARD = 'standard';
+    public const TYPE_INSTALLMENTS = 'installments';
+    public const TYPE_SUBSCRIPTION = 'subscription';
+
     public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
     public const PAYMENT_STATUS_UNPAID = 'unpaid';
     public const PAYMENT_STATUS_PENDING = 'pending';
@@ -55,15 +60,18 @@ class Order extends EVBaseModel
         return $this->belongsTo(Shop::class, 'shop_id');
     }
 
-    public function order_items() {
+    public function order_items()
+    {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
-    public function invoices() {
+    public function invoices()
+    {
         return $this->hasMany(Invoice::class, 'order_id', 'id');
     }
 
-    public static function count() {
+    public static function count()
+    {
         return self::where('shop_id', MyShop::getShop()->id ?? null)->count();
     }
 
@@ -99,7 +107,8 @@ class Order extends EVBaseModel
     public function scopeSearch($query, $term)
     {
         return $query->where(
-            fn ($query) => $query->where('billing_first_name', 'like', '%'.$term.'%')
+            fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
+                ->orWhere('billing_first_name', 'like', '%'.$term.'%')
                 ->orWhere('billing_last_name', 'like', '%'.$term.'%')
                 ->orWhere('payment_status', 'like', '%'.$term.'%')
                 ->orWhere('shipping_status', 'like', '%'.$term.'%')

@@ -12,7 +12,7 @@
         <!-- Header -->
         <div class="card-header">
             <h5 class="card-header-title">{{ translate('All Orders') }}</h5>
-            <a href="{{ route('ev-products.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
+            <a href="{{ route('order.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
 
         </div>
         <!-- End Header -->
@@ -71,8 +71,8 @@
 
 
     <div class="row mt-5">
-        <div class="col-4 d-flex">
-            <div class="card w-100">
+        <div class="col-12 col-md-6 col-lg-4 d-flex">
+            <div class="card w-100 mb-3">
                 <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">
                     <div class="pb-2">
                         @svg('lineawesome-file-invoice-solid', ['class' => 'square-32'])
@@ -90,8 +90,8 @@
                 </a>
             </div>
         </div>
-        <div class="col-4 d-flex">
-            <div class="card w-100">
+        <div class="col-12 col-md-6 col-lg-4 d-flex">
+            <div class="card w-100 mb-3">
                 <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">
                     <div class="pb-2">
                         @svg('lineawesome-question-solid', ['class' => 'square-32'])
@@ -109,25 +109,25 @@
                 </a>
             </div>
         </div>
-        <div class="col-4 d-flex">
-            <div class="card w-100">
-                <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">
-                    <div class="pb-2">
-                        @svg('lineawesome-file-invoice-dollar-solid', ['class' => 'square-32'])
-                    </div>
-                    <h5 class="text-20">
-                        {{ translate('Create Invoice') }}
-                    </h5>
-                    <p class="text-dark text-14 mb-4">
-                        {{ translate('Create single invoice for specific products/services manually.') }}
-                    </p>
-                    <span class="text-link d-flex align-items-center mt-auto">
-                        {{ translate('Get Started') }}
-                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])
-                    </span>
-                </a>
-            </div>
-        </div>
+{{--        <div class="col-12 col-md-6 col-lg-4 d-flex">--}}
+{{--            <div class="card w-100 mb-3">--}}
+{{--                <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">--}}
+{{--                    <div class="pb-2">--}}
+{{--                        @svg('lineawesome-file-invoice-dollar-solid', ['class' => 'square-32'])--}}
+{{--                    </div>--}}
+{{--                    <h5 class="text-20">--}}
+{{--                        {{ translate('Create Invoice') }}--}}
+{{--                    </h5>--}}
+{{--                    <p class="text-dark text-14 mb-4">--}}
+{{--                        {{ translate('Create single invoice for specific products/services manually.') }}--}}
+{{--                    </p>--}}
+{{--                    <span class="text-link d-flex align-items-center mt-auto">--}}
+{{--                        {{ translate('Get Started') }}--}}
+{{--                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])--}}
+{{--                    </span>--}}
+{{--                </a>--}}
+{{--            </div>--}}
+{{--        </div>--}}
     </div>
 
 @endsection

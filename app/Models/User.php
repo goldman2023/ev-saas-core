@@ -15,7 +15,11 @@ use Spark\Billable;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class User extends Authenticatable implements MustVerifyEmail
+use Bavix\Wallet\Traits\HasWalletFloat;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Interfaces\Wallet;
+
+class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
     use Notifiable, HasApiTokens;
     use HasRoles;
@@ -26,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use UploadTrait;
     use GalleryTrait;
     use SocialAccounts;
+    use HasWalletFloat;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
