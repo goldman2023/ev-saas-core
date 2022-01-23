@@ -235,8 +235,7 @@
                                                 <div class="col-12 mt-3">
                                                     <!-- Form Group -->
                                                     @php
-                                                        $phone_numbers = array_filter(request()->old('phone_numbers') ?? ['']);
-                                                        $phone_numbers = empty($phone_numbers) ? [''] : $phone_numbers;
+                                                        $phone_numbers = empty(request()->old('phone_numbers')) ? [''] : array_filter(request()->old('phone_numbers') ?? ['']);
                                                     @endphp
                                                     <div class="row form-group mb-2"
                                                          x-data="{
@@ -287,7 +286,10 @@
                                                             </template>
                                                         </div>
 
-                                                        <input type="hidden" name="phone_numbers" class="" x-model="phoneNumbers">
+                                                        <template x-for="[key, phone_number] of Object.entries(phoneNumbers)">
+                                                            <input type="hidden" name="phone_numbers[]" class="" x-model="phoneNumbers[key]">
+                                                        </template>
+
                                                     </div>
                                                     <!-- End Form Group -->
 
@@ -352,7 +354,7 @@
 
                                             <div class="col-sm-6 mt-3">
                                                 <label for="checkout_account_password" class="form-label">{{ translate('Password') }} <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control @error('account_password') is-invalid @enderror" name="account_password" id="checkout_account_password" value="{{ request()->old('shipping_first_name') }}"  required >
+                                                <input type="password" class="form-control @error('account_password') is-invalid @enderror" name="account_password" id="checkout_account_password" value="{{ request()->old('shipping_first_name') }}"  >
 
                                                 @error('account_password')
                                                 <div class="invalid-feedback">
@@ -363,7 +365,7 @@
 
                                             <div class="col-sm-6 mt-3">
                                                 <label for="checkout_account_password_confirmation" class="form-label">{{ translate('Confirm password') }} <span class="text-danger">*</span></label>
-                                                <input type="password" class="form-control @error('account_password_confirmation') is-invalid @enderror" name="account_password_confirmation" id="checkout_account_password_confirmation" value="{{ request()->old('shipping_first_name') }}"  required >
+                                                <input type="password" class="form-control @error('account_password_confirmation') is-invalid @enderror" name="account_password_confirmation" id="checkout_account_password_confirmation" value="{{ request()->old('shipping_first_name') }}"  >
 
                                                 @error('account_password_confirmation')
                                                 <div class="invalid-feedback">

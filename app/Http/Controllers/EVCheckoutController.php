@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Address;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentMethodUniversal;
@@ -11,6 +12,7 @@ use App\Models\User;
 use CartService;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -71,9 +73,9 @@ class EVCheckoutController extends Controller
         ];
 
         $shipping_rules = [
-            'shipping_first_name' => 'required|min:3',
-            'shipping_last_name' => 'required|min:3',
-            'shipping_company' => 'nullable',
+//            'shipping_first_name' => 'required|min:3',
+//            'shipping_last_name' => 'required|min:3',
+//            'shipping_company' => 'nullable',
             'shipping_address' => 'required|min:5',
             'shipping_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
             'shipping_state' => 'nullable',
@@ -129,12 +131,12 @@ class EVCheckoutController extends Controller
         $validator = Validator::make($request->all(), $data_to_validate);
 
         if ($validator->fails()) {
-            //dd($data_to_validate);
+            //dd($validator);
             session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
             return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
                 ->withErrors($validator);
         }
-        dd($validator);
+
         // Retrieve the validated input...
         $data = $validator->validated();
 
@@ -168,37 +170,78 @@ class EVCheckoutController extends Controller
 
         DB::beginTransaction();
 
-        $payment_method = PaymentMethodUniversal::where('gateway', $data['payment_method'])->first();
-
-        $phone_numbers = array_values(array_filter($data['phone_numbers']));
         try {
+            $payment_method = PaymentMethodUniversal::where('gateway', $data['payment_method'])->first();
+            $default_grace_period = 5; // 5 days is default grace period
+            $default_due_date = Carbon::now()->addDays(7)->toDateTimeString(); // 7 days fom now is default invoice due_date
+            $selected_billing_address_id = (int) ($request->input('selected_billing_address_id') ?? -1);
+            $selected_shipping_address_id = (int) ($request->input('selected_shipping_address_id') ?? -1);
+
             // Save Order and order items
             $order = new Order();
             $order->shop_id = \CartService::getShop(true);
             $order->user_id = auth()->user()->id ?? null;
             $order->email = $data['email'];
+            $order->type = Order::TYPE_STANDARD;
+
             $order->billing_first_name = $data['billing_first_name'];
             $order->billing_last_name = $data['billing_last_name'];
             $order->billing_company = $data['billing_company'];
-            $order->billing_address = $data['billing_address'];
-            $order->billing_country = $data['billing_country'];
-            $order->billing_state = empty($data['billing_state']) ? $data['billing_country'] : $data['billing_state'];
-            $order->billing_city = $data['billing_city'];
-            $order->billing_zip = $data['billing_zip'];
 
-            $order->phone_numbers = $phone_numbers;
+            // Check if Billing Address is selected from user's addresses
+            // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
+            if($selected_billing_address_id > 0 && Address::where('id', $selected_billing_address_id)->exists()) {
+                // Billing Address is selected from the list
+                $address = Address::find($selected_billing_address_id);
+
+                $order->billing_address = $address->address;
+                $order->billing_country = $address->country;
+                $order->billing_state = empty($address->state) ? $address->country : $address->state;
+                $order->billing_city = $address->city;
+                $order->billing_zip = $address->zip_code;
+                $order->phone_numbers = $address->phones;
+            } else {
+                // Billing Address is manually added
+                $order->billing_address = $data['billing_address'];
+                $order->billing_country = $data['billing_country'];
+                $order->billing_state = empty($data['billing_state']) ? $data['billing_country'] : $data['billing_state'];
+                $order->billing_city = $data['billing_city'];
+                $order->billing_zip = $data['billing_zip'];
+                $order->phone_numbers = array_values(array_filter($data['phone_numbers'] ?? ['']));
+            }
+
+
             $order->same_billing_shipping = $same_billing_shipping;
 
+            // Check if billing and shipping address are NOT THE SAME!
             if(!$same_billing_shipping) {
-                $order->shipping_first_name = $data['shipping_first_name'];
-                $order->shipping_last_name = $data['shipping_last_name'];
-                $order->shipping_company = $data['shipping_company'];
-                $order->shipping_address = $data['shipping_address'];
-                $order->shipping_country = $data['shipping_country'];
-                $order->shipping_state = empty($data['shipping_state']) ? $data['shipping_country'] : $data['shipping_state'];
-                $order->shipping_city = $data['shipping_city'];
-                $order->shipping_zip = $data['shipping_zip'];
+                // TODO: Do we need shipping first_name, last_name and shipping_company ???
+                $order->shipping_first_name = $data['billing_first_name'];
+                $order->shipping_last_name = $data['billing_last_name'];
+                $order->shipping_company = $data['billing_company'];
+
+                // Check if Shipping Address is selected from user's addresses
+                // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
+                if($selected_shipping_address_id > 0 && Address::where('id', $selected_shipping_address_id)->exists()) {
+                    // Billing Address is selected from the list
+                    $address = Address::find($selected_shipping_address_id);
+
+                    $order->shipping_address = $address->address;
+                    $order->shipping_country = $address->country;
+                    $order->shipping_state = empty($address->state) ? $address->country : $address->state;
+                    $order->shipping_city = $address->city;
+                    $order->shipping_zip = $address->zip_code;
+                } else {
+                    // Shipping Address is manually added
+                    $order->shipping_address = $data['shipping_address'];
+                    $order->shipping_country = $data['shipping_country'];
+                    $order->shipping_state = empty($data['shipping_state']) ? $data['shipping_country'] : $data['shipping_state'];
+                    $order->shipping_city = $data['shipping_city'];
+                    $order->shipping_zip = $data['shipping_zip'];
+                }
             }
+
+
 
             $order->base_price = $originalPrice['raw'];
             $order->discount_amount = $discountAmount['raw'];
@@ -209,14 +252,21 @@ class EVCheckoutController extends Controller
             $order->shipping_cost = 0;
             $order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
 
-            $order->payment_method_type = PaymentMethodUniversal::class;
-            $order->payment_method_id = $payment_method->id ?? null; // TODO: Change this to use ID
+
+//            $order->terms TODO: Where are Order Terms added? In shop settings(default), in each purchasable item (specific)?
+
+            // These are invoicing data for standard orders
+            $order->number_of_invoices = 1;
+            $order->invoicing_period = null;
+            $order->invoice_grace_period = $default_grace_period;
+            $order->invoicing_start_date = Carbon::now()->toDateTimeString(); // start invoicing this moment
 
             $order->note = $data['note'];
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
             // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)
             // viewed - is 0 by default (if it's not viewed by company stuff, it'll be marked as `New` in company dashboard)
+
             $order->save();
 
             // Save Order items
@@ -250,6 +300,59 @@ class EVCheckoutController extends Controller
                     $order_item->save();
                 }
             }
+
+
+            // Create Invoices
+            // TODO: Create Invoice(s)
+            $invoice = new Invoice();
+            $invoice->order_id = $order->id;
+            $invoice->shop_id = \CartService::getShop(true);
+            $invoice->user_id = auth()->user()->id ?? null;
+            $invoice->payment_method_type = PaymentMethodUniversal::class;
+            $invoice->payment_method_id = $payment_method->id ?? null;
+            $invoice->invoice_number = Invoice::generateInvoiceNumber($data['billing_first_name'], $data['billing_last_name'], $data['billing_company']); // Default: VJ21012022
+            $invoice->email = $data['email'];
+
+            $invoice->billing_first_name = $data['billing_first_name'];
+            $invoice->billing_last_name = $data['billing_last_name'];
+            $invoice->billing_company = $data['billing_company'];
+
+            // Check if Billing Address is selected from user's addresses
+            // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
+            if($selected_billing_address_id > 0 && Address::where('id', $selected_billing_address_id)->exists()) {
+                // Billing Address is selected from the list
+                $address = Address::find($selected_billing_address_id);
+
+                $invoice->billing_address = $address->address;
+                $invoice->billing_country = $address->country;
+                $invoice->billing_state = empty($address->state) ? $address->country : $address->state;
+                $invoice->billing_city = $address->city;
+                $invoice->billing_zip = $address->zip_code;
+            } else {
+                // Billing Address is manually added
+                $invoice->billing_address = $data['billing_address'];
+                $invoice->billing_country = $data['billing_country'];
+                $invoice->billing_state = empty($data['billing_state']) ? $data['billing_country'] : $data['billing_state'];
+                $invoice->billing_city = $data['billing_city'];
+                $invoice->billing_zip = $data['billing_zip'];
+            }
+
+            $invoice->base_price = $originalPrice['raw'];
+            $invoice->discount_amount = $discountAmount['raw'];
+            $invoice->subtotal_price = $subtotalPrice['raw'];
+            $invoice->total_price = $subtotalPrice['raw'];
+
+
+            $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
+            $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
+
+            // TODO: Add Shop Settings for general due_date and grace_period
+            $invoice->due_date = $default_due_date; // Default due_date is 7 days from
+            $invoice->grace_period = $default_grace_period; // 5 days grace_period by default
+
+            $invoice->save();
+
+            throw new \Exception($invoice);
 
 
             // If user is not logged in and `create account` is set to TRUE - Create account if it doesn't exist
@@ -309,6 +412,8 @@ class EVCheckoutController extends Controller
             DB::commit();
         } catch(\Exception $e) {
             DB::rollBack();
+
+            // TODO: Add a danger alert to checkout page!
             dd($e->getMessage()); // TODO: Find a better way to display messages on FE!
         }
 
@@ -321,7 +426,7 @@ class EVCheckoutController extends Controller
         \CartService::fullCartReset();
 
         // Depending on payment method, do actions
-        $this->executePayment($request, $order->id);
+        $this->executePayment($request, $order->id, $invoice->id);
 
 
         // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
@@ -340,13 +445,14 @@ class EVCheckoutController extends Controller
         return view('frontend.order-received', compact('order'));
     }
 
-    public function executePayment(Request $request, $order_id) {
-        $order = Order::with('payment_method')->find($order_id);
+    public function executePayment(Request $request, $order_id, $invoice_id) {
+        $order = Order::find($order_id);
+        $invoice = Order::with('payment_method')->find($invoice_id);
 
-        if($order->payment_method->gateway === 'wire_transfer') {
+        if($invoice->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-        } else if($order->payment_method->gateway === 'paysera') {
-            $paysera = new PayseraGateway(order: $order, payment_method: $order->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
+        } else if($invoice->payment_method->gateway === 'paysera') {
+            $paysera = new PayseraGateway(order: $order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
             $paysera->pay();
         }
     }

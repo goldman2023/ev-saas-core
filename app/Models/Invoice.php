@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Invoice
@@ -67,6 +68,17 @@ class Invoice extends EVBaseModel
         );
     }
 
+
+    public static function generateInvoiceNumber($first_name, $last_name, $company_name) {
+        // TODO: Add invoicing number template to Shop settings, otherwise use Default
+        $random_number = random_int(0, 100000);
+        $current_date = date('dmY');
+        $first_name_char = strtoupper($first_name[0]??'x');
+        $last_name_char = strtoupper($last_name[0]??'y');
+        $company_name_char = strtoupper($company_name[0]??'');
+
+        return $current_date.$first_name_char.$last_name_char.$company_name_char.$random_number;
+    }
 
 //    TODO: ORDER TRACKING NUMBER!!!
 //    public function refund_requests()
