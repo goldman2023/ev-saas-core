@@ -182,6 +182,8 @@
         @php
         echo get_setting('footer_script');
         @endphp
+
+        <x-default.system.tenant.custom-includes></x-default.system.tenant.custom-includes>
 </body>
 
 </html>

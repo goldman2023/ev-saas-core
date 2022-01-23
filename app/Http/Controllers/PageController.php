@@ -157,7 +157,9 @@ class PageController extends Controller
         if($page != null){
             return view('frontend.custom_page', compact('page'));
         }
-        abort(404);
+
+        return view('frontend.pages.'. $slug);
+
     }
 
     public function early_bird(){
