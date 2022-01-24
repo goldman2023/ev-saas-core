@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
+use App\Traits\Eloquent\Base\Model\hasCoreProperties;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
 class EVBaseModel extends Model
 {
-    protected array $core_properties = [];
+    use hasCoreProperties;
 
     /**
      * Create a new Eloquent model instance.
@@ -24,33 +26,15 @@ class EVBaseModel extends Model
         $this->initCoreProperties();
     }
 
-    public function initCoreProperties() {
-        if($this->core_properties) {
-            foreach($this->core_properties as $property) {
-                $this->$property = null;
-            }
-        }
-    }
-
-    public function appendCoreProperties($properties = [])
+    /**
+     * Replace Eloquent/Builder with BaseBuilder (an extension of Eloquent/Builder with more features)
+     *
+     * @param    \Illuminate\Database\Query\Builder  $query
+     * @return  BaseBuilder
+     */
+    public function newEloquentBuilder($query)
     {
-        $this->core_properties = array_unique(
-            array_merge($this->core_properties, $properties)
-        );
-
-        return $this;
-    }
-
-    public function getCoreProperties(): array
-    {
-        return $this->core_properties;
-    }
-
-    public function getCorePropertiesMutators(): array
-    {
-        return array_map(function($property) {
-            return $this->getPropertyMutatorName($property);
-        }, $this->core_properties);
+        return new BaseBuilder($query);
     }
 
     protected function getPropertyMutatorName($name, $inverse = false) {
@@ -73,18 +57,7 @@ class EVBaseModel extends Model
         return array_merge(parent::toArray(), $this->corePropertiesToArray());
     }
 
-    /*
-     * Append core properties to Array along with attributes and relations properties!
-     */
-    public function corePropertiesToArray(): array
-    {
-        $core_properties = [];
-        foreach($this->getCorePropertiesMutators() as $core_property_mutator) {
-            $core_properties[$this->getPropertyMutatorName($core_property_mutator, true)] = $this->{$core_property_mutator}();
-        }
 
-        return $core_properties;
-    }
 
     /**
      * Set a given attribute on the model.
@@ -155,4 +128,46 @@ class EVBaseModel extends Model
         return parent::__call($method, $parameters);
     }
 
+
+    /**
+     * Get the observable event names.
+     *
+     * Added:
+     * 1. relationsRetrieved - Event which is fired after Models relations are added
+     * @return array
+     */
+    public function getObservableEvents()
+    {
+        return array_merge(
+            parent::getObservableEvents(),
+            [
+                'relationsRetrieved'
+            ]
+        );
+    }
+
+    /**
+     * Register a relationsRetrieved model event with the dispatcher.
+     *
+     * @param  \Closure|string  $callback
+     * @return void
+     */
+    public static function relationsRetrieved($callback)
+    {
+        static::registerModelEvent('relationsRetrieved', $callback);
+    }
+
+    /**
+     * Fire the given event for the model.
+     *
+     * Method has to be public in order to call it from Builder.
+     *
+     * @param  string  $event
+     * @param  bool  $halt
+     * @return mixed
+     */
+    public function fireModelEvent($event, $halt = true)
+    {
+        return parent::fireModelEvent($event, $halt);
+    }
 }

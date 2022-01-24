@@ -9,14 +9,19 @@ use Illuminate\Http\Request;
 class EVOrderController extends Controller
 {
     public function index() {
-        $orders = MyShop::getShop()->orders()->orderBy('created_at','desc')->paginate(20);
-        $orders_count = MyShop::getShop()->orders()->count();
+//        $orders = MyShop::getShop()->orders()->orderBy('created_at','desc')->paginate(20);
+        // ^^^ $orders will be queried in livewire datatable component ^^^^
+        $orders_count = Order::count(); // Reminder: there is a global scope to add shop_id
 
-        return view('frontend.dashboard.orders.index',  compact('orders','orders_count'));
+        return view('frontend.dashboard.orders.index',  compact('orders_count'));
+    }
+
+    public function create() {
+        return view('frontend.dashboard.orders.create');
     }
 
     public function details(Request $request, $order_id) {
-        $order = Order::find($order_id);
+        $order = Order::findOrFail($order_id);
         $order_items = $order->order_items;
         $user = $order->user;
 

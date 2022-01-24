@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\PaymentMethods;
 
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
@@ -17,6 +18,7 @@ class PayseraGateway
 {
     public $payment_method;
     public $order;
+    public $invoice;
     public $lang;
     public $paytext;
     public $accepturl;
@@ -24,19 +26,20 @@ class PayseraGateway
     public $callbackurl;
     public $test;
 
-    public function __construct(?Order $order = null, mixed $payment_method = null, $lang = null, $paytext = '') {
+    public function __construct(?Order $order = null, ?Invoice $invoice = null, mixed $payment_method = null, $lang = null, $paytext = '') {
         try {
             $this->payment_method = ($payment_method instanceof PaymentMethodUniversal || $payment_method instanceof PaymentMethod)
                 ? $payment_method : PaymentMethodUniversal::where('gateway', 'paysera')->first();
 
             $this->order = $order;
+            $this->invoice = $invoice;
             $this->lang = !empty($lang) ? $lang : 'ENG'; // TODO: Get current user selected language from the Session. But remember to use ISO 639-2/B notation!!!
             $this->paytext = !empty($paytext) ? $paytext : translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'); // MUST USE: [order_nr] and ([site_name] or [owner_name] )
             $this->test = 1; // Testing!
 
-            $this->accepturl = route('gateway.paysera.accepted', ['id' => $this->order->id]);
-            $this->cancelurl = route('gateway.paysera.canceled', ['id' => $this->order->id]);
-            $this->callbackurl = route('gateway.paysera.callback', ['id' => $this->order->id]);
+            $this->accepturl = route('gateway.paysera.accepted', ['order_id' => $this->order->id, 'invoice-id' => $this->invoice->id]);
+            $this->cancelurl = route('gateway.paysera.canceled', ['order_id' => $this->order->id, 'invoice-id' => $this->invoice->id]);
+            $this->callbackurl = route('gateway.paysera.callback', ['order_id' => $this->order->id, 'invoice-id' => $this->invoice->id]);
         } catch(\Exception $e) {}
     }
 
@@ -72,7 +75,7 @@ class PayseraGateway
         }
     }
 
-    public function accepted(Request $request, $order_id) {
+    public function accepted(Request $request, $order_id, $invoice_id) {
         $params = array();
         parse_str( base64_decode( strtr( $request->data, array( '-' => '+', '_' => '/' ) ) ), $params );
 
@@ -84,7 +87,7 @@ class PayseraGateway
         return view('frontend.order-accepted', compact('order'));
     }
 
-    public function canceled(Request $request, $order_id) {
+    public function canceled(Request $request, $order_id, $invoice_id) {
         $order = Order::find($order_id);
         $order->payment_status = Order::PAYMENT_STATUS_CANCELED; // change payment status to canceled
         $order->save();
@@ -92,7 +95,7 @@ class PayseraGateway
         return view('frontend.order-canceled', compact('order'));
     }
 
-    public function callback(Request $request, $order_id) {
+    public function callback(Request $request, $order_id, $invoice_ids) {
         $order = Order::find($order_id);
 
         try {

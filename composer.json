@@ -13,6 +13,7 @@
         "anandsiddharth/laravel-paytm-wallet": "^1.0",
         "awssat/laravel-visits": "^3.0",
         "barryvdh/laravel-snappy": "^0.4.8",
+        "bavix/laravel-wallet": "^7.3",
         "binarytorch/larecipe": "^2.4",
         "blade-ui-kit/blade-heroicons": "^1.2",
         "blade-ui-kit/blade-icons": "^1.1",

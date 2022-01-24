@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
+use App\Facades\MyShop;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Order
  */
-class Order extends Model
+class Order extends EVBaseModel
 {
     use SoftDeletes;
 
@@ -25,7 +27,17 @@ class Order extends Model
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
 
-    protected $with = ['payment_method'];
+    public mixed $base_price;
+    public mixed $discount_amount;
+    public mixed $subtotal_price;
+    public mixed $total_price;
+
+    protected $with = ['order_items', 'invoices'];
+
+    public const TYPES = ['standard', 'installments', 'subscription'];
+    public const TYPE_STANDARD = 'standard';
+    public const TYPE_INSTALLMENTS = 'installments';
+    public const TYPE_SUBSCRIPTION = 'subscription';
 
     public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
     public const PAYMENT_STATUS_UNPAID = 'unpaid';
@@ -48,17 +60,62 @@ class Order extends Model
         return $this->belongsTo(Shop::class, 'shop_id');
     }
 
-    public function order_items() {
+    public function order_items()
+    {
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
-    public function payment_method() {
-        return $this->morphTo('payment_method');
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'order_id', 'id');
     }
 
-    public static function count() {
-        return self::where('shop_id', )->count();
+    public static function count()
+    {
+        return self::where('shop_id', MyShop::getShop()->id ?? null)->count();
     }
+
+    protected static function booted()
+    {
+        // Show only MyShop Orders
+        static::addGlobalScope('from_my_shop', function (BaseBuilder $builder) {
+            $builder->where('shop_id', '=', MyShop::getShop()->id ?? null);
+        });
+
+        // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties
+        static::relationsRetrieved(function ($order) {
+            $sums_properties = ['base_price', 'discount_amount', 'subtotal_price', 'total_price'];
+            $order->appendCoreProperties($sums_properties);
+            $order->append($sums_properties);
+
+            if(!empty($order->fillable))
+                $order->fillable(array_unique(array_merge($order->fillable, $sums_properties)));
+
+            $order->initCoreProperties();
+
+            foreach($sums_properties as $property) {
+                foreach($order->order_items as $item) {
+                    $order->{$property} += $item->{$property};
+                }
+            }
+        });
+    }
+
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
+                ->orWhere('billing_first_name', 'like', '%'.$term.'%')
+                ->orWhere('billing_last_name', 'like', '%'.$term.'%')
+                ->orWhere('payment_status', 'like', '%'.$term.'%')
+                ->orWhere('shipping_status', 'like', '%'.$term.'%')
+                ->orWhere('total_price', 'like', '%'.$term.'%')
+        );
+    }
+
 
 //    TODO: ORDER TRACKING NUMBER!!!
 //    public function refund_requests()
@@ -78,20 +135,6 @@ class Order extends Model
 //    {
 //        return $this->hasMany(ClubPoint::class);
 //    }
-
-    /*
-     * Scope searchable parameters
-     */
-    public function scopeSearch($query, $term)
-    {
-        return $query->where(
-            fn ($query) => $query->where('billing_first_name', 'like', '%'.$term.'%')
-                ->orWhere('billing_last_name', 'like', '%'.$term.'%')
-                ->orWhere('payment_status', 'like', '%'.$term.'%')
-                ->orWhere('shipping_status', 'like', '%'.$term.'%')
-                ->orWhere('total_price', 'like', '%'.$term.'%')
-        );
-    }
 
 
     public static function trend($period = 30)

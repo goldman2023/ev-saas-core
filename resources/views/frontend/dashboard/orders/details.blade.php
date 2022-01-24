@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('All Products'))
+@section('page_title', translate('Order #').($order->id??'').translate('details'))
 
 @push('head_scripts')
 
@@ -304,26 +304,26 @@
 
                     <hr>
 
-                    <div class="">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5>{{ translate('Payment method') }}</h5>
-                        </div>
+{{--                    <div class="">--}}
+{{--                        <div class="d-flex justify-content-between align-items-center">--}}
+{{--                            <h5>{{ translate('Payment method') }}</h5>--}}
+{{--                        </div>--}}
 
-                        <div class="d-flex flex-column text-14 justify-content-start">
-                            <div>
-                                <span>{{ translate('Method') }}:</span> <strong>{{ $order->payment_method->name }}</strong>
-                            </div>
-                            @if($order->payment_status === 'unpaid')
-                                <form action="{{ route('checkout.execute.payment', ['id' => $order->id]) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary btn-xs mt-2 mr-auto">
-                                        {{ translate('Pay now') }}
-                                    </button>
-                                </form>
-                            @endif
+{{--                        <div class="d-flex flex-column text-14 justify-content-start">--}}
+{{--                            <div>--}}
+{{--                                <span>{{ translate('Method') }}:</span> <strong>{{ $order->payment_method->name }}</strong>--}}
+{{--                            </div>--}}
+{{--                            @if($order->payment_status === 'unpaid')--}}
+{{--                                <form action="{{ route('checkout.execute.payment', ['id' => $order->id]) }}" method="POST">--}}
+{{--                                    @csrf--}}
+{{--                                    <button type="submit" class="btn btn-primary btn-xs mt-2 mr-auto">--}}
+{{--                                        {{ translate('Pay now') }}--}}
+{{--                                    </button>--}}
+{{--                                </form>--}}
+{{--                            @endif--}}
 
-                        </div>
-                    </div>
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
             </div>
         </div>

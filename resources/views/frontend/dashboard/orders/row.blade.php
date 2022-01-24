@@ -7,6 +7,12 @@
     </a>
 </x-livewire-tables::table.cell>
 
+@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('type')))
+<x-livewire-tables::table.cell class="align-middle">
+    <span class="d-block text-14 mb-0 {{ $row->type === App\Models\Order::TYPE_SUBSCRIPTION ? 'text-info':'' }} {{ $row->type === App\Models\Order::TYPE_INSTALLMENTS ? 'text-warning':'' }}">{{ $row->type }}</span>
+</x-livewire-tables::table.cell>
+@endif
+
 <x-livewire-tables::table.cell class="align-middle">
     <span class="d-block text-14 mb-0">{{ $row->created_at->format('d.m.Y H:i') }}</span>
 </x-livewire-tables::table.cell>

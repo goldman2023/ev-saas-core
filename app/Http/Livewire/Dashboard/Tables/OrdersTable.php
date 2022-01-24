@@ -53,6 +53,13 @@ class OrdersTable extends DataTableComponent
     public function filters(): array
     {
         return [
+            'type' => Filter::make('Type')
+                ->select([
+                    '' => translate('All'),
+                    Order::TYPE_STANDARD => translate('Standard'),
+                    Order::TYPE_SUBSCRIPTION => translate('Subscription'),
+                    Order::TYPE_INSTALLMENTS => translate('Installments'),
+                ]),
             'payment_status' => Filter::make('Payment Status')
                 ->select([
                     '' => translate('Any'),
@@ -74,6 +81,10 @@ class OrdersTable extends DataTableComponent
                     'new' => translate('New'),
                     'viewed' => translate('Viewed')
                 ]),
+            'date_created' => Filter::make('Date created')
+                ->date([
+                    'max' => now()->format('Y-m-d') // Optional
+                ]),
         ];
     }
 
@@ -83,6 +94,8 @@ class OrdersTable extends DataTableComponent
             Column::make('Order')
                 ->sortable()
                 ->excludeFromSelectable()
+                ->addClass('hidden md:table-cell'),
+            Column::make('Type', 'type')
                 ->addClass('hidden md:table-cell'),
             Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
@@ -108,6 +121,7 @@ class OrdersTable extends DataTableComponent
     {
         return Order::query()
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
+            ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
             ->when($this->getFilter('shipping_status'), fn ($query, $status) => $query->where('shipping_status', $status))
             ->when($this->getFilter('viewed'), function ($query, $status) {
@@ -117,7 +131,8 @@ class OrdersTable extends DataTableComponent
                     return $query->where('viewed', 1);
                 else
                     return $query;
-            });
+            })
+            ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
       }
 
     public function rowView(): string
