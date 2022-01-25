@@ -1,23 +1,27 @@
 <style>
     /* TODO: Add this color definition as custom option inside dashboard */
-:root {
-    --blue: #8bc53f !important;
-    --white: #ffffff;
-  }
+    :root {
+        --blue: #8bc53f !important;
+        --white: #ffffff;
+        --font: 'Open Sans', sans-serif;
+    }
+</style>
 
-  .navbar-brand, .navbar-brand > img {
-      width: 10em;
-      margin-top: 10px;
-      margin-bottom: 10px;
-  }
 
-  .navbar-expand .navbar-nav {
-      margin-top: 0;
-      margin-bottom: 0;
-  }
+<style>
+    .navbar-brand,
+    .navbar-brand>img {
+        width: 10em;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 
-  .navbar-expand.navbar {
-      padding: 0;
-  }
+    .navbar-expand .navbar-nav {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
 
-  </style>
+    .navbar-expand.navbar {
+        padding: 0;
+    }
+</style>

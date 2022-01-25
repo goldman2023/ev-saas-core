@@ -43,6 +43,7 @@ mix.setPublicPath("public")
     .scripts([
         'resources/js/flare.js',
     ], 'public/js/flare.js').version()
+    // TODO: add replacement of colors to css variables
     .webpackConfig({
         resolve: {
             alias: {

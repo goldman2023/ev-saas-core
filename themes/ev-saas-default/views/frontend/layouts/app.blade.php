@@ -57,12 +57,15 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
-    <!-- Theme styles -->
+    @livewireStyles
+    {{-- Include overides and custom css for child theme if needed --}}
     <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
 
-
-    @livewireStyles
+    {{-- Global base css, with variables replaced and default set inside probably --}}
     <link rel="stylesheet" href="{{ global_asset('dynamic-colors/app-dynamic.css', false, true) }}">
+
+    {{-- This component holds css variable per tenant --}}
+    <x-default.system.tenant.custom-includes></x-default.system.tenant.custom-includes>
 
     @stack('pre_head_scripts')
 
@@ -81,7 +84,9 @@
     @stack('head_scripts')
 </head>
 
-<body>
+{{-- TODO : Add a slug if page has a slug --}}
+
+<body class="{{ Route::currentRouteName() }}">
     <!-- AlpineJS -->
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
@@ -122,14 +127,11 @@
         <!-- Wishlist -->
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
 
-        <x-ev.toast id="global-toast"
-                    position="bottom-center"
-                    class="bg-success border-success text-white h3"
-                    :is_x="true"
-                    :timeout="4000">
+        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
+            :is_x="true" :timeout="4000">
         </x-ev.toast>
 
-    <script>
+        <script>
             document.addEventListener('toastIt', async function (event) {
                 let content = event.detail.content;
                 let id = event.detail.id;
@@ -185,7 +187,6 @@
         echo get_setting('footer_script');
         @endphp
 
-        <x-default.system.tenant.custom-includes></x-default.system.tenant.custom-includes>
 </body>
 
 </html>
