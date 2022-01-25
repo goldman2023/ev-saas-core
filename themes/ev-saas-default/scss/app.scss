@@ -2,6 +2,7 @@
 @import '~bootstrap/scss/functions';
 @import 'user-variables';
 
+
 // Front setup
 // IMPORTANT NOTE 1: Variables file (either theme default or tenant-theme) is prepended on webpack compile! Check `additionalData` option in .sass `pluginOptions` argument in webpack.mix.js (for more info, check: https://webpack.js.org/loaders/sass-loader/#additionaldata)!
 // IMPORTANT NOTE 2: SCSS variables are defined per TENANT and THEME, if tenant doesn't have it's own variables file for chosen theme -
@@ -10,13 +11,17 @@
 // NOTE: Default tenant variables are actually default theme variables, and also if tenant doesn't have it's main scss file in /public folder, default theme scss will be used (app.scss)
 //@import 'themes/default';
 
-@import 'front/variables';
-
-@import 'front-dashboard/variables';
-
-
 // Bootstrap core
 @import '~bootstrap/scss/bootstrap';
+
+// @import 'front-dashboard/variables';
+
+@import 'front/variables';
+
+
+
+
+
 
 // VENDOR
 @import "~quill/dist/quill.snow.css"; // this will be moved to the beginning of the compiled file, cuz it's css, check: https://github.com/laravel-mix/laravel-mix/issues/429

@@ -41,5 +41,4 @@
         class="btn btn-primary btn-pill transition-3d-hover px-5">
     </x-ev.link-button>
 </div>
-</div>
 <!-- End Products Section -->

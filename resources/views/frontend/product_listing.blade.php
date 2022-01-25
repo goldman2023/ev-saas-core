@@ -34,20 +34,15 @@ $meta_description = get_setting('site_motto');
 @endsection
 
 @section('content')
-<div class="bg-dark mb-3" style="margin-top:-130px;">
+<div class="bg-dark mb-3" style="">
     <div class="container">
-        <div class="row space-1 space-top-3">
+        <div class="row py-3">
             <div class="col-sm-8">
-                <h1 class="text-white mt-3">
-                    {{ translate('Shop') }}
-                    @isset($brand)
-                    {{ $brand->name }} {{ translate('Products')}}
-                    @endisset
-                </h1>
+
                 <div class="d-flex justify-content-between">
-                    <ul class="breadcrumb bg-transparent p-0 text-white">
+                    <ul class="breadcrumb bg-transparent p-0 text-white my-0">
                         <li class="breadcrumb-item opacity-50">
-                            <a class="" href="{{ route('home') }}">{{ translate('Home') }}</a>
+                            <a class="text-danger" href="{{ route('home') }}">{{ translate('Home') }}</a>
                         </li>
 
                         @isset($brand)
@@ -57,7 +52,7 @@ $meta_description = get_setting('site_motto');
                         </li>
                         @else
                         <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-600':'opacity-50' }} ">
-                            <a class="{{ !empty($selected_category) ? '':'text-white' }}"
+                            <a class="{{ !empty($selected_category) ? 'text-danger':'text-white' }}"
                                 href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
                         @endisset
@@ -80,20 +75,16 @@ $meta_description = get_setting('site_motto');
                 </div>
             </div>
             <div class="col-sm-4">
-                 {{-- Sub Categories Display --}}
-                 @if(!empty($selected_category))
-                 <x-default.categories.sub-category-cards :categories="$selected_category">
-                 </x-default.categories.sub-category-cards>
-                 @endif
-                {{-- <x-b2-b-search></x-b2-b-search> --}}
+
 
                 @isset($brand)
                 <div class="p-3 bg-white text-center">
                     <a href="{{ route('products.brand', $brand->slug) }}">
 
-                    <x-tenant.system.image style="max-height: 100px;" class="lazyload mx-auto h-70px mw-100 bg-white" :image="$brand->logo"
-                        alt="{{ $brand->name}}">
-                    </x-tenant.system.image>
+                        <x-tenant.system.image style="max-height: 100px;"
+                            class="lazyload mx-auto h-70px mw-100 bg-white" :image="$brand->logo"
+                            alt="{{ $brand->name}}">
+                        </x-tenant.system.image>
                     </a>
                 </div>
 
@@ -136,13 +127,19 @@ $meta_description = get_setting('site_motto');
                     </div>
                 </div>
                 <div class="col-xl-9">
-{{-- TODO: add category slider here --}}
+
+
+                    {{-- Sub Categories Display --}}
+
+                    {{-- <x-b2-b-search></x-b2-b-search> --}}
+                    {{-- TODO: add category slider here --}}
                     @if ($content == 'product' || $content == null)
                     <div>
                         <div class="text-left">
-                            <div class="d-flex align-items-center">
+                            <div class="">
                                 <div>
-                                    <h1 class="h3 fw-600">
+                                    @if (!empty($selected_category))
+                                    <h1 class="h1 fw-600">
                                         @if (!empty($selected_category))
                                         {{ translate('Products - ') }}
                                         {{ $selected_category->getTranslation('name') }}
@@ -153,7 +150,25 @@ $meta_description = get_setting('site_motto');
                                         {{ translate('All Products') }}
                                         @endif
                                     </h1>
+                                    @else
+                                    <h1 class="h1 mt-3">
+                                        {{ translate('Shop') }}
+                                        @isset($brand)
+                                        {{ $brand->name }} {{ translate('Products')}}
+                                        @endisset
+                                    </h1>
+                                    @endif
+
                                 </div>
+
+                                <div class="we-archive-sub-category-cards">
+                                    @if(!empty($selected_category))
+                                    <x-default.categories.sub-category-cards :categories="$selected_category">
+                                    </x-default.categories.sub-category-cards>
+                                    @endif
+                                </div>
+
+
                                 @if ($products->count() > 0 && $content == null && !empty($selected_category))
                                 <div class="ml-auto text-right">
                                     <a class="font-weight-bold"
@@ -176,14 +191,14 @@ $meta_description = get_setting('site_motto');
                         @if ($products->count() > 0)
 
                         @if($products->isNotEmpty())
-                            <div class="row gutters-5 mt-2">
-                                @foreach ($products as $key => $product)
-                                    <div class="col-sm-4 col-12 mb-3">
-                                        <x-default.products.cards.product-card :product="$product" class="product-card">
-                                        </x-default.products.cards.product-card>
-                                    </div>
-                                @endforeach
+                        <div class="row gutters-5 mt-2">
+                            @foreach ($products as $key => $product)
+                            <div class="col-sm-4 col-12 mb-3">
+                                <x-default.products.cards.product-card :product="$product" class="product-card">
+                                </x-default.products.cards.product-card>
                             </div>
+                            @endforeach
+                        </div>
                         @endif
 
                         @if ($content == 'product' || !empty($selected_category))

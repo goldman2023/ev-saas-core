@@ -5,6 +5,7 @@ use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\User;
@@ -61,10 +62,10 @@ Route::middleware([
 //        Route::resource('orders', 'EVOrderController')->parameters([
 //            'orders' => 'id',
 //        ])->except(['destroy']);
-//        Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
-//        Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
-//        Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
-//        Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+       Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+       Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+       Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+       Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
@@ -179,6 +180,12 @@ Route::middleware([
 //    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
         Route::get('/jobs/destroy/{id}', 'JobController@destroy')->name('jobs.destroy');
     });
+
+
+    // Integrations
+    Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');
+
+    Route::get('/integrations/facebook-business-export', 'Integrations\FacebookBusinessController@export')->name('integrations.facebook-business.export');
 
 
 

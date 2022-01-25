@@ -1,24 +1,23 @@
 <div id="fancyboxGallery" class="js-fancybox" data-hs-fancybox-options="{
     'selector': '#fancyboxGallery .js-fancybox-item'
 }">
-    <div id="product-gallery-hero" class="overflow-hidden bg-dark">
+    <div id="product-gallery-hero" class="bg-dark">
         <div class="container">
             <div class="row ">
                 <div class="col-md-8 rounded-lg pl-sm-0 position-relative mb-3 mb-sm-0"
-                     style="height: 400px; overflow: hidden;">
+                    style="height: 400px; overflow: hidden;">
                     <div class="row ">
-                        <div class="col-sm-12 px-sm-1 position-static">
-                            <!-- Gallery -->
-                            <a class="js-fancybox-item d-block" href="javascript:;" style="height: 400px;">
-                                <x-tenant.system.image class="img-fluid w-100 h-100" fit="cover" :image="$product->getThumbnail(['w'=>600]) ?? ''">
-                                </x-tenant.system.image>
-                            </a>
+                        <div class="col-sm-12 px-sm-1 bg-white">
+                            <iframe title="Carlsberg beer bottle VR ready" width="800px" height="600px"
+                                style="min-height: 600px;" style="background:white;" frameborder="0" allowfullscreen
+                                mozallowfullscreen="true" webkitallowfullscreen="true"
+                                allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking
+                                execution-while-out-of-viewport execution-while-not-rendered web-share
+                                src="https://sketchfab.com/models/56ecb3b7f8034167a411b694458b3df3/embed?autostart=1&transparent=1&ui_infos=0&ui_watermark_link=0&ui_watermark=0&ui_help=0&ui_theme=dark">
+                            </iframe>
                         </div>
-
                     </div>
                 </div>
-
-
                 <div class="col-md-4 " id="stickyBlockStartPoint2">
                     <div class="js-sticky-block" data-hs-sticky-block-options='{
                                                     "parentSelector": "#stickyBlockStartPoint2",
@@ -40,7 +39,7 @@
 
     </div>
 
-@push('footer_scripts')
+    @push('footer_scripts')
 
     <script src="{{ static_asset('vendor/hs-sticky-block/dist/hs-sticky-block.min.js', false, true) }}"></script>
     <!-- JS Plugins Init. -->

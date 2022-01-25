@@ -55,9 +55,9 @@
         @foreach ($categories as $key => $category)
             <div class="tab-pane fade  @if ($key == 0) show active @endif" id="pills-with-category-images-{{ $key }}-tab"
                 role="tabpanel" aria-labelledby="pills-with-category-images-{{ $key }}-tab">
-                <div class="row">
+                <div class="row d-flex flex-nowrap" style="overflow: scroll;">
                     @foreach ($category->products as $product)
-                        <div class="col-sm-4">
+                        <div class="col-10 col-sm-4">
                             <x-default.products.cards.product-card :product="$product"
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">
                             </x-default.products.cards.product-card>

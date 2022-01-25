@@ -1,18 +1,17 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-    @php
-    $plans = App\Models\SellerPackage::all();
-    @endphp
-    <div class="overflow-hidden space-bottom-2">
-        <h1 class="display-1">
-            {{ translate('Pricing') }}
+<div class="container space-top-2">
+    <div class="row">
 
-        </h1>
-        <p>
-            lorem ipsum
-        </p>
+
+        <div class="col-12">
+            <x-default.promo.pricing></x-default.promo.pricing>
+
+        </div>
     </div>
+</div>
+
 @endsection
 
 @section('script')

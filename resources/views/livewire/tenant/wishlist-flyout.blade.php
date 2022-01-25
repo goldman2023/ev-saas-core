@@ -67,7 +67,27 @@
                     </div>
                 </a>
             @endforeach
+
+            @else
+             <!-- Empty Wishlist Section -->
+             <div class="container-fluid space-2">
+                <div class="text-center mx-md-auto">
+                    <figure class="max-w-10rem max-w-sm-15rem mx-auto mb-3">
+                        @svg('heroicon-o-heart', ['class' => 'text-dark', 'style' => 'width: 72px;'])
+                    </figure>
+                    <div class="mb-5">
+                        <h3 class="h3">{{ translate('Your wishlist is currently empty') }}</h3>
+                        <p>{{ translate('Visit the shop and add some items to your wishlist you like') }}</p>
+                    </div>
+                    <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('search') }}">
+                        {{ translate('Explore Products') }}
+                    </a>
+                </div>
+            </div>
+            <!-- End Empty Cart Section -->
         @endif
+
+
     </div>
 
 </div>

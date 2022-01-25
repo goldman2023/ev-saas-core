@@ -84,9 +84,8 @@ $class_col_body_2 = 'col-md-5';
 
         <div class="card-footer">
             <ul class="list-inline list-separator small text-body">
-                <li class="list-inline-item">{{ translate('Est.') }} {{ $company->get_attribute_value_by_id(10) }}</li>
                 {{-- TODO: create a country column- not a simple attribute, we will need filtering based on that --}}
-                <li class="list-inline-item">{{ country_name_by_code('default')  }}</li>
+                <li class="list-inline-item">{{ country_name_by_code($company->country)  }}</li>
                 <li class="list-inline-item">{{ translate('Company Type:') }} {{ $company->get_attribute_value_by_id(1)  }}</li>
             </ul>
 
@@ -96,15 +95,12 @@ $class_col_body_2 = 'col-md-5';
 
             @endphp
             @if ($seller_package != null)
-                <span class="badge badge-soft-success w-auto">
-                    {{-- <span class="legend-indicator bg-info"></span> --}}
-                    {{ $seller_package->name }} {{ __('Club member') }}
-                </span>
+
 
             @else
                 <span class="badge badge-soft-success w-auto">
                     {{-- <span class="legend-indicator bg-info"></span> --}}
-                    {{ __('Prospect Club member') }}
+                    {{ __('Verified Seller') }}
                 </span>
             @endif
 

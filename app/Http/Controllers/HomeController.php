@@ -145,13 +145,13 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        return view('frontend.user.admin.dashboard');
 
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
-        } else {
+        } elseif (auth()->user()->isAdmin()) {
+            return view('frontend.user.admin.dashboard');
         }
     }
 
@@ -408,7 +408,10 @@ class HomeController extends Controller
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         $product  = Product::where('slug', $slug)->first()->load(['shop']);
-
+        if(empty($product->shop)) {
+            /* TODO: Default value for products with no shops falls back to shop_id 1 */
+            $product->shop = Shop::first();
+        }
         //$this->log($product,"User viewed this product");
 
         if (!empty($product) && $product->published) {
@@ -432,9 +435,8 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
 
-            if(auth()->check()) {
+            if (auth()->check()) {
                 $user = auth()->user();
-
             } else {
                 $user = null;
             }

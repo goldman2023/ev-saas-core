@@ -1,7 +1,7 @@
 @if($categories)
     <div class="row mt-2 flex-nowrap" style="overflow: auto;">
         @foreach ($categories as $key => $category)
-            <div class="col-sm-4 col-10 mb-3">
+            <div class="col-sm-3 col-10 mb-3">
                 <a class="card card-bordered card-hover-shadow h-100"
                    href="{{ route('products.category', $category->slug) }}">
                     <div class="card-body d-flex align-items-center">

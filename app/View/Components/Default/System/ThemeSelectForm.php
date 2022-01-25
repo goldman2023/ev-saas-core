@@ -6,7 +6,13 @@ use Illuminate\View\Component;
 
 class ThemeSelectForm extends Component
 {
-    public $themes = ['ev-saas-default', 'ev-boostrap-gun', 'ev-saas-fox', 'ev-saas-demo'];
+    public $themes = [
+        'ev-saas-default',
+        'ev-boostrap-gun',
+        'ev-saas-fox',
+        'ev-saas-demo',
+        'we-saas-boostrap-software'
+    ];
     public $currentTheme;
     public $domain;
     /**

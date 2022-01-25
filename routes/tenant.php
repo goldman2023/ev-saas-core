@@ -63,6 +63,8 @@ Route::middleware([
     /* This is experimental, adding it here for now */
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
 
+    Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
+    Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
 
     // Route to show after creating new tenant:
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');
@@ -323,6 +325,7 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
+    Route::resource('knowledge-base', 'KnowledgeBaseController');
 
 
     // Tenant Management routes - added from SaaS Boilerplate

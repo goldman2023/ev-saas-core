@@ -1,4 +1,4 @@
-<div class="container space-0 space-sm-1  mt-3 mt-lg-0">
+<div class="space-0 space-sm-1 pl-3  mt-3 mt-lg-0">
 
     <div class="w-md-80 w-lg-40 text-center mx-md-auto mb-3 d-none">
         <x-ev.label tag="h3" :label="ev_dynamic_translate('Brands List Title', true)">

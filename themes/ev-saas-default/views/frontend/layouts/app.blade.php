@@ -57,12 +57,15 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
-    <!-- Theme styles -->
+    @livewireStyles
+    {{-- Include overides and custom css for child theme if needed --}}
     <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
 
+    {{-- Global base css, with variables replaced and default set inside probably --}}
+    <link rel="stylesheet" href="{{ global_asset('dynamic-colors/app-dynamic.css', false, true) }}">
 
-    @livewireStyles
-    <link rel="stylesheet" href="{{ static_asset('/front/icon-set/style.css') }}">
+    {{-- This component holds css variable per tenant --}}
+    <x-default.system.tenant.custom-includes></x-default.system.tenant.custom-includes>
 
     @stack('pre_head_scripts')
 
@@ -81,7 +84,9 @@
     @stack('head_scripts')
 </head>
 
-<body>
+{{-- TODO : Add a slug if page has a slug --}}
+
+<body class="{{ Route::currentRouteName() }}">
     <!-- AlpineJS -->
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
@@ -92,7 +97,7 @@
         </x-default.headers.header>
 
         {{-- <div class="space-top-lg-3 space-top-3"> --}}
-            <div>
+            <div class="app-layout-container d-flex" style="flex-basis: 100%; flex-wrap: wrap; flex-direction: column;">
                 {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
 
                 @yield('content')
@@ -102,8 +107,7 @@
 
             <x-default.footers.footer>
             </x-default.footers.footer>
-
-    </div>
+        </div>
         <x-default.footers.app-bar>
         </x-default.footers.app-bar>
 
@@ -116,23 +120,20 @@
         <!-- Print SignUp Modal Component -->
         <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
-        <!-- Carts Flyout-->
+        <!-- Carts -->
         <livewire:cart.cart template="flyout-cart" />
 
-        <!-- Wishlist Flyout -->
+        <!-- Wishlist -->
+        {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+        {{-- Like this, will decide later --}}
+        <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
 
-        <!-- Categories Flyout -->
-        <x-default.global.flyout-categories></x-default.global.flyout-categories>
-
-        <x-ev.toast id="global-toast"
-                    position="bottom-center"
-                    class="bg-success border-success text-white h3"
-                    :is_x="true"
-                    :timeout="4000">
+        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
+            :is_x="true" :timeout="4000">
         </x-ev.toast>
 
-    <script>
+        <script>
             document.addEventListener('toastIt', async function (event) {
                 let content = event.detail.content;
                 let id = event.detail.id;
@@ -187,6 +188,7 @@
         @php
         echo get_setting('footer_script');
         @endphp
+
 </body>
 
 </html>

@@ -88,22 +88,7 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
-                    [
-                        'label' => translate('Schedule'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'user_types' => User::$user_types,
-                        'permissions' => []
-                    ],
-                    [
-                        'label' => translate('Activity'),
-                        'icon' => 'heroicon-o-status-online',
-                        'route' => route('activity.index'),
-                        'is_active' => areActiveRoutes(['']),
-                        'user_types' => User::$user_types,
-                        'permissions' => []
-                    ],
+
                 ]
             ],
             [

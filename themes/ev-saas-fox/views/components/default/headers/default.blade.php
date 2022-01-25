@@ -10,7 +10,7 @@
             <!-- Nav -->
             <div class="row align-items-center">
                 <div class="col-sm-3 col-6">
-                    <a class="navbar-brand" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
+                    <a class="navbar-brand p-0" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
                         @php
                         $header_logo = get_setting('header_logo');
                         @endphp
