@@ -11,7 +11,8 @@
         </a>
     </div>
     <div class="card-body">
-        <div class="row flex-nowrap ev-horizontal-slider" style="overflow: scroll;   -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        <div class="row flex-nowrap ev-horizontal-slider" style="overflow: scroll;
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
         scrollbar-width: none; /* for Firefox */
         overflow-y: scroll; ">
             @foreach($products as $productActivity)

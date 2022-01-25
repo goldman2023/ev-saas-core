@@ -11,10 +11,22 @@
             "Ubuntu", "Cantarell", "Fira Sans",
             "Droid Sans", "Helvetica Neue", sans-serif;
     }
+
+    body,
+    html {
+        font-family: -apple-system, BlinkMacSystemFont,
+            "Segoe UI", "Roboto", "Oxygen",
+            "Ubuntu", "Cantarell", "Fira Sans",
+            "Droid Sans", "Helvetica Neue", sans-serif !important;
+    }
 </style>
 
 
 <style>
+    .app-layout-container>* {
+        width: 100%;
+    }
+
     .navbar-brand,
     .navbar-brand>img {
         width: 10em;

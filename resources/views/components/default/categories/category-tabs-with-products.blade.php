@@ -28,10 +28,10 @@
         @foreach ($categories as $key => $category)
             <div class="tab-pane fade  @if ($key == 0) show active @endif" id="pills-one-code-features-{{ $key }}"
                 role="tabpanel" aria-labelledby="pills-one-code-features-{{ $key }}-tab">
-                <div class="row">
+                <div class="row flex-nowrap" style="overflow:scroll;">
                     @if($category->products->isNotEmpty())
                         @foreach ($category->products as $product)
-                            <div class="col-sm-4">
+                            <div class="col-10 col-sm-4">
                                 <x-default.products.cards.product-card :product="$product"
                                                                        style="{{ ev_dynamic_translate('product-card', true)->value }}">
                                 </x-default.products.cards.product-card>

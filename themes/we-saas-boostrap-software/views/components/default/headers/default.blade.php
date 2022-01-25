@@ -128,7 +128,7 @@
                         <li class="list-inline-item">
                             <div class="hs-unfold">
                                 <a class="btn btn-xs btn-icon btn-secondary position-relative"
-                                    href="{{ route('wishlist') }}">
+                                href="javascript:;" x-data="" @click="$dispatch('display-flyout-panel', {'id': 'wishlist-panel'})" >
                                     @svg('heroicon-o-heart', ['class' => 'square-22'])
                                     {{-- TODO: Make count different, probably create a wishlist service like CartService
                                     --}}

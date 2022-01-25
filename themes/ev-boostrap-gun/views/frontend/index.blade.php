@@ -2,13 +2,14 @@
 
 @section('content')
 
-<section>
+<section style="max-width: 100%; overflow: scroll;">
     <x-default.brands.brands-list>
     </x-default.brands.brands-list>
 </section>
 
 @php
 $categories = App\Models\Category::where('level', 0)
+->whereHas('products')
 ->orderBy('order_level', 'desc')
 ->get();
 @endphp
