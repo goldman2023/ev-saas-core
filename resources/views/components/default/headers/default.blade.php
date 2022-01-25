@@ -237,7 +237,8 @@
                     <li class="list-inline-item">
                         <div class="hs-unfold">
                             <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary"
-                                href="{{ route('business.login') }}">
+                            href="javascript:;"
+                            x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" >
                                 <!--data-toggle="modal" data-target="#signupModal">-->
                                 @svg('heroicon-s-user-circle', ['class' => 'square-2'])
                             </a>
