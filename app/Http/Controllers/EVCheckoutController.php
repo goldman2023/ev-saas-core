@@ -144,7 +144,8 @@ class EVCheckoutController extends Controller
         // Validate password again
         // If user is not logged in and `create account` is set to TRUE
         $new_user = User::where('email', $data['email'])->first();
-        if(empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on') {
+        $to_create_user = empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on';
+        if($to_create_user) {
             // Check if user with email is not already registered user.
             if($new_user instanceof User && !empty($new_user->id ?? null)) {
                 // Registered user
@@ -176,6 +177,7 @@ class EVCheckoutController extends Controller
             $default_due_date = Carbon::now()->addDays(7)->toDateTimeString(); // 7 days fom now is default invoice due_date
             $selected_billing_address_id = (int) ($request->input('selected_billing_address_id') ?? -1);
             $selected_shipping_address_id = (int) ($request->input('selected_shipping_address_id') ?? -1);
+            $phone_numbers = [];
 
             // Save Order and order items
             $order = new Order();
@@ -194,12 +196,13 @@ class EVCheckoutController extends Controller
                 // Billing Address is selected from the list
                 $address = Address::find($selected_billing_address_id);
 
+
                 $order->billing_address = $address->address;
                 $order->billing_country = $address->country;
                 $order->billing_state = empty($address->state) ? $address->country : $address->state;
                 $order->billing_city = $address->city;
                 $order->billing_zip = $address->zip_code;
-                $order->phone_numbers = $address->phones;
+                $order->phone_numbers = $phone_numbers = $address->phones;
             } else {
                 // Billing Address is manually added
                 $order->billing_address = $data['billing_address'];
@@ -207,7 +210,7 @@ class EVCheckoutController extends Controller
                 $order->billing_state = empty($data['billing_state']) ? $data['billing_country'] : $data['billing_state'];
                 $order->billing_city = $data['billing_city'];
                 $order->billing_zip = $data['billing_zip'];
-                $order->phone_numbers = array_values(array_filter($data['phone_numbers'] ?? ['']));
+                $order->phone_numbers = $phone_numbers = array_values(array_filter($data['phone_numbers'] ?? ['']));
             }
 
 
@@ -352,11 +355,10 @@ class EVCheckoutController extends Controller
 
             $invoice->save();
 
-            throw new \Exception($invoice);
-
+//            throw new \Exception($invoice->toJson());
 
             // If user is not logged in and `create account` is set to TRUE - Create account if it doesn't exist
-            if(empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on') {
+            if($to_create_user) {
                 if(!empty($new_user->id ?? null) && Hash::check($data['account_password'], $new_user->password)) { // check password again just in case
                     // There is a user under given Email AND passwords match -> LOG IN USER
                     auth()->login($new_user, true); // log the user in
@@ -413,21 +415,20 @@ class EVCheckoutController extends Controller
         } catch(\Exception $e) {
             DB::rollBack();
 
-            // TODO: Add a danger alert to checkout page!
-            dd($e->getMessage()); // TODO: Find a better way to display messages on FE!
+            session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
+            return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
+                ->withErrors(['general' => $e->getMessage()]);
         }
 
 
         // TODO: Check if newsletter is checked and based on that add email to mailing list (CRM)
         // $subscribe_newsletter
 
-
         // Full Cart reset (with resetting session cart data)
         \CartService::fullCartReset();
 
         // Depending on payment method, do actions
-        $this->executePayment($request, $order->id, $invoice->id);
-
+        $this->executePayment($request, $invoice->id);
 
         // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
 
@@ -445,14 +446,13 @@ class EVCheckoutController extends Controller
         return view('frontend.order-received', compact('order'));
     }
 
-    public function executePayment(Request $request, $order_id, $invoice_id) {
-        $order = Order::find($order_id);
-        $invoice = Order::with('payment_method')->find($invoice_id);
+    public function executePayment(Request $request, $invoice_id) {
+        $invoice = Invoice::with('payment_method')->find($invoice_id);
 
         if($invoice->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
         } else if($invoice->payment_method->gateway === 'paysera') {
-            $paysera = new PayseraGateway(order: $order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
+            $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
             $paysera->pay();
         }
     }

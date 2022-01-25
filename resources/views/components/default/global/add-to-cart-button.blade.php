@@ -1,8 +1,9 @@
-<a class="btn  d-flex justify-content-center align-items-center {{ $class }}"
+<a class="btn btn-{{ $btnSize }} d-flex justify-content-center align-items-center {{ $class }}"
    @click="
     if(!processing && Number(qty) > 0) {
         processing = true; // start addToCart button processing
-        $wire.emit('addToCart', model_id, model_type, qty, true);
+
+        Livewire.find($('.c-flyout-cart').parent().attr('wire:id')).emit('addToCart', model_id, model_type, qty, true);
     }"
    x-cloak
    x-data="{
@@ -35,7 +36,14 @@
     </div>
 
     <div x-show="processing">
-        <div class="spinner-border text-white text-10 square-24" role="status">
+        @php
+            if($btnSize === 'xs') {
+               $loading_class = 'square-16';
+            } else if($btnSize === 'sm') {
+               $loading_class = 'square-24';
+            }
+        @endphp
+        <div class="spinner-border text-white text-10  {{ $loading_class }}" role="status">
             <span class="sr-only">{{ translate('Loading...') }}</span>
         </div>
     </div>
