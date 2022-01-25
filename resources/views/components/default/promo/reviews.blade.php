@@ -1,7 +1,9 @@
 <div class="container space-top-2 space-top-lg-3">
     <!-- Title -->
     <div class="w-md-80 w-lg-50 mb-5 mb-md-9">
-      <h2 class="h1">Front worklfow is loved by users worldwide</h2>
+        <x-ev.label class="h1" tag="h2" :label="ev_dynamic_translate('Reviews Title', true)">
+        </x-ev.label>
+
     </div>
     <!-- End Title -->
 
@@ -36,7 +38,8 @@
           <div class="card-footer border-0 bg-transparent pt-0 px-5 pb-5">
             <div class="media align-items-center">
               <div class="avatar avatar-circle mr-3">
-                <img class="avatar-img" src="../../assets/img/100x100/img2.jpg" alt="Image Description">
+                  {{-- TODO: create default avatar constant or component to manage images easily --}}
+                <img class="avatar-img" src="/assets/img/avatar-place.png" alt="Image Description">
               </div>
               <div class="media-body">
                 <h4 class="mb-0">Christina Kray</h4>
@@ -47,87 +50,6 @@
         </div>
       </div>
       <!-- End Testimonials -->
-
-      <!-- Testimonials -->
-      <div class="col-md-6 col-lg-4 mb-3 mb-md-5 mb-lg-0">
-        <div class="card h-100">
-          <div class="card-body">
-            <ul class="list-inline text-warning">
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-            </ul>
-            <div class="mb-auto">
-              <p class="text-dark mb-0">From boarding passes to transit and movie tickets, there's pretty much nothing you can't store with Front Pay.</p>
-            </div>
-          </div>
-
-          <div class="card-footer border-0 bg-transparent pt-0 px-5 pb-5">
-            <div class="media align-items-center">
-              <div class="avatar avatar-circle mr-3">
-                <img class="avatar-img" src="../../assets/img/100x100/img11.jpg" alt="Image Description">
-              </div>
-              <div class="media-body">
-                <h4 class="mb-0">Massalha Shady</h4>
-                <small class="d-block text-body">CEO at Slack</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Testimonials -->
-
-      <!-- Testimonials -->
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <ul class="list-inline text-warning">
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-              <li class="list-inline-item mx-0">
-                <i class="fas fa-star"></i>
-              </li>
-            </ul>
-            <div class="mb-auto">
-              <p class="text-dark mb-0">I love Front Pay for cash back, reward points and fraud protection – just like when you're swiping your card.</p>
-            </div>
-          </div>
-
-          <div class="card-footer border-0 bg-transparent pt-0 px-5 pb-5">
-            <div class="media align-items-center">
-              <div class="avatar avatar-circle mr-3">
-                <img class="avatar-img" src="../../assets/img/100x100/img4.jpg" alt="Image Description">
-              </div>
-              <div class="media-body">
-                <h4 class="mb-0">Mark McManus</h4>
-                <small class="d-block text-body">Front Pay user</small>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <!-- End Testimonials -->
     </div>
   </div>
@@ -178,7 +100,7 @@
                   <use xlink:href="#SVGID_1_"></use>
                 </clipPath>
                 <g transform="matrix(1 0 0 1 0 1.907349e-06)" style="clip-path:url(#SVGID_2_);">
-                  <image width="100" height="100" xlink:href="../../assets/img/100x100/img10.jpg" transform="matrix(0.36 0 0 0.36 32.8571 25.1429)"></image>
+                  <image width="100" height="100" xlink:href="/assets/img/avatar-place.png" transform="matrix(0.36 0 0 0.36 32.8571 25.1429)"></image>
                 </g>
                 <use xlink:href="#SVGID_1_" fill="none" stroke="#FFFFFF" stroke-width="4"></use>
                 <defs>
@@ -188,7 +110,7 @@
                   <use xlink:href="#SVGID_3_"></use>
                 </clipPath>
                 <g style="clip-path:url(#SVGID_4_);">
-                  <image width="100" height="100" xlink:href="../../assets/img/100x100/img3.jpg" transform="matrix(0.36 0 0 0.36 16.5714 2.8571)"></image>
+                  <image width="100" height="100" xlink:href="/assets/img/avatar-place.png" transform="matrix(0.36 0 0 0.36 16.5714 2.8571)"></image>
                 </g>
                 <use xlink:href="#SVGID_3_" fill="none" stroke="#FFFFFF" stroke-width="4"></use>
                 <defs>
@@ -198,7 +120,7 @@
                   <use xlink:href="#SVGID_5_"></use>
                 </clipPath>
                 <g style="clip-path:url(#SVGID_6_);">
-                  <image width="100" height="100" xlink:href="../../assets/img/100x100/img2.jpg" transform="matrix(0.3771 0 0 0.3771 2 24.2857)"></image>
+                  <image width="100" height="100" xlink:href="/assets/img/avatar-place.png" transform="matrix(0.3771 0 0 0.3771 2 24.2857)"></image>
                 </g>
                 <use xlink:href="#SVGID_5_" fill="none" stroke="#FFFFFF" stroke-width="4"></use>
               </svg>

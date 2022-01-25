@@ -2,8 +2,12 @@
     <div class="container pb-4">
       <!-- Title -->
       <div class="w-md-80 w-lg-60 text-center mx-md-auto mb-9">
-        <h2 class="h1">Flexible and transparent pricing</h2>
-        <p>Whatever your status, our offers evolve according to your needs.</p>
+        <x-ev.label tag="h1" class="h1" :label="ev_dynamic_translate('Pricing title', true)">
+        </x-ev.label>
+
+        <x-ev.label tag="p" class="" :label="ev_dynamic_translate('Pricing description', true)">
+        </x-ev.label>
+
       </div>
       <!-- End Title -->
 
@@ -74,8 +78,8 @@
                   1 app
                 </div>
               </div>
-              <div class="media font-size-1 text-body mb-3">
-                <i class="fas fa-check-circle text-success mt-1 mr-2"></i>
+              <div class="media font-size-1 text-body mb-3 d-flex align-items-center">
+                @svg('heroicon-o-check', ['class'=> 'ev-icon__xs text-success mt-1 mr-2'])
                 <div class="media-body">
                   Integrations
                 </div>
@@ -153,7 +157,7 @@
             <!-- SVG Elements -->
             <figure class="max-w-19rem w-100 position-absolute bottom-0 left-0 z-index-n1">
               <div class="mb-n7 ml-n7">
-                <img class="img-fluid" src="../../assets/svg/components/dots-2.svg" alt="Image Description">
+                <img class="img-fluid" src="/assets/svg/components/dots-2.svg" alt="Image Description">
               </div>
             </figure>
             <figure class="max-w-15rem w-100 position-absolute top-0 right-0 z-index-n1">

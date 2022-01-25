@@ -182,7 +182,7 @@ class PageController extends Controller
 
     public function pricing(){
 
-        return view('frontend.landings.pricing');
+        return view('frontend.pages.pricing');
 
     }
 
