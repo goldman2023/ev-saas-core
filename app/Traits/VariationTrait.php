@@ -119,8 +119,10 @@ trait VariationTrait
             }
 
             if($pass) {
-                return $item;
+                return true;
             }
+
+            return false;
         })->values();
     }
 

@@ -14,11 +14,22 @@
             selected_shipping_method: 0,
             same_billing_shipping: {{ ((request()->old('same_billing_shipping') ?? 'off') === 'off') ? 'false' : 'true' }},
             create_account: {{ ((request()->old('create_account') ?? 'off') === 'off') ? 'false' : 'true' }},
+            newsletter: {{ ((request()->old('newsletter') ?? 'off') === 'off') ? 'false' : 'true' }},
         }"
     >
         <form method="POST" action="" name="checkout-form" class="container">
             <div class="row">
                 <div class="col-lg-8">
+
+                    @error('general')
+                        <div class="alert alert-danger media" role="alert">
+                            <i class="tio-warning mt-1 mr-1"></i>
+                            <div class="media-body" role="alert">
+                                {{ $message }}
+                            </div>
+                        </div>
+                    @enderror
+
                     <div class="bg-white rounded card">
 
                         <div class="card-body">
@@ -323,7 +334,8 @@
 
                                         <div class="js-form-message mb-2">
                                             <div class="custom-control custom-checkbox d-flex align-items-center text-muted">
-                                                <input type="checkbox" class="custom-control-input" id="checkout_newsletter" name="newsletter">
+                                                <input type="checkbox" class="custom-control-input" id="checkout_newsletter" name="newsletter"
+                                                x-model="newsletter">
                                                 <label class="custom-control-label" for="checkout_newsletter">
                                                     <small>{{ translate('Please send me emails with exclusive info') }}</small>
                                                 </label>

@@ -68,6 +68,23 @@ class Invoice extends EVBaseModel
         );
     }
 
+    /*
+     * This functions determines if current Invoice is actually the last invoice of an Order this invoice is related to.
+     *
+     * There are three possible scenarios:
+     * 1. Standard order - one invoice is generated and invoice is always last
+     * 2. Subscription order - x invoices are generated and invoice is never last
+     * 3. Installments - Invoice can be last if Number_of_invoices is reached
+     */
+    public function isLastInvoice() {
+        if($this->order->type === Order::TYPE_STANDARD) {
+            return true;
+        } else if($this->order->type === Order::TYPE_SUBSCRIPTION) {
+            return false;
+        } else if($this->order->type === Order::TYPE_INSTALLMENTS) {
+            return $this->order->number_of_invoices === $this->order->invoices()->count();
+        }
+    }
 
     public static function generateInvoiceNumber($first_name, $last_name, $company_name) {
         // TODO: Add invoicing number template to Shop settings, otherwise use Default

@@ -109,13 +109,14 @@
                      <!-- Wish List Cart -->
                      <li class="list-inline-item">
                         <div class="hs-unfold">
-                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="{{ route('wishlist') }}">
+                            <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="javascript:;" x-data="" @click="$dispatch('display-flyout-panel', {'id': 'wishlist-panel'})">
                                 @svg('heroicon-o-heart', ['class' => 'square-22'])
                                 {{-- TODO: Make count different, probably create a wishlist service like CartService --}}
                                 <div class="position-absolute badge badge-primary circle-dynamic"
                                      style="top: -6px; right: -6px; line-height: 0.8;   "
-                                     x-data="{count: 2}"
+                                     x-data="{count: {{ auth()->user()?->wishlists()?->count() ?? 0 }} }"
                                      x-text="Number(count) > 99 ? '99+':count"
+                                     @refresh-wishlist-items-count.window="count = $event.detail.count;"
                                      x-cloak
                                 >
                                 </div>

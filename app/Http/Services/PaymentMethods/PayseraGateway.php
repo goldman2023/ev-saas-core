@@ -37,9 +37,9 @@ class PayseraGateway
             $this->paytext = !empty($paytext) ? $paytext : translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'); // MUST USE: [order_nr] and ([site_name] or [owner_name] )
             $this->test = 1; // Testing!
 
-            $this->accepturl = route('gateway.paysera.accepted', ['order_id' => $this->order->id, 'invoice-id' => $this->invoice->id]);
-            $this->cancelurl = route('gateway.paysera.canceled', ['order_id' => $this->order->id, 'invoice-id' => $this->invoice->id]);
-            $this->callbackurl = route('gateway.paysera.callback', ['order_id' => $this->order->id, 'invoice-id' => $this->invoice->id]);
+            $this->accepturl = route('gateway.paysera.accepted', ['invoice_id' => $this->invoice->id]);
+            $this->cancelurl = route('gateway.paysera.canceled', ['invoice_id' => $this->invoice->id]);
+            $this->callbackurl = route('gateway.paysera.callback', ['invoice_id' => $this->invoice->id]);
         } catch(\Exception $e) {}
     }
 
@@ -48,80 +48,91 @@ class PayseraGateway
             WebToPay::redirectToPayment([
                 'projectid' => $this->payment_method->paysera_project_id,
                 'sign_password' => $this->payment_method->paysera_project_password,
-                'orderid' => $this->order->id,
-                'amount' => $this->order->total_price * 100, // in cents, hence x100
+                'orderid' => $this->invoice->id,
+                'amount' => $this->invoice->total_price * 100, // in cents, hence x100
                 'currency' => 'EUR', // 3-char notation - EUR, USD, RSD, JPY etc. TODO: Add currency column to `orders` table
-                'country' => $this->order->billing_country, // 2-char notation - LT, GB, US, DE, PL, RS etc.
+                'country' => $this->invoice->billing_country, // 2-char notation - LT, GB, US, DE, PL, RS etc.
                 'lang' => $this->lang,
                 'paytext' => $this->paytext,
-                'name' => $this->order->billing_first_name,
-                'surename' => $this->order->billing_last_name,
-                'p_firstname' => $this->order->billing_first_name,
-                'p_lastname' => $this->order->billing_last_name,
-                'p_email' => $this->order->email,
+                'name' => $this->invoice->billing_first_name,
+                'surename' => $this->invoice->billing_last_name,
+                'p_firstname' => $this->invoice->billing_first_name,
+                'p_lastname' => $this->invoice->billing_last_name,
+                'p_email' => $this->invoice->email,
                 'p_street' => !empty($this->order->shipping_address) ? $this->order->shipping_address : $this->order->billing_address,
                 'p_city' => !empty($this->order->shipping_city) ? $this->order->shipping_city : $this->order->billing_city,
                 'p_state' => !empty($this->order->shipping_state) ? $this->order->shipping_state : $this->order->billing_state,
                 'p_zip' => !empty($this->order->shipping_zip) ? $this->order->shipping_zip : $this->order->billing_zip,
                 'p_countrycode' => !empty($this->order->shipping_country) ? $this->order->shipping_country : $this->order->billing_country,
-                'buyer_consent' => 1, // TODO: Add consent checkbox to checkout page. You can find required text to be added to checkout page here: https://developers.paysera.com/en/checkout/integrations/integration-library#en_buyer_consent
+                'buyer_consent' => 1,
                 'accepturl' => $this->accepturl,
                 'cancelurl' => $this->cancelurl,
                 'callbackurl' => $this->callbackurl,
                 'test' => $this->test,
             ]);
         } catch (\Exception $exception) {
-            echo get_class($exception) . ':' . $exception->getMessage();
+            dd( get_class($exception) . ':' . $exception->getMessage());
         }
     }
 
-    public function accepted(Request $request, $order_id, $invoice_id) {
+    public function accepted(Request $request, $invoice_id) {
         $params = array();
         parse_str( base64_decode( strtr( $request->data, array( '-' => '+', '_' => '/' ) ) ), $params );
 
-        $order = Order::find($order_id);
-        $order->payment_status = Order::PAYMENT_STATUS_PENDING; // change payment status to pending until callback from paysera changes it to `paid`
-        $order->meta = $params;
-        $order->save();
+        $invoice = Invoice::find($invoice_id);
+
+        $invoice->order->payment_status = $invoice->isLastInvoice() ? Order::PAYMENT_STATUS_PENDING : Order::PAYMENT_STATUS_UNPAID;
+        $invoice->meta = $params;
+        $invoice->payment_status = Order::PAYMENT_STATUS_PENDING; // change payment status to pending until callback from paysera changes it to `paid`
+
+        $invoice->order->save();
+        $invoice->save();
 
         return view('frontend.order-accepted', compact('order'));
     }
 
-    public function canceled(Request $request, $order_id, $invoice_id) {
-        $order = Order::find($order_id);
-        $order->payment_status = Order::PAYMENT_STATUS_CANCELED; // change payment status to canceled
-        $order->save();
+    public function canceled(Request $request, $invoice_id) {
+        $invoice = Invoice::find($invoice_id);
+
+        $invoice->order->payment_status = Order::PAYMENT_STATUS_UNPAID; // change payment status of Order to unpaid
+        $invoice->payment_status = Order::PAYMENT_STATUS_CANCELED; // change payment_status of Invoice to canceled
+
+        $invoice->order->save();
+        $invoice->save();
 
         return view('frontend.order-canceled', compact('order'));
     }
 
-    public function callback(Request $request, $order_id, $invoice_ids) {
-        $order = Order::find($order_id);
+    public function callback(Request $request, $invoice_id) {
+        $invoice = Invoice::find($invoice_id);
 
         try {
             $response = WebToPay::validateAndParseData(
                 $_REQUEST,
-                $order->payment_method->paysera_project_id,
-                $order->payment_method->paysera_project_password
+                $invoice->payment_method->paysera_project_id,
+                $invoice->payment_method->paysera_project_password
             );
 
             if ($response['status'] === '1' || $response['status'] === '3') {
-                //@ToDo: Validate payment amount and currency, example provided in isPaymentValid method.
+                // ToDo: Validate payment amount and currency, example provided in isPaymentValid method.
 
-                if((int) $response['orderid'] !== Order::findOrFail($response['orderid'])->id) {
-                    Log::debug(translate('Received orderid from Paysera callback is not the same as order in DB'));
-                    throw new \Exception(translate('Received orderid from Paysera callback is not the same as order in DB'));
+                if((int) $response['orderid'] !== Invoice::findOrFail($response['orderid'])->id) {
+                    Log::debug(translate('Received orderid from Paysera callback is not the same as an invoice in DB'));
+                    throw new \Exception(translate('Received orderid from Paysera callback is not the same as an invoice in DB'));
                 }
 
-                $this->isPaymentValid($order, $response); // check if payment is valid
+                $this->isPaymentValid($invoice, $response); // check if payment is valid
 
-                $order->payment_status = Order::PAYMENT_STATUS_PAID; // change payment status
-                $order->save();
+                $invoice->payment_status = Order::PAYMENT_STATUS_PAID; // change payment status
+                $invoice->save();
+
+                $invoice->order->payment_status = $invoice->isLastInvoice() ? Order::PAYMENT_STATUS_PAID : Order::PAYMENT_STATUS_UNPAID;
+                $invoice->order->save();
 
                 echo 'OK';
             } else {
-                Log::debug(translate('Payment was not successful for order: '.$order->id));
-                throw new \Exception(translate('Payment was not successful for order: #'.$order->id));
+                Log::debug(translate('Payment was not successful for invoice: #'.$invoice->id));
+                throw new \Exception(translate('Payment was not successful for invoice: #'.$invoice->id));
             }
         } catch (\Exception $exception) {
             echo get_class($exception) . ':' . $exception->getMessage();
@@ -131,16 +142,16 @@ class PayseraGateway
     /**
      * @throws \Exception
      */
-    protected function isPaymentValid(Order $order, array $response): bool
+    protected function isPaymentValid(Invoice $invoice, array $response): bool
     {
         if (array_key_exists('payamount', $response) === false) {
-            if ($this->order->total_price !== (float) $response['amount']) { // TODO: Check currency also
-                Log::debug(translate('Wrong payment amount for order: #'.$order->id.' ('.$this->order->total_price.' != '.$response['amount'].')'));
-                throw new \Exception('Wrong payment amount');
+            if ($invoice->total_price !== (float) $response['amount']) { // TODO: Check currency also
+                Log::debug(translate('Wrong payment amount for invoice: #'.$invoice->id.' ('.$invoice->total_price.' != '.$response['amount'].')'));
+                throw new \Exception('Wrong payment amount for invoice: #'.$invoice->id.' ('.$invoice->total_price.' != '.$response['amount'].')');
             }
-        } else if ($this->order->total_price !== (float) $response['payamount']) { // TODO: Check currency also
-            Log::debug(translate('Wrong payment amount for order: #'.$order->id.' ('.$this->order->total_price.' != '.$response['payamount'].')'));
-            throw new \Exception('Wrong payment amount');
+        } else if ($invoice->total_price !== (float) $response['payamount']) { // TODO: Check currency also
+            Log::debug(translate('Wrong payment amount for order: #'.$invoice->id.' ('.$invoice->total_price.' != '.$response['payamount'].')'));
+            throw new \Exception('Wrong payment amount for order: #'.$invoice->id.' ('.$invoice->total_price.' != '.$response['payamount'].')');
         }
 
         return true;

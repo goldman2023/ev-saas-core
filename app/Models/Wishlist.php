@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
+use App\Facades\MyShop;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -25,12 +27,21 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @mixin \Eloquent
  */
 
-class Wishlist extends Model
+class Wishlist extends EVBaseModel
 {
     use LogsActivity;
 
-
     protected $guarded = [];
+
+    protected $with = ['subject'];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('my_wishlists', function (BaseBuilder $builder) {
+            $builder->where('user_id', '=', auth()->user()?->id)->orWhere('session_id', '=', -1);
+            // TODO: getting wishlist items by session
+        });
+    }
 
     public function user()
     {

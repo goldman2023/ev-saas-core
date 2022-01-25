@@ -118,6 +118,8 @@
 
         <!-- Carts -->
         <livewire:cart.cart template="flyout-cart" />
+
+        <!-- Wishlist -->
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
 
         <x-ev.toast id="global-toast"

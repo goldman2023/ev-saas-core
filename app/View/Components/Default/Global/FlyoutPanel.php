@@ -4,20 +4,20 @@ namespace App\View\Components\Default\Global;
 
 use Illuminate\View\Component;
 
-class FlyoutWishlist extends Component
+class FlyoutPanel extends Component
 {
-    public $wishlist;
-    public $count;
+    public $id;
+    public $title;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($id = 'flyout_panel', $title = 'Flyout panel')
     {
-        $this->count = auth()->user()?->wishlists()?->count() ?? 0;
-        $this->wishlist = auth()->user()?->wishlists;
+        $this->id = $id;
+        $this->title = $title;
     }
 
     /**
@@ -27,6 +27,6 @@ class FlyoutWishlist extends Component
      */
     public function render()
     {
-        return view('components.default.global.flyout-wishlist');
+        return view('components.default.global.flyout-panel');
     }
 }

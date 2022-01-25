@@ -87,10 +87,10 @@
 
                     <div class="col-8 pr-2">
                         {{-- TODO: Disable add to cart button and quantity counter if available stock is <= 0 --}}
-                            <livewire:cart.add-to-cart-button :model="$product" icon="heroicon-o-shopping-cart"
+                            <x-default.global.add-to-cart-button :model="$product" icon="heroicon-o-shopping-cart"
                             label="{{ translate('Add to cart') }}" label-not-in-stock="{{ translate('Not in stock') }}"
                             btn-type="primary">
-                            </livewire:cart.add-to-cart-button>
+                            </x-default.global.add-to-cart-button>
                     </div>
                     <div class="col-4 pl-2">
 

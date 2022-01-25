@@ -281,7 +281,7 @@ class ProductForm extends Component
 
             $this->update_success = true;
 
-            $this->dispatchBrowserEvent('toastIt', ['id' => '#product-updated-toast']);
+            $this->dispatchBrowserEvent('toastit', ['id' => '#product-updated-toast']);
             $this->dispatchBrowserEvent('goToTop');
         } catch(\Exception $e) {
             DB::rollBack();

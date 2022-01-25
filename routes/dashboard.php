@@ -84,11 +84,11 @@ Route::middleware([
 
 
 // Payment Methods callback routes
-        Route::get('/checkout/paysera/accepted/{id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
-        Route::get('/checkout/paysera/canceled/{id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
-        Route::get('/checkout/paysera/callback/{id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
+        Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
+        Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
+        Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
 
-        Route::post('/checkout/execute/payment/{id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
+        Route::post('/checkout/execute/payment/{invoice_id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
 // ---------------------------------------------------- //
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
