@@ -6,10 +6,12 @@ trait hasCoreProperties
 {
     protected array $core_properties = [];
 
-    public function initCoreProperties() {
+    public function initCoreProperties($only = []) {
         if(!empty($this->core_properties)) {
             foreach($this->core_properties as $property) {
-                $this->$property = null;
+                if(empty($only) || in_array($property, $only, true)) {
+                    $this->$property = null;
+                }
             }
         }
     }

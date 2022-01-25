@@ -11,6 +11,8 @@ class EVBaseModel extends Model
 {
     use hasCoreProperties;
 
+    public ?array $eagerLoaded = [];
+
     /**
      * Create a new Eloquent model instance.
      *

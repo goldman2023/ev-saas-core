@@ -93,21 +93,15 @@ class WishlistButton extends Component
     public function checkIfProductExistsInWishlist()
     {
         if (auth()->user()) {
-            $item = Wishlist::where('subject_id', $this->object->id)
+            return Wishlist::where('subject_id', $this->object->id)
                 ->where('subject_type', $this->model_class)
                 ->where('user_id', auth()->user()->id)
-                ->first();
+                ->count() === 1;
         } else {
-            $item = Wishlist::where('subject_id', $this->object->id)
+            return Wishlist::where('subject_id', $this->object->id)
                 ->where('subject_type', $this->model_class)
                 ->where('session_id', session()->getId())
-                ->first();
-        }
-
-        if ($item) {
-            return true;
-        } else {
-            return false;
+                ->count() === 1;
         }
     }
 }

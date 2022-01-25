@@ -17,8 +17,8 @@ trait CategoryTrait
     protected static function bootCategoryTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model):void {
-            if(!isset($model->categories)) {
+        static::relationsRetrieved(function ($model):void {
+            if(!$model->relationLoaded('categories')) {
                 $model->load('categories');
             }
         });

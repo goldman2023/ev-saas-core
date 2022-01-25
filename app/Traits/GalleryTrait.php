@@ -22,8 +22,8 @@ trait GalleryTrait
      */
     protected static function bootGalleryTrait()
     {
-        // When model data is retrieved, populate model prices data!
-        static::retrieved(function ($model) {
+        // When model relations data is retrieved, do:
+        static::relationsRetrieved(function ($model) {
             $model->getThumbnailAttribute();
             $model->getCoverAttribute();
             $model->getGalleryAttribute();

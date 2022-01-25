@@ -40,7 +40,7 @@ use Vendor;
  * @mixin \Eloquent
  */
 
-class Category extends Model
+class Category extends EVBaseModel
 {
     //use Cachable;
     use HasSlug;
@@ -54,6 +54,8 @@ class Category extends Model
     public const PATH_SEPARATOR = '.';
 
     protected $appends = ['selected', 'title_path'];
+
+    protected $with = ['translations'];
 
 
     public function getParentKeyName() {
