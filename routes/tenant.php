@@ -147,7 +147,8 @@ Route::middleware([
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
-    Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.category');
+    Route::get('/products/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.category');
+    Route::get('/category/{slug}', [HomeController::class, 'listingByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
 

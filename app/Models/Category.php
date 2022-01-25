@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Categories;
 use App\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
@@ -170,6 +171,11 @@ class Category extends EVBaseModel
         }
 
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return Categories::getRoute($this);
     }
 
     public function getTranslationModel(): ?string

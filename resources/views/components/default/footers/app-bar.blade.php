@@ -49,12 +49,13 @@
     }
 }
 </style>
-<nav class="nav-bottom text-dark" id="ev-app-bar">
+
+<nav class="nav-bar-bottom nav-bottom text-dark" id="ev-app-bar">
     <a href="/" class="nav-link active">
         @svg('heroicon-o-home', ['style' => 'width: 24px;'])
         <span class="text">{{ translate('Home') }}</span>
     </a>
-    <span x-data="" @click="$dispatch('display-wishlist')" class="nav-link text-dark">
+    <span x-data="" @click="$dispatch('display-flyout-panel', {'id': 'categories-panel'})" class="nav-link text-dark">
         @svg('heroicon-o-view-grid', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Categories') }}</span>
     </span>
@@ -66,7 +67,6 @@
         @svg('heroicon-o-user-circle', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Profile') }}</span>
     </a>
-
     <span  @click="$dispatch('display-menu')" class="nav-link text-dark">
         @svg('heroicon-o-menu', ['style' => 'width: 24px;'])
         <span class="text">{{ translate('Menu') }}</span>

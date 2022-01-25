@@ -103,7 +103,7 @@
             <x-default.footers.footer>
             </x-default.footers.footer>
 
-        </div>
+    </div>
         <x-default.footers.app-bar>
         </x-default.footers.app-bar>
 
@@ -116,11 +116,14 @@
         <!-- Print SignUp Modal Component -->
         <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
-        <!-- Carts -->
+        <!-- Carts Flyout-->
         <livewire:cart.cart template="flyout-cart" />
 
-        <!-- Wishlist -->
+        <!-- Wishlist Flyout -->
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+
+        <!-- Categories Flyout -->
+        <x-default.global.flyout-categories></x-default.global.flyout-categories>
 
         <x-ev.toast id="global-toast"
                     position="bottom-center"
