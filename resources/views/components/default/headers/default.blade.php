@@ -1,5 +1,71 @@
 <!-- ========== HEADER ========== -->
 <header id="header" class="header shadow-lg" style="position: relative;">
+    <div class="sub-header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <!-- Responsive Toggle Button -->
+                <button type="button" class="navbar-toggler btn btn-icon btn-sm rounded-circle"
+                    aria-label="Toggle navigation" aria-expanded="false" aria-controls="navBar" data-toggle="collapse"
+                    data-target="#navBar">
+                    <span class="navbar-toggler-default">
+                        <svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="currentColor"
+                                d="M17.4,6.2H0.6C0.3,6.2,0,5.9,0,5.5V4.1c0-0.4,0.3-0.7,0.6-0.7h16.9c0.3,0,0.6,0.3,0.6,0.7v1.4C18,5.9,17.7,6.2,17.4,6.2z M17.4,14.1H0.6c-0.3,0-0.6-0.3-0.6-0.7V12c0-0.4,0.3-0.7,0.6-0.7h16.9c0.3,0,0.6,0.3,0.6,0.7v1.4C18,13.7,17.7,14.1,17.4,14.1z" />
+                        </svg>
+                    </span>
+                    <span class="navbar-toggler-toggled">
+                        <svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="currentColor"
+                                d="M11.5,9.5l5-5c0.2-0.2,0.2-0.6-0.1-0.9l-1-1c-0.3-0.3-0.7-0.3-0.9-0.1l-5,5l-5-5C4.3,2.3,3.9,2.4,3.6,2.6l-1,1 C2.4,3.9,2.3,4.3,2.5,4.5l5,5l-5,5c-0.2,0.2-0.2,0.6,0.1,0.9l1,1c0.3,0.3,0.7,0.3,0.9,0.1l5-5l5,5c0.2,0.2,0.6,0.2,0.9-0.1l1-1 c0.3-0.3,0.3-0.7,0.1-0.9L11.5,9.5z" />
+                        </svg>
+                    </span>
+                </button>
+                <!-- End Responsive Toggle Button -->
+
+                <!-- Navigation -->
+                <div id="navBar" class="collapse navbar-collapse">
+
+                    <ul class="navbar-nav ml-0 mr-0">
+                        <!-- Home -->
+                        <li class="category-dropdown-toggle">
+
+                            <x-default.system.tenant.logo style="max-width: 100px;">
+                            </x-default.system.tenant.logo>
+                        </li>
+                        @if (get_setting('header_menu_labels') != null)
+
+
+                        @foreach (get_setting('header_menu_labels') as $key => $value)
+                        @php
+                        $target = '_self';
+
+                        @endphp
+                        <li class="position-static">
+                            {{-- TODO: Add active menu indicators --}}
+                            <a class="nav-link text-white" style="font-weight: 600; font-size: 16px;"
+                                target="{{ $target }}" href="{{ get_setting('header_menu_links')[$key] }}">
+                                {{ $value }}
+                            </a>
+                        </li>
+                        @endforeach
+
+                        @endif
+
+
+                        <!-- End Home -->
+
+                        <!-- End Docs -->
+
+                        <!-- Button -->
+
+                        <!-- End Button -->
+                    </ul>
+
+                </div>
+
+        </div>
+
+    </div>
     <div class="header-section">
         <!-- Topbar -->
         <div class="container header-hide-content pt-2">
@@ -175,100 +241,32 @@
         <div id="logoAndNav" class="container pb-3">
             <!-- Nav -->
             <div class="row">
-                <div class="col-sm-3 col-6">
-                    <a class="navbar-brand p-0" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
-                        @php
-                        $header_logo = get_setting('header_logo');
-                        @endphp
-                        @if ($header_logo != null)
-                        <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
-                        @else
-                        <img src="{{ static_asset('tenancy/assets/img/logo.jpg') }}" alt="{{ env('APP_NAME') }}">
-                        @endif
-                    </a>
-                </div>
+
                 <div class="col-sm-6 align-items-center d-none d-sm-block">
                     <x-b2-b-search></x-b2-b-search>
                 </div>
+
+                <div class="col-sm-3 col-6">
+
+                </div>
                 <div class="col-sm-3 col-6 justify-content-end align-items-end text-right">
+
                     <x-join-button>
                     </x-join-button>
+
+                    @auth
+                    <div class="avatar avatar-sm avatar-soft-primary avatar-circle ml-3">
+                        <span class="avatar-initials">EIM</span>
+                        <span class="avatar-status avatar-sm-status avatar-status-success bg-success"></span>
+                      </div>
+                    @endauth
                 </div>
                 <!-- End Nav -->
             </div>
 
         </div>
     </div>
-    <div class="sub-header">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg">
-                <!-- Responsive Toggle Button -->
-                <button type="button" class="navbar-toggler btn btn-icon btn-sm rounded-circle"
-                    aria-label="Toggle navigation" aria-expanded="false" aria-controls="navBar" data-toggle="collapse"
-                    data-target="#navBar">
-                    <span class="navbar-toggler-default">
-                        <svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="currentColor"
-                                d="M17.4,6.2H0.6C0.3,6.2,0,5.9,0,5.5V4.1c0-0.4,0.3-0.7,0.6-0.7h16.9c0.3,0,0.6,0.3,0.6,0.7v1.4C18,5.9,17.7,6.2,17.4,6.2z M17.4,14.1H0.6c-0.3,0-0.6-0.3-0.6-0.7V12c0-0.4,0.3-0.7,0.6-0.7h16.9c0.3,0,0.6,0.3,0.6,0.7v1.4C18,13.7,17.7,14.1,17.4,14.1z" />
-                        </svg>
-                    </span>
-                    <span class="navbar-toggler-toggled">
-                        <svg width="14" height="14" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="currentColor"
-                                d="M11.5,9.5l5-5c0.2-0.2,0.2-0.6-0.1-0.9l-1-1c-0.3-0.3-0.7-0.3-0.9-0.1l-5,5l-5-5C4.3,2.3,3.9,2.4,3.6,2.6l-1,1 C2.4,3.9,2.3,4.3,2.5,4.5l5,5l-5,5c-0.2,0.2-0.2,0.6,0.1,0.9l1,1c0.3,0.3,0.7,0.3,0.9,0.1l5-5l5,5c0.2,0.2,0.6,0.2,0.9-0.1l1-1 c0.3-0.3,0.3-0.7,0.1-0.9L11.5,9.5z" />
-                        </svg>
-                    </span>
-                </button>
-                <!-- End Responsive Toggle Button -->
 
-                <!-- Navigation -->
-                <div id="navBar" class="collapse navbar-collapse">
-
-                    <ul class="navbar-nav ml-0 mr-0">
-                        <!-- Home -->
-                        <li class="category-dropdown-toggle">
-
-                            <a href="#" class="nav-link text-white d-flex align-items-center fw-600">
-
-                                @svg('heroicon-s-menu', ["class" => 'ev-icon__small mr-2'])
-
-                                </span>{{ translate('Browse Categories') }}
-                            </a>
-                        </li>
-                        @if (get_setting('header_menu_labels') != null)
-
-
-                        @foreach (get_setting('header_menu_labels') as $key => $value)
-                        @php
-                        $target = '_self';
-
-                        @endphp
-                        <li class="position-static">
-                            {{-- TODO: Add active menu indicators --}}
-                            <a class="nav-link text-white" style="font-weight: 600; font-size: 16px;"
-                                target="{{ $target }}" href="{{ get_setting('header_menu_links')[$key] }}">
-                                {{ $value }}
-                            </a>
-                        </li>
-                        @endforeach
-
-                        @endif
-
-
-                        <!-- End Home -->
-
-                        <!-- End Docs -->
-
-                        <!-- Button -->
-
-                        <!-- End Button -->
-                    </ul>
-
-                </div>
-
-        </div>
-
-    </div>
     <!-- End Navigation -->
     </div>
 </header>

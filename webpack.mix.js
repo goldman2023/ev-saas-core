@@ -1,9 +1,24 @@
-const mix = require('laravel-mix');
+// TODO: FIX mix-manifest.json! For now mix() doesn't work cuz compiling tenant-theme css overrides mix-manifest.json!
+const mix = require("laravel-mix");
+const os = require('os');
+let sassVars = require("get-sass-vars");
+let _ = require('lodash');
 const path = require("path");
+const fs = require("fs");
+
+
+
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+
+// TODO: Fix vue-loader error!
+// NOTE: If vue is enabled with .vue(), there will be an error in compiling due to vue-loader package.
+// Error: Compiling RuleSet failed: Unexpected property test in condition
+// Read: https://github.com/laravel-mix/laravel-mix/issues/2613
 
 /*
  |--------------------------------------------------------------------------
- | Mix Asset Management for CENTRAL APP and ADMIN DASHBOARD
+ | Mix Asset Management
  |--------------------------------------------------------------------------
  |
  | Mix provides a clean, fluent API for defining some Webpack build steps
@@ -12,42 +27,45 @@ const path = require("path");
  |
  */
 
- /* TODO: Document this propertly right now it's a test using getstream.io react chat sdk */
- mix.js('resources/js/feed.js', 'public/js').react().extract(['react', 'react-dom']);
+// NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
+// That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
+let theme = 'ev-saas-default';
 
+let childThemes = ['ev-saas-fox', 'ev-saas-gun'];
 
-
-/* Minimal dependency requirements for public parts of the website */
-mix.js([
-    'resources/js/vendor/jquery.js',
-    'resources/js/admin/vendors.js',
-    'resources/js/vendor/aiz-core.js',
-], 'public/assets/js/vendors.js');
-
-
-mix.scripts([
-    'resources/js/vendor/vendors.js',
-    'resources/js/vendor/aiz-core.js',
-], 'public/assets/js/vendors-guest.js');
-
-mix.setPublicPath("public")
-    .js('resources/js/app.js', 'public/js').version()
-    .sass('resources/scss/app.scss', 'public/css').version()
-    .sass('resources/scss/admin/admin.scss', 'public/ev-assets/admin/css').version()
-    // .sass('resources/scss/app.scss', 'public/ev-assets/css').version()
-    /* Minimal dependency requirements for public parts of the CENTRAL EV-SAAS app AND Tenants Dashboards! */
-    .scripts([
-        'resources/js/admin/vendors.js',
-        'resources/js/vendor/aiz-core.js',
-    ], 'public/js/vendors.js').version()
-    .scripts([
-        'resources/js/flare.js',
-    ], 'public/js/flare.js').version()
-    // TODO: add replacement of colors to css variables
+mix.setPublicPath(`public/themes/${theme}`)
     .webpackConfig({
         resolve: {
             alias: {
-                '@': path.resolve('./resources'),
+                // -------- Theme resources paths -------- //
+                '@': path.resolve(`themes/${theme}`),
+                'scss@': path.resolve(`themes/${theme}/scss`),
+                'js@': path.resolve(`themes/${theme}/js`),
+                'vue@': path.resolve(`themes/${theme}/js/components`), // vue@ is base path alias for Vue components inside a specific theme. Used if we need to override styling or html or anything to be theme specific!
+                // -------- Default resources paths -------- //
+                'r@': path.resolve(`resources`),
+                'r-scss@': path.resolve(`resources/scss`),
+                'r-js@': path.resolve(`resources/js`),
+                'r-vue@': path.resolve(`resources/js/components`) // r-vue means: Vue files in resources/js. These are non-theme dependent files. Can be overriden with in theme by including vue files with 'vue@'.
             },
         }
     });
+
+
+var entry_path = 'themes/ev-saas-default';
+mix.setPublicPath(`public/themes/${theme}`).js(`${entry_path}/js/app.js`, `public/themes/${theme}/js`).version()
+    .js(`${entry_path}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
+    .js(`${entry_path}/js/alpine.js`, `public/themes/${theme}/js`).version()
+    .js(`${entry_path}/js/vue.js`, `public/themes/${theme}/js`)/*.vue({ version: 2 })*/.version() // Uses Vue v2 // TODO: Fix vue-loader version issue before using .vue()
+    .sass(`${entry_path}/scss/app.scss`, `public/themes/${theme}/css`, {
+        sassOptions: {
+            processCssUrls: false
+        },
+    }).version()
+    .copy(`${entry_path}/js/crud/*.js`, `public/themes/${theme}/js/crud`)
+    .copyDirectory(`themes/ev-saas-default/images`, `public/themes/${theme}/images`)
+    .copyDirectory(`themes/ev-saas-default/vendor`, `public/themes/${theme}/vendor`)
+    .copyDirectory(`themes/ev-saas-default/svg`, `public/themes/${theme}/svg`)
+    // TODO: Note that when .then() function is added, everything is compiled already, so no further compilings are possible!
+
+
