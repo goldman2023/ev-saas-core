@@ -48,7 +48,7 @@
                         @endforeach
 
                         @endif
-                        <li class="ml-auto d-none d-sm-block">
+                        <li class="ml-auto d-none d-sm-block position-relative">
                             @auth
                             @if(Auth::user()->user_type == 'seller')
                             <a href="{{ route('dashboard') }}" class="btn btn-white">
@@ -59,7 +59,8 @@
                                 {{ translate('Become a Seller') }}
 
                                 <div class="position-absolute badge badge-success d-flex align-items-center justify-content-center"
-                                    style="top: -10px; right: -20px;  font-size: 14px;  ">Available in
+                                    style="top: -10px; right: -20px;  font-size: 14px;  ">
+                                    {{ translate('Available in') }}
                                     <div style="font-size: 18px;" class="ml-1">
                                         🇪🇺
                                     </div>
@@ -236,9 +237,8 @@
                     @else
                     <li class="list-inline-item">
                         <div class="hs-unfold">
-                            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary"
-                            href="javascript:;"
-                            x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" >
+                            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary" href="javascript:;"
+                                x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
                                 <!--data-toggle="modal" data-target="#signupModal">-->
                                 @svg('heroicon-s-user-circle', ['class' => 'square-2'])
                             </a>
@@ -246,8 +246,8 @@
                     </li>
 
                     <li class="list-inline-item">
-                        <a href="javascript:;"
-                        x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})"  >
+                        <a href="javascript:;" x-data=""
+                            @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
                             {{ translate('Login') }}
                         </a>
                     </li>
