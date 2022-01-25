@@ -59,7 +59,7 @@
                                 {{ translate('Become a Seller') }}
 
                                 <div class="position-absolute badge badge-success d-flex align-items-center justify-content-center"
-                                    style="top: 6px; right: -20px;  font-size: 14px;  ">Available in
+                                    style="top: -10px; right: -20px;  font-size: 14px;  ">Available in
                                     <div style="font-size: 18px;" class="ml-1">
                                         🇪🇺
                                     </div>
@@ -245,7 +245,8 @@
                     </li>
 
                     <li class="list-inline-item">
-                        <a href="{{ route('business.login') }}" data-test="header.login">
+                        <a href="javascript:;"
+                        x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})"  >
                             {{ translate('Login') }}
                         </a>
                     </li>

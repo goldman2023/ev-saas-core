@@ -74,10 +74,11 @@
         <span class="text text-dark">{{ translate('My cart') }}</span>
     </span>
     @guest
-    <span @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" class="nav-link text-dark">
+    <a href="javascript:;"
+    x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" class="nav-link text-dark">
         @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Join') }}</span>
-    </span>
+    </a>
     @else
     <span @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" class="nav-link text-dark">
         @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])

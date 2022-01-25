@@ -124,7 +124,9 @@
         <livewire:cart.cart template="flyout-cart" />
 
         <!-- Wishlist -->
+        {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+        {{-- Like this, will decide later --}}
         <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
 
         <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
