@@ -30,13 +30,13 @@ trait VariationTrait
                 $model->load('variations');
             }
 
-            if($model->isMain()) {
-                // If it's a main model, set all variations main relation to main model! Reason is less DB queries.
-                $model->variations->map(function($variation) use ($model) {
-                    $variation->setMain($model);
-                    return $variation;
-                });
-            }
+//            if($model->isMain()) {
+//                // If it's a main model, set all variations main relation to main model! Reason is less DB queries.
+//                $model->variations->map(function($variation) use ($model) {
+//                    $variation->setMain($model);
+//                    return $variation;
+//                });
+//            }
         });
     }
 

@@ -78,9 +78,9 @@ class ProductVariation extends EVBaseModel
     public static function booted()
     {
         static::relationsRetrieved(function ($model) {
-            $model->appendCoreProperties(['name']);
-            $model->append(['name']);
-            $model->initCoreProperties(['name']);
+//            $model->appendCoreProperties(['name']);
+//            $model->append(['name']);
+//            $model->initCoreProperties(['name']);
         });
     }
 
@@ -93,8 +93,8 @@ class ProductVariation extends EVBaseModel
     public function getNameAttribute() {
         $att_values_idx = [];
         $name = '';
-        dd($this->main);
-        return json_encode($this->variant);
+//        dd($this->main);
+//        return json_encode($this->variant);
 
         if(!empty($this->variant)) {
             foreach($this->variant as $item) {
@@ -111,8 +111,6 @@ class ProductVariation extends EVBaseModel
         }
 
         return $name;
-
-        //return 'asd';
     }
 
     /*
