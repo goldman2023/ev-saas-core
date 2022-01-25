@@ -107,7 +107,6 @@
 
             <x-default.footers.footer>
             </x-default.footers.footer>
-
         </div>
         <x-default.footers.app-bar>
         </x-default.footers.app-bar>
@@ -126,6 +125,7 @@
 
         <!-- Wishlist -->
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+        <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
 
         <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
             :is_x="true" :timeout="4000">

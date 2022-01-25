@@ -73,10 +73,17 @@
         @svg('heroicon-s-shopping-cart', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('My cart') }}</span>
     </span>
-    <a href="{{ route('dashboard') }}" class="nav-link text-dark">
+    @guest
+    <span @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" class="nav-link text-dark">
+        @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])
+        <span class="text text-dark">{{ translate('Join') }}</span>
+    </span>
+    @else
+    <span @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" class="nav-link text-dark">
         @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Profile') }}</span>
-    </a>
+    </span>
+    @endif
 
     <span @click="$dispatch('display-menu')" class="nav-link text-dark">
         @svg('heroicon-s-menu', ['style' => 'width: 24px;'])

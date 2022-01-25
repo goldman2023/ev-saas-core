@@ -16,7 +16,7 @@
                 ->get();
         @endphp
         @foreach ($companies as $company)
-            <div class="col-sm-4 col-10">
+            <div class="col-sm-3 col-10">
                 <!-- Team -->
                 <x-company.company-card :company="$company">
                 </x-company.company-card>

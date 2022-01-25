@@ -7,6 +7,7 @@
             <div class="row">
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
                     <div class="card p-4">
+
                         <form class="js-validate" role="form" action="{{ route('business.login.submit') }}"
                             method="POST">
                             @csrf
@@ -20,9 +21,51 @@
                                 </div>
                                 <!-- End Title -->
 
+
                                 @error('incorrect')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
+
+
+
+                                @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 ||
+                                get_setting('twitter_login') == 1)
+                                <ul class="list-inline social colored text-center mb-4">
+
+                                    @if (get_setting('google_login') == 1)
+                                    <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"
+                                        href="{{ route('social.login', ['provider' => 'google']) }}">
+                                        <span class="d-flex justify-content-center align-items-center">
+                                            @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
+                                            {{ translate('Sign In with Google') }}
+                                        </span>
+                                    </a>
+                                    @endif
+                                    @if (get_setting('facebook_login') == 1)
+                                    <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"
+                                        href="{{ route('social.login', ['provider' => 'facebook']) }}">
+                                        <span class="d-flex justify-content-center align-items-center">
+                                            @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
+                                            {{ translate('Sign In with Facebook') }}
+                                        </span>
+                                    </a>
+                                    @endif
+                                    @if (get_setting('twitter_login') == 1)
+                                    <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"
+                                        href="{{ route('social.login', ['provider' => 'twitter']) }}">
+                                        <span class="d-flex justify-content-center align-items-center">
+                                            @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
+                                            {{ translate('Sign In with Twitter') }}
+                                        </span>
+                                    </a>
+                                    @endif
+                                </ul>
+                                @endif
+
+                                <div class="text-center mb-3">
+                                    <span class="divider divider-text">{{ translate('OR') }}</span>
+                                </div>
+
                                 <!-- Input Group -->
                                 <div class="js-form-message mb-4">
                                     <label class="input-label">{{ translate('Email') }}</label>
@@ -88,43 +131,7 @@
                                         }}</button>
                                 </div>
 
-                                <div class="text-center mb-3">
-                                    <span class="divider divider-text">{{ translate('OR') }}</span>
-                                </div>
 
-                                @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 ||
-                                get_setting('twitter_login') == 1)
-                                <ul class="list-inline social colored text-center mb-4">
-
-                                    @if (get_setting('google_login') == 1)
-                                    <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"
-                                        href="{{ route('social.login', ['provider' => 'google']) }}">
-                                        <span class="d-flex justify-content-center align-items-center">
-                                            @svg('grommet-google', ['style' => 'width:16px;margin-right:10px'])
-                                            {{ translate('Sign In with Google') }}
-                                        </span>
-                                    </a>
-                                    @endif
-                                    @if (get_setting('facebook_login') == 1)
-                                    <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"
-                                        href="{{ route('social.login', ['provider' => 'facebook']) }}">
-                                        <span class="d-flex justify-content-center align-items-center">
-                                            @svg('grommet-facebook', ['style' => 'width:16px;margin-right:10px'])
-                                            {{ translate('Sign In with Facebook') }}
-                                        </span>
-                                    </a>
-                                    @endif
-                                    @if (get_setting('twitter_login') == 1)
-                                    <a class="border btn btn-sm btn-ghost-secondary btn-block mb-2"
-                                        href="{{ route('social.login', ['provider' => 'twitter']) }}">
-                                        <span class="d-flex justify-content-center align-items-center">
-                                            @svg('grommet-twitter', ['style' => 'width:16px;margin-right:10px'])
-                                            {{ translate('Sign In with Twitter') }}
-                                        </span>
-                                    </a>
-                                    @endif
-                                </ul>
-                                @endif
                                 <div class="text-center">
                                     <span class="small text-muted">Do not have an account?</span>
                                     <a class="js-animation-link small font-weight-bold"
