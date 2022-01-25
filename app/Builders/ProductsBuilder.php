@@ -50,6 +50,9 @@ class ProductsBuilder extends BaseBuilder
             });
         }
 
+        // Eager load all Product Traits:
+        //$this->with();
+
         // Cacher is initially disabled! Where you want to use cached data, chain `->fromCache()` to the builder query!
         //$this->enableCacher();
     }

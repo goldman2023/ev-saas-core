@@ -19,9 +19,8 @@ trait AttributeTrait
     protected static function bootAttributeTrait()
     {
         // When model data is retrieved, populate model prices data!
-        static::retrieved(function ($model) {
-            // Load Custom Attributes
-            if(!isset($model->custom_attributes)) {
+        static::relationsRetrieved(function ($model) {
+            if(!$model->relationLoaded('custom_attributes')) {
                 $model->load('custom_attributes');
             }
         });

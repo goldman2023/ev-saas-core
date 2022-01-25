@@ -157,16 +157,16 @@ class Product extends EVBaseModel
      *
      * @var array
      */
-    protected $with = [];
-
+    protected $with = ['translations', 'custom_attributes', 'variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
+    public static $defaultEagerLoads = ['translations', 'custom_attributes', 'variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = ['name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'num_of_sale', 'meta_title', 'meta_description'];
 
-    protected static function boot()
-    {
-        parent::boot();
-    }
+//    protected static function boot()
+//    {
+//        parent::boot();
+//    }
 
     /**
      * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)

@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 trait VariationTrait
 {
-
     /*
      * Gets the class of the Variations Model (e.g. For Product Model, ProductVariation is the variation model class)
      */
@@ -26,15 +25,24 @@ trait VariationTrait
     protected static function bootVariationTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model) {
-            if($model->useVariations() && !isset($model->variations)) {
+        static::relationsRetrieved(function ($model) {
+            if($model->useVariations() && !$model->relationLoaded('variations')) {
                 $model->load('variations');
             }
+
+//            if($model->isMain()) {
+//                // If it's a main model, set all variations main relation to main model! Reason is less DB queries.
+//                $model->variations->map(function($variation) use ($model) {
+//                    $variation->setMain($model);
+//                    return $variation;
+//                });
+//            }
         });
     }
 
     public function useVariations(): ?bool
     {
+        // Does NOT query the database
         return $this->variant_attributes()->count() > 0;
     }
 
@@ -193,11 +201,16 @@ trait VariationTrait
         return ($this->main() instanceof Relation) ? $this->main : null;
     }
 
+    public function setMain($model): void
+    {
+        $this->setRelation('main', $model);
+    }
+
     public function hasMain() {
-        return !empty($this->getMain());
+        return $this->main() instanceof Relation;
     }
 
     public function isMain() {
-        return empty($this->getMain());
+        return empty($this->main());
     }
 }

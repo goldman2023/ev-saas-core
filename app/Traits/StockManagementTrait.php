@@ -24,11 +24,12 @@ trait StockManagementTrait
     protected static function bootStockManagementTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model) {
+        static::relationsRetrieved(function ($model) {
 
-            if(!isset($model->stock)) {
+            if(!$model->relationLoaded('stock')) {
                 $model->load('stock');
             }
+
 
 //            if(empty($model->stock)) {
 //                $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
@@ -39,7 +40,7 @@ trait StockManagementTrait
 //                $model->load('stock');
 //            }
 
-            if(!isset($model->serial_numbers)) {
+            if(!$model->relationLoaded('serial_numbers')) {
                 $model->load('serial_numbers');
             }
 
