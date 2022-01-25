@@ -38,7 +38,7 @@ class Wishlist extends EVBaseModel
     protected static function booted()
     {
         static::addGlobalScope('my_wishlists', function (BaseBuilder $builder) {
-            $builder->where('user_id', '=', auth()->user()?->id)->orWhere('session_id', '=', -1);
+            $builder->where('user_id', '=', auth()->user()?->id)->orWhere('guest_id', '=', -1);
             // TODO: getting wishlist items by session
         });
     }

@@ -54,7 +54,7 @@ class WishlistButton extends Component
             } else {
                 $item = Wishlist::where('subject_id', $this->object->id)
                     ->where('subject_type', $this->model_class)
-                    ->where('session_id', session()->getId())
+                    ->where('guest_id', session()->getId())
                     ->first()->delete();
             }
 
@@ -71,7 +71,7 @@ class WishlistButton extends Component
                 // $this->object->user->notify(new WishlistItemAdded($item));
 
             } else {
-                $item->session_id = session()->getId();
+                $item->guest_id = session()->getId();
             }
             $item->save();
             activity()
@@ -100,7 +100,7 @@ class WishlistButton extends Component
         } else {
             return Wishlist::where('subject_id', $this->object->id)
                 ->where('subject_type', $this->model_class)
-                ->where('session_id', session()->getId())
+                ->where('guest_id', session()->getId())
                 ->count() === 1;
         }
     }
