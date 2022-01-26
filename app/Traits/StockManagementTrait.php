@@ -44,8 +44,6 @@ trait StockManagementTrait
                 $model->load('serial_numbers');
             }
 
-            Log::debug($model);
-
             $model->getUseSerialAttribute();
             $model->getTempSkuAttribute();
             $model->getCurrentStockAttribute();

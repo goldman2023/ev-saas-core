@@ -129,6 +129,8 @@
         {{-- Like this, will decide later --}}
         <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
 
+        <x-default.global.flyout-categories></x-default.global.flyout-categories>
+
         <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
             :is_x="true" :timeout="4000">
         </x-ev.toast>
