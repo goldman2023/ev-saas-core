@@ -249,7 +249,7 @@
                             <!-- Course -->
                             <div class="row pt-0 mt-0 ev-horizontal-slider d-flex flex-nowrap pb-5"
                                 style="overflow-x: auto;">
-                                @foreach($shop->products as $product)
+                                @foreach($shop->products()->take(10)->get() as $product)
                                 <div class="col-10 col-sm-5">
                                     <x-default.products.cards.product-card :product="$product">
                                     </x-default.products.cards.product-card>
