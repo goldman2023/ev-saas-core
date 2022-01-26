@@ -27,7 +27,7 @@
                 </button>
                 <!-- End Responsive Toggle Button -->
                 <!-- Navigation -->
-                <div id="navBar" class="navbar-expand-lg colapsed navbar-expand-lg-collapse-block w-100">
+                <div id="navBar" class="navbar-expand-lg collapse navbar-expand-lg-collapse-block w-100">
 
                     <ul class="navbar-nav ml-0 mr-0 w-100 d-flex flex-nowrap">
                         @if (get_setting('header_menu_labels') != null)
