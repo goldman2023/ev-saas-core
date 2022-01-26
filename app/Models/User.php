@@ -223,6 +223,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         $data = Activity::where('subject_type', 'App\Models\Product')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')
+        ->take(10)
         ->get();
 
         return $data;

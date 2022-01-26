@@ -1,9 +1,9 @@
 @extends('frontend.layouts.' . $globalLayout)
 @section('content')
 
-<main id="content" role="main" class="bg-light" style="margin-top:-50px;">
+<main id="content" role="main" class="bg-light" >
     <section class="bg-dark" style="background-image: url('https://htmlstream.com/front/assets/svg/components/abstract-shapes-20.svg');">
-        <div class="container space-1 space-top-lg-2 space-bottom-lg-3">
+        <div class="container space-1 space-top-lg-2 space-bottom-lg-3 d-none d-sm-block">
             <div class="row align-items-center">
                 <div class="col">
                     <div class="d-none d-lg-block">
@@ -41,10 +41,10 @@
 
     <section class="c-dashboard-panel container space-1 space-top-lg-0 space-bottom-lg-2 mt-lg-n10">
         <div class="row">
-            <div class="c-user-side-nav">
+            <div class="c-user-side-nav d-none d-sm-block">
                 @include('frontend.inc.user_side_nav')
             </div>
-            <div class="aiz-user-panel c-user-panel">
+            <div class="aiz-user-panel c-user-panel ">
                 @yield('panel_content')
             </div>
         </div>

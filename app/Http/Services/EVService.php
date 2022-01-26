@@ -102,14 +102,14 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_products', 'browse_products']
                     ],
-                    [
+                    /* [
                         'label' => translate('Courses'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('courses.index'),
                         'is_active' => areActiveRoutes(['courses.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => [] // TODO: Add browse_all_courses and browse_my_courses - when courses are added as new content type
-                    ],
+                    ], */
                     [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
@@ -168,14 +168,14 @@ class EVService
 //                        'user_types' => User::$non_customer_user_types,
 //                        'permissions' => [] // TODO: Don't know what this is about tbh
 //                    ],
-                    [
+                    /* [
                         'label' => translate('Tutorials'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('ev-tutorials.index'),
                         'is_active' => areActiveRoutes(['ev-tutorials.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => []
-                    ]
+                    ] */
                     // [
                     //     'label' => translate('Subscriptions'),
                     //     'icon' => 'heroicon-o-currency-dollar',
@@ -205,18 +205,18 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_customers', 'browse_customers']
                     ],
-                    [
+                    /* [
                         'label' => translate('Reviews'),
                         'icon' => 'heroicon-o-star',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['browse_reviews', 'view_review']
-                    ],
+                    ], */
                     [
-                        'label' => translate('Support'),
+                        'label' => translate('Messages'),
                         'icon' => 'heroicon-o-support',
-                        'route' => '',
+                        'route' => route('conversations.index'),
                         'is_active' => areActiveRoutes(['']),
                         'user_types' => User::$vendor_user_types,
                         'permissions' => []
@@ -236,7 +236,15 @@ class EVService
                         'permissions' => []
                     ],
                     [
-                        'label' => translate('My Purchases'),
+                        'label' => translate('My Orders'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('my.purchases.all'),
+                        'is_active' => areActiveRoutes(['my.purchases.all']),
+                        'user_types' => User::$user_types,
+                        'permissions' => []
+                    ],
+                    [
+                        'label' => translate('Invoices'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),

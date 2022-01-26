@@ -79,10 +79,10 @@
         <span class="text text-dark">{{ translate('Join') }}</span>
     </a>
     @else
-    <span @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" class="nav-link text-dark">
+    <a  x-data=""  @click="$dispatch('display-flyout-panel', {'id': 'profile-panel'})" class="nav-link text-dark">
         @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Profile') }}</span>
-    </span>
+    </a>
     @endif
 
     <span @click="$dispatch('display-menu')" class="nav-link text-dark">

@@ -3,7 +3,7 @@
 
 @section('panel_content')
     <div class="row">
-        <div class="col-4 mb-3">
+        <div class="col-sm-4 col-10  mb-3">
             <x-default.dashboard.widgets.leads-widget></x-default.dashboard.widgets.leads-widget>
          </div>
 

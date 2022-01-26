@@ -48,27 +48,22 @@ $categories = App\Models\Category::where('level', 0)
     {{-- <x-companies-archive-hero></x-companies-archive-hero> --}}
 </section>
 
-<section>
+{{-- <section>
 
     <x-default.categories.category-tabs-with-products :categories="$categories">
     </x-default.categories.category-tabs-with-products>
-</section>
+</section> --}}
 
-<section>
+{{-- <section>
     @php
     $categories = App\Models\Category
-    ::where('level', 0)
+    ::where('level', NULL)
     ->orderBy('order_level', 'desc')
     ->get();
     @endphp
     <x-default.categories.category-list :categories="$categories" slider="true"> </x-default.categories.category-list>
-</section>
+</section> --}}
 
-
-
-{{-- TODO: Add latest companies list here --}}
-{{-- HERE --}}
-{{-- END TODO --}}
 
 
 
@@ -76,7 +71,7 @@ $categories = App\Models\Category::where('level', 0)
     <div class="container">
         <div class="row">
             <div class="col-12">
-                {{-- <x-latest-products></x-latest-products> --}}
+                <x-latest-products></x-latest-products>
             </div>
         </div>
     </div>
@@ -86,20 +81,13 @@ $categories = App\Models\Category::where('level', 0)
 {{-- TODO: Refactor this to blade components --}}
 @include('frontend.components.benefits')
 
-<section>
-
-    <x-default.promo.features></x-default.promo.features>
-</section>
 
 <section>
-
     <x-default.promo.reviews></x-default.promo.reviews>
 </section>
 
 @guest
-<section>
-    <x-default.forms.contact-form></x-default.forms.contact-form>
-</section>
+
 
 
 @endguest

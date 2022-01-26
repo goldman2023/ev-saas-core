@@ -1,5 +1,5 @@
 @guest
-    <a href="{{ route('register') }}" class="text-white d-lg-inline-block btn-login btn btn-primary">
+    <a href="{{ route('shops.create') }}" class="text-white d-lg-inline-block btn-login btn btn-primary">
         {{ translate('Join GunOB') }}
         <i class="la la-angle-right "></i>
     </a>
@@ -15,7 +15,5 @@
             {{ translate('Dashboard') }}
             <i class="la la-angle-right "></i>
         </a>
-
-
     @endif
 @endguest

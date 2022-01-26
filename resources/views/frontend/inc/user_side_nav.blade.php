@@ -20,13 +20,13 @@
 
 <!-- Navbar -->
 <div class="navbar-expand-lg navbar-expand-lg-collapse-block navbar-light">
-    <div id="sidebarNav" class="collapse navbar-collapse navbar-vertical">
+    <div id="sidebarNav" class="navbar-vertical">
         <!-- Card -->
         <div class="card">
             <div class="card-body">
                 <!-- Avatar -->
                 @auth
-                <div class="d-none d-lg-block text-center mb-5">
+                <div class="d-block text-center mb-5">
                     <div class="avatar avatar-xxl avatar-circle mb-3">
                         {{-- TODO: Make this store logo, but think that users can have this --}}
                         <img class="avatar-img" src="{{ Auth::user()->getUpload('avatar') ?: 'https://htmlstream.com/front/assets/img/160x160/img1.jpg' }}" alt="Image Description">

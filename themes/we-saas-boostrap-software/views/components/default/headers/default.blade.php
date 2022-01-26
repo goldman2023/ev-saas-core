@@ -7,16 +7,7 @@
             <!-- Nav -->
             <div class="row align-items-center">
                 <div class="col-sm-3 col-6">
-                    <a class="navbar-brand p-2" href="{{ route('home') }}" aria-label="{{ get_site_name() }}">
-                        @php
-                        $header_logo = get_setting('header_logo');
-                        @endphp
-                        @if ($header_logo != null)
-                        <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}">
-                        @else
-                        <img src="{{ static_asset('tenancy/assets/img/logo.jpg') }}" alt="{{ env('APP_NAME') }}">
-                        @endif
-                    </a>
+                   <x-default.system.tenant.logo></x-default.system.tenant.logo>
                 </div>
                 <div class="col-sm-6 align-items-center d-none d-sm-block">
                 </div>

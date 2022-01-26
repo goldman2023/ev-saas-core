@@ -1,5 +1,4 @@
 @extends('frontend.layouts.user_panel')
-@section('page_title', translate('My Shop Settings'))
 @section('meta_title', translate('My Shop Settings'))
 
 @push('head_scripts')
