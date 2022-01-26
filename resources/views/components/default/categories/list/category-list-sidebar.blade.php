@@ -1,6 +1,6 @@
 <!-- Component name: Category List - Sidebar-->
 <!-- Component used: front/snippets/sidebar-examples.html#component-7 -->
-<div class="c-category-list-sidebar container-fluid w-100">
+<div class="c-category-list-sidebar w-100">
     <div class="row w-100">
         <div class="navbar-expand-lg navbar-expand-lg-collapse-block w-100">
             <div class="d-flex d-md-none mb-5 mb-lg-3 w-100">

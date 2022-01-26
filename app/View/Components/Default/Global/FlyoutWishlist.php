@@ -6,6 +6,9 @@ use Illuminate\View\Component;
 
 class FlyoutWishlist extends Component
 {
+    public $wishlist;
+    public $count;
+
     /**
      * Create a new component instance.
      *
@@ -13,7 +16,8 @@ class FlyoutWishlist extends Component
      */
     public function __construct()
     {
-        //
+        $this->count = auth()->user()?->wishlists()?->count() ?? 0;
+        $this->wishlist = auth()->user()?->wishlists;
     }
 
     /**

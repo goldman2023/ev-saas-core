@@ -29,9 +29,10 @@ class MatchPassword implements Rule, ValidatorAwareRule, DataAwareRule
     {
         $model_type = $this->parameters[0] ?? User::class;
         $model_identificator = $this->parameters[1];
+        $data_key = $this->parameters[2] ?? null;
 
         // Check if user with email is not already registered.
-        $model = app($model_type)::where($model_identificator, $this->data[$model_identificator])->first();
+        $model = app($model_type)::where($model_identificator, (!empty($data_key)) ? $this->data[$data_key][$model_identificator] : $this->data[$model_identificator])->first();
 
         // If user already exists, check if provided password is the password for that user
         return $model instanceof User && !empty($model->id ?? null) && Hash::check($value, $model->password);

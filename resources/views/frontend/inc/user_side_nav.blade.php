@@ -46,7 +46,7 @@
                 {{-- TODO: Add role-dependent menu items for Sellers(multi-vendor). --}}
                 {{-- IMPORTANT: Do not add admin-dependent menu items, like global SaaS settings and all sellers CRUD etc. We already have this in Admin panel! --}}
 
-                @if($menu = \EVS::getVendorMenuByRole('admin'))
+                @if($menu = \EVS::getDashboardMenu())
                     @foreach($menu as $section)
                         @if($section['label'] === 'hr')
                             <div class="dropdown-divider"></div>
@@ -62,6 +62,12 @@
                                         <a class="nav-link {{ $item['is_active'] }}" href="{{ $item['route'] }}">
                                             @svg($item['icon'], ['class' => 'nav-icon'])
                                             {{ $item['label'] }}
+
+                                            @if(($item['badge'] ?? null) && $item['badge']['content'] instanceof \Closure)
+                                                <span class="badge {{ $item['badge']['class'] }} text-12 ml-2 rounded">
+                                                    {{ $item['badge']['content']() ?? '' }}
+                                                </span>
+                                            @endif
                                         </a>
                                     </li>
                                 @endforeach

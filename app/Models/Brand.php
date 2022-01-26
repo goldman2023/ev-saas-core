@@ -29,7 +29,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
  * @mixin \Eloquent
  */
 
-class Brand extends Model
+class Brand extends EVBaseModel
 {
     use Cachable;
     use TranslationTrait;

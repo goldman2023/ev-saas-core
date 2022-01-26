@@ -2,9 +2,11 @@
 
 namespace App\Http\Services;
 
+use App\Facades\MyShop;
 use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use App\Models\User;
 use Cache;
 use Illuminate\Support\Collection;
 use Qirolab\Theme\Theme;
@@ -20,14 +22,14 @@ class EVService
 {
     protected $tenantStylePath;
 
-    public function __construct($app)
-    {
-        $tenant_css_path = public_path('themes/' . Theme::parent() . '/css/' . tenant()->id . '.css');
-        $default_css_path = public_path('themes/' . Theme::parent() . '/css/app.css');
+    public function __construct($app) {
+        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant('id').'.css');
+        $default_css_path = public_path('themes/'.Theme::parent().'/css/app.css');
         $styling_url = '';
 
-        if (file_exists($tenant_css_path)) {
-            $url = asset('themes/' . Theme::parent() . '/css/' . tenant()->id . '.css?ver=' . filemtime($tenant_css_path));
+        if(file_exists($tenant_css_path)) {
+            $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
+
         } else {
             $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
         }
@@ -42,39 +44,30 @@ class EVService
         return $this->tenantStylePath;
     }
 
-    public function getVendorMenuByRole($role = 'customer')
+    public function getDashboardMenuByRole($role = 'customer')
     {
-        $vendorMenu = [];
-        $vendorMenu = $this->getVendorMenu();
+        return collect($this->getDashboardMenuTemplate())->map(fn($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
+            if(isset($child['user_types'])) {
+                return in_array($role, $child['user_types']);
 
-        $vendorMenu = collect($vendorMenu)->map(function ($item) use ($role) {
-
-            return collect($item['items'])->filter(function ($child) use ($role, $item) {
-                if(isset($child['roles'])) {
-                    return in_array($role, $child['roles']);
-
-                } else {
-                    return true;
-                }
-            })->count() > 0 ? $item : null;
-
-        })->filter()->toArray();
-
-        return $vendorMenu;
-
-        /*  foreach($vendorMenu as $item) {
-            foreach($item['items'] as $key => $subItem) {
-                if(in_array($role, $subItem['roles'])) {
-
-                } else {
-                    unset($subItem[$key]);  // $arr = ['b', 'c']
-                }
+            } else {
+                return true;
             }
-        } */
+        })->count() > 0 ? $item : null)->filter()->toArray();
     }
 
-    public function getVendorMenu(): array
+    public function getDashboardMenu() {
+        return collect($this->getDashboardMenuTemplate())->map(function($group) {
+            $group['items'] = collect($group['items'])->filter(function($child) use($group) {
+                return \Permissions::canAccess($child['user_types'], $child['permissions'], false);
+            })->toArray();
+            return  $group;
+        })->filter(fn($group) => !empty($group['items']))->toArray();
+    }
+
+    protected function getDashboardMenuTemplate(): array
     {
+        // In order to show/hide certain items based on user type and permissions, you need to define user_types and permissions for each item
         return [
             [
                 'label' => translate('General'),
@@ -84,30 +77,17 @@ class EVService
                         'icon' => 'heroicon-o-presentation-chart-bar',
                         'route' => route('dashboard'),
                         'is_active' => areActiveRoutes(['dashboard']),
-                        'roles' => ['admin', 'seller', 'customer'], // empty array means ALL roles - admin/seller/customer
+                        'user_types' => User::$user_types,
+                        'permissions' => [] // always show, independent of permissions
                     ],
                     [
                         'label' => translate('Chat'),
                         'icon' => 'heroicon-o-chat',
                         'route' => route('chat.index'),
                         'is_active' => areActiveRoutes(['chat']),
-                        'roles' => [], // empty array means ALL roles - admin/seller/customer
+                        'user_types' => User::$user_types,
+                        'permissions' => []
                     ],
-                    [
-                        'label' => translate('Schedule'),
-                        'icon' => 'heroicon-o-calendar',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => [],
-                    ],
-                    [
-                        'label' => translate('Activity'),
-                        'icon' => 'heroicon-o-status-online',
-                        'route' => route('activity.index'),
-                        'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin'],
-                    ],
-
 
                 ]
             ],
@@ -119,42 +99,52 @@ class EVService
                         'icon' => 'heroicon-o-shopping-cart',
                         'route' => route('ev-products.index'),
                         'is_active' => areActiveRoutes(['ev-products.index']),
-                        'roles' => ['admin', 'seller'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_products', 'browse_products']
                     ],
                     [
                         'label' => translate('Courses'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('courses.index'),
                         'is_active' => areActiveRoutes(['courses.index']),
-                        'roles' => ['admin', 'seller'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => [] // TODO: Add browse_all_courses and browse_my_courses - when courses are added as new content type
                     ],
                     [
                         'label' => translate('Orders'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('orders.index'),
                         'is_active' => areActiveRoutes(['orders.index']),
-                        'roles' => ['admin', 'seller'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_orders'],
+                        'badge' => [
+                            'class' => 'badge-danger',
+                            'content' => function() {
+                                return MyShop::getShop()->orders()->where('viewed', 0)->count();
+                            }
+                        ]
                     ],
                     [
                         'label' => translate('Leads'),
                         'icon' => 'heroicon-o-calendar',
                         'route' => route('leads.index'),
                         'is_active' => areActiveRoutes(['leads']),
-                        'roles' => ['admin'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_leads','browse_leads']
                     ],
                     // [
                     //     'label' => translate('Events'),
                     //     'icon' => 'heroicon-o-ticket',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
                     // [
                     //     'label' => translate('Jobs'),
                     //     'icon' => 'heroicon-o-briefcase',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
 
                 ]
@@ -167,28 +157,31 @@ class EVService
                         'icon' => 'heroicon-o-newspaper',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin', 'seller'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_posts', 'browse_posts']
                     ],
-                    [
-                        'label' => translate('Website'),
-                        'icon' => 'heroicon-o-qrcode',
-                        'route' => route('ev.settings.domains'),
-                        'is_active' => areActiveRoutes(['ev.settings.domains']),
-                        'roles' => ['admin', 'seller'],
-                    ],
+//                    [
+//                        'label' => translate('Website'),
+//                        'icon' => 'heroicon-o-qrcode',
+//                        'route' => route('settings.domains'),
+//                        'is_active' => areActiveRoutes(['settings.domains']),
+//                        'user_types' => User::$non_customer_user_types,
+//                        'permissions' => [] // TODO: Don't know what this is about tbh
+//                    ],
                     [
                         'label' => translate('Tutorials'),
                         'icon' => 'heroicon-o-academic-cap',
                         'route' => route('ev-tutorials.index'),
-                        'is_active' => areActiveRoutes(['ev.settings.domains']),
-                        'roles' => ['admin', 'seller'],
+                        'is_active' => areActiveRoutes(['ev-tutorials.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => []
                     ]
                     // [
                     //     'label' => translate('Subscriptions'),
                     //     'icon' => 'heroicon-o-currency-dollar',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
                 ]
             ],
@@ -201,54 +194,70 @@ class EVService
                         'icon' => 'heroicon-o-chat',
                         'route' => route('conversations.index'),
                         'is_active' => areActiveRoutes(['conversations.index', 'conversations.show']),
-                        'roles' => ['admin', 'seller', 'customer'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => []
                     ],
                     [
                         'label' => translate('Customers'),
                         'icon' => 'heroicon-o-user-group',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin', 'seller'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_customers', 'browse_customers']
                     ],
                     [
                         'label' => translate('Reviews'),
                         'icon' => 'heroicon-o-star',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin', 'seller'],
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_reviews', 'view_review']
                     ],
                     [
                         'label' => translate('Support'),
                         'icon' => 'heroicon-o-support',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
-                        'roles' => ['admin', 'seller',  'guest'],
+                        'user_types' => User::$vendor_user_types,
+                        'permissions' => []
                     ],
+                    // TODO: Do we need another route/menu-item for admin/moderator/support Support page? We should have to support panels: one for customers/vendors and one for admin/moderator/support
                 ]
             ],
             [
                 'label' => translate('Customer zone'),
                 'items' => [
                     [
+                        'label' => translate('Account'),
+                        'icon' => 'heroicon-o-user',
+                        'route' => route('my.account.settings'),
+                        'is_active' => areActiveRoutes(['my.account.settings']),
+                        'user_types' => User::$user_types,
+                        'permissions' => []
+                    ],
+                    [
                         'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
-                        //'roles' => ['admin','seller', 'customer'],
+                        'user_types' => User::$user_types,
+                        'permissions' => []
                     ],
                     [
                         'label' => translate('My Wishlist'),
                         'icon' => 'heroicon-o-heart',
                         'route' => route('wishlist'),
                         'is_active' => areActiveRoutes(['wishlist']),
-                        'roles' => ['customer',  'guest'],
+                        'user_types' => User::$user_types,
+                        'permissions' => []
                     ],
                     [
                         'label' => translate('My Viewed Items'),
                         'icon' => 'heroicon-o-eye',
                         'route' => route('wishlist.views'),
                         'is_active' => areActiveRoutes(['wishlist.views']),
-                        'roles' => ['customer', 'admin', 'seller', 'guest'],
+                        'user_types' => User::$user_types,
+                        'permissions' => []
                     ]
                 ]
             ],
@@ -256,67 +265,59 @@ class EVService
                 'label' => translate('Settings'),
                 'items' => [
                     [
+                        'label' => translate('Shop settings'),
+                        'icon' => 'heroicon-o-office-building',
+                        'route' => route('settings.shop_settings'),
+                        'is_active' => areActiveRoutes(['settings.shop_settings']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['view_shop_data', 'view_shop_settings']
+                    ],
+                    [
                         'label' => translate('Design settings'),
                         'icon' => 'heroicon-o-cog',
-                        'route' => route('ev.settings.design'),
-                        'is_active' => areActiveRoutes(['ev.settings.design']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-                    [
-                        'label' => translate('Account settings'),
-                        'icon' => 'heroicon-o-cog',
-                        'route' => route('profile'),
-                        'is_active' => areActiveRoutes(['profile']),
-                        'roles' => ['admin', 'seller'],
-                    ],
-                    [
-                        'label' => translate('Payment settings'),
-                        'icon' => 'heroicon-o-cash',
-                        'route' => route('ev.settings.payment_methods'),
-                        'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
-                        'roles' => ['admin', 'seller'],
+                        'route' => route('settings.design'),
+                        'is_active' => areActiveRoutes(['settings.design']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_designs']
                     ],
                      [
                          'label' => translate('Payment settings'),
                          'icon' => 'heroicon-o-cash',
-                         'route' => route('ev.settings.payment_methods'),
-                         'is_active' => areActiveRoutes(['ev.settings.payment_methods']),
-                         'roles' => ['admin','seller'],
+                         'route' => route('settings.payment_methods'),
+                         'is_active' => areActiveRoutes(['settings.payment_methods']),
+                         'user_types' => User::$tenant_user_types,
+                         'permissions' => ['browse_uni_payment_methods']
                      ],
                     [
-                        'label' => translate('Users settings'),
+                        'label' => translate('Staff settings'),
                         'icon' => 'heroicon-s-user-group',
-                        'route' => route('ev.settings.users_settings'),
-                        'is_active' => areActiveRoutes(['ev.settings.users_settings']),
-                        'roles' => ['admin','seller'],
+                        'route' => route('settings.staff_settings'),
+                        'is_active' => areActiveRoutes(['settings.staff_settings']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_staff'] // TODO: Add users managing permissions
                     ],
+
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',
                     //     'route' => route('attributes'),
                     //     'is_active' => areActiveRoutes(['attributes']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
-                    // [
-                    //     'label' => translate('Shop settings'),
-                    //     'icon' => 'heroicon-o-office-building',
-                    //     'route' => route('shops.index'),
-                    //     'is_active' => areActiveRoutes(['shops']),
-                    //     'roles' => ['admin','seller'],
-                    // ],
+
                     // [
                     //     'label' => translate('Shipping settings'),
                     //     'icon' => 'heroicon-o-truck',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
                     // [
                     //     'label' => translate('Tax settings'),
                     //     'icon' => 'heroicon-o-receipt-tax',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
                 ]
             ],
@@ -328,14 +329,14 @@ class EVService
                     //     'icon' => 'heroicon-o-credit-card',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
                     // [
                     //     'label' => translate('Uploaded media'),
                     //     'icon' => 'heroicon-o-upload',
                     //     'route' => '',
                     //     'is_active' => areActiveRoutes(['']),
-                    //     'roles' => ['admin','seller'],
+                    //     'user_types' => ['admin','seller'],
                     // ],
                 ]
             ],
@@ -347,8 +348,8 @@ class EVService
                         'icon' => 'heroicon-o-logout',
                         'route' => route('user.logout'),
                         'is_active' => false,
-                        'roles' => ['admin', 'seller'],
-
+                        'user_types' => User::$user_types,
+                        'permissions' => []
                     ],
                 ]
             ]

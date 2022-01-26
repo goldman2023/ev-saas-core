@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AffiliateBannerController;
 use App\Http\Controllers\AizUploadController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
@@ -62,6 +63,8 @@ Route::middleware([
     /* This is experimental, adding it here for now */
     Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
 
+    Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
+    Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
 
     // Route to show after creating new tenant:
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');
@@ -116,8 +119,12 @@ Route::middleware([
     Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
     Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');
 
-    Route::get('/social-login/redirect/{provider}', [LoginController::class, 'redirectToProvider'])->name('social.login');
-    Route::get('/social-login/{provider}/callback', [LoginController::class, 'handleProviderCallback'])->name('social.callback');
+
+    Route::get('/social-login/redirect/{provider}', [SocialController::class, 'redirectLoginToProvider'])->name('social.login');
+    Route::get('/social-login/{provider}/callback', [SocialController::class, 'handleProviderLoginCallback'])->name('social.login.callback');
+    Route::get('/social-connect/redirect/{provider}', [SocialController::class, 'redirectConnectToProvider'])->name('social.connect');
+    Route::get('/social-connect/{provider}/callback', [SocialController::class, 'handleProviderConnectCallback'])->name('social.connect.callback');
+
     Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
     Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
     Route::get('/users/login', [HomeController::class, 'login_users'])->name('user.login');
@@ -142,7 +149,8 @@ Route::middleware([
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
-    Route::get('/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.category');
+    Route::get('/products/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.category');
+    Route::get('/category/{slug}', [HomeController::class, 'listingByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
 
@@ -317,6 +325,7 @@ Route::middleware([
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
+    Route::resource('knowledge-base', 'KnowledgeBaseController');
 
 
     // Tenant Management routes - added from SaaS Boilerplate

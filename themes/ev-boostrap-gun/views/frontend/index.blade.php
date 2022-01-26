@@ -2,13 +2,14 @@
 
 @section('content')
 
-<section>
+<section style="max-width: 100%; overflow: scroll;">
     <x-default.brands.brands-list>
     </x-default.brands.brands-list>
 </section>
 
 @php
 $categories = App\Models\Category::where('level', 0)
+->whereHas('products')
 ->orderBy('order_level', 'desc')
 ->get();
 @endphp
@@ -20,7 +21,7 @@ $categories = App\Models\Category::where('level', 0)
 
 <section>
     <div class="container">
-                <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
+        <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
     </div>
 </section>
 
@@ -85,10 +86,18 @@ $categories = App\Models\Category::where('level', 0)
 {{-- TODO: Refactor this to blade components --}}
 @include('frontend.components.benefits')
 
+
+<section>
+
+    <x-default.promo.reviews></x-default.promo.reviews>
+</section>
+
 @guest
 <section>
     <x-default.forms.contact-form></x-default.forms.contact-form>
 </section>
+
+
 @endguest
 {{-- TODO: Refactor this to blade components --}}
 {{-- @include('frontend.components.news') --}}

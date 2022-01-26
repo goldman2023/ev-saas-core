@@ -5,10 +5,13 @@ namespace App\Http\Livewire\Actions;
 use App\Models\Product;
 use App\Models\Wishlist;
 use App\Notifications\WishlistItemAdded;
+use App\Traits\Livewire\DispatchSupport;
 use Livewire\Component;
 
 class WishlistButton extends Component
 {
+    use DispatchSupport;
+
     public $object;
     public $added = false;
     public $model_class;
@@ -51,14 +54,12 @@ class WishlistButton extends Component
             } else {
                 $item = Wishlist::where('subject_id', $this->object->id)
                     ->where('subject_type', $this->model_class)
-                    ->where('session_id', session()->getId())
+                    ->where('guest_id', session()->getId())
                     ->first()->delete();
             }
-            $this->dispatchBrowserEvent('toastIt', [
-                'id' => "#global-toast",
-                'content' => "Item removed from wishlist",
-                'type' => 'success'
-            ]);
+
+            $this->emit('removedFromWishlist');
+            $this->toastify(translate('Item removed from wishlist'), 'success');
         } else {
             $item =  new Wishlist();
             $item->subject_type = $this->model_class;
@@ -70,7 +71,7 @@ class WishlistButton extends Component
                 // $this->object->user->notify(new WishlistItemAdded($item));
 
             } else {
-                $item->session_id = session()->getId();
+                $item->guest_id = session()->getId();
             }
             $item->save();
             activity()
@@ -78,9 +79,13 @@ class WishlistButton extends Component
             ->causedBy(auth()->user())
             ->withProperties(['action' => 'liked'])
             ->log('User liked a product');
-            $this->dispatchBrowserEvent('toastIt', ['id' => "#global-toast", 'content' => "Item added to wishlist"]);
+
+            $this->toastify(translate('Item added to wishlist'), 'success');
+
             $this->emit('addedToWishlist');
         }
+
+        $this->dispatchBrowserEvent('refresh-wishlist-items-count', ['count' => auth()->user()?->wishlists()?->count()]);
 
         $this->added = $this->checkIfProductExistsInWishlist();
     }
@@ -88,21 +93,15 @@ class WishlistButton extends Component
     public function checkIfProductExistsInWishlist()
     {
         if (auth()->user()) {
-            $item = Wishlist::where('subject_id', $this->object->id)
+            return Wishlist::where('subject_id', $this->object->id)
                 ->where('subject_type', $this->model_class)
                 ->where('user_id', auth()->user()->id)
-                ->first();
+                ->count() === 1;
         } else {
-            $item = Wishlist::where('subject_id', $this->object->id)
+            return Wishlist::where('subject_id', $this->object->id)
                 ->where('subject_type', $this->model_class)
-                ->where('session_id', session()->getId())
-                ->first();
-        }
-
-        if ($item) {
-            return true;
-        } else {
-            return false;
+                ->where('guest_id', session()->getId())
+                ->count() === 1;
         }
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Category;
 trait CategoryTrait
 {
     public $category_id; // TODO: This should be removed in future, once the code in admin is fixed in all places!
+    public $primary_category;
 
     /**
      * Boot the trait
@@ -16,8 +17,8 @@ trait CategoryTrait
     protected static function bootCategoryTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model):void {
-            if(!isset($model->categories)) {
+        static::relationsRetrieved(function ($model):void {
+            if(!$model->relationLoaded('categories')) {
                 $model->load('categories');
             }
         });
@@ -30,8 +31,8 @@ trait CategoryTrait
      */
     public function initializeCategoryTrait(): void
     {
-        $this->append(['category_id']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['category_id'])));
+        $this->append(['category_id', 'primary_category']);
+        $this->fillable(array_unique(array_merge($this->fillable, ['category_id', 'primary_category'])));
     }
 
     /************************************
@@ -51,6 +52,14 @@ trait CategoryTrait
         }
 
         return $this->category_id;
+    }
+
+    public function getPrimaryCategoryAttribute() {
+        if(!isset($this->primary_category)) {
+            $this->primary_category = $this->categories->whereNull('parent_id')?->first();
+        }
+
+        return $this->primary_category;
     }
 
     /************************************

@@ -14,7 +14,7 @@ use App\Traits\Eloquent\Cacher;
 use Illuminate\Support\Collection;
 use Vendor;
 
-class ProductsBuilder extends Builder
+class ProductsBuilder extends BaseBuilder
 {
     use Cacher;
 
@@ -49,6 +49,9 @@ class ProductsBuilder extends Builder
                 $builder->where('shop_id', '=' , Vendor::getVendorShop()->id ?? null);
             });
         }
+
+        // Eager load all Product Traits:
+        //$this->with();
 
         // Cacher is initially disabled! Where you want to use cached data, chain `->fromCache()` to the builder query!
         //$this->enableCacher();

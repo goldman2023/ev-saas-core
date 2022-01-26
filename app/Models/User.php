@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
+use App\Traits\SocialAccounts;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
@@ -13,7 +15,11 @@ use Spark\Billable;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class User extends Authenticatable implements MustVerifyEmail
+use Bavix\Wallet\Traits\HasWalletFloat;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Interfaces\Wallet;
+
+class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
     use Notifiable, HasApiTokens;
     use HasRoles;
@@ -22,15 +28,19 @@ class User extends Authenticatable implements MustVerifyEmail
     use Billable;
     use LogsActivity;
     use UploadTrait;
+    use GalleryTrait;
+    use SocialAccounts;
+    use HasWalletFloat;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean'
     ];
 
-    public static array $user_types = ['admin','moderator','seller','staff'];
+    public static array $user_types = ['admin','moderator','seller','staff','customer'];
     public static array $tenant_user_types = ['admin','moderator'];
     public static array $vendor_user_types = ['seller','staff'];
+    public static array $non_customer_user_types = ['admin','moderator','seller','staff'];
     public static string $customer_type = 'customer';
 
     public function sendEmailVerificationNotification()
@@ -85,7 +95,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function wishlists()
     {
-    return $this->hasMany(Wishlist::class);
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function social_accounts()
+    {
+        return $this->hasMany(SocialAccount::class);
     }
 
     public function customer()
@@ -105,8 +120,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function affiliate_withdraw_request()
     {
-    return $this->hasMany(AffiliateWithdrawRequest::class);
+        return $this->hasMany(AffiliateWithdrawRequest::class);
     }
+
 
     public function products()
     {
@@ -187,16 +203,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getDynamicModelUploadProperties(): array
     {
         return [
-            [
-                'property_name' => 'avatar', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
-                'relation_type' => 'avatar', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
-                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
-            ]
+
         ];
     }
 
     public function getAvatar(array $options = []) {
-        return $this->getUpload('avatar', $options);
+        return $this->getUpload('thumbnail', $options);
     }
 
     public static function getAvailableUserTypes($only_vendor_types = true) {
@@ -211,6 +223,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $data = Activity::where('subject_type', 'App\Models\Product')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')
+        ->take(10)
         ->get();
 
         return $data;
@@ -220,7 +233,7 @@ class User extends Authenticatable implements MustVerifyEmail
         $data = Activity::where('subject_type', 'App\Models\Shop')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')
-        ->get();
+        ->paginate(18);
 
         return $data;
     }

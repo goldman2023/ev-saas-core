@@ -4,16 +4,6 @@
         return (errors[0] !== undefined) ? errors[0] : {};
     }
 }">
-    <x-ev.toast id="stock-updated-toast"
-                position="bottom-center"
-                class="bg-success border-success text-white h3"
-                :is_x="true"
-                x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
-                @toast.window="if(event.detail.id == 'stock-updated-toast') {
-                    content = event.detail.content;
-                    show = true;
-                }"
-    ></x-ev.toast>
 
     @if($errors->hasAny($errors->keys()))
         <script id="stockManagementFormErrors" type="application/json">

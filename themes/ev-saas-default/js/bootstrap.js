@@ -62,6 +62,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.EV = {};
 require('./IMG');
 require('./form');
+require('./leaflet');
 
 // Utilities
 $(window).on('load', function() {

@@ -16,10 +16,10 @@ $meta_description = get_setting('site_motto');
 @endphp
 @endif
 
-@section('meta_title'){{ $meta_title }}@stop
 @section('meta_description'){{ $meta_description }}@stop
 
 @section('meta')
+<meta name="robots" content="index, follow" />
 <!-- Schema.org markup for Google+ -->
 <meta itemprop="name" content="{{ $meta_title }}">
 <meta itemprop="description" content="{{ $meta_description }}">
@@ -34,20 +34,15 @@ $meta_description = get_setting('site_motto');
 @endsection
 
 @section('content')
-<div class="bg-dark mb-3" style="margin-top:-130px;">
+<div class="bg-dark mb-3" style="">
     <div class="container">
-        <div class="row space-1 space-top-3">
+        <div class="row py-3">
             <div class="col-sm-8">
-                <h1 class="text-white mt-3">
-                    {{ translate('Shop') }}
-                    @isset($brand)
-                    {{ $brand->name }} {{ translate('Products')}}
-                    @endisset
-                </h1>
+
                 <div class="d-flex justify-content-between">
-                    <ul class="breadcrumb bg-transparent p-0 text-white">
+                    <ul class="breadcrumb bg-transparent p-0 text-white my-0">
                         <li class="breadcrumb-item opacity-50">
-                            <a class="" href="{{ route('home') }}">{{ translate('Home') }}</a>
+                            <a class="text-white" href="{{ route('home') }}">{{ translate('Home') }}</a>
                         </li>
 
                         @isset($brand)
@@ -56,14 +51,22 @@ $meta_description = get_setting('site_motto');
                                 href="{{ route('brands.all') }}">{{ translate('All Brands') }}</a>
                         </li>
                         @else
-                        <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-600':'opacity-50' }} ">
-                            <a class="{{ !empty($selected_category) ? '':'text-white' }}"
+                        <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-400':'opacity-50' }} ">
+                            <a class="text-white"
                                 href="{{ route('search') }}">{{ translate('All Categories') }}</a>
                         </li>
                         @endisset
+
+                        @if (!empty($selected_category->parent))
+                        <li class="text-dark fw-400 opacity-50 breadcrumb-item">
+                            <a class="text-white" href="{{ route('products.category', $selected_category->parent->slug) }}">
+                                {{ $selected_category->parent->getTranslation('name') }}</a>
+                        </li>
+                        @endif
+
                         @if (!empty($selected_category))
                         <li class="text-dark fw-600 breadcrumb-item">
-                            <a class="text-white" href="{{ route('products.category', $selected_category->slug) }}">
+                            <a class="text-primary" href="{{ route('products.category', $selected_category->slug) }}">
                                 {{ $selected_category->getTranslation('name') }}</a>
                         </li>
                         @endif
@@ -80,20 +83,16 @@ $meta_description = get_setting('site_motto');
                 </div>
             </div>
             <div class="col-sm-4">
-                 {{-- Sub Categories Display --}}
-                 @if(!empty($selected_category))
-                 <x-default.categories.sub-category-cards :categories="$selected_category">
-                 </x-default.categories.sub-category-cards>
-                 @endif
-                {{-- <x-b2-b-search></x-b2-b-search> --}}
+
 
                 @isset($brand)
                 <div class="p-3 bg-white text-center">
                     <a href="{{ route('products.brand', $brand->slug) }}">
 
-                    <x-tenant.system.image style="max-height: 100px;" class="lazyload mx-auto h-70px mw-100 bg-white" :image="$brand->logo"
-                        alt="{{ $brand->name}}">
-                    </x-tenant.system.image>
+                        <x-tenant.system.image style="max-height: 100px;"
+                            class="lazyload mx-auto h-70px mw-100 bg-white" :image="$brand->logo"
+                            alt="{{ $brand->name}}">
+                        </x-tenant.system.image>
                     </a>
                 </div>
 
@@ -136,13 +135,19 @@ $meta_description = get_setting('site_motto');
                     </div>
                 </div>
                 <div class="col-xl-9">
-{{-- TODO: add category slider here --}}
+
+
+                    {{-- Sub Categories Display --}}
+
+                    {{-- <x-b2-b-search></x-b2-b-search> --}}
+                    {{-- TODO: add category slider here --}}
                     @if ($content == 'product' || $content == null)
                     <div>
                         <div class="text-left">
-                            <div class="d-flex align-items-center">
+                            <div class="">
                                 <div>
-                                    <h1 class="h3 fw-600">
+                                    @if (!empty($selected_category))
+                                    <h1 class="h1 fw-600">
                                         @if (!empty($selected_category))
                                         {{ translate('Products - ') }}
                                         {{ $selected_category->getTranslation('name') }}
@@ -153,7 +158,30 @@ $meta_description = get_setting('site_motto');
                                         {{ translate('All Products') }}
                                         @endif
                                     </h1>
+                                    @else
+                                    <h1 class="h1 mt-3">
+                                        {{ translate('Shop') }}
+                                        @isset($brand)
+                                        {{ $brand->name }} {{ translate('Products')}}
+                                        @endisset
+                                    </h1>
+                                    @endif
+
                                 </div>
+                                @if ($products->count() > 0)
+                                @else
+                                <x-default.global.empty-state-dynamic></x-default.global.empty-state-dynamic>
+
+                                <div class="h3 mt-3 mb-3">
+                                    {{ translate('Or... check recommended categories') }}
+                                </div>
+                                @endif
+                                <div class="we-archive-sub-category-cards">
+                                    <x-default.categories.sub-category-cards :categories="$selected_category">
+                                    </x-default.categories.sub-category-cards>
+                                </div>
+
+
                                 @if ($products->count() > 0 && $content == null && !empty($selected_category))
                                 <div class="ml-auto text-right">
                                     <a class="font-weight-bold"
@@ -163,12 +191,7 @@ $meta_description = get_setting('site_motto');
                                     </a>
                                 </div>
                                 @endif
-                                <div class="d-xl-none ml-auto ml-xl-3 mr-0 form-group align-self-end">
-                                    <button type="button" class="btn btn-icon p-0" data-toggle="class-toggle"
-                                        data-target=".aiz-filter-sidebar">
-                                        <i class="la la-filter la-2x"></i>
-                                    </button>
-                                </div>
+
                             </div>
                         </div>
 
@@ -176,14 +199,14 @@ $meta_description = get_setting('site_motto');
                         @if ($products->count() > 0)
 
                         @if($products->isNotEmpty())
-                            <div class="row gutters-5 mt-2">
-                                @foreach ($products as $key => $product)
-                                    <div class="col-sm-4 col-12 mb-3">
-                                        <x-default.products.cards.product-card :product="$product" class="product-card">
-                                        </x-default.products.cards.product-card>
-                                    </div>
-                                @endforeach
+                        <div class="row gutters-5 mt-2">
+                            @foreach ($products as $key => $product)
+                            <div class="col-sm-4 col-12 mb-3">
+                                <x-default.products.cards.product-card :product="$product" class="product-card">
+                                </x-default.products.cards.product-card>
                             </div>
+                            @endforeach
+                        </div>
                         @endif
 
                         @if ($content == 'product' || !empty($selected_category))
@@ -193,7 +216,7 @@ $meta_description = get_setting('site_motto');
                         </div>
                         @endif
                         @else
-                        <p class="text-center mt-2">{{ translate('Nothing found') }}</p>
+
                         @endif
                     </div>
                     @endif
@@ -203,35 +226,6 @@ $meta_description = get_setting('site_motto');
 
 
                 <div class="col-xl-3">
-
-                    <!--<div class="aiz-filter-sidebar collapse-sidebar-wrap sidebar-xl sidebar-right z-1035">
-                        <div class="overlay overlay-fixed dark c-pointer" data-toggle="class-toggle"
-                            data-target=".aiz-filter-sidebar" data-same=".filter-sidebar-thumb"></div>
-                        <div class="collapse-sidebar c-scrollbar-light text-left">
-                            <div class="d-flex d-xl-none justify-content-between align-items-center pl-3 border-bottom">
-                                <h3 class="h6 mb-0 fw-600">{{ translate('Filters') }}</h3>
-                                <button type="button" class="btn btn-sm p-2 filter-sidebar-thumb"
-                                    data-toggle="class-toggle" data-target=".aiz-filter-sidebar">
-                                    <i class="las la-times la-2x"></i>
-                                </button>
-                            </div>
-                            <div class="bg-white shadow-sm rounded mb-3">
-                                <div class="fs-15 fw-600 p-3 border-bottom">
-                                    {{ translate('Categories') }}
-                                </div>
-                                <div class="p-3">
-                                    <ul class="list-unstyled">
-
-                                    </ul>
-                                </div>
-                            </div>
-
-                            @if($content != null)
-                                <x-company.company-attributes :items="$attributes" :selected="$filters">
-                                </x-company.company-attributes>
-                            @endif
-                        </div>
-                    </div>-->
                 </div>
             </div>
         </form>

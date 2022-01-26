@@ -72,7 +72,7 @@
     </div>
 
     <div class="card-footer">
-        <ul class="list-inline list-separator small text-body">
+        {{-- <ul class="list-inline list-separator small text-body">
             <li class="list-inline-item">
                 <x-ev.dynamic-attribute-value :data="$product"
                     :attribute="ev_dynamic_attribute('product-card-attribute-1')">
@@ -90,6 +90,6 @@
                 </x-ev.dynamic-attribute-value>
             </li>
 
-        </ul>
+        </ul> --}}
     </div>
 </div>

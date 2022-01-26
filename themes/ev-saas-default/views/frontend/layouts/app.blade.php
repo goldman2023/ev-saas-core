@@ -57,12 +57,15 @@
     <!-- Vendor Styles -->
     <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
 
-    <!-- Theme styles -->
+    @livewireStyles
+    {{-- Include overides and custom css for child theme if needed --}}
     <link rel="stylesheet" href="{{ \EVS::getThemeStyling() }}">
 
+    {{-- Global base css, with variables replaced and default set inside probably --}}
+    <link rel="stylesheet" href="{{ global_asset('dynamic-colors/app-dynamic.css', false, true) }}">
 
-    @livewireStyles
-    <link rel="stylesheet" href="{{ static_asset('/front/icon-set/style.css') }}">
+    {{-- This component holds css variable per tenant --}}
+    <x-default.system.tenant.custom-includes></x-default.system.tenant.custom-includes>
 
     @stack('pre_head_scripts')
 
@@ -81,7 +84,9 @@
     @stack('head_scripts')
 </head>
 
-<body>
+{{-- TODO : Add a slug if page has a slug --}}
+
+<body class="{{ Route::currentRouteName() }}">
     <!-- AlpineJS -->
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
@@ -92,7 +97,7 @@
         </x-default.headers.header>
 
         {{-- <div class="space-top-lg-3 space-top-3"> --}}
-            <div>
+            <div class="app-layout-container d-flex" style="flex-basis: 100%; flex-wrap: wrap; flex-direction: column;">
                 {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
 
                 @yield('content')
@@ -102,7 +107,6 @@
 
             <x-default.footers.footer>
             </x-default.footers.footer>
-
         </div>
         <x-default.footers.app-bar>
         </x-default.footers.app-bar>
@@ -118,28 +122,34 @@
 
         <!-- Carts -->
         <livewire:cart.cart template="flyout-cart" />
+
+        <!-- Wishlist -->
+        {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
         <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
-        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success h3" :is_x="true"
-            x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, 3000) : ''; })"
-            @toast.window="if(event.detail.id == 'global-toast') {
-        content = event.detail.content;
-        show = true;
-    }">
+        {{-- Like this, will decide later --}}
+        <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
+
+        <x-default.global.flyout-categories></x-default.global.flyout-categories>
+
+        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
+            :is_x="true" :timeout="4000">
         </x-ev.toast>
+
         <script>
             document.addEventListener('toastIt', async function (event) {
-    let content = event.detail.content;
-    let id = event.detail.id;
+                let content = event.detail.content;
+                let id = event.detail.id;
 
-    $(id).find('.toast-body').text(content);
+                $(id).find('.toast-body').text(content);
 
-    $(id).toast({
-        delay: 3000
-    });
+                $(id).toast({
+                    delay: 3000
+                });
 
-    $(id).toast('show');
-});
+                $(id).toast('show');
+            });
         </script>
+
         @yield('modal')
 
         @yield('script')
@@ -163,23 +173,24 @@
             });
 
 
-            $(document).on('ready', function () {
-    // INITIALIZATION OF LEAFLET
-    // =======================================================
-    $('#map').each(function () {
-      var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
-
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        id: 'mapbox/light-v9'
-      }).addTo(leaflet);
-    });
-  });
+            // $(document).on('ready', function () {
+            //     // INITIALIZATION OF LEAFLET
+            //     // =======================================================
+            //     $('#map').each(function () {
+            //       var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
+            //
+            //       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+            //         id: 'mapbox/light-v9'
+            //       }).addTo(leaflet);
+            //     });
+            //   });
         });
         </script>
 
         @php
         echo get_setting('footer_script');
         @endphp
+
 </body>
 
 </html>

@@ -23,7 +23,6 @@ class RouteServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    //
     parent::boot();
   }
 
@@ -38,23 +37,23 @@ class RouteServiceProvider extends ServiceProvider
 
     $this->mapAdminRoutes();
 
-    $this->mapAffiliateRoutes();
-
-    $this->mapRefundRoutes();
-
-    $this->mapClubPointsRoutes();
-
-    $this->mapOtpRoutes();
-
-    $this->mapOfflinePaymentRoutes();
-
-    $this->mapAfricanPaymentGatewayRoutes();
-
-    $this->mapPaytmRoutes();
-
-    $this->mapPosRoutes();
-
-    $this->mapSellerPackageRoutes();
+//    $this->mapAffiliateRoutes();
+//
+//    $this->mapRefundRoutes();
+//
+//    $this->mapClubPointsRoutes();
+//
+//    $this->mapOtpRoutes();
+//
+//    $this->mapOfflinePaymentRoutes();
+//
+//    $this->mapAfricanPaymentGatewayRoutes();
+//
+//    $this->mapPaytmRoutes();
+//
+//    $this->mapPosRoutes();
+//
+//    $this->mapSellerPackageRoutes();
 
     $this->mapWebRoutes();
 

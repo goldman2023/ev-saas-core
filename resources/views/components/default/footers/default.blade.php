@@ -3,7 +3,7 @@
     <x-footer-bottom-links></x-footer-bottom-links>
 @endif
 <div class="bg-dark">
-    <footer class="container space-1">
+    <footer class="container space-3 space-md-1">
         <div class="row align-items-md-center text-center">
             <div class="col-md-3 mb-4 mb-md-0">
                 <a href="#" aria-label="{{ get_site_name() }}">

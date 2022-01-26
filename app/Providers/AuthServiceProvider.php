@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Services\PermissionsService;
 use App\Models\Product;
+use App\Models\Shop;
 use App\Policies\ProductPolicy;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +18,8 @@ class AuthServiceProvider extends ServiceProvider
    * @var array
    */
   protected $policies = [
-     Product::class => ProductPolicy::class,
+      Product::class => ProductPolicy::class,
+      Shop::class => ShopPolicy::class
   ];
 
   /**

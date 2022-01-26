@@ -145,13 +145,13 @@ class HomeController extends Controller
      */
     public function dashboard()
     {
-        return view('frontend.user.admin.dashboard');
 
         if (auth()->user()->isSeller()) {
             return view('frontend.user.seller.dashboard');
         } elseif (auth()->user()->isCustomer()) {
             return view('frontend.user.customer.dashboard');
-        } else {
+        } elseif (auth()->user()->isAdmin()) {
+            return view('frontend.user.admin.dashboard');
         }
     }
 
@@ -408,8 +408,10 @@ class HomeController extends Controller
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         $product  = Product::where('slug', $slug)->first()->load(['shop']);
-
-        //$this->log($product,"User viewed this product");
+        if (empty($product->shop)) {
+            /* TODO: Default value for products with no shops falls back to shop_id 1 */
+            $product->shop = Shop::first();
+        }
 
         if (!empty($product) && $product->published) {
             if (
@@ -432,9 +434,8 @@ class HomeController extends Controller
                 $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
             }
 
-            if(auth()->check()) {
+            if (auth()->check()) {
                 $user = auth()->user();
-
             } else {
                 $user = null;
             }
@@ -444,18 +445,10 @@ class HomeController extends Controller
                 ->causedBy($user)
                 ->withProperties(['action' => 'viewed'])
                 ->log('User viewed a product');
-
-            if ($product->digital == 1) {
-                return view('frontend.digital_product_details', compact('product'));
-            } else {
-                return view('frontend.product.show', compact('product'));
-            }
-            // return view('frontend.product_details', compact('detailedProduct'));
         }
 
-        abort(404);
+        return view('frontend.product.show', compact('product'));
     }
-
 
 
     public function filter_shop($slug, $type)
@@ -583,8 +576,7 @@ class HomeController extends Controller
 
     public function listingByCategory(Request $request, $category_slug)
     {
-        $selected_categories = \Categories::getChildrenAndSelf($category_slug, 'flat');
-
+        $selected_categories = Category::where('slug', $category_slug)->with('children')->get();
         if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
             return $this->search($request, $selected_categories);
         }
@@ -721,7 +713,7 @@ class HomeController extends Controller
         $shops = $shops->paginate(10)->appends(request()->query());
         $events = $events->paginate(10)->appends(request()->query());
 
-        $selected_category = !empty($selected_categories) ? $selected_categories->toTree()->first() : null;
+        $selected_category = !empty($selected_categories) ? $selected_categories->first() : null;
         return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 

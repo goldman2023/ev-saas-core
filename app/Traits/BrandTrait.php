@@ -18,8 +18,8 @@ trait BrandTrait
     protected static function bootBrandTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model) {
-            if(!isset($model->brand)) {
+        static::relationsRetrieved(function ($model) {
+            if(!$model->relationLoaded('brand')) {
                 $model->load('brand');
             }
 

@@ -1,6 +1,6 @@
-<div class="{{ $class ?? '' }}">
+<div class="position-relative {{ $class ?? '' }}" wire:loading.class="opacity-3">
+
     <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                          wire:target="{{ $wireTarget }}"
                           wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
     <div
@@ -15,7 +15,7 @@
                 wire:poll="{{ $refresh }}"
             @endif
         @endif
-        class="container-fluid p-0" @if($wireTarget) wire:target="{{ $wireTarget }}" wire:loading.class="{{ $wireLoadingClass }}" @endif
+        class="container-fluid p-0"
     >
         @include('livewire-tables::includes.debug')
         @include('livewire-tables::bootstrap-4.includes.offline')

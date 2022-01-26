@@ -132,12 +132,12 @@ trait Cacher
     public function generateModelCacheKey($model_id, bool $reverse = false, $cast_to = 'int'): mixed
     {
         if($reverse) {
-            $id = Str::replace(tenant()->id.'-'.($this->getModel()::class).'-', '', $model_id);
+            $id = Str::replace(tenant('id').'-'.($this->getModel()::class).'-', '', $model_id);
             settype($id, $cast_to);
 
             return $id;
         }
 
-        return tenant()->id.'-'.($this->getModel()::class).'-'.$model_id;
+        return tenant('id').'-'.($this->getModel()::class).'-'.$model_id;
     }
 }

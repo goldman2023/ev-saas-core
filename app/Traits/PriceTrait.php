@@ -24,9 +24,9 @@ trait PriceTrait
      */
     protected static function bootPriceTrait()
     {
-        // When model data is retrieved, populate model prices data!
-        static::retrieved(function ($model) {
-            if(!isset($model->flash_deals)) {
+        // When model relations data is retrieved, populate model prices data!
+        static::relationsRetrieved(function ($model) {
+            if(!$model->relationLoaded('flash_deals')) {
                 $model->load('flash_deals');
             }
 

@@ -22,8 +22,8 @@ trait TranslationTrait
     protected static function bootTranslationTrait()
     {
         // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model) {
-            if(!isset($model->translations)) {
+        static::relationsRetrieved(function ($model) {
+            if(!$model->relationLoaded('translations')) {
                 $model->load('translations');
             }
         });
@@ -38,6 +38,7 @@ trait TranslationTrait
     {
 
     }
+
 
     /************************************
      * Translations Relation Functions *

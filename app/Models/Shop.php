@@ -5,7 +5,9 @@ namespace App\Models;
 use App\Models\User;
 use App\Traits\AttributeTrait;
 use App\Traits\Caching\RegeneratesCache;
+use App\Traits\GalleryTrait;
 use App\Traits\ReviewTrait;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\PermalinkTrait;
 
@@ -46,14 +48,18 @@ use App\Traits\PermalinkTrait;
  * @mixin \Eloquent
  */
 
-class Shop extends Model
+class Shop extends EVBaseModel
 {
     use RegeneratesCache;
 
     use AttributeTrait;
+    use UploadTrait;
+    use GalleryTrait;
     use ReviewTrait;
 
     protected $table = 'shops';
+
+    protected $fillable = ['name', 'slug', 'excerpt', 'content', 'meta_title', 'meta_description'];
 
     public function seller()
     {
@@ -75,6 +81,11 @@ class Shop extends Model
     public function settings()
     {
         return $this->hasMany(ShopSetting::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(ShopAddress::class);
     }
 
     public function domains()
@@ -113,7 +124,13 @@ class Shop extends Model
         return $this->hasMany(Order::class, 'shop_id');
     }
 
+    public function getPhonesAttribute($value) {
+        if(empty($value)) {
+            return [''];
+        }
 
+        return is_array($value) ? $value : json_decode($value, true);
+    }
 
     public static function companies_count_rounded()
     {
@@ -277,4 +294,10 @@ class Shop extends Model
         return 5;
     }
 
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+
+        ];
+    }
 }

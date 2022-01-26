@@ -43,10 +43,10 @@ class SellerController extends Controller
         }
         $sellers = $sellers->paginate(15);
         return view('backend.sellers.index', compact('sellers', 'sort_search', 'approved'));
-    }
 
-        $sellers = Seller::all();
-        return view('backend.sellers.index', compact('sellers', 'sort_search', 'approved'));
+
+//        $sellers = Seller::all();
+//        return view('backend.sellers.index', compact('sellers', 'sort_search', 'approved'));
     }
 
     /**

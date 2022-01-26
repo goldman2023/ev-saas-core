@@ -191,14 +191,10 @@
                                        data-hs-unfold-target="#orderExportDropdown-{{ $order->id }}" data-hs-unfold-invoker=""></a>
 
                                     <div id="orderExportDropdown-{{ $order->id }}" class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-right mt-1 hs-unfold-content-initialized hs-unfold-css-animation animated hs-unfold-hidden" data-hs-target-height="330.625" data-hs-unfold-content="" data-hs-unfold-content-animation-in="slideInUp" data-hs-unfold-content-animation-out="fadeOut" style="animation-duration: 300ms;">
-                                        <span class="dropdown-header">Options</span>
-                                        <a class="js-export-copy dropdown-item" href="javascript:;">
-                                            @svg('heroicon-o-document-duplicate', ['class' => 'square-16 mr-2'])
-                                            Copy
-                                        </a>
-                                        <a class="js-export-print dropdown-item" href="javascript:;">
-                                            <img class="avatar avatar-xss avatar-4by3 mr-2" src="./assets/svg/illustrations/print.svg" alt="Image Description">
-                                            Print
+                                        <span class="dropdown-header">{{ translate('Options') }}</span>s
+                                        <a class="js-export-print dropdown-item d-flex " href="javascript:;">
+                                            @svg('heroicon-o-printer', ['class' => 'square-18 mr-2'])
+                                            {{ translate('Print') }}
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <span class="dropdown-header">Download options</span>

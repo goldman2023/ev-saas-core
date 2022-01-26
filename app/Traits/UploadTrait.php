@@ -20,12 +20,10 @@ trait UploadTrait
      */
     protected static function bootUploadTrait()
     {
-        // When model data is retrieved, populate model stock data!
-        static::retrieved(function ($model): void {
-            if(!isset($model->uploads)) {
+        static::relationsRetrieved(function ($model): void {
+            if(!$model->relationLoaded('uploads')) {
                 $model->load('uploads');
             }
-
 
             // Initiate dynamic properties values
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {

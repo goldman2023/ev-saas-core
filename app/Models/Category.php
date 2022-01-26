@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Categories;
 use App\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +41,7 @@ use Vendor;
  * @mixin \Eloquent
  */
 
-class Category extends Model
+class Category extends EVBaseModel
 {
     //use Cachable;
     use HasSlug;
@@ -54,6 +55,8 @@ class Category extends Model
     public const PATH_SEPARATOR = '.';
 
     protected $appends = ['selected', 'title_path'];
+
+    protected $with = ['translations'];
 
 
     public function getParentKeyName() {
@@ -168,6 +171,11 @@ class Category extends Model
         }
 
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return Categories::getRoute($this);
     }
 
     public function getTranslationModel(): ?string

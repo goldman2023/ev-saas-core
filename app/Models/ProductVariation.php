@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\Products\ProductVariationDeleting;
+use App\Models\Central\Tenant;
 use App\Traits\AttributeTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\Caching\SavesToCache;
@@ -59,14 +60,13 @@ class ProductVariation extends EVBaseModel
         'discount' => 0,
     ];
 
-
     /**
      * The relationships that should always be loaded.
      * NOTE: Uploads, Attribute, Price and Stock traits are eager loading all relationships by default
      *
      * @var array
      */
-    protected $with = [];
+    protected $with = ['custom_attributes', 'uploads', 'stock', 'serial_numbers', 'flash_deals'];
 
     protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type', 'created_at', 'updated_at'];
     //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name'];
@@ -75,16 +75,26 @@ class ProductVariation extends EVBaseModel
         'variant' => 'array',
     ];
 
-    protected $appends = ['name'];
+    public static function booted()
+    {
+        static::relationsRetrieved(function ($model) {
+//            $model->appendCoreProperties(['name']);
+//            $model->append(['name']);
+//            $model->initCoreProperties(['name']);
+        });
+    }
 
     public function main()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        //dd($this->belongsTo(Product::class, 'product_id', 'id')->without(Product::$defaultEagerLoads)->first());
+        return $this->belongsTo(Product::class, 'product_id', 'id')->without(Product::$defaultEagerLoads);
     }
 
     public function getNameAttribute() {
         $att_values_idx = [];
         $name = '';
+//        dd($this->main);
+//        return json_encode($this->variant);
 
         if(!empty($this->variant)) {
             foreach($this->variant as $item) {

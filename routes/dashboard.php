@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
+use App\Models\User;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +28,8 @@ Route::middleware([
         'middleware' => ['auth'],
         'prefix' => 'dashboard'
     ], function () {
-        Route::get('/', 'HomeController@dashboard')->name('dashboard');
+        Route::get('/index', 'HomeController@dashboard')->name('dashboard');
+
 
         /* TODO : Admin only */
 
@@ -53,31 +57,38 @@ Route::middleware([
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
-        Route::get('/order/{id}', [EVOrderController::class, 'details'])->name('order.details');
+        Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
+        Route::get('/order/view/{id}', [EVOrderController::class, 'details'])->name('order.details');
 //        Route::resource('orders', 'EVOrderController')->parameters([
 //            'orders' => 'id',
 //        ])->except(['destroy']);
-        Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
-        Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
-        Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
-        Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+       Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+       Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+       Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+       Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
-        /* My Purchases */
+        /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
 
+        /* My account */
+        Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
+        Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
+
         /* Settings pages*/
-        Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('ev.settings.design');
-        Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('ev.settings.design.store');
-        Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('ev.settings.payment_methods');
-        Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('ev.settings.domains');
-        Route::get('/users-settings', [EVAccountController::class, 'users_settings'])->name('ev.settings.users_settings');
+        Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('settings.design');
+        Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('settings.design.store');
+        Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('settings.payment_methods');
+        Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('settings.domains');
+        Route::get('/staff-settings', [EVAccountController::class, 'staff_settings'])->name('settings.staff_settings');
+        Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
+
 
 // Payment Methods callback routes
-        Route::get('/checkout/paysera/accepted/{id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
-        Route::get('/checkout/paysera/canceled/{id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
-        Route::get('/checkout/paysera/callback/{id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
+        Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
+        Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
+        Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
 
-        Route::post('/checkout/execute/payment/{id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
+        Route::post('/checkout/execute/payment/{invoice_id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
 // ---------------------------------------------------- //
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
@@ -169,6 +180,12 @@ Route::middleware([
 //    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
         Route::get('/jobs/destroy/{id}', 'JobController@destroy')->name('jobs.destroy');
     });
+
+
+    // Integrations
+    Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');
+
+    Route::get('/integrations/facebook-business-export', 'Integrations\FacebookBusinessController@export')->name('integrations.facebook-business.export');
 
 
 

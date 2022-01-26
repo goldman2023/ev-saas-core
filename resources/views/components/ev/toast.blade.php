@@ -6,8 +6,15 @@
             content: '{{ $content }}',
             type: '{{ $type }}'
         }"
+        x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, {{ $timeout }}) : ''; })"
         :class="{ 'opacity-10': show, 'bg-success border-success': type === 'success', 'bg-danger border-danger': type === 'danger' }"
-
+        @toastit.window="
+            if(event.detail.id === '{{ $id }}') {
+                content = event.detail.content;
+                type = event.detail.type;
+                show = true;
+            }
+        "
     @endif
     {{ $attributes }}
 >
