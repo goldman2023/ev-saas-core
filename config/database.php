@@ -122,7 +122,7 @@ return [
 
     'redis' => [
 
-        'client' => 'phpredis',
+        'client' => 'predis',
 
         'laravel-visits' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
