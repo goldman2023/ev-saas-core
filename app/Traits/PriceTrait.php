@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Builders\BaseBuilder;
 use App\Models\FlashDeal;
 use FX;
 
@@ -15,7 +16,7 @@ trait PriceTrait
      * Abstract Trait Methods *
      ************************************/
     abstract public function getPriceColumn();
-    abstract public function useVariations(): ?bool;
+//    abstract public function useVariations(): ?bool;
 
     /**
      * Boot the trait
@@ -24,6 +25,11 @@ trait PriceTrait
      */
     protected static function bootPriceTrait()
     {
+        static::addGlobalScope('withPricesAndTaxAndFlashDeals', function(mixed $builder) {
+            // Eager Load Flash Deals
+            $builder->with(['flash_deals']);
+        });
+
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
             if(!$model->relationLoaded('flash_deals')) {

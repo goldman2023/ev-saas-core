@@ -159,6 +159,9 @@
     &.ease-in {
         transition-timing-function: ease-in;
     }
+    &.ease-in-out {
+        transition-timing-function: ease-in-out;
+    }
 
     &.duration-300 {
         transition-duration: 300ms

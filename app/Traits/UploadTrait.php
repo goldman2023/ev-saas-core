@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Builders\BaseBuilder;
 use App\Models\Product;
 use Closure;
 use Illuminate\Support\Str;
@@ -20,6 +21,11 @@ trait UploadTrait
      */
     protected static function bootUploadTrait()
     {
+        static::addGlobalScope('withUploads', function(mixed $builder) {
+            // Eager Load Uploads
+            $builder->with(['uploads']);
+        });
+
         static::relationsRetrieved(function ($model): void {
             if(!$model->relationLoaded('uploads')) {
                 $model->load('uploads');

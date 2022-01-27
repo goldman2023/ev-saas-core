@@ -181,7 +181,7 @@ $box-shadow-vertical-right:                                 -5px 0px 12px rgba($
 $box-shadow-vertical-left:                                  5px 0px 12px rgba($gray-700, .1) !default;
 
 // Borders
-$border-width:                                              .0625rem !default;
+$border-width:                0.0625rem !default;
 $border-type:                                               solid !default;
 $border-color:                                              $gray-300 !default;
 $border-active-color:                                       $primary !default;
@@ -1667,7 +1667,8 @@ $toggle-switch-content-margin-x:                            .5rem !default;
 
 // Transitions
 $toggle-switch-transition:                                  $transition-timing !default;
-$custom-switch-checked-translateX:                          $toggle-switch-width - $toggle-switch-indicator-size * 1.4 + $toggle-switch-border-width !default;
+//$custom-switch-checked-translateX:                          $toggle-switch-width - $toggle-switch-indicator-size * 1.4 + $toggle-switch-border-width !default;
+$custom-switch-checked-translateX:                          3rem - 1.5rem * 1.4 + (0.0625*2) !default;
 
 
 
@@ -1805,7 +1806,7 @@ $slick-pagination-interactive-active-title-color:           $primary !default;
 $slick-pagination-interactive-active-text-color:            $gray-700 !default;
 
 // Background
-$slick-bg-preloader:                                        url(#{$root-path}svg/components/circle-preloader.svg) no-repeat 50% 50% !default;
+//$slick-bg-preloader:                                        url(#{$root-path}svg/components/circle-preloader.svg) no-repeat 50% 50% !default;s
 $slick-arrow-bg-color:                                      $white !default;
 $slick-arrow-hover-bg-color:                                $primary !default;
 $slick-arrow-soft-white-bg-color:                           rgba($white, .1) !default;

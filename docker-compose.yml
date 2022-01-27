@@ -20,21 +20,21 @@ services:
     depends_on:
       - mysql
 
-  mysql:
-    image: mysql:latest
-    ports:
-      - '${DB_MYSQL_DOCKER_PORT_EXTERNAL:-3306}:3306'
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_DATABASE: '${DB_DATABASE:-evsaas}'
-      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-123456}'
-      #MYSQL_USER: '${DB_MYSQL_USERNAME:-root}'
-      MYSQL_PASSWORD: '${DB_PASSWORD:-123456}'
-    volumes:
-      - 'sail2mysql:/var/lib/mysql'
-    networks:
-      - sail2
+#  mysql:
+#    image: mysql:latest
+#    ports:
+#      - '${DB_MYSQL_DOCKER_PORT_EXTERNAL:-3306}:3306'
+#    command: --default-authentication-plugin=mysql_native_password
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: '${DB_DATABASE:-evsaas}'
+#      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-123456}'
+#      #MYSQL_USER: '${DB_MYSQL_USERNAME:-root}'
+#      MYSQL_PASSWORD: '${DB_PASSWORD:-123456}'
+#    volumes:
+#      - 'sail2mysql:/var/lib/mysql'
+#    networks:
+#      - sail2
 #  pgsql:
 #    image: 'postgres'
 #    ports:

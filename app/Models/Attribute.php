@@ -9,7 +9,7 @@ use App\Models\AttributeGroup;
 
 class Attribute extends Model
 {
-    protected $with = ['attribute_values'];
+//    protected $with = ['attribute_relationships', 'attributes_values'];
 
     protected $casts = [
         'custom_properties' => 'object'

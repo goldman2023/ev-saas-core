@@ -15,12 +15,12 @@ $xl:                                                        1200px;
 $xxl:                                                       1400px;
 
 $grid-breakpoints: (
-  xs:                                                       $xs,
-  sm:                                                       $sm,
-  md:                                                       $md,
-  lg:                                                       $lg,
-  xl:                                                       $xl,
-  xxl:                                                      $xxl
+    xs:                                                       $xs,
+    sm:                                                       $sm,
+    md:                                                       $md,
+    lg:                                                       $lg,
+    xl:                                                       $xl,
+    xxl:                                                      $xxl
 ) !default;
 
 
@@ -29,7 +29,7 @@ $grid-breakpoints: (
 // =========================================================
 
 $container-max-widths: (
-  xxl: 1320px
+    xxl: 82.5rem
 ) !default;
 
 
@@ -41,41 +41,41 @@ $container-max-widths: (
 $spacer: 1rem !default;
 $spacers: () !default;
 $spacers: map-merge((
-  0: 0,
-  1: ($spacer * .25),
-  2: ($spacer * .5),
-  3: $spacer,
-  4: ($spacer * 1.5),
-  5: ($spacer * 2),
-  6: ($spacer * 2.5),
-  7: ($spacer * 3),
-  8: ($spacer * 3.5),
-  9: ($spacer * 4),
-  10: ($spacer * 4.5)
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 2),
+    6: ($spacer * 2.5),
+    7: ($spacer * 3),
+    8: ($spacer * 3.5),
+    9: ($spacer * 4),
+    10: ($spacer * 4.5)
 ), $spacers);
 
 // This variable affects the `.h-*` and `.w-*` classes.
 $sizes: () !default;
 $sizes: map-merge((
-  25: 25%,
-  50: 50%,
-  60: 60%,
-  75: 75%,
-  85: 85%,
-  100: 100%,
-  auto: auto
+    25: 25%,
+    50: 50%,
+    60: 60%,
+    75: 75%,
+    85: 85%,
+    100: 100%,
+    auto: auto
 ), $sizes);
 // stylelint-enable
 
 // Spacing
 $gutters-spacer: 1rem !default;
 $gutters-spacers: (
-  0: 0,
-  1: $gutters-spacer / 4,
-  2: $gutters-spacer / 2,
-  3: $gutters-spacer,
-  4: $gutters-spacer * 1.5,
-  5: $gutters-spacer * 3,
+    0: 0,
+    1: $gutters-spacer / 4,
+    2: $gutters-spacer / 2,
+    3: $gutters-spacer,
+    4: $gutters-spacer * 1.5,
+    5: $gutters-spacer * 3,
 ) !default;
 
 
@@ -85,7 +85,7 @@ $gutters-spacers: (
 
 $font-family-base:                                          "Open Sans", sans-serif !default;
 
-$font-size-base:                                            1rem !default; // Assumes the browser default, typically 16px
+$font-size-base:                                            1rem !default; // Assumes the browser default, typically 1rem
 $font-size-xs:                                              .75rem !default;
 $font-size-sm:                                              .8125rem !default;
 $font-size-lg:                                              1rem !default;
@@ -117,7 +117,7 @@ $display3-weight:                                           $font-weight-bold !d
 $display4-weight:                                           $font-weight-bold !default;
 $display-line-height:                                       1.4 !default;
 
-$outline:                                                   5px auto -webkit-focus-ring-color !default;
+$outline:                                                   0.3125rem auto -webkit-focus-ring-color !default;
 
 // Colors
 $body-color:                                                $gray-700 !default;
@@ -141,13 +141,13 @@ $light-bg-color:                                            $gray-300 !default;
 $overlay-soft-bg-color:                                     rgba($dark, .25) !default;
 
 // Shadows
-$box-shadow:                                                0px 6px 24px 0px rgba($gray-600, .125) !default;
-$box-shadow-sm:                                             0px 6px 12px rgba($gray-600, .075) !default;
-$box-shadow-sm-hover:                                       0px 6px 12px rgba($gray-600, .25) !default;
-$box-shadow-lg:                                             0px 10px 40px 10px rgba($gray-600, .175) !default;
-$box-shadow-soft:                                           0px 3px 6px 0px rgba($gray-600, .25) !default;
-$box-shadow-vertical-right:                                 -5px 0px 12px rgba($gray-700, .1) !default;
-$box-shadow-vertical-left:                                  5px 0px 12px rgba($gray-700, .1) !default;
+$box-shadow:                                                0rem 0.375rem 1.5rem 0rem rgba($gray-600, .125) !default;
+$box-shadow-sm:                                             0rem 0.375rem 0.75rem rgba($gray-600, .075) !default;
+$box-shadow-sm-hover:                                       0rem 0.375rem 0.75rem rgba($gray-600, .25) !default;
+$box-shadow-lg:                                             0rem 0.625rem 2.5rem 0.625rem rgba($gray-600, .175) !default;
+$box-shadow-soft:                                           0rem 0.1875rem 0.375rem 0rem rgba($gray-600, .25) !default;
+$box-shadow-vertical-right:                                 -0.3125rem 0rem 0.75rem rgba($gray-700, .1) !default;
+$box-shadow-vertical-left:                                  0.3125rem 0rem 0.75rem rgba($gray-700, .1) !default;
 
 // Borders
 $border-width:                                              .0625rem !default;
@@ -157,7 +157,7 @@ $border-active-color:                                       $primary !default;
 $border-active-light-color:                                 $white !default;
 
 // Border Radius
-$border-radius:                                             3px !default;
+$border-radius:                                             0.1875rem !default;
 $border-radius-sm:                                          .25rem !default;
 $border-radius-lg:                                          .75rem !default;
 $border-radius-pill:                                        6.1875rem !default;
@@ -262,9 +262,9 @@ $input-pill-border-radius:                                  $border-radius-pill 
 
 // Box Shadow
 $input-btn-focus-box-shadow-disabled:                       0 0 0 0 transparent !default;
-$input-focus-box-shadow:                                    0 0 10px rgba($primary, .1) !default;
-$input-valid-state-box-shadow:                              0 0 10px rgba($success, .1) !default;
-$input-invalid-state-box-shadow:                            0 0 10px rgba($danger, .1) !default;
+$input-focus-box-shadow:                                    0 0 0.625rem rgba($primary, .1) !default;
+$input-valid-state-box-shadow:                              0 0 0.625rem rgba($success, .1) !default;
+$input-invalid-state-box-shadow:                            0 0 0.625rem rgba($danger, .1) !default;
 
 // Width & Heights
 $input-group-add-field-delete-width:                        1rem !default;
@@ -459,10 +459,10 @@ $btn-icon-sm-height:                                        $btn-icon-sm-width !
 $btn-icon-md-height:                                        $btn-icon-md-width !default;
 $btn-icon-lg-height:                                        $btn-icon-lg-width !default;
 
-$btn-status-width:                                          21px !default;
-$btn-status-xs-width:                                       10px !default;
-$btn-status-sm-width:                                       12px !default;
-$btn-status-lg-width:                                       24px !default;
+$btn-status-width:                                          1.3125rem !default;
+$btn-status-xs-width:                                       0.625rem !default;
+$btn-status-sm-width:                                       0.75rem !default;
+$btn-status-lg-width:                                       1.5rem !default;
 
 $btn-status-height:                                         $btn-status-width !default;
 $btn-status-xs-height:                                      $btn-status-xs-width !default;
@@ -480,8 +480,8 @@ $btn-status-lg-top-offset:                                  .6125rem !default;
 $btn-status-lg-right-offset:                                $btn-status-lg-top-offset !default;
 
 // Shadows
-$btn-box-shadow-value:                                      0 4px 11px !default;
-$btn-white-box-shadow-hover:                                0px 3px 6px -2px rgba($gray-600, .25) !default;
+$btn-box-shadow-value:                                      0 0.25rem 0.6875rem !default;
+$btn-white-box-shadow-hover:                                0rem 0.1875rem 0.375rem -0.125rem rgba($gray-600, .25) !default;
 $btn-group-segment-link-active-box-shadow:                  $box-shadow-soft !default;
 
 // Paddings
@@ -500,8 +500,8 @@ $btn-transition:                                            all $transition-timi
 $bs-input-btn-focus-width:                                  .2rem !default;
 $bs-input-btn-focus-color:                                  rgba($primary, .25) !default;
 $bs-input-btn-focus-box-shadow:                             0 0 0 $bs-input-btn-focus-width $bs-input-btn-focus-color !default;
-$bs-btn-box-shadow:                                         inset 0 1px 0 rgba($white, .15), 0 1px 1px rgba($gray-900, .075) !default;
-$bs-btn-active-box-shadow:                                  inset 0 3px 5px rgba($gray-900, .125) !default;
+$bs-btn-box-shadow:                                         inset 0 0.0625rem 0 rgba($white, .15), 0 0.0625rem 0.0625rem rgba($gray-900, .075) !default;
+$bs-btn-active-box-shadow:                                  inset 0 0.1875rem 0.3125rem rgba($gray-900, .125) !default;
 
 
 
@@ -572,7 +572,7 @@ $nav-title-font-weight:                                     $font-weight-bold !d
 $nav-subtitle-font-weight:                                  $font-weight-bold !default;
 $nav-subtitle-replacer-font-size:                           $font-size-base * 1.5 !default;
 $nav-segment-font-size:                                     $font-size-sm !default;
-$nav-indicator-icon-font-size:                              6px !default;
+$nav-indicator-icon-font-size:                              0.375rem !default;
 $nav-icon-font-size:                                        1.125rem !default;
 $nav-icon-line-height:                                      1.4 !default;
 $nav-icon-opacity:                                          .7 !default;
@@ -690,7 +690,7 @@ $navbar-brand-short-width:                                  2rem !default;
 $navbar-input-group-min-width:                              21rem !default;
 $navbar-dropdown-item-toggle-width:                         1rem !default;
 $navbar-dropdown-item-toggle-height:                        1rem !default;
-$navbar-vertical-aside-has-menu-pseudo-width:               5px !default;
+$navbar-vertical-aside-has-menu-pseudo-width:               0.3125rem !default;
 $navbar-vertical-aside-has-menu-pseudo-height:              $navbar-vertical-aside-has-menu-pseudo-width !default;
 
 // Type
@@ -929,7 +929,7 @@ $content-padding-x:                                         $navbar-container-pa
 $content-padding-left:                                      $navbar-container-padding !default;
 
 // Width & Heights
-$kanban-board-max-width:                                    350px !default;
+$kanban-board-max-width:                                    21.875rem !default;
 
 
 
@@ -1121,8 +1121,8 @@ $modal-close-padding-x:                                     $modal-close-padding
 $modal-top-cover-avatar-margin-y:                           -3rem !default;
 
 // Width & Heights
-$modal-md:                                                  550px !default;
-$modal-sm:                                                  400px !default;
+$modal-md:                                                  34.375rem !default;
+$modal-sm:                                                  25rem !default;
 $modal-top-cover-min-height:                                8rem !default;
 
 // Z-index

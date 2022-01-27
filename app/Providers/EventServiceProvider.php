@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\Eloquent\ItemsQueried;
+use App\Listeners\Eloquent\CustomAttributesEagerLoad;
 use App\Models\CategoryRelationship;
 use App\Models\Product;
 use App\Models\ProductStock;
@@ -33,6 +35,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
           SendEmailVerificationNotification::class,
         ],
+        ItemsQueried::class => [
+            CustomAttributesEagerLoad::class
+        ]
     ];
 
     /**

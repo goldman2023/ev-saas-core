@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Builders\BaseBuilder;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use Illuminate\Support\Facades\Log;
@@ -23,9 +24,14 @@ trait StockManagementTrait
      */
     protected static function bootStockManagementTrait()
     {
+        static::addGlobalScope('withStockAndSerialNumbers', function(mixed $builder) {
+            // Eager Load Stock and Serial Numbers
+            $builder->with(['stock']);
+            $builder->with(['serial_numbers']);
+        });
+
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model) {
-
             if(!$model->relationLoaded('stock')) {
                 $model->load('stock');
             }

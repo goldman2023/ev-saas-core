@@ -157,8 +157,8 @@ class Product extends EVBaseModel
      *
      * @var array
      */
-    protected $with = ['translations', 'custom_attributes', 'variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
-    public static $defaultEagerLoads = ['translations', 'custom_attributes', 'variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
+    protected $with = ['variations'];
+    //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = ['name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
         'purchase_price', 'unit', 'slug', 'num_of_sale', 'meta_title', 'meta_description'];

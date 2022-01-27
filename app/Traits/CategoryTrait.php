@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Builders\BaseBuilder;
 use App\Models\Category;
 
 trait CategoryTrait
@@ -16,6 +17,11 @@ trait CategoryTrait
      */
     protected static function bootCategoryTrait()
     {
+        static::addGlobalScope('withCategories', function (mixed $builder) {
+            // Eager Load Categories
+            $builder->with(['categories']);
+        });
+
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model):void {
             if(!$model->relationLoaded('categories')) {

@@ -16,9 +16,12 @@
                                 <div class="mt-0 mb-2 border-bottom" x-data="{
                                     show: false,
                                 }">
-                                    <h2 class="h4" data-toggle="collapse" href="#flyout-categories-parent-{{ $parent->id }}" role="button"
+                                    <h2 class="h4 d-flex align-items-center justify-content-between" data-toggle="collapse" href="#flyout-categories-parent-{{ $parent->id }}" role="button"
                                         aria-expanded="false" aria-controls="flyout-categories-parent-{{ $parent->id }}" @click="show = !show">
-                                        {{ $parent->name }}
+                                        <span>{{ $parent->name }}</span>
+                                        <span class="transition ease-in-out duration-300 mr-1 d-flex align-items-center" x-bind:style="show && { transform: 'rotate(90deg)' }">
+                                            @svg('lineawesome-chevron-circle-right-solid', ['class' => 'square-18'])
+                                        </span>
                                     </h2>
 
                                     <div class="collapse" id="flyout-categories-parent-{{ $parent->id }}">
