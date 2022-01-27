@@ -56,13 +56,6 @@ trait AttributeTrait
 //            dd($this);
 //        }
 
-//        return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
-//            ->distinct()
-//            ->withOnly([
-//                'attribute_values' , 'attribute_relationships'
-//            ])
-//            ->withPivot('for_variations');
-
         return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
             ->distinct()
             ->withOnly([
