@@ -250,6 +250,8 @@
                         removePhoneNumber(index) {
                             settings.company_phones.splice(index, 1);
                         },
+                    }" x-init="if(settings.company_phones === null || settings.company_phones === undefined) {
+                        settings.company_phones = [''];
                     }">
                         <label for="shop-phone" class="col-sm-3 col-form-label input-label">{{ translate('Phones') }}</label>
 
@@ -300,6 +302,8 @@
                         remove(index) {
                             settings.websites.splice(index, 1);
                         },
+                    }" x-init="if(settings.websites === null || settings.websites === undefined) {
+                        settings.websites = [''];
                     }">
                         <label for="shop-phone" class="col-sm-3 col-form-label input-label">{{ translate('Websites') }}</label>
 
