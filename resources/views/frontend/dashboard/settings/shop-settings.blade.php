@@ -9,7 +9,7 @@
 @section('panel_content')
     <div class="card card-header mb-3">
         <h4 class="mb-0 h4">{{ translate('My shop settings')}}</h4>
-        <a class="btn btn-primary" href="#">
+        <a class="btn btn-primary d-flex align-items-center" href="#">
             @svg('heroicon-o-user', ['class' => 'mr-2 square-16']) {{ translate('My shop') }}
         </a>
     </div>

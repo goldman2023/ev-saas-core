@@ -39,7 +39,7 @@
                         {{ $product->getTotalPrice(true) }}</span>
                     </span>
                 </h2>
-                <span class="d-block text-dark mb-3">Est. Shipping 76€</span>
+                <span class="d-block text-dark mb-3">Est. Shipping 30€</span>
                 @guest
                 <a href="{{ route('register') }}">Register and get shipping price</a>
                 @endguest

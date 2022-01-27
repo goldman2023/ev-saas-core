@@ -12,16 +12,11 @@
 //@import 'themes/default';
 
 // Bootstrap core
-@import '~bootstrap/scss/bootstrap';
-
-// @import 'front-dashboard/variables';
+//@import '~bootstrap/scss/bootstrap';
+@import 'vendor/bootstrap';
+@import 'front-dashboard/variables';
 
 @import 'front/variables';
-
-
-
-
-
 
 // VENDOR
 @import "~quill/dist/quill.snow.css"; // this will be moved to the beginning of the compiled file, cuz it's css, check: https://github.com/laravel-mix/laravel-mix/issues/429

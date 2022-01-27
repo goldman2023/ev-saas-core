@@ -1,8 +1,9 @@
 {
-    "/js/app.js": "/js/app.js?id=37a232d23f7a91dacaaf",
-    "/js/aiz-core.js": "/js/aiz-core.js?id=aea66fcdb4321d212f60",
-    "/js/alpine.js": "/js/alpine.js?id=b5dd4d93920504156511",
+    "/js/app.js": "/js/app.js?id=09f4755ca8d494460d3f",
+    "/js/aiz-core.js": "/js/aiz-core.js?id=d30cf315f5faf48bf9ec",
+    "/js/alpine.js": "/js/alpine.js?id=52ab768547e0a57f3207",
     "/js/vue.js": "/js/vue.js?id=1b1a325ab99d4df64a29",
+    "/css/app.css": "/css/app.css?id=ca10dc3f2917c7f92faa",
     "/js/crud/account-settings-form.js": "/js/crud/account-settings-form.js?id=090bee86258fd5cdbbe8",
     "/js/crud/checkout-form.js": "/js/crud/checkout-form.js?id=85881a4fe0c2d0b8e2e8",
     "/js/crud/payment-methods-form.js": "/js/crud/payment-methods-form.js?id=711f821c9fa0c1e8b0a0",
@@ -43,6 +44,5 @@
     "/vendor/hs.tagify.js": "/vendor/hs.tagify.js?id=0c7a05165a6bda77fbfe",
     "/vendor/hs.typed.js": "/vendor/hs.typed.js?id=4a40f50dfbcbf494a534",
     "/vendor/hs.validation.js": "/vendor/hs.validation.js?id=8d14b64b36585c44997a",
-    "/vendor/leaflet-providers.js": "/vendor/leaflet-providers.js?id=aaf0a355f3c7d24e8bb9",
-    "/css/app.css": "/css/app.css?id=11c1c22e3f250b37e472"
+    "/vendor/leaflet-providers.js": "/vendor/leaflet-providers.js?id=aaf0a355f3c7d24e8bb9"
 }

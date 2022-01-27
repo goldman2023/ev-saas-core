@@ -281,8 +281,17 @@ class Product extends EVBaseModel
     }
 
     function public_view_count() {
-        /* TODO: Implement some view libeary, i'm looking into two different ones */
-        return visits($this)->count();
+
+        $ttl = 600;
+        $product = $this;
+        $view_count = Cache::remember('product_view_count_' . $this->id, $ttl, function () use ($product) {
+            return \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)
+            ->whereJsonContains('properties->action', 'viewed')
+            ->orderBy('created_at','desc'
+            )->count();
+        });
+
+        return $view_count;
     }
 
 
