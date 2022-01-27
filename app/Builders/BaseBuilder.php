@@ -2,8 +2,10 @@
 
 namespace App\Builders;
 
+use App\Events\Eloquent\ItemsQueried;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\EVBaseModel as Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class BaseBuilder extends Builder
@@ -29,6 +31,8 @@ class BaseBuilder extends Builder
                 $model->fireModelEvent('relationsRetrieved');
             }
         }
+
+//        ItemsQueried::dispatch(new Collection($models));
 
         return $models;
     }

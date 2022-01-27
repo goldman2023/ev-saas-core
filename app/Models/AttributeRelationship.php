@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable;
 
-class AttributeRelationship extends Model implements \OwenIt\Auditing\Contracts\Auditable
+class AttributeRelationship extends Model //implements \OwenIt\Auditing\Contracts\Auditable
 {
-    use HasFactory, Auditable;
+    use HasFactory;
 
     protected $fillable = ['subject_type','subject_id','attribute_id','attribute_value_id'];
 

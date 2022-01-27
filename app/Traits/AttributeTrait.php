@@ -2,6 +2,7 @@
 namespace App\Traits;
 
 
+use App\Builders\BaseBuilder;
 use App\Models\Attribute;
 use App\Models\AttributeRelationship;
 use App\Models\AttributeValue;
@@ -18,10 +19,16 @@ trait AttributeTrait
      */
     protected static function bootAttributeTrait()
     {
+        static::addGlobalScope('withCustomAttributes', function (mixed $builder) {
+            // Load all custom attributes along with theirs relations and values! Attribute -> Relations -> Values
+//             $builder->with(['custom_attributes']);
+        });
+
         // When model data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
+            // TODO: FIX EAGER LOAD OF CUSTOM ATTRIBUTES. It still does not eager load...
             if(!$model->relationLoaded('custom_attributes')) {
-                $model->load('custom_attributes');
+//                $model->load('custom_attributes');
             }
         });
     }
@@ -45,22 +52,32 @@ trait AttributeTrait
 
     public function custom_attributes()
     {
-        // Load all product attributes along with relations and values! Attribute -> Relation -> Value
+//        if($this instanceof Product) {
+//            dd($this);
+//        }
+
+//        return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
+//            ->distinct()
+//            ->withOnly([
+//                'attribute_values' , 'attribute_relationships'
+//            ])
+//            ->withPivot('for_variations');
+
         return $this->morphToMany(Attribute::class, 'subject', 'attribute_relationships', null, 'attribute_id')
             ->distinct()
             ->withOnly([
-                'attribute_values' => function($query) {
-                    $query->where([
-                        ['subject_id', '=', $this->id],
-                        ['subject_type', '=', $this::class]
-                    ]);
-                },
-                'attribute_relationships' => function($query) {
-                    $query->where([
-                        ['subject_id', '=', $this->id],
-                        ['subject_type', '=', $this::class]
-                    ]);
-                },
+            'attribute_values' => function($query) {
+                $query->where([
+                    ['subject_id', '=', $this->id],
+                    ['subject_type', '=', $this::class]
+                ]);
+            },
+            'attribute_relationships' => function($query) {
+                $query->where([
+                    ['subject_id', '=', $this->id],
+                    ['subject_type', '=', $this::class]
+                ]);
+            },
             ])
             ->withPivot('for_variations');
     }
@@ -91,6 +108,7 @@ trait AttributeTrait
 
     public function variant_attributes($key_by = null)
     {
+
         $attributes =  $this->custom_attributes->filter(function($att, $index) {
             return $att->pivot->for_variations === 1;
         })->values();

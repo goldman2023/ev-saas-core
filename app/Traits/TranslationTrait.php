@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 
+use App\Builders\BaseBuilder;
 use App\Models\Brand;
 use App\Models\ProductTranslation;
 use App\Models\ProductVariation;
@@ -21,6 +22,11 @@ trait TranslationTrait
      */
     protected static function bootTranslationTrait()
     {
+        static::addGlobalScope('withTranslations', function (mixed $builder) {
+            // Eager Load Translations
+            $builder->with(['translations']);
+        });
+
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model) {
             if(!$model->relationLoaded('translations')) {

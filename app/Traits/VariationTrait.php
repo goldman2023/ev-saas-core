@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 
+use App\Builders\BaseBuilder;
 use App\Models\AttributeValue;
 use App\Models\ProductVariation;
 use Illuminate\Support\Collection;

@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 
+use App\Builders\BaseBuilder;
 use App\Models\Brand;
 use App\Models\ProductVariation;
 
@@ -17,6 +18,11 @@ trait BrandTrait
      */
     protected static function bootBrandTrait()
     {
+        static::addGlobalScope('withBrand', function(mixed $builder) {
+            // Eager Load Brand
+            $builder->with(['brand']);
+        });
+
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model) {
             if(!$model->relationLoaded('brand')) {
