@@ -66,7 +66,7 @@ class ProductVariation extends EVBaseModel
      *
      * @var array
      */
-    protected $with = ['custom_attributes', 'uploads', 'stock', 'serial_numbers', 'flash_deals'];
+    protected $with = [];
 
     protected $fillable = ['product_id', 'variant', 'price', 'discount', 'discount_type', 'created_at', 'updated_at'];
     //protected $visible = ['id', 'product_id', 'variant', 'image', 'image_url', 'price', 'discount', 'discount_type', 'name'];

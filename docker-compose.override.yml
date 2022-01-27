@@ -27,7 +27,7 @@ services:
   mysql:
     image: mysql:latest
     ports:
-      - '3306'
+      - '${DB_MYSQL_DOCKER_PORT_EXTERNAL:-3306}:3306'
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
