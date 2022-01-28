@@ -21,13 +21,14 @@ class CategoryService
 
         $cache_key = tenant('id') . '_categories';
         $cache_key_flat = tenant('id') . '_categories_flat';
-
+//        Cache::forget($cache_key);
+//        Cache::forget($cache_key_flat);
         $categories = Cache::get($cache_key, null);
         $categories_flat = Cache::get($cache_key_flat, null);
         $default = [];
 
         if (empty($categories_flat)) {
-            $categories_flat = Category::tree()->withCount(['products', 'shops'])->get()->keyBy('slug');
+            $categories_flat = Category::tree()->withCount(['products', 'shops', 'descendants'])->get()->keyBy('slug');
 
             if (!empty($categories_flat)) {
                 Cache::forget($cache_key_flat);

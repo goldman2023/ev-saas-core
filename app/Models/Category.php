@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Facades\Categories;
 use App\Traits\TranslationTrait;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -58,6 +59,20 @@ class Category extends EVBaseModel
 
     protected $with = ['translations'];
 
+    protected $casts = [
+        'created_at' => 'date:d.m.Y'
+    ];
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y');
+    }
 
     public function getParentKeyName() {
         return 'parent_id';
@@ -123,6 +138,14 @@ class Category extends EVBaseModel
                 }
             });
         }
+    }
+
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', '%'.$term.'%');
     }
 
     // TODO: FIX THIS TOO. REMOVE CLASSIFIED PRODUCTS!

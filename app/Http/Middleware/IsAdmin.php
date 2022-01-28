@@ -16,11 +16,11 @@ class IsAdmin
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && (auth()->user()->isAdmin() || auth()->user()->isStaff())) {
+        // TODO: Don't forget to add IsModerator and check for permissions
+        if (Auth::check() && auth()->user()->isAdmin()) {
             return $next($request);
         }
-        else{
-            abort(404);
-        }
+
+        abort(404);
     }
 }

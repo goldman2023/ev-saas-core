@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EVAccountController;
+use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
@@ -22,23 +23,32 @@ Route::middleware([
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
+    /* TODO: Admin only */
+    Route::group([
+        'middleware' => ['auth', 'admin'],
+        'prefix' => 'dashboard'
+    ], function () {
+        Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
+        Route::get('/categories/create', [EVCategoryController::class, 'create'])->name('category.create');
+        Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
+    });
+
     /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
 
     Route::group([
         'middleware' => ['auth'],
         'prefix' => 'dashboard'
     ], function () {
-        Route::get('/index', 'HomeController@dashboard')->name('dashboard');
-
-
-        /* TODO : Admin only */
+        Route::get('/', 'HomeController@dashboard')->name('dashboard');
 
         /* Leads Management - BY EIM */
         Route::get('leads/success', 'LeadController@success')->name('leads.success');
         Route::resource('leads', 'LeadController');
 
-        /* TODO: Admin only */
+
         Route::get('/ev-activity', [ActivityController::class, 'index_frontend'])->name('activity.index');
+
+
 
 
 
