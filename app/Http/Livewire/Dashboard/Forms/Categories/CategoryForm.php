@@ -36,14 +36,38 @@ class CategoryForm extends Component
     {
         return [
             'category.*' => [],
-            'category.name' => 'required|'
+            'category.name' => 'required',
+            'category.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
+            'category.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+            'category.icon' => ['if_id_exists:App\Models\Upload,id,true'],
+            'category.parent_id' => ['if_id_exists:App\Models\Category,id,true'],
         ];
     }
 
 
     protected function messages()
     {
-        return [];
+        return [
+            'category.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
+            'category.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
+            'category.icon.if_id_exists' => translate('Selected icon does not exist in Media Library. Please select again.'),
+            'category.parent_id.if_id_exists' => translate('Selected parent category does not exist. Please select again.'),
+
+            'category.name.required' => translate('Category name is required'),
+            'category.name.min' => translate('Minimum category name length is :min'),
+
+        ];
+    }
+
+    public function dehydrate()
+    {
+        $this->dispatchBrowserEvent('initCategoryForm');
+    }
+
+    public function updatingCategory(&$category) {
+        if(!($category instanceof Category) && isset($category['id'])) {
+            $category = (new Category())->forceFill($category);
+        }
     }
 
     public function render()

@@ -80,7 +80,7 @@ class ProductVariation extends EVBaseModel
         static::relationsRetrieved(function ($model) {
 //            $model->appendCoreProperties(['name']);
 //            $model->append(['name']);
-//            $model->initCoreProperties(['name']);
+//            $model->initCoreProperties(only: ['name']);
         });
     }
 

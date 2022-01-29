@@ -59,9 +59,8 @@ class Category extends EVBaseModel
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
     protected $appends = ['selected', 'title_path'];
-
-    protected $with = ['translations'];
 
     protected $casts = [
         'created_at' => 'date:d.m.Y',
@@ -213,6 +212,12 @@ class Category extends EVBaseModel
 
     public function getDynamicModelUploadProperties(): array
     {
-        return [];
+        return [
+            [
+                'property_name' => 'icon',
+                'relation_type' => 'icon',
+                'multiple' => false
+            ]
+        ];
     }
 }

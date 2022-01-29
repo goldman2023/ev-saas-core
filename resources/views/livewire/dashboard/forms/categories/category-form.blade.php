@@ -1,5 +1,5 @@
 <div x-data="{
-    category: @entangle('category').defer
+    category: @entangle('category').defer,
 }">
     <div class="col-lg-12 position-relative">
         <x-ev.loaders.spinner class="absolute-center z-10 d-none"
@@ -50,7 +50,7 @@
             <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader mx-auto profile-cover-avatar pointer border p-1" for="avatarUploader"
                    style="margin-top: -60px;"
                    x-data="{
-                        name: 'me.thumbnail',
+                        name: 'category.thumbnail',
                         imageID: {{ $category->thumbnail->id ?? 'null' }},
                         imageURL: '{{ $category->getThumbnail() }}',
                     }"
@@ -73,9 +73,12 @@
             </label>
             <!-- End Thumbnail -->
 
+            <x-default.system.invalid-msg field="category.thumbnail"></x-default.system.invalid-msg>
+
+            <x-default.system.invalid-msg field="category.cover"></x-default.system.invalid-msg>
 
             <!-- Name -->
-            <div class="row form-group">
+            <div class="row form-group mt-5">
                 <label for="category-name" class="col-sm-3 col-form-label input-label">{{ translate('Name') }}</label>
 
                 <div class="col-sm-9">
@@ -86,11 +89,9 @@
                                placeholder="{{ translate('New category name') }}"
                                x-model="category.name" />
                     </div>
-                </div>
 
-                @error('category.name')
-                    <div class="invalid-feedback d-block px-3 py-2 rounded">{{ $message }}</div>
-                @enderror
+                    <x-default.system.invalid-msg field="category.name"></x-default.system.invalid-msg>
+                </div>
             </div>
             <!-- END Name -->
 
@@ -130,6 +131,8 @@
                         @endforeach
                     </select>
                     <!-- End Select -->
+
+                    <x-default.system.invalid-msg field="category.parent_id"></x-default.system.invalid-msg>
                 </div>
             </div>
 
@@ -151,6 +154,43 @@
                 </div>
             </div>
 
+            <div class="row form-group">
+                <div for="category-featured" class="col-sm-3 col-form-label input-label">{{ translate('Icon') }}</div>
+
+                <div class="col-sm-9 d-flex align-items-center">
+                    <!-- Icon -->
+                    <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar pointer border p-1 mb-0 mt-0" for="avatarUploader"
+                           style="width: 65px; height: 65px;"
+                           x-data="{
+                                name: 'category.icon',
+                                imageID: {{ $category->icon?->id ?? 'null' }},
+                                imageURL: '{{ $category->getUpload('icon', ['w'=>100]) }}',
+                            }"
+                           @aiz-selected.window="
+                             if(event.detail.name === name) {
+                                imageURL = event.detail.imageURL;
+                                $wire.set('category.icon', $('input[name=\'category.icon\']').val(), true);
+                             }"
+                           data-toggle="aizuploader"
+                           data-type="image">
+                        <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
+
+                        <input type="hidden" x-bind:name="name" x-model="category.icon" class="selected-files" data-preview-width="200">
+
+{{--                        <span class="avatar-uploader-trigger">--}}
+{{--                          <i class="avatar-uploader-icon shadow-soft">--}}
+{{--                              @svg('heroicon-o-pencil', ['class' => 'square-16'])--}}
+{{--                          </i>--}}
+{{--                        </span>--}}
+                    </label>
+                    <!-- End Icon -->
+
+                    <x-default.system.invalid-msg class="ml-3" field="category.icon"></x-default.system.invalid-msg>
+                </div>
+
+            </div>
+
+
 
             <!-- Meta Title -->
             <div class="row form-group">
@@ -166,9 +206,7 @@
                     </div>
                 </div>
 
-                @error('category.meta_title')
-                <div class="invalid-feedback d-block px-3 py-2 rounded">{{ $message }}</div>
-                @enderror
+                <x-default.system.invalid-msg field="category.meta_title"></x-default.system.invalid-msg>
             </div>
             <!-- END Meta Title -->
 
@@ -187,9 +225,7 @@
                     </div>
                 </div>
 
-                @error('category.meta_description')
-                <div class="invalid-feedback d-block px-3 py-2 rounded">{{ $message }}</div>
-                @enderror
+                <x-default.system.invalid-msg field="category.meta_description"></x-default.system.invalid-msg>
             </div>
             <!-- END Name -->
 
