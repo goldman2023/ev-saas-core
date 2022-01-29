@@ -39,7 +39,7 @@ window.initAccountSettingsFormInit = function(event) {
 
 
     /* Init file managers */
-    $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
+    $('.custom-file-manager[data-toggle="aizuploader"]').each(function(index, element) {
         let selected_files = $.map($(element).find(".selected-files").val().split(','), function(value){
             let id = parseInt(value, 10);
             if(id) {

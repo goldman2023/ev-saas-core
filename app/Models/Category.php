@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Facades\Categories;
+use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +52,8 @@ class Category extends EVBaseModel
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
     use TranslationTrait;
+    use UploadTrait;
+    use GalleryTrait;
 
     public $selected;
     public $title_path;
@@ -60,7 +64,10 @@ class Category extends EVBaseModel
     protected $with = ['translations'];
 
     protected $casts = [
-        'created_at' => 'date:d.m.Y'
+        'created_at' => 'date:d.m.Y',
+        'featured' => 'boolean',
+        'digital' => 'boolean',
+        'top' => 'boolean',
     ];
 
     /**
@@ -122,10 +129,8 @@ class Category extends EVBaseModel
         return 'slug';
     }
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope('alphabetical', function (Builder $builder) {
             $builder->orderBy('name', 'ASC');
         });
@@ -204,5 +209,10 @@ class Category extends EVBaseModel
     public function getTranslationModel(): ?string
     {
         return CategoryTranslation::class;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [];
     }
 }
