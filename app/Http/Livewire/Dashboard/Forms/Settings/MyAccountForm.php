@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Rules\UniqueSKU;
+use App\Traits\Livewire\DispatchSupport;
 use DB;
 use EVS;
 use Categories;
@@ -19,6 +20,7 @@ use App\Traits\Livewire\RulesSets;
 class MyAccountForm extends Component
 {
     use RulesSets;
+    use DispatchSupport;
 
     public $me;
     public $currentPassword = '';
@@ -129,9 +131,5 @@ class MyAccountForm extends Component
         // TODO: Logout the User
 
         $this->toastify(translate('Your password is successfully updated. You will be logged out.'), 'success');
-    }
-
-    protected function toastify($msg = '', $type = 'info') {
-        $this->dispatchBrowserEvent('toast', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
     }
 }

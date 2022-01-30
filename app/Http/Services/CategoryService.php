@@ -21,18 +21,14 @@ class CategoryService
 
         $cache_key = tenant('id') . '_categories';
         $cache_key_flat = tenant('id') . '_categories_flat';
-
+        Cache::forget($cache_key);
+        Cache::forget($cache_key_flat);
         $categories = Cache::get($cache_key, null);
         $categories_flat = Cache::get($cache_key_flat, null);
         $default = [];
 
         if (empty($categories_flat)) {
-            $categories_flat = Category::tree()->withCount(['products', 'shops'])->get()->keyBy('slug');
-
-            if (!empty($categories_flat)) {
-                Cache::forget($cache_key_flat);
-                Cache::put($cache_key_flat, $categories_flat);
-            }
+            $categories_flat = Category::tree()->withCount(['products', 'shops', 'descendants'])->get()->keyBy('slug');
 
             $tree = $categories_flat->toTree();
 
@@ -42,6 +38,24 @@ class CategoryService
             if (!empty($categories)) {
                 Cache::forget($cache_key);
                 Cache::put($cache_key, $categories);
+            }
+
+            // recrusively sort categories
+            $arr = collect();
+            $recursive = function($categories) use(&$arr, &$recursive) {
+                if(!empty($categories) && $categories->isNotEmpty()) {
+                    foreach($categories as $category) {
+                        $arr->put($category->slug, $category);
+                        $recursive($category->children);
+                    }
+                }
+            };
+            $recursive($categories);
+            $categories_flat = $arr;
+
+            if (!empty($categories_flat)) {
+                Cache::forget($cache_key_flat);
+                Cache::put($cache_key_flat, $categories_flat);
             }
         }
 

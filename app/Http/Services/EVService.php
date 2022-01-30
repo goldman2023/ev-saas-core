@@ -88,7 +88,14 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
-
+                    [
+                        'label' => translate('Categories'),
+                        'icon' => 'heroicon-o-folder-open',
+                        'route' => route('categories.index'),
+                        'is_active' => areActiveRoutes(['categories.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => []
+                    ],
                 ]
             ],
             [

@@ -183,8 +183,8 @@
 
                                 <input type="hidden" x-bind:name="name" x-model="me.cover" class="selected-files" data-preview-width="1200">
 
-                                <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg" for="profileCoverUploader">
-                                    <i class="tio-add-photo mr-sm-1"></i>
+                                <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg d-flex align-items-center" for="profileCoverUploader">
+                                    @svg('heroicon-o-pencil', ['class' => 'square-16 mr-2'])
                                     <span class="d-none d-sm-inline-block">{{ translate('Update your cover') }}</span>
                                 </label>
                             </div>
@@ -214,8 +214,10 @@
                     <input type="hidden" x-bind:name="name" x-model="me.thumbnail" class="selected-files" data-preview-width="200">
 
                     <span class="avatar-uploader-trigger">
-                  <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
-                </span>
+                      <i class="tio-edit avatar-uploader-icon shadow-soft">
+                          @svg('heroicon-o-pencil', ['class' => 'square-16'])
+                      </i>
+                    </span>
                 </label>
                 <!-- End Avatar -->
 
@@ -595,8 +597,8 @@
                                             <label class="toggle-switch" for="connectedAccounts1">
                                                 <input id="connectedAccounts1" type="checkbox" class="toggle-switch-input">
                                                 <span class="toggle-switch-label">
-                                  <span class="toggle-switch-indicator"></span>
-                                </span>
+                                                  <span class="toggle-switch-indicator"></span>
+                                                </span>
                                             </label>
                                             <!-- End Checkbox Switch -->
                                         </div>
@@ -623,8 +625,8 @@
                                             <label class="toggle-switch" for="connectedAccounts2">
                                                 <input id="connectedAccounts2" type="checkbox" class="toggle-switch-input">
                                                 <span class="toggle-switch-label">
-                                  <span class="toggle-switch-indicator"></span>
-                                </span>
+                                                  <span class="toggle-switch-indicator"></span>
+                                                </span>
                                             </label>
                                             <!-- End Checkbox Switch -->
                                         </div>

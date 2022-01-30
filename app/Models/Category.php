@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Facades\Categories;
+use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,15 +52,33 @@ class Category extends EVBaseModel
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
     use TranslationTrait;
+    use UploadTrait;
+    use GalleryTrait;
 
     public $selected;
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
     protected $appends = ['selected', 'title_path'];
 
-    protected $with = ['translations'];
+    protected $casts = [
+        'created_at' => 'date:d.m.Y',
+        'featured' => 'boolean',
+        'digital' => 'boolean',
+        'top' => 'boolean',
+    ];
 
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y');
+    }
 
     public function getParentKeyName() {
         return 'parent_id';
@@ -107,10 +128,8 @@ class Category extends EVBaseModel
         return 'slug';
     }
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope('alphabetical', function (Builder $builder) {
             $builder->orderBy('name', 'ASC');
         });
@@ -123,6 +142,14 @@ class Category extends EVBaseModel
                 }
             });
         }
+    }
+
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', '%'.$term.'%');
     }
 
     // TODO: FIX THIS TOO. REMOVE CLASSIFIED PRODUCTS!
@@ -181,5 +208,16 @@ class Category extends EVBaseModel
     public function getTranslationModel(): ?string
     {
         return CategoryTranslation::class;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'icon',
+                'relation_type' => 'icon',
+                'multiple' => false
+            ]
+        ];
     }
 }
