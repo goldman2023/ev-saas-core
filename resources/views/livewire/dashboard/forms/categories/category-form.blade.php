@@ -1,6 +1,6 @@
 <div x-data="{
     category: @entangle('category').defer,
-}">
+}" x-cloak>
     <div class="col-lg-12 position-relative">
         <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                               wire:target="saveCategory"
