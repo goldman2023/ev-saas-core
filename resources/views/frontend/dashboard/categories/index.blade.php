@@ -10,8 +10,13 @@
     <!-- Card -->
     <div class="card">
         <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">{{ translate('All Categories') }}</h5>
+        <div class="card-header" x-data="{
+            count: {{ $all_categories->count() }}
+        }"
+         @update-categories-count.window="count = $event.detail.count;" >
+            <h5 class="card-header-title">
+                {{ translate('All Categories') }} (<strong x-text="count"></strong>)
+            </h5>
             <a href="{{ route('category.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
         </div>
         <!-- End Header -->

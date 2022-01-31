@@ -16,8 +16,8 @@ use Categories;
 class EVCategoryController extends Controller
 {
     public function index(Request $request) {
-        $categories = Categories::getAll(true);
-        return view('frontend.dashboard.categories.index', compact('categories'));
+        $all_categories = Categories::getAll(true);
+        return view('frontend.dashboard.categories.index', compact('all_categories'));
     }
 
     public function create(Request $request) {

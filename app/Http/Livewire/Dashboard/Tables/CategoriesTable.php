@@ -15,13 +15,14 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
 use Livewire\Component;
+use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
 
 class CategoriesTable extends Component
 {
     use RulesSets;
     use DispatchSupport;
 
-    public $categories;
+    public $all_categories;
     public $search_query;
 
     /**
@@ -31,7 +32,7 @@ class CategoriesTable extends Component
      */
     public function mount()
     {
-        $this->categories = Categories::getAll();
+        $this->all_categories = Categories::getAll(true);
     }
 
     protected function rules()
@@ -48,16 +49,18 @@ class CategoriesTable extends Component
         return [];
     }
 
-    public function updatedSearchQuery()
+    public function searchByQuery()
     {
         // TODO: Does not work for some reason...even though it returns correctly formatted categories data -_-
         if(!empty($this->search_query)) {
-            $this->categories = Categories::getAll(true)->filter(fn($item) => stripos($item?->getTranslation('name') ?? $item->name, $this->search_query) !== false)
-                ->toTree()
+            $this->all_categories = collect(Categories::getAll(true))
+                ->filter(fn($item) => stripos($item?->getTranslation('name') ?? $item->name, $this->search_query) !== false)
                 ->recursiveApply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
         } else {
-            $this->categories = Categories::getAll();
+            $this->all_categories = Categories::getAll(true);
         }
+
+        $this->dispatchBrowserEvent('update-categories-count', ['count' => $this->all_categories->count()]);
     }
 
     public function render()
