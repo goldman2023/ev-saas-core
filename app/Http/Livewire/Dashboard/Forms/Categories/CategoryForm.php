@@ -41,9 +41,11 @@ class CategoryForm extends Component
             'category.meta_title' => [],
             'category.meta_description' => [],
             'category.name' => 'required',
+            'category.description' => [],
             'category.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
             'category.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'category.icon' => ['if_id_exists:App\Models\Upload,id,true'],
+            'category.icon' => ['if_id_exists:App\Models\Upload,id'],
+            'category.meta_img' => ['if_id_exists:App\Models\Upload,id'],
             'category.parent_id' => ['if_id_exists:App\Models\Category,id,true'],
         ];
     }
@@ -56,6 +58,7 @@ class CategoryForm extends Component
             'category.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'category.icon.if_id_exists' => translate('Selected icon does not exist in Media Library. Please select again.'),
             'category.parent_id.if_id_exists' => translate('Selected parent category does not exist. Please select again.'),
+            'category.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
             'category.name.required' => translate('Category name is required'),
             'category.name.min' => translate('Minimum category name length is :min'),
@@ -101,6 +104,8 @@ class CategoryForm extends Component
             $this->category->syncUploads();
 
             DB::commit();
+
+            Categories::clearCache(); // clear cache after category is added/updated
 
             if($is_update) {
                 $this->toastify('Category successfully updated!', 'success');

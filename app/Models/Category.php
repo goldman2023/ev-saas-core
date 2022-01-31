@@ -39,7 +39,7 @@ class Category extends EVBaseModel
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
-    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'description', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
     protected $appends = ['selected']; // title_path
 
     protected $casts = [

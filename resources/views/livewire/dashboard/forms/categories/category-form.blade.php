@@ -155,18 +155,17 @@
                 </div>
             </div>
 
+            <!-- Icon -->
             <div class="row form-group">
-                <div for="category-featured" class="col-sm-3 col-form-label input-label">{{ translate('Icon') }}</div>
+                <div class="col-sm-3 col-form-label input-label">{{ translate('Icon') }}</div>
 
                 <div class="col-sm-9 d-flex align-items-center">
-                    <!-- Icon -->
-
                     <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar pointer border p-1 mb-0 mt-0" for="avatarUploader"
                            style="width: 65px; height: 65px;"
                            x-data="{
                                 name: 'category.icon',
                                 imageID: {{ $category->icon?->id ?? 'null' }},
-                                imageURL: '{{ $category->getUpload('icon', ['w'=>100]) }}',
+                                imageURL: '{{ $category->getUpload('icon', ['w'=>150]) }}',
                             }"
                            @aiz-selected.window="
                              if(event.detail.name === name) {
@@ -178,21 +177,32 @@
                         <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
 
                         <input type="hidden" x-bind:name="name" wire:model.defer="category.icon" class="selected-files" data-preview-width="200">
-
-{{--                        <span class="avatar-uploader-trigger">--}}
-{{--                          <i class="avatar-uploader-icon shadow-soft">--}}
-{{--                              @svg('heroicon-o-pencil', ['class' => 'square-16'])--}}
-{{--                          </i>--}}
-{{--                        </span>--}}
                     </label>
-                    <!-- End Icon -->
 
                     <x-default.system.invalid-msg class="ml-3" field="category.icon"></x-default.system.invalid-msg>
                 </div>
-
             </div>
+            <!-- End Icon -->
 
 
+            <!-- Description -->
+            <div class="row form-group">
+                <label for="category-description" class="col-sm-3 col-form-label input-label">{{ translate('Description') }}</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group input-group-sm-down-break">
+                        <textarea type="text" class="form-control @error('category.description') is-invalid @enderror"
+                                  name="category.description"
+                                  id="category-description"
+                                  placeholder="{{ translate('Description') }}"
+                                  wire:model.defer="category.description">
+                        </textarea>
+                    </div>
+                </div>
+
+                <x-default.system.invalid-msg field="category.description"></x-default.system.invalid-msg>
+            </div>
+            <!-- END Description -->
 
             <!-- Meta Title -->
             <div class="row form-group">
@@ -229,8 +239,36 @@
 
                 <x-default.system.invalid-msg field="category.meta_description"></x-default.system.invalid-msg>
             </div>
-            <!-- END Name -->
+            <!-- END Meta Description -->
 
+            <!-- Icon -->
+            <div class="row form-group">
+                <div class="col-sm-3 col-form-label input-label">{{ translate('Meta image') }}</div>
+
+                <div class="col-sm-9 d-flex flex-column justify-content-center align-items-start">
+                    <label class="card-img-top pointer border rounded p-1 mb-0 mt-0" for="avatarUploader"
+                           style="width: 180px; height: 115px;"
+                           x-data="{
+                                name: 'category.meta_img',
+                                imageID: {{ $category->meta_img?->id ?? 'null' }},
+                                imageURL: '{{ $category->getUpload('meta_img', ['w'=>220]) }}',
+                            }"
+                           @aiz-selected.window="
+                             if(event.detail.name === name) {
+                                imageURL = event.detail.imageURL;
+                                $wire.set('category.meta_img', $('input[name=\'category.meta_img\']').val(), true);
+                             }"
+                           data-toggle="aizuploader"
+                           data-type="image">
+                        <img id="avatarImg" class="avatar-img rounded w-100" x-bind:src="imageURL" >
+
+                        <input type="hidden" x-bind:name="name" wire:model.defer="category.meta_img" class="selected-files" data-preview-width="200">
+                    </label>
+
+                    <x-default.system.invalid-msg class="mt-1" field="category.meta_img"></x-default.system.invalid-msg>
+                </div>
+            </div>
+            <!-- End Icon -->
 
             <hr/>
             <div class="row form-group mb-0">
