@@ -36,6 +36,10 @@ class CategoryForm extends Component
     {
         return [
             'category.*' => [],
+            'category.id' => [],
+            'category.featured' => [],
+            'category.meta_title' => [],
+            'category.meta_description' => [],
             'category.name' => 'required',
             'category.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
             'category.cover' => ['if_id_exists:App\Models\Upload,id,true'],
@@ -64,11 +68,11 @@ class CategoryForm extends Component
         $this->dispatchBrowserEvent('initCategoryForm');
     }
 
-    public function updatingCategory(&$category) {
-        if(!($category instanceof Category) && isset($category['id'])) {
-            $category = (new Category())->forceFill($category);
-        }
-    }
+//    public function updatingCategory(&$category) {
+////        if(!($category instanceof Category) && is_array($category)) {
+////            $category = (new Category())->forceFill($category);
+////        }
+//    }
 
     public function render()
     {
@@ -76,6 +80,8 @@ class CategoryForm extends Component
     }
 
     public function saveCategory() {
+        $is_update = isset($this->category->id) && !empty($this->category->id);
+
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -83,32 +89,34 @@ class CategoryForm extends Component
             $this->validate();
         }
 
-//        DB::beginTransaction();
-//
-//        try {
-//            // Update address
-//            $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
-//            $address->save();
-//
-//            // if address IS PRIMARY, set other addresses to non-primary
-//            if($address->is_primary) {
-//                app($this->currentAddress::class)::where('id', '!=', $address->id)->update(['is_primary' => 0]);
-//            }
-//
-//            DB::commit();
-//
-//            if($this->currentAddress instanceof ShopAddress) {
-//                $this->addresses = MyShop::getShop()->addresses()->get(); // re-init shop addresses
-//            } else if($this->currentAddress instanceof Address) {
-//                $this->addresses = auth()->user()->addresses()->get(); // re-init user addresses
-//            }
-//
-//            $this->dispatchBrowserEvent('display-address-modal');
-//            $this->toastify('Address successfully updated!', 'success');
-//        } catch(\Exception $e) {
-//            DB::rollBack();
-//            $this->dispatchGeneralError(translate('There was an error while updating the shop address...Try again.'));
-//        }
+        DB::beginTransaction();
+
+        try {
+            // Update address
+            if(empty($this->category->parent_id)) {
+                $this->category->parent_id = null;
+            }
+            $this->category->level = \Categories::getCategoryLevel($this->category);
+            $this->category->save();
+            $this->category->syncUploads();
+
+            DB::commit();
+
+            if($is_update) {
+                $this->toastify('Category successfully updated!', 'success');
+            } else {
+                $this->toastify('Category successfully created!', 'success');
+            }
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            if($is_update) {
+                $this->dispatchGeneralError(translate('There was an error while updating a category...Please try again.'));
+            } else {
+                $this->dispatchGeneralError(translate('There was an error while creating a category...Please try again.'));
+            }
+
+        }
     }
 
     public function removeCategory() {

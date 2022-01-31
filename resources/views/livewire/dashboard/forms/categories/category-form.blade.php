@@ -33,7 +33,7 @@
                     <div class="profile-cover-content profile-cover-btn custom-file-manager"
                          data-toggle="aizuploader" data-type="image">
                         <div class="custom-file-btn">
-                            <input type="hidden" x-bind:name="name" x-model="category.cover" class="selected-files" data-preview-width="1200">
+                            <input type="hidden" x-bind:name="name" wire:model.defer="category.cover" class="selected-files" data-preview-width="1200">
 
                             <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg d-flex align-items-center" for="profileCoverUploader">
                                 @svg('heroicon-o-pencil', ['class' => 'square-16 mr-2'])
@@ -63,7 +63,7 @@
                    data-type="image">
                 <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
 
-                <input type="hidden" x-bind:name="name" x-model="category.thumbnail" class="selected-files" data-preview-width="200">
+                <input type="hidden" x-bind:name="name" wire:model.defer="category.thumbnail" class="selected-files" data-preview-width="200">
 
                 <span class="avatar-uploader-trigger">
                   <i class="avatar-uploader-icon shadow-soft">
@@ -87,7 +87,7 @@
                                name="category.name"
                                id="category-name"
                                placeholder="{{ translate('New category name') }}"
-                               x-model="category.name" />
+                               wire:model.defer="category.name" />
                     </div>
 
                     <x-default.system.invalid-msg field="category.name"></x-default.system.invalid-msg>
@@ -104,7 +104,7 @@
                     });
                     $watch('parent_id', (value) => {
                       $($refs.parent_category_selector).val(value).trigger('change');
-{{--                  $wire.call('bulkAction', $($refs.bulk_permission_actions).val());--}}
+{{--                        $wire.call('bulkAction', $($refs.bulk_permission_actions).val());--}}
                      });
             ">
 
@@ -113,21 +113,22 @@
                 <div class="col-sm-9">
                     <!-- Select -->
                     <select class="js-select2-custom js-datatable-filter custom-select" size="1" style=""
+                            id="parent_category_selector"
                             data-target-column-index="1"
                             data-hs-select2-options='{
                               "minimumResultsForSearch": "1",
                               "customClass": "custom-select custom-select-sm",
                               "dropdownAutoWidth": true,
                               "width": true,
-                              "dropdownCssClass": "no-max-height",
-                              "placeholder": "{{ translate('Select parent category...') }}"
+                              "dropdownCssClass": "no-max-height"
+{{--                              "placeholder": "{{ translate('Select parent category...') }}"--}}
                             }'
                             x-ref="parent_category_selector"
-                            x-model="category.parent_id"
+                            wire:model.defer="category.parent_id"
                     >
-                        <option></option>
-                        @foreach(Categories::getAll(true) as $category)
-                            <option value="{{ $category->id }}">{{ str_repeat('-', $category->level).$category->getTranslation('name') }}</option>
+                        <option value="" {{ empty($category->parent_id) ? 'selected':'' }}>{{ translate('No parent category') }}</option>
+                        @foreach(Categories::getAll(true) as $item)
+                            <option value="{{ $item->id }}">{{ str_repeat('-', $item->level).$item->getTranslation('name') }}</option>
                         @endforeach
                     </select>
                     <!-- End Select -->
@@ -142,7 +143,7 @@
                 <div class="col-sm-9 d-flex align-items-center">
                     <!-- Checkbox Switch -->
                     <label class="toggle-switch d-flex align-items-center" for="category-featured">
-                        <input type="checkbox" class="toggle-switch-input" id="category-featured" x-model="category.featured">
+                        <input type="checkbox" class="toggle-switch-input" id="category-featured" wire:model.defer="category.featured">
                         <span class="toggle-switch-label">
                             <span class="toggle-switch-indicator"></span>
                           </span>
@@ -159,6 +160,7 @@
 
                 <div class="col-sm-9 d-flex align-items-center">
                     <!-- Icon -->
+
                     <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar pointer border p-1 mb-0 mt-0" for="avatarUploader"
                            style="width: 65px; height: 65px;"
                            x-data="{
@@ -175,7 +177,7 @@
                            data-type="image">
                         <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
 
-                        <input type="hidden" x-bind:name="name" x-model="category.icon" class="selected-files" data-preview-width="200">
+                        <input type="hidden" x-bind:name="name" wire:model.defer="category.icon" class="selected-files" data-preview-width="200">
 
 {{--                        <span class="avatar-uploader-trigger">--}}
 {{--                          <i class="avatar-uploader-icon shadow-soft">--}}
@@ -202,7 +204,7 @@
                                name="category.meta_title"
                                id="category-meta_title"
                                placeholder="{{ translate('Category SEO/meta title') }}"
-                               x-model="category.meta_title" />
+                               wire:model.defer="category.meta_title" />
                     </div>
                 </div>
 
@@ -220,7 +222,7 @@
                                   name="category.meta_description"
                                   id="category-meta_description"
                                   placeholder="{{ translate('Category SEO/meta description') }}"
-                                  x-model="category.meta_description">
+                                  wire:model.defer="category.meta_description">
                         </textarea>
                     </div>
                 </div>
@@ -233,7 +235,8 @@
             <hr/>
             <div class="row form-group mb-0">
                 <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$wire.saveCategory()">
+                    <button type="button" class="btn btn-primary ml-auto btn-sm"
+                            @click="$wire.set('category.parent_id', $('#parent_category_selector').val(), true); $wire.saveCategory();">
                         {{ translate('Save') }}
                     </button>
                 </div>

@@ -64,7 +64,7 @@ class CategoryService
         $this->pluckable_categories = Collection::wrap([$this->categories->all()]);
 
         // Define categories routes
-        $this->determineCategoriesRoutes();
+        //$this->determineCategoriesRoutes();
     }
 
     // Routes
@@ -196,5 +196,24 @@ class CategoryService
         }
 
         return $category;
+    }
+
+    public function getCategoryLevel($category) {
+        $level = 0;
+
+        $recursive = function($parent_id) use(&$recursive, &$level) {
+            $parent = Category::find($parent_id);
+
+            if($parent instanceof Category && !empty($parent->id ?? null) ) {
+                $level++;
+                $recursive($parent->parent_id);
+            }
+
+            return false;
+        };
+
+        $recursive($category->parent_id);
+
+        return $level;
     }
 }
