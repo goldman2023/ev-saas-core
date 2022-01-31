@@ -23,7 +23,10 @@ class CategoriesTable extends Component
     use DispatchSupport;
 
     public $all_categories;
-    public $search_query;
+    public $search_query = '';
+    protected $queryString = [
+        'search_query' => ['except' => ''],
+    ];
 
     /**
      * Create a new component instance.
@@ -32,7 +35,13 @@ class CategoriesTable extends Component
      */
     public function mount()
     {
-        $this->all_categories = Categories::getAll(true);
+        if(!empty($this->search_query)) {
+            $this->searchByQuery();
+        } else {
+            $this->all_categories = Categories::getAll(true);
+
+        }
+
     }
 
     protected function rules()
