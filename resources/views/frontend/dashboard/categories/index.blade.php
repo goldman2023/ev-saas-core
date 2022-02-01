@@ -11,7 +11,9 @@
     <div class="card">
         <!-- Header -->
         <div class="card-header">
-            <h5 class="card-header-title">{{ translate('All Categories') }}</h5>
+            <h5 class="card-header-title">
+                {{ translate('All Categories') }}
+            </h5>
             <a href="{{ route('category.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
         </div>
         <!-- End Header -->

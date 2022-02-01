@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Builders\BaseBuilder;
+use App\Models\Category;
 use App\Models\Product;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +32,7 @@ trait UploadTrait
             if(!$model->relationLoaded('uploads')) {
                 $model->load('uploads');
             }
-
+//
             // Initiate dynamic properties values
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
                 if($property['multiple'] ?? false) {
@@ -45,6 +46,7 @@ trait UploadTrait
                         return $upload->pivot->relation_type === $property['relation_type'];
                     })->first();
                 }
+
             });
         });
     }

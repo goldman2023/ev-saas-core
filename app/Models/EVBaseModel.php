@@ -31,7 +31,7 @@ class EVBaseModel extends Model
     /**
      * Fill the model with an array of attributes. Force mass assignment.
      *
-     * TODO: ->fill() function should also use initCoreProperties where it fills core properties with passed attributes!!!
+     * TODO: ->fill() function should also use initCoreProperties where it fills core properties using given attributes!!!
      * This is needed for alpineJS/Livewire core_properties model binding to work properly!
      *
      * @param  array  $attributes

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
+use App\Builders\CteBuilder;
 use App\Facades\Categories;
 use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
@@ -20,28 +22,6 @@ use Vendor;
 
 /**
  * App\Models\Category
- *
- * @property int $id
- * @property string $name
- * @property string|null $banner
- * @property string|null $icon
- * @property int $featured
- * @property int $top
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereBanner($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereFeatured($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIcon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereTop($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 
 class Category extends EVBaseModel
@@ -59,8 +39,8 @@ class Category extends EVBaseModel
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
-    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
-    protected $appends = ['selected', 'title_path'];
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'description', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
+    protected $appends = ['selected']; // title_path
 
     protected $casts = [
         'created_at' => 'date:d.m.Y',
@@ -78,6 +58,17 @@ class Category extends EVBaseModel
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('d.m.Y');
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return CteBuilder|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new CteBuilder($query);
     }
 
     public function getParentKeyName() {
@@ -200,9 +191,9 @@ class Category extends EVBaseModel
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
     }
 
-    public function getPermalinkAttribute()
+    public function getPermalink($for = null)
     {
-        return Categories::getRoute($this);
+        return Categories::getRoute($this, $for);
     }
 
     public function getTranslationModel(): ?string

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use EVS;
 use App\Models\Product;
 use Auth;
+use Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
@@ -70,5 +71,24 @@ class EVProductController extends Controller
 
         $activity = Activity::where('subject_type', 'App\Models\Product')->where('subject_id', $product->id)->first();
         return view('frontend.dashboard.products.activity')->with('product', $product);
+    }
+
+    // Frontend
+    public function productsByCategory(Request $request, $slug) {
+        $category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
+
+        // TODO: Init Filters here
+
+        // TODO: return view
+
+        dd($category);
+
+//        $selected_categories = Category::where('slug', $category_slug)->with('children')->get();
+//        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
+//            return $this->search($request, $selected_categories);
+//        }
+//
+//        abort(404); // TODO: Maybe a redirect to All Categories?
+//        return null;
     }
 }
