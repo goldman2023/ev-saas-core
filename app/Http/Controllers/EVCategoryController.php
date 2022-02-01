@@ -29,4 +29,15 @@ class EVCategoryController extends Controller
 
         return view('frontend.dashboard.categories.edit', compact('category'));
     }
+
+    // Frontend
+    public function archiveByCategory(Request $request, $slug) {
+        $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
+
+        // TODO: Get content types based on page builder sections added here
+        $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
+        $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
+
+        return view('frontend.categories.archive', compact('selected_category', 'products', 'shops'));
+    }
 }

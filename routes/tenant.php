@@ -15,6 +15,7 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCartController;
+use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVOrderController;
@@ -149,8 +150,12 @@ Route::middleware([
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
-    Route::get('/products/category/{category_slug}', [HomeController::class, 'listingByCategory'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.category');
-    Route::get('/category/{slug}', [HomeController::class, 'listingByCategory'])->where('slug', '.+')->name('category.index');
+
+    // Category archive page
+    Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
+    Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
+    
+
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
 
@@ -292,7 +297,7 @@ Route::middleware([
     Route::get('/privacypolicy', 'HomeController@privacypolicy')->name('privacypolicy');
 
     Route::resource('companies', 'CompanyController');
-    Route::get('/companies/category/{category_slug}', 'CompanyController@listingByCategory')->name('companies.category');
+//    Route::get('/companies/category/{category_slug}', 'CompanyController@listingByCategory')->name('companies.category');
 
 
     //Blog Section

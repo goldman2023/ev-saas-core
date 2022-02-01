@@ -44,8 +44,8 @@ class CategoryForm extends Component
             'category.description' => [],
             'category.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
             'category.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'category.icon' => ['if_id_exists:App\Models\Upload,id'],
-            'category.meta_img' => ['if_id_exists:App\Models\Upload,id'],
+            'category.icon' => ['if_id_exists:App\Models\Upload,id,true'],
+            'category.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
             'category.parent_id' => ['if_id_exists:App\Models\Category,id,true'],
         ];
     }

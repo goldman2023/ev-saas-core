@@ -57,6 +57,7 @@
                             <tr wire:key="category-item-{{ $category->id }}">
                                 <td>
                                     {{ $category->id }}
+                                    {{ $category->getPermalink('products') }}
                                 </td>
                                 <td >
                                     {{ (str_repeat('-', $category->level)).$category?->getTranslation('name') ?? $category->name }}

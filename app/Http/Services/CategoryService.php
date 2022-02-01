@@ -15,6 +15,12 @@ class CategoryService
     protected $categories_flat;
     protected $pluckable_categories;
     private $routes = [];
+    public $categorizable_items = ['products'];
+    private $category_archive_key = 'category.%d%.index';
+    private $category_content_type_archive_key = 'category.%d%.%s%.index';
+
+    public const URL_SEPARATOR = '/';
+    public const PATH_SEPARATOR = '.';
 
     public function __construct($app) {
         $this->app = $app;
@@ -63,7 +69,7 @@ class CategoryService
         $this->pluckable_categories = Collection::wrap([$this->categories->all()]);
 
         // Define categories routes
-        //$this->determineCategoriesRoutes();
+        $this->determineCategoriesRoutes();
     }
 
     public function clearCache() {
@@ -75,23 +81,45 @@ class CategoryService
     }
 
     // Routes
-    public function getRoute(Category $category)
+    public function getRoute(Category $category, ?string $for = null)
     {
-        return $this->routes[$category->id];
+        if($for) {
+            return $this->routes[str_replace(['%d%', '%s%'], [$category->id, $for], $this->category_content_type_archive_key)];
+        }
+
+        return $this->routes[str_replace('%d%', $category->id, $this->category_archive_key)];
+    }
+
+    public function getCategorySlugFromRoute($slug = null) {
+        if(!empty($slug)) {
+            return last(explode(self::URL_SEPARATOR, $slug));
+        }
+
+        return '';
     }
 
     private function determineCategoriesRoutes()
     {
         $categories = Category::all()->keyBy('id');
 
+
         foreach ($categories as $id => $category) {
             $slugs = $this->determineCategorySlugs($category, $categories);
+            $category_archive_key = str_replace('%d%', $id, $this->category_archive_key);
 
             if (count($slugs) === 1) {
-                $this->routes[$id] = url('category/' . $slugs[0]);
+                $this->routes[$category_archive_key] = route('category.index', ['slug' => $slugs[0]]);
+
+                foreach($this->categorizable_items as $item_name) {
+                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.'.$item_name.'.index', ['slug' => $slugs[0]]);
+                }
             }
             else {
-                $this->routes[$id] = url('category/' . implode('/', $slugs));
+                $this->routes[$category_archive_key] = route('category.index', ['slug' => implode('/', $slugs)]);
+
+                foreach($this->categorizable_items as $item_name) {
+                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.'.$item_name.'.index', ['slug' => implode('/', $slugs)]);
+                }
             }
         }
     }
