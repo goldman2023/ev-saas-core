@@ -4,7 +4,7 @@ use App\Models\User;
 use Spark\Features;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\VendorMode;
-
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 
 return [
 
