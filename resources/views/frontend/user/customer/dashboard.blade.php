@@ -14,8 +14,15 @@
     </div>
 </div>
 <div class="row">
+    <div class="col-12">
+        <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe>
+
+    </div>
+</div>
+<div class="row">
     <div class="col-8">
         <div class="row">
+
             <div class="col-sm-6 mb-3">
                 {{-- <x-default.dashboard.customer.current-plan>
                     @slot('title')

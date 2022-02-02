@@ -6,10 +6,10 @@
     <div class="row align-items-md-center">
         <div class="col-md-8 mb-3 mb-md-0">
             <h1 class="h4 text-white">
-                {{ translate('Upgrade your '. get_site_name() .' profile, to your own e-commerce store!') }}
+                {{ translate('Upgrade your '. get_site_name() .' profile!') }}
             </h1>
             <h3 class="h5 text-white">
-                {{ translate('Starting from 89€/month') }}
+                {{ translate('Starting from 10€/month') }}
             </h3>
         </div>
         <div class="col-md-4 text-md-right">
