@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EVAccountController;
+use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
@@ -28,9 +29,15 @@ Route::middleware([
         'middleware' => ['auth', 'admin'],
         'prefix' => 'dashboard'
     ], function () {
+        // Categories
         Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
         Route::get('/categories/create', [EVCategoryController::class, 'create'])->name('category.create');
         Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
+
+        // Tenant blog posts
+//        Route::get('/tenant/blog/posts', [EVProductController::class, 'index'])->name('blog-posts.index');
+//        Route::get('/tenant/blog/posts/create', [EVProductController::class, 'create'])->name('blog-posts.create');
+//        Route::get('/tenant/blog/posts/edit/{slug}', [EVProductController::class, 'edit'])->name('blog-posts.edit');
     });
 
     /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
@@ -49,9 +56,6 @@ Route::middleware([
         Route::get('/ev-activity', [ActivityController::class, 'index_frontend'])->name('activity.index');
 
 
-
-
-
         /* TODO: Admin and seller only */
 
         // ---------------------------------------------------- //
@@ -64,6 +68,11 @@ Route::middleware([
         Route::get('/ev-products/edit/{slug}/details/activity', [EVProductController::class, 'product_activity'])->name('ev-products.activity');
         Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
         Route::get('/ev-products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('ev-products.edit.stocks');
+
+        /* Blog Posts */
+        Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
+        Route::get('/blog/posts/create', [EVBlogPostController::class, 'create'])->name('blog.posts.create');
+        Route::get('/blog/posts/edit/{slug}', [EVBlogPostController::class, 'edit'])->name('blog.posts.edit');
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
@@ -93,7 +102,7 @@ Route::middleware([
         Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
 
 
-// Payment Methods callback routes
+        // Payment Methods callback routes
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
         Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
         Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');

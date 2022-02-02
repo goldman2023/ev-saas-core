@@ -93,12 +93,4 @@
     <script src="{{ static_asset('vendor/hs-toggle-switch/dist/hs-toggle-switch.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-sticky-block/dist/hs-sticky-block.min.js', false, true) }}"></script>
 
-    <!-- JS Front -->
-    <script src="{{ static_asset('vendor/hs.mask.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs.sortable.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs.flatpickr.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs.datatables.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 @endpush

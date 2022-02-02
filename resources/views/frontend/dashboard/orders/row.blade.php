@@ -67,8 +67,8 @@
 
 <x-livewire-tables::table.cell class="align-middle">
     <div class="btn-group" role="group">
-        <a class="btn btn-sm btn-white" href="{{ route('order.details', ['id' => $row->id]) }}">
-            <i class="tio-visible-outlined"></i> {{ translate('View') }}
+        <a class="btn btn-sm btn-white d-flex align-items-center" href="{{ route('order.details', ['id' => $row->id]) }}">
+            @svg('heroicon-o-eye', ['class' => 'square-18 mr-2']) {{ translate('View') }}
         </a>
     </div>
 </x-livewire-tables::table.cell>

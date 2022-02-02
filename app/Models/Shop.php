@@ -98,6 +98,10 @@ class Shop extends EVBaseModel
         return $this->hasMany(Product::class);
     }
 
+    public function blog_posts() {
+        return $this->hasMany(BlogPost::class);
+    }
+
     public function jobs()
     {
         return $this->hasMany(Job::class);

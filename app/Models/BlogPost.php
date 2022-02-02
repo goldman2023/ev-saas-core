@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
+use App\Facades\MyShop;
 use App\Traits\GalleryTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
@@ -37,12 +39,40 @@ class BlogPost extends EVBaseModel
 
     protected $fillable = ['shop_id', 'title', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
 
+    protected $casts = [
+        'subscription_only' => 'boolean',
+        'created_at' => 'datetime:d.m.Y H:i',
+        'updated_at' => 'datetime:d.m.Y H:i',
+    ];
+
+    protected static function booted()
+    {
+        // Show only MyShop Blog Posts
+        static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
+            $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1); // restrict to current user's shop blog posts
+        });
+    }
+
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
     }
+
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
+                ->orWhere('title', 'like', '%'.$term.'%')
+                ->orWhere('excerpt', 'like', '%'.$term.'%')
+                ->orWhere('content', 'like', '%'.$term.'%')
+        );
+    }
+
 
     public function shop() {
         return $this->belongsTo(Shop::class, 'shop_id');

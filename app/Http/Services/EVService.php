@@ -162,8 +162,8 @@ class EVService
                     [
                         'label' => translate('Blog'),
                         'icon' => 'heroicon-o-newspaper',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
+                        'route' => route('blog.posts.index'),
+                        'is_active' => areActiveRoutes(['blog.posts.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_posts', 'browse_posts']
                     ],
