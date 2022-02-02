@@ -58,7 +58,7 @@ class PermissionsService
         } else {
             $data = collect([
                 'Owner' => $this->getAllPossiblePermissions(),
-                'Editor' => array_merge($this->getProductPermissions(), $this->getBlogPermissions(), $this->getReviewsPermissions(), $this->getOrdersPermissions(), $this->getLeadsPermissions()),
+                'Editor' => array_merge($this->getProductPermissions(), $this->getBlogPostsPermissions(), $this->getReviewsPermissions(), $this->getOrdersPermissions(), $this->getLeadsPermissions()),
                 'HR' => array_merge($this->getStaffPermissions(), $this->getReviewsPermissions(), [
                     'view_shop_data' => 'View shop data',
                     'view_shop_settings' => 'View shop settings',
@@ -82,7 +82,7 @@ class PermissionsService
             $this->getOrdersPermissions(),
             $this->getProductPermissions(),
             $this->getReviewsPermissions(),
-            $this->getBlogPermissions(),
+            $this->getBlogPostsPermissions(),
             $this->getCustomersPermissions(),
             $this->getPaymentMethodsUniversalPermissions(),
             $this->getDesignsPermissions(),
@@ -97,7 +97,7 @@ class PermissionsService
             translate('Customers') => 'getCustomersPermissions',
             translate('Orders') => 'getOrdersPermissions',
             translate('Products') => 'getProductPermissions',
-            translate('Blog') => 'getBlogPermissions',
+            translate('Blog Posts') => 'getBlogPostsPermissions',
             translate('Reviews') => 'getReviewsPermissions',
             translate('Leads') => 'getLeadsPermissions',
             translate('Payment Methods Universal') => [
@@ -162,19 +162,19 @@ class PermissionsService
         ];
     }
 
-    public function getBlogPermissions() {
+    public function getBlogPostsPermissions() {
         return [
-            'all_posts' => 'Allow managing all posts',
-            'browse_posts' => 'Browse posts',
-            'view_post' => 'View post',
-            'insert_post' => 'Create post',
-            'update_post' => 'Update post',
-            'update_post_status' => 'Update post status',
-            'delete_post' => 'Delete post',
-            'view_product_attributes' => 'View post attributes',
-            'insert_product_attributes' => 'Create post attributes',
-            'update_product_attributes' => 'Update post attributes',
-            'delete_product_attributes' => 'Delete post attributes',
+            'all_posts' => 'Allow managing all blog posts',
+            'browse_posts' => 'Browse blog posts',
+            'view_post' => 'View blog post',
+            'insert_post' => 'Create blog post',
+            'update_post' => 'Update blog post',
+            'update_post_status' => 'Update blog post status',
+            'delete_post' => 'Delete blog post',
+            'view_post_attributes' => 'View blog post attributes',
+            'insert_post_attributes' => 'Create blog post attributes',
+            'update_post_attributes' => 'Update blog post attributes',
+            'delete_post_attributes' => 'Delete blog post attributes',
         ];
     }
 

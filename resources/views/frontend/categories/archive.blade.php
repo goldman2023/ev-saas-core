@@ -34,35 +34,7 @@
         <div class="container">
             <div class="row py-3">
                 <div class="col-sm-8">
-
-                    <div class="d-flex justify-content-between">
-                        <ul class="breadcrumb bg-transparent p-0 text-white my-0">
-                            <li class="breadcrumb-item opacity-50">
-                                <a class="text-white" href="{{ route('home') }}">{{ translate('Home') }}</a>
-                            </li>
-
-                            <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-400':'opacity-50' }} ">
-                                <a class="text-white"
-                                   href="{{ route('search') }}">{{ translate('All Categories') }}</a>
-                            </li>
-
-                            @if (!empty($selected_category->parent))
-                                <li class="text-dark fw-400 opacity-50 breadcrumb-item">
-                                    <a class="text-white" href="{{ route('category.index', $selected_category->parent->slug) }}">
-                                        {{ $selected_category->parent->getTranslation('name') }}</a>
-                                </li>
-                            @endif
-
-                            @if (!empty($selected_category))
-                                <li class="text-dark fw-600 breadcrumb-item">
-                                    <a class="text-primary" href="{{ route('category.index', $selected_category->slug) }}">
-                                        {{ $selected_category->getTranslation('name') }}</a>
-                                </li>
-                            @endif
-                        </ul>
-
-
-                    </div>
+                    {{ Breadcrumbs::render('category', $selected_category) }}
                 </div>
                 <div class="col-sm-4">
 

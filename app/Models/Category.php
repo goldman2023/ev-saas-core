@@ -191,9 +191,9 @@ class Category extends EVBaseModel
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
     }
 
-    public function getPermalink($for = null)
+    public function getPermalink($content_type = null)
     {
-        return Categories::getRoute($this, $for);
+        return Categories::getRoute($this, $content_type);
     }
 
     public function getTranslationModel(): ?string
