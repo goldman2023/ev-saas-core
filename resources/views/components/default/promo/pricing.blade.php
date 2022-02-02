@@ -88,7 +88,18 @@
             <!-- End Body -->
 
             <div class="card-footer border-0">
-              <button type="button" class="btn btn-soft-primary btn-block transition-3d-hover">Get Started</button>
+                @guest
+                 <a href="javascript:;"
+                 x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})"  type="button" class="btn btn-soft-primary btn-block transition-3d-hover">
+                 {{ translate('Get Started') }}
+                </a>
+                @else
+                <a href="/spark"
+                  type="button" class="btn btn-soft-primary btn-block transition-3d-hover">
+                {{ translate('Get Started') }}
+               </a>
+                @endif
+
             </div>
           </div>
           <!-- End Pricing -->
