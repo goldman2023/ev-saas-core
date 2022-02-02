@@ -63,9 +63,9 @@
                                             @svg($item['icon'], ['class' => 'nav-icon'])
                                             {{ $item['label'] }}
 
-                                            @if(($item['badge'] ?? null) && $item['badge']['content'] instanceof \Closure)
+                                            @if(($item['badge'] ?? null) && $item['badge']['content'] instanceof \Closure && $count = $item['badge']['content']() ?? null)
                                                 <span class="badge {{ $item['badge']['class'] }} text-12 ml-2 rounded">
-                                                    {{ $item['badge']['content']() ?? '' }}
+                                                    {{ $count }}
                                                 </span>
                                             @endif
                                         </a>

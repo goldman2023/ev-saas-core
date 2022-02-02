@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Builders\ProductsBuilder;
 use App\Models\Product;
 use Illuminate\Cache\Repository;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
@@ -57,21 +58,26 @@ class MacrosServiceProvider extends ServiceProvider
             return $this->whenNotEmpty($recursive = function (&$items) use (&$recursive, $property_name, $method) {
 
                 if($items->isEmpty()) {
-                    return [];
+                    return collect([]);
                 }
 
                 $items = $items->{$method['fn']}(...$method['params']);
 
-                foreach($items as &$item) {
-                    $new_items = $item->{$property_name};
-                    $item->{$property_name} = $recursive($new_items);
+                foreach($items as $key => &$item) {
+                    if($item->relationLoaded($property_name)) {
+                        // if relation
+                        $item->setRelation($property_name, $recursive($item->{$property_name}));
+                    } else {
+                        // if property
+                        $item->{$property_name} = $recursive($item->{$property_name});
+                    }
                 }
 
                 return $items;
             });
         });
 
-        // Static version of `recursiveApply` function. Collections, arrays and objects can be used as $items!
+        // Static version of `recursiveApply` function. Models, Collections, arrays and objects can be used as $items!
         Collection::macro('recursiveApplyStatic', function ($items, $property_name, $method = []) {
             // If given $items are Collection type, call `recursiveApply` macro
             if($items instanceof Collection) {
@@ -87,12 +93,16 @@ class MacrosServiceProvider extends ServiceProvider
                 $items = collect($items)->{$method['fn']}(...$method['params'])->all();
 
                 foreach($items as &$item) {
-                    if(is_object($item)) {
-                        $new_items = $item->$property_name;
-                        $item->$property_name = $recursive($new_items, $property_name, $method);
+                    if($item instanceof Model) {
+                        if($item->relationLoaded($property_name)) {
+                            $item->setRelation($property_name, $recursive($item->{$property_name}, $property_name, $method));
+                        } else {
+                            $item->{$property_name} = $recursive($item->{$property_name}, $property_name, $method);
+                        }
+                    } else if(is_object($item)) {
+                        $item->$property_name = $recursive($item->$property_name, $property_name, $method);
                     } else if(is_array($item)) {
-                        $new_items = $item[$property_name];
-                        $item[$property_name] = $recursive($new_items, $property_name, $method);
+                        $item[$property_name] = $recursive($item[$property_name], $property_name, $method);
                     }
                 }
 

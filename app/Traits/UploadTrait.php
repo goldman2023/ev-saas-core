@@ -3,8 +3,10 @@
 namespace App\Traits;
 
 use App\Builders\BaseBuilder;
+use App\Models\Category;
 use App\Models\Product;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use IMG;
 use Illuminate\Support\Collection;
@@ -30,7 +32,7 @@ trait UploadTrait
             if(!$model->relationLoaded('uploads')) {
                 $model->load('uploads');
             }
-
+//
             // Initiate dynamic properties values
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
                 if($property['multiple'] ?? false) {
@@ -44,6 +46,7 @@ trait UploadTrait
                         return $upload->pivot->relation_type === $property['relation_type'];
                     })->first();
                 }
+
             });
         });
     }
@@ -62,6 +65,25 @@ trait UploadTrait
             $this->fillable(array_unique(array_merge($this->fillable, [$property['property_name']])));
         });
     }
+
+
+//    /**
+//     * Fill the model with an array of attributes.
+//     *
+//     * @param  array  $attributes
+//     * @return $this
+//     *
+//     * @throws \Illuminate\Database\Eloquent\MassAssignmentException
+//     */
+//    public function fill(array $attributes)
+//    {
+//        if($this instanceof \App\Models\Category) {
+//            dd($attributes);
+//        }
+//        parent::fill($attributes);
+//
+//
+//    }
 
     /*
      * Gets the Upload URL

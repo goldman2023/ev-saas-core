@@ -18,55 +18,8 @@
         <!-- End Header -->
 
         <div class="card-body">
-            @if($orders_count > 0)
-                <livewire:dashboard.tables.orders-table></livewire:dashboard.tables.orders-table>
-            @endif
+            <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
         </div>
-
-        <!-- Footer -->
-{{--        <div class="card-footer">--}}
-{{--            <!-- Pagination -->--}}
-{{--            <div class="row justify-content-center justify-content-sm-between align-items-sm-center">--}}
-{{--                <div class="col-sm mb-2 mb-sm-0">--}}
-{{--                    <div class="d-flex justify-content-center justify-content-sm-start align-items-center">--}}
-{{--                        <span class="mr-2">{{ translate('Showing') }}:</span>--}}
-
-{{--                        <!-- Select -->--}}
-{{--                        <select id="ordersDatatablePerPage" class="js-select2-custom"--}}
-{{--                                data-hs-select2-options='{--}}
-{{--                                    "minimumResultsForSearch": "Infinity",--}}
-{{--                                    "customClass": "custom-select custom-select-sm custom-select-borderless",--}}
-{{--                                    "dropdownAutoWidth": true,--}}
-{{--                                    "width": true--}}
-{{--                                  }'>--}}
-{{--                            <option value="10">10</option>--}}
-{{--                            <option value="15" selected>15</option>--}}
-{{--                            <option value="20">20</option>--}}
-{{--                            <option value="30">30</option>--}}
-{{--                            <option value="50">40</option>--}}
-{{--                            <option value="50">50</option>--}}
-{{--                            <option value="75">75</option>--}}
-{{--                            <option value="100">100</option>--}}
-{{--                        </select>--}}
-{{--                        <!-- End Select -->--}}
-
-{{--                        <span class="text-secondary mr-2">{{ translate('of') }}</span>--}}
-
-{{--                        <!-- Pagination Quantity -->--}}
-{{--                        <span id="ordersDatatableTotalQty">{{ $orders_count }}</span>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
-{{--                <div class="col-sm-auto">--}}
-{{--                    <div class="d-flex justify-content-center justify-content-sm-end">--}}
-{{--                        <!-- Pagination -->--}}
-{{--                        <nav id="ordersDatatablePagination" aria-label="Activity pagination"></nav>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--            <!-- End Pagination -->--}}
-{{--        </div>--}}
-        <!-- End Footer -->
     </div>
 
 

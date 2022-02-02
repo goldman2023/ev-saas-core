@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
+use App\Facades\MyShop;
 use App\Models\Order;
 use App\Models\Orders;
 use App\Traits\Livewire\DispatchSupport;
@@ -14,6 +15,7 @@ class OrdersTable extends DataTableComponent
 {
     use DispatchSupport;
 
+    public $for = 'me';
     public ?int $searchFilterDebounce = 800;
     public string $defaultSortColumn = 'created_at';
     public string $defaultSortDirection = 'desc';
@@ -38,6 +40,11 @@ class OrdersTable extends DataTableComponent
     protected string $pageName = 'orders';
     protected string $tableName = 'orders';
 
+    public function mount($for = 'me') {
+        $this->for = $for;
+
+        parent::mount();
+    }
     public function exportSelected()
     {
         if ($this->selectedRowsQuery->count() > 0) {
@@ -120,6 +127,8 @@ class OrdersTable extends DataTableComponent
     public function query(): Builder
     {
         return Order::query()
+            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
+            ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))

@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryTranslation extends Model
 {
-    protected $fillable = ['name', 'lang', 'category_id'];
+    protected $fillable = ['category_id', 'name', 'lang', 'meta_title', 'meta_description'];
 
-    public function category(){
+    public function category() {
     	return $this->belongsTo(Category::class);
     }
 }

@@ -15,24 +15,25 @@ class CategoryService
     protected $categories_flat;
     protected $pluckable_categories;
     private $routes = [];
+    public $categorizable_items = ['products'];
+    private $category_archive_key = 'category.%d%.index';
+    private $category_content_type_archive_key = 'category.%d%.%s%.index';
+
+    public const URL_SEPARATOR = '/';
+    public const PATH_SEPARATOR = '.';
 
     public function __construct($app) {
         $this->app = $app;
 
         $cache_key = tenant('id') . '_categories';
         $cache_key_flat = tenant('id') . '_categories_flat';
-
+//        $this->clearCache(); // TODO: remove later to use cache fully
         $categories = Cache::get($cache_key, null);
         $categories_flat = Cache::get($cache_key_flat, null);
         $default = [];
 
         if (empty($categories_flat)) {
-            $categories_flat = Category::tree()->withCount(['products', 'shops'])->get()->keyBy('slug');
-
-            if (!empty($categories_flat)) {
-                Cache::forget($cache_key_flat);
-                Cache::put($cache_key_flat, $categories_flat);
-            }
+            $categories_flat = Category::tree()->withCount(['products', 'shops', 'descendants'])->get()->keyBy('slug');
 
             $tree = $categories_flat->toTree();
 
@@ -42,6 +43,24 @@ class CategoryService
             if (!empty($categories)) {
                 Cache::forget($cache_key);
                 Cache::put($cache_key, $categories);
+            }
+
+            // recrusively sort categories
+            $arr = collect();
+            $recursive = function($categories) use(&$arr, &$recursive) {
+                if(!empty($categories) && $categories->isNotEmpty()) {
+                    foreach($categories as $category) {
+                        $arr->put($category->slug, $category);
+                        $recursive($category->children);
+                    }
+                }
+            };
+            $recursive($categories);
+            $categories_flat = $arr;
+
+            if (!empty($categories_flat)) {
+                Cache::forget($cache_key_flat);
+                Cache::put($cache_key_flat, $categories_flat);
             }
         }
 
@@ -53,24 +72,54 @@ class CategoryService
         $this->determineCategoriesRoutes();
     }
 
+    public function clearCache() {
+        $cache_key = tenant('id') . '_categories';
+        $cache_key_flat = tenant('id') . '_categories_flat';
+
+        Cache::forget($cache_key);
+        Cache::forget($cache_key_flat);
+    }
+
     // Routes
-    public function getRoute(Category $category)
+    public function getRoute(Category $category, ?string $content_type = null)
     {
-        return $this->routes[$category->id];
+        if($content_type) {
+            return $this->routes[str_replace(['%d%', '%s%'], [$category->id, $content_type], $this->category_content_type_archive_key)];
+        }
+
+        return $this->routes[str_replace('%d%', $category->id, $this->category_archive_key)];
+    }
+
+    public function getCategorySlugFromRoute($slug = null) {
+        if(!empty($slug)) {
+            return last(explode(self::URL_SEPARATOR, $slug));
+        }
+
+        return '';
     }
 
     private function determineCategoriesRoutes()
     {
         $categories = Category::all()->keyBy('id');
 
+
         foreach ($categories as $id => $category) {
             $slugs = $this->determineCategorySlugs($category, $categories);
+            $category_archive_key = str_replace('%d%', $id, $this->category_archive_key);
 
             if (count($slugs) === 1) {
-                $this->routes[$id] = url('category/' . $slugs[0]);
+                $this->routes[$category_archive_key] = route('category.index', ['slug' => $slugs[0]]);
+
+                foreach($this->categorizable_items as $item_name) {
+                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.'.$item_name.'.index', ['slug' => $slugs[0]]);
+                }
             }
             else {
-                $this->routes[$id] = url('category/' . implode('/', $slugs));
+                $this->routes[$category_archive_key] = route('category.index', ['slug' => implode('/', $slugs)]);
+
+                foreach($this->categorizable_items as $item_name) {
+                    $this->routes[str_replace(['%d%', '%s%'], [$id, $item_name], $this->category_content_type_archive_key)] = route('category.'.$item_name.'.index', ['slug' => implode('/', $slugs)]);
+                }
             }
         }
     }
@@ -182,5 +231,24 @@ class CategoryService
         }
 
         return $category;
+    }
+
+    public function getCategoryLevel($category) {
+        $level = 0;
+
+        $recursive = function($parent_id) use(&$recursive, &$level) {
+            $parent = Category::find($parent_id);
+
+            if($parent instanceof Category && !empty($parent->id ?? null) ) {
+                $level++;
+                $recursive($parent->parent_id);
+            }
+
+            return false;
+        };
+
+        $recursive($category->parent_id);
+
+        return $level;
     }
 }

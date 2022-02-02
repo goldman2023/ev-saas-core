@@ -37,6 +37,9 @@ class MyShopService
         return $this->shop;
     }
 
+    public function getShopID() {
+        return $this->shop?->id ?? null;
+    }
 
     /*
      * Shop Settings

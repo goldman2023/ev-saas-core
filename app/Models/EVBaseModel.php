@@ -11,7 +11,7 @@ class EVBaseModel extends Model
 {
     use hasCoreProperties;
 
-    public ?array $eagerLoaded = [];
+//    public ?array $eagerLoaded = [];
 
     /**
      * Create a new Eloquent model instance.
@@ -25,7 +25,23 @@ class EVBaseModel extends Model
 
         // After this moment Model is a) booted, b) traits are initialized, c) attributes are filled from original values
         // What is left to do is define $core_properties of the newly created Model object, otherwise we'll face `Undefined property` error if we ever try to access core_property of the newly created model
-        $this->initCoreProperties();
+        $this->initCoreProperties($attributes);
+    }
+
+    /**
+     * Fill the model with an array of attributes. Force mass assignment.
+     *
+     * TODO: ->fill() function should also use initCoreProperties where it fills core properties using given attributes!!!
+     * This is needed for alpineJS/Livewire core_properties model binding to work properly!
+     *
+     * @param  array  $attributes
+     * @return $this
+     */
+    public function forceFill(array $attributes = []) {
+        parent::forceFill($attributes); // Fill standard Laravel attributes
+        $this->initCoreProperties($attributes); // Fill core_properties with passed data
+
+        return $this; // Must return $this object
     }
 
     /**

@@ -84,7 +84,7 @@
 
                     var data = $(el).data('sub');
                     var html = '<div class="card-columns">';
-                    var href = '{{ route('products.category', '') }}' + '/';
+                    var href = '{{ route('category.index', '') }}' + '/';
 
                     data.map((item, key) => {
                         html += '<div class="card shadow-none border-0">' +

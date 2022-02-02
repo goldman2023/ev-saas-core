@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
+use App\Builders\CteBuilder;
 use App\Facades\Categories;
+use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -17,28 +22,6 @@ use Vendor;
 
 /**
  * App\Models\Category
- *
- * @property int $id
- * @property string $name
- * @property string|null $banner
- * @property string|null $icon
- * @property int $featured
- * @property int $top
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product[] $products
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereBanner($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereFeatured($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereIcon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereTop($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 
 class Category extends EVBaseModel
@@ -49,15 +32,44 @@ class Category extends EVBaseModel
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
 
     use TranslationTrait;
+    use UploadTrait;
+    use GalleryTrait;
 
     public $selected;
     public $title_path;
     public const PATH_SEPARATOR = '.';
 
-    protected $appends = ['selected', 'title_path'];
+    protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'description', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
+    protected $appends = ['selected']; // title_path
 
-    protected $with = ['translations'];
+    protected $casts = [
+        'created_at' => 'date:d.m.Y',
+        'featured' => 'boolean',
+        'digital' => 'boolean',
+        'top' => 'boolean',
+    ];
 
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('d.m.Y');
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return CteBuilder|static
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new CteBuilder($query);
+    }
 
     public function getParentKeyName() {
         return 'parent_id';
@@ -107,10 +119,8 @@ class Category extends EVBaseModel
         return 'slug';
     }
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::addGlobalScope('alphabetical', function (Builder $builder) {
             $builder->orderBy('name', 'ASC');
         });
@@ -123,6 +133,14 @@ class Category extends EVBaseModel
                 }
             });
         }
+    }
+
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where('name', 'like', '%'.$term.'%');
     }
 
     // TODO: FIX THIS TOO. REMOVE CLASSIFIED PRODUCTS!
@@ -173,13 +191,24 @@ class Category extends EVBaseModel
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
     }
 
-    public function getPermalinkAttribute()
+    public function getPermalink($content_type = null)
     {
-        return Categories::getRoute($this);
+        return Categories::getRoute($this, $content_type);
     }
 
     public function getTranslationModel(): ?string
     {
         return CategoryTranslation::class;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [
+            [
+                'property_name' => 'icon',
+                'relation_type' => 'icon',
+                'multiple' => false
+            ]
+        ];
     }
 }
