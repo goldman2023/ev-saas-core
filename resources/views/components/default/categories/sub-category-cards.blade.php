@@ -3,7 +3,7 @@
         @foreach ($categories as $key => $category)
             <div class="col-sm-3 col-10 mb-3">
                 <a class="card card-bordered card-hover-shadow h-100"
-                   href="{{ route('products.category', $category->slug) }}">
+                   href="{{ route('category.products.index', $category->slug) }}">
                     <div class="card-body d-flex align-items-center">
                         <div class="media align-items-center d-flex d-sm-flex text-sm-left text-center w-100">
                             {{-- TODO: Show last product image if there is no icon --}}

@@ -44,7 +44,7 @@
                                 <h3 class="c-category-list-sidebar__top-item h5 fw-500 d-flex justify-content-between align-items-center px-0 mb-1 {{ $is_collapsed }}"
                                     data-toggle="collapse" href="#{{ 'collapse-section-'.$category->slug_path }}" role="button" aria-expanded="false" aria-controls="{{ 'collapse-section-'.$category->slug_path }}"
                                 >
-                                    <a class="text-inherit" href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') ?? '' }}</a>
+                                    <a class="text-inherit" href="{{ route('category.products.index', $category->slug) }}">{{ $category->getTranslation('name') ?? '' }}</a>
 
                                     @if(!empty($category->children) && $category->children->isNotEmpty())
                                         @svg('heroicon-o-chevron-down', ['class' => 'ev-icon ev-icon__xs'])

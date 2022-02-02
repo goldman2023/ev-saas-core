@@ -5,6 +5,7 @@ use Spark\Features;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\VendorMode;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 return [
 
@@ -35,7 +36,9 @@ return [
     'middleware' => [
         'web',
         'universal',
-        InitializeTenancyByDomain::class, // or whatever tenancy middleware you use
+        InitializeTenancyByDomain::class, // or whatever tenancy middleware you use,
+        PreventAccessFromCentralDomains::class,
+        VendorMode::class
     ],
 
     /*
@@ -137,6 +140,41 @@ return [
             'plans' => [
                 [
                     'name' => 'Business',
+                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'monthly_id' => 'price_1JtUlbASOFrdz0QBuOm9oJh5',
+                    'yearly_id' => 'price_1JtUmuASOFrdz0QBjyGpDwCs',
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                ],
+
+                [
+                    'name' => 'Solo Plus',
+                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'monthly_id' => 'price_1JtUlbASOFrdz0QBuOm9oJh5',
+                    'yearly_id' => 'price_1JtUmuASOFrdz0QBjyGpDwCs',
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                ],
+
+                [
+                    'name' => 'Premium',
+                    'short_description' => 'This is a short, human friendly description of the plan.',
+                    'monthly_id' => 'price_1JtUlbASOFrdz0QBuOm9oJh5',
+                    'yearly_id' => 'price_1JtUmuASOFrdz0QBjyGpDwCs',
+                    'features' => [
+                        'Feature 1',
+                        'Feature 2',
+                        'Feature 3',
+                    ],
+                ],
+                [
+                    'name' => 'Enterprise',
                     'short_description' => 'This is a short, human friendly description of the plan.',
                     'monthly_id' => 'price_1JtUlbASOFrdz0QBuOm9oJh5',
                     'yearly_id' => 'price_1JtUmuASOFrdz0QBjyGpDwCs',

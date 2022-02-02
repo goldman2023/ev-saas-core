@@ -15,7 +15,7 @@
         <div class="col-md-4 text-md-right">
 
             <a class="btn btn-primary btn-pill transition-3d-hover px-5" target="_blank"
-            href="dashboard/subscriptions">
+            href="/spark/">
                 {{ translate('Subscribe') }}
             </a>
         </div>
