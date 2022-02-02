@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 mb-3">
         <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe>
 
     </div>
@@ -23,7 +23,7 @@
     <div class="col-8">
         <div class="row">
 
-            <div class="col-sm-6 mb-3">
+            <div class="col-sm-6">
                 {{-- <x-default.dashboard.customer.current-plan>
                     @slot('title')
                         AdeoWeb - Headache Free Website
@@ -35,7 +35,7 @@
                 </x-default.dashboard.customer.current-plan> --}}
             </div>
 
-        <div class="col-sm-6 mb-3">
+        <div class="col-sm-6">
             {{-- <x-default.dashboard.customer.current-plan>
                 @slot('title')
                 PassCamp - Headache Free Website
