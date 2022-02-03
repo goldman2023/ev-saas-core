@@ -37,7 +37,7 @@ trait CategoryTrait
      */
     public function initializeCategoryTrait(): void
     {
-        $this->append(['category_id', 'primary_category']);
+        //$this->append(['category_id', 'primary_category']);
         $this->fillable(array_unique(array_merge($this->fillable, ['category_id', 'primary_category'])));
     }
 

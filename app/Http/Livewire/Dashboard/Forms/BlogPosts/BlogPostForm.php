@@ -7,50 +7,57 @@ use App\Models\Address;
 use App\Models\BlogPost;
 use App\Models\Category;
 use App\Models\ShopAddress;
+use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
 use DB;
 use EVS;
 use Categories;
 use Illuminate\Validation\Rule;
 use Purifier;
+use Permissions;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasCategories;
 
 class BlogPostForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
+    use HasCategories;
 
-    public $blog_post;
+    public $blogPost;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount($blog_post = null)
+    public function mount($blogPost = null)
     {
-        $this->blog_post = empty($blog_post) ? new BlogPost() : $blog_post;
+        $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
+
+        $this->initCategories($this->blogPost);
     }
 
     protected function rules()
     {
         return [
-            'blog_post.*' => [],
-            'blog_post.id' => [],
-            'blog_post.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-            'blog_post.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'blog_post.title' => 'required|min:10',
-            'blog_post.subscription_only' => ['required'],
-            'blog_post.status' => [Rule::in(BlogPost::STATUSES)],
-            'blog_post.excerpt' => 'required|min:10',
-            'blog_post.content' => 'required|min:10',
-            'blog_post.gallery' => [''],
-            'blog_post.meta_title' => [''],
-            'blog_post.meta_keywords' => [''],
-            'blog_post.meta_description' => [''],
-            'blog_post.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+            'selected_categories' => 'required',
+            'blogPost.*' => [],
+            'blogPost.id' => [],
+            'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+            'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+            'blogPost.title' => 'required|min:10',
+            'blogPost.subscription_only' => [],
+            'blogPost.status' => [Rule::in(BlogPost::STATUSES)],
+            'blogPost.excerpt' => 'required|min:10',
+            'blogPost.content' => 'required|min:10',
+            'blogPost.gallery' => [''],
+            'blogPost.meta_title' => [''],
+            'blogPost.meta_keywords' => [''],
+            'blogPost.meta_description' => [''],
+            'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
     }
 
@@ -58,31 +65,33 @@ class BlogPostForm extends Component
     protected function messages()
     {
         return [
-            'blog_post.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
-            'blog_post.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
-            'blog_post.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
+            'blogPost.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
+            'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
+            'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
-            'blog_post.title.required' => translate('Title is required'),
-            'blog_post.title.min' => translate('Minimum title length is :min'),
+            'blogPost.title.required' => translate('Title is required'),
+            'blogPost.title.min' => translate('Minimum title length is :min'),
 
-            'blog_post.excerpt.required' => translate('Excerpt is required'),
-            'blog_post.excerpt.min' => translate('Minimum excerpt length is :min'),
+            'blogPost.excerpt.required' => translate('Excerpt is required'),
+            'blogPost.excerpt.min' => translate('Minimum excerpt length is :min'),
 
-            'blog_post.content.required' => translate('Content is required'),
-            'blog_post.content.min' => translate('Minimum content length is :min'),
+            'blogPost.content.required' => translate('Content is required'),
+            'blogPost.content.min' => translate('Minimum content length is :min'),
 
-            'blog_post.status.in' => translate('Status must be one of the following:').' '.implode(',',BlogPost::STATUSES),
-            'blog_post.subscription_only' => translate('Subscription only must be either true or false'),
+            'blogPost.status.in' => translate('Status must be one of the following:').' '.implode(', ',BlogPost::STATUSES),
+            'blogPost.subscription_only' => translate('Subscription only must be either true or false'),
         ];
     }
 
     public function dehydrate()
     {
+        $this->dispatchBrowserEvent('initSlugGeneration');
         $this->dispatchBrowserEvent('initBlogPostForm');
     }
 
     public function saveBlogPost() {
-        $is_update = isset($this->blog_post->id) && !empty($this->blog_post->id);
+        $msg = '';
+        $is_update = isset($this->blogPost->id) && !empty($this->blogPost->id);
 
         try {
             $this->validate();
@@ -94,20 +103,30 @@ class BlogPostForm extends Component
         DB::beginTransaction();
 
         try {
-//            // Update address
-//            if(empty($this->category->parent_id)) {
-//                $this->category->parent_id = null;
-//            }
-//            $this->category->level = \Categories::getCategoryLevel($this->category);
-//            $this->category->save();
-//            $this->category->syncUploads();
+            // Insert or Update BlogPost
+            $this->blogPost->subscription_only = (bool) $this->blogPost->subscription_only;
+            $this->blogPost->shop_id = MyShop::getShopID();
+
+            // If user has no permissions to publish the post, change the status to Draft
+            if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_post'], false)) {
+                $this->blogPost->status = BlogPost::STATUS_DRAFT;
+                $msg = translate('Blog post status is set to '.BlogPost::STATUS_DRAFT.' because you don\'t have enough Permissions to publish it right away.');
+            }
+
+            $this->blogPost->save();
+            $this->blogPost->syncUploads();
+
+            // Set Categories
+            $this->setCategories($this->blogPost);
+
+            // TODO: Determine which package to use for Translations! Set Translations...
 //
-//            DB::commit();
+            DB::commit();
 
             if($is_update) {
-                $this->toastify('Blog post successfully updated!', 'success');
+                $this->toastify(translate('Blog post successfully updated!').' '.$msg, 'success');
             } else {
-                $this->toastify('Blog post successfully created!', 'success');
+                $this->toastify(translate('Blog post successfully created!').' '.$msg, 'success');
             }
         } catch(\Exception $e) {
             DB::rollBack();

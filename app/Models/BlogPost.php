@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
+use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
@@ -25,15 +26,18 @@ class BlogPost extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use TranslationTrait;
+    use CategoryTrait;
 //    use ReactionsTrait;
 //    use CommentsTrait;
 //    use PermalinkTrait;
 
     public const STATUSES = ['published', 'draft', 'private', 'pending'];
+    public const STATUSES_SELECT = ['published' => 'Published', 'draft' => 'Draft', 'private' => 'Private', 'pending' => 'Pending'];
     public const STATUS_PUBLISHED = 'published';
     public const STATUS_DRAFT = 'draft';
     public const STATUS_PRIVATE = 'private';
     public const STATUS_PENDING = 'pending';
+    public const STATUS_DEFAULT = self::STATUS_DRAFT;
 
     protected $table = 'blog_posts';
 
@@ -81,6 +85,10 @@ class BlogPost extends EVBaseModel
     public function authors() {
         return $this->morphedByMany(User::class, 'subject', 'blog_post_relationships');
     }
+
+//    public function categories() {
+//        return $this->morphedByMany(Category::class, 'subject', 'blog_post_relationships');
+//    }
 
 //    public function subscriptions()
 //    {

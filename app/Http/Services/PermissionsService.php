@@ -141,13 +141,13 @@ class PermissionsService
             'insert_product' => 'Create product',
             'delete_product' => 'Delete product',
             'publish_product' => 'Publish product',
-            'unpublish_product' => 'Unpublish product',
+//            'unpublish_product' => 'Unpublish product',
             'update_product_stock' => 'Update product stock',
             'view_product_attributes' => 'View product attributes',
             'insert_product_attributes' => 'Create product attributes',
             'update_product_attributes' => 'Update product attributes',
             'delete_product_attributes' => 'Delete product attributes',
-            // Maybe add 'Update product variations' ?
+            // Maybe add 'manage product stock' ?
         ];
     }
 
@@ -169,7 +169,8 @@ class PermissionsService
             'view_post' => 'View blog post',
             'insert_post' => 'Create blog post',
             'update_post' => 'Update blog post',
-            'update_post_status' => 'Update blog post status',
+//            'update_post_status' => 'Update blog post status',
+            'publish_post' => 'Publish blog post',
             'delete_post' => 'Delete blog post',
             'view_post_attributes' => 'View blog post attributes',
             'insert_post_attributes' => 'Create blog post attributes',

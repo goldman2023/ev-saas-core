@@ -27,6 +27,9 @@ window.initBlogPostForm = function(event) {
     // =======================================================
     $.HSCore.components.EVToastUIEditor.init('.js-toast-ui-editor');
 
+    /* Initialize Category selectors */
+    window.EV.form.select.initCategoriesSelectors();
+
 }
 
 $(window).on('load', window.initBlogPostForm);

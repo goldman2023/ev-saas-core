@@ -1,5 +1,11 @@
+@push('pre_head_scripts')
+    <script>
+        let all_categories = @json(Categories::getAllFormatted());
+    </script>
+@endpush
+
 <div x-data="{
-    blog_post: @entangle('blog_post').defer,
+    blogPost: @entangle('blogPost').defer,
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
@@ -17,14 +23,14 @@
             <div class="profile-cover">
                 <div class="profile-cover-img-wrapper"
                      x-data="{
-                        name: 'blog_post.cover',
-                        imageID: {{ $blog_post->cover->id ?? 'null' }},
-                        imageURL: '{{ $blog_post->getCover(['w'=>1200]) }}',
+                        name: 'blogPost.cover',
+                        imageID: {{ $blogPost->cover->id ?? 'null' }},
+                        imageURL: '{{ $blogPost->getCover(['w'=>1200]) }}',
                     }"
                      @aiz-selected.window="
                      if(event.detail.name === name) {
                         imageURL = event.detail.imageURL;
-                        $wire.set('blog_post.cover', $('input[name=\'blog_post.cover\']').val(), true);
+                        $wire.set('blogPost.cover', $('input[name=\'blogPost.cover\']').val(), true);
                      }"
                      data-toggle="aizuploader"
                      data-type="image">
@@ -35,7 +41,7 @@
                     <div class="profile-cover-content profile-cover-btn custom-file-manager"
                          data-toggle="aizuploader" data-type="image">
                         <div class="custom-file-btn">
-                            <input type="hidden" x-bind:name="name" wire:model.defer="blog_post.cover" class="selected-files" data-preview-width="1200">
+                            <input type="hidden" x-bind:name="name" wire:model.defer="blogPost.cover" class="selected-files" data-preview-width="1200">
 
                             <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg d-flex align-items-center" for="profileCoverUploader">
                                 @svg('heroicon-o-pencil', ['class' => 'square-16 mr-2'])
@@ -52,20 +58,20 @@
             <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader mx-auto profile-cover-avatar pointer border p-1" for="avatarUploader"
                    style="margin-top: -60px;"
                    x-data="{
-                        name: 'blog_post.thumbnail',
-                        imageID: {{ $blog_post->thumbnail->id ?? 'null' }},
-                        imageURL: '{{ $blog_post->getThumbnail() }}',
+                        name: 'blogPost.thumbnail',
+                        imageID: {{ $blogPost->thumbnail->id ?? 'null' }},
+                        imageURL: '{{ $blogPost->getThumbnail() }}',
                     }"
                    @aiz-selected.window="
                      if(event.detail.name === name) {
                         imageURL = event.detail.imageURL;
-                        $wire.set('blog_post.thumbnail', $('input[name=\'blog_post.thumbnail\']').val(), true);
+                        $wire.set('blogPost.thumbnail', $('input[name=\'blogPost.thumbnail\']').val(), true);
                      }"
                    data-toggle="aizuploader"
                    data-type="image">
                 <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
 
-                <input type="hidden" x-bind:name="name" wire:model.defer="blog_post.thumbnail" class="selected-files" data-preview-width="200">
+                <input type="hidden" x-bind:name="name" wire:model.defer="blogPost.thumbnail" class="selected-files" data-preview-width="200">
 
                 <span class="avatar-uploader-trigger">
                   <i class="avatar-uploader-icon shadow-soft">
@@ -75,53 +81,109 @@
             </label>
             <!-- End Thumbnail -->
 
-            <x-default.system.invalid-msg field="blog_post.thumbnail"></x-default.system.invalid-msg>
+            <x-default.system.invalid-msg field="blogPost.thumbnail"></x-default.system.invalid-msg>
 
-            <x-default.system.invalid-msg field="blog_post.cover"></x-default.system.invalid-msg>
+            <x-default.system.invalid-msg field="blogPost.cover"></x-default.system.invalid-msg>
 
             <!-- Title -->
             <div class="row form-group mt-5" x-data="{
-                url_template: '{{ route('shop.blog.post.index', ['%shop_slug%', '%slug%'], false) }}',
-                url: '',
-                generateURL($slug) {
-                    this.url = this.url_template.replace('%shop_slug%', '{{ MyShop::getShop()->slug ?? '' }}').replace('%slug%', '<strong>'+$slug.slugify()+'</strong>');
-                }
-            }">
-                <label for="blog_post-title" class="col-sm-3 col-form-label input-label">{{ translate('Title') }}</label>
+{{--                url_template: '{{ route('shop.blog.post.index', ['%shop_slug%', '%slug%'], false) }}',--}}
+{{--                url: '',--}}
+{{--                generateURL($slug) {--}}
+{{--                    this.url = this.url_template.replace('%shop_slug%', '{{ MyShop::getShop()->slug ?? '' }}').replace('%slug%', '<strong>'+$slug.slugify()+'</strong>');--}}
+{{--                }--}}
+            }"
+{{--            @initSlugGeneration.window="this.generateURL($('#blogPost-title').val())">--}}
+                >
+
+                <label for="blogPost-title" class="col-sm-3 col-form-label input-label">{{ translate('Title') }}</label>
 
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
-                        <input type="text" class="form-control @error('blog_post.title') is-invalid @enderror"
-                               name="blog_post.title"
-                               id="blog_post-title"
+                        <input type="text" class="form-control @error('blogPost.title') is-invalid @enderror"
+                               name="blogPost.title"
+                               id="blogPost-title"
                                placeholder="{{ translate('New post title') }}"
-                               @input="generateURL($($el).val())"
-                               wire:model.defer="blog_post.title" />
+{{--                               @input="generateURL($($el).val())"--}}
+                               wire:model.defer="blogPost.title" />
                     </div>
 
-                    <div class="w-100 d-flex align-items-center mt-2">
-                        <strong class="mr-2">{{ translate('URL') }}:</strong>
-                        <span x-html="url"></span>
-                    </div>
+{{--                    <div class="w-100 d-flex align-items-center mt-2">--}}
+{{--                        <strong class="mr-2">{{ translate('URL') }}:</strong>--}}
+{{--                        <span x-html="(url !== undefined) ? url : ''"></span>--}}
+{{--                    </div>--}}
 
-                    <x-default.system.invalid-msg field="blog_post.title"></x-default.system.invalid-msg>
+                    <x-default.system.invalid-msg field="blogPost.title"></x-default.system.invalid-msg>
                 </div>
             </div>
             <!-- END Title -->
 
+            <!-- Status -->
+            <div class="row form-group mt-5">
+                <label for="blogPost-status" class="col-sm-3 col-form-label input-label">{{ translate('Status') }}</label>
+
+                <div class="col-sm-9" x-data="{
+                        status: @js($blogPost->status ?? App\Models\BlogPost::STATUS_DEFAULT),
+                    }"
+                     x-init="
+                        $($refs.blogPost_status_selector).on('select2:select', (event) => {
+                          status = event.target.value;
+                        });
+
+                        $watch('status', (value) => {
+                          $($refs.blogPost_status_selector).val(value).trigger('change');
+                        });
+                     ">
+                    <select
+                        wire:model.defer="blogPost.status"
+                        name="blogPost.status"
+                        x-ref="blogPost_status_selector"
+                        id="blog-post-status-selector"
+                        class="js-select2-custom custom-select select2-hidden-accessible"
+                        data-hs-select2-options='
+                            {"minimumResultsForSearch":"Infinity"}
+                        '
+                    >
+                        @foreach(App\Models\BlogPost::STATUSES_SELECT as $key => $status)
+                            <option value="{{ $key }}">
+                                {{ $status }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <x-default.system.invalid-msg field="blogPost.status"></x-default.system.invalid-msg>
+                </div>
+                </div>
+            </div>
+            <!-- END Status -->
+
 
             <!-- Category Selector -->
-            
+            <div class="row form-group mt-5">
+                <label for="blogPost-title" class="col-sm-3 col-form-label input-label">{{ translate('Category') }}</label>
+
+                <div class="col-sm-9">
+                    <x-ev.form.categories-selector
+                        error-bag-name="selected_categories"
+                        :items="$categories"
+                        :selected-categories="$this->levelSelectedCategories()"
+                        :multiple="true"
+                        :required="true"
+                        :search="true">
+                    </x-ev.form.categories-selector>
+                </div>
+            </div>
             <!-- END Category Selector -->
+
 
             <!-- Subscription only -->
             <div class="row form-group">
-                <label for="blog_post-subscription_only" class="col-sm-3 col-form-label input-label">{{ translate('Subscription only') }}</label>
+                <label for="blogPost-subscription_only" class="col-sm-3 col-form-label input-label">{{ translate('Subscription only') }}</label>
 
                 <div class="col-sm-9 d-flex align-items-center">
                     <!-- Checkbox Switch -->
-                    <label class="toggle-switch d-flex align-items-center" for="blog_post-subscription_only">
-                        <input type="checkbox" class="toggle-switch-input" id="blog_post-subscription_only" wire:model.defer="blog_post.subscription_only">
+                    <label class="toggle-switch d-flex align-items-center" for="blogPost-subscription_only">
+                        <input type="checkbox" class="toggle-switch-input" id="blogPost-subscription_only" wire:model.defer="blogPost.subscription_only">
                         <span class="toggle-switch-label">
                             <span class="toggle-switch-indicator"></span>
                           </span>
@@ -138,18 +200,18 @@
 
             <!-- Excerpt -->
             <div class="row form-group">
-                <label for="blog_post-excerpt" class="col-sm-3 col-form-label input-label">{{ translate('Excerpt') }}</label>
+                <label for="blogPost-excerpt" class="col-sm-3 col-form-label input-label">{{ translate('Excerpt') }}</label>
 
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('blog_post.excerpt') is-invalid @enderror"
-                                  name="blog_post.excerpt"
-                                  id="blog_post-excerpt"
-                                  wire:model.defer="blog_post.excerpt">
+                        <textarea type="text" class="form-control @error('blogPost.excerpt') is-invalid @enderror"
+                                  name="blogPost.excerpt"
+                                  id="blogPost-excerpt"
+                                  wire:model.defer="blogPost.excerpt">
                         </textarea>
                     </div>
 
-                    <x-default.system.invalid-msg field="blog_post.excerpt"></x-default.system.invalid-msg>
+                    <x-default.system.invalid-msg field="blogPost.excerpt"></x-default.system.invalid-msg>
                 </div>
 
 
@@ -158,23 +220,23 @@
 
             <!-- Content -->
             <div class="row form-group">
-                <label for="blog_post-content" class="col-sm-3 col-form-label input-label">{{ translate('Content') }}</label>
+                <label for="blogPost-content" class="col-sm-3 col-form-label input-label">{{ translate('Content') }}</label>
 
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
                         <div class="toast-ui-editor-custom w-100">
-                            <div class="js-toast-ui-editor @error('blog_post.content') is-invalid @enderror"
+                            <div class="js-toast-ui-editor @error('blogPost.content') is-invalid @enderror"
                                  data-ev-toastui-editor-options=""></div>
 
                             <input type="text"
                                    value=""
                                    data-textarea
-                                   id="blog_post-content"
-                                   name="blog_post.content" style="display: none !important;" wire:model.delay="blog_post.content"/>
+                                   id="blogPost-content"
+                                   name="blogPost.content" style="display: none !important;" wire:model.delay="blogPost.content"/>
                         </div>
                     </div>
 
-                    <x-default.system.invalid-msg field="blog_post.content"></x-default.system.invalid-msg>
+                    <x-default.system.invalid-msg field="blogPost.content"></x-default.system.invalid-msg>
                 </div>
             </div>
             <!-- END Content -->
@@ -185,57 +247,57 @@
 
             <!-- Meta Title -->
             <div class="row form-group">
-                <label for="blog_post-meta_title" class="col-sm-3 col-form-label input-label">{{ translate('Meta title') }}</label>
+                <label for="blogPost-meta_title" class="col-sm-3 col-form-label input-label">{{ translate('Meta title') }}</label>
 
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
-                        <input type="text" class="form-control @error('blog_post.meta_title') is-invalid @enderror"
-                               name="blog_post.meta_title"
-                               id="blog_post-meta_title"
+                        <input type="text" class="form-control @error('blogPost.meta_title') is-invalid @enderror"
+                               name="blogPost.meta_title"
+                               id="blogPost-meta_title"
                                placeholder="{{ translate('Post SEO/meta title') }}"
-                               wire:model.defer="blog_post.meta_title" />
+                               wire:model.defer="blogPost.meta_title" />
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="blog_post.meta_title"></x-default.system.invalid-msg>
+                <x-default.system.invalid-msg field="blogPost.meta_title"></x-default.system.invalid-msg>
             </div>
             <!-- END Meta Title -->
 
             <!-- Meta Description -->
             <div class="row form-group">
-                <label for="blog_post-meta_description" class="col-sm-3 col-form-label input-label">{{ translate('Meta description') }}</label>
+                <label for="blogPost-meta_description" class="col-sm-3 col-form-label input-label">{{ translate('Meta description') }}</label>
 
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('blog_post.meta_description') is-invalid @enderror"
-                                  name="blog_post.meta_description"
-                                  id="blog_post-meta_description"
+                        <textarea type="text" class="form-control @error('blogPost.meta_description') is-invalid @enderror"
+                                  name="blogPost.meta_description"
+                                  id="blogPost-meta_description"
                                   placeholder="{{ translate('Post SEO/meta description') }}"
-                                  wire:model.defer="blog_post.meta_description">
+                                  wire:model.defer="blogPost.meta_description">
                         </textarea>
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="blog_post.meta_description"></x-default.system.invalid-msg>
+                <x-default.system.invalid-msg field="blogPost.meta_description"></x-default.system.invalid-msg>
             </div>
             <!-- END Meta Description -->
 
             <!-- Meta Keywords -->
             <div class="row form-group">
-                <label for="blog_post-meta_keywords" class="col-sm-3 col-form-label input-label">{{ translate('Meta keywords') }}</label>
+                <label for="blogPost-meta_keywords" class="col-sm-3 col-form-label input-label">{{ translate('Meta keywords') }}</label>
 
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('blog_post.meta_keywords') is-invalid @enderror"
-                                  name="blog_post.meta_keywords"
-                                  id="blog_post-meta_keywords"
+                        <textarea type="text" class="form-control @error('blogPost.meta_keywords') is-invalid @enderror"
+                                  name="blogPost.meta_keywords"
+                                  id="blogPost-meta_keywords"
                                   placeholder="{{ translate('Post SEO/meta keywords') }}"
-                                  wire:model.defer="blog_post.meta_keywords">
+                                  wire:model.defer="blogPost.meta_keywords">
                         </textarea>
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="blog_post.meta_keywords"></x-default.system.invalid-msg>
+                <x-default.system.invalid-msg field="blogPost.meta_keywords"></x-default.system.invalid-msg>
             </div>
             <!-- END Meta Keywords -->
 
@@ -247,23 +309,23 @@
                     <label class="card-img-top pointer border rounded p-1 mb-0 mt-0" for="avatarUploader"
                            style="width: 180px; height: 115px;"
                            x-data="{
-                                name: 'blog_post.meta_img',
-                                imageID: {{ $blog_post->meta_img?->id ?? 'null' }},
-                                imageURL: '{{ $blog_post->getUpload('meta_img', ['w'=>220]) }}',
+                                name: 'blogPost.meta_img',
+                                imageID: {{ $blogPost->meta_img?->id ?? 'null' }},
+                                imageURL: '{{ $blogPost->getUpload('meta_img', ['w'=>220]) }}',
                             }"
                            @aiz-selected.window="
                              if(event.detail.name === name) {
                                 imageURL = event.detail.imageURL;
-                                $wire.set('blog_post.meta_img', $('input[name=\'blog_post.meta_img\']').val(), true);
+                                $wire.set('blogPost.meta_img', $('input[name=\'blogPost.meta_img\']').val(), true);
                              }"
                            data-toggle="aizuploader"
                            data-type="image">
                         <img id="avatarImg" class="avatar-img rounded w-100" x-bind:src="imageURL" >
 
-                        <input type="hidden" x-bind:name="name" wire:model.defer="blog_post.meta_img" class="selected-files" data-preview-width="200">
+                        <input type="hidden" x-bind:name="name" wire:model.defer="blogPost.meta_img" class="selected-files" data-preview-width="200">
                     </label>
 
-                    <x-default.system.invalid-msg class="mt-1" field="blog_post.meta_img"></x-default.system.invalid-msg>
+                    <x-default.system.invalid-msg class="mt-1" field="blogPost.meta_img"></x-default.system.invalid-msg>
                 </div>
             </div>
             <!-- End Meta Img -->
@@ -271,8 +333,17 @@
             <hr/>
             <div class="row form-group mb-0">
                 <div class="col-12 d-flex">
+                    {{-- TODO: Standardize Categories selection for various Content Types --}}
                     <button type="button" class="btn btn-primary ml-auto btn-sm"
-                            @click="$wire.set('blog_post.content', $('#blog_post-content').val(), true); $wire.saveBlogPost();">
+                            @click="
+                            $wire.set('blogPost.content', $('#blogPost-content').val(), true);
+                            $wire.set('blogPost.status', $('#blog-post-status-selector').val(), true);
+                            let $selected_categories = [];
+                            $('[name=\'selected_categories\']').each(function(index, item) {
+                                $selected_categories = [...$selected_categories, ...$(item).val()];
+                            });
+                            $wire.set('selected_categories', $selected_categories, true);
+                            $wire.saveBlogPost();">
                         {{ translate('Save') }}
                     </button>
                 </div>

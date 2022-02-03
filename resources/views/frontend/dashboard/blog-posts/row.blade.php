@@ -53,7 +53,7 @@
 <x-livewire-tables::table.cell class="align-middle">
     <div class="btn-group" role="group">
         <a class="btn btn-sm btn-white d-flex align-items-center" href="{{ route('blog.posts.edit', ['slug' => $row->slug]) }}">
-            @svg('heroicon-o-eye', ['class' => 'square-18 mr-2']) {{ translate('View') }}
+            @svg('heroicon-o-pencil', ['class' => 'square-18 mr-2']) {{ translate('Edit') }}
         </a>
     </div>
 </x-livewire-tables::table.cell>

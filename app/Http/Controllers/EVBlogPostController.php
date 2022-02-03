@@ -22,7 +22,7 @@ class EVBlogPostController extends Controller
     }
 
     public function edit(Request $request, $slug) {
-        $blog_post = BlogPost::findOrFail('slug', $slug);
+        $blog_post = BlogPost::where('slug', $slug)->first();
 
         return view('frontend.dashboard.blog-posts.edit', compact('blog_post'));
     }

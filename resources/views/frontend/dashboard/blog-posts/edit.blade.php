@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit').$blog_post->getTranslation('title'))
+@section('page_title', translate('Edit Blog Post').': '.$blog_post->getTranslation('title'))
 
 @push('head_scripts')
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
@@ -11,12 +11,13 @@
     <div class="card">
         <!-- Header -->
         <div class="card-header">
-            <h5 class="card-header-title">{{ translate('Edit') }} {{ $blog_post->getTranslation('title') }}</h5>
-            <a href="{{ route('categories.index') }}" class="btn btn-primary btn-xs">{{ translate('All blog posts') }}</a>
+            <h5 class="card-header-title">{{ translate('Edit') }}: {{ $blog_post->getTranslation('title') }}</h5>
+            <a href="{{ route('blog.posts.index') }}" class="btn btn-primary btn-xs">{{ translate('All blog posts') }}</a>
         </div>
         <!-- End Header -->
 
         <div class="card-body">
+            <livewire:dashboard.forms.blog-posts.blog-post-form :blogPost="$blog_post"></livewire:dashboard.forms.blog-posts.blog-post-form>
 {{--            <livewire:dashboard.forms.blog-posts.blog-post-form :category="$category"></livewire:dashboard.forms.blog-posts.blog-post-form>--}}
         </div>
     </div>
