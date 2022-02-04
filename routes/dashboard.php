@@ -6,6 +6,7 @@ use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
+use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
@@ -71,8 +72,13 @@ Route::middleware([
 
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
-        Route::get('/blog/posts/create', [EVBlogPostController::class, 'create'])->name('blog.posts.create');
-        Route::get('/blog/posts/edit/{slug}', [EVBlogPostController::class, 'edit'])->name('blog.posts.edit');
+        Route::get('/blog/posts/create', [EVBlogPostController::class, 'create'])->name('blog.post.create');
+        Route::get('/blog/posts/edit/{slug}', [EVBlogPostController::class, 'edit'])->name('blog.post.edit');
+
+        /* Plans */
+        Route::get('/plans', [EVPlanController::class, 'index'])->name('plans.index');
+        Route::get('/plans/create', [EVPlanController::class, 'create'])->name('plan.create');
+        Route::get('/plans/edit/{slug}', [EVPlanController::class, 'edit'])->name('plan.edit');
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');

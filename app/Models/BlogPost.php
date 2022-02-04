@@ -31,13 +31,6 @@ class BlogPost extends EVBaseModel
 //    use CommentsTrait;
 //    use PermalinkTrait;
 
-    public const STATUSES = ['published', 'draft', 'private', 'pending'];
-    public const STATUSES_SELECT = ['published' => 'Published', 'draft' => 'Draft', 'private' => 'Private', 'pending' => 'Pending'];
-    public const STATUS_PUBLISHED = 'published';
-    public const STATUS_DRAFT = 'draft';
-    public const STATUS_PRIVATE = 'private';
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_DEFAULT = self::STATUS_DRAFT;
 
     protected $table = 'blog_posts';
 

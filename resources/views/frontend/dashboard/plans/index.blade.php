@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('All Blog Posts'))
+@section('page_title', translate('All Plans'))
 
 @push('head_scripts')
 
@@ -12,14 +12,14 @@
         <!-- Header -->
         <div class="card-header">
             <h5 class="card-header-title">
-                {{ translate('All Blog Posts') }}
+                {{ translate('All Plans') }}
             </h5>
-            <a href="{{ route('blog.post.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
+            <a href="{{ route('plan.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
         </div>
         <!-- End Header -->
 
         <div class="card-body">
-            <livewire:dashboard.tables.blog-posts-table></livewire:dashboard.tables.blog-posts-table>
+            <livewire:dashboard.tables.plans-table></livewire:dashboard.tables.plans-table>
         </div>
     </div>
 @endsection

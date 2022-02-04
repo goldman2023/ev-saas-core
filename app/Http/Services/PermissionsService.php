@@ -58,12 +58,23 @@ class PermissionsService
         } else {
             $data = collect([
                 'Owner' => $this->getAllPossiblePermissions(),
-                'Editor' => array_merge($this->getProductPermissions(), $this->getBlogPostsPermissions(), $this->getReviewsPermissions(), $this->getOrdersPermissions(), $this->getLeadsPermissions()),
-                'HR' => array_merge($this->getStaffPermissions(), $this->getReviewsPermissions(), [
+                'Editor' => array_merge(
+                    $this->getProductPermissions(),
+                    $this->getBlogPostsPermissions(),
+                    $this->getReviewsPermissions(),
+                    $this->getOrdersPermissions(),
+                    $this->getLeadsPermissions(),
+                    $this->getPlansPermissions()
+                ),
+                'HR' => array_merge(
+                    $this->getStaffPermissions(),
+                    $this->getReviewsPermissions(),
+                    [
                     'view_shop_data' => 'View shop data',
                     'view_shop_settings' => 'View shop settings',
                     'browse_shop_domains' => 'Browse shop domains',
-                ]),
+                    ]
+                ),
                 // More roles should be added later, like: Marketer, Manager of XZY, {whatever} etc.
             ]);
 
@@ -81,6 +92,7 @@ class PermissionsService
             $this->getStaffPermissions(),
             $this->getOrdersPermissions(),
             $this->getProductPermissions(),
+            $this->getPlansPermissions(),
             $this->getReviewsPermissions(),
             $this->getBlogPostsPermissions(),
             $this->getCustomersPermissions(),
@@ -97,6 +109,7 @@ class PermissionsService
             translate('Customers') => 'getCustomersPermissions',
             translate('Orders') => 'getOrdersPermissions',
             translate('Products') => 'getProductPermissions',
+            translate('Plans') => 'getPlansPermissions',
             translate('Blog Posts') => 'getBlogPostsPermissions',
             translate('Reviews') => 'getReviewsPermissions',
             translate('Leads') => 'getLeadsPermissions',
@@ -224,6 +237,22 @@ class PermissionsService
             'insert_leads' => 'Create leads',
             'update_leads' => 'Update leads',
             'delete_leads' => 'Delete leads',
+        ];
+    }
+
+    public function getPlansPermissions() {
+        return [
+            'all_plans' => 'Allow managing all plans',
+            'browse_plans' => 'Browse plans',
+            'view_plan' => 'View plan',
+            'insert_plan' => 'Create plan',
+            'update_plan' => 'Update plan',
+            'delete_plan' => 'Delete plan',
+            'publish_plan' => 'Publish plan',
+            'view_plan_attributes' => 'View plan attributes',
+            'insert_plan_attributes' => 'Create plan attributes',
+            'update_plan_attributes' => 'Update plan attributes',
+            'delete_plan_attributes' => 'Delete plan attributes',
         ];
     }
 

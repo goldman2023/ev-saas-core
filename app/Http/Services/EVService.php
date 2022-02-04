@@ -109,6 +109,14 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_products', 'browse_products']
                     ],
+                    [
+                        'label' => translate('Plans'),
+                        'icon' => 'heroicon-o-document',
+                        'route' => route('plans.index'),
+                        'is_active' => areActiveRoutes(['plans.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_plans', 'browse_plans']
+                    ],
                     /* [
                         'label' => translate('Courses'),
                         'icon' => 'heroicon-o-academic-cap',

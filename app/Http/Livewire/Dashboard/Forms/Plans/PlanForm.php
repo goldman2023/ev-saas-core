@@ -7,6 +7,7 @@ use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\BlogPost;
 use App\Models\Category;
+use App\Models\Plan;
 use App\Models\ShopAddress;
 use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
@@ -21,44 +22,44 @@ use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\HasCategories;
 
-class BlogPostForm extends Component
+class PlanForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
     use HasCategories;
 
-    public $blogPost;
+    public $plan;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount($blogPost = null)
+    public function mount($plan = null)
     {
-        $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
+        $this->plan = empty($plan) ? new Plan() : $plan;
 
-        $this->initCategories($this->blogPost);
+        $this->initCategories($this->plan);
     }
 
     protected function rules()
     {
         return [
             'selected_categories' => 'required',
-            'blogPost.*' => [],
-            'blogPost.id' => [],
-            'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-            'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'blogPost.title' => 'required|min:10',
-            'blogPost.subscription_only' => [],
-            'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
-            'blogPost.excerpt' => 'required|min:10',
-            'blogPost.content' => 'required|min:10',
-            'blogPost.gallery' => [''],
-            'blogPost.meta_title' => [''],
-            'blogPost.meta_keywords' => [''],
-            'blogPost.meta_description' => [''],
-            'blogPost.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+            'plan.*' => [],
+            'plan.id' => [],
+            'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
+            'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+            'plan.title' => 'required|min:10',
+            'blogPost.' => [],
+            'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
+            'plan.excerpt' => 'required|min:10',
+            'plan.content' => 'required|min:10',
+            'plan.gallery' => [''],
+            'plan.meta_title' => [''],
+            'plan.meta_keywords' => [''],
+            'plan.meta_description' => [''],
+            'plan.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
     }
 
@@ -68,7 +69,7 @@ class BlogPostForm extends Component
         return [
             'blogPost.thumbnail.if_id_exists' => translate('Selected thumbnail does not exist in Media Library. Please select again.'),
             'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
-            'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
+            'plan.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
             'blogPost.title.required' => translate('Title is required'),
             'blogPost.title.min' => translate('Minimum title length is :min'),
