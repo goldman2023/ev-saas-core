@@ -2,6 +2,8 @@ FROM gitpod/workspace-full
 
 USER gitpod
 
+RUN sudo apt-get install apt-utils
+
 # Stop apache2 because we'll use Docker images
 RUN sudo service apache2 stop
 
@@ -11,7 +13,7 @@ sudo apt install lsb-release ca-certificates apt-transport-https software-proper
 sudo add-apt-repository ppa:ondrej/php && \
 sudo apt-get update -q && \
 sudo apt-get install -yq php8.1 && \
-sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} && \
+sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} -yq && \
 sudo rm -rf /var/lib/apt/lists/*; exit 0;
 
 # Install Kool
