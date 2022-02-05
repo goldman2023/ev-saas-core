@@ -20,6 +20,7 @@ RUN sudo apt install php8.1-zip -yq
 RUN sudo apt install php8.1-curl -yq
 RUN sudo apt install php8.1-gd -yq
 RUN sudo apt install php8.1-dom -yq
+RUN sudo apt install php8.1-soap -yq
 
 # Install Kool
 #RUN sudo curl -fsSL https://kool.dev/install | bash
