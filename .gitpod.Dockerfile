@@ -12,7 +12,7 @@ sudo add-apt-repository ppa:ondrej/php && \
 sudo apt-get update -q && \
 sudo apt-get install -yq php8.1 && \
 sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} && \
-sudo rm -rf /var/lib/apt/lists/*
+sudo rm -rf /var/lib/apt/lists/*; exit 0;
 
 # Install Kool
 RUN sudo curl -fsSL https://kool.dev/install | bash
