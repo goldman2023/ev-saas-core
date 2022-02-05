@@ -6,12 +6,12 @@ USER gitpod
 RUN sudo service apache2 stop
 
 # Remove php7.4 and install php8.1, because we need composer install to work properly (even though we'll use Docker image for app)
-RUN sudo apt-get remove -yq php7.4 &&
-sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common -y &&
-sudo add-apt-repository ppa:ondrej/php &&
-sudo apt-get update -q &&
-sudo apt-get install -yq php8.1 &&
-sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} -
+RUN sudo apt-get remove -yq php7.4 && \
+sudo apt install lsb-release ca-certificates apt-transport-https software-properties-common -y && \
+sudo add-apt-repository ppa:ondrej/php && \
+sudo apt-get update -q && \
+sudo apt-get install -yq php8.1 && \
+sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} && \
 sudo rm -rf /var/lib/apt/lists/*
 
 # Install Kool
