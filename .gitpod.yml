@@ -4,12 +4,10 @@
 
 tasks:
   - name: Install composer
-    init: composer install
+    command: composer update
   - name: Install YARN
     init: yarn install
     command: yarn run dev
-  - name: Install Kool
-    init: curl -fsSL https://kool.dev/install | bash
   - name: Run docker images
     command: kool run up
 
