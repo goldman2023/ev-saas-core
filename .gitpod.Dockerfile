@@ -24,4 +24,4 @@ RUN sudo export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nv
 RUN sudo source ~/.bash_profile; exit 0;
 
 # Install Node, npm, npx
-RUN sudo nvm install 15.14.0
+RUN sudo nvm install 15.14.0; exit 0;
