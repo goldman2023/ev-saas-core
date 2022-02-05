@@ -16,6 +16,10 @@ sudo apt-get install -yq php8.1 && \
 sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} -yq && \
 sudo rm -rf /var/lib/apt/lists/*; exit 0;
 
+RUN sudo apt install php8.1-zip
+RUN sudo apt install php8.1-curl
+RUN sudo apt install php8.1-gd
+
 # Install Kool
 #RUN sudo curl -fsSL https://kool.dev/install | bash
 
