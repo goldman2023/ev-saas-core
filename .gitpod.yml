@@ -3,13 +3,15 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
+  - name: Make directory
+    command: mkdir -p storage/framework/views && chown -R gitpod:gitpod .
   - name: Install composer
     command: composer update
   - name: Install YARN
     init: yarn install
     command: yarn run dev
-  - name: Run docker images
-    command: kool run up
+#  - name: Run docker images
+#    command: kool run up
 
 image:
   file: .gitpod.Dockerfile
