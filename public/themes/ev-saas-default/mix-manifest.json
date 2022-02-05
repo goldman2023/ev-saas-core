@@ -5,6 +5,8 @@
     "/js/vue.js": "/js/vue.js?id=1b1a325ab99d4df64a29",
     "/css/app.css": "/css/app.css?id=05c98cc9ced0805b6c12",
     "/js/crud/account-settings-form.js": "/js/crud/account-settings-form.js?id=ed25fec3add301f29676",
+    "/js/crud/blog-post-form.js": "/js/crud/blog-post-form.js?id=b569c554eb47a06fcc7b",
+    "/js/crud/category-form.js": "/js/crud/category-form.js?id=b17469028785e6e5e1ff",
     "/js/crud/checkout-form.js": "/js/crud/checkout-form.js?id=85881a4fe0c2d0b8e2e8",
     "/js/crud/payment-methods-form.js": "/js/crud/payment-methods-form.js?id=711f821c9fa0c1e8b0a0",
     "/js/crud/product-form.js": "/js/crud/product-form.js?id=4435347e51f421251626",
@@ -44,7 +46,5 @@
     "/vendor/hs.tagify.js": "/vendor/hs.tagify.js?id=0c7a05165a6bda77fbfe",
     "/vendor/hs.typed.js": "/vendor/hs.typed.js?id=4a40f50dfbcbf494a534",
     "/vendor/hs.validation.js": "/vendor/hs.validation.js?id=8d14b64b36585c44997a",
-    "/vendor/leaflet-providers.js": "/vendor/leaflet-providers.js?id=aaf0a355f3c7d24e8bb9",
-    "/js/crud/blog-post-form.js": "/js/crud/blog-post-form.js?id=b569c554eb47a06fcc7b",
-    "/js/crud/category-form.js": "/js/crud/category-form.js?id=b17469028785e6e5e1ff"
+    "/vendor/leaflet-providers.js": "/vendor/leaflet-providers.js?id=aaf0a355f3c7d24e8bb9"
 }
