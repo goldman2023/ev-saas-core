@@ -25,7 +25,7 @@ RUN sudo apt install php8.1-soap -yq; exit 0;
 RUN sudo mkdir -p /workspace/ev-saas-core/storage/framework/views; exit 0;
 
 # Install Kool
-#RUN sudo curl -fsSL https://kool.dev/install | bash
+RUN sudo curl -fsSL https://kool.dev/install | bash
 
 # Install NVM
 #RUN sudo curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
