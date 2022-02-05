@@ -20,8 +20,8 @@ sudo rm -rf /var/lib/apt/lists/*; exit 0;
 # Install NVM
 RUN sudo curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
 RUN sudo bash install_nvm.sh
-RUN sudo export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-RUN sudo source ~/.bash_profile
+RUN sudo export NVM_DIR="$HOME/.nvm" [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"; exit 0;
+RUN sudo source ~/.bash_profile; exit 0;
 
 # Install Node, npm, npx
 RUN sudo nvm install 15.14.0
