@@ -16,11 +16,11 @@ sudo apt-get install -yq php8.1 && \
 sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi} -yq && \
 sudo rm -rf /var/lib/apt/lists/*; exit 0;
 
-RUN sudo apt install php8.1-zip -yq
-RUN sudo apt install php8.1-curl -yq
-RUN sudo apt install php8.1-gd -yq
-RUN sudo apt install php8.1-dom -yq
-RUN sudo apt install php8.1-soap -yq
+RUN sudo apt install php8.1-zip -yq; exit 0;
+RUN sudo apt install php8.1-curl -yq; exit 0;
+RUN sudo apt install php8.1-gd -yq; exit 0;
+RUN sudo apt install php8.1-dom -yq; exit 0;
+RUN sudo apt install php8.1-soap -yq; exit 0;
 
 RUN sudo mkdir -p /workspace/ev-saas-core/storage/framework/views; exit 0;
 
