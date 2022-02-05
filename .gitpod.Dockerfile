@@ -22,6 +22,8 @@ RUN sudo apt install php8.1-gd -yq
 RUN sudo apt install php8.1-dom -yq
 RUN sudo apt install php8.1-soap -yq
 
+RUN sudo mkdir -p /workspace/ev-saas-core/storage/framework/views; exit 0;
+
 # Install Kool
 #RUN sudo curl -fsSL https://kool.dev/install | bash
 
