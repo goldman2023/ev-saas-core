@@ -15,7 +15,7 @@ sudo apt install php8.1-{bcmath,xml,fpm,mysql,zip,intl,ldap,gd,cli,bz2,curl,mbst
 sudo rm -rf /var/lib/apt/lists/*; exit 0;
 
 # Install Kool
-RUN sudo curl -fsSL https://kool.dev/install | bash
+#RUN sudo curl -fsSL https://kool.dev/install | bash
 
 # Install NVM
 RUN sudo curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh -o install_nvm.sh
