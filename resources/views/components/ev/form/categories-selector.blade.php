@@ -36,7 +36,7 @@
                                 $parent = \Categories::getBySlugPath($parent_slug);
                             @endphp
                             @if(count($parent['children'] ?? []) > 0)
-                                <optgroup id="group-{{ $parent_slug }}" label="{{ str_replace('.', ' / ', $parent_slug) }}">
+                                <optgroup id="group-{{ $parent_slug }}" label="{{ $parent->name ?? '' }}">
                                     @foreach($parent['children'] as $key => $child)
                                         <option value="{{ $child['slug_path'] }}" @if(in_array($child['slug_path'], $selectedCategories[$level])) selected @endif>
                                             {{ $child['name'] }}
@@ -50,7 +50,5 @@
             @endforeach
         @endif
 
-    @error($errorBagName)
-        <div class="invalid-feedback d-block">{{ $message }}</div>
-    @enderror
+        <x-default.system.invalid-msg field="{{ $errorBagName }}"></x-default.system.invalid-msg>
 </div>

@@ -26,6 +26,7 @@ use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use Str;
+use HasCategories;
 
 class ProductForm extends Component
 {
@@ -152,9 +153,7 @@ class ProductForm extends Component
                         "selected" => true,
                     ];
                 } else {
-                    if(empty($this->attributes[$key]->attribute_values)) {
-                        $this->attributes[$key]->attribute_values = [];
-                    }
+                    $this->attributes[$key]->attribute_values = [];
                 }
             }
         }

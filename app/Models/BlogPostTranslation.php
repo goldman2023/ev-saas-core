@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\GalleryTrait;
+use App\Traits\IsTranslation;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;

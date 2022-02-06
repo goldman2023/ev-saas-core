@@ -27,6 +27,7 @@ trait DispatchSupport
             $errors = $obj;
         }
 
+        // Remember: Order of the keys in assoc. array is same as the order of keys in rules()
         $this->dispatchBrowserEvent('validation-errors', ['errors' => $errors]);
     }
 }

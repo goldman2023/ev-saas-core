@@ -1,6 +1,6 @@
 @push('pre_head_scripts')
     <script>
-        let all_categories = @json(Categories::getAllFormatted());
+        let all_categories = @json(\Categories::getAllFormatted());
     </script>
 @endpush
 

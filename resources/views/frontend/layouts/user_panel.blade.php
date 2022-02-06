@@ -10,9 +10,7 @@
                         <h1 class="h2 text-white">@yield('page_title')</h1>
                     </div>
 
-                    <!-- Breadcrumb -->
-                    {{-- <x-default.breadcrumbs.breadcrumbs></x-default.breadcrumbs.breadcrumbs> --}}
-                    <!-- End Breadcrumb -->
+                    {{-- TODO: Add section for Breadcrumbs @section('dashboard_top_breadcrumbs')--}}
                 </div>
 
                 <div class="col-auto">
