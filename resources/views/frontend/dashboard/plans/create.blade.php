@@ -33,5 +33,5 @@
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
-    <script src="{{ static_asset('js/crud/blog-post-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/plan-form.js', false, true, true) }}"></script>
 @endpush

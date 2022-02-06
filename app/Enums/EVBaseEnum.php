@@ -38,4 +38,14 @@ class EVBaseEnum extends Enum
     {
         return array_values(static::toArray($skip));
     }
+
+    public static function implodedValues($skip = null, $separator = ', '): array
+    {
+        return implode($separator, self::toValues($skip));
+    }
+
+    public static function implodedLabels($skip = null, $separator = ', '): array
+    {
+        return implode($separator, self::toLabels($skip));
+    }
 }

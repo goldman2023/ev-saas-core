@@ -35,7 +35,7 @@ trait PriceTrait
             if(!$model->relationLoaded('flash_deals')) {
                 $model->load('flash_deals');
             }
-
+            
             $model->getTotalPrice();
             $model->getDiscountedPrice();
             $model->getBasePrice();
@@ -83,8 +83,11 @@ trait PriceTrait
     // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
     public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
     {
-        if(empty($this->total_price)) {
-            $this->total_price = $this->attributes[$this->getPriceColumn()];
+        
+        if(empty($this->attributes[$this->getPriceColumn()])) {
+            $this->total_price = 0;
+        } else if(empty($this->total_price)) {
+            $this->total_price = $this->attributes[$this->getPriceColumn()] ?? 0;
 
 
             if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
@@ -174,7 +177,9 @@ trait PriceTrait
      */
     public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
     {
-        if(empty($this->discounted_price)) {
+        if(empty($this->attributes[$this->getPriceColumn()])) {
+            $this->discounted_price = 0;
+        } else if(empty($this->discounted_price)) {
             $this->discounted_price = $this->attributes[$this->getPriceColumn()];
 
             if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
@@ -246,7 +251,9 @@ trait PriceTrait
      */
     public function getBasePrice(bool $display = false, bool $both_formats = false): mixed
     {
-        if(empty($this->base_price)) {
+        if(empty($this->attributes[$this->getPriceColumn()])) {
+            $this->base_price = 0;
+        } else if(empty($this->base_price)) {
             $this->base_price = $this->attributes[$this->getPriceColumn()];
 
             // TODO: Create tax_relationship table and link it to subjects and taxes!
@@ -289,12 +296,12 @@ trait PriceTrait
 
         if ($both_formats) {
             return [
-                'raw' => $this->attributes[$price_column],
-                'display' => FX::formatPrice($this->attributes[$price_column])
+                'raw' => $this->attributes[$price_column] ?? 0,
+                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0)
             ];
         }
 
-        return $display ? FX::formatPrice($this->attributes[$price_column]) : $this->attributes[$price_column];
+        return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0) : $this->attributes[$price_column] ?? 0;
     }
     // END PRICES
 }
