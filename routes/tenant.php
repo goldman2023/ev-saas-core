@@ -135,7 +135,7 @@ Route::middleware([
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
-    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_products.category');
+    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_category.products.index');
     Route::get('/customer-products?city={city_id}', [CustomerProductController::class, 'search'])->name('customer_products.city');
     Route::get('/customer-products?q={search}', [CustomerProductController::class, 'search'])->name('customer_products.search');
     Route::get('/customer-products/admin', [HomeController::class, 'profile_edit'])->name('customer.profile.edit');

@@ -59,14 +59,14 @@ $meta_description = get_setting('site_motto');
 
                         @if (!empty($selected_category->parent))
                         <li class="text-dark fw-400 opacity-50 breadcrumb-item">
-                            <a class="text-white" href="{{ route('products.category', $selected_category->parent->slug) }}">
+                            <a class="text-white" href="{{ route('category.products.index', $selected_category->parent->slug) }}">
                                 {{ $selected_category->parent->getTranslation('name') }}</a>
                         </li>
                         @endif
 
                         @if (!empty($selected_category))
                         <li class="text-dark fw-600 breadcrumb-item">
-                            <a class="text-primary" href="{{ route('products.category', $selected_category->slug) }}">
+                            <a class="text-primary" href="{{ route('category.products.index', $selected_category->slug) }}">
                                 {{ $selected_category->getTranslation('name') }}</a>
                         </li>
                         @endif

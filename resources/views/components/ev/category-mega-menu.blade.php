@@ -12,7 +12,7 @@
                 @foreach ($categories as $key => $category)
                     <li class="category-nav-element" data-id="{{ $category['id'] }}"
                         data-sub="{{ json_encode($category['children']) }}">
-                        <a href="{{ route('products.category', $category['slug']) }}"
+                        <a href="{{ route('category.products.index', $category['slug']) }}"
                             class="text-truncate text-reset py-2 px-3 d-block">
 
                             @if ($category['icon'])
