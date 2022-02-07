@@ -175,28 +175,45 @@
             </div>
             <!-- END Category Selector -->
 
+            <!-- Price -->
+            <div class="row form-group mt-5">
+                <label for="plan-price" class="col-sm-3 col-form-label input-label">{{ translate('Price') }}</label>
 
-            <!-- Subscription only -->
-            <div class="row form-group">
-                <label for="plan-subscription_only" class="col-sm-3 col-form-label input-label">{{ translate('Subscription only') }}</label>
+                <div class="col-sm-7">
+                    <div class="input-group input-group-sm-down-break">
+                        <input type="number" step="0.01" class="form-control @error('plan.price') is-invalid @enderror"
+                                name="plan.price"
+                                id="plan-price"
+                                placeholder="{{ translate('Subscription plan price') }}"
+                                wire:model.defer="plan.price" />
+                    </div>
 
-                <div class="col-sm-9 d-flex align-items-center">
-                    <!-- Checkbox Switch -->
-                    <label class="toggle-switch d-flex align-items-center" for="plan-subscription_only">
-                        <input type="checkbox" class="toggle-switch-input" id="plan-subscription_only" wire:model.defer="plan.subscription_only">
-                        <span class="toggle-switch-label">
-                            <span class="toggle-switch-indicator"></span>
-                          </span>
-                        <span class="toggle-switch-content">
-                            <span class="d-block">{{ translate('Yes') }}</span>
-                          </span>
-                    </label>
-                    <!-- End Checkbox Switch -->
+                    <x-default.system.invalid-msg field="plan.price"></x-default.system.invalid-msg>
                 </div>
 
-                {{-- TODO: Add Subscription multi-select element--}}
+                <div class="col-sm-2" x-init="
+                    $('#modal_address_country').on('select2:select', (event) => {
+                        currentAddress.country = event.target.value;
+                    });
+                    $watch('currentAddress.country', (value) => {
+                        $('#modal_address_country').val(value).trigger('change');
+                    });
+                "> 
+                    <select class="form-control custom-select" name="modal_address_country" id="modal_address_country"
+                            data-hs-select2-options='{
+                            "minimumResultsForSearch": -1,
+                            "placeholder": "Select country..."
+                        }'>
+                        <option label="empty"></option>
+                        @foreach(\Countries::getAll() as $country)
+                            <option value="{{ $country->code }}" x-bind:selected="'{{ $country->code }}' === currentAddress.country">
+                                {{ $country->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <!-- END Subscription only -->
+            <!-- END Price -->
 
             <!-- Excerpt -->
             <div class="row form-group">
@@ -207,6 +224,7 @@
                         <textarea type="text" class="form-control @error('plan.excerpt') is-invalid @enderror"
                                   name="plan.excerpt"
                                   id="plan-excerpt"
+                                  placeholder="{{ translate('Write a short description for this subscription plan') }}"
                                   wire:model.defer="plan.excerpt">
                         </textarea>
                     </div>
@@ -240,6 +258,55 @@
                 </div>
             </div>
             <!-- END Content -->
+
+
+            <!-- Features -->
+            <div class="row form-group" x-data="{
+                features: @entangle('plan.features').defer,
+                add() {
+                    this.features.push('');
+                },
+                remove(index) {
+                    this.features.splice(index, 1);
+                },
+             }" x-init="if(features === null || features.length < 1) features = ['']"
+             >
+                <label for="plan-features" class="col-sm-3 col-form-label input-label">{{ translate('Features') }}</label>
+
+                <div class="col-sm-9">
+                    <template x-if="features.length <= 1">
+                        <div class="d-flex">
+                            <input type="text" class="form-control" name="plan.features[]"
+                                   placeholder="{{ translate('Feature 1') }}"
+                                   x-model="features[0]">
+                        </div>
+                    </template>
+                    <template x-if="features.length > 1">
+                        <template x-for="[key, value] of Object.entries(features)">
+                            <div class="d-flex" :class="{'mt-2': key > 0}">
+                                <input type="text" class="form-control" name="plan.features[]"
+                                       x-bind:placeholder="'{{ translate('Feature') }} '+(Number(key)+1)"
+                                       x-model="features[key]">
+                                <template x-if="key > 0">
+                                    <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
+                                        @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
+                                    </span>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
+
+                
+                    <a href="javascript:;"
+                        class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="add()">
+                        <i class="tio-add"></i> {{ translate('Add feature') }}
+                    </a>
+
+                    <x-default.system.invalid-msg field="plan.features"></x-default.system.invalid-msg>
+                </div>
+            </div>
+            <!-- END Features -->
+
 
             <hr class="my-4"/>
 

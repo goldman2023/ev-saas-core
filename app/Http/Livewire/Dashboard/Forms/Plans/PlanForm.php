@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Forms\Plans;
 
 use App\Enums\StatusEnum;
+use App\Enums\DiscountTypeEnum;
 use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\Category;

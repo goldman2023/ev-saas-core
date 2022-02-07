@@ -9,12 +9,21 @@ use App\Models\Currency;
 
 class FXService
 {
+    public mixed $currencies;
     public Currency $currency;
     public Currency $default_currency;
     public string $currency_symbol;
 
+    private string $openExchangeLatestURL = 'https://openexchangerates.org/api/latest.json?';
+
     public function __construct($app) {
+        $this->setAllCurrencies();
         $this->setCurrency();
+    }
+
+    public function setAllCurrencies() {
+        $currencies = Currency::all();
+        dd($currencies->first()->fx_rates);
     }
 
     public function setCurrency() {

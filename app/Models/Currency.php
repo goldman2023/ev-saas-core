@@ -8,39 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Currency
- *
- * @property int $id
- * @property string $name
- * @property string $symbol
- * @property float $exchange_rate
- * @property int $status
- * @property string|null $code
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereExchangeRate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereSymbol($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Currency whereUpdatedAt($value)
- * @mixin \Eloquent
  */
-
 class Currency extends Model
 {
     use Cachable;
+
+    protected $casts = [
+        'status' => 'boolean',
+        'created_at' => 'datetime:d.m.Y H:i',
+        'updated_at' => 'datetime:d.m.Y H:i',
+    ];
+
+    protected $with = ['fx_rates'];
+
     protected static function boot()
     {
         parent::boot();
 
         // Determine scope based on user role
-        // If admin: select products that are both published and not published
-        // If vendor/user: select products which are published
+        // If admin: select currencies that are both published and not published
+        // If vendor/user: select currencies which are published
         if(!auth()->check() || (auth()->check() && !auth()->user()->isAdmin())) {
             static::addGlobalScope('status', function (Builder $builder) {
                 $builder->where('status', 1);
@@ -48,8 +35,7 @@ class Currency extends Model
         }
     }
 
-    public function appSettings()
-    {
-        return $this->hasOne(AppSettings::class);
+    public function fx_rates() {
+        return $this->hasMany(CurrencyRate::class, 'base_currency_id');
     }
 }
