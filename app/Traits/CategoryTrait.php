@@ -37,6 +37,7 @@ trait CategoryTrait
      */
     public function initializeCategoryTrait(): void
     {
+        $this->appendCoreProperties(['category_id', 'primary_category']);
         //$this->append(['category_id', 'primary_category']);
         $this->fillable(array_unique(array_merge($this->fillable, ['category_id', 'primary_category'])));
     }
@@ -54,7 +55,11 @@ trait CategoryTrait
      ************************************/
     public function getCategoryIdAttribute() {
         if(!isset($this->category_id)) {
-            $this->category_id = $this->categories->whereNull('parent_id')->first()->id ?? null;
+            try {
+                $this->category_id = $this->categories->whereNull('parent_id')->first()->id ?? null;
+            } catch(\Throwable $e) {
+                $this->category_id = null;
+            }
         }
 
         return $this->category_id;
@@ -62,7 +67,11 @@ trait CategoryTrait
 
     public function getPrimaryCategoryAttribute() {
         if(!isset($this->primary_category)) {
-            $this->primary_category = $this->categories->whereNull('parent_id')?->first();
+            try {
+                $this->primary_category = $this->categories->whereNull('parent_id')?->first();
+            } catch(\Throwable $e) {
+                $this->primary_category = null;
+            }
         }
 
         return $this->primary_category;

@@ -13,6 +13,8 @@ class Currency extends Model
 {
     use Cachable;
 
+    protected $fillable = ['name', 'symbol', 'status', 'code', 'created_at', 'updated_at'];
+
     protected $casts = [
         'status' => 'boolean',
         'created_at' => 'datetime:d.m.Y H:i',
@@ -25,14 +27,14 @@ class Currency extends Model
     {
         parent::boot();
 
-        // Determine scope based on user role
-        // If admin: select currencies that are both published and not published
-        // If vendor/user: select currencies which are published
-        if(!auth()->check() || (auth()->check() && !auth()->user()->isAdmin())) {
-            static::addGlobalScope('status', function (Builder $builder) {
-                $builder->where('status', 1);
-            });
-        }
+        // // Determine scope based on user role
+        // // If admin: select currencies that are both published and not published
+        // // If vendor/user: select currencies which are published
+        // if(!auth()->check() || (auth()->check() && !auth()->user()->isAdmin())) {
+        //     static::addGlobalScope('status', function (Builder $builder) {
+        //         $builder->where('status', 1);
+        //     });
+        // }
     }
 
     public function fx_rates() {

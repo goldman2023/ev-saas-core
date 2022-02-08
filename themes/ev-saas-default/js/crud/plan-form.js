@@ -1,4 +1,5 @@
 window.initPlanForm = function(event) {
+    
     // INITIALIZATION OF SELECT2
     // =======================================================
     $('.custom-select').each(function () {

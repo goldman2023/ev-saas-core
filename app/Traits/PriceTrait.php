@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Builders\BaseBuilder;
 use App\Models\FlashDeal;
+use App\Enums\AmountPercentTypeEnum;
 use FX;
 
 trait PriceTrait
@@ -28,8 +29,10 @@ trait PriceTrait
         static::addGlobalScope('withPricesAndTaxAndFlashDeals', function(mixed $builder) {
             // Eager Load Flash Deals
             $builder->with(['flash_deals']);
+            // dd($builder);
         });
 
+        
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
             if(!$model->relationLoaded('flash_deals')) {
@@ -49,7 +52,11 @@ trait PriceTrait
      */
     public function initializePriceTrait(): void
     {
+        $this->appendCoreProperties(['total_price', 'discounted_price', 'base_price']);
         $this->append(['total_price', 'discounted_price', 'base_price']);
+
+        // These calculated prices ARE NOT FILLABLE! They are calculated based on other properties!
+        // $this->fillable(array_unique(array_merge($this->fillable, ['total_price', 'discounted_price', 'base_price'])));
     }
 
     /************************************
@@ -92,10 +99,10 @@ trait PriceTrait
 
             if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
-                /*if ($flash_deal->discount_type === 'percent') {
+                /*if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
                     $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
+                } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
                     $lowest_price -= $flash_deal_product->discount;
                     $highest_price -= $flash_deal_product->discount;
                 }*/
@@ -106,35 +113,36 @@ trait PriceTrait
                 // Which flash deal will take precedence?
                 // TODO: We need to create a column which will determine flash_deal "stacking" type. Stacking type can be:
                 // TODO: ~ 1) 'compound' (stacks with others), 2) 'single' (does not stack)
-                $flash_deal = $this->flash_deals->first();
 
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
+                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                    $flash_deal = $this->flash_deals->first();
+
+                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
+                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
+                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $this->attributes['discount'];
                     }
                 }
             } else {
-                $flash_deal = $this->flash_deals->first();
-
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
+                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                    $flash_deal = $this->flash_deals->first();
+
+                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
+                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
+                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $this->attributes['discount'];
                     }
                 }
@@ -143,9 +151,9 @@ trait PriceTrait
             // TODO: Create tax_relationships table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
             if(!empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === 'percent') {
+                if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
                     $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === 'amount') {
+                } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
                     $this->total_price += $this->attributes['tax'];
                 }
             }
@@ -184,42 +192,44 @@ trait PriceTrait
 
             if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
-                /*if ($flash_deal->discount_type === 'percent') {
+                /*if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
                     $highest_price -= ($highest_price * $flash_deal_product->discount) / 100;
-                } elseif ($flash_deal->discount_type === 'amount') {
+                } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
                     $lowest_price -= $flash_deal_product->discount;
                     $highest_price -= $flash_deal_product->discount;
                 }*/
-                $flash_deal = $this->flash_deals->first();
 
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
+                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                    $flash_deal = $this->flash_deals->first();
+
+                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
+                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
+                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $this->attributes['discount'];
                     }
                 }
             } else {
-                $flash_deal = $this->flash_deals->first();
-
+                
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if(!empty($flash_deal)) {
-                    if ($flash_deal->discount_type === 'percent') {
+                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty()) ) {
+                    $flash_deal = $this->flash_deals->first();
+
+                    if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $flash_deal->discount) / 100;
-                    } elseif ($flash_deal->discount_type === 'amount') {
+                    } elseif ($flash_deal->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === 'percent') {
+                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === 'amount') {
+                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $this->attributes['discount'];
                     }
                 }
@@ -259,9 +269,9 @@ trait PriceTrait
             // TODO: Create tax_relationship table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
             if(!empty($this->attributes['tax'])) {
-                if ($this->attributes['tax_type'] === 'percent') {
-                    $this->base_price += ($this->base_price * $this->attributes['tax']) / 100;
-                } elseif ($this->attributes['tax_type'] === 'amount') {
+                if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
+                    $this->base_price += ($this->base_price * (float) $this->attributes['tax']) / 100;
+                } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
                     $this->base_price += $this->attributes['tax'];
                 }
             }
