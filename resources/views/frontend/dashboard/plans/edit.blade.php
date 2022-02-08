@@ -17,6 +17,7 @@
         <!-- End Header -->
 
         <div class="card-body">
+            <livewire:dashboard.forms.plans.plan-form :plan="$plan"></livewire:dashboard.forms.plans.plan-form>
 {{--            <livewire:dashboard.forms.blog-posts.blog-post-form :plan="$plan"></livewire:dashboard.forms.blog-posts.blog-post-form>--}}
 {{--            <livewire:dashboard.forms.blog-posts.blog-post-form :category="$category"></livewire:dashboard.forms.blog-posts.blog-post-form>--}}
         </div>

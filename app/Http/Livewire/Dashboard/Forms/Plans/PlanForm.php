@@ -43,6 +43,7 @@ class PlanForm extends Component
         $this->is_update = isset($this->plan->id) && !empty($this->plan->id);
         
         if(!$this->is_update) {
+            // If insert
             $this->plan->base_currency = FX::getCurrency()->code;
             $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->tax_type = AmountPercentTypeEnum::amount()->value;
@@ -57,16 +58,18 @@ class PlanForm extends Component
             'selected_categories' => 'required',
             'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'plan.title' => 'required|min:10',
+            'plan.title' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'plan.excerpt' => 'required|min:10',
             // 'plan.content' => 'required|min:10',
             'plan.features' => 'required|array',
             'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
             'plan.price' => 'required|numeric',
-            'plan.discount' => 'sometimes|numeric',
+            'plan.discount' => 'nullable|numeric',
             'plan.discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
-            'plan.tax' => 'sometimes|numeric',
+            'plan.yearly_discount' => 'nullable|numeric',
+            'plan.yearly_discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
+            'plan.tax' => 'nullable|numeric',
             'plan.tax_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
             'plan.gallery' => [''],
             'plan.meta_title' => [''],

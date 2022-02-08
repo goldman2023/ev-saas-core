@@ -4,9 +4,7 @@
     </script>
 @endpush
 
-<div x-data="{
-    plan: @entangle('plan').defer,
-}"
+<div x-data="{}"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
     <div class="col-lg-12 position-relative">
@@ -120,7 +118,9 @@
 
             <!-- Status -->
             <div class="row form-group mt-5">
-                <label for="plan-status" class="col-sm-3 col-form-label input-label">{{ translate('Status') }}</label>
+                <label for="plan-status" class="col-sm-3 col-form-label input-label d-flex align-items-center">
+                    {{ translate('Status') }}
+                </label>
 
                 <div class="col-sm-9" x-data="{
                         status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
@@ -150,6 +150,27 @@
                             </option>
                         @endforeach
                     </select>
+
+                    <div class="d-flex align-items-center mt-2 pl-1">
+                        <span class="mr-2 text-14">{{ translate('Current status:') }}</span>
+                        @if($plan->status === App\Enums\StatusEnum::published()->value)
+                            <span class="badge badge-soft-success">
+                                <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @elseif($plan->status === App\Enums\StatusEnum::draft()->value)
+                            <span class="badge badge-soft-warning">
+                                <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @elseif($plan->status === App\Enums\StatusEnum::pending()->value)
+                            <span class="badge badge-soft-info">
+                                <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @elseif($plan->status === App\Enums\StatusEnum::private()->value)
+                            <span class="badge badge-soft-dark">
+                                <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @endif
+                    </div>
 
                     <x-default.system.invalid-msg field="plan.status"></x-default.system.invalid-msg>
                 </div>
@@ -190,11 +211,13 @@
                     <x-default.system.invalid-msg field="plan.price"></x-default.system.invalid-msg>
                 </div>
 
-                <div class="col-sm-2" x-init="
+                <div class="col-sm-2" x-data="{
+                    base_currency: @js($plan->base_currency),
+                }" x-init="
                     $('#plan-base_currency').on('select2:select', (event) => {
-                        plan.base_currency = event.target.value;
+                        base_currency = event.target.value;
                     });
-                    $watch('plan.base_currency', (value) => {
+                    $watch('base_currency', (value) => {
                         $('#plan-base_currency').val(value).trigger('change');
                     });
                 "> 
@@ -218,25 +241,27 @@
 
             <!-- Discount and Discount type -->
             <div class="row form-group mt-3">
-                <label for="plan-discount" class="col-sm-3 col-form-label input-label">{{ translate('Discount') }}</label>
+                <label for="plan-discount" class="col-sm-3 col-form-label input-label">{{ translate('Monthly plan discount') }}</label>
 
                 <div class="col-sm-7">
                     <div class="input-group input-group-sm-down-break">
                         <input type="number" step="0.01" class="form-control @error('plan.discount') is-invalid @enderror"
                                 name="plan.discount"
                                 id="plan-discount"
-                                placeholder="{{ translate('Subscription plan discount (fixed or percentage)') }}"
+                                placeholder="{{ translate('Subscription plan discount (fixed or percentage) - for monthly payment') }}"
                                 wire:model.defer="plan.discount" />
                     </div>
 
                     <x-default.system.invalid-msg field="plan.discount"></x-default.system.invalid-msg>
                 </div>
 
-                <div class="col-sm-2" x-init="
+                <div class="col-sm-2" x-data="{
+                    discount_type: @js($plan->discount_type)
+                }" x-init="
                     $('#plan-discount_type').on('select2:select', (event) => {
-                        plan.discount_type = event.target.value;
+                        discount_type = event.target.value;
                     });
-                    $watch('plan.discount_type', (value) => {
+                    $watch('discount_type', (value) => {
                         $('#plan-discount_type').val(value).trigger('change');
                     });
                 "> 
@@ -257,6 +282,50 @@
             </div>
             <!-- END Discount and discount type -->
 
+            <!-- Yearly discount and discount type -->
+            <div class="row form-group mt-3">
+                <label for="plan-yearly_discount" class="col-sm-3 col-form-label input-label">{{ translate('Annual plan discount') }}</label>
+
+                <div class="col-sm-7">
+                    <div class="input-group input-group-sm-down-break">
+                        <input type="number" step="0.01" class="form-control @error('plan.yearly_discount') is-invalid @enderror"
+                                name="plan.yearly_discount"
+                                id="plan-yearly_discount"
+                                placeholder="{{ translate('Subscription plan yearly discount (fixed or percentage) - for annual payment') }}"
+                                wire:model.defer="plan.yearly_discount" />
+                    </div>
+                    <small class="text-warning">{{ translate('*Note: If yearly discount is set, standard discount won\'t be applied to each month.') }}</small>
+
+                    <x-default.system.invalid-msg field="plan.yearly_discount"></x-default.system.invalid-msg>
+                </div>
+
+                <div class="col-sm-2" x-data="{
+                    yearly_discount_type: @js($plan->yearly_discount_type)
+                }" x-init="
+                    $('#plan-yearly_discount_type').on('select2:select', (event) => {
+                        yearly_discount_type = event.target.value;
+                    });
+                    $watch('yearly_discount_type', (value) => {
+                        $('#plan-yearly_discount_type').val(value).trigger('change');
+                    });
+                "> 
+                    <select class="form-control custom-select" 
+                            name="plan.yearly_discount_type" 
+                            id="plan-yearly_discount_type"
+                            wire:model.defer="plan.yearly_discount_type"
+                            data-hs-select2-options='{
+                                "minimumResultsForSearch": "Infinity"
+                        }'>
+                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
+                            <option value="{{ $type }}" >
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <!-- END Yearly discount and discount type -->
+
 
             <!-- Tax and Tax type -->
             <div class="row form-group mt-3">
@@ -274,11 +343,13 @@
                     <x-default.system.invalid-msg field="plan.tax"></x-default.system.invalid-msg>
                 </div>
 
-                <div class="col-sm-2" x-init="
+                <div class="col-sm-2" x-data="{
+                    tax_type: @js($plan->tax_type)
+                }" x-init="
                     $('#plan-tax_type').on('select2:select', (event) => {
-                        plan.tax_type = event.target.value;
+                        tax_type = event.target.value;
                     });
-                    $watch('plan.tax_type', (value) => {
+                    $watch('tax_type', (value) => {
                         $('#plan-tax_type').val(value).trigger('change');
                     });
                 "> 
@@ -494,17 +565,19 @@
                     {{-- TODO: Standardize Categories selection for various Content Types --}}
                     <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
-                            //$wire.set('plan.content', $('#plan-content').val(), true);
-                            $wire.set('plan.status', $('#blog-post-status-selector').val(), true);
-                            let $selected_categories = [];
-                            $('[name=\'selected_categories\']').each(function(index, item) {
-                                $selected_categories = [...$selected_categories, ...$(item).val()];
-                            });
-                            $wire.set('selected_categories', $selected_categories, true);
-                            $wire.set('plan.base_currency', $('#plan-base_currency').val(), true);
-                            $wire.set('plan.discount_type', $('#plan-discount_type').val(), true);
-                            $wire.set('plan.tax_type', $('#plan-tax_type').val(), true);
-                            $wire.savePlan();">
+                                //$wire.set('plan.content', $('#plan-content').val(), true);
+                                $wire.set('plan.status', $('#blog-post-status-selector').val(), true);
+                                let $selected_categories = [];
+                                $('[name=\'selected_categories\']').each(function(index, item) {
+                                    $selected_categories = [...$selected_categories, ...$(item).val()];
+                                });
+                                $wire.set('selected_categories', $selected_categories, true);
+                                $wire.set('plan.base_currency', $('#plan-base_currency').val(), true);
+                                $wire.set('plan.discount_type', $('#plan-discount_type').val(), true);
+                                $wire.set('plan.yearly_discount_type', $('#plan-yearly_discount_type').val(), true);
+                                $wire.set('plan.tax_type', $('#plan-tax_type').val(), true);
+                            "
+                            wire:click="savePlan()">
                         {{ translate('Save') }}
                     </button>
                 </div>
