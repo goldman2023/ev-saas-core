@@ -1,6 +1,5 @@
 <div class="container grid grid-cols-1 lg:grid-cols-2 py-24 mx-auto">
     <div class="flex flex-col justify-center px-12 py-32">
-        <x-application-logo class="block w-auto h-10 text-gray-600 fill-current self-start mb-10" />
         <x-ev.label :label="ev_dynamic_translate('EV Search Hero Title')"
             class="mt-5 mb-2 text-indigo-600 font-semibold leading-[55px]"></x-ev.label>
         <x-ev.label :label="ev_dynamic_translate('EV Search Hero Sub Title')" class="text-6xl font-bold tracking-tighter">
