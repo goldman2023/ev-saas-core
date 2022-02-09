@@ -15,7 +15,7 @@ use App\Models\User;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\SetDashboard;
 
 Route::middleware([
     'web',
@@ -23,6 +23,7 @@ Route::middleware([
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
+    SetDashboard::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
     /* TODO: Admin only */

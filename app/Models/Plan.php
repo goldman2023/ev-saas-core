@@ -44,7 +44,9 @@ class Plan extends EVBaseModel
         // TODO: Fix to show all plans in Frontend and only my posts in Backend
         // Show only MyShop Suscription Plans
         static::addGlobalScope('from_my_shop', function (BaseBuilder $builder) {
-            $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+            if(request()->is_dashboard) {
+                $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+            }
         });
     }
 

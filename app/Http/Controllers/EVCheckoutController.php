@@ -435,6 +435,18 @@ class EVCheckoutController extends Controller
         return redirect()->route('checkout.order.received', $order);
     }
 
+    public function single() {
+        try {
+            $data = json_decode(base64_decode(request()->data ?? null));
+            
+            $model = app($data->class)->findOrFail($data->id);
+        } catch(\Throwable $e) {
+            dd($e);
+        }
+    
+        return view('frontend.checkout-single', compact('model'));
+    }
+
     public function orderReceived(Request $request, Order $order)
     {
         if(auth()->user()->id ?? null) {
