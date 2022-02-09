@@ -31,7 +31,7 @@
               </li>
             </ul>
             <div class="mb-auto">
-              <p class="text-dark mb-0">With Front Pay, you can check out across the web and in apps without having to enter any payment information.</p>
+              <p class="text-dark mb-0">With We SaaS, you can check out across the web and in apps without having to enter any payment information.</p>
             </div>
           </div>
 
@@ -148,7 +148,7 @@
                   c1.4,0,2.5-1.1,2.5-2.5v-0.5c0-1.4-1.1-2.5-2.5-2.5H19.5C18.1,58.4,17.1,57.4,17.1,56z"></path>
               </svg>
             </figure>
-            <p class="mb-0"><span class="text-dark font-weight-bold">3,500</span> Front copies have been purchased</p>
+            <p class="mb-0"><span class="text-dark font-weight-bold">3,500</span> We SaaS Customers</p>
           </div>
           <!-- End Stats -->
         </div>

@@ -21,6 +21,8 @@ class BlogController extends Controller
     public function index(Request $request)
     {
         $sort_search = null;
+
+
         $blogs = Blog::orderBy('created_at', 'desc');
 
         if ($request->search != null) {

@@ -10,10 +10,10 @@
 
 
 {{-- TODO: Refactor this to blade components --}}
-{{-- @include('frontend.components.benefits') --}}
+@include('frontend.components.benefits')
 
 <section>
-    <x-default.promo.features></x-default.promo.features>
+    {{-- <x-default.promo.features></x-default.promo.features> --}}
 </section>
 
 <section>
