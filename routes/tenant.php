@@ -149,7 +149,7 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
+    Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');

@@ -1,6 +1,7 @@
 @php($first_variation = $product->variations->first())
 
-<div class="card position-relative" x-data="{
+<div
+class="card position-relative" x-data="{
             processing: false,
             processing_variation_change: false,
             qty: 0,
@@ -39,7 +40,7 @@
     <div class="card-body" :class="{'opacity-3':processing_variation_change}">
         <div class="row ">
             <div class="col-sm-12 d-flex flex-column">
-                <h2 class="h3">{{ $product->getTranslation('name') }}</h1>
+                {{-- <h2 class="h3">{{ $product->getTranslation('name') }}</h2> --}}
 
                     @isset($product->brand)
                     <x-default.products.single.product-brand-box :product="$product">

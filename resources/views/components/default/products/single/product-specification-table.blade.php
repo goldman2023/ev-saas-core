@@ -6,7 +6,7 @@
                 <h5>{{ $group->name }}</h5>
             </div>
 
-            <ul class="specification-list list-group list-group-flush">
+            <ul class="specification-list list-group list-group-flush p-0">
                 @foreach($group->custom_attributes as $attribute)
                     @if($attribute->attribute_values->isNotEmpty() && !empty($att_values_plucked = $attribute->attribute_values->pluck('values')))
                         <li class="list-group-item">
