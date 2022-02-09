@@ -9,7 +9,7 @@
 @endsection
 
 @push('head_scripts')
-    <link rel="stylesheet" href="{{ static_asset('css/tailwind.css', false, true) }}" />
+    <link rel="stylesheet" href="{{ static_asset('css/tailwind.css', false, true, true) }}" />
 @endpush
 
 @section('content')
@@ -28,10 +28,25 @@
                 <x-default.system.tenant.logo style="max-width: 120px;"></x-default.system.tenant.logo>
 
                 <div class="item-summary w-full flex-col">
-                    <div class="">
-                        <strong>{{ translate('Checkout summary') }}</strong>
-                        <span class="text-36 tracking-[-0.03]"></span>
+                    <div class="pb-3">
+                        <strong class="flex">{{ translate('Checkout summary') }}</strong>
+                        <span class="text-36 tracking-[-0.03]">{{ $model->getTotalPrice('display') }}</span>
                     </div>
+
+                    <ul class="flex flex-col list-none">
+                        <li class="w-full flex justify-left">
+                            <div class="w-[50px] h-[50px] shrink-0">
+                                <img class="w-[50px] h-[50px] object-cover rounded border" src="{{ $model->getThumbnail() }}" />
+                            </div>
+                            <div class="w-full flex justify-between pl-4">
+                                <strong>{{ $model->getTranslation('title') ?: $model->getTranslation('name') }}</strong>
+                                <strong>{{ $model->getBasePrice('display') }}</strong>
+                            </div>
+                            <div class="w-full pt-2">
+                                <small>{{ $model->getTranslation('excerpt') }}</small>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="w-full md:max-w-[400px] ">

@@ -436,6 +436,7 @@ class EVCheckoutController extends Controller
     }
 
     public function single() {
+        // TODO: Add support for buying multiple items
         try {
             $data = json_decode(base64_decode(request()->data ?? null));
             
