@@ -117,6 +117,11 @@ if(is_compiling_tenant) {
             },
             additionalData: fs.readFileSync(`${__dirname}/scss/themes/_default.scss`).toString() // Get default theme variables!
         }).version()
+        .sass(`${__dirname}/scss/tailwind.scss`, `public/themes/${theme}/css`, {}, [
+            tailwindcss(`${__dirname}/tailwind.config.js`), // IT HAS TO BE ADDED HERE, OTHERWISE IT WON'T WORK!
+        ]).options({
+            processCssUrls: false,
+        }).version()
         .copy(`${__dirname}/js/crud/*.js`, `public/themes/${theme}/js/crud`)
         .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
         .copyDirectory(`${__dirname}/vendor`, `public/themes/${theme}/vendor`)

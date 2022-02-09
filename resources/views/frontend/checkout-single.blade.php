@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-
+{{-- NOTE: Check this file in ev-saas-default theme --}}
 @endsection
 
 @section('modal')

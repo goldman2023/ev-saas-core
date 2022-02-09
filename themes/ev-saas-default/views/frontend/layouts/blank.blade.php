@@ -81,91 +81,46 @@
         echo get_setting('header_script');
     @endphp
 
+    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
     @stack('head_scripts')
 </head>
 
-{{-- TODO : Add a slug if page has a slug --}}
-
 <body class="{{ Route::currentRouteName() }}">
-    <!-- AlpineJS -->
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
-    <div class="">
+    <div class="main-wrapper">
+        @yield('content')
+    </div>
+ 
+    @include('frontend.partials.modal')
 
-        {{-- @include('frontend.inc.nav') --}}
-        <x-default.headers.header>
-        </x-default.headers.header>
+    <!-- Print SignUp Modal Component -->
+    <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
-        {{-- <div class="space-top-lg-3 space-top-3"> --}}
-            <div class="app-layout-container d-flex" style="flex-basis: 100%; flex-direction: column;">
-                {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
-                @yield('content')
-            </div>
+    <!-- Wishlist -->
+    {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
+    <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
+    {{-- Like this, will decide later --}}
+    <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
 
-            {{-- @include('frontend.inc.footer') --}}
+    <x-default.global.flyout-categories></x-default.global.flyout-categories>
 
-            <x-default.footers.footer>
-            </x-default.footers.footer>
-        </div>
-        <x-default.footers.app-bar>
-        </x-default.footers.app-bar>
+    @auth
+    <x-default.global.flyout-profile></x-default.global.flyout-profile>
+    @endauth
 
-        {{-- <x-default.chat.widget-chat></x-default.chat.widget-chat> --}}
+    <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3" :is_x="true" :timeout="4000"></x-ev.toast>
 
-        <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
+    @yield('modal')
 
-        @include('frontend.partials.modal')
+    @yield('script')
 
-        <!-- Print SignUp Modal Component -->
-        <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
+    @livewireScripts
 
-        <!-- Carts -->
-        <livewire:cart.cart template="flyout-cart" />
+    @stack('footer_scripts')
 
-        <!-- Wishlist -->
-        {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-        <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
-        {{-- Like this, will decide later --}}
-        <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
+    @include('frontend.layouts.partials.app-js')
 
-        <x-default.global.flyout-categories></x-default.global.flyout-categories>
-
-        @auth
-            <x-default.global.flyout-profile></x-default.global.flyout-profile>
-        @endauth
-
-        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
-            :is_x="true" :timeout="4000">
-        </x-ev.toast>
-
-        @yield('modal')
-
-        @yield('script')
-
-        @livewireScripts
-
-        @stack('footer_scripts')
-
-        @include('frontend.layouts.partials.app-js')
-
-        {{-- TODO: Move this to some logical place --}}
-        <script src="{{ static_asset('front/js/hs.leaflet.js') }}"></script>
-
-        <!-- JS Plugins Init. -->
-
-        <script>
-            $(function() {
-                // TODO: Move this to some logical place
-                // =======================================================
-                $('.js-hs-unfold-invoker').each(function () {
-                    var unfold = new HSUnfold($(this)).init();
-                });
-            });
-        </script>
-
-        @php
+    @php
         echo get_setting('footer_script');
-        @endphp
+    @endphp
 </body>
-
-</html>
