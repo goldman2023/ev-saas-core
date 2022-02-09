@@ -10,7 +10,7 @@
 <meta name="twitter:description" content="{{ $product->meta_description }}">
 <meta name="twitter:creator" content="@author_handle">
 <meta name="twitter:image" content="{{ $product->getMetaImg() }}">
-<meta name="twitter:data1" content="{{ single_price($product->unit_price) }}">
+<meta name="twitter:data1" content="{{ $product->total_price }}">
 <meta name="twitter:label1" content="Price">
 
 <!-- Open Graph data -->
@@ -20,7 +20,6 @@
 <meta property="og:image" content="{{ $product->getMetaImg() }}" />
 <meta property="og:description" content="{{ $product->meta_description }}" />
 <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
-<meta property="og:price:amount" content="{{ single_price($product->unit_price) }}" />
-<meta property="product:price:currency"
-    content="{{ \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code }}" />
+<meta property="og:price:amount" content="{{ $product->total_price }}" />
+<meta property="product:price:currency" content="{{ \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code }}" />
 <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
