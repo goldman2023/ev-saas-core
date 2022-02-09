@@ -15,7 +15,7 @@ use App\Models\User;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Middleware\SetDashboard;
 
 Route::middleware([
     'web',
@@ -23,6 +23,7 @@ Route::middleware([
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
+    SetDashboard::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
     /* TODO: Admin only */
@@ -73,12 +74,12 @@ Route::middleware([
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
         Route::get('/blog/posts/create', [EVBlogPostController::class, 'create'])->name('blog.post.create');
-        Route::get('/blog/posts/edit/{slug}', [EVBlogPostController::class, 'edit'])->name('blog.post.edit');
+        Route::get('/blog/posts/edit/{id}', [EVBlogPostController::class, 'edit'])->name('blog.post.edit');
 
         /* Plans */
         Route::get('/plans', [EVPlanController::class, 'index'])->name('plans.index');
         Route::get('/plans/create', [EVPlanController::class, 'create'])->name('plan.create');
-        Route::get('/plans/edit/{slug}', [EVPlanController::class, 'edit'])->name('plan.edit');
+        Route::get('/plans/edit/{id}', [EVPlanController::class, 'edit'])->name('plan.edit');
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');

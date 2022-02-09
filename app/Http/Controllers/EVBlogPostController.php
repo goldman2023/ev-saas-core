@@ -21,8 +21,8 @@ class EVBlogPostController extends Controller
         return view('frontend.dashboard.blog-posts.create');
     }
 
-    public function edit(Request $request, $slug) {
-        $blog_post = BlogPost::where('slug', $slug)->first();
+    public function edit(Request $request, $id) {
+        $blog_post = BlogPost::findOrFail($id);
 
         return view('frontend.dashboard.blog-posts.edit', compact('blog_post'));
     }

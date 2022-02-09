@@ -1,4 +1,4 @@
-<div class="form-group categories-selector-wrapper {{ $class }}">
+<div class="categories-selector-wrapper {{ $class }}">
     @if (!empty(trim($label)))
         <label class="input-label">{{ $label }} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
     @endif

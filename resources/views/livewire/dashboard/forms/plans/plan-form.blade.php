@@ -4,9 +4,7 @@
     </script>
 @endpush
 
-<div x-data="{
-    plan: @entangle('plan').defer,
-}"
+<div x-data="{}"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
     <div class="col-lg-12 position-relative">
@@ -120,7 +118,9 @@
 
             <!-- Status -->
             <div class="row form-group mt-5">
-                <label for="plan-status" class="col-sm-3 col-form-label input-label">{{ translate('Status') }}</label>
+                <label for="plan-status" class="col-sm-3 col-form-label input-label d-flex align-items-center">
+                    {{ translate('Status') }}
+                </label>
 
                 <div class="col-sm-9" x-data="{
                         status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
@@ -151,15 +151,35 @@
                         @endforeach
                     </select>
 
+                    <div class="d-flex align-items-center mt-2 pl-1">
+                        <span class="mr-2 text-14">{{ translate('Current status:') }}</span>
+                        @if($plan->status === App\Enums\StatusEnum::published()->value)
+                            <span class="badge badge-soft-success">
+                                <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @elseif($plan->status === App\Enums\StatusEnum::draft()->value)
+                            <span class="badge badge-soft-warning">
+                                <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @elseif($plan->status === App\Enums\StatusEnum::pending()->value)
+                            <span class="badge badge-soft-info">
+                                <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @elseif($plan->status === App\Enums\StatusEnum::private()->value)
+                            <span class="badge badge-soft-dark">
+                                <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($plan->status) }}
+                            </span>
+                        @endif
+                    </div>
+
                     <x-default.system.invalid-msg field="plan.status"></x-default.system.invalid-msg>
-                </div>
                 </div>
             </div>
             <!-- END Status -->
 
 
             <!-- Category Selector -->
-            <div class="row form-group mt-5">
+            <div class="row form-group mt-4">
                 <label for="plan-title" class="col-sm-3 col-form-label input-label">{{ translate('Category') }}</label>
 
                 <div class="col-sm-9">
@@ -175,31 +195,184 @@
             </div>
             <!-- END Category Selector -->
 
+            <!-- Price -->
+            <div class="row form-group mt-3">
+                <label for="plan-price" class="col-sm-3 col-form-label input-label">{{ translate('Price') }}</label>
 
-            <!-- Subscription only -->
-            <div class="row form-group">
-                <label for="plan-subscription_only" class="col-sm-3 col-form-label input-label">{{ translate('Subscription only') }}</label>
+                <div class="col-sm-7">
+                    <div class="input-group input-group-sm-down-break">
+                        <input type="number" step="0.01" class="form-control @error('plan.price') is-invalid @enderror"
+                                name="plan.price"
+                                id="plan-price"
+                                placeholder="{{ translate('Subscription plan price') }}"
+                                wire:model.defer="plan.price" />
+                    </div>
 
-                <div class="col-sm-9 d-flex align-items-center">
-                    <!-- Checkbox Switch -->
-                    <label class="toggle-switch d-flex align-items-center" for="plan-subscription_only">
-                        <input type="checkbox" class="toggle-switch-input" id="plan-subscription_only" wire:model.defer="plan.subscription_only">
-                        <span class="toggle-switch-label">
-                            <span class="toggle-switch-indicator"></span>
-                          </span>
-                        <span class="toggle-switch-content">
-                            <span class="d-block">{{ translate('Yes') }}</span>
-                          </span>
-                    </label>
-                    <!-- End Checkbox Switch -->
+                    <x-default.system.invalid-msg field="plan.price"></x-default.system.invalid-msg>
                 </div>
 
-                {{-- TODO: Add Subscription multi-select element--}}
+                <div class="col-sm-2" x-data="{
+                    base_currency: @js($plan->base_currency),
+                }" x-init="
+                    $('#plan-base_currency').on('select2:select', (event) => {
+                        base_currency = event.target.value;
+                    });
+                    $watch('base_currency', (value) => {
+                        $('#plan-base_currency').val(value).trigger('change');
+                    });
+                "> 
+                    <select class="form-control custom-select" 
+                            name="plan.base_currency" 
+                            id="plan-base_currency"
+                            wire:model.defer="plan.base_currency"
+                            data-hs-select2-options='{
+                            "minimumResultsForSearch": "Infinity"
+                        }'>
+                        @foreach(\FX::getAllCurrencies() as $currency)
+                            <option value="{{ $currency->code }}" >
+                                {{ $currency->code }} ({{ $currency->symbol }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <!-- END Subscription only -->
+            <!-- END Price -->
+
+
+            <!-- Discount and Discount type -->
+            <div class="row form-group mt-3">
+                <label for="plan-discount" class="col-sm-3 col-form-label input-label">{{ translate('Monthly plan discount') }}</label>
+
+                <div class="col-sm-7">
+                    <div class="input-group input-group-sm-down-break">
+                        <input type="number" step="0.01" class="form-control @error('plan.discount') is-invalid @enderror"
+                                name="plan.discount"
+                                id="plan-discount"
+                                placeholder="{{ translate('Subscription plan discount (fixed or percentage) - for monthly payment') }}"
+                                wire:model.defer="plan.discount" />
+                    </div>
+
+                    <x-default.system.invalid-msg field="plan.discount"></x-default.system.invalid-msg>
+                </div>
+
+                <div class="col-sm-2" x-data="{
+                    discount_type: @js($plan->discount_type)
+                }" x-init="
+                    $('#plan-discount_type').on('select2:select', (event) => {
+                        discount_type = event.target.value;
+                    });
+                    $watch('discount_type', (value) => {
+                        $('#plan-discount_type').val(value).trigger('change');
+                    });
+                "> 
+                    <select class="form-control custom-select" 
+                            name="plan.discount_type" 
+                            id="plan-discount_type"
+                            wire:model.defer="plan.discount_type"
+                            data-hs-select2-options='{
+                                "minimumResultsForSearch": "Infinity"
+                        }'>
+                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
+                            <option value="{{ $type }}" >
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <!-- END Discount and discount type -->
+
+            <!-- Yearly discount and discount type -->
+            <div class="row form-group mt-3">
+                <label for="plan-yearly_discount" class="col-sm-3 col-form-label input-label">{{ translate('Annual plan discount') }}</label>
+
+                <div class="col-sm-7">
+                    <div class="input-group input-group-sm-down-break">
+                        <input type="number" step="0.01" class="form-control @error('plan.yearly_discount') is-invalid @enderror"
+                                name="plan.yearly_discount"
+                                id="plan-yearly_discount"
+                                placeholder="{{ translate('Subscription plan yearly discount (fixed or percentage) - for annual payment') }}"
+                                wire:model.defer="plan.yearly_discount" />
+                    </div>
+                    <small class="text-warning">{{ translate('*Note: If yearly discount is set, standard discount won\'t be applied to each month.') }}</small>
+
+                    <x-default.system.invalid-msg field="plan.yearly_discount"></x-default.system.invalid-msg>
+                </div>
+
+                <div class="col-sm-2" x-data="{
+                    yearly_discount_type: @js($plan->yearly_discount_type)
+                }" x-init="
+                    $('#plan-yearly_discount_type').on('select2:select', (event) => {
+                        yearly_discount_type = event.target.value;
+                    });
+                    $watch('yearly_discount_type', (value) => {
+                        $('#plan-yearly_discount_type').val(value).trigger('change');
+                    });
+                "> 
+                    <select class="form-control custom-select" 
+                            name="plan.yearly_discount_type" 
+                            id="plan-yearly_discount_type"
+                            wire:model.defer="plan.yearly_discount_type"
+                            data-hs-select2-options='{
+                                "minimumResultsForSearch": "Infinity"
+                        }'>
+                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
+                            <option value="{{ $type }}" >
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <!-- END Yearly discount and discount type -->
+
+
+            <!-- Tax and Tax type -->
+            <div class="row form-group mt-3">
+                <label for="plan-tax" class="col-sm-3 col-form-label input-label">{{ translate('Tax') }}</label>
+
+                <div class="col-sm-7">
+                    <div class="input-group input-group-sm-down-break">
+                        <input type="number" step="0.01" class="form-control @error('plan.tax') is-invalid @enderror"
+                                name="plan.tax"
+                                id="plan-tax"
+                                placeholder="{{ translate('Subscription specific tax (fixed or percentage)') }}"
+                                wire:model.defer="plan.tax" />
+                    </div>
+
+                    <x-default.system.invalid-msg field="plan.tax"></x-default.system.invalid-msg>
+                </div>
+
+                <div class="col-sm-2" x-data="{
+                    tax_type: @js($plan->tax_type)
+                }" x-init="
+                    $('#plan-tax_type').on('select2:select', (event) => {
+                        tax_type = event.target.value;
+                    });
+                    $watch('tax_type', (value) => {
+                        $('#plan-tax_type').val(value).trigger('change');
+                    });
+                "> 
+                    <select class="form-control custom-select" 
+                            name="plan.tax_type" 
+                            id="plan-tax_type"
+                            wire:model.defer="plan.tax_type"
+                            data-hs-select2-options='{
+                                "minimumResultsForSearch": "Infinity"
+                        }'>
+                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
+                            <option value="{{ $type }}" >
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <!-- END Tax and Tax type -->
+
 
             <!-- Excerpt -->
-            <div class="row form-group">
+            <div class="row form-group mt-3">
                 <label for="plan-excerpt" class="col-sm-3 col-form-label input-label">{{ translate('Excerpt') }}</label>
 
                 <div class="col-sm-9">
@@ -207,25 +380,25 @@
                         <textarea type="text" class="form-control @error('plan.excerpt') is-invalid @enderror"
                                   name="plan.excerpt"
                                   id="plan-excerpt"
+                                  placeholder="{{ translate('Write a short description for this subscription plan') }}"
                                   wire:model.defer="plan.excerpt">
                         </textarea>
                     </div>
 
                     <x-default.system.invalid-msg field="plan.excerpt"></x-default.system.invalid-msg>
                 </div>
-
-
             </div>
             <!-- END Excerpt -->
 
             <!-- Content -->
-            <div class="row form-group">
+            <!-- TODO: Find out why ONLY THIS FUCKING PART OF FORM DOES NOT WORK AFTER SAVE!!!! WTF???? It works exactly the same in blog-post-form, but doesn't work here! DA FUQ????-->
+            {{-- <div class="row form-group mt-3">
                 <label for="plan-content" class="col-sm-3 col-form-label input-label">{{ translate('Content') }}</label>
-
+                
                 <div class="col-sm-9">
                     <div class="input-group input-group-sm-down-break">
                         <div class="toast-ui-editor-custom w-100">
-                            <div class="js-toast-ui-editor @error('plan.content') is-invalid @enderror"
+                            <div class="js-toast-ui-editor"
                                  data-ev-toastui-editor-options=""></div>
 
                             <input type="text"
@@ -238,10 +411,65 @@
 
                     <x-default.system.invalid-msg field="plan.content"></x-default.system.invalid-msg>
                 </div>
-            </div>
+            </div> --}}
             <!-- END Content -->
 
             <hr class="my-4"/>
+
+            <!-- Features -->
+            <div class="row form-group" x-data="{
+                features: @entangle('plan.features').defer,
+                count() {
+                    if(this.features === undefined || this.features === null) {
+                        this.features = [''];
+                    }
+
+                    return this.features.length;
+                },
+                add() {
+                    this.features.push('');
+                },
+                remove(index) {
+                    this.features.splice(index, 1);
+                },
+             }"
+             >
+                <label for="plan-features" class="col-sm-3 col-form-label input-label">{{ translate('Features') }}</label>
+
+                <div class="col-sm-9">
+                    <template x-if="count() <= 1">
+                        <div class="d-flex">
+                            <input type="text" class="form-control" name="plan.features[]"
+                            placeholder="{{ translate('Feature 1') }}"
+                            x-model="features[0]" />
+                        </div>
+                    </template>
+                    <template x-if="count() > 1">
+                        <template x-for="[key, value] of Object.entries(features)">
+                            <div class="d-flex" :class="{'mt-2': key > 0}">
+                                <input type="text" class="form-control" name="plan.features[]"
+                                       x-bind:placeholder="'{{ translate('Feature') }} '+(Number(key)+1)"
+                                       x-model="features[key]" />
+                                <template x-if="key > 0">
+                                    <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
+                                        @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
+                                    </span>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
+
+                    <a href="javascript:;"
+                        class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="add()">
+                        <i class="tio-add"></i> {{ translate('Add feature') }}
+                    </a>
+
+                    <x-default.system.invalid-msg field="plan.features"></x-default.system.invalid-msg>
+                </div>
+            </div>
+            <!-- END Features -->
+            
+            <hr/>
 
             <h3 class="h4"> {{ translate('SEO') }}</h3>
 
@@ -331,23 +559,30 @@
             <!-- End Meta Img -->
 
             <hr/>
+
             <div class="row form-group mb-0">
                 <div class="col-12 d-flex">
                     {{-- TODO: Standardize Categories selection for various Content Types --}}
                     <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
-                            $wire.set('plan.content', $('#plan-content').val(), true);
-                            $wire.set('plan.status', $('#blog-post-status-selector').val(), true);
-                            let $selected_categories = [];
-                            $('[name=\'selected_categories\']').each(function(index, item) {
-                                $selected_categories = [...$selected_categories, ...$(item).val()];
-                            });
-                            $wire.set('selected_categories', $selected_categories, true);
-                            $wire.savePlan();">
+                                //$wire.set('plan.content', $('#plan-content').val(), true);
+                                $wire.set('plan.status', $('#blog-post-status-selector').val(), true);
+                                let $selected_categories = [];
+                                $('[name=\'selected_categories\']').each(function(index, item) {
+                                    $selected_categories = [...$selected_categories, ...$(item).val()];
+                                });
+                                $wire.set('selected_categories', $selected_categories, true);
+                                $wire.set('plan.base_currency', $('#plan-base_currency').val(), true);
+                                $wire.set('plan.discount_type', $('#plan-discount_type').val(), true);
+                                $wire.set('plan.yearly_discount_type', $('#plan-yearly_discount_type').val(), true);
+                                $wire.set('plan.tax_type', $('#plan-tax_type').val(), true);
+                            "
+                            wire:click="savePlan()">
                         {{ translate('Save') }}
                     </button>
                 </div>
             </div>
+            
         </div>
 
     </div>

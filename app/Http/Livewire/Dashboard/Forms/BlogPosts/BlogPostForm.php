@@ -37,7 +37,7 @@ class BlogPostForm extends Component
     public function mount($blogPost = null)
     {
         $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
-
+        
         $this->initCategories($this->blogPost);
     }
 
@@ -45,8 +45,7 @@ class BlogPostForm extends Component
     {
         return [
             'selected_categories' => 'required',
-            'blogPost.*' => [],
-            'blogPost.id' => [],
+            // 'blogPost.id' => [],
             'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
             'blogPost.title' => 'required|min:10',
@@ -90,10 +89,14 @@ class BlogPostForm extends Component
         $this->dispatchBrowserEvent('initBlogPostForm');
     }
 
+    // public function hydrate() {
+    //     dd($this->blogPost);
+    // }
+
     public function saveBlogPost() {
         $msg = '';
         $is_update = isset($this->blogPost->id) && !empty($this->blogPost->id);
-
+        
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -108,10 +111,10 @@ class BlogPostForm extends Component
             $this->blogPost->subscription_only = (bool) $this->blogPost->subscription_only;
             $this->blogPost->shop_id = MyShop::getShopID();
 
-            // If user has no permissions to publish the post, change the status to Draft
+            // If user has no permissions to publish the post, change the status to Pending (all pending blog posts will be visible to users who can publish the Blog Post)
             if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_post'], false)) {
-                $this->blogPost->status = StatusEnum::draft();
-                $msg = translate('Blog post status is set to '.(StatusEnum::draft()->value).' because you don\'t have enough Permissions to publish it right away.');
+                $this->blogPost->status = StatusEnum::pending();
+                $msg = translate('Blog post status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
 
             $this->blogPost->save();

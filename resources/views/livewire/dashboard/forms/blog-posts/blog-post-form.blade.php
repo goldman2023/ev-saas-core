@@ -16,8 +16,7 @@
 
         <div class=""
              wire:loading.class="opacity-3 prevent-pointer-events"
-             wire:target="saveBlogPost"
-        >
+             wire:target="saveBlogPost">
 
             <!-- Cover -->
             <div class="profile-cover">
@@ -152,7 +151,6 @@
                     </select>
 
                     <x-default.system.invalid-msg field="blogPost.status"></x-default.system.invalid-msg>
-                </div>
                 </div>
             </div>
             <!-- END Status -->

@@ -1,5 +1,5 @@
 <x-livewire-tables::table.cell class="align-middle">
-    <a class="media align-items-center text-14" href="{{ route('plan.edit', ['slug' => $row->slug]) }}">
+    <a class="media align-items-center text-14" href="{{ route('plan.edit', ['id' => $row->id]) }}">
         #{{ $row->id }}
     </a>
 </x-livewire-tables::table.cell>
@@ -43,7 +43,7 @@
 
 <x-livewire-tables::table.cell class="align-middle">
     <div class="btn-group" role="group">
-        <a class="btn btn-sm btn-white d-flex align-items-center" href="{{ route('plan.edit', ['slug' => $row->slug]) }}">
+        <a class="btn btn-sm btn-white d-flex align-items-center" href="{{ route('plan.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'square-18 mr-2']) {{ translate('Edit') }}
         </a>
     </div>

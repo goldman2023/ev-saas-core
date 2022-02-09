@@ -24,8 +24,8 @@ class EVPlanController extends Controller
         return view('frontend.dashboard.plans.create');
     }
 
-    public function edit(Request $request, $slug) {
-        $plan = Plan::where('slug', $slug)->first();
+    public function edit(Request $request, $id) {
+        $plan = Plan::findOrFail($id);
 
         return view('frontend.dashboard.plans.edit', compact('plan'));
     }
