@@ -56,7 +56,7 @@
                         <ul class="list-group list-group-raw">
                             @foreach ($categories as $key => $category)
                                 <li class="list-group-item py-1 px-3">
-                                    <a class="text-[14px]" href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
+                                    <a class="text-[14px]" href="{{ route('category.products.index', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
                                 </li>
                             @endforeach
                         </ul>

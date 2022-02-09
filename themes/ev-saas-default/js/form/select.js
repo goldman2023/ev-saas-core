@@ -112,12 +112,12 @@ window.EV.form.select = {
             let sub_selector = $('.categories-selector[data-level="'+(level+1)+'"]');
 
             // Check if select field with certain level exists
-            console.log(value);
-            console.log(level);
-            console.log(selected);
+            // console.log(value);
+            // console.log(level);
+            // console.log(selected);
             if(sub_selector.length <= 0 && Object.keys(selected.children).length > 0) {
 
-                let options = [`<optgroup id="group-${selected.slug_path}" label="${selected.title_path.replace('.', ' / ')}">`];
+                let options = [`<optgroup id="group-${selected.slug_path}" label="${selected.name}">`];
                 for (const slug in selected.children) {
                     options.push(`
                         <option value="${selected.children[slug].slug_path}">
@@ -159,7 +159,7 @@ window.EV.form.select = {
                 }
 
                 let new_options = [`
-                        <optgroup id="group-${selected.slug_path}" label="${selected.title_path.replace('.', ' / ')}">
+                        <optgroup id="group-${selected.slug_path}" label="${selected.name}">
                     `];
                 for (const slug in selected.children) {
                     new_options.push(`

@@ -95,7 +95,6 @@ class CategoryForm extends Component
         DB::beginTransaction();
 
         try {
-            // Update address
             if(empty($this->category->parent_id)) {
                 $this->category->parent_id = null;
             }

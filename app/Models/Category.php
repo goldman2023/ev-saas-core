@@ -40,7 +40,7 @@ class Category extends EVBaseModel
     public const PATH_SEPARATOR = '.';
 
     protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'description', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
-    protected $appends = ['selected']; // title_path
+    protected $appends = ['selected', 'title_path'];
 
     protected $casts = [
         'created_at' => 'date:d.m.Y',
@@ -144,9 +144,9 @@ class Category extends EVBaseModel
     }
 
     // TODO: FIX THIS TOO. REMOVE CLASSIFIED PRODUCTS!
-    public function classified_products(){
-    	return $this->hasMany(CustomerProduct::class);
-    }
+//    public function classified_products(){
+//    	return $this->hasMany(CustomerProduct::class);
+//    }
 
     public function categories()
     {
@@ -166,10 +166,10 @@ class Category extends EVBaseModel
     // TODO: Create Category groups. Each category group is related to specific content types.
     // TODO: Get rid of unnecessary categories tables in DB, like: blog_categories, home_categories.
     // TODO: Make sure in future we only use following tables: categories, category_translations, category_relationships, category_groups (not created), category_group_relationships (not created)
-    public function news()
-    {
-        return $this->belongsTo(Blog::class, 'category_id');
-    }
+//    public function news()
+//    {
+//        return $this->belongsTo(Blog::class, 'category_id');
+//    }
 
     public function setSelectedAttribute($value) {
         $this->selected = $value;

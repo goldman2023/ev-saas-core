@@ -135,7 +135,7 @@ Route::middleware([
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
-    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_products.category');
+    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_category.products.index');
     Route::get('/customer-products?city={city_id}', [CustomerProductController::class, 'search'])->name('customer_products.city');
     Route::get('/customer-products?q={search}', [CustomerProductController::class, 'search'])->name('customer_products.search');
     Route::get('/customer-products/admin', [HomeController::class, 'profile_edit'])->name('customer.profile.edit');
@@ -149,12 +149,16 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
+    Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
 
-    // Category archive page
+    // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
-    
+
+
+    // Blog Posts
+    Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
+
 
     Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
     Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
@@ -164,12 +168,15 @@ Route::middleware([
     Route::get('/wishlist', [EVWishlistController::class, 'index'])->name('wishlist');
     Route::get('/wishlist/views', [EVWishlistController::class, 'views'])->name('wishlist.views');
 
-    //Checkout Routes
+    // Checkout Routes
     Route::group(['middleware' => ['checkout']], function () {
         Route::get('/checkout', [EVCheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout', [EVCheckoutController::class, 'store'])->name('checkout.post');
+        Route::get('/checkout-single', [EVCheckoutController::class, 'single'])->name('checkout.single.page');
 
         Route::get('/order-received/{id}', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
+
+
 
 //        Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
 //        Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');

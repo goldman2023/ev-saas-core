@@ -38,8 +38,7 @@
                                                     "stickyOffsetTop": 20
                                                   }'>
 
-                        <x-default.products.single.product-checkout-card :product="$product">
-                        </x-default.products.single.product-checkout-card>
+
                     </div>
                     <!-- End Row -->
                 </div>

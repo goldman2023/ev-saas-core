@@ -78,7 +78,7 @@
     </x-default.system.tracking-pixels>
 
     @php
-    echo get_setting('header_script');
+        echo get_setting('header_script');
     @endphp
 
     @stack('head_scripts')
@@ -99,7 +99,6 @@
         {{-- <div class="space-top-lg-3 space-top-3"> --}}
             <div class="app-layout-container d-flex" style="flex-basis: 100%; flex-direction: column;">
                 {{-- <x-default.system.promo-alert></x-default.system.promo-alert> --}}
-
                 @yield('content')
             </div>
 
@@ -132,26 +131,12 @@
         <x-default.global.flyout-categories></x-default.global.flyout-categories>
 
         @auth
-        <x-default.global.flyout-profile></x-default.global.flyout-profile>
+            <x-default.global.flyout-profile></x-default.global.flyout-profile>
         @endauth
+
         <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
             :is_x="true" :timeout="4000">
         </x-ev.toast>
-
-        <script>
-            document.addEventListener('toastIt', async function (event) {
-                let content = event.detail.content;
-                let id = event.detail.id;
-
-                $(id).find('.toast-body').text(content);
-
-                $(id).toast({
-                    delay: 3000
-                });
-
-                $(id).toast('show');
-            });
-        </script>
 
         @yield('modal')
 
@@ -170,30 +155,17 @@
 
         <script>
             $(function() {
-            // =======================================================
-            $('.js-hs-unfold-invoker').each(function () {
-                var unfold = new HSUnfold($(this)).init();
+                // TODO: Move this to some logical place
+                // =======================================================
+                $('.js-hs-unfold-invoker').each(function () {
+                    var unfold = new HSUnfold($(this)).init();
+                });
             });
-
-
-            // $(document).on('ready', function () {
-            //     // INITIALIZATION OF LEAFLET
-            //     // =======================================================
-            //     $('#map').each(function () {
-            //       var leaflet = $.HSCore.components.HSLeaflet.init($(this)[0]);
-            //
-            //       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-            //         id: 'mapbox/light-v9'
-            //       }).addTo(leaflet);
-            //     });
-            //   });
-        });
         </script>
 
         @php
         echo get_setting('footer_script');
         @endphp
-
 </body>
 
 </html>

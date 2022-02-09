@@ -241,7 +241,7 @@
             </div>
             <!-- END Meta Description -->
 
-            <!-- Icon -->
+            <!-- Meta Img -->
             <div class="row form-group">
                 <div class="col-sm-3 col-form-label input-label">{{ translate('Meta image') }}</div>
 
@@ -268,7 +268,7 @@
                     <x-default.system.invalid-msg class="mt-1" field="category.meta_img"></x-default.system.invalid-msg>
                 </div>
             </div>
-            <!-- End Icon -->
+            <!-- End Meta Img -->
 
             <hr/>
             <div class="row form-group mb-0">

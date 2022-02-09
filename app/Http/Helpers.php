@@ -284,7 +284,11 @@ if (!function_exists('convert_price')) {
 
         if ($system_default_currency != null) {
             $currency = Currency::find($system_default_currency);
-            $price = (float) $price / (float) $currency->exchange_rate;
+            if($currency->exchange_rate != 0){
+                $price = (float) $price / (float) $currency->exchange_rate;
+            } else {
+                $price = (float) $price;
+            }
         }
 
         $code = Cache::remember(tenant('id').'_system_default_currency', config('cache.stores.redis.ttl_redis_cache', 60), function () {

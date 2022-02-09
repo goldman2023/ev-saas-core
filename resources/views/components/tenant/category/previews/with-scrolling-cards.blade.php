@@ -25,7 +25,7 @@
                         class="absolute min-w-screen-xl px-4 flex space-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:grid xl:grid-cols-5 xl:gap-x-8">
 
                         @foreach ($categories as $key => $category)
-                            <a href="{{ route('products.category', $category->slug) }}"
+                            <a href="{{ route('category.products.index', $category->slug) }}"
                                 class="relative w-56 h-80 rounded-lg p-6 flex flex-col overflow-hidden hover:opacity-75 xl:w-auto mb-3">
                                 <span aria-hidden="true" class="absolute inset-0">
                                     <img src="https://tailwindui.com/img/ecommerce-images/home-page-01-category-01.jpg"

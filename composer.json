@@ -58,6 +58,7 @@
         "romanzipp/laravel-seo": "^2.2",
         "sentry/sentry-laravel": "^2.10",
         "shetabit/visitor": "^3.1",
+        "spatie/enum": "^3.11",
         "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-backup": "^6.16",
         "spatie/laravel-newsletter": "^4.10",

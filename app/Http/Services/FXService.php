@@ -9,15 +9,30 @@ use App\Models\Currency;
 
 class FXService
 {
+    public mixed $currencies;
     public Currency $currency;
     public Currency $default_currency;
     public string $currency_symbol;
 
     public function __construct($app) {
+        $this->setAllCurrencies();
         $this->setCurrency();
     }
 
-    public function setCurrency() {
+    protected function setAllCurrencies() {
+        $this->currencies = Currency::get(); // Get all currencies with fx_rates
+    }
+
+    public function getAllCurrencies($only_enabled = true) {
+        // When only_enabled is true, we will return only Currencies with status: 1, otherwise all categories will be returned
+        if($only_enabled) {
+            $this->currencies = $this->currencies->filter(fn($item) => $item->status === true);
+        }
+
+        return $this->currencies;
+    }
+
+    protected function setCurrency() {
         $code = Cache::remember(tenant('id').'_system_default_currency',  config('cache.stores.redis.ttl_redis_cache', 60), function () {
             return Currency::findOrFail(get_setting('system_default_currency'))->code;
         });
@@ -37,17 +52,27 @@ class FXService
         $this->currency_symbol = $this->currency->symbol ?? '';
     }
 
-    public function convertPrice($price)
+    public function getCurrency() {
+        return $this->currency;
+    }
+
+    public function convertPrice($price, $base_currency = null)
     {
+        // If the base_currency of the purchasable item is same as current currency, conversion is 1:1 aka. just return $price;
+        if($base_currency === $this->currency->code || empty($base_currency)) {
+            return $price;
+        }
+
         // TODO: Create proper Currency Converter that will store FX rates in CENTRAL app and in non-tenant-related Cache
         $price = (float) $price / (float) $this->default_currency->exchange_rate;
+
         return (float) $price * (float) $this->currency->exchange_rate;
     }
 
-    public function formatPrice($price, $convert = true)
+    public function formatPrice($price, $base_currency = null, $convert = true)
     {
         if($convert) {
-            $price = $this->convertPrice($price);
+            $price = $this->convertPrice($price, $base_currency);
         }
 
         if (get_setting('decimal_separator') === 1) {

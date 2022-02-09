@@ -88,6 +88,14 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
+                    [
+                        'label' => translate('Categories'),
+                        'icon' => 'heroicon-o-folder-open',
+                        'route' => route('categories.index'),
+                        'is_active' => areActiveRoutes(['categories.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => []
+                    ],
                 ]
             ],
             [
@@ -102,12 +110,12 @@ class EVService
                         'permissions' => ['all_products', 'browse_products']
                     ],
                     [
-                        'label' => translate('Categories'),
-                        'icon' => 'heroicon-o-folder-open',
-                        'route' => route('categories.index'),
-                        'is_active' => areActiveRoutes(['categories.index']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => []
+                        'label' => translate('Plans'),
+                        'icon' => 'heroicon-o-document',
+                        'route' => route('plans.index'),
+                        'is_active' => areActiveRoutes(['plans.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['all_plans', 'browse_plans']
                     ],
                     /* [
                         'label' => translate('Courses'),
@@ -162,8 +170,8 @@ class EVService
                     [
                         'label' => translate('Blog'),
                         'icon' => 'heroicon-o-newspaper',
-                        'route' => '',
-                        'is_active' => areActiveRoutes(['']),
+                        'route' => route('blog.posts.index'),
+                        'is_active' => areActiveRoutes(['blog.posts.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_posts', 'browse_posts']
                     ],
@@ -204,15 +212,14 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => []
                     ],
-                    /* TODO: Uncomment this once we have customers page */
-                    /* [
+                    [
                         'label' => translate('Customers'),
                         'icon' => 'heroicon-o-user-group',
                         'route' => '',
                         'is_active' => areActiveRoutes(['']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_customers', 'browse_customers']
-                    ], */
+                    ],
                     /* [
                         'label' => translate('Reviews'),
                         'icon' => 'heroicon-o-star',
@@ -221,7 +228,14 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['browse_reviews', 'view_review']
                     ], */
-
+                    [
+                        'label' => translate('Messages'),
+                        'icon' => 'heroicon-o-support',
+                        'route' => route('conversations.index'),
+                        'is_active' => areActiveRoutes(['']),
+                        'user_types' => User::$vendor_user_types,
+                        'permissions' => []
+                    ],
                     // TODO: Do we need another route/menu-item for admin/moderator/support Support page? We should have to support panels: one for customers/vendors and one for admin/moderator/support
                 ]
             ],

@@ -72,7 +72,7 @@ function recursiveTemplate($children, $parent, $selectedCategory, $show = false)
 @endphp
     <a class="c-category-list-sidebar__submenu-item dropdown-item d-flex justify-content-between align-items-center px-0
         @if(Str::startsWith($selectedCategory->slug_path ?? null, $category->slug_path)) active @endif
-    " href="{{ route('products.category', $category->slug) }}">
+    " href="{{ route('category.products.index', $category->slug) }}">
         <span class="pr-1 flex-text-ellipsis">{{ $category->getTranslation('name') }}</span>
         <span class="badge border badge-pill">{{ $category->products_count ?? '' }}</span>
     </a>

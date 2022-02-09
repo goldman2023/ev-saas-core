@@ -53,7 +53,7 @@
 //
 //    Route::get('products/admin', 'Api\V2\ProductController@admin');
 //    Route::get('products/seller/{id}', 'Api\V2\ProductController@seller');
-//    Route::get('products/category/{id}', 'Api\V2\ProductController@category')->name('products.category');
+//    Route::get('products/category/{id}', 'Api\V2\ProductController@category')->name('category.products.index');
 //    Route::get('products/sub-category/{id}', 'Api\V2\ProductController@subCategory')->name('products.subCategory');
 //    Route::get('products/sub-sub-category/{id}', 'Api\V2\ProductController@subSubCategory')->name('products.subSubCategory');
 //    Route::get('products/brand/{id}', 'Api\V2\ProductController@brand')->name('products.brand');

@@ -112,7 +112,7 @@ class Order extends EVBaseModel
                 ->orWhere('billing_last_name', 'like', '%'.$term.'%')
                 ->orWhere('payment_status', 'like', '%'.$term.'%')
                 ->orWhere('shipping_status', 'like', '%'.$term.'%')
-                ->orWhere('total_price', 'like', '%'.$term.'%')
+//                ->orWhere('total_price', 'like', '%'.$term.'%')
         );
     }
 

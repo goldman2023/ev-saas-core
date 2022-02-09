@@ -54,7 +54,7 @@
                                 {{ translate('products') }}</span>
 
                             <a class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover px-5"
-                                href="{{ route('products.category', $category->slug) }}">
+                                href="{{ route('category.products.index', $category->slug) }}">
                                 {{ translate('View Products') }}
                             </a>
                         </div>
