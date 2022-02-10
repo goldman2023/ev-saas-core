@@ -47,6 +47,10 @@ class AppServiceProvider extends ServiceProvider
   }
 
   public function registerCustomValidaionRules() {
+        Validator::extend('is_true', function ($attribute, $value, $parameters, $validator) {
+            return $value === true;
+        });
+
       Validator::extend('match_password', function ($attribute, $value, $parameters, $validator) {
           return (new MatchPassword($parameters, $validator))->passes($attribute, $value);
       });

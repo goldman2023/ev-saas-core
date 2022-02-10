@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use App\Enums\OrderTypeEnum;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
 
 class EVCheckoutController extends Controller
 {
@@ -184,7 +187,7 @@ class EVCheckoutController extends Controller
             $order->shop_id = \CartService::getShop(true);
             $order->user_id = auth()->user()->id ?? null;
             $order->email = $data['email'];
-            $order->type = Order::TYPE_STANDARD;
+            $order->type = OrderTypeEnum::standard()->value;
 
             $order->billing_first_name = $data['billing_first_name'];
             $order->billing_last_name = $data['billing_last_name'];

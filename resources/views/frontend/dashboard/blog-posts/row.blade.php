@@ -6,7 +6,6 @@
 
 <x-livewire-tables::table.cell class="align-middle">
     {{ $row->getTranslation('title') }}
-{{--    <span class="d-block text-14 mb-0 {{ $row->type === App\Models\Order::TYPE_SUBSCRIPTION ? 'text-info':'' }} {{ $row->type === App\Models\Order::TYPE_INSTALLMENTS ? 'text-warning':'' }}">{{ $row->type }}</span>--}}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
