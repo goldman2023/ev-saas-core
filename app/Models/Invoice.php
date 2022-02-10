@@ -77,11 +77,11 @@ class Invoice extends EVBaseModel
      * 3. Installments - Invoice can be last if Number_of_invoices is reached
      */
     public function isLastInvoice() {
-        if($this->order->type === Order::TYPE_STANDARD) {
+        if($this->order->type === OrderTypeEnum::standard()->value) {
             return true;
-        } else if($this->order->type === Order::TYPE_SUBSCRIPTION) {
+        } else if($this->order->type === OrderTypeEnum::subscription()->value) {
             return false;
-        } else if($this->order->type === Order::TYPE_INSTALLMENTS) {
+        } else if($this->order->type === OrderTypeEnum::installments()->value) {
             return $this->order->number_of_invoices === $this->order->invoices()->count();
         }
     }

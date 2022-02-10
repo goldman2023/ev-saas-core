@@ -930,6 +930,23 @@ if (!function_exists('static_asset')) {
     }
 }
 
+if (!function_exists('static_asset_root')) {
+    /**
+     * Generate an asset path for the application.
+     *
+     * @param  string  $path
+     * @param  bool|null  $secure
+     * @return string
+     */
+    function static_assets_root($path, $secure = null, $theme = false)
+    {
+        if ($theme) {
+            return url('themes/' . Theme::parent().'/'.$path);
+        }
+        return url('/'.$path);
+    }
+}
+
 
 
 if (!function_exists('isHttps')) {

@@ -2,6 +2,7 @@ module.exports = {
   content: [
     "./resources/views/frontend/checkout-single.blade.php", // relative path from the root of the project!
     "./resources/views/livewire/checkout/checkout-single-form.blade.php",
+    "./resources/views/components/default/system/invalid-msg.blade.php",
     `${__dirname}/views/**/*.blade.php` // absolute path to theme
   ],
   theme: {

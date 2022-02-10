@@ -34,22 +34,6 @@ class Order extends EVBaseModel
 
     protected $with = ['order_items', 'invoices'];
 
-    public const TYPES = ['standard', 'installments', 'subscription'];
-    public const TYPE_STANDARD = 'standard';
-    public const TYPE_INSTALLMENTS = 'installments';
-    public const TYPE_SUBSCRIPTION = 'subscription';
-
-    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
-    public const PAYMENT_STATUS_UNPAID = 'unpaid';
-    public const PAYMENT_STATUS_PENDING = 'pending';
-    public const PAYMENT_STATUS_CANCELED = 'canceled';
-    public const PAYMENT_STATUS_PAID = 'paid';
-
-    public const SHIPPING_STATUS = ['not_sent', 'sent', 'delivered']; // TODO: Should consider more statuses!
-    public const SHIPPING_STATUS_NOT_SENT = 'not_sent';
-    public const SHIPPING_STATUS_SENT = 'sent';
-    public const SHIPPING_STATUS_DELIVERED = 'delivered';
-
     public function user()
     {
         return $this->belongsTo(User::class);
