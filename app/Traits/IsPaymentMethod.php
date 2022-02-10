@@ -7,7 +7,7 @@ use Closure;
 trait IsPaymentMethod
 {
     public static $available_gateways = ['wire_transfer', 'paypal', 'stripe', 'paysera'];
-
+   
     /**
      * Boot the trait
      *
@@ -31,6 +31,7 @@ trait IsPaymentMethod
             // Save dynamic properties to Data
             $model->dynamicPaymentMethodPropertiesWalker(function($property) use (&$model) {
                 $data = $model->data;
+                 // TODO: FIX treating array as object error!
                 $data->{$property['property_name']} = $model->{$property['property_name']} ?? null;
                 $model->data = $data;
             });

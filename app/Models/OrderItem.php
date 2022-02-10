@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\OrderDetail
+ * App\Models\OrderItem
  */
-class OrderItem extends Model
+class OrderItem extends EVBaseModel
 {
     protected $table = 'order_items';
 
@@ -16,10 +16,7 @@ class OrderItem extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'phone_numbers' => 'array',
         'serial_numbers' => 'array',
-        'same_billing_shipping' => 'boolean',
-        'viewed' => 'boolean',
         'variant' => 'array',
     ];
 

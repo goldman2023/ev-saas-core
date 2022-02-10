@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Orders;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;

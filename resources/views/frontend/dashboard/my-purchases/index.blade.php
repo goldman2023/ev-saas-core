@@ -123,34 +123,34 @@
                             <span class="text-14">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                         </td>
                         <td>
-                            @if($order->payment_status === App\Enums\PaymentStatusEnum::paid()->value)
+                            @if($order->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
                                 <span class="badge badge-soft-success">
                                   <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($order->payment_status) }}
                                 </span>
-                            @elseif($order->payment_status === App\Enums\PaymentStatusEnum::pending()->value)
+                            @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
                                 <span class="badge badge-soft-info">
                                   <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($order->payment_status) }}
                                 </span>
-                            @elseif($order->payment_status === App\Enums\PaymentStatusEnum::unpaid()->value)
+                            @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
                                 <span class="badge badge-soft-danger">
                                   <span class="legend-indicator bg-danger mr-1"></span> {{ ucfirst($order->payment_status) }}
                                 </span>
-                            @elseif($order->payment_status === App\Enums\PaymentStatusEnum::canceled()->value)
+                            @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
                                 <span class="badge badge-soft-warning">
                                   <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($order->payment_status) }}
                                 </span>
                             @endif
                         </td>
                         <td>
-                            @if($order->shipping_status === App\Enums\ShippingStatusEnum::delivered()->value)
+                            @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
                                 <span class="badge badge-soft-success">
                                   <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($order->shipping_status) }}
                                 </span>
-                            @elseif($order->shipping_status === App\Enums\ShippingStatusEnum::sent()->value)
+                            @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
                                 <span class="badge badge-soft-warning">
                                   <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($order->shipping_status) }}
                                 </span>
-                            @elseif($order->shipping_status === App\Enums\ShippingStatusEnum::not_sent()->value)
+                            @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
                                 <span class="badge badge-soft-danger">
                                   <span class="legend-indicator bg-danger mr-1"></span> {{ \Str::replace('_', ' ', ucfirst($order->shipping_status)) }}
                                 </span>
