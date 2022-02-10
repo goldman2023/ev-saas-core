@@ -1,5 +1,3 @@
-[![buddy pipeline](https://app.buddy.works/b2bwood/b2bwood/pipelines/pipeline/323136/badge.svg?token=35b16afac4ba4dae4724876e550894984b5e2ac6eb9da98b094b339061ed9ad1 "buddy pipeline")](https://app.buddy.works/b2bwood/b2bwood/pipelines/pipeline/323136) \
-
 # We-SaaS Core
 We-SaaS is a no-code SaaS and Customer Self-Service Platform. 
 
@@ -13,8 +11,7 @@ https://gunob.com
 ## Remote Development Environment
 https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 
-# Local setup
-
+## Local setup
 -   After checking out project from git
 -   Edit your `.env`
 -   run `php artisan migrate --path=/database/migrations/central`
