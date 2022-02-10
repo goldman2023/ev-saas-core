@@ -418,7 +418,7 @@
 
             <!-- Features -->
             <div class="row form-group" x-data="{
-                features: @entangle('plan.features').defer,
+                features: @js($plan->features),
                 count() {
                     if(this.features === undefined || this.features === null) {
                         this.features = [''];
