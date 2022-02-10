@@ -61,8 +61,6 @@ x-cloak
                             class="tw-input-main @error('account_password') input-invalid @enderror"       
                     />
                 </div>
-        
-                
             </div>
             <x-default.system.invalid-msg field="account_password" framework="tailwind"></x-default.system.invalid-msg>
         </div>

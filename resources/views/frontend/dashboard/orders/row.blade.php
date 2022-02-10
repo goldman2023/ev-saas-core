@@ -9,7 +9,7 @@
 
 @if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('type')))
 <x-livewire-tables::table.cell class="align-middle">
-    <span class="d-block text-14 mb-0 {{ $row->type === App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enum\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{ $row->type }}</span>
+    <span class="d-block text-14 mb-0 {{ $row->type === \App\Enums\OrderTypeEnum::subscription()->value ? 'text-info':'' }} {{ $row->type === App\Enums\OrderTypeEnum::installments()->value ? 'text-warning':'' }}">{{ $row->type }}</span>
 </x-livewire-tables::table.cell>
 @endif
 
@@ -23,19 +23,19 @@
 
 @if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('payment_status')))
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
-    @if($row->payment_status === App\Enums\PaymentStatusEnum::paid()->value)
+    @if($row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
         <span class="badge badge-soft-success">
           <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($row->payment_status) }}
         </span>
-    @elseif($row->payment_status === App\Enums\PaymentStatusEnum::pending()->value)
+    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
         <span class="badge badge-soft-info">
           <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($row->payment_status) }}
         </span>
-    @elseif($row->payment_status === App\Enums\PaymentStatusEnum::unpaid()->value)
+    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
         <span class="badge badge-soft-danger">
           <span class="legend-indicator bg-danger mr-1"></span> {{ ucfirst($row->payment_status) }}
         </span>
-    @elseif($row->payment_status === App\Enums\PaymentStatusEnum::canceled()->value)
+    @elseif($row->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value)
         <span class="badge badge-soft-warning">
           <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($row->payment_status) }}
         </span>
@@ -45,15 +45,15 @@
 
 @if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('shipping_status')))
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
-    @if($row->shipping_status === App\Enums\ShippingStatusEnum::delivered()->value)
+    @if($row->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
         <span class="badge badge-soft-success">
           <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($row->shipping_status) }}
         </span>
-    @elseif($row->shipping_status === App\Enums\ShippingStatusEnum::sent()->value)
+    @elseif($row->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
         <span class="badge badge-soft-warning">
           <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($row->shipping_status) }}
         </span>
-    @elseif($row->shipping_status === App\Enums\ShippingStatusEnum::not_sent()->value)
+    @elseif($row->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
         <span class="badge badge-soft-danger">
           <span class="legend-indicator bg-danger mr-1"></span> {{ \Str::replace('_', ' ', ucfirst($row->shipping_status)) }}
         </span>

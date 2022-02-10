@@ -66,8 +66,9 @@ class Order extends EVBaseModel
             $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1)->orWhere('user_id', '=', auth()->user()->id);
         });
 
-        // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties
+        // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties - THEY ARE NOT SET DURING THE ORDER CREATION!!!
         static::relationsRetrieved(function ($order) {
+            // TODO: These should depend on "invoices number x order_items"
             $sums_properties = ['base_price', 'discount_amount', 'subtotal_price', 'total_price'];
             $order->appendCoreProperties($sums_properties);
             $order->append($sums_properties);
