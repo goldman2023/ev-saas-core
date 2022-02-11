@@ -17,7 +17,7 @@ $class_col_body_2 = 'col-md-5';
 
                     <div class="media-body d-none">
                         <h6 class="mb-0">
-                            <a class="text-dark" href="{{ route('shop.visit', $company->slug) }}">
+                            <a class="text-dark" href="{{  $company->permalink }}">
                                 {{ $company->name }}
                             </a>
 
@@ -33,7 +33,7 @@ $class_col_body_2 = 'col-md-5';
                         <div class="col {{ $class_col_body_1 }}">
                             <h3 class="mb-0">
                                 {{-- TODO: Add --}}
-                                <a class="text-dark" href="{{ route('shop.visit', $company->slug) }}">
+                                <a class="text-dark" href="{{ $company->permalink }}">
                                     {{ $company->name }}
                                 </a>
                                 {{-- TODO: Create company avatar component, because we need to use it in separate places --}}
