@@ -34,22 +34,6 @@ class Order extends EVBaseModel
 
     protected $with = ['order_items', 'invoices'];
 
-    public const TYPES = ['standard', 'installments', 'subscription'];
-    public const TYPE_STANDARD = 'standard';
-    public const TYPE_INSTALLMENTS = 'installments';
-    public const TYPE_SUBSCRIPTION = 'subscription';
-
-    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
-    public const PAYMENT_STATUS_UNPAID = 'unpaid';
-    public const PAYMENT_STATUS_PENDING = 'pending';
-    public const PAYMENT_STATUS_CANCELED = 'canceled';
-    public const PAYMENT_STATUS_PAID = 'paid';
-
-    public const SHIPPING_STATUS = ['not_sent', 'sent', 'delivered']; // TODO: Should consider more statuses!
-    public const SHIPPING_STATUS_NOT_SENT = 'not_sent';
-    public const SHIPPING_STATUS_SENT = 'sent';
-    public const SHIPPING_STATUS_DELIVERED = 'delivered';
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -82,8 +66,9 @@ class Order extends EVBaseModel
             $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1)->orWhere('user_id', '=', auth()->user()->id);
         });
 
-        // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties
+        // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties - THEY ARE NOT SET DURING THE ORDER CREATION!!!
         static::relationsRetrieved(function ($order) {
+            // TODO: These should depend on "invoices number x order_items"
             $sums_properties = ['base_price', 'discount_amount', 'subtotal_price', 'total_price'];
             $order->appendCoreProperties($sums_properties);
             $order->append($sums_properties);

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use App\Builders\BaseBuilder;
+use MyShop;
 
 /**
  * App\Models\Invoice
@@ -27,11 +29,13 @@ class Invoice extends EVBaseModel
 
     protected $with = ['payment_method'];
 
-    public const PAYMENT_STATUS = ['unpaid', 'pending', 'paid', 'canceled'];
-    public const PAYMENT_STATUS_UNPAID = 'unpaid';
-    public const PAYMENT_STATUS_PENDING = 'pending';
-    public const PAYMENT_STATUS_CANCELED = 'canceled';
-    public const PAYMENT_STATUS_PAID = 'paid';
+    protected static function booted()
+    {
+        // Restrict to MyShop and My invoices
+        static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
+            $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1)->orWhere('user_id', '=', auth()->user()->id);
+        });
+    }
 
     public function user()
     {
@@ -77,11 +81,11 @@ class Invoice extends EVBaseModel
      * 3. Installments - Invoice can be last if Number_of_invoices is reached
      */
     public function isLastInvoice() {
-        if($this->order->type === Order::TYPE_STANDARD) {
+        if($this->order->type === OrderTypeEnum::standard()->value) {
             return true;
-        } else if($this->order->type === Order::TYPE_SUBSCRIPTION) {
+        } else if($this->order->type === OrderTypeEnum::subscription()->value) {
             return false;
-        } else if($this->order->type === Order::TYPE_INSTALLMENTS) {
+        } else if($this->order->type === OrderTypeEnum::installments()->value) {
             return $this->order->number_of_invoices === $this->order->invoices()->count();
         }
     }

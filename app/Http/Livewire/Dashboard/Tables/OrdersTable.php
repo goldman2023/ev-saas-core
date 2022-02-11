@@ -5,6 +5,9 @@ namespace App\Http\Livewire\Dashboard\Tables;
 use App\Facades\MyShop;
 use App\Models\Order;
 use App\Models\Orders;
+use App\Enums\OrderTypeEnum;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -63,24 +66,24 @@ class OrdersTable extends DataTableComponent
             'type' => Filter::make('Type')
                 ->select([
                     '' => translate('All'),
-                    Order::TYPE_STANDARD => translate('Standard'),
-                    Order::TYPE_SUBSCRIPTION => translate('Subscription'),
-                    Order::TYPE_INSTALLMENTS => translate('Installments'),
+                    OrderTypeEnum::standard()->value => translate('Standard'),
+                    OrderTypeEnum::subscription()->value => translate('Subscription'),
+                    OrderTypeEnum::installments()->value => translate('Installments'),
                 ]),
             'payment_status' => Filter::make('Payment Status')
                 ->select([
                     '' => translate('Any'),
-                    Order::PAYMENT_STATUS_PAID => translate('Paid'),
-                    Order::PAYMENT_STATUS_UNPAID => translate('Unpaid'),
-                    Order::PAYMENT_STATUS_PENDING => translate('Pending'),
-                    Order::PAYMENT_STATUS_CANCELED => translate('Canceled'),
+                    PaymentStatusEnum::paid()->value => translate('Paid'),
+                    PaymentStatusEnum::unpaid()->value => translate('Unpaid'),
+                    PaymentStatusEnum::pending()->value => translate('Pending'),
+                    PaymentStatusEnum::canceled()->value => translate('Canceled'),
                 ]),
             'shipping_status' => Filter::make('Shipping Status')
                 ->select([
                     '' => translate('Any'),
-                    Order::SHIPPING_STATUS_DELIVERED => translate('Delivered'),
-                    Order::SHIPPING_STATUS_SENT => translate('Sent'),
-                    Order::SHIPPING_STATUS_NOT_SENT => translate('Not Sent'),
+                    ShippingStatusEnum::delivered()->value => translate('Delivered'),
+                    ShippingStatusEnum::sent()->value => translate('Sent'),
+                    ShippingStatusEnum::not_sent()->value => translate('Not Sent'),
                 ]),
             'viewed' => Filter::make('Viewed')
                 ->select([

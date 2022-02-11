@@ -1,6 +1,8 @@
 module.exports = {
   content: [
     "./resources/views/frontend/checkout-single.blade.php", // relative path from the root of the project!
+    "./resources/views/livewire/checkout/checkout-single-form.blade.php",
+    "./resources/views/components/default/system/invalid-msg.blade.php",
     `${__dirname}/views/**/*.blade.php` // absolute path to theme
   ],
   theme: {
@@ -11,6 +13,9 @@ module.exports = {
       'xl': '1500px',
     },
     extend: {
+      boxShadow: {
+        'input': '0 0 0 1px #e0e0e0, 0 2px 4px 0 rgb(0 0 0 / 7%), 0 1px 1.5px 0 rgb(0 0 0 / 5%)'
+      },
       fontSize: {
         '10': '10px',
         '11': '11px',

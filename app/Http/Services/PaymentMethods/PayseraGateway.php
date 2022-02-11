@@ -6,6 +6,9 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
+use App\Enums\OrderTypeEnum;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
 use Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -81,9 +84,9 @@ class PayseraGateway
 
         $invoice = Invoice::find($invoice_id);
 
-        $invoice->order->payment_status = $invoice->isLastInvoice() ? Order::PAYMENT_STATUS_PENDING : Order::PAYMENT_STATUS_UNPAID;
+        $invoice->order->payment_status = $invoice->isLastInvoice() ? PaymentStatusEnum::pending()->value : PaymentStatusEnum::unpaid()->value;
         $invoice->meta = $params;
-        $invoice->payment_status = Order::PAYMENT_STATUS_PENDING; // change payment status to pending until callback from paysera changes it to `paid`
+        $invoice->payment_status = PaymentStatusEnum::pending()->value; // change payment status to pending until callback from paysera changes it to `paid`
 
         $invoice->order->save();
         $invoice->save();
@@ -94,8 +97,8 @@ class PayseraGateway
     public function canceled(Request $request, $invoice_id) {
         $invoice = Invoice::find($invoice_id);
 
-        $invoice->order->payment_status = Order::PAYMENT_STATUS_UNPAID; // change payment status of Order to unpaid
-        $invoice->payment_status = Order::PAYMENT_STATUS_CANCELED; // change payment_status of Invoice to canceled
+        $invoice->order->payment_status = PaymentStatusEnum::unpaid()->value; // change payment status of Order to unpaid
+        $invoice->payment_status = PaymentStatusEnum::canceled()->value; // change payment_status of Invoice to canceled
 
         $invoice->order->save();
         $invoice->save();
@@ -123,10 +126,10 @@ class PayseraGateway
 
                 $this->isPaymentValid($invoice, $response); // check if payment is valid
 
-                $invoice->payment_status = Order::PAYMENT_STATUS_PAID; // change payment status
+                $invoice->payment_status = PaymentStatusEnum::paid()->value; // change payment status
                 $invoice->save();
 
-                $invoice->order->payment_status = $invoice->isLastInvoice() ? Order::PAYMENT_STATUS_PAID : Order::PAYMENT_STATUS_UNPAID;
+                $invoice->order->payment_status = $invoice->isLastInvoice() ? PaymentStatusEnum::paid()->value : PaymentStatusEnum::unpaid()->value;
                 $invoice->order->save();
 
                 echo 'OK';

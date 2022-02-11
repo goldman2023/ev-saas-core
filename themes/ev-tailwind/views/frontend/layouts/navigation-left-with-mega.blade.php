@@ -3,7 +3,6 @@
     <div class="flex justify-between items-center px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
         <div>
             <a href="{{ route('home') }}" class="flex">
-                <x-application-logo class="block w-auto h-[50px] text-gray-600 fill-current"/>
             </a>
         </div>
         <div class="-mr-2 -my-2 md:hidden">

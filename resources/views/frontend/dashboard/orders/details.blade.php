@@ -24,29 +24,29 @@
                     <div class="d-sm-flex align-items-sm-center">
                         <h1 class="page-header-title text-24 mr-3">{{ translate('Order') }} #{{ $order->id }}</h1>
 
-                        @if($order->payment_status === App\Models\Order::PAYMENT_STATUS_PAID)
+                        @if($order->payment_status === \App\Enums\PaymentStatusEnum::paid()->value)
                             <span class="badge badge-soft-success mr-3">
                               <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst(\Str::replace('_', ' ', $order->payment_status)) }}
                             </span>
-                        @elseif($order->payment_status === App\Models\Order::PAYMENT_STATUS_PENDING)
+                        @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::pending()->value)
                             <span class="badge badge-soft-warning  mr-3">
                               <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst(\Str::replace('_', ' ', $order->payment_status)) }}
                             </span>
-                        @elseif($order->payment_status === App\Models\Order::PAYMENT_STATUS_UNPAID)
+                        @elseif($order->payment_status === \App\Enums\PaymentStatusEnum::unpaid()->value)
                             <span class="badge badge-soft-danger  mr-3">
                               <span class="legend-indicator bg-danger mr-1"></span> {{ ucfirst(\Str::replace('_', ' ', $order->payment_status)) }}
                             </span>
                         @endif
 
-                        @if($order->shipping_status === App\Models\Order::SHIPPING_STATUS_DELIVERED)
+                        @if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value)
                             <span class="badge badge-soft-success  mr-2">
                               <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
                             </span>
-                        @elseif($order->shipping_status === App\Models\Order::SHIPPING_STATUS_SENT)
+                        @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value)
                             <span class="badge badge-soft-warning  mr-2">
                               <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
                             </span>
-                        @elseif($order->shipping_status === App\Models\Order::SHIPPING_STATUS_NOT_SENT)
+                        @elseif($order->shipping_status === \App\Enums\ShippingStatusEnum::not_sent()->value)
                             <span class="badge badge-soft-danger mr-2">
                               <span class="legend-indicator bg-danger mr-1"></span> {{ ucfirst(\Str::replace('_', ' ', $order->shipping_status)) }}
                             </span>
