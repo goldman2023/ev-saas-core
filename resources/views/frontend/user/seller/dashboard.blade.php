@@ -4,7 +4,7 @@
 
 <section>
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 we-horizontal-slider">
             <h5 class="text-white">{{ translate('Setup your company profile') }} </h5>
             <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget>
         </div>
@@ -16,8 +16,8 @@
 </section>
 
 <section>
-    <div class="row mb-3">
-        <div class="col-sm-4">
+    <div class="row mb-3 we-horizontal-slider">
+        <div class="col-10 col-sm-4">
             <x-default.dashboard.widgets.products-widget>
                 <a href="{{ route('ev-products.index') }}">
                     {{ translate('View all') }}
@@ -26,14 +26,14 @@
 
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-10 col-sm-4">
             <x-default.dashboard.widgets.orders-widget>
                 <a href="{{ route('orders.index') }}">
                     {{ translate('View all') }}
                 </a>
             </x-default.dashboard.widgets.orders-widget>
         </div>
-        <div class="col-sm-4">
+        <div class="col-10 col-sm-4">
             <x-default.dashboard.widgets.leads-widget>
 
                 <a href="{{ route('leads.index') }}">
