@@ -104,7 +104,8 @@ class ShopController extends Controller
         $user->save();
             $shop = new Shop;
             $shop->name = $request->company_name;
-            $shop->address = $request->address;
+            /* @vukasin TODO: Replace this with new way of adding address */
+            // $shop->address = $request->address;
             $shop->slug = preg_replace('/\s+/', '-', $request->name) . '-' . $shop->id;
 
             if ($shop->save()) {

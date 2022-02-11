@@ -46,3 +46,13 @@
 @import 'user';
 @import 'custom';
 
+
+.we-horizontal-slider {
+    @media(max-width: 768px) {
+        flex-wrap: nowrap !important;
+        overflow-x: scroll;
+        width: 100%;
+}
+
+}
+
