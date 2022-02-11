@@ -78,7 +78,7 @@
 </section>
 <section>
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             <x-default.dashboard.widgets.integration-stats-widget url="{{ route('analytics.index') }}" title="Website Analytics"
                 img="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png?hl=ar">
                 {{ translate('Track your website statictics') }}
@@ -86,7 +86,7 @@
             </x-default.dashboard.widgets.integration-stats-widget>
         </div>
 
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
 
         </div>
     </div>
@@ -94,12 +94,12 @@
 
 <section class="stats mb-3">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12">
 
             <x-default.dashboard.dashboard-summary.admin>
             </x-default.dashboard.dashboard-summary.admin>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             <div class="row">
                 <div class="col-12">
                     <x-default.dashboard.widgets.integrations-widget>
