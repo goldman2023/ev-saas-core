@@ -278,13 +278,10 @@ if (!function_exists('verified_sellers_id')) {
 
 //converts currency to home default currency
 if (!function_exists('convert_price')) {
-    function convert_price($price)
+    function convert_price($price, $base_currency = null)
     {
-        $system_default_currency = get_setting('system_default_currency');
-
-        if ($system_default_currency != null) {
-            $currency = Currency::find($system_default_currency);
-            $price = (float) $price / (float) $currency->exchange_rate;
+        if(($base_currency === \FX::getCurrency()->code) || empty($base_currency)) {
+            return $price;
         }
 
         $code = Cache::remember(tenant('id').'_system_default_currency', config('cache.stores.redis.ttl_redis_cache', 60), function () {
@@ -297,8 +294,7 @@ if (!function_exists('convert_price')) {
             $currency = Currency::where('code', $code)->first();
         }
 
-
-        $price = (float) $price * (float) $currency->exchange_rate;
+        $price = (float) $price / (float) Currency::getDefaultCurrency()->exchange_rate;
 
         return $price;
     }
