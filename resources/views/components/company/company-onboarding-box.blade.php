@@ -1,10 +1,7 @@
 <div class="card mb-3 mb-lg-5">
     <!-- Header -->
     <div class="card-header">
-        <x-ev.label
-        tag="h4"
-        class="card-header-title"
-        :label="ev_dynamic_translate('Welcome to Dashboard', true)">
+        <x-ev.label tag="h4" class="card-header-title" :label="ev_dynamic_translate('Welcome to Dashboard', true)">
         </x-ev.label>
 
 
@@ -18,39 +15,39 @@
                 <div class="mb-4">
                     <span class="card-subtitle mb-0">{{ translate('Your Company:') }}</span>
                     @php
-                        $company = auth()->user()->shop;
+                    $company = auth()->user()->shop;
                     @endphp
                     <h3>
-                        <a class="text-dark" href="{{ route('shop.visit', $company->slug) }}"> {{ $company->name }}
-                        </a>
+                        {{ $company->name }}
                     </h3>
                 </div>
 
                 @php
-                    $seller_package = \App\Models\SellerPackage::find(auth()->user()->seller->seller_package_id);
+                $seller_package = \App\Models\SellerPackage::find(auth()->user()->seller->seller_package_id);
                 @endphp
                 <span class="card-subtitle mb-0">{{ translate('Company Membership') }}</span>
                 @if ($seller_package != null)
 
-                    <h2 class="h1 text-primary">
-                        {{-- TODO: Make this dynamic based on subscription --}}
-                        {{ $seller_package->name }}
-                        @if ($seller_package->name !== 'Prime')
-                            <a href="{{ route('seller_packages_list') }}" class="display-5">
-                                <small style="font-size:12px;">{{ translate('(Upgrade your membership)') }}</small>
-                            </a>
+                <h2 class="h1 text-primary">
+                    {{-- TODO: Make this dynamic based on subscription --}}
+                    {{ $seller_package->name }}
+                    @if ($seller_package->name !== 'Prime')
+                    <a href="{{ route('seller_packages_list') }}" class="display-5">
+                        <small style="font-size:12px;">{{ translate('(Upgrade your membership)') }}</small>
+                    </a>
 
-                        @endif
-                        {{-- It can also be Free/Basic/Prime --}}
-                    </h2>
+                    @endif
+                    {{-- It can also be Free/Basic/Prime --}}
+                </h2>
                 @else
-                    <h2 class="h1 text-primary">
-                        <a href="{{ route('seller_packages_list') }}" class="">
-                            {{ translate('Prospect') }}
-                            <small style="font-size:12px;">{{ translate('*Your profile, has limited functionality') }}</small>
+                <h2 class="h1 text-primary">
+                    <a href="{{ route('seller_packages_list') }}" class="">
+                        {{ translate('Prospect') }}
+                        <small style="font-size:12px;">{{ translate('*Your profile, has limited functionality')
+                            }}</small>
 
-                        </a>
-                    </h2>
+                    </a>
+                </h2>
                 @endif
             </div>
 
@@ -67,8 +64,7 @@
                         data-content="Check out this Subscription plan modal example." data-html="true"
                         data-original-title="<div class='d-flex align-items-center'>Subscription plan <a href='#!' class='close close-light ml-auto'><i id='closeUpdatePlanPopover' class='tio-clear'></i></a></div>"
                         aria-describedby="popover385880">
-                        <a class="btn btn-primary"
-                            href="{{ route('shop.visit', auth()->user()->shop->slug) }}">
+                        <a class="btn btn-primary" href="{{ route('shop.visit', auth()->user()->shop->slug) }}">
                             {{ translate('View company Profile') }}
                         </a>
                     </div>
@@ -109,26 +105,26 @@
         <div class="row">
             <div class="col-auto">
                 @if ($company->company_has_logo())
-                    <del>
-                        <span class="legend-indicator bg-primary"></span> {{ translate('Add logo') }}
-                    </del>
+                <del>
+                    <span class="legend-indicator bg-primary"></span> {{ translate('Add logo') }}
+                </del>
                 @else
-                    <span class="legend-indicator bg-primary"></span>
-                    <a href="{{ route('shops.index') }}">
-                        {{ translate('Add logo') }}
-                    </a>
+                <span class="legend-indicator bg-primary"></span>
+                <a href="{{ route('shops.index') }}">
+                    {{ translate('Add logo') }}
+                </a>
                 @endif
             </div>
 
             <div class="col-auto">
                 @if ($company->company_has_description())
-                    <del>
-                        <span class="legend-indicator bg-primary opacity"></span> {{ translate('Add Company Data') }}
-                    </del>
+                <del>
+                    <span class="legend-indicator bg-primary opacity"></span> {{ translate('Add Company Data') }}
+                </del>
                 @else
-                    <a href="{{ route('shops.index') }}">
-                        <span class="legend-indicator bg-primary opacity"></span> {{ translate('Add Company Data') }}
-                    </a>
+                <a href="{{ route('shops.index') }}">
+                    <span class="legend-indicator bg-primary opacity"></span> {{ translate('Add Company Data') }}
+                </a>
                 @endif
             </div>
 
@@ -136,13 +132,13 @@
 
                 <span class="legend-indicator"></span>
                 @if ($company->company_has_category())
-                    <del>
-                        {{ translate('Choose categories') }}
-                    </del>
+                <del>
+                    {{ translate('Choose categories') }}
+                </del>
                 @else
-                    <a href="{{ route('attributes') }}">
-                        {{ translate('Choose categories') }}
-                    </a>
+                <a href="{{ route('attributes') }}">
+                    {{ translate('Choose categories') }}
+                </a>
                 @endif
             </div>
 
@@ -150,13 +146,13 @@
                 <span class="legend-indicator bg-primary"></span>
 
                 @if ($company->company_has_required_attributes())
-                    <del>
-                        {{ translate('Complete Company Profile') }}
-                    </del>
+                <del>
+                    {{ translate('Complete Company Profile') }}
+                </del>
                 @else
-                    <a href="{{ route('attributes') }}">
-                        {{ translate('Complete Company Profile') }}
-                    </a>
+                <a href="{{ route('attributes') }}">
+                    {{ translate('Complete Company Profile') }}
+                </a>
                 @endif
             </div>
         </div>
