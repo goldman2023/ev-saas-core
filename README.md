@@ -66,6 +66,11 @@ Run: UniversalPaymentMethodsTableSeeder.php:
 
 `php artisan tenants:seed --class=UniversalPaymentMethodsTableSeeder`
 
+# Ceating Products stock for all products which don't have it (like legacy products)
+Runs: CreateStockForAllProducts.php: 
+
+`php artisan command:create_product_stock --tenant_id={tenant_id}`
+
 # Dynamic Components for Label/Image/Button
 
 -   Labels
