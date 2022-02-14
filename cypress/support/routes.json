@@ -181,8 +181,8 @@
       "POST"
     ]
   },
-  "generated::sP6mysSFA7fbz6rS": {
-    "name": "generated::sP6mysSFA7fbz6rS",
+  "generated::m3eE7o5kqjXHyDCs": {
+    "name": "generated::m3eE7o5kqjXHyDCs",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\WebhookController@handleWebhook",
     "uri": "spark/webhook",
@@ -190,8 +190,8 @@
       "POST"
     ]
   },
-  "generated::0uNCWQtUQfrqrjU3": {
-    "name": "generated::0uNCWQtUQfrqrjU3",
+  "generated::NDnsylh8Pjw42EEq": {
+    "name": "generated::NDnsylh8Pjw42EEq",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\NewSubscriptionController",
     "uri": "spark/subscription",
@@ -199,8 +199,8 @@
       "POST"
     ]
   },
-  "generated::YTyHKRNiGic3UkbO": {
-    "name": "generated::YTyHKRNiGic3UkbO",
+  "generated::5WejZDFqi3pDkjDZ": {
+    "name": "generated::5WejZDFqi3pDkjDZ",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdateSubscriptionController",
     "uri": "spark/subscription",
@@ -208,8 +208,8 @@
       "PUT"
     ]
   },
-  "generated::sSZtMuDd8EBpuPIF": {
-    "name": "generated::sSZtMuDd8EBpuPIF",
+  "generated::YgaX43wv9c4M2NmW": {
+    "name": "generated::YgaX43wv9c4M2NmW",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\CancelSubscriptionController",
     "uri": "spark/subscription/cancel",
@@ -217,8 +217,8 @@
       "PUT"
     ]
   },
-  "generated::hZDNvN7SjbWBMbtU": {
-    "name": "generated::hZDNvN7SjbWBMbtU",
+  "generated::kZI8283w9e6fkDz9": {
+    "name": "generated::kZI8283w9e6fkDz9",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\ResumeSubscriptionController",
     "uri": "spark/subscription/resume",
@@ -226,8 +226,8 @@
       "PUT"
     ]
   },
-  "generated::eyVYVyDpt6ylZuEM": {
-    "name": "generated::eyVYVyDpt6ylZuEM",
+  "generated::B71j5wMIgZpgciEv": {
+    "name": "generated::B71j5wMIgZpgciEv",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdatePaymentMethodController",
     "uri": "spark/subscription/payment-method",
@@ -235,8 +235,8 @@
       "PUT"
     ]
   },
-  "generated::nSLzfLS98s75OIIn": {
-    "name": "generated::nSLzfLS98s75OIIn",
+  "generated::BElRLL1xZ45LJg6S": {
+    "name": "generated::BElRLL1xZ45LJg6S",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdateBillingInformationController",
     "uri": "spark/billing-information",
@@ -244,8 +244,8 @@
       "PUT"
     ]
   },
-  "generated::Sq0yLoQIjlSXz7oJ": {
-    "name": "generated::Sq0yLoQIjlSXz7oJ",
+  "generated::ttuWk8Mg3xmjHThe": {
+    "name": "generated::ttuWk8Mg3xmjHThe",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdateReceiptEmailsController",
     "uri": "spark/receipt-emails",
@@ -253,8 +253,8 @@
       "PUT"
     ]
   },
-  "generated::WpJYa1rhjnSQZMFJ": {
-    "name": "generated::WpJYa1rhjnSQZMFJ",
+  "generated::hAapucuTWrtzT9m4": {
+    "name": "generated::hAapucuTWrtzT9m4",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\ApplyCouponController",
     "uri": "spark/coupon",
@@ -262,8 +262,8 @@
       "PUT"
     ]
   },
-  "generated::aACy1kjLwxsyCn2k": {
-    "name": "generated::aACy1kjLwxsyCn2k",
+  "generated::GCMlDHM2sX8CrLK1": {
+    "name": "generated::GCMlDHM2sX8CrLK1",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\StripeTokenController",
     "uri": "spark/token",
@@ -272,8 +272,8 @@
       "HEAD"
     ]
   },
-  "generated::aCK5U0grsJevN2ah": {
-    "name": "generated::aCK5U0grsJevN2ah",
+  "generated::hJtoL2zk1CuE0SbC": {
+    "name": "generated::hJtoL2zk1CuE0SbC",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\TaxController",
     "uri": "spark/tax-rate",
@@ -329,8 +329,8 @@
       "HEAD"
     ]
   },
-  "generated::GbRbLrI128nvSlqn": {
-    "name": "generated::GbRbLrI128nvSlqn",
+  "generated::C7XmaFWlBhZ6G8ti": {
+    "name": "generated::C7XmaFWlBhZ6G8ti",
     "domain": null,
     "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@source",
     "uri": "livewire/livewire.js",
@@ -339,8 +339,8 @@
       "HEAD"
     ]
   },
-  "generated::X6HIslvtbd2bCOyC": {
-    "name": "generated::X6HIslvtbd2bCOyC",
+  "generated::LAl4MKGE62im2oDF": {
+    "name": "generated::LAl4MKGE62im2oDF",
     "domain": null,
     "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@maps",
     "uri": "livewire/livewire.js.map",
@@ -349,8 +349,8 @@
       "HEAD"
     ]
   },
-  "generated::QTuPJfjKpCVu2LFt": {
-    "name": "generated::QTuPJfjKpCVu2LFt",
+  "generated::9nSw8YU37RuU7qUN": {
+    "name": "generated::9nSw8YU37RuU7qUN",
     "domain": null,
     "action": "Mediconesystems\\LivewireDatatables\\Http\\Controllers\\FileExportController@handle",
     "uri": "datatables/{filename}",
@@ -359,8 +359,8 @@
       "HEAD"
     ]
   },
-  "generated::7Irnac4c37JH3AAL": {
-    "name": "generated::7Irnac4c37JH3AAL",
+  "generated::KBPkkTDfCK0FrYeX": {
+    "name": "generated::KBPkkTDfCK0FrYeX",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@getTaxRateForLocation",
     "uri": "vatcalculator/tax-rate-for-location/{country?}/{postal_code?}",
@@ -369,8 +369,8 @@
       "HEAD"
     ]
   },
-  "generated::Tk10AXg0UpChyIBk": {
-    "name": "generated::Tk10AXg0UpChyIBk",
+  "generated::nLrwI9KuGD7SM8M0": {
+    "name": "generated::nLrwI9KuGD7SM8M0",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@calculateGrossPrice",
     "uri": "vatcalculator/calculate",
@@ -379,8 +379,8 @@
       "HEAD"
     ]
   },
-  "generated::urrdA4B9fteNOon7": {
-    "name": "generated::urrdA4B9fteNOon7",
+  "generated::PcIVwzBfVWbdQAzd": {
+    "name": "generated::PcIVwzBfVWbdQAzd",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@getCountryCode",
     "uri": "vatcalculator/country-code",
@@ -389,8 +389,8 @@
       "HEAD"
     ]
   },
-  "generated::tGbsKbL2X98pMdyh": {
-    "name": "generated::tGbsKbL2X98pMdyh",
+  "generated::MG206g7FR7QCr9WY": {
+    "name": "generated::MG206g7FR7QCr9WY",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@validateVATID",
     "uri": "vatcalculator/validate-vat-id/{vat_id}",
@@ -3250,8 +3250,8 @@
       "HEAD"
     ]
   },
-  "generated::oR0ssDFsarzAr2St": {
-    "name": "generated::oR0ssDFsarzAr2St",
+  "generated::9PrdX6wmik4wsmEx": {
+    "name": "generated::9PrdX6wmik4wsmEx",
     "domain": "ev-saas.localhost",
     "action": "Closure",
     "uri": "refresh-csrf",
@@ -3318,8 +3318,8 @@
       "POST"
     ]
   },
-  "generated::V3N0Hwjlzj6mpU9B": {
-    "name": "generated::V3N0Hwjlzj6mpU9B",
+  "generated::n7CLuAp6IZ9eXhVV": {
+    "name": "generated::n7CLuAp6IZ9eXhVV",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@index",
     "uri": "sslcommerz/pay",
@@ -3328,8 +3328,8 @@
       "HEAD"
     ]
   },
-  "generated::Sxzvf9tbd1nwhbEa": {
-    "name": "generated::Sxzvf9tbd1nwhbEa",
+  "generated::9CGu7QmH4o0gd3mg": {
+    "name": "generated::9CGu7QmH4o0gd3mg",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@success",
     "uri": "sslcommerz/success",
@@ -3337,8 +3337,8 @@
       "POST"
     ]
   },
-  "generated::QOIVqioGYmLfbAGw": {
-    "name": "generated::QOIVqioGYmLfbAGw",
+  "generated::igkLJJ6SlCf4efj0": {
+    "name": "generated::igkLJJ6SlCf4efj0",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@fail",
     "uri": "sslcommerz/fail",
@@ -3346,8 +3346,8 @@
       "POST"
     ]
   },
-  "generated::96LakKURxGLn0CWe": {
-    "name": "generated::96LakKURxGLn0CWe",
+  "generated::F5doAsDwOSwwQFZ7": {
+    "name": "generated::F5doAsDwOSwwQFZ7",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@cancel",
     "uri": "sslcommerz/cancel",
@@ -3355,8 +3355,8 @@
       "POST"
     ]
   },
-  "generated::kC4D7Q9lcrrd599K": {
-    "name": "generated::kC4D7Q9lcrrd599K",
+  "generated::pT3dNlweTlgeBVX3": {
+    "name": "generated::pT3dNlweTlgeBVX3",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@ipn",
     "uri": "sslcommerz/ipn",
@@ -3383,8 +3383,8 @@
       "POST"
     ]
   },
-  "generated::rJEiqB67NvpPW9vv": {
-    "name": "generated::rJEiqB67NvpPW9vv",
+  "generated::DbcbTVgyzcxMhkl9": {
+    "name": "generated::DbcbTVgyzcxMhkl9",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PaystackController@handleGatewayCallback",
     "uri": "paystack/payment/callback",
@@ -3393,8 +3393,8 @@
       "HEAD"
     ]
   },
-  "generated::mggkZGomnW1r6IAD": {
-    "name": "generated::mggkZGomnW1r6IAD",
+  "generated::f6cNmdAkVqaFGOI6": {
+    "name": "generated::f6cNmdAkVqaFGOI6",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\VoguePayController@showForm",
     "uri": "vogue-pay",
@@ -3403,8 +3403,8 @@
       "HEAD"
     ]
   },
-  "generated::skbBX4Uim9rPQrgy": {
-    "name": "generated::skbBX4Uim9rPQrgy",
+  "generated::iiBlJT47uTWBSYYU": {
+    "name": "generated::iiBlJT47uTWBSYYU",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\VoguePayController@paymentSuccess",
     "uri": "vogue-pay/success/{id}",
@@ -3413,8 +3413,8 @@
       "HEAD"
     ]
   },
-  "generated::wbI19umpOu1c5BvI": {
-    "name": "generated::wbI19umpOu1c5BvI",
+  "generated::FkwE2iJIwESlaDmk": {
+    "name": "generated::FkwE2iJIwESlaDmk",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\VoguePayController@paymentFailure",
     "uri": "vogue-pay/failure/{id}",
@@ -3612,8 +3612,8 @@
       "OPTIONS"
     ]
   },
-  "generated::r9dOBCpNsyBUYI22": {
-    "name": "generated::r9dOBCpNsyBUYI22",
+  "generated::aiBMJYRTlI02cb7o": {
+    "name": "generated::aiBMJYRTlI02cb7o",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PayhereController@migrate_seller_package_payment",
     "uri": "migrate/products",
@@ -3697,8 +3697,8 @@
       "OPTIONS"
     ]
   },
-  "generated::OzjbKgked7T1lR6Y": {
-    "name": "generated::OzjbKgked7T1lR6Y",
+  "generated::8n78Sx2gpcrFdTyo": {
+    "name": "generated::8n78Sx2gpcrFdTyo",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\NgeniusController@migrate_ngenius",
     "uri": "migrate/database",
@@ -3902,8 +3902,8 @@
       "POST"
     ]
   },
-  "generated::boA7xp3n8epHSDnJ": {
-    "name": "generated::boA7xp3n8epHSDnJ",
+  "generated::0qoYG1bMdsL38FiH": {
+    "name": "generated::0qoYG1bMdsL38FiH",
     "domain": null,
     "action": "Closure",
     "uri": "sitemap.xml",
@@ -3912,8 +3912,8 @@
       "HEAD"
     ]
   },
-  "generated::kQHgrpSHRatiXaBe": {
-    "name": "generated::kQHgrpSHRatiXaBe",
+  "generated::nAJX8WJBPOHCOZNi": {
+    "name": "generated::nAJX8WJBPOHCOZNi",
     "domain": null,
     "action": "Closure",
     "uri": "refresh-csrf",
@@ -3922,8 +3922,8 @@
       "HEAD"
     ]
   },
-  "generated::mhhOOfF8NI7Jeqo5": {
-    "name": "generated::mhhOOfF8NI7Jeqo5",
+  "generated::6mOQqpdMhTZpM8b7": {
+    "name": "generated::6mOQqpdMhTZpM8b7",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@show_uploader",
     "uri": "aiz-uploader",
@@ -3931,8 +3931,8 @@
       "POST"
     ]
   },
-  "generated::d9EZsoP7SMfLatND": {
-    "name": "generated::d9EZsoP7SMfLatND",
+  "generated::ohWaMQse6pJZVpRN": {
+    "name": "generated::ohWaMQse6pJZVpRN",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@upload",
     "uri": "aiz-uploader/upload",
@@ -3940,8 +3940,8 @@
       "POST"
     ]
   },
-  "generated::MpGYh0CLvK0BgEPC": {
-    "name": "generated::MpGYh0CLvK0BgEPC",
+  "generated::vevg4iZWGZe1kSq0": {
+    "name": "generated::vevg4iZWGZe1kSq0",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@get_uploaded_files",
     "uri": "aiz-uploader/get_uploaded_files",
@@ -3950,8 +3950,8 @@
       "HEAD"
     ]
   },
-  "generated::syCOfi0NAAgj71ax": {
-    "name": "generated::syCOfi0NAAgj71ax",
+  "generated::PdqfCY22rMEsddi8": {
+    "name": "generated::PdqfCY22rMEsddi8",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@get_preview_files",
     "uri": "aiz-uploader/get_file_by_ids",
@@ -4281,8 +4281,8 @@
       "HEAD"
     ]
   },
-  "generated::aJUUQik6ZZhjix7g": {
-    "name": "generated::aJUUQik6ZZhjix7g",
+  "generated::6GSytBS9tgXZLRez": {
+    "name": "generated::6GSytBS9tgXZLRez",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Auth\\LoginController@login",
     "uri": "login",
@@ -4309,8 +4309,8 @@
       "HEAD"
     ]
   },
-  "generated::fZri5tBGAL42XG7m": {
-    "name": "generated::fZri5tBGAL42XG7m",
+  "generated::HuQ9dQixzvtox9kh": {
+    "name": "generated::HuQ9dQixzvtox9kh",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Auth\\RegisterController@register",
     "uri": "register",
@@ -4661,7 +4661,7 @@
   "product.single": {
     "name": "product.single",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@show",
+    "action": "App\\Http\\Controllers\\HomeController@product",
     "uri": "product/{slug}",
     "method": [
       "GET",
@@ -4862,8 +4862,8 @@
       "POST"
     ]
   },
-  "generated::iMg4FNJZ6qlTgV5A": {
-    "name": "generated::iMg4FNJZ6qlTgV5A",
+  "generated::YbL01fUrIzKqCyIE": {
+    "name": "generated::YbL01fUrIzKqCyIE",
     "domain": null,
     "action": "App\\Http\\Controllers\\StripePaymentController@stripe",
     "uri": "stripe",
@@ -5935,8 +5935,8 @@
       "HEAD"
     ]
   },
-  "generated::G8ul9pF0peH3cRFu": {
-    "name": "generated::G8ul9pF0peH3cRFu",
+  "generated::HX6GABRGOYosrbKP": {
+    "name": "generated::HX6GABRGOYosrbKP",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Integrations\\GetStreamControler@index",
     "uri": "feed/all",

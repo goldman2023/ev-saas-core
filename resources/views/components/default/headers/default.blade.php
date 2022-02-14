@@ -247,6 +247,7 @@
 
                     <li class="list-inline-item">
                         <a href="javascript:;" x-data=""
+                        data-test="we-login-header"
                             @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
                             {{ translate('Login') }}
                         </a>
