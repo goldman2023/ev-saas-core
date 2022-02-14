@@ -25,7 +25,6 @@ class PaymentMethodUniversal extends EVBaseModel
 
     public function shop()
     {
-        return $this->belongsToMany(Shop::class, 'payment_methods_universal_relationships', 'upm_id', 'shop_id')
-                ->withPivot('enabled');
+        return $this->belongsToMany(Shop::class, 'payment_methods_universal_relationships', 'upm_id', 'shop_id')->withPivot('enabled');
     }
 }

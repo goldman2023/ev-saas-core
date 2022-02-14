@@ -110,14 +110,14 @@
                             <td>{{ $key+1 }}</td>
                             <td>
                                 @if ($orderDetail->product != null)
-                                <a href="{{ $orderDetail->product->permalink }}" target="_blank"><img height="50" src="{{ uploaded_asset($orderDetail->product->thumbnail_img) }}"></a>
+                                <a href="{{ $orderDetail->product->getPermalink() }}" target="_blank"><img height="50" src="{{ uploaded_asset($orderDetail->product->thumbnail_img) }}"></a>
                                 @else
                                 <strong>{{ translate('N/A') }}</strong>
                                 @endif
                             </td>
                             <td>
                                 @if ($orderDetail->product != null)
-                                <strong><a href="{{ $orderDetail->product->permalink }}" target="_blank" class="text-muted">{{ $orderDetail->product->getTranslation('name') }}</a></strong>
+                                <strong><a href="{{ $orderDetail->product->getPermalink() }}" target="_blank" class="text-muted">{{ $orderDetail->product->getTranslation('name') }}</a></strong>
                                 <small>{{ $orderDetail->variation }}</small>
                                 @else
                                 <strong>{{ translate('Product Unavailable') }}</strong>

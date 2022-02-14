@@ -407,7 +407,7 @@
                                     <li class="py-3 px-0 list-group-item border-light">
                                         <div class="row gutters-10 align-items-center">
                                             <div class="col-5">
-                                                <a href="{{ $top_product->permalink }}"
+                                                <a href="{{ $top_product->getPermalink() }}"
                                                     class="d-block text-reset">
                                                     <img class="img-fit lazyload h-110px"
                                                         src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -418,7 +418,7 @@
                                             </div>
                                             <div class="col-7">
                                                 <h4 class="fs-13 text-truncate-2">
-                                                    <a href="{{ $top_product->permalink }}"
+                                                    <a href="{{ $top_product->getPermalink() }}"
                                                         class="d-block text-reset">{{ $top_product->getTranslation('name') }}</a>
                                                 </h4>
                                                 <div class="rating rating-sm mt-1">
@@ -606,7 +606,7 @@
                                         <div
                                             class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
                                             <div class="">
-                                                <a href="{{ $related_product->permalink }}"
+                                                <a href="{{ $related_product->getPermalink() }}"
                                                     class="d-block">
                                                     <img class="img-fit lazyload mx-auto h-140px h-md-210px"
                                                         src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -628,7 +628,7 @@
                                                     {{ renderStarRating($related_product->rating) }}
                                                 </div>
                                                 <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">
-                                                    <a href="{{ $related_product->permalink }}"
+                                                    <a href="{{ $related_product->getPermalink() }}"
                                                         class="d-block text-reset">{{ $related_product->getTranslation('name') }}</a>
                                                 </h3>
                                                 @if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated)
@@ -675,7 +675,7 @@
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" rows="8" name="message" required
-                                placeholder="{{ translate('Your Question') }}">{{ $detailedProduct->permalink }}</textarea>
+                                placeholder="{{ translate('Your Question') }}">{{ $detailedProduct->getPermalink() }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

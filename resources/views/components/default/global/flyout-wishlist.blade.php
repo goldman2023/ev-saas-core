@@ -35,5 +35,11 @@
             <livewire:tenant.wishlist-flyout></livewire:tenant.wishlist-flyout>
         @endif
     </div>
+
+    <div class="flyout-wishlist__bottom-cta  pt-3 mt-2 pb-0 bottom-0  bg-white border-top">
+        <a href="{{ route('my.purchases.all') }}" class="d-block btn btn-sm w-full bg-primary text-white text-center">
+            {{ translate('My wishlist') }}
+        </a>
+    </div>
 </x-default.global.flyout-panel>
 

@@ -41,10 +41,35 @@
     <span class="d-block text-14 mb-0">{{ $row->updated_at?->format('d.m.Y') ?? '' }}</span>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
-    <div class="btn-group" role="group">
+<x-livewire-tables::table.cell class="align-middle position-static">
+    <div class="btn-group position-static" role="group" x-data="{ isOpen: false }" x-cloak>
         <a class="btn btn-sm btn-white d-flex align-items-center" href="{{ route('plan.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'square-18 mr-2']) {{ translate('Edit') }}
         </a>
+
+        <button 
+            @click="isOpen = !isOpen" 
+            @keydown.escape="isOpen = false" 
+            class="d-flex align-items-center btn btn-xs" 
+        >
+            @svg('heroicon-o-chevron-down', ['class' => 'square-18'])
+        </button>
+        <ul x-show="isOpen"
+            @click.away="isOpen = false"
+            class="position-absolute bg-white z-10 list-style-none p-0 border rounded mt-7 shadow"
+        >
+            <li>
+                <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank" class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14">
+                    @svg('heroicon-o-link', ['class' => 'square-18'])
+                    <span class="ml-2">{{ translate('Copy checkout link') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14  border-top">
+                    @svg('heroicon-o-trash', ['class' => 'text-primary square-18'])
+                    <span class="ml-2">{{ translate('Remove plan') }}</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </x-livewire-tables::table.cell>

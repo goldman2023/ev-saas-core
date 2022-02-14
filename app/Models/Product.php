@@ -190,6 +190,15 @@ class Product extends EVBaseModel
     }
 
     /**
+     * Get the route name for the model.
+     *
+     * @return string
+     */
+    public static function getRouteName() {
+        return 'product.single';
+    }
+
+    /**
      * Get the route key for the model.
      *
      * @return string
@@ -197,7 +206,7 @@ class Product extends EVBaseModel
     public function getRouteKeyName()
     {
         return 'slug';
-    }
+    } 
 
     /**
      * Stream: Add extra activity data - task name, and user's display name:

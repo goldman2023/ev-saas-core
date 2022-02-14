@@ -130,7 +130,7 @@ class CartController extends Controller
             'display' => format_price(convert_price($price))
         ];
         $data['images'] = $product->getAllImages();
-        $data['permalink'] = $product->permalink;
+        $data['permalink'] = $product->getPermalink();
         $data['tax'] = $tax;
         $data['shipping'] = 0;
         $data['product_referral_code'] = null;

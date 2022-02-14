@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col col-md-12">
                         <h3 class="mb-0">
-                            <a class="text-dark" href="{{ $product->permalink }}">
+                            <a class="text-dark" href="{{ $product->getPermalink() }}">
                                 {{ $product->getTranslation('name') }}
                             </a>
                         </h3>
