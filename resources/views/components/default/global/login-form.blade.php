@@ -11,7 +11,6 @@ method="POST">
     </div>
     <!-- End Title -->
 
-
     @error('incorrect')
     <small class="text-danger">{{ $message }}</small>
     @enderror
