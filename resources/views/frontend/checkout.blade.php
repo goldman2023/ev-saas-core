@@ -815,7 +815,7 @@
                                             $has_variations = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->hasVariations();
                                             $name = ($item->hasMain()) ? $item->main->getTranslation('name') : $item->getTranslation('name');
                                             $excerpt = ($item->hasMain()) ? $item->main->getTranslation('excerpt') : $item->getTranslation('excerpt');
-                                            $permalink = ($item->hasMain()) ? $item->main->permalink : $item->permalink;
+                                            $permalink = ($item->hasMain()) ? $item->main->getPermalink() : $item->getPermalink();
                                             $variant_name = ($item->hasMain()) ? $item->getVariantName(key_by: 'name') : null;
                                         @endphp
 

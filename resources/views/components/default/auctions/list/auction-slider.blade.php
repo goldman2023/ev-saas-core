@@ -41,7 +41,7 @@
 
                 @foreach ($products as $key => $product)
                     <div class="col-3 col-sm text-center slick-slide position-relative">
-                        <a href="{{ $product->permalink }}" class="d-block rounded hov-shadow-md">
+                        <a href="{{ $product->getPermalink() }}" class="d-block rounded hov-shadow-md">
                             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
                                 class="lazyload mx-auto h-70px mw-100 bg-white" :image="$product->getThumbnail()">
                             </x-tenant.system.image>

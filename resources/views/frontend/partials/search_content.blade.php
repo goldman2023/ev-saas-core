@@ -4,7 +4,7 @@
         <ul class="list-group list-group-raw">
             @foreach ($products as $key => $product)
                 <li class="list-group-item">
-                    <a class="text-reset" href="{{ $product->permalink }}">
+                    <a class="text-reset" href="{{ $product->getPermalink() }}">
                         <div class="d-flex search-product align-items-center">
                             <div class="mr-3">
                                 <img class="w-100 img-fit rounded" src="{{ $product->getThumbnail(['w' => 100])}}">

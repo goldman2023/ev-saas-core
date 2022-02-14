@@ -1,5 +1,5 @@
 <!-- Card -->
-<a class="d-block border-bottom pb-5 mb-5" href="{{ $product->permalink }}">
+<a class="d-block border-bottom pb-5 mb-5" href="{{ $product->getPermalink() }}">
     <div class="row mx-md-n2">
         <div class="col-md-4 px-md-2 mb-3 mb-md-0">
             <div class="position-relative">

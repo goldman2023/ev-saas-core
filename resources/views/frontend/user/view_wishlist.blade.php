@@ -15,12 +15,12 @@
                 <div class="col-xxl-3 col-xl-4 col-lg-3 col-md-4 col-sm-6" id="wishlist_{{ $wishlist->id }}">
                     <div class="card mb-2 shadow-sm">
                         <div class="card-body">
-                            <a href="{{ $wishlist->product->permalink }}" class="d-block mb-3">
+                            <a href="{{ $wishlist->product->getPermalink() }}" class="d-block mb-3">
                                 <img src="{{ uploaded_asset($wishlist->product->thumbnail_img) }}" class="img-fit h-140px h-md-200px">
                             </a>
 
                             <h5 class="fs-14 mb-0 lh-1-5 fw-600 text-truncate-2">
-                                <a href="{{ $wishlist->product->permalink }}" class="text-reset">{{ $wishlist->product->getTranslation('name') }}</a>
+                                <a href="{{ $wishlist->product->getPermalink() }}" class="text-reset">{{ $wishlist->product->getTranslation('name') }}</a>
                             </h5>
                             <div class="rating rating-sm mb-1">
                                 {{ renderStarRating($wishlist->product->rating) }}

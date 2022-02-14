@@ -44,7 +44,7 @@
                     @foreach($products as $key => $product)
                         <tr>
                             <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
-                            <td><a href="{{ $product->permalink }}" class="text-muted" target="_blank"><b>{{ $product->getTranslation('name') }}</b></a></td>
+                            <td><a href="{{ $product->getPermalink() }}" class="text-muted" target="_blank"><b>{{ $product->getTranslation('name') }}</b></a></td>
                             <td>{{ ucfirst($product->added_by) }}</td>
                             <td>
 								<img src="{{ uploaded_asset($product->thumbnail_img)}}" alt="Image" class="w-50px">

@@ -1,5 +1,5 @@
-<div class="row mb-3 mx-n2">
-    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+<div class="row mb-3 mx-n2 we-horizontal-slider">
+    <div class="col-10 col-sm-6 col-lg px-2 mb-3">
         <!-- Card -->
         <div class="card card-bordered shadow-none h-100 card-complete">
             <div class="card-overlay text-center justify-content-center d-flex"
@@ -23,7 +23,7 @@
         <!-- End Card -->
     </div>
 
-    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+    <div class="col-10 col-sm-6 col-lg px-2 mb-3">
         <!-- Card -->
         <div class="card card-bordered shadow-none h-100">
             <div class="card-body pt-3 px-3 pb-0">
@@ -42,7 +42,7 @@
         <!-- End Card -->
     </div>
 
-    <div class="col-12 col-sm-6 col-lg px-2 mb-3">
+    <div class="col-10 col-sm-6 col-lg px-2 mb-3">
         <!-- Card -->
         <div class="card card-bordered shadow-none h-100">
             <div class="card-body pt-3 px-3 pb-0">

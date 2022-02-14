@@ -56,10 +56,15 @@ class FXService
         return $this->currency;
     }
 
+
+    public function getDefaultCurrency() {
+        return $this->default_currency;
+    }
+
     public function convertPrice($price, $base_currency = null)
     {
         // If the base_currency of the purchasable item is same as current currency, conversion is 1:1 aka. just return $price;
-        if($base_currency === $this->currency->code || empty($base_currency)) {
+        if(($base_currency === $this->currency->code) || empty($base_currency)) {
             return $price;
         }
 

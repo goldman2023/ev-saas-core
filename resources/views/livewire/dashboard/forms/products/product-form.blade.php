@@ -17,7 +17,7 @@
             @endif
         </span>
         <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            <a class="btn btn-white btn-sm mr-3" href="{{ $product->getPermalink() }}" target="_blank">{{ translate('Preview') }}</a>
             @if(!empty($product->id) && $insert_success)
                 <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
             @endif

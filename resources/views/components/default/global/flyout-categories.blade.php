@@ -28,7 +28,7 @@
                                         @if(!empty($parent->children) && $parent->children->isNotEmpty())
                                             @foreach($parent->children as $child)
                                                 @if($child->products_count > 0)
-                                                    <a class="dropdown-item d-flex justify-content-between align-items-center pl-3 pr-0" href="{{ $child->permalink }}">
+                                                    <a class="dropdown-item d-flex justify-content-between align-items-center pl-3 pr-0" href="{{ $child->getPermalink() }}">
                                                         {{ $child->name }}
                                                         <span class="badge border badge-pill">{{ $child->products_count }}</span>
                                                     </a>

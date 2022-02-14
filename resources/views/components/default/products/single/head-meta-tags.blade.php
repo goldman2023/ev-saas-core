@@ -16,7 +16,7 @@
 <!-- Open Graph data -->
 <meta property="og:title" content="{{ $product->meta_title }}" />
 <meta property="og:type" content="og:product" />
-<meta property="og:url" content="{{ $product->permalink }}" />
+<meta property="og:url" content="{{ $product->getPermalink() }}" />
 <meta property="og:image" content="{{ $product->getMetaImg() }}" />
 <meta property="og:description" content="{{ $product->meta_description }}" />
 <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />

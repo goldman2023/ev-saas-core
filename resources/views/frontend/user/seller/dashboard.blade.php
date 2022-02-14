@@ -4,7 +4,7 @@
 
 <section>
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 we-horizontal-slider">
             <h5 class="text-white">{{ translate('Setup your company profile') }} </h5>
             <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget>
         </div>
@@ -16,8 +16,8 @@
 </section>
 
 <section>
-    <div class="row mb-3">
-        <div class="col-sm-4">
+    <div class="row mb-3 we-horizontal-slider">
+        <div class="col-10 col-sm-4">
             <x-default.dashboard.widgets.products-widget>
                 <a href="{{ route('ev-products.index') }}">
                     {{ translate('View all') }}
@@ -26,14 +26,14 @@
 
         </div>
 
-        <div class="col-sm-4">
+        <div class="col-10 col-sm-4">
             <x-default.dashboard.widgets.orders-widget>
                 <a href="{{ route('orders.index') }}">
                     {{ translate('View all') }}
                 </a>
             </x-default.dashboard.widgets.orders-widget>
         </div>
-        <div class="col-sm-4">
+        <div class="col-10 col-sm-4">
             <x-default.dashboard.widgets.leads-widget>
 
                 <a href="{{ route('leads.index') }}">
@@ -78,7 +78,7 @@
 </section>
 <section>
     <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             <x-default.dashboard.widgets.integration-stats-widget url="{{ route('analytics.index') }}" title="Website Analytics"
                 img="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png?hl=ar">
                 {{ translate('Track your website statictics') }}
@@ -86,7 +86,7 @@
             </x-default.dashboard.widgets.integration-stats-widget>
         </div>
 
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
 
         </div>
     </div>
@@ -94,12 +94,12 @@
 
 <section class="stats mb-3">
     <div class="row">
-        <div class="col-6">
+        <div class="col-12">
 
             <x-default.dashboard.dashboard-summary.admin>
             </x-default.dashboard.dashboard-summary.admin>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             <div class="row">
                 <div class="col-12">
                     <x-default.dashboard.widgets.integrations-widget>

@@ -6,43 +6,15 @@ use Route;
 
 trait PermalinkTrait
 {
-    public string $permalink = '#';
+    abstract public static function getRouteName();
 
-    /**
-     * Boot the trait
-     *
-     * @return void
-     */
-    protected static function bootPermalinkTrait()
-    {
-        // When model data is retrieved, populate $permalink
-        static::retrieved(function ($model) {
-            $routeKeyName = method_exists($model, 'getRouteKeyName') ? $model->getRouteKeyName() : 'slug';
-            $routeName = app($model::class)::ROUTING_SINGULAR_NAME_PREFIX.'.single';
+    public function getPermalink() {
+        $routeKeyName = method_exists($this, 'getRouteKeyName') ? $this->getRouteKeyName() : 'slug';
 
-            if (!empty($model->attributes[$routeKeyName] ?? null) && Route::has($routeName)) {
-                $model->permalink = route($routeName, $model->attributes[$routeKeyName]);
-            }
-        });
-    }
+        if (!empty($this->attributes[$routeKeyName] ?? null) && Route::has($this->getRouteName())) {
+            return route($this->getRouteName(), $this->attributes[$routeKeyName]);
+        }
 
-    /**
-     * Initialize the trait
-     *
-     * @return void
-     */
-    protected function initializePermalinkTrait(): void
-    {
-        $this->append(['permalink']);
-    }
-
-    /**
-     * Get the ContentType permalink
-     *
-     * @return string $permalink
-     */
-    public function getPermalinkAttribute()
-    {
-        return $this->permalink;
+        return '#';
     }
 }

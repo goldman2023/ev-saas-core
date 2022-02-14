@@ -1,7 +1,7 @@
 <div class="ev-product-card card card-bordered shadow-none text-left h-100">
     <div class="position-relative">
 
-        <a class="card-img-top" href="{{ $product->permalink }}">
+        <a class="card-img-top" href="{{ $product->getPermalink() }}">
             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
                 class="card-img-top ev-product-card__img" fit="cover" :image="$product->getThumbnail()">
             </x-tenant.system.image>
@@ -20,12 +20,12 @@
 
     <div class="card-body pt-3 px-3 pb-0">
         <div class="mb-2">
-            <a class="d-inline-block text-body small font-weight-bold mb-1" href="{{ $product->permalink }}">
+            <a class="d-inline-block text-body small font-weight-bold mb-1" href="{{ $product->getPermalink() }}">
                 {{ $product->getCondition() ?? '' }}
 
             </a>
             <span class="d-block h4 font-weight-bold">
-                <a class="text-inherit" href="{{ $product->permalink }}">
+                <a class="text-inherit" href="{{ $product->getPermalink() }}">
                     {{ $product->getTranslation('name') }}
                 </a>
             </span>
@@ -33,7 +33,7 @@
             <div class="mb-3">
                 <a class="d-inline-flex align-items-center small" href="#">
                     <div class="text-warning mr-2">
-                        <a class="d-inline-block text-body small font-weight-bold" href="{{ $product->permalink }}">
+                        <a class="d-inline-block text-body small font-weight-bold" href="{{ $product->getPermalink() }}">
 
                             <x-tenant.system.image class="ev-brand-image-small"
                                 :image='uploaded_asset($product->brand->logo ?? "")'>
@@ -61,13 +61,13 @@
         </div>
 
         {{-- TODO: Make an option to manage what buttons are visible --}}
-        {{-- <a href="{{ $product->permalink }}" type="button"
+        {{-- <a href="{{ $product->getPermalink() }}" type="button"
             class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
             {{ translate('Add to Cart') }}
         </a> --}}
         <div class="hover-only">
 
-            <a href="{{ $product->permalink }}" type="button"
+            <a href="{{ $product->getPermalink() }}" type="button"
                 class="ml-1 btn btn-sm btn-primary btn-pill transition-3d-hover">
                 {{ translate('View Product') }}
             </a>
