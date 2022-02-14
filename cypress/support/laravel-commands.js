@@ -65,6 +65,35 @@ Cypress.Commands.add('loginAsSeller', (attributes = {}) => {
         });
 });
 
+Cypress.Commands.add('loginAsCustomer', (attributes = {}) => {
+    // Are we using the new object system.
+    let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
+    cy.visit({
+        route: 'home'
+    });
+
+    /* Get the header login button on desktop */
+    cy.get('[data-test="we-login-header"]')
+        .click()
+
+    cy.get('[data-test="we-login-email"]')
+        .type('customer@eim.solutions')
+
+    cy.get('[data-test="we-login-password"]')
+        .type('123456789')
+
+    cy.get('[data-test="we-login-submit"]')
+        .click()
+
+        // Cypress.Laravel.currentUser = body;
+
+        Cypress.log({
+            name: 'login',
+            message: JSON.stringify('login as seller'),
+            consoleProps: () => ({ user: 'login' }),
+        });
+});
+
 
 /**
  * Logout the current user.
