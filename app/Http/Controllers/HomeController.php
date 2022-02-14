@@ -404,7 +404,6 @@ class HomeController extends Controller
         return view('frontend.track_order');
     }
 
-
     public function filter_shop($slug, $type)
     {
         $shop  = Shop::where('slug', $slug)->first();
