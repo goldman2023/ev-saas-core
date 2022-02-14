@@ -1,5 +1,32 @@
-# We-SaaS Core
-We-SaaS is a no-code SaaS and Customer Self-Service Platform. 
+We-SaaS Core. This is a repository of multitenancy SaaS Application builder We-SaaS. 
+
+# General Information
+
+Documentation URL: https://docs.we-saas.com
+
+Production url: https://app.we-saas.com
+
+Staging URL: https://ev-saas.com
+
+Cypress Dashboard: https://dashboard.cypress.io/projects/1fmcmw/runs
+
+Asana Board: https://app.asana.com/0/1201613541420424/list
+
+<div style="position: relative; padding-bottom: 60.810810810810814%; height: 0;">
+<iframe src="https://www.loom.com/embed/3f94edc7d7fd450391b1710156151f69" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+</div>
+
+# Features
+
+- multi-tenancy
+- multilanguage
+- multcurrency
+- advanced permissions management
+- stripe payment gateway and stripe checkout option
+- scheduling
+- email templates
+- email notifications
+- real-time chat
 
 ## Documentation
 Documentation can be found at: https://docs.we-saas.com/
