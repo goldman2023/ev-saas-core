@@ -3,7 +3,7 @@
     @if (!isset($category_id))
         @foreach (\App\Models\Category::where('level', 0)->get() as $category)
             <li class="pt-3">
-                <a class="" href="{{ route('products.category', $category->slug) }}">
+                <a class="" href="{{ route('category.products.index', $category->slug) }}">
                     {{ $category->getTranslation('name') }}
                 </a>
             </li>

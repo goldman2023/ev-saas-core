@@ -45,7 +45,7 @@
         <ul class="list-group list-group-raw">
             @foreach ($categories as $key => $category)
                 <li class="list-group-item py-1">
-                    <a class="text-reset hov-text-primary" href="{{ route('products.category', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
+                    <a class="text-reset hov-text-primary" href="{{ route('category.products.index', $category->slug) }}">{{ $category->getTranslation('name') }}</a>
                 </li>
             @endforeach
         </ul>

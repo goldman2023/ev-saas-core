@@ -8,7 +8,7 @@
     <ul class="list-unstyled categories no-scrollbar py-2 mb-0 text-left">
         @foreach (\App\Models\Category::where('level', 0)->orderBy('order_level', 'desc')->get()->take(11) as $key => $category)
             <li class="category-nav-element" data-id="{{ $category->id }}">
-                <a href="{{ route('products.category', $category->slug) }}" class="text-truncate text-reset py-2 px-3 d-block">
+                <a href="{{ route('category.products.index', $category->slug) }}" class="text-truncate text-reset py-2 px-3 d-block">
                     {{-- <img
                         class="cat-image mr-2 opacity-60"
                         src="{{ uploaded_asset($category->icon) }}"

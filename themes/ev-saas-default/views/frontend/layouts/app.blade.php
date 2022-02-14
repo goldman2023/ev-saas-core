@@ -166,6 +166,24 @@
         @php
         echo get_setting('footer_script');
         @endphp
+
+        @auth
+            {{-- Gleap IO Integration
+                Documentation: https://docs.gunob.com/gunob-marketplace/report-a-bug
+
+                Only for admins
+
+                FUTURE TODO: Add an user setting beta_tester and then show this also
+                --}}
+                @if(auth()->user()->isAdmin())
+                <script>
+                    !function(Gleap,e,key){if(window.GleapActions=[],Gleap=window.Gleap=window.Gleap||[],!Gleap.invoked){for(Gleap.invoked=!0,Gleap.methods=['identify','clearIdentity','attachCustomData','setCustomData','removeCustomData','clearCustomData','registerCustomAction','logEvent','sendSilentBugReport','startFeedbackFlow','open','hide','on','setLanguage','setLiveSite','initialize'],Gleap.f=function(e){return function(){var a=Array.prototype.slice.call(arguments);window.GleapActions.push({e,a});};},e=0;e<Gleap.methods.length;e++)key=Gleap.methods[e],Gleap[key]=Gleap.f(key);Gleap.load=function(k){var b='https://gleapcdn.com/latest/';var h=document.getElementsByTagName('head')[0];var n=document.createElement('link');n.onload=function(){var t=document.createElement('script');t.type='text/javascript',t.async=!0,t.src=b+'index.js',h.appendChild(t);},n.rel='stylesheet',n.type='text/css',n.href=b+'index.min.css',n.media='all',h.appendChild(n);},Gleap.load(),
+                    Gleap.initialize('21KEv5MH1KOJWJ1cEps24tiakTNX9Fau');
+                    }}();
+                    </script>
+                @endif
+
+        @endauth
 </body>
 
 </html>

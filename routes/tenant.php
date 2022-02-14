@@ -137,7 +137,7 @@ Route::middleware([
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
     Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
-    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_products.category');
+    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_category.products.index');
     Route::get('/customer-products?city={city_id}', [CustomerProductController::class, 'search'])->name('customer_products.city');
     Route::get('/customer-products?q={search}', [CustomerProductController::class, 'search'])->name('customer_products.search');
     Route::get('/customer-products/admin', [HomeController::class, 'profile_edit'])->name('customer.profile.edit');
@@ -151,7 +151,7 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [HomeController::class, 'product'])->name(Product::getRouteName());
+    Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
@@ -167,7 +167,7 @@ Route::middleware([
     Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
-    
+
     Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
 
 
@@ -203,7 +203,7 @@ Route::middleware([
 //        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
     });
 
-    
+
 
 
     Route::post('/cart/nav-cart-items', [CartController::class, 'updateNavCart'])->name('cart.nav_cart');

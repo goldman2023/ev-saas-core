@@ -236,7 +236,7 @@
             <!-- Nav -->
             <nav class="js-mega-menu navbar navbar-expand-lg">
                 <!-- Logo -->
-                <a class="navbar-brand" href="#" aria-label="Front">
+                <a class="navbar-brand" href="#">
                     @php
                         $header_logo = get_setting('header_logo');
                     @endphp

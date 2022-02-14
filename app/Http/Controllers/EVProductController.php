@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use EVS;
 use App\Models\Product;
+use App\Models\Shop;
 use Auth;
 use Categories;
 use Illuminate\Http\Request;
@@ -92,4 +93,36 @@ class EVProductController extends Controller
 //        return null;
         return view('frontend.products.archive', compact('products', 'shops', 'selected_category'));
     }
+
+
+    public function show(Request $request, $slug)
+    {
+        /* TODO This is duplicate for consistent naming, let's refactor to better approach */
+        $product  = Product::where('slug', $slug)->first()->load(['shop']);
+//        dd($product->custom_attributes);
+        if (empty($product->shop)) {
+            /* TODO: Default value for products with no shops falls back to shop_id 1 */
+            $product->shop = Shop::first();
+        }
+
+        if (!empty($product) && $product->published) {
+
+            if (auth()->check()) {
+                $user = auth()->user();
+            } else {
+                $user = null;
+            }
+
+            activity()
+                ->performedOn($product)
+                ->causedBy($user)
+                ->withProperties(['action' => 'viewed'])
+                ->log('User viewed a product');
+        }
+        /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
+
+        $template = 'product-single-1';
+        return view('frontend.product.single.' . $template, compact('product'));
+    }
+
 }

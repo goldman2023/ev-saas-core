@@ -404,54 +404,6 @@ class HomeController extends Controller
         return view('frontend.track_order');
     }
 
-    public function product(Request $request, $slug)
-    {
-        /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $product  = Product::where('slug', $slug)->first()->load(['shop']);
-//        dd($product->custom_attributes);
-        if (empty($product->shop)) {
-            /* TODO: Default value for products with no shops falls back to shop_id 1 */
-            $product->shop = Shop::first();
-        }
-
-        if (!empty($product) && $product->published) {
-            if (
-                $request->has('product_referral_code') &&
-                \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first() != null &&
-                \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first()->activated
-            ) {
-
-                $affiliate_validation_time = \App\Models\AffiliateConfig::where('type', 'validation_time')->first();
-                $cookie_minute = 30 * 24;
-                if ($affiliate_validation_time) {
-                    $cookie_minute = $affiliate_validation_time->value * 60;
-                }
-                Cookie::queue('product_referral_code', $request->product_referral_code, $cookie_minute);
-                Cookie::queue('referred_product_id', $detailedProduct->id, $cookie_minute);
-
-                $referred_by_user = User::where('referral_code', $request->product_referral_code)->first();
-
-                $affiliateController = new AffiliateController;
-                $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
-            }
-
-            if (auth()->check()) {
-                $user = auth()->user();
-            } else {
-                $user = null;
-            }
-
-            activity()
-                ->performedOn($product)
-                ->causedBy($user)
-                ->withProperties(['action' => 'viewed'])
-                ->log('User viewed a product');
-        }
-
-        return view('frontend.products.show', compact('product'));
-    }
-
-
     public function filter_shop($slug, $type)
     {
         $shop  = Shop::where('slug', $slug)->first();

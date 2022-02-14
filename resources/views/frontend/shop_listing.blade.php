@@ -43,7 +43,7 @@ if (empty($banner3->refer_url)) {
                     @if (isset($category_id))
                         <li class="text-dark fw-600 breadcrumb-item">
                             <a class="text-reset"
-                                href="{{ route('products.category', \App\Models\Category::find($category_id)->slug) }}">"{{ \App\Models\Category::find($category_id)->getTranslation('name') }}"</a>
+                                href="{{ route('category.products.index', \App\Models\Category::find($category_id)->slug) }}">"{{ \App\Models\Category::find($category_id)->getTranslation('name') }}"</a>
                         </li>
                     @endif
                 </ul>

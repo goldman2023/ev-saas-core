@@ -20,7 +20,7 @@
                             @endif
                             <span class="cat-name">{{ $category->name }}</span>
                         </a>
-                        
+
                         {{-- TODO: Categories dropdown menu updates --}}
                         {{-- @if (count($category['children']) > 0)
                             <div class="sub-cat-menu c-scrollbar-light rounded shadow-lg p-4">

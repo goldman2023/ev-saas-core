@@ -30,7 +30,7 @@ class ProductDetailCollection extends ResourceCollection
                         'banner' => api_asset($data->category->banner),
                         'icon' => $data->category->icon,
                         'links' => [
-                            'products' => route('api.products.category', $data->category_id),
+                            'products' => route('api.category.products.index', $data->category_id),
                             'sub_categories' => route('subCategories.index', $data->category_id)
                         ]
                     ],
