@@ -65,7 +65,6 @@ class LoginController extends Controller
 
         // check if they're an existing user
         $existingUser = User::where('provider_id', $user->id)->orWhere('email', $user->email)->first();
-        dd($existingUser);
         if($existingUser){
             // log them in
             auth()->login($existingUser, true);
@@ -112,6 +111,8 @@ class LoginController extends Controller
      */
     public function authenticated()
     {
+        $request->session()->flash('message', 'Congratulations, you have cracked the code!');
+
         if(auth()->user()->isAdmin() || auth()->user()->isStaff())
         {
             // CoreComponentRepository::instantiateShopRepository();
@@ -148,6 +149,8 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        flash()->info('Bye', 'You have been successfully logged out!');
+
         if(auth()->user() != null && (auth()->user()->isAdmin() || auth()->user()->isStaff())){
             $redirect_route = 'login';
         }
@@ -159,8 +162,25 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
 
+        session()->flash('message', '🔓 You have sucefully logged out!');
+
+
         return $this->loggedOut($request) ?: redirect()->route($redirect_route);
     }
+
+    /**
+ * Get the post register / login redirect path.
+ *
+ * @return string
+ */
+public function redirectPath()
+{
+    // Do your logic to flash data to session...
+    session()->flash('message', 'You have sucefully logged in!');
+
+    // Return the results of the method we are overriding that we aliased.
+    return $this->laravelRedirectPath();
+}
 
     /**
      * Create a new controller instance.
