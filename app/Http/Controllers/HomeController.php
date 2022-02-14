@@ -448,7 +448,7 @@ class HomeController extends Controller
                 ->log('User viewed a product');
         }
 
-        return view('frontend.product.show', compact('product'));
+        return view('frontend.products.show', compact('product'));
     }
 
 
