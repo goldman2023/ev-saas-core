@@ -92,7 +92,7 @@ class Shop extends EVBaseModel
     public function getRouteKeyName()
     {
         return 'slug';
-    } 
+    }
 
     public function seller()
     {
@@ -189,12 +189,6 @@ class Shop extends EVBaseModel
         $website['href'] = $website_attribute;
 
         return $website;
-    }
-
-    public function getPermalinkAttribute() {
-        /* TODO: Make this consistent with naming convention
-        Overiding for custom route names */
-        return route('shop.visit', $this->slug);
     }
 
     public function get_company_logo()
