@@ -44,7 +44,7 @@
                                 <h3 class="c-category-list-sidebar__top-item h5 fw-500 d-flex justify-content-between align-items-center px-0 mb-1 {{ $is_collapsed }}"
                                     data-toggle="collapse" href="#{{ 'collapse-section-'.$category->slug_path }}" role="button" aria-expanded="false" aria-controls="{{ 'collapse-section-'.$category->slug_path }}"
                                 >
-                                    <a class="text-inherit" href="{{ route('category.products.index', $category->slug) }}">{{ $category->getTranslation('name') ?? '' }}</a>
+                                    <a class="text-inherit" href="{{ $category->getPermalink('products') }}">{{ $category->getTranslation('name') ?? '' }}</a>
 
                                     @if(!empty($category->children) && $category->children->isNotEmpty())
                                         @svg('heroicon-o-chevron-down', ['class' => 'ev-icon ev-icon__xs'])
@@ -72,7 +72,7 @@ function recursiveTemplate($children, $parent, $selectedCategory, $show = false)
 @endphp
     <a class="c-category-list-sidebar__submenu-item dropdown-item d-flex justify-content-between align-items-center px-0
         @if(Str::startsWith($selectedCategory->slug_path ?? null, $category->slug_path)) active @endif
-    " href="{{ route('category.products.index', $category->slug) }}">
+    " href="{{  $category->getPermalink('products') }}">
         <span class="pr-1 flex-text-ellipsis">{{ $category->getTranslation('name') }}</span>
         <span class="badge border badge-pill">{{ $category->products_count ?? '' }}</span>
     </a>
