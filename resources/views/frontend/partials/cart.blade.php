@@ -27,7 +27,7 @@
                     @if ($product != null)
                         <li class="list-group-item">
                             <span class="d-flex align-items-center">
-                                <a href="{{ $product->permalink }}" class="text-reset d-flex align-items-center flex-grow-1">
+                                <a href="{{ $product->getPermalink() }}" class="text-reset d-flex align-items-center flex-grow-1">
                                     <img
                                         src="{{ static_asset('assets/img/placeholder.jpg') }}"
                                         data-src="{{ uploaded_asset($product->thumbnail_img) }}"

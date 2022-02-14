@@ -20,7 +20,7 @@
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" rows="8" name="message" required
-                                placeholder="{{ translate('Your Question') }}">{{ $product->permalink }}</textarea>
+                                placeholder="{{ translate('Your Question') }}">{{ $product->getPermalink() }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -54,7 +54,7 @@ class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHe
             'new',
             /*  TODO: Make currency dynamic */
             $price,
-            $product->permalink,
+            $product->getPermalink(),
             $product->getThumbnail(),
             $brand
         ];

@@ -18,7 +18,7 @@
     <!-- Open Graph data -->
     <meta property="og:title" content="{{ $customer_product->meta_title }}" />
     <meta property="og:type" content="product" />
-    <meta property="og:url" content="{{ $customer_product->permalink }}" />
+    <meta property="og:url" content="{{ $customer_product->getPermalink() }}" />
     <meta property="og:image" content="{{ uploaded_asset($customer_product->meta_img) }}" />
     <meta property="og:description" content="{{ $customer_product->meta_description }}" />
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />

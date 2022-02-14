@@ -31,8 +31,13 @@ trait IsPaymentMethod
             // Save dynamic properties to Data
             $model->dynamicPaymentMethodPropertiesWalker(function($property) use (&$model) {
                 $data = $model->data;
-                 // TODO: FIX treating array as object error!
-                $data->{$property['property_name']} = $model->{$property['property_name']} ?? null;
+                
+                 if(is_object($data)) {
+                    $data->{$property['property_name']} = $model->{$property['property_name']} ?? null;
+                 } else if(is_array($data)) {
+                    $data[$property['property_name']] = $model[$property['property_name']] ?? null;
+                 }
+                
                 $model->data = $data;
             });
         });

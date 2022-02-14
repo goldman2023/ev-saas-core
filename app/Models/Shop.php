@@ -10,6 +10,8 @@ use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\PermalinkTrait;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 /**
  * App\Models\Shop
@@ -50,16 +52,47 @@ use App\Traits\PermalinkTrait;
 
 class Shop extends EVBaseModel
 {
+    use HasSlug;
     use RegeneratesCache;
 
     use AttributeTrait;
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
+    use PermalinkTrait;
 
     protected $table = 'shops';
 
     protected $fillable = ['name', 'slug', 'excerpt', 'content', 'meta_title', 'meta_description'];
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the route name for the model.
+     *
+     * @return string
+     */
+    public static function getRouteName() {
+        return 'shop.single';
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    } 
 
     public function seller()
     {

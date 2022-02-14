@@ -23,7 +23,7 @@
     <!-- Open Graph data -->
     <meta property="og:title" content="{{ $blog->meta_title }}"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{ $blog->permalink }}"/>
+    <meta property="og:url" content="{{ $blog->getPermalink() }}"/>
     <meta property="og:image" content="{{ uploaded_asset($blog->meta_img) }}"/>
     <meta property="og:description" content="{{ $blog->meta_description }}"/>
     <meta property="og:site_name" content="{{ env('APP_NAME') }}"/>

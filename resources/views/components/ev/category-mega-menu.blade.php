@@ -10,18 +10,17 @@
             </div>
             <ul class="list-unstyled categories no-scrollbar py-2 mb-0 text-left">
                 @foreach ($categories as $key => $category)
-                    <li class="category-nav-element" data-id="{{ $category['id'] }}"
-                        data-sub="{{ json_encode($category['children']) }}">
-                        <a href="{{ route('products.category', $category['slug']) }}"
+                    <li class="category-nav-element" data-id="{{ $category->id }}"
+                        data-sub="{{ json_encode($category->children) }}">
+                        <a href="{{ $category->getPermalink() }}"
                             class="text-truncate text-reset py-2 px-3 d-block">
 
-                            @if ($category['icon'])
-                                <img class="cat-image mr-2 opacity-60" src="{{ uploaded_asset($category['icon']) }}"
-                                    width="32">
-
+                            @if(!empty($category->getUpload('icon')))
+                                <img class="cat-image mr-2 opacity-60" src="{{ $category->getUpload('icon', ['w'=>100]) }}" width="32">
                             @endif
-                            <span class="cat-name">{{ $category['name'] }}</span>
+                            <span class="cat-name">{{ $category->name }}</span>
                         </a>
+                        
                         {{-- TODO: Categories dropdown menu updates --}}
                         {{-- @if (count($category['children']) > 0)
                             <div class="sub-cat-menu c-scrollbar-light rounded shadow-lg p-4">

@@ -252,7 +252,7 @@
 
                 <div class="media-body">
                     <h4 class="mb-1">
-                        <a class="text-dark" href="{{ $product->shop->permalink }}">{{ $product->shop->name }}</a>
+                        <a class="text-dark" href="{{ $product->shop->getPermalink() }}">{{ $product->shop->name }}</a>
                     </h4>
 
 

@@ -34,4 +34,14 @@ trait Purchasable
         return $this->purchase_quantity;
     }
 
+    public function getSingleCheckoutPermalink() {
+        $data = base64_encode(json_encode([
+            'id' => $this->id,
+            'class' => $this::class,
+            'qty' => 1
+        ]));
+
+        return route('checkout.single.page').'?data='.$data;
+    }
+
 }
