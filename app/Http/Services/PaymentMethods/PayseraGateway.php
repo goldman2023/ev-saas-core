@@ -48,6 +48,7 @@ class PayseraGateway
 
     public function pay() {
         try {
+            // TODO: check Paysera 
             WebToPay::redirectToPayment([
                 'projectid' => $this->payment_method->paysera_project_id,
                 'sign_password' => $this->payment_method->paysera_project_password,

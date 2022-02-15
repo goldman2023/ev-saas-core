@@ -6,6 +6,7 @@ use App\Http\Services\PermissionsService;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Policies\ProductPolicy;
+use App\Policies\ShopPolicy;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

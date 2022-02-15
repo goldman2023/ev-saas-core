@@ -8,6 +8,7 @@ use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
@@ -80,6 +81,9 @@ Route::middleware([
         Route::get('/plans', [EVPlanController::class, 'index'])->name('plans.index');
         Route::get('/plans/create', [EVPlanController::class, 'create'])->name('plan.create');
         Route::get('/plans/edit/{id}', [EVPlanController::class, 'edit'])->name('plan.edit');
+
+        /* Attributes */
+        Route::get('/attributes/{content}', [EVAttributesController::class, 'index'])->name('attributes.index');
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
