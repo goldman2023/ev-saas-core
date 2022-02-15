@@ -91,6 +91,7 @@ class PaymentMethodCard extends Component
 
     public function toggle($enabled) {
         $this->paymentMethod->enabled = false;
+        $this->paymentMethod->save();
         $this->validate();
 
         $this->paymentMethod->enabled = $enabled;
