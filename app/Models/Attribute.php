@@ -6,13 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 use App;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeGroup;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
-class Attribute extends Model
+class Attribute extends EVBaseModel
 {
+    use HasSlug;
+    use TranslationTrait;
+
+    // TODO: Think about uncommenting this because Attribute inherits EVBaseModel
 //    protected $with = ['attribute_relationships', 'attributes_values'];
 
+    public const TYPES = ['checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'radio', 'text_list', 'wysiwyg'];
+
     protected $casts = [
-        'custom_properties' => 'object'
+        'custom_properties' => 'object',
+        'filterable' => 'boolean',
+        'is_admin' => 'boolean',
+        'is_schema' => 'boolean',
+        'is_default' => 'boolean',
     ];
 
     protected $appends = ['is_predefined'];
@@ -21,6 +33,7 @@ class Attribute extends Model
     {
         parent::boot();
 
+        // TODO: Move this AttributeObserver
         static::deleting(function ($attribute) {
             $attribute->attribute_translations()->delete();
             $attribute->attribute_relationships()->delete();
@@ -28,6 +41,23 @@ class Attribute extends Model
                 $value->delete();
             }
         });
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function getTranslationModel(): ?string
+    {
+        return AttributeTranslation::class;
     }
 
     /**
@@ -60,19 +90,6 @@ class Attribute extends Model
         }
 
         return new AttributeGroup;
-    }
-
-
-    public function getTranslation($field = '', $lang = false)
-    {
-        $lang = $lang == false ? App::getLocale() : $lang;
-        $attribute_translation = $this->hasMany(AttributeTranslation::class)->where('lang', $lang)->first();
-        return $attribute_translation != null ? $attribute_translation->$field : $this->$field;
-    }
-
-    public function attribute_translations()
-    {
-        return $this->hasMany(AttributeTranslation::class);
     }
 
     public function included_categories()
