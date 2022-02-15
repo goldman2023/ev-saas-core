@@ -31,7 +31,9 @@
             <input type="checkbox"
                    class="js-toggle-switch toggle-switch-input"
                    id="payment-method-{{ $paymentMethod->gateway }}-enabled"
-                   wire:model="paymentMethod.enabled"
+                   @click="$wire.toggle(!paymentMethod.enabled); show = true;"
+                   wire:model.defer="paymentMethod.enabled"
+                   {{-- wire:model="paymentMethod.enabled" --}}
             >
             <span class="toggle-switch-label">
               <span class="toggle-switch-indicator"></span>

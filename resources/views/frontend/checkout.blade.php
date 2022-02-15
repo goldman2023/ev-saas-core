@@ -12,9 +12,11 @@
     <section class="checkout position-relative my-5"
         x-data="{
             selected_shipping_method: 0,
-            same_billing_shipping: {{ ((request()->old('same_billing_shipping') ?? 'off') === 'off') ? 'false' : 'true' }},
+            same_billing_shipping: {{ ((request()->old('same_billing_shipping') ?? 'on') === 'off') ? 'false' : 'true' }},
             create_account: {{ ((request()->old('create_account') ?? 'off') === 'off') ? 'false' : 'true' }},
             newsletter: {{ ((request()->old('newsletter') ?? 'off') === 'off') ? 'false' : 'true' }},
+            available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsGateway()),
+            selected_payment_method: '{{ request()->old('payment_method') }}'
         }"
     >
         <form method="POST" action="" name="checkout-form" class="container">
@@ -92,8 +94,8 @@
 
                                         <!-- Billing Address -->
                                         @php
-                                            $manual_mode_billing = !\Auth::check();
-                                            $manual_mode_shipping = !\Auth::check();
+                                            $manual_mode_billing = !\Auth::check() || auth()->user()->addresses->isEmpty();
+                                            $manual_mode_shipping = !\Auth::check() || auth()->user()->addresses->isEmpty();
                                             $show_addresses = \Auth::check() && auth()->user()->addresses->isNotEmpty();
                                             $addresses = \Auth::check()  ? auth()->user()->addresses->map(function($item) {
                                                 $item->country = \Countries::get(code: $item->country)->name ?? translate('Unknown');
@@ -644,23 +646,24 @@
 
 
                                     <!-- Payment Methods -->
-                                    <div class="mb-5" x-data="{
-                                        selected: '{{ request()->old('payment_method') }}'
-                                    }">
+                                    <div class="mb-5" x-data="{}">
                                         <h4 class="mb-3">{{ translate('Payment methods') }}</h4>
 
                                         <!-- Radio Checkbox Group -->
                                         <div class="row mx-n2">
-                                            <div class="col-6 col-md-3 px-2 mb-3 mb-md-0">
-                                                <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
-                                                    <input type="radio" id="checkout_payment_wire_transfer" name="payment_method" x-model="selected" value="wire_transfer" class="custom-control-input checkbox-outline-input checkbox-icon-input" x-bind:checked="selected === 'wire_transfer'">
-                                                    <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_wire_transfer">
-                                                        <img class="img-fluid w-75 mb-3" src="{{ static_asset(path: 'images/wire-transfer-logo-transparent.png', theme: true) }}" alt="SVG" >
-                                                        <span class="d-block">{{ translate('Wire Transfer') }}</span>
-                                                    </label>
+                                            <template x-for="payment_method_name in available_payment_methods">
+                                                <div class="col-6 col-md-3 px-2 mb-3 mb-md-0" @click="selected_payment_method = payment_method_name; ">
+                                                    <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
+                                                        <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0 d-flex flex-column justify-content-center align-items-center"
+                                                            :class="{'border border-info':payment_method_name === selected_payment_method}">
+                                                            <img class="img-fluid mb-3" style="height: 30px" x-bind:src="'{{ static_assets_root(path:'images', theme: true) }}/'+payment_method_name.replace('_','-')+'-logo-transparent.png'" alt="SVG" >
+                                                            <span class="d-block" x-text="payment_method_name"></span>
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-6 col-md-3 px-2 mb-3 mb-md-0">
+                                            </template>
+                                            
+                                            {{-- <div class="col-6 col-md-3 px-2 mb-3 mb-md-0">
                                                 <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
                                                     <input type="radio" id="checkout_payment_stripe" name="payment_method" x-model="selected" value="stripe" class="custom-control-input checkbox-outline-input checkbox-icon-input" x-bind:checked="selected === 'stripe'">
                                                     <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_stripe">
@@ -671,7 +674,7 @@
                                             </div>
                                             <div class="col-6 col-md-3 px-2">
                                                 <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
-                                                    <input type="radio" id="checkout_payment_paypal" name="payment_method" x-model="selected" value="paysera" class="custom-control-input checkbox-outline-input checkbox-icon-input" x-bind:checked="selected === 'paypal'">
+                                                    <input type="radio" id="checkout_payment_paypal" name="payment_method" x-model="selected" value="paypal" class="custom-control-input checkbox-outline-input checkbox-icon-input" x-bind:checked="selected === 'paypal'">
                                                     <label class="checkbox-outline-label checkbox-icon-label w-100 rounded py-3 px-3 mb-0" for="checkout_payment_paypal">
                                                         <img class="img-fluid w-75 mb-3" src="{{ static_asset(path: 'images/paypal-logo-transparent-512.png', theme: true) }}" alt="SVG" >
                                                         <span class="d-block">{{ translate('Paypal') }}</span>
@@ -686,23 +689,34 @@
                                                         <span class="d-block">{{ translate('Paysera') }}</span>
                                                     </label>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <!-- End Radio Checkbox Group -->
 
-                                        <div class="mt-3" x-show="selected != ''">
-                                            <div class="text-14" :class="{'d-none': selected !== 'paysera'}">
-                                                Please be informed that the account information and payment initiation services will be provided to you by Paysera in accordance with these
-                                                <a href="https://www.paysera.com/v2/en-GB/legal/pis-rules-2020" target="_blank" rel="noopener noreferrer">rules</a>.
-                                                By proceeding with this payment, you agree to receive this service and the service terms and conditions.
+                                        <template x-if="selected_payment_method != ''">
+                                            <div class="payment-methods-details w-full mt-3">
+                                                @foreach(\PaymentMethodsUniversal::getPaymentMethods() as $payment_method)
+                                                <div class="text-12" :class="{'d-none': selected_payment_method !== '{{ $payment_method->gateway }}'}">
+                                                    <div class="w-100">
+                                                        {!! $payment_method->description !!}
+                                                    </div>
+                                
+                                                    @if($payment_method->gateway === 'stripe')
+                                                        {{-- TODO: Add Stripe credit cards --}}
+                                                    @endif
+                                                </div>
+                                                @endforeach
                                             </div>
-                                        </div>
+                                        </template>
+
 
                                         @error('payment_method')
                                             <div class="invalid-feedback btn btn-danger btn-xs mt-3 w-100 text-center">
                                                 {{ $message }}
                                             </div>
                                         @enderror
+
+                                        <input type="hidden" name="payment_method" id="checkout_payment_method" x-model="selected_payment_method">
                                     </div>
                                     <!-- End Payment Methods -->
 

@@ -90,7 +90,7 @@ class EVCheckoutController extends Controller
             $data_to_validate = array_merge($data_to_validate, $address_rules);
 
             if(empty($request->input('same_billing_shipping'))) {
-                if((int) $request->input('selected_shipping_address_id') === -1) {
+                if((int) $request->input('selected_shipping_address_id') === -1 || empty($request->input('selected_shipping_address_id'))) {
                     // Shipping address IS NOT a selected address, but a manually added address!
                     $data_to_validate = array_merge($data_to_validate, $shipping_rules);
                 } else {
@@ -103,7 +103,7 @@ class EVCheckoutController extends Controller
         };
 
         if(Auth::check()) {
-            if((int) $request->input('selected_billing_address_id') === -1) {
+            if((int) $request->input('selected_billing_address_id') === -1 || empty($request->input('selected_billing_address_id'))) {
                 // Always validate billing info when user IS logged in AND DID NOT select billing address
                 $add_billing_shipping_rules();
             } else {
@@ -114,7 +114,7 @@ class EVCheckoutController extends Controller
                 if(!$same_billing_shipping) {
                     // shipping address IS NOT the same as the billing address
 
-                    if((int) $request->input('selected_shipping_address_id') === -1) {
+                    if((int) $request->input('selected_shipping_address_id') === -1 || empty($request->input('selected_shipping_address_id'))) {
                         // Shipping address IS NOT a selected address, but a manually added address!
                         $data_to_validate = array_merge($data_to_validate, $shipping_rules);
                     } else {
@@ -134,15 +134,15 @@ class EVCheckoutController extends Controller
         $validator = Validator::make($request->all(), $data_to_validate);
 
         if ($validator->fails()) {
-            //dd($validator);
+            // dd($validator);
             session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
             return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
                 ->withErrors($validator);
         }
 
+         
         // Retrieve the validated input...
         $data = $validator->validated();
-
 
         // Validate password again
         // If user is not logged in and `create account` is set to TRUE
