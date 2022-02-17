@@ -310,7 +310,7 @@
     {{-- END Attribute Card --}}
 
     {{-- Attribute Values Card --}}
-    <div class="card mt-4" x-if="predefined_types.indexOf(type) !== -1">
+    <div class="card mt-4" x-show="predefined_types.indexOf(type) !== -1">
         <!-- Header -->
         <div class="card-header">
             <h5 class="card-header-title">{{ translate('Attribute Values') }}</h5>
@@ -340,10 +340,17 @@
 
                                     return this.attribute_values.length;
                                 },
+                                hasID(index) {
+                                    return this.attribute_values[index].hasOwnProperty('id') ? true : false;
+                                },
                                 add() {
                                     this.attribute_values.push({values:''});
                                 },
                                 remove(index) {
+                                    console.log(this.hasID(index));
+                                    if(this.hasID(index)) {
+                                        $wire.removeAttributeValue(this.attribute_values[index]['id']);
+                                    }
                                     this.attribute_values.splice(index, 1);
                                 },
                             }"
