@@ -186,8 +186,8 @@ class AttributeForm extends Component
             } catch(\Exception $e) {
                 DB::rollBack();
 
-                $this->dispatchGeneralError(translate('There was an error while updating a attribute values...Please try again.'));
-                $this->toastify(translate('There was an error while updating a attribute values...Please try again. ').$e->getMessage(), 'danger');
+                $this->dispatchGeneralError(translate('There was an error while updating an attribute values...Please try again.'));
+                $this->toastify(translate('There was an error while updating an attribute values...Please try again. ').$e->getMessage(), 'danger');
             }
             
         }
@@ -196,6 +196,25 @@ class AttributeForm extends Component
     public function removeAttribute() {
 //        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
 //        $address->remove();
+    }
+
+    public function removeAttributeValue($id) {
+        DB::beginTransaction();
+
+        try {
+            // remove the attribute -> this will remove attribute value translations and relationships too!
+            AttributeValue::destroy($id);
+
+            DB::commit();
+
+            $this->toastify(translate('Attribute value successfully removed!'), 'success');
+
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while removing an attribute value...Please try again.'));
+            $this->toastify(translate('There was an error while removing an attribute value...Please try again. ').$e->getMessage(), 'danger');
+        }
     }
 
     public function render()
