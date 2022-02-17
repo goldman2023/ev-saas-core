@@ -1576,10 +1576,10 @@ $step-icon-margin-y:                                        1rem !default;
 $step-icon-margin-x:                                        1rem !default;
 $step-avatar-margin-x:                                      $step-icon-margin-x !default;
 $step-timeline-content-margin-x:                            1.5rem !default;
-$step-timeline-icon-margin-x:                               $step-icon-width / 2 !default;
-$step-timeline-icon-xs-margin-x:                            $step-icon-xs-width / 2 !default;
-$step-timeline-icon-sm-margin-x:                            $step-icon-sm-width / 2 !default;
-$step-timeline-icon-lg-margin-x:                            $step-icon-lg-width / 2 !default;
+$step-timeline-icon-margin-x:                               $step-icon-width * 0.5 !default;
+$step-timeline-icon-xs-margin-x:                            $step-icon-xs-width * 0.5 !default;
+$step-timeline-icon-sm-margin-x:                            $step-icon-sm-width * 0.5 !default;
+$step-timeline-icon-lg-margin-x:                            $step-icon-lg-width * 0.5 !default;
 
 
 

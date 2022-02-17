@@ -2,11 +2,13 @@
   Avatar Sizes
 ------------------------------------*/
 
+@use "sass:math";
+
 .avatar {
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
@@ -19,8 +21,8 @@
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-lg-height / 5);
-      right: -($avatar-status-lg-height / 5);
+      bottom: -($avatar-status-lg-height * 0.2);
+      right: -($avatar-status-lg-height * 0.2);
     }
   }
 }
@@ -44,22 +46,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: -($avatar-status-sm-height / 8);
-      right: -($avatar-status-sm-height / 8);
+      bottom: -($avatar-status-sm-height * 0.125);
+      right: -($avatar-status-sm-height * 0.125);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-lg-height / 5);
-      right: -($avatar-status-lg-height / 5);
+      bottom: -($avatar-status-lg-height * 0.2);
+      right: -($avatar-status-lg-height * 0.2);
     }
   }
 }
@@ -74,22 +76,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: -($avatar-status-sm-height / 10);
-      right: -($avatar-status-sm-height / 10);
+      bottom: -($avatar-status-sm-height * 0.1);
+      right: -($avatar-status-sm-height * 0.1);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-lg-height / 4);
-      right: -($avatar-status-lg-height / 4);
+      bottom: -($avatar-status-lg-height * 0.25);
+      right: -($avatar-status-lg-height * 0.25);
     }
   }
 }
@@ -104,22 +106,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 10);
-      right: -($avatar-status-height / 10);
+      bottom: -($avatar-status-height * 0.1);
+      right: -($avatar-status-height * 0.1);
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: ($avatar-status-sm-height / 10);
-      right: ($avatar-status-sm-height / 10);
+      bottom: ($avatar-status-sm-height * 0.1);
+      right: ($avatar-status-sm-height * 0.1);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-lg-height / 8);
-      right: -($avatar-status-lg-height / 8);
+      bottom: -($avatar-status-lg-height * 0.125);
+      right: -($avatar-status-lg-height * 0.125);
     }
   }
 }
@@ -134,22 +136,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: ($avatar-status-height / 8);
-      right: ($avatar-status-height / 8);
+      bottom: ($avatar-status-height * 0.125);
+      right: ($avatar-status-height * 0.125);
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: ($avatar-status-sm-height / 4);
-      right: ($avatar-status-sm-height / 4);
+      bottom: ($avatar-status-sm-height * 0.25);
+      right: ($avatar-status-sm-height * 0.25);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: ($avatar-status-lg-height / 12);
-      right: ($avatar-status-lg-height / 12);
+      bottom: math.div($avatar-status-lg-height, 12);
+      right: math.div($avatar-status-lg-height, 12);
     }
   }
 }
@@ -164,8 +166,8 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: ($avatar-status-height / 3.5);
-      right: ($avatar-status-height / 3.5);
+      bottom: math.div($avatar-status-height, 3.5);
+      right: math.div($avatar-status-height, 3.5);
     }
   }
 
@@ -178,8 +180,8 @@
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: ($avatar-status-lg-height / 4);
-      right: ($avatar-status-lg-height / 4);
+      bottom: ($avatar-status-lg-height * 0.25);
+      right: ($avatar-status-lg-height * 0.25);
     }
   }
 }

@@ -15,8 +15,8 @@
 
       &::after {
         position: absolute;
-        top: calc(50% - #{$list-separator-pseudo-height / 2});
-        right: #{$list-separator-padding-x / 2 - $list-separator-pseudo-width / 2};
+        top: calc(50% - #{$list-separator-pseudo-height * 0.5});
+        right: #{$list-separator-padding-x * 0.5 - $list-separator-pseudo-width * 0.5};
         width: $list-separator-pseudo-width;
         height: $list-separator-pseudo-height;
         background-color: $list-separator-pseudo-bg-color;

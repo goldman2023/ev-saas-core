@@ -43,7 +43,7 @@
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
   border-bottom-width: $nav-tabs-link-active-border-width;
-  margin-bottom: -$nav-tabs-link-active-border-width / 2;
+  margin-bottom: -$nav-tabs-link-active-border-width * 0.5;
 }
 
 .nav-tabs-light .nav-link.active,

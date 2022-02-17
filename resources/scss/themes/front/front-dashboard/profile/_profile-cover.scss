@@ -2,6 +2,8 @@
   Profile Cover
 ------------------------------------*/
 
+@use "sass:math";
+
 .profile-cover {
   position: relative;
   height: $profile-cover-height;
@@ -34,7 +36,7 @@
 
 .profile-cover-avatar {
   display: flex;
-  margin: -$avatar-xxl-width / 1.25 auto .5rem auto;
+  margin: math.div(-$avatar-xxl-width, 1.25) auto .5rem auto;
 }
 
 .profile-cover-content {

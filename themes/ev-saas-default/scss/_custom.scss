@@ -1,7 +1,7 @@
 /* Generate max-width classes */
 @for $mw from 1 through 10 {
     .max-w-#{$mw*10} {
-        max-width: round(percentage($mw/10));
+        max-width: round(percentage($mw*0.1));
     }
 }
 
@@ -37,17 +37,17 @@
 /* Generate line-height classes */
 @for $lh from 5 through 20 {
     .lh-#{$lh} {
-        line-height: $lh / 10;
+        line-height: $lh * 0.1;
     }
 }
 
 /* Generate opacity classes */
 @for $o from 0 through 10 {
     .opacity-#{$o} {
-        opacity: $o / 10;
+        opacity: $o * 0.1;
     }
     .opacity-#{$o}-i {
-        opacity: $o / 10;
+        opacity: $o * 0.1;
     }
 }
 

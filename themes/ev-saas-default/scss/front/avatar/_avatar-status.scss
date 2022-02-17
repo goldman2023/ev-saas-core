@@ -2,10 +2,12 @@
   Avatar Status
 ------------------------------------*/
 
+@use "sass:math";
+
 .avatar-status {
   position: absolute;
-  bottom: -($avatar-status-height / 2.5);
-  right: -($avatar-status-width / 2.5);
+  bottom: -(math.div($avatar-status-height, 2.5));
+  right: -(math.div($avatar-status-width, 2.5));
   display: inline-flex;
   flex-shrink: 0;
   justify-content: center;
@@ -22,8 +24,8 @@
 }
 
 .avatar-sm-status {
-  bottom: -($avatar-status-height / 5);
-  right: -($avatar-status-width / 5);
+  bottom: -($avatar-status-height * 0.2);
+  right: -($avatar-status-width * 0.2);
   width: $avatar-status-width-sm;
   height: $avatar-status-height-sm;
   font-size: $avatar-status-font-size-sm;

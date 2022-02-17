@@ -42,7 +42,7 @@
     .step-title {
       &::after {
         position: absolute;
-        top: $step-icon-height / 2;
+        top: $step-icon-height * 0.5;
         width: 100%;
         height: $step-border-width + $step-padding-x;
         border-top: $step-border-width $step-border-type $step-border-color;
@@ -53,17 +53,17 @@
 
     &.step-icon-xs .step-content .step-title::after,
     .step-icon-xs + .step-content .step-title::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
     }
 
     &.step-icon-sm .step-content .step-title::after,
     .step-icon-sm + .step-content .step-title::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
     }
 
     &.step-icon-lg .step-content .step-title::after,
     .step-icon-lg + .step-content .step-title::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
     }
   }
 }
@@ -92,7 +92,7 @@
     .step-title {
       &::after {
         position: absolute;
-        top: $step-icon-height / 2;
+        top: $step-icon-height * 0.5;
         width: 100%;
         height: $step-border-width + $step-padding-x;
         border-top: $step-border-width $step-border-type $step-border-color;
@@ -103,17 +103,17 @@
 
     &.step-icon-xs .step-content .step-title::after,
     .step-icon-xs + .step-content .step-title::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
     }
 
     &.step-icon-sm .step-content .step-title::after,
     .step-icon-sm + .step-content .step-title::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
     }
 
     &.step-icon-lg .step-content .step-title::after,
     .step-icon-lg + .step-content .step-title::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
     }
   }
 }
@@ -142,7 +142,7 @@
     .step-title {
       &::after {
         position: absolute;
-        top: $step-icon-height / 2;
+        top: $step-icon-height * 0.5;
         width: 100%;
         height: $step-border-width + $step-padding-x;
         border-top: $step-border-width $step-border-type $step-border-color;
@@ -153,17 +153,17 @@
 
     &.step-icon-xs .step-content .step-title::after,
     .step-icon-xs + .step-content .step-title::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
     }
 
     &.step-icon-sm .step-content .step-title::after,
     .step-icon-sm + .step-content .step-title::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
     }
 
     &.step-icon-lg .step-content .step-title::after,
     .step-icon-lg + .step-content .step-title::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
     }
   }
 }
@@ -192,7 +192,7 @@
     .step-title {
       &::after {
         position: absolute;
-        top: $step-icon-height / 2;
+        top: $step-icon-height * 0.5;
         width: 100%;
         height: $step-border-width + $step-padding-x;
         border-top: $step-border-width $step-border-type $step-border-color;
@@ -203,17 +203,17 @@
 
     &.step-icon-xs .step-content .step-title::after,
     .step-icon-xs + .step-content .step-title::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
     }
 
     &.step-icon-sm .step-content .step-title::after,
     .step-icon-sm + .step-content .step-title::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
     }
 
     &.step-icon-lg .step-content .step-title::after,
     .step-icon-lg + .step-content .step-title::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
     }
   }
 }

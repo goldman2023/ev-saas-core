@@ -7,7 +7,7 @@
 
   // Small Devices
   @include media-breakpoint-down(xs) {
-    padding: $content-space-padding / 2;
+    padding: $content-space-padding * 0.5;
   }
 }
 
@@ -42,7 +42,7 @@
 
   // Small Devices
   @include media-breakpoint-down(xs) {
-    padding-right: $content-padding-x / 2;
-    padding-left: $content-padding-x / 2;
+    padding-right: $content-padding-x * 0.5;
+    padding-left: $content-padding-x * 0.5;
   }
 }
