@@ -19,7 +19,7 @@
         <!-- End Header -->
 
         <div class="card-body">
-            {{-- <livewire:dashboard.tables.blog-posts-table></livewire:dashboard.tables.blog-posts-table> --}}
+            <livewire:dashboard.tables.attributes-table></livewire:dashboard.tables.attributes-table>
         </div>
     </div>
 @endsection

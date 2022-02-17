@@ -8,6 +8,7 @@ use App\Models\AttributeTranslation;
 use App\Models\AttributeGroup;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use App\Traits\TranslationTrait;
 
 class Attribute extends EVBaseModel
 {
@@ -16,8 +17,6 @@ class Attribute extends EVBaseModel
 
     // TODO: Think about uncommenting this because Attribute inherits EVBaseModel
 //    protected $with = ['attribute_relationships', 'attributes_values'];
-
-    public const TYPES = ['checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'radio', 'text_list', 'wysiwyg'];
 
     protected $casts = [
         'custom_properties' => 'object',
@@ -60,6 +59,16 @@ class Attribute extends EVBaseModel
         return AttributeTranslation::class;
     }
 
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) =>  $query->where('name', 'like', '%'.$term.'%')
+        );
+    }
+
     /**
      * Checks if attribute has one or multiple values
      *
@@ -77,6 +86,12 @@ class Attribute extends EVBaseModel
 
     public function attribute_values()
     {
+        if($this->is_predefined) {
+            // If attribute is predefined, there is only strict amount of values that it should return from DB, 
+            // it should not use hasManyThrough relationship, but hasMany, because it does not depend on any AttributeRelationship
+            return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
+        } 
+
         return $this->hasManyThrough(AttributeValue::class, AttributeRelationship::class, 'attribute_id', 'id', 'id', 'attribute_value_id');
     }
 
