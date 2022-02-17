@@ -18,15 +18,17 @@ try {
          */
         return (errors, duration = 800, callback = null) => {
             Alpine.nextTick(() => {
-                if(errors !== undefined && Object.keys(errors).length > 0)  {
-                    let $target_el = $('[name=\''+Object.keys(errors)[0]+'\']');
-                    $('html').animate({ // html,body - fires callback twice...
-                        scrollTop: $target_el.parent().offset().top
-                    }, duration, function() {
-                        if (callback instanceof Function)
-                            callback();
-                    });
-                }
+                try {
+                    if(errors !== undefined && Object.keys(errors).length > 0)  {
+                        let $target_el = $('[name=\''+Object.keys(errors)[0]+'\']');
+                        $('html').animate({ // html,body - fires callback twice...
+                            scrollTop: $target_el.parent().offset().top
+                        }, duration, function() {
+                            if (callback instanceof Function)
+                                callback();
+                        });
+                    }
+                } catch(error) {}
             });
         };
     });

@@ -12,6 +12,8 @@ class AttributeValue extends Model
 
     protected $appends = ['selected'];
 
+    protected $fillable = ['attribute_id', 'values'];
+
     public static function boot() {
         parent::boot();
 

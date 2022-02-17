@@ -8,9 +8,12 @@
             </div>
             <div class="modal-body text-center">
                 <p class="mt-1">{{translate('Are you sure to delete this?')}}</p>
-                <button type="button" class="btn btn-link mt-2" data-dismiss="modal">{{translate('Cancel')}}</button>
-                <a href="" id="delete-link" class="btn btn-primary mt-2" data-test="deleteSubmit">{{translate('Delete')}}</a>
+                
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link mt-2" data-dismiss="modal" data-test="deleteModalCancel">{{translate('Cancel')}}</button>
+                <button type="button" class="btn btn-primary mt-2" data-test="deleteModalSubmit">{{translate('Delete')}}</button>
+              </div>
         </div>
     </div>
 </div><!-- /.modal -->

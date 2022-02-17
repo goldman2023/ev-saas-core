@@ -84,6 +84,8 @@ Route::middleware([
 
         /* Attributes */
         Route::get('/attributes/{content}', [EVAttributesController::class, 'index'])->name('attributes.index');
+        // Route::get('/attributes/create', [EVOrderController::class, 'create'])->name('order.create');
+        Route::get('/attributes/edit/{id}', [EVAttributesController::class, 'edit'])->name('attributes.edit');
 
         /* Orders */
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
