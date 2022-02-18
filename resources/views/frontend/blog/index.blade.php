@@ -32,7 +32,6 @@
             </div>
         </div>
     </section>
-    <x-category-list-news :categories="$categories"></x-category-list-news>
     <div class="text-center">
         {{--      <x-affiliate-banner></x-affiliate-banner>--}}
     </div>
@@ -48,13 +47,15 @@
                             class="las la-angle-right la-sm ml-1"></i></a>
                 </div>
             </div>
-            <div class="row">
-
+            <div class="row justify-content-lg-between">
+                <div class="col-lg-8">
                 @foreach ($blogs as $item)
-                    <div class="col-sm-4 mb-3">
-                        <x-news-card :item="$item"></x-news-card>
+                    <div class="col-sm-12 mb-3">
+                        {{-- <x-news-card :item="$item"></x-news-card> --}}
+                        <x-default.blog.single.card :item="$item"></x-default.blog.single.card>
                     </div>
                 @endforeach
+                </div>
             </div>
 
             <div class="aiz-pagination aiz-pagination-center mt-4">

@@ -62,8 +62,7 @@ $meta_description = get_setting('site_motto');
                                 </button>
                             </div>
                             <div class="d-none d-sm-block">
-                                <x-default.categories.category-list :selectedCategory="$selected_category"
-                                    style="category-list-sidebar"></x-default.categories.category-list>
+
                             </div>
                         </div>
                     </div>
