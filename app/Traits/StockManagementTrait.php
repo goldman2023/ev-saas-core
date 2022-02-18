@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Log;
  */
 trait StockManagementTrait
 {
-    public $temp_sku;
+    public $sku;
+    public $barcode;
     public $current_stock;
     public $low_stock_qty;
     public $use_serial;
+    public $allow_out_of_stock_purchases;
 
     /**
      * Boot the trait
@@ -35,6 +37,9 @@ trait StockManagementTrait
             if(!$model->relationLoaded('stock')) {
                 $model->load('stock');
             }
+            if(!$model->relationLoaded('serial_numbers')) {
+                $model->load('serial_numbers');
+            }
 
 
 //            if(empty($model->stock)) {
@@ -46,14 +51,12 @@ trait StockManagementTrait
 //                $model->load('stock');
 //            }
 
-            if(!$model->relationLoaded('serial_numbers')) {
-                $model->load('serial_numbers');
-            }
-
             $model->getUseSerialAttribute();
-            $model->getTempSkuAttribute();
+            $model->getSkuAttribute();
+            $model->getBarcodeAttribute();
             $model->getCurrentStockAttribute();
             $model->getLowStockQtyAttribute();
+            $model->getAllowOutOfStockPurchasesAttribute();
         });
     }
 
@@ -64,8 +67,8 @@ trait StockManagementTrait
      */
     public function initializeStockManagementTrait(): void
     {
-        $this->append(['temp_sku', 'current_stock', 'low_stock_qty', 'use_serial']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['temp_sku', 'current_stock', 'low_stock_qty', 'use_serial'])));
+        $this->append(['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
+        $this->fillable(array_unique(array_merge($this->fillable, ['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases'])));
     }
 
     /************************************
@@ -97,18 +100,32 @@ trait StockManagementTrait
         $this->use_serial = (bool) $value;
     }
 
-    public function setTempSkuAttribute($value)
+    public function setSkuAttribute($value)
     {
-        $this->temp_sku = $value;
+        $this->sku = $value;
     }
 
-    public function getTempSkuAttribute() {
-        // Set temp_sku only on first model hydration!
-        if(!isset($this->temp_sku)) {
-            $this->temp_sku = (string) (empty($this->stock) ? null : ($this->stock->sku ?? ''));
+    public function getSkuAttribute() {
+        // Set sku only on first model hydration!
+        if(!isset($this->sku)) {
+            $this->sku = (string) (empty($this->stock) ? null : ($this->stock->sku ?? ''));
         }
 
-        return $this->temp_sku ?? '';
+        return $this->sku ?? '';
+    }
+
+    public function setBarcodeAttribute($value)
+    {
+        $this->barcode = $value;
+    }
+
+    public function getBarcodeAttribute() {
+        // Set bracode only on first model hydration!
+        if(!isset($this->barcode)) {
+            $this->barcode = (string) (empty($this->stock) ? null : ($this->stock->barcode ?? ''));
+        }
+
+        return $this->barcode ?? '';
     }
 
 
@@ -138,6 +155,19 @@ trait StockManagementTrait
         }
 
         return $this->low_stock_qty;
+    }
+
+    public function setAllowOutOfStockPurchasesAttribute($value)
+    {
+        $this->allow_out_of_stock_purchases = $value;
+    }
+
+    public function getAllowOutOfStockPurchasesAttribute() {
+        if(!isset($this->allow_out_of_stock_purchases)) {
+            $this->allow_out_of_stock_purchases = (string) (empty($this->stock) ? null : ($this->stock->allow_out_of_stock_purchases ?? false));
+        }
+
+        return $this->allow_out_of_stock_purchases ?? false;
     }
 
 

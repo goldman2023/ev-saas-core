@@ -59,7 +59,7 @@ if($this->attributes->isNotEmpty()) {
 </x-livewire-tables::bs4.table.cell>
 
 <x-livewire-tables::bs4.table.cell>
-    <x-ev.form.input name="rows.{{ $index }}.temp_sku"
+    <x-ev.form.input name="rows.{{ $index }}.sku"
                      type="text"
                      wireType="defer">
     </x-ev.form.input>

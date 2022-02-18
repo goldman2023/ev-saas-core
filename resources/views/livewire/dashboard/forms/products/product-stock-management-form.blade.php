@@ -16,7 +16,7 @@
         <div id="main-product-stock-form">
             <form wire:submit.prevent="updateMainStock" class="row">
                 <div class="col-md-6 mb-1">
-                    <x-ev.form.input name="product.temp_sku" type="text" label="{{ translate('SKU') }}" :required="true" placeholder="{{ translate('SKU of the main product.') }}" >
+                    <x-ev.form.input name="product.sku" type="text" label="{{ translate('SKU') }}" :required="true" placeholder="{{ translate('SKU of the main product.') }}" >
                         <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
                     </x-ev.form.input>
 
@@ -462,7 +462,7 @@
                                     </x-ev.form.input>
                                 </div>
                                 <div class="col-5 d-flex align-items-center">
-                                    <x-ev.form.input groupclass="w-100 mb-0" name="variations.{{ $key }}.temp_sku" type="text" :required="true"> </x-ev.form.input>
+                                    <x-ev.form.input groupclass="w-100 mb-0" name="variations.{{ $key }}.sku" type="text" :required="true"> </x-ev.form.input>
                                 </div>
                             </div>
                         @endforeach

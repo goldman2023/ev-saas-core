@@ -29,7 +29,7 @@
         <label class="input-label">{!! $label !!} {!! $required ? '<span class="text-danger">*</span>':'' !!}</label>
 
         <div class="js-toast-ui-editor {{ $class }} @error($errorBagName) is-invalid @enderror"
-             @if(!empty($options)) data-ev-toastui-editor-options="@if(is_string($options)) {!! $options !!} @else @json($options) @endif" @endif
+             @if(!empty($options)) data-ev-toastui-editor-options='@if(is_string($options)) {!! $options !!} @else @json($options) @endif' @endif
         ></div>
 
         <input type="text"

@@ -72,6 +72,8 @@ Route::middleware([
         Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
         Route::get('/ev-products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('ev-products.edit.stocks');
 
+        Route::get('/products/create', [EVProductController::class, 'create2'])->name('products.create');
+
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
         Route::get('/blog/posts/create', [EVBlogPostController::class, 'create'])->name('blog.post.create');

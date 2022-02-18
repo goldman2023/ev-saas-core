@@ -11,8 +11,8 @@ class ProductStock extends Model
 
     protected $table = 'product_stocks';
 
-    protected $fillable = ['subject_id', 'subject_type', 'sku', 'qty', 'low_stock_qty', 'use_serial', 'created_at', 'updated_at'];
-    protected $visible = ['id', 'subject_id', 'subject_type', 'sku', 'qty', 'created_at', 'updated_at'];
+    protected $fillable = ['subject_id', 'subject_type', 'sku', 'barcode', 'qty', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases', 'created_at', 'updated_at'];
+    protected $visible = ['id', 'subject_id', 'subject_type', 'sku', 'barcode', 'qty', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases', 'created_at', 'updated_at'];
 
     //
     public function subject() {

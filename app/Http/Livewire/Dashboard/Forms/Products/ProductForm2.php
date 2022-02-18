@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Forms\Products;
+namespace App\Http\Livewire\Dashboard\Forms\Products;
 
 use App\Models\Attribute;
 use App\Models\AttributeRelationship;
@@ -15,107 +15,234 @@ use App\Models\ProductTranslation;
 use App\Models\Upload;
 use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
+use App\Enums\StatusEnum;
+use App\Enums\AmountPercentTypeEnum;
 use DB;
 use EVS;
 use Categories;
+use MyShop;
+use FX;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
+use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\DispatchSupport;
 use Str;
 
-class CheckoutForm extends Component
+class ProductForm2 extends Component
 {
-    public $form;
+    use DispatchSupport;
+    use RulesSets;
+    use HasCategories;
+
+    public $product;
+    public $is_update;
+    public $attributes;
 
     protected $listeners = [
-
+        // TODO Do we need this?
+        // 'variationsUpdated' => 'updateAttributeValuesForVariations'
     ];
+
+    protected function getRuleSet($set = null) {
+        $rulesSets = collect([
+            'basic' => [
+                'product.name' => 'required|min:6',
+                'product.description' => 'required|min:20',
+                'product.excerpt' => 'nullable',
+            ],
+            'media' => [
+                'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id'],
+                'product.gallery' => ['required', 'if_id_exists:App\Models\Upload,id,true'],
+                'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
+                'product.video_link' => 'nullable|active_url',
+                'product.pdf' => ['nullable', 'if_id_exists:App\Models\Upload,id,true'],
+            ],
+            'pricing' => [
+                'product.unit_price' => 'required|numeric',
+                'product.purchase_price' => 'nullable|numeric',
+                'product.discount' => 'nullable|numeric',
+                'product.discount_type' => 'nullable|in:amount,percent',
+                'product.tax' => 'nullable|numeric',
+                'product.tax_type' => 'nullable|in:amount,percent',
+            ],
+            'categories_and_tags' => [
+                'selected_categories' => 'required',
+                'product.tags' => 'nullable|array',
+            ],
+            'brand' => [
+                'product.brand_id' => 'nullable|exists:App\Models\Brand,id',
+            ],
+            'inventory' => [
+                'product.unit' => 'required',
+                'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
+                'product.barcode' => ['nullable'],
+                'product.min_qty' => 'required|numeric|min:1',
+                'product.current_stock' => 'required|numeric|min:1',
+                'product.low_stock_qty' => 'required|numeric|min:0',
+            ],
+            'shipping' => [
+                // 'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
+                // 'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
+                // 'product.est_shipping_days' => 'nullable|numeric'
+            ],
+            'seo' => [
+                'product.meta_title' => 'nullable',
+                'product.meta_description' => 'nullable',
+                'product.meta_img' => 'nullable',
+            ]
+        ]);
+
+        return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
+    }
 
     protected function rules()
     {
-        return [
-            'form.first_name' => [],
-            'form.last_name' => [],
-            'form.email' => [],
-            'form.address' => [],
-            'form.address_2' => [],
-            'form.country' => [],
-            'form.state' => [],
-            'form.zip' => [],
-            'form.same_billing_and_shipping_address' => [],
-            'form.save_info' => [],
-        ];
+        $rules = [];
+        foreach($this->getRuleSet('all') as $key => $items) {
+            $rules = array_merge($rules, $items);
+        }
+
+        return $rules;
     }
+
+    protected function messages() {
+        return [];
+    }
+
+    // protected function rules()
+    // {
+
+    //     // Define rules sets
+    //     $this->rulesSets['content'] = [
+    //         'product.thumbnail' => 'required|exists:App\Models\Upload,id',
+    //         'product.gallery' => ['required', new EVModelsExist(Upload::class)],
+    //         'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
+    //         'product.video_link' => 'nullable|active_url',
+    //         'product.pdf' => 'nullable|exists:App\Models\Upload,id',
+            
+    //     ];
+
+    //     $this->rulesSets['price_stock_shipping'] = [
+    //         'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
+    //         'product.min_qty' => 'required|numeric|min:1',
+    //         'product.current_stock' => 'required|numeric|min:1',
+    //         'product.low_stock_qty' => 'required|numeric|min:0',
+    //         'product.unit_price' => 'required|numeric',
+    //         'product.purchase_price' => 'nullable|numeric',
+    //         'product.discount' => 'required|numeric',
+    //         'product.discount_type' => 'required|in:amount,percent',
+    //         'product.stock_visibility_state' => 'required|in:quantity,text,hide',
+    //         'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
+    //         'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
+    //         'product.is_quantity_multiplied' => 'required|boolean',
+    //         'product.est_shipping_days' => 'nullable|numeric'
+    //     ];
+
+    //     $this->rulesSets['attributes'] = [
+    //         'attributes.*' => 'required', //[ new AttributeValuesSelected() ]
+    //     ];
+
+    //     $this->rulesSets['seo'] = [
+    //         'product.meta_title' => 'nullable',
+    //         'product.meta_description' => 'nullable',
+    //         'product.meta_img' => 'nullable',
+    //     ];
+
+    //     $rules = [];
+    //     foreach($this->rulesSets as $key => $items) {
+    //         $rules = array_merge($rules, $items);
+    //     }
+
+    //     return $rules;
+    // }
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function mount()
+    public function mount(&$product = null)
     {
+        // Set default params
+        if($product) {
+            $this->product = $product;
+            $this->is_update = false;
+        } else {
+            $this->is_update = true;
 
+            $this->product = new Product();
+
+            $this->product->slug = '';
+            $this->product->status = StatusEnum::draft()->value;
+            $this->product->shop_id = MyShop::getShop()->id;
+            $this->product->is_quantity_multiplied = 1;
+            $this->product->shipping_type = 'product_wise';
+            $this->product->stock_visibility_state = 'quantity';
+            $this->product->discount_type = 'amount';
+            $this->product->discount = 0;
+            $this->product->low_stock_qty = 0;
+            $this->product->min_qty = 1;
+            $this->product->unit_price = 0;
+            $this->product->brand_id = null;
+
+            // If insert
+            $this->product->base_currency = FX::getCurrency()->code;
+            $this->product->discount_type = AmountPercentTypeEnum::amount()->value;
+            $this->product->tax_type = AmountPercentTypeEnum::amount()->value;
+        }
+
+        $this->attributes = $this->product->getMappedAttributes();
+
+        // Set default attributes
+        foreach($this->attributes as $key => $attribute) {
+            if($attribute->is_predefined) {
+                $attribute->selcted_values = '';
+            }
+
+            if(empty($this->attributes[$key]->attribute_values)) {
+                if(!$attribute->is_predefined) {
+                    $this->attributes[$key]->attribute_values[] = [
+                        "id" => null,
+                        "attribute_id" => $attribute->id,
+                        "values" => '',
+                        "selected" => true,
+                    ];
+                } else {
+                    $this->attributes[$key]->attribute_values = [];
+                }
+            }
+        }
+
+        $this->initCategories($this->product);
     }
 
     public function dehydrate()
     {
-        $this->dispatchBrowserEvent('initCheckoutForm');
+        $this->dispatchBrowserEvent('initProductForm');
     }
 
     public function render()
     {
-        return view('livewire.forms.products.product-form');
+        return view('livewire.dashboard.forms.products.product-form2');
     }
 
     public function refreshVariationsDatatable() {
         // TODO: Refresh variations datatable
-        $this->emit('refreshDatatable');
+        // $this->emit('refreshDatatable');
         //$this->emit('updatedAttributeValues', $this->variations_attributes);
     }
 
-    public function validateSpecificSet($set_name, $next_page, $is_last = false, $insert_on_step = null)
-    {
-        if($set_name) {
-            foreach($this->rulesSets as $key => $set) {
-                $this->page = $key; // set page
-                $this->validate($set); // validate page
-
-                if($set_name == $key) {
-                    break;
-                }
-            }
-
-            // Check if insert on specific step is set
-            if(is_array($insert_on_step) && (in_array($next_page, $insert_on_step) || in_array($set_name, $insert_on_step))) {
-                if(empty($this->product->id)) {
-                    $this->insert(true);
-                } else {
-                    $this->update();
-                }
-            } else if($is_last) {
-                if(empty($this->product->id)) {
-                    $this->insert();
-                } else {
-                    $this->update();
-                }
-            }
-
-            $this->page = $next_page;
-        }
+    public function saveBasic() {
+        dd($this->product);
     }
 
-    /**
-     * Inserts product data to database.
-     * Inserts can be partial or full.
-     * 1. Full: inserts all the product data, attributes, variations, translations, stocks etc. to the database
-     * 2. Partial: inserts only part of the data to the database and creates a draft version of the product (before adding attributes, variations, stocks)
-     *
-     * @param false $partial
-     */
-    protected function insert(bool $partial = false): void
+
+    protected function insert(): void
     {
         DB::beginTransaction();
         $this->insert_success = false;
@@ -274,6 +401,7 @@ class CheckoutForm extends Component
         $product_translation->save();
     }
 
+    /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
         $product_stock->sku = $this->product->sku;
@@ -376,22 +504,5 @@ class CheckoutForm extends Component
         });
 
         return $atts_for_variations;
-    }
-
-    public function levelSelectedCategories() {
-        $data = [];
-
-        if($this->selected_categories) {
-            foreach($this->selected_categories as $selected) {
-                $level = count(explode('.', $selected)) - 1;
-                if(!isset($data[$level])) {
-                    $data[$level] = [];
-                }
-
-                $data[$level][] = $selected;
-            }
-        }
-
-        return $data;
     }
 }

@@ -153,7 +153,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <x-ev.form.input groupclass="w-100 mb-0"
-                                                     name="variations.{{ $index }}.temp_sku"
+                                                     name="variations.{{ $index }}.sku"
                                                      label="{{ translate('SKU') }}"
                                                      type="text"
                                                      :required="true">
