@@ -98,6 +98,8 @@ class AttributeForm extends Component
             $except = ['min_value', 'max_value', 'unit'];
         } else if($this->attribute->type === 'dropdown') {
             $except = ['multiple'];
+        } else if($this->attribute->type === 'date') {
+            $except = ['with_time', 'range'];
         }
         
         foreach($custom_properties as $key => $value) {
@@ -111,6 +113,8 @@ class AttributeForm extends Component
 
     public function saveAttribute() {
         $msg = null;
+
+        // FIXME: If $attribute->custom_properties is {} and not null, it will rise livewire checksum error on saveAttribute()
         
         try {
             $this->validate();
@@ -124,7 +128,7 @@ class AttributeForm extends Component
         DB::beginTransaction();
         
         try {
-            // Insert or Update plan
+            // Insert or Update Attribute
             // $this->attribute->shop_id = MyShop::getShopID(); // TODO: add shop_id to attributes for multi-vendor support!
 
             // If user has no permissions to insert/create attribute, throw exception
@@ -136,7 +140,7 @@ class AttributeForm extends Component
             $this->attribute->save();
 
             // Set Attribute Categories relationship
-            // $this->setCategories($this->plan);
+            // $this->setCategories($this->attribute);
 
             // TODO: Determine which package to use for Translations! Set Translations...
 

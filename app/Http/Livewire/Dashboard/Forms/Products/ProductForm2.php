@@ -42,6 +42,7 @@ class ProductForm2 extends Component
     public $product;
     public $is_update;
     public $attributes;
+    public $selected_predefined_attribute_values;
 
     protected $listeners = [
         // TODO Do we need this?
@@ -86,9 +87,13 @@ class ProductForm2 extends Component
                 'product.low_stock_qty' => 'required|numeric|min:0',
             ],
             'shipping' => [
-                // 'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
+                'product.digital' => 'required|boolean',
                 // 'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
                 // 'product.est_shipping_days' => 'nullable|numeric'
+            ],
+            'attributes' => [
+                'attributes.*' => 'required',
+                'selected_predefined_attribute_values.*' => ''
             ],
             'seo' => [
                 'product.meta_title' => 'nullable',
@@ -161,6 +166,27 @@ class ProductForm2 extends Component
     //     return $rules;
     // }
 
+    protected function setPredefinedAttributeValues($model) {
+        // Set predefined attribute values AND select specific values if it's necessary
+        foreach($this->attributes as $attribute) {
+            if($attribute->is_predefined) {
+                if(isset($model->id) && !empty($model->id)) {
+                    // edit product
+                    $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
+
+                    if($product_attribute instanceof \App\Models\Attribute) {
+                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck();
+                    } else {
+                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
+                    }
+                } else {
+                    // insert product
+                    $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
+                }
+            }
+        }
+    }
+
     /**
      * Create a new component instance.
      *
@@ -217,6 +243,7 @@ class ProductForm2 extends Component
                 }
             }
         }
+        $this->setPredefinedAttributeValues($product);
 
         $this->initCategories($this->product);
     }
