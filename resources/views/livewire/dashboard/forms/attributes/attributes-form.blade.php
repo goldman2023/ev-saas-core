@@ -7,9 +7,13 @@
         'min_value': 0,
         'max_value': 0,
         'unit': '',
+        'with_time': false,
+        'range': false,
     }, ...@js($attribute->custom_properties ?? ((object) []))},
     attribute_values: @js($attribute->attribute_values ?? []),
 }">
+    {{-- FIXME: If $attribute->custom_properties is {} and not null, it will rise livewire checksum error on saveAttribute() --}}
+    
     {{-- Attribute Card --}}
     <div class="card">
         <!-- Header -->
@@ -258,7 +262,7 @@
                                             });
                                         "
                                     >
-                                        <select
+                                        {{-- <select
                                             x-ref="custom_properties_unit_selector"
                                             class="js-select2-custom custom-select select2-hidden-accessible"
                                             data-hs-select2-options='
@@ -270,7 +274,14 @@
                                                     {{ $status }}
                                                 </option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
+
+                                        <div class="input-group input-group-sm-down-break">
+                                            <input type="text" 
+                                                    class="form-control"
+                                                    placeholder=""
+                                                    x-model="custom_properties.unit" />
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- END Type -->
@@ -278,6 +289,44 @@
                         {{-- </template> --}}
                         <!-- END Number Custom properties -->
             
+                        <!-- Date Custom properties -->
+                        <div x-show="type === 'date'">
+                            <!-- With time -->
+                            <div class="row form-group mt-5" x-data="{}">
+                                <label class="col-sm-3 col-form-label input-label">{{ translate('With time') }}</label>
+        
+                                <div class="col-sm-9 d-flex align-items-center">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" class="toggle-switch-input" x-model="custom_properties.with_time">
+                                            <span class="toggle-switch-label">
+                                                <span class="toggle-switch-indicator"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END With time -->
+
+                            <!-- Range -->
+                            <div class="row form-group mt-5" x-data="{}">
+                                <label class="col-sm-3 col-form-label input-label">{{ translate('Is range') }}</label>
+        
+                                <div class="col-sm-9 d-flex align-items-center">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" class="toggle-switch-input" x-model="custom_properties.range">
+                                            <span class="toggle-switch-label">
+                                                <span class="toggle-switch-indicator"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Range -->
+                        </div>
+                        <!-- END Date Custom properties -->
+
                         <hr/>
             
                         <div class="row form-group mb-0">

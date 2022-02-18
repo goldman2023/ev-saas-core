@@ -200,3 +200,9 @@
         line-height: 1.5;
     }
 }
+
+.rotate {
+    &-180 {
+        transform: rotate(180deg);
+    }
+}

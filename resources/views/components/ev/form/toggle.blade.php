@@ -8,7 +8,7 @@
                 <input type="checkbox"
                        name="{{ $name }}"
                        id="toggle-{{ $name }}"
-                       wire:model="{{ $name }}"
+                       wire:model.defer="{{ $name }}"
                        class="js-toggle-switch toggle-switch-input"
                        @if($id) id="{{ $id }}" @endif
                        @if($selected) selected @endif

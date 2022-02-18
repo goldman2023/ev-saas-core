@@ -1,6 +1,11 @@
 <div x-data="{
         is_digital: {{ $product->digital === true ? 'true' : 'false' }},
-        use_serial: {{ $product->use_serial === 1 ? 'true' : 'false' }}
+        use_serial: {{ $product->use_serial === 1 ? 'true' : 'false' }},
+        base_currency: @js($product->base_currency),
+        discount_type: @js($product->discount_type),
+        tax_type: @js($product->tax_type),
+        attributes: @js($attributes),
+        selected_attribute_values: @js($selected_predefined_attribute_values),
     }"
      class="container-fluid"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
@@ -86,9 +91,6 @@
 
             {{-- Card Pricing --}}
             <div class="card mb-3 mb-lg-5" x-data="{
-                    base_currency: @js($product->base_currency),
-                    discount_type: @js($product->discount_type),
-                    tax_type: @js($product->tax_type),
                     show_tax: {{ !empty($product->tax) ? 'true':'false' }},
                 }">
                 <div class="card-body position-relative">
@@ -272,9 +274,7 @@
             
 
             {{-- Card Inventory --}}
-            <div class="card mb-3 mb-lg-5" x-data="
-                    
-                ">
+            <div class="card mb-3 mb-lg-5" x-data="{}">
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Inventory') }}</h5>
 
@@ -345,9 +345,7 @@
 
 
             {{-- Card Shipping --}}
-            <div class="card mb-3 mb-lg-5" x-data="
-                    
-                ">
+            <div class="card mb-3 mb-lg-5" x-data="{}">
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Shipping') }}</h5>
 
@@ -366,12 +364,340 @@
                     </div>
 
                     <div class="w-100" :class="{'d-none': is_digital}">
-                       
+                       {{-- TODO: Add Shipping methods first and then edit this part --}}
                     </div>
                 </div>
             </div>
             {{-- END Card Shipping --}}
 
+
+            {{-- Card Attributes --}}
+            <div class="card mb-3 mb-lg-5">
+                <div class="card-body position-relative">
+                    <h5 class="pb-2 mb-3 border-bottom">{{ translate('Attributes') }}</h5>
+
+                    <template x-for="attribute in attributes">
+                        <div class="w-100 mb-3" x-data="{
+                                selector_id: 'attributes_'+attribute.id+'_attribute_values',
+                                hasCustomProperty(name) {
+                                    return attribute.custom_properties !== null && 
+                                            attribute.custom_properties !== undefined && 
+                                            attribute.custom_properties.hasOwnProperty(name);
+                                },
+                            }" x-cloak>
+
+                            {{-- Dropdown --}}
+                            <template x-if="attribute.type === 'dropdown'">
+                                <div class="w-100" x-data="{
+                                        isMultiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple
+                                    }" x-init="
+                                        $nextTick(() => {
+                                            $('#'+selector_id).on('select2:select', (event) => {
+                                                console.log(isMultiple);
+                                                selected_attribute_values['attribute.'+attribute.id] = event.target.value;
+                                            });
+                                            $watch('selected_attribute_values', (value, oldValue) => {
+                                                if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
+                                                    $('#'+selector_id).val(value).trigger('change');
+                                                }
+                                            });
+                                        });
+                                        
+                                    "> 
+                                        <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                        <select class="form-control custom-select custom-select-sm"
+                                                :id="selector_id"
+                                                x-bind:multiple="hasCustomProperty('multiple') && attribute.custom_properties.multiple"
+                                                x-model="selected_attribute_values['attribute.'+attribute.id]"
+                                                data-hs-select2-options='{
+                                                    "minimumResultsForSearch": "Infinity",
+                                                    "selectionCssClass": "custom-select-sm",
+                                                    "placeholder": "{{ translate('Select value') }}"
+                                            }'>
+                                                <option></option>
+                                                <template x-for="attribute_value in attribute.attribute_values">
+                                                    <option :value="attribute_value.id" x-text="attribute_value.values">
+                                                    </option>
+                                                </template>
+                                        </select>
+
+                                        <template x-if="hasCustomProperty('multiple') && attribute.custom_properties.multiple">
+                                            <div class="w-100 d-flex mt-2 mb-2">
+                                                <label class="toggle-switch mr-3">
+                                                    <input type="checkbox" x-model="attribute.for_variations" class="js-toggle-switch toggle-switch-input">
+                                                    <span class="toggle-switch-label">
+                                                        <span class="toggle-switch-indicator"></span>
+                                                    </span>
+                        
+                                                    <span class="ml-3">{{ translate('Used for variations') }}</span>
+                                                </label>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </template>
+                            {{-- END Dropdown --}}
+
+                            {{-- Plain Text --}}
+                            <template x-if="attribute.type === 'plain_text'">
+                                <div class="w-100" x-data="{}" x-init="">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                    <input type="text" 
+                                        class="form-control form-control-sm"
+                                        :id="selector_id"
+                                        x-model="attributes[attribute.id].attribute_values[0].values" />
+                                </div>
+                            </template>
+                            {{-- END Plain Text --}}
+
+                            {{-- Number --}}
+                            <template x-if="attribute.type === 'number'">
+                                <div class="w-100" x-data="{}" x-init="">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                    <div class="input-group" :class="{'input-group-merge': !hasCustomProperty('unit')}">
+
+                                        <input type="number" 
+                                        class="form-control form-control-sm"
+                                        :id="selector_id"
+                                        x-bind:min="hasCustomProperty('min_value') ? attribute.custom_properties.min_value : ''"
+                                        x-bind:max="hasCustomProperty('max_value') ? attribute.custom_properties.max_value : ''"
+                                        x-model="attributes[attribute.id].attribute_values[0].values" />
+
+                                        <template x-if="hasCustomProperty('unit')">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text input-group-text-sm" x-text="attribute.custom_properties.unit"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    
+                                </div>
+                            </template>
+                            {{-- END Number --}}
+
+
+                            {{-- Date --}}
+                            <template x-if="attribute.type === 'date'">
+                                <div class="w-100" x-data="{
+                                        getDateOptions() {
+                                            let options = {
+                                                mode: 'single',
+                                                enableTime: false,
+                                            };
+                                            
+                                            if(hasCustomProperty('with_time') && attribute.custom_properties.with_time) {
+                                                options.enableTime = true;
+                                                options.dateFormat = 'd.m.Y H:i';
+                                            } 
+                                            
+                                            if(hasCustomProperty('range') && attribute.custom_properties.range) {
+                                                options.mode = 'range';
+                                            }
+
+                                            return JSON.stringify(options);
+                                        }
+                                    }" x-init="">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                    <input x-model="attributes[attribute.id].attribute_values[0].values"
+                                                type="text"
+                                                class="js-flatpickr form-control form-control-sm flatpickr-custom"
+                                                placeholder="{{ translate('Pick date') }}"
+                                                :data-hs-flatpickr-options='getDateOptions()'
+                                                data-input />
+                                    
+                                </div>
+                            </template>
+                            {{-- END Date --}}
+                            
+
+                            {{-- Checkbox --}}
+                            {{-- <template x-if="attribute.type === 'checkbox'">
+                                <div class="w-100" x-data="{}" x-init="">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                    <template x-for="attribute_value in attribute.attribute_values">
+                                        <div class="form-control form-control-sm mb-2">
+                                            <div class="custom-control custom-checkbox">
+                                                <input x-model="selected_attribute_values['attribute.'+attribute.id]" 
+                                                       type="checkbox"
+                                                       class="custom-control-input"
+                                                       @if(!empty($value) || !empty($valueProperty)) value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}" @endif
+                                                       @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
+                                                       {{ $attributes }}>
+                        
+                                                <label class="custom-control-label" x-text="attribute_value.values">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                    <div class="input-group" :class="{'input-group-merge': !hasCustomProperty('unit')}">
+
+                                        <input type="number" 
+                                        class="form-control form-control-sm"
+                                        :id="selector_id"
+                                        x-bind:min="hasCustomProperty('min_value') ? attribute.custom_properties.min_value : ''"
+                                        x-bind:max="hasCustomProperty('max_value') ? attribute.custom_properties.max_value : ''"
+                                        x-model="attributes[attribute.id].attribute_values[0].values" />
+
+                                        <template x-if="hasCustomProperty('unit')">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text input-group-text-sm" x-text="attribute.custom_properties.unit"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    
+                                </div>
+                            </template> --}}
+                            {{-- END Checkbox --}}
+                        </div>
+                    </template>
+
+                    <hr />
+
+                    <div class="w-100">
+
+                        @if($attributes)
+                            @foreach($attributes as $attribute)
+                                @php
+                                    $attribute = (object) $attribute; // NOTE: Retard doesn't work properly without a cast, even though it is an object in livewire component (facepalm)
+                                    $custom_properties = (object) $attribute->custom_properties;
+                                @endphp
+                                @if($attribute->selected ?? null)
+                                     @if($attribute->type === 'dropdown')
+                                        {{--<x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
+                                                        error-bag-name="attributes.{{ $attribute->id }}"
+                                                        label="{{ $attribute->name }}"
+                                                        :items="$attribute->attribute_values"
+                                                        value-property="id"
+                                                        label-property="values"
+                                                        :multiple="($custom_properties->multiple ?? null) ? true : false"
+                                                        placeholder="{{ translate('Search or add values...') }}"
+                                                        data-attribute-id="{{ $attribute->id }}"
+                                                        data-type="{{ $attribute->type }}"
+                                                        wireType="defer"
+                                                    >
+                                            @if($custom_properties->multiple ?? null)
+                                                <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
+                                                                class="mt-2 mb-2"
+                                                                class-label="d-flex align-items-center"
+                                                                append-text="{{ translate('Used for variations') }}"
+                                                                :selected="$attribute->for_variations ?? false"
+                                                                >
+                                                </x-ev.form.toggle>
+                                            @endif
+                                        </x-ev.form.select> --}}
+                                    @elseif($attribute->type === 'plain_text')
+                                        {{-- <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
+                                                        type="text"
+                                                        label="{{ $attribute->name }}"
+                                                        data-attribute-id="{{ $attribute->id }}"
+                                                        error-bag-name="attributes.{{ $attribute->id }}"
+                                                        :value="$attribute->attribute_values->values ?? ''"
+                                                        data-type="{{ $attribute->type }}"
+                                                        wireType="defer">
+                                        </x-ev.form.input> --}}
+                                    @elseif($attribute->type === 'number')
+                                        {{-- <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
+                                                        type="number"
+                                                        label="{{ $attribute->name }}"
+                                                        :placement="!empty($custom_properties->unit ?? null) ? 'append' : 'prepend'"
+                                                        :text="!empty($custom_properties->unit ?? null) ? $custom_properties->unit : ''"
+                                                        data-attribute-id="{{ $attribute->id }}"
+                                                        error-bag-name="attributes.{{ $attribute->id }}"
+                                                        :value="$attribute->attribute_values->values ?? ''"
+                                                        :min="isset($custom_properties->min_value) ? $custom_properties->min_value : 0"
+                                                        :max="isset($custom_properties->max_value) ? $custom_properties->max_value : 999999999999999999999"
+                                                        data-type="{{ $attribute->type }}"
+                                                        wireType="defer">
+                                        </x-ev.form.input> --}}
+                                    @elseif($attribute->type === 'date')
+                                        {{-- @php
+                                            $options = [
+                                                'dateFormat' => ($custom_properties->with_time ?? false) ? 'd.m.Y H:i' : 'd.m.Y',
+                                                'enableTime' => (bool) ($custom_properties->with_time ?? false),
+                                                'mode' => ($custom_properties->range ?? false) ? 'range' : 'single',
+                                            ];
+                                        @endphp
+                                        <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values.0.values"
+                                                                    id="{{ 'date_' . $attribute->id }}"
+                                                                    label="{{ $attribute->name }}"
+                                                                    placeholder="{{ translate('Choose Date(s)...') }}"
+                                                                    error-bag-name="attributes.{{ $attribute->id }}"
+                                                                    data-attribute-id="{{ $attribute->id }}"
+                                                                    value="$attribute->attribute_values->values ?? []"
+                                                                    :options="$options"
+                                                                    icon="heroicon-o-calendar"
+                                                                    data-type="{{ $attribute->type }}"
+                                                                    wireType="defer"
+                                                                    style="text-indent: 25px;">
+                                        </x-ev.form.date-time-picker> --}}
+                                    @elseif($attribute->type === 'checkbox')
+                                        <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
+                                                            :append-to-name="true"
+                                                            value-property="selected"
+                                                            label-property="values"
+                                                            :items="$attribute->attribute_values"
+                                                            error-bag-name="attributes.{{ $attribute->id }}"
+                                                            data-attribute-id="{{ $attribute->id }}"
+                                                            label="{{ $attribute->name }}"
+                                                            data-type="{{ $attribute->type }}"
+                                                            wireType="defer">
+                                        </x-ev.form.checkbox>
+                                    @elseif($attribute->type === 'radio')
+                                        <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
+                                                        :append-to-name="true"
+                                                        value-property="selected"
+                                                        label-property="values"
+                                                        :items="$attribute->attribute_values"
+                                                        error-bag-name="attributes.{{ $attribute->id }}"
+                                                        data-attribute-id="{{ $attribute->id }}"
+                                                        label="{{ $attribute->name }}"
+                                                        data-type="{{ $attribute->type }}"
+                                                        :isWired="false">
+                                        </x-ev.form.radio>
+                                    @endif
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
+                    
+                </div>
+            </div>
+            {{-- END Card Attributes --}}
+
+            {{-- Card SEO --}}
+            <div class="card mb-3 mb-lg-5" x-data="{
+                    collapse: true,
+                }">
+                <div class="card-body position-relative">
+                    <h5 class="mb-0 d-flex justify-content-between pointer" @click="collapse = !collapse">
+                        {{ translate('SEO') }}
+
+                        @svg('heroicon-o-chevron-down', ['class' => 'square-20', ':class' => "{'rotate-180': !collapse}"])
+                    </h5>
+
+                    <div class="w-100 pt-3 mt-3 border-top d-none" :class="{'d-none': collapse}">
+                        <!-- SEO Meta Title -->
+                        <x-ev.form.input name="product.meta_title" class="form-control-sm" type="text" label="{{ translate('Meta Title') }}" placeholder="{{ translate('Meta title is used for Meta, OpenGraph, Twitter...') }}" >
+                            <small class="text-muted">{{ translate('This title will be used for SEO and Social. Real product title will be used as fallback if this is empty.') }}</small>
+                        </x-ev.form.input>
+
+                        <!-- SEO Meta Description -->
+                        <x-ev.form.textarea name="product.meta_description" rows="4" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
+                            <small class="text-muted">{{ translate('Have in mind that description should be between 70 and max 200 characters. Facebook up to 200 chars, Twitter up to 150 chars max.') }}</small>
+                        </x-ev.form.textarea>
+
+                        <!-- SEO Meta Image -->
+                        <x-ev.form.file-selector name="product.meta_img" label="{{ translate('Meta image') }}" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
+                    </div>
+                    
+                </div>
+            </div>
+            {{-- END Card SEO --}}
         </div>
         {{-- END Left column --}}
 
