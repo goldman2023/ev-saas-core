@@ -75,12 +75,12 @@
         <div class="d-flex text-center mt-3">
 
             <a href="{{ $product->getPermalink() }}" type="button"
-                class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
+                class="btn btn-xs btn-outline-primary btn-pill transition-3d-hover">
                 {{ translate('View Product') }}
             </a>
 
             <button href="{{ $product->getPermalink() }}" type="button"
-                class="btn ml-1 btn-sm btn-outline-primary btn-pill transition-3d-hover">
+                class="btn ml-2 btn-xs btn-outline-primary btn-pill transition-3d-hover">
                 {{ translate('Add To Cart') }}
             </a>
         </div>

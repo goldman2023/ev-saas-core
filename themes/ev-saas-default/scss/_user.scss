@@ -111,6 +111,13 @@ img {
         object-fit: cover;
     }
 
+    &-list {
+        .ev-product-card__img {
+            height: 100%;
+            min-height: 120px;
+        }
+    }
+
     .hover-only {
         position: absolute;
         bottom: 20px;

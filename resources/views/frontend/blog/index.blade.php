@@ -47,8 +47,7 @@
                 <h2 class="h3 mb-0">{{ translate('Latest news') }}</h2>
             </div>
             <div class="col-6 text-right">
-                <a class="font-weight-bold" href="{{ route('news') }}">{{ translate('View all ') }}<i
-                        class="las la-angle-right la-sm ml-1"></i></a>
+
             </div>
         </div>
         <div class="row justify-content-lg-between">
@@ -65,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <div id="stickyBlockStartPoint" style=""></div>
                 <div class="js-sticky-block" data-hs-sticky-block-options="{
                     &quot;parentSelector&quot;: &quot;#stickyBlockStartPoint&quot;,
@@ -80,7 +79,7 @@
                             <h3>{{ translate('Recently Viewed Products') }}</h3>
                         </div>
 
-                        <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
+                        <x-default.products.recently-viewed-products style="list" columns="12"></x-default.products.recently-viewed-products>
 
                     </div>
 

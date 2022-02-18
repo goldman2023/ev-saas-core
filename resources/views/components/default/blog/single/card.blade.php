@@ -23,7 +23,7 @@
                 </ul>
                 <h3 class="h3">
                     <a class="text-dark" href="
-                        {{  $item->getPermalink() }}>
+                        {{  $item->getPermalink() }}">
                         {{ $item->title }}
                     </a>
                 </h3>
