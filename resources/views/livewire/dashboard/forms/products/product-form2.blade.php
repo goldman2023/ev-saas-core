@@ -1,4 +1,7 @@
-<div x-data="{}"
+<div x-data="{
+        is_digital: {{ $product->digital === true ? 'true' : 'false' }},
+        use_serial: {{ $product->use_serial === 1 ? 'true' : 'false' }}
+    }"
      class="container-fluid"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
@@ -30,9 +33,9 @@
 
             {{-- Card Media --}}
             <div class="card mb-3 mb-lg-5" x-data="{
-                show_video: {{ !empty($product->video_link) ? 'true':'false' }},
-                show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
-            }">
+                    show_video: {{ !empty($product->video_link) ? 'true':'false' }},
+                    show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
+                }">
                 <div class="card-body position-relative pb-2">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Media') }}</h5>
 
@@ -81,21 +84,21 @@
             </div>
             {{-- END Card Media --}}
 
-            {{-- Card Basic --}}
+            {{-- Card Pricing --}}
             <div class="card mb-3 mb-lg-5" x-data="{
-                base_currency: @js($product->base_currency),
-                discount_type: @js($product->discount_type),
-                tax_type: @js($product->tax_type),
-                show_tax: {{ !empty($product->tax) ? 'true':'false' }},
-            }">
+                    base_currency: @js($product->base_currency),
+                    discount_type: @js($product->discount_type),
+                    tax_type: @js($product->tax_type),
+                    show_tax: {{ !empty($product->tax) ? 'true':'false' }},
+                }">
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Pricing') }}</h5>
 
                     <div class="w-100">
                         <!-- Price -->
-                        <div class="row form-group mt-3">
+                        <div class="row form-group">
                             <div class="col-12 col-sm-7">
-                                <label class="w-100 col-form-label input-label">{{ translate('Price') }}</label>
+                                <label class="w-100">{{ translate('Price') }}</label>
 
                                 <div class="input-group input-group-sm-down-break">
                                     <input type="number" 
@@ -117,7 +120,7 @@
                                     $('#product-base_currency').val(value).trigger('change');
                                 });
                             "> 
-                                <label class="w-100 col-form-label input-label">{{ translate('Base currency') }}</label>
+                                <label class="w-100">{{ translate('Base currency') }}</label>
 
                                 <select class="form-control custom-select custom-select-sm" 
                                         name="product.base_currency" 
@@ -141,7 +144,7 @@
                         <div class="row form-group mt-3">
                             
                             <div class="col-12 col-sm-7">
-                                <label class="w-100 col-form-label input-label">{{ translate('Discount') }}</label>
+                                <label class="w-100">{{ translate('Discount') }}</label>
 
                                 <div class="input-group input-group-sm-down-break">
                                     <input type="number" step="0.01" class="form-control form-control-sm @error('product.discount') is-invalid @enderror"
@@ -163,7 +166,7 @@
                                     $('#product-discount_type').val(value).trigger('change');
                                 });
                             "> 
-                                <label class="w-100 col-form-label input-label">{{ translate('Discount type') }}</label>
+                                <label class="w-100">{{ translate('Discount type') }}</label>
 
                                 <select class="form-control custom-select custom-select-sm" 
                                         name="product.discount_type" 
@@ -183,6 +186,7 @@
                         </div>
                         <!-- END Discount and discount type -->
 
+                        <!-- Has additional fee -->
                         <div class="w-100 d-flex">
                             <label class="toggle-switch mr-3">
                                 <input type="checkbox" x-model="show_tax" class="js-toggle-switch toggle-switch-input">
@@ -197,7 +201,7 @@
                         <!-- Tax and Tax type -->
                         <div class="row form-group mt-3" :class="{'d-none': !show_tax}">
                             <div class="col-12 col-sm-7">
-                                <label class="w-100 col-form-label input-label">{{ translate('Additional Fee') }}</label>
+                                <label class="w-100 ">{{ translate('Additional Fee') }}</label>
 
                                 <div class="input-group input-group-sm-down-break">
                                     <input type="number" step="0.01" class="form-control @error('product.tax') is-invalid @enderror"
@@ -219,7 +223,7 @@
                                     $('#product-tax_type').val(value).trigger('change');
                                 });
                             "> 
-                                <label class="w-100 col-form-label input-label">{{ translate('Fee type') }}</label>
+                                <label class="w-100">{{ translate('Fee type') }}</label>
 
                                 <select class="form-control custom-select custom-select-sm" 
                                         name="product.tax_type" 
@@ -237,11 +241,137 @@
                             </div>
                         </div>
                         <!-- END Tax and Tax type -->
+
+                        <hr class="my-2 mt-3" />
+
+                        <div class="row form-group mt-0 mb-0">
+                            <div class="col-12">
+                                <label class="w-100 col-form-label input-label pt-1">{{ translate('Cost per item') }}</label>
+
+                                <div class="input-group input-group-sm-down-break">
+                                    <input type="number" 
+                                            step="0.01"
+                                            min="0"
+                                            class="form-control form-control-sm @error('product.purchase_price') is-invalid @enderror"
+                                            placeholder="{{ translate('0.00') }}"
+                                            wire:model.defer="product.purchase_price" />
+
+                                    <small class="w-100 mt-2">
+                                        {{ translate('Customers won\'t see this. For your reference and reports only.') }}
+                                    </small>
+                                </div>
+
+                                <x-default.system.invalid-msg field="product.purchase_price"></x-default.system.invalid-msg>
+                            </div>
+                        </div>
                     </div>
                     
                 </div>
             </div>
-            {{-- END Card Basic --}}
+            {{-- END Card Pricing --}}
+            
+
+            {{-- Card Inventory --}}
+            <div class="card mb-3 mb-lg-5" x-data="
+                    
+                ">
+                <div class="card-body position-relative">
+                    <h5 class="pb-2 mb-3 border-bottom">{{ translate('Inventory') }}</h5>
+
+                    <div class="w-100">
+                        <div class="row form-group mt-0 mb-0">
+                            <div class="col-12 col-sm-6">
+                                <x-ev.form.input name="product.sku" class="form-control-sm" groupclass="mb-0" type="text" label="{{ translate('SKU (Stock keeping unit)') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
+                                    <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
+                                </x-ev.form.input>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <x-ev.form.input name="product.barcode" class="form-control-sm" groupclass="mb-0" type="text" label="{{ translate('Barcode (ISBN, UPC, GTIN, etc.)') }}" placeholder="{{ translate('Barcode of the main product (not variations).') }}" >
+                                    <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
+                                </x-ev.form.input>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Uses Serial -->
+                    <div class="w-100 pt-3 d-flex">
+                        <label class="toggle-switch mr-3">
+                            <input type="checkbox" x-model="use_serial" class="js-toggle-switch toggle-switch-input">
+                            <span class="toggle-switch-label">
+                                <span class="toggle-switch-indicator"></span>
+                            </span>
+
+                            <span class="ml-3">{{ translate('Uses serial numbers?') }}</span>
+                        </label>
+                    </div>
+                    <!-- END Uses Serial -->
+
+                    <!-- Allow out of stock purchases -->
+                    <div class="w-100 pt-2 d-flex">
+                        <label class="toggle-switch mr-3">
+                            <input type="checkbox" wire:model.defer="product.allow_out_of_stock_purchases" class="js-toggle-switch toggle-switch-input">
+                            <span class="toggle-switch-label">
+                                <span class="toggle-switch-indicator"></span>
+                            </span>
+
+                            <span class="ml-3">{{ translate('Allow selling even when out of stock?') }}</span>
+                        </label>
+                    </div>
+                    <!-- END Allow out of stock purchases -->
+
+                    <!-- Standard Inventory tracking -->
+                    <div class="w-100 pt-3" :class="{'d-none': use_serial}">
+                        <x-ev.form.input name="product.min_qty" class="form-control-sm"  type="number" label="{{ translate('Minimum quantity') }}" :required="true" min="1" step="1">
+                            <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
+                        </x-ev.form.input>
+
+                        <x-ev.form.input name="product.current_stock" class="form-control-sm" groupclass="mb-0" type="number" label="{{ translate('Stock quantity') }}" :required="true"  min="0" step="1">
+                            <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
+                        </x-ev.form.input>
+                    </div>
+                    <!-- END Standard Inventory tracking -->
+
+                    <!-- Low stock quantity warning threshold -->
+                    <div class="w-100 pt-3">
+                        <x-ev.form.input name="product.low_stock_qty" class="form-control-sm" groupclass="mb-0" type="number" label="{{ translate('Low stock quantity warning threshold') }}"  min="0" step="1">
+                        </x-ev.form.input>
+                    </div>
+                    <!-- END ow stock quantity warning threshold -->
+
+                </div>
+            </div>
+            {{-- END Card Inventory --}}
+
+
+            {{-- Card Shipping --}}
+            <div class="card mb-3 mb-lg-5" x-data="
+                    
+                ">
+                <div class="card-body position-relative">
+                    <h5 class="pb-2 mb-3 border-bottom">{{ translate('Shipping') }}</h5>
+
+                    <div class="w-100">
+                        <!-- Is digital product? -->
+                        <div class="w-100 d-flex">
+                            <label class="toggle-switch mr-3">
+                                <input type="checkbox" x-model="is_digital" class="js-toggle-switch toggle-switch-input">
+                                <span class="toggle-switch-label">
+                                    <span class="toggle-switch-indicator"></span>
+                                </span>
+    
+                                <span class="ml-3">{{ translate('Is this a digital product?') }}</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="w-100" :class="{'d-none': is_digital}">
+                       
+                    </div>
+                </div>
+            </div>
+            {{-- END Card Shipping --}}
+
         </div>
         {{-- END Left column --}}
 

@@ -82,6 +82,10 @@ class Product extends EVBaseModel
         'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description'];
 
 
+    protected $casts = [
+        'digital' => 'boolean',
+    ];
+
     /**
      * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)
      *
