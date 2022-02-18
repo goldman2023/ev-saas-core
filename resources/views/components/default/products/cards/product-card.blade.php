@@ -24,7 +24,7 @@
                 {{ $product->getCondition() ?? '' }}
 
             </a>
-            <span class="d-block h4 font-weight-bold">
+            <span class="d-block h4 mb-0 font-weight-bold">
                 <a class="text-inherit" href="{{ $product->getPermalink() }}">
                     {{ $product->getTranslation('name') }}
                 </a>
@@ -33,13 +33,20 @@
             <div class="mb-3">
                 <a class="d-inline-flex align-items-center small" href="#">
                     <div class="text-warning mr-2">
-                        <a class="d-inline-block text-body small font-weight-bold" href="{{ $product->getPermalink() }}">
-
+                        <a class="d-inline-block text-body small font-weight-bold"
+                            href="{{ $product->getPermalink() }}">
+                            @if($product->brand)
                             <x-tenant.system.image class="ev-brand-image-small"
-                                :image='uploaded_asset($product->brand->logo ?? "")'>
+                                :image='$product->brand()->getThumbnail()'>
                             </x-tenant.system.image>
-                            <br>
-                            {{ $product->brand->name ?? '' }}
+
+                            @endif
+
+                            <div>
+                                {{-- TODO: Fix Brand --}}
+                               Brand {{ $product->brand_id }}
+                            </div>
+
 
                         </a>
                     </div>
@@ -65,11 +72,16 @@
             class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
             {{ translate('Add to Cart') }}
         </a> --}}
-        <div class="hover-only">
+        <div class="d-flex text-center mt-3">
 
             <a href="{{ $product->getPermalink() }}" type="button"
-                class="ml-1 btn btn-sm btn-primary btn-pill transition-3d-hover">
+                class="btn btn-sm btn-outline-primary btn-pill transition-3d-hover">
                 {{ translate('View Product') }}
+            </a>
+
+            <button href="{{ $product->getPermalink() }}" type="button"
+                class="btn ml-1 btn-sm btn-outline-primary btn-pill transition-3d-hover">
+                {{ translate('Add To Cart') }}
             </a>
         </div>
     </div>
