@@ -182,7 +182,7 @@ trait VariationTrait
                     $variation->discount_type = 'percent';
                     $variation->thumbnail = null;
                     $variation->current_stock = 0;
-                    $variation->temp_sku = '';
+                    $variation->sku = '';
 
                     $all_combinations->push($variation);
                 } else {

@@ -14,6 +14,7 @@
         defaults: {
             el: document.querySelector('.js-toast-ui-editor'),
             height: '400px',
+            minHeight: '200px',
             initialEditType: 'wysiwyg',
             previewStyle: 'vertical',
             hideModeSwitch: true,

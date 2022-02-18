@@ -24,6 +24,10 @@ class EVProductController extends Controller
         return view('frontend.dashboard.products.create');
     }
 
+    public function create2(Request $request) {
+        return view('frontend.dashboard.products.create2');
+    }
+
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();

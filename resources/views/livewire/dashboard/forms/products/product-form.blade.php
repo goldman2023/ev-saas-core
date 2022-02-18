@@ -318,7 +318,7 @@
                                     <!-- Body -->
                                     <div class="">
                                         <!-- Main Product SKU -->
-                                        <x-ev.form.input name="product.temp_sku" type="text" label="{{ translate('SKU') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
+                                        <x-ev.form.input name="product.sku" type="text" label="{{ translate('SKU') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
                                             <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
                                         </x-ev.form.input>
 
