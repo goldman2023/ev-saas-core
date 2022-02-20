@@ -79,7 +79,7 @@ class Product extends EVBaseModel
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = ['name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description'];
+        'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description', 'shop_id'];
 
 
     protected $casts = [
@@ -126,7 +126,7 @@ class Product extends EVBaseModel
     {
         return 'slug';
     }
-    
+
     /*
      * Scope searchable parameters
      */
