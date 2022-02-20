@@ -18,6 +18,7 @@ use App\Notifications\NewCompanyJoin;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Requests\ShopRequest;
 use Spatie\Newsletter\NewsletterFacade;
+
 class ShopController extends Controller
 {
     use LoggingTrait;
@@ -76,11 +77,13 @@ class ShopController extends Controller
                 $user->email = $request->email;
                 $user->user_type = "seller";
                 $user->phone = $request->phone_number;
-//          TODO: Make sure this does not throw error when mailchimp is not setup
-//                $news = NewsletterFacade::subscribe($request->email, ['FNAME'=>$request->name, 'LNAME'=>""]);
+                /* TODO: Add a correct permissions for the seller */
+
+                // TODO: Make sure this does not throw error when mailchimp is not setup
+                // $news = NewsletterFacade::subscribe($request->email, ['FNAME'=>$request->name, 'LNAME'=>""]);
                 $user->password = Hash::make($request->password);
                 $user->save();
-                $this->simpleLog("New User Created and Registered to newsletter using email: ".$user->email);
+                $this->simpleLog("New User Created and Registered to newsletter using email: " . $user->email);
             } else {
                 flash(translate('Sorry! Password did not match.'))->error();
                 return back();
@@ -102,32 +105,32 @@ class ShopController extends Controller
 
 
         $user->save();
-            $shop = new Shop;
-            $shop->name = $request->company_name;
-            /* @vukasin TODO: Replace this with new way of adding address */
-            // $shop->address = $request->address;
-            $shop->slug = preg_replace('/\s+/', '-', $request->name) . '-' . $shop->id;
+        $shop = new Shop;
+        $shop->name = $request->company_name;
+        /* @vukasin TODO: Replace this with new way of adding address */
+        // $shop->address = $request->address;
+        $shop->slug = preg_replace('/\s+/', '-', $request->name) . '-' . $shop->id;
 
-            if ($shop->save()) {
-                $shop->users()->attach($user);
-                auth()->login($user, false);
-                if (get_setting('email_verification') != 1) {
-                    $user->email_verified_at = date('Y-m-d H:m:s');
-                    $user->save();
-                    Notification::send(User::where('id', '!=', $user->id)->get(), new NewCompanyJoin($user));
-                } else {
-                    $user->notify(new EmailVerificationNotification());
-                }
-                flash(translate('Your Company has been created successfully!'))->success();
-
-                /* TODO: ADD user to mailchimp for welcome email: */
-
-                return redirect()->route('dashboard');
-            } else {
-                $seller->delete();
-                $user->user_type == 'customer';
+        if ($shop->save()) {
+            $shop->users()->attach($user);
+            auth()->login($user, false);
+            if (get_setting('email_verification') != 1) {
+                $user->email_verified_at = date('Y-m-d H:m:s');
                 $user->save();
+                Notification::send(User::where('id', '!=', $user->id)->get(), new NewCompanyJoin($user));
+            } else {
+                $user->notify(new EmailVerificationNotification());
             }
+            flash(translate('Your Company has been created successfully!'))->success();
+
+            /* TODO: ADD user to mailchimp for welcome email: */
+
+            return redirect()->route('dashboard');
+        } else {
+            $seller->delete();
+            $user->user_type == 'customer';
+            $user->save();
+        }
 
         flash(translate('Sorry! Something went wrong.'))->error();
         return back();

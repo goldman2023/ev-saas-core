@@ -265,18 +265,18 @@ class PermissionsService
 
 
         /* Old version that causes the error  */
-        /* if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
+        if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
             (empty($allowed_permissions) || auth()->user()->hasAnyDirectPermission($allowed_permissions))) {
             return true;
-        } */
+        } 
 
         /* @vukasin TODO: I've removed part of code this because of an error:
         https://app.asana.com/0/1201698626580352/1201824066448387
         */
-        if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
-            (empty($allowed_permissions) )) {
-            return true;
-        }
+        // if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
+        //     (empty($allowed_permissions) )) {
+        //     return true;
+        // }
 
         return $abort ? abort(403) : false;
     }

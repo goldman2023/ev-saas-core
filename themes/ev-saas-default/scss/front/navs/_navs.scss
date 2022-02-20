@@ -208,7 +208,7 @@
     border-right-width: 0;
     border-top-width: 0;
     padding: $nav-tabs-link-padding-y 0;
-    margin-bottom: -$nav-tabs-link-active-border-width / 2;
+    margin-bottom: -$nav-tabs-link-active-border-width * 0.5;
   }
 
   .nav-link.active,

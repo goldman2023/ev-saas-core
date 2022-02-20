@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Add New Product'))
+@section('page_title', translate('Edit Product').': '.$product->getTranslation('name'))
 
 @push('head_scripts')
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
@@ -8,7 +8,7 @@
 
 @section('panel_content')
     <section id="app">
-        <livewire:dashboard.forms.products.product-form page="general" :product="$product"/>
+        <livewire:dashboard.forms.products.product-form2 :product="$product"></livewire:dashboard.forms.products.product-form2>
     </section>
 @endsection
 
@@ -29,6 +29,6 @@
     <script src="{{ static_asset('vendor/hs.datatables.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
-    <script src="{{ static_asset('js/crud/product-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/new-product-form.js', false, true, true) }}"></script>
     <script src="{{ static_asset('js/crud/product-variations-table.js', false, true, true) }}"></script>
 @endpush

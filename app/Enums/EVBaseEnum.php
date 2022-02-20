@@ -7,13 +7,14 @@ use \Spatie\Enum\Enum;
 
 class EVBaseEnum extends Enum
 {
+    // ALWAYS RETURNS EMPTY ARRAY! DON'T USE IT...
     public static function toArray($skip = null): array
-    {
+    {   
         $new_array = [];
-        $array = parent::toArray();
+        $array = parent::toArray(); // TODO: THIS DOES NOT WORK FOR SOME WEIRD REASON! 
 
         foreach ($array as $value => $label) {
-            if((is_string($skip) && $skip === $value) || (is_array($skip) && in_array($value, $skip))) {
+            if((is_string($skip) && $skip === $value) || (is_array($skip) && in_array($value, $skip))) { 
                 continue;
             }
 
@@ -28,7 +29,7 @@ class EVBaseEnum extends Enum
      */
     public static function toValues($skip = null): array
     {
-        return array_keys(static::toArray($skip));
+        return array_keys(static::values($skip));
     }
 
     /**
@@ -36,7 +37,7 @@ class EVBaseEnum extends Enum
      */
     public static function toLabels($skip = null): array
     {
-        return array_values(static::toArray($skip));
+        return array_values(static::labels($skip));
     }
 
     public static function implodedValues($skip = null, $separator = ', '): string

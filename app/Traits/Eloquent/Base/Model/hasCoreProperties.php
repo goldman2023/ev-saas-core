@@ -55,4 +55,14 @@ trait hasCoreProperties
 
         return $core_properties;
     }
+
+    /*
+     * Remove Core Properties from attributesToArray() function returned data!
+     */
+    public function attributesToArray() {
+        $all_attributes = parent::attributesToArray();
+        $core_properties = array_fill_keys($this->getCoreProperties(), null);
+
+        return array_diff_key($all_attributes, $core_properties);
+    }
 }

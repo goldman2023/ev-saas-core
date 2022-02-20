@@ -21,7 +21,7 @@
   .irs-handle {
     width: $range-slider-handle-width;
     height: $range-slider-handle-height;
-    top: $range-slider-handle-height / 2;
+    top: $range-slider-handle-height * 0.5;
     background-color: $range-slider-handle-bg-color;
     cursor: pointer;
     @include border-radius($range-slider-handle-border-radius);

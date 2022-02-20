@@ -14,6 +14,7 @@
         defaults: {
             el: document.querySelector('.js-toast-ui-editor'),
             height: '400px',
+            minHeight: '200px',
             initialEditType: 'wysiwyg',
             previewStyle: 'vertical',
             hideModeSwitch: true,
@@ -39,7 +40,7 @@
                 settings['initialValue'] = $input.val();
 
                 let editor = new toastui.Editor(settings);
-                editor.on('change', function() {
+                editor.on('change', function() { console.log($input);
                     $input.val(editor.getHTML());
                     //$input.get(0).dispatchEvent(new Event('input'));
                 });

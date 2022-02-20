@@ -22,18 +22,15 @@ class PaymentMethodsUniversalService
         $this->payment_methods = PaymentMethodUniversal::where('enabled', 1)->get();
     }
 
-    protected function init() {
-        if(auth()->user() instanceof User) {
-            if (auth()->user()->isSeller() || auth()->user()->isStaff() || auth()->user()->isAdmin()) {
-                $this->shop = auth()->user()->shop->first();
-
-                $this->setSettings();
-            }
-        }
-    }
-
     public function getPaymentMethods() {
         return $this->payment_methods;
     }
 
+    public function getPaymentMethodsName() {
+        return $this->payment_methods->map(fn($item) => $item->name);
+    }
+
+    public function getPaymentMethodsGateway() {
+        return $this->payment_methods->map(fn($item) => $item->gateway);
+    }
 }

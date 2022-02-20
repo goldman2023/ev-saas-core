@@ -10,6 +10,8 @@ use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\PermalinkTrait;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 /**
  * App\Models\Shop
@@ -50,16 +52,47 @@ use App\Traits\PermalinkTrait;
 
 class Shop extends EVBaseModel
 {
+    use HasSlug;
     use RegeneratesCache;
 
     use AttributeTrait;
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
+    use PermalinkTrait;
 
     protected $table = 'shops';
 
     protected $fillable = ['name', 'slug', 'excerpt', 'content', 'meta_title', 'meta_description'];
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
+    }
+
+    /**
+     * Get the route name for the model.
+     *
+     * @return string
+     */
+    public static function getRouteName() {
+        return 'shop.single';
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function seller()
     {
@@ -158,11 +191,6 @@ class Shop extends EVBaseModel
         return $website;
     }
 
-    public function getPermalinkAttribute() {
-        /* TODO: Make this consistent with naming convention
-        Overiding for custom route names */
-        return route('shop.visit', $this->slug);
-    }
 
     public function get_company_logo()
     {
@@ -254,13 +282,13 @@ class Shop extends EVBaseModel
         }
     }
 
-    public function company_is_verified()
+    public function isVerified()
     {
 
         /* TODO: Add dynamic verification column to shops table */
         $verification_status = true;
 
-        if ($verification_status === 'yes') {
+        if ($verification_status === true) {
             return true;
         } else {
             return false;

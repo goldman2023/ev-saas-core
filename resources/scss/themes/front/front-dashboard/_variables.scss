@@ -71,8 +71,8 @@ $sizes: map-merge((
 $gutters-spacer: 1rem !default;
 $gutters-spacers: (
   0: 0,
-  1: $gutters-spacer / 4,
-  2: $gutters-spacer / 2,
+  1: $gutters-spacer * 0.25,
+  2: $gutters-spacer * 0.5,
   3: $gutters-spacer,
   4: $gutters-spacer * 1.5,
   5: $gutters-spacer * 3,
@@ -1614,10 +1614,10 @@ $step-icon-margin-y:                                        1rem !default;
 $step-icon-margin-x:                                        1rem !default;
 $step-avatar-margin-x:                                      $step-icon-margin-x !default;
 $step-timeline-content-margin-x:                            1.5rem !default;
-$step-timeline-icon-margin-x:                               $step-icon-width / 2 !default;
-$step-timeline-icon-xs-margin-x:                            $step-icon-xs-width / 2 !default;
-$step-timeline-icon-sm-margin-x:                            $step-icon-sm-width / 2 !default;
-$step-timeline-icon-lg-margin-x:                            $step-icon-lg-width / 2 !default;
+$step-timeline-icon-margin-x:                               $step-icon-width * 0.5 !default;
+$step-timeline-icon-xs-margin-x:                            $step-icon-xs-width * 0.5 !default;
+$step-timeline-icon-sm-margin-x:                            $step-icon-sm-width * 0.5 !default;
+$step-timeline-icon-lg-margin-x:                            $step-icon-lg-width * 0.5 !default;
 
 
 
@@ -2106,7 +2106,7 @@ $chartjs-tooltip-header-color:                              $white-color-70 !def
 
 // Width & Heights
 $chartjs-tooltip-arrow-pointer-pseudo-width:                1rem !default;
-$chartjs-tooltip-arrow-pointer-pseudo-height:               $chartjs-tooltip-arrow-pointer-pseudo-width / 2 !default;
+$chartjs-tooltip-arrow-pointer-pseudo-height:               $chartjs-tooltip-arrow-pointer-pseudo-width * 0.5 !default;
 
 // Backgrounds
 $chartjs-tooltip-bg-color:                                  $dark !default;
@@ -2499,7 +2499,7 @@ $jvectormap-zoom-border-color:                              $border-color !defau
 $jvectormap-indicators-width:                               $btn-icon-xs-width !default;
 $jvectormap-indicators-height:                              $jvectormap-indicators-width !default;
 $jvectormap-tooltip-arrow-pointer-pseudo-width:             $chartjs-tooltip-arrow-pointer-pseudo-width !default;
-$jvectormap-tooltip-arrow-pointer-pseudo-height:            $jvectormap-tooltip-arrow-pointer-pseudo-width / 2 !default;
+$jvectormap-tooltip-arrow-pointer-pseudo-height:            $jvectormap-tooltip-arrow-pointer-pseudo-width * 0.5 !default;
 
 // Backgrounds
 $jvectormap-tooltip-bg-color:                               $white !default;

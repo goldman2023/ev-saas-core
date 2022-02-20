@@ -42,8 +42,8 @@ class ProductVariationsTable extends \Livewire\Component
             'variations.*.price.numeric' => 'Price must be numeric',
             'variations.*.price.min' => 'Minimum value is :min',
 
-            'variations.*.temp_sku.required' => 'SKU is required',
-            'variations.*.temp_sku.unique' => 'SKU taken by another product',
+            'variations.*.sku.required' => 'SKU is required',
+            'variations.*.sku.unique' => 'SKU taken by another product',
 
             'variations.*.current_stock.required' => 'Quantity is required',
             'variations.*.current_stock.numeric' => 'Quantity must be numeric',
@@ -61,7 +61,7 @@ class ProductVariationsTable extends \Livewire\Component
             'variations.*.variant' => [],
             'variations.*.product_id' => [],
             'variations.*.price' => 'required|numeric|min:1',
-            'variations.*.temp_sku' => ['required', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.temp_sku' => $item]; }))],
+            'variations.*.sku' => ['required', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.sku' => $item]; }))],
             'variations.*.current_stock' => 'required|numeric|min:0',
             'variations.*.low_stock_qty' => 'numeric|min:0',
             'variations.*.discount' => [],
@@ -195,7 +195,7 @@ class ProductVariationsTable extends \Livewire\Component
         if($variation_model->id ?? null) {
             $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => ProductVariation::class]);
             $product_stock->qty = (float) ($variation_model->current_stock ?? 0);
-            $product_stock->sku = $variation_model->temp_sku;
+            $product_stock->sku = $variation_model->sku;
             $product_stock->low_stock_qty = (float) ($variation_model->low_stock_qty ?? 0);
             $product_stock->save();
         }
@@ -218,7 +218,7 @@ class ProductVariationsTable extends \Livewire\Component
     public function setGenericSKUs() {
         if($this->variations->isNotEmpty()) {
             $this->variations = $this->variations->map(function($variation) {
-                $variation['temp_stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
+                $variation['stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
                 return $variation;
             })->sortKeys();
         }

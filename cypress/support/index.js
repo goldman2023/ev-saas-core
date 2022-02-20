@@ -13,8 +13,18 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
-// Import commands.js using ES2015 syntax:
-import './commands'
+import './laravel-commands';
+import './laravel-routes';
+import './assertions';
 
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
+before(() => {
+    cy.task('activateCypressEnvFile', {}, { log: false });
+    cy.artisan('config:clear', {}, { log: false });
+
+    cy.refreshRoutes();
+});
+
+after(() => {
+    cy.task('activateLocalEnvFile', {}, { log: false });
+    cy.artisan('config:clear', {}, { log: false });
+});

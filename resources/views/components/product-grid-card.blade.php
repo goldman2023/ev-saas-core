@@ -4,7 +4,7 @@
     <div class="card card-bordered h-100 b2b-product-card">
         <div class="card-img-top position-relative">
 
-            <a href="{{ $product->permalink }}">
+            <a href="{{ $product->getPermalink() }}">
                 @if($product->thumbnail_img)
                     <img class="card-img-top" src="{{ uploaded_asset($product->thumbnail_img) }}"
                          data-src="{{ uploaded_asset($product->thumbnail_img) }}"
@@ -35,7 +35,7 @@
 
             <div class="mb-3">
                 <h3>
-                    <a class="text-inherit" href="{{ $product->permalink }}">{{  $product->getTranslation('name')  }}</a>
+                    <a class="text-inherit" href="{{ $product->getPermalink() }}">{{  $product->getTranslation('name')  }}</a>
                 </h3>
             </div>
 
@@ -69,7 +69,7 @@
 
 
             <div class="d-flex justify-content-between align-items-center">
-                <a class="btn  btn-primary transition-3d-hover" href="{{ $product->permalink }}">
+                <a class="btn  btn-primary transition-3d-hover" href="{{ $product->getPermalink() }}">
                     {{ translate('Product details') }}
                 </a>
             </div>

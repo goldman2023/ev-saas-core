@@ -76,7 +76,7 @@
                         <!--Submenu-->
                         <ul class="aiz-side-nav-list level-2">
                             <li class="aiz-side-nav-item">
-                                <a class="aiz-side-nav-link" href="{{route('admin.products.create')}}">
+                                <a class="aiz-side-nav-link" href="{{route('admin.product.create')}}">
                                     <span class="aiz-side-nav-text">{{translate('Add New product')}}</span>
                                 </a>
                             </li>
@@ -87,7 +87,7 @@
                             </li>
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('admin.products')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['admin.products', 'admin.products.edit']) }}">
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['admin.products', 'admin.product.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('In House Products') }}</span>
                                 </a>
                             </li>
@@ -101,7 +101,7 @@
                             @endif
                             <li class="aiz-side-nav-item">
                                 <a href="{{route('digitalproducts.index')}}"
-                                   class="aiz-side-nav-link {{ areActiveRoutes(['digitalproducts.index', 'digitalproducts.create', 'digitalproducts.edit']) }}">
+                                   class="aiz-side-nav-link {{ areActiveRoutes(['digitalproducts.index', 'digitalproduct.create', 'digitalproduct.edit']) }}">
                                     <span class="aiz-side-nav-text">{{ translate('Digital Products') }}</span>
                                 </a>
                             </li>

@@ -90,7 +90,7 @@
                         <tr>
                             <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
                             <td>
-                                <a href="{{ $product->permalink }}" target="_blank" class="text-reset">
+                                <a href="{{ $product->getPermalink() }}" target="_blank" class="text-reset">
                                     {{ $product->getTranslation('name') }}
                                 </a>
                             </td>
@@ -127,7 +127,7 @@
                                 </label>
                             </td>
                             <td class="text-right">
-		                      <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.products.edit', ['id'=>$product->id, 'lang'=>config('app.locale')])}}" title="{{ translate('Edit') }}">
+		                      <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('seller.product.edit', ['id'=>$product->id, 'lang'=>config('app.locale')])}}" title="{{ translate('Edit') }}">
 		                          <i class="las la-edit"></i>
 		                      </a>
                               <a href="{{route('products.duplicate', $product->id)}}" class="btn btn-soft-success btn-icon btn-circle btn-sm"  title="{{ translate('Duplicate') }}">

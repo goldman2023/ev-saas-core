@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Facades\MyShop;
 use App\Models\Product;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -14,7 +15,11 @@ class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHe
      */
     public function collection()
     {
-        return Product::all();
+        /* TODO: Add a complete products export for admin only  */
+
+        /* IMPORTANT: Do not query products directly, only via shop service, so people don't
+        export products from other shops */
+        return MyShop::getShop()->products()->get();
     }
 
 
@@ -54,7 +59,7 @@ class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHe
             'new',
             /*  TODO: Make currency dynamic */
             $price,
-            $product->permalink,
+            $product->getPermalink(),
             $product->getThumbnail(),
             $brand
         ];

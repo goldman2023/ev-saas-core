@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use App\Facades\PaymentMethodsUniversal;
+use App\Http\Services\PaymentMethodsUniversalService;
 
 class PaymentMethodsProvider extends ServiceProvider
 {
@@ -16,12 +16,9 @@ class PaymentMethodsProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Add EV dynamic components to EV namespace
-        Blade::componentNamespace('App\\View\\Components\\EV', 'ev');
-
         // Register Universal Payment Methods Service singleton
         $this->app->singleton('universal_payment_methods', function() {
-            return new PaymentMethodsUniversal(fn () => Container::getInstance());
+            return new PaymentMethodsUniversalService(fn () => Container::getInstance());
         });
 
     }

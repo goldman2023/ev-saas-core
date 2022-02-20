@@ -41,7 +41,7 @@ class StockManagementForm extends Component
     protected function rules()
     {
         return [
-            'product.temp_sku' => ['required', 'filled', Rule::unique($this->product->stock->getTable(), 'sku')->ignore($this->product->stock->id ?? null)],
+            'product.sku' => ['required', 'filled', Rule::unique($this->product->stock->getTable(), 'sku')->ignore($this->product->stock->id ?? null)],
             'product.current_stock' => 'required|numeric|min:0',
             'product.low_stock_qty' => 'required|numeric|min:0',
             'product.use_serial' => 'required|bool',
@@ -51,7 +51,7 @@ class StockManagementForm extends Component
             'edit_serial_numbers.*.serial_number' => ['required'],
             'edit_serial_numbers.*.status' => ['required', 'in:'.SerialNumber::getStatusEnum(true)],
             'variations.*.name' => [],
-            'variations.*.temp_sku' => ['required', 'filled', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.temp_sku' => $item]; }))],
+            'variations.*.sku' => ['required', 'filled', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.sku' => $item]; }))],
             'variations.*.low_stock_qty' => 'required|numeric|min:0',
             'variations.*.current_stock' => 'required|numeric|min:0',
         ];
@@ -59,10 +59,9 @@ class StockManagementForm extends Component
 
     protected function messages() {
         return [
-            'product.temp_sku.required' => translate('This field is required'),
-            'product.temp_sku.filled' => translate('This field cannot be empty'),
-            'product.temp_sku.unique' => translate('SKU must be unique. Another item is using it already.'),
-            'product.temp_stock.unique' => translate('This SKU is already taken'),
+            'product.sku.required' => translate('This field is required'),
+            'product.sku.filled' => translate('This field cannot be empty'),
+            'product.sku.unique' => translate('SKU must be unique. Another item is using it already.'),
             'product.current_stock.required' => translate('This field is required'),
             'product.current_stock.numeric' => translate('Quantity must be numeric'),
             'product.current_stock.min' => translate('Quantity cannot be less than 0'),
@@ -84,8 +83,8 @@ class StockManagementForm extends Component
             'edit_serial_numbers.*.status.required' => translate('This field is required'),
             'edit_serial_numbers.*.status.in' => translate('Value must be one of these: '.SerialNumber::getStatusEnum(true, ', ')),
 
-            'variations.*.temp_sku.required' => translate('This field is required'),
-            'variations.*.temp_sku.filled' => translate('This field cannot be empty'),
+            'variations.*.sku.required' => translate('This field is required'),
+            'variations.*.sku.filled' => translate('This field cannot be empty'),
             'variations.*.current_stock.required' => translate('This field is required'),
             'variations.*.current_stock.numeric' => translate('Quantity must be numeric'),
             'variations.*.current_stock.min' => translate('Quantity cannot be less than 0'),
@@ -250,7 +249,7 @@ class StockManagementForm extends Component
         try {
             // TODO: Write main stock update logic
             $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => $this->product::class]);
-            $product_stock->sku = $this->product->temp_sku;
+            $product_stock->sku = $this->product->sku;
             $product_stock->qty = $this->product->current_stock;
             $product_stock->low_stock_qty = $this->product->low_stock_qty;
             $product_stock->use_serial = $this->product->use_serial;
@@ -276,7 +275,7 @@ class StockManagementForm extends Component
         try {
             foreach($this->variations as $variation) {
                 $product_stock = ProductStock::firstOrNew(['subject_id' => $variation->id, 'subject_type' => $variation::class]);
-                $product_stock->sku = $variation->temp_sku;
+                $product_stock->sku = $variation->sku;
                 $product_stock->qty = $variation->current_stock;
                 $product_stock->low_stock_qty = $variation->low_stock_qty;
                 $product_stock->save();

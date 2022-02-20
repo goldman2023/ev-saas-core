@@ -16,10 +16,12 @@ use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\DispatchSupport;
 
 class PaymentMethodCard extends Component
 {
     use RulesSets;
+    use DispatchSupport;
 
     public $paymentMethod;
     public $class;
@@ -84,7 +86,19 @@ class PaymentMethodCard extends Component
 
         $this->paymentMethod->save();
 
-        $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $this->paymentMethod->name.' '.translate(' method updated successfully!'), 'type' => 'success' ]);
+        $this->toastify($this->paymentMethod->name.' '.translate(' method updated successfully!'));
+    }
+
+    public function toggle($enabled) {
+        $this->paymentMethod->enabled = false;
+        $this->paymentMethod->save();
+        $this->validate();
+
+        $this->paymentMethod->enabled = $enabled;
+        $this->paymentMethod->save();
+
+        $this->toastify($this->paymentMethod->name.' '.translate(' payment method ').($enabled ? translate('enabled'):translate('disabled')));
+        // $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $this->paymentMethod->name.' '.translate(' method updated successfully!'), 'type' => 'success' ]);
     }
 
     public function render()

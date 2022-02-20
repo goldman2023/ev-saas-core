@@ -11,6 +11,7 @@ use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Shetabit\Visitor\Traits\Visitable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -29,10 +30,13 @@ class BlogPost extends EVBaseModel
     use CategoryTrait;
 //    use ReactionsTrait;
 //    use CommentsTrait;
-//    use PermalinkTrait;
+   use PermalinkTrait;
 
 
     protected $table = 'blog_posts';
+
+    public const ROUTING_SINGULAR_NAME_PREFIX = 'post';
+    public const ROUTING_PLURAL_NAME_PREFIX = 'posts';
 
     protected $fillable = ['shop_id', 'title', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
 
@@ -98,5 +102,9 @@ class BlogPost extends EVBaseModel
     public function getTranslationModel(): ?string
     {
         return BlogPostTranslation::class;
+    }
+
+    public static function getRouteName() {
+        return 'blog.single';
     }
 }

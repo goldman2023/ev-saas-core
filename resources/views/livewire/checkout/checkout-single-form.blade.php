@@ -7,7 +7,7 @@
     selected_shipping_address_id: Number(@js($selected_shipping_address_id)),
     same_billing_shipping: @js($order->same_billing_shipping ? true : false),
     buyers_consent: @js($order->buyers_consent ? true : false),
-    available_payment_methods: @js(\App\Models\PaymentMethodUniversal::$available_gateways),
+    available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsGateway()),
     selected_payment_method: @js($this->selected_payment_method),
     phoneNumbers: @js($order->phone_numbers),
 
@@ -518,115 +518,111 @@ x-cloak
 
         <template x-if="selected_payment_method != ''">
             <div class="payment-methods-details w-full mt-3">
-                <div class="text-10" :class="{'hidden': selected_payment_method !== 'paysera'}">
-                    Please be informed that the account information and payment initiation services will be provided to you by Paysera in accordance with these
-                    <a href="https://www.paysera.com/v2/en-GB/legal/pis-rules-2020" class="text-red-500" target="_blank" rel="noopener noreferrer">rules</a>.
-                    By proceeding with this payment, you agree to receive this service and the service terms and conditions.
-                </div>
-    
-                <div class="w-full" :class="{'hidden': selected_payment_method !== 'stripe'}">
-                    <div class="w-full mb-2">
-                        <label for="cc_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
-                            {{ translate('Name on card') }}
-                            <span class="text-red-500 ml-1">*</span>
-                        </label>
-                        <input name="cc_name"
-                                id="cc_name"
-                                type="text"
-                                x-model="cc_name" 
-                                class="tw-input-main @error('cc_name') input-invalid @enderror"       
-                        />
-    
-                        <x-default.system.invalid-msg field="cc_name" framework="tailwind"></x-default.system.invalid-msg>
-                    </div>
-    
-                    <div class="w-full mb-2">
-                        <label for="cc_number" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
-                            {{ translate('Card number') }}
-                            <span class="text-red-500 ml-1">*</span>
-                        </label>
-                        <input name="cc_number"
-                                id="cc_number"
-                                type="number"
-                                x-model="cc_number"
-                                class="tw-input-main @error('cc_number') input-invalid @enderror"       
-                        />
-    
-                        <x-default.system.invalid-msg field="cc_number" framework="tailwind"></x-default.system.invalid-msg>
+                @foreach(\PaymentMethodsUniversal::getPaymentMethods() as $payment_method)
+                <div class="text-12" :class="{'hidden': selected_payment_method !== '{{ $payment_method->gateway }}'}">
+                    <div class="w-full">
+                        {!! $payment_method->description !!}
                     </div>
 
-                    <div class="w-full grid grid-cols-2 gap-4">
-                        <div x-data="{
-                            formatString(e) {
-                                var inputChar = String.fromCharCode(event.keyCode);
-                                var code = event.keyCode;
-                                var allowedKeys = [8];
-                                if (allowedKeys.indexOf(code) !== -1) {
-                                    return;
-                                }
-                                
-                                event.target.value = event.target.value.replace(
-                                    /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
-                                ).replace(
-                                    /^(0[1-9]|1[0-2])$/g, '$1/' // 11 > 11/
-                                ).replace(
-                                    /^([0-1])([3-9])$/g, '0$1/$2' // 13 > 01/3
-                                ).replace(
-                                    /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2' // 141 > 01/41
-                                ).replace(
-                                    /^([0]+)\/|[0]+$/g, '0' // 0/ > 0 and 00 > 0
-                                ).replace(
-                                    /[^\d\/]|^[\/]*$/g, '' // To allow only digits and `/`
-                                ).replace(
-                                    /\/\//g, '/' // Prevent entering more than 1 `/`
-                                );
-                            }
-                        }"
-                        >
-                            <label for="cc_expiration_date" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
-                                {{ translate('Expiration date') }}
-                                <span class="text-red-500 ml-1">*</span>
-                            </label>
-                            <input name="cc_expiration_date"
-                                    id="cc_expiration_date"
-                                    x-model.defer="cc_expiration_date"
-                                    placeholder="MM/YY"
-                                    maxlength="5"
-                                    @keyup="formatString(event)"
-                                    class="tw-input-main @error('cc_expiration_date') input-invalid @enderror"       
-                            />
-    
-                            <x-default.system.invalid-msg field="cc_expiration_date" framework="tailwind"></x-default.system.invalid-msg>
-                        </div>
-    
-                        <div class="">
-                            <label for="cc_cvc" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
-                                {{ translate('CVC') }}
-                                <span class="text-red-500 ml-1">*</span>
-                            </label>
-                            <input name="cc_cvc"
-                                    id="cc_cvc"
-                                    x-model="cc_cvc"
-                                    pattern="\d*" 
-                                    maxlength="4"
-                                    type="number"
-                                    min="0"
-                                    class="tw-input-main @error('cc_cvc') input-invalid @enderror"       
-                            />
+                    @if($payment_method->gateway === 'stripe')
+                        <div class="w-full">
+                            <div class="w-full mb-2">
+                                <label for="cc_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                    {{ translate('Name on card') }}
+                                    <span class="text-red-500 ml-1">*</span>
+                                </label>
+                                <input name="cc_name"
+                                        id="cc_name"
+                                        type="text"
+                                        x-model="cc_name" 
+                                        class="tw-input-main @error('cc_name') input-invalid @enderror"       
+                                />
             
-                            <x-default.system.invalid-msg field="cc_cvc" framework="tailwind"></x-default.system.invalid-msg>
+                                <x-default.system.invalid-msg field="cc_name" framework="tailwind"></x-default.system.invalid-msg>
+                            </div>
+            
+                            <div class="w-full mb-2">
+                                <label for="cc_number" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                    {{ translate('Card number') }}
+                                    <span class="text-red-500 ml-1">*</span>
+                                </label>
+                                <input name="cc_number"
+                                        id="cc_number"
+                                        type="number"
+                                        x-model="cc_number"
+                                        class="tw-input-main @error('cc_number') input-invalid @enderror"       
+                                />
+            
+                                <x-default.system.invalid-msg field="cc_number" framework="tailwind"></x-default.system.invalid-msg>
+                            </div>
+        
+                            <div class="w-full grid grid-cols-2 gap-4">
+                                <div x-data="{
+                                    formatString(e) {
+                                        var inputChar = String.fromCharCode(event.keyCode);
+                                        var code = event.keyCode;
+                                        var allowedKeys = [8];
+                                        if (allowedKeys.indexOf(code) !== -1) {
+                                            return;
+                                        }
+                                        
+                                        event.target.value = event.target.value.replace(
+                                            /^([1-9]\/|[2-9])$/g, '0$1/' // 3 > 03/
+                                        ).replace(
+                                            /^(0[1-9]|1[0-2])$/g, '$1/' // 11 > 11/
+                                        ).replace(
+                                            /^([0-1])([3-9])$/g, '0$1/$2' // 13 > 01/3
+                                        ).replace(
+                                            /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2' // 141 > 01/41
+                                        ).replace(
+                                            /^([0]+)\/|[0]+$/g, '0' // 0/ > 0 and 00 > 0
+                                        ).replace(
+                                            /[^\d\/]|^[\/]*$/g, '' // To allow only digits and `/`
+                                        ).replace(
+                                            /\/\//g, '/' // Prevent entering more than 1 `/`
+                                        );
+                                    }
+                                }"
+                                >
+                                    <label for="cc_expiration_date" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                        {{ translate('Expiration date') }}
+                                        <span class="text-red-500 ml-1">*</span>
+                                    </label>
+                                    <input name="cc_expiration_date"
+                                            id="cc_expiration_date"
+                                            x-model.defer="cc_expiration_date"
+                                            placeholder="MM/YY"
+                                            maxlength="5"
+                                            @keyup="formatString(event)"
+                                            class="tw-input-main @error('cc_expiration_date') input-invalid @enderror"       
+                                    />
+            
+                                    <x-default.system.invalid-msg field="cc_expiration_date" framework="tailwind"></x-default.system.invalid-msg>
+                                </div>
+            
+                                <div class="">
+                                    <label for="cc_cvc" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
+                                        {{ translate('CVC') }}
+                                        <span class="text-red-500 ml-1">*</span>
+                                    </label>
+                                    <input name="cc_cvc"
+                                            id="cc_cvc"
+                                            x-model="cc_cvc"
+                                            pattern="\d*" 
+                                            maxlength="4"
+                                            type="number"
+                                            min="0"
+                                            class="tw-input-main @error('cc_cvc') input-invalid @enderror"       
+                                    />
+                    
+                                    <x-default.system.invalid-msg field="cc_cvc" framework="tailwind"></x-default.system.invalid-msg>
+                                </div>
+                                <!-- End Col -->
+                            </div>
                         </div>
-                        <!-- End Col -->
-                    </div>
+                    @endif
                 </div>
-
-                <div class="text-12" :class="{'hidden': selected_payment_method !== 'wire_transfer'}">
-                    {{ translate('Instructions for wire transfer will be displayed after order is processed.') }}
-                </div>
-
-                <div class="text-12" :class="{'hidden': selected_payment_method !== 'paypal'}">
-                    {{ translate('You will be redirected to PayPal payment page.') }}
-                </div>
+                @endforeach
             </div>
         </template>
         

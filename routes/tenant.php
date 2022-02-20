@@ -22,6 +22,7 @@ use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\EVWishlistController;
+use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
@@ -35,6 +36,7 @@ use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Product;
+use App\Models\Shop;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -149,19 +151,28 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
-    Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::ROUTING_SINGULAR_NAME_PREFIX.'.single');
+    Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
+    Route::get('/products/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
 
 
     // Blog Posts
     Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
 
+    // Shop pages
+    Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());
+    Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');
+    Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
+    Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
 
-    Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.brand');
-    Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
+    Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
+
+
+    // Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('brand.single');
+    // Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
 
     // Cart page
     Route::get('/cart', [EVCartController::class, 'index'])->name('cart');
@@ -192,12 +203,7 @@ Route::middleware([
 //        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
     });
 
-    // Shop pages
-    Route::get('/shop/{slug}', [MerchantController::class, 'shop'])->name('shop.visit');
-    Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');
-    Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
-    Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
-    Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
+
 
 
     Route::post('/cart/nav-cart-items', [CartController::class, 'updateNavCart'])->name('cart.nav_cart');
@@ -263,7 +269,7 @@ Route::middleware([
     Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user']], function () {
         Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
         Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
-        Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
+        Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.product.edit');
         Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
 
         Route::resource('payments', 'PaymentController');
@@ -276,7 +282,7 @@ Route::middleware([
         //digital Product
         Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
         Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
-        Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproducts.edit');
+        Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproduct.edit');
 
         //Events
         Route::get('/events', 'EventController@seller_events')->name('seller.events');

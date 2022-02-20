@@ -20,13 +20,13 @@
 
     <div class="ml-auto d-flex align-items-center pr-3">
         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-2"
-           href="{{ route('ev-products.details', $product->slug) }}" target="_blank">
+           href="{{ route('product.details', $product->slug) }}" target="_blank">
             @svg('heroicon-o-eye', ['class' => 'square-16 mr-2'])
             {{ translate('Details') }}
         </a>
 
         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center"
-           href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+           href="{{ route('product.edit.stocks', $product->slug) }}">
             @svg('heroicon-o-archive', ['class' => 'square-16 mr-2'])
             {{ translate('Stock Management') }}
         </a>

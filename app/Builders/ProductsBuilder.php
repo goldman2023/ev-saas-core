@@ -38,11 +38,7 @@ class ProductsBuilder extends BaseBuilder
         // Determine scope based on user role
         // If admin: select products that are both published and not published
         // If vendor/user: select products which are published
-        if(!auth()->check() || (auth()->check() && auth()->user()->isCustomer())) {
-            $this->withGlobalScope('published', function (Builder $builder) {
-                $builder->where('published', 1);
-            });
-        }
+
 
         if(Vendor::isVendorSite()) {
             $this->withGlobalScope('single_vendor', function (Builder $builder) {

@@ -24,6 +24,10 @@ class EVProductController extends Controller
         return view('frontend.dashboard.products.create');
     }
 
+    public function create2(Request $request) {
+        return view('frontend.dashboard.products.create2');
+    }
+
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
@@ -76,13 +80,13 @@ class EVProductController extends Controller
 
     // Frontend
     public function productsByCategory(Request $request, $slug) {
-        $category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
+        $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
+        $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
+        $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
 
         // TODO: Init Filters here
 
         // TODO: return view
-
-        dd($category);
 
 //        $selected_categories = Category::where('slug', $category_slug)->with('children')->get();
 //        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
@@ -91,6 +95,7 @@ class EVProductController extends Controller
 //
 //        abort(404); // TODO: Maybe a redirect to All Categories?
 //        return null;
+        return view('frontend.products.archive', compact('products', 'shops', 'selected_category'));
     }
 
 

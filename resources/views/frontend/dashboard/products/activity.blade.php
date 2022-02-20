@@ -16,21 +16,21 @@
         </a>
 
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-            href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+            href="{{ route('product.edit.stocks', $product->slug) }}">
             @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
             {{ translate('Stock Management') }}
         </a>
 
         @if($product->useVariations())
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-            href="{{ route('ev-products.edit.variations', $product->slug) }}">
+            href="{{ route('product.edit.variations', $product->slug) }}">
             @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
             {{ translate('Variations') }}
         </a>
         @endif
 
         <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-            href="{{ route('ev-products.edit', $product->slug) }}">
+            href="{{ route('product.edit', $product->slug) }}">
             {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'class' => 'ml-2'])
         </a>
         <a class="btn btn-soft-danger btn-circle btn-xs d-inline-flex align-items-center confirm-delete "
@@ -98,7 +98,7 @@
                                         {{-- Assign Categories button --}}
                                         <div class="mt-3">
                                             <small>
-                                                <a href="{{ route('ev-products.edit', $product->slug) }}"
+                                                <a href="{{ route('product.edit', $product->slug) }}"
                                                     target="_blank"> {{ translate('+ Assign Categories') }} </a>
                                             </small>
                                         </div>
@@ -119,7 +119,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <small>
-                                                <a href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+                                                <a href="{{ route('product.edit.stocks', $product->slug) }}">
                                                     {{ translate('+ Manage Stock') }}
                                                 </a>
                                             </small>

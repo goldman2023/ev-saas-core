@@ -230,7 +230,9 @@
                     @auth
                     <li class="list-inline-item">
                         <div class="hs-unfold">
-                            <a href="{{ route('user.logout') }}" class="text-reset py-2 d-inline-block opacity-60">{{
+                            <a href="{{ route('user.logout') }}"
+                            data-test="we-logout-header"
+                            class="text-reset py-2 d-inline-block opacity-60">{{
                                 translate('Logout') }}</a>
                         </div>
                     </li>
@@ -247,6 +249,7 @@
 
                     <li class="list-inline-item">
                         <a href="javascript:;" x-data=""
+                        data-test="we-login-header"
                             @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
                             {{ translate('Login') }}
                         </a>
@@ -290,6 +293,25 @@
     <!-- End Navigation -->
     </div>
 </header>
+
+@if ($message = Session::get('message'))
+<div class="alert alert-success alert-block mb-0"
+data-test="we-user-feedback-inline-notification"
+style="border-radius: 0;">
+    <div class="container">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>{{ $message }}</strong>
+    </div>
+
+</div>
+@endif
+
+@if ($message = Session::get('Login'))
+<div class="alert alert-info alert-block">
+	<button type="button" class="close" data-dismiss="alert">×</button>
+	<strong>{{ $message }}</strong>
+</div>
+@endif
 <!-- ========== END HEADER ========== -->
 
 @push('footer_scripts')

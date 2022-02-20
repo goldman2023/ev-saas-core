@@ -2,10 +2,12 @@
   Button Status
 ------------------------------------*/
 
+@use "sass:math";
+
 .btn-status {
   position: absolute;
-  top: -($btn-status-height / 3);
-  right: -($btn-status-width / 3);
+  top: -(math.div($btn-status-height, 3));
+  right: -(math.div($btn-status-width, 3));
   display: inline-block;
   white-space: nowrap;
   text-align: center;

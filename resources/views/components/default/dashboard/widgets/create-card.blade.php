@@ -1,6 +1,6 @@
 <div class="card w-100 mb-3">
     {{-- TODO: Make link dynamic in component settings --}}
-    <a href="{{ route('ev-products.create') }}" class="card-body d-flex flex-column">
+    <a href="{{ route('product.create') }}" class="card-body d-flex flex-column">
         <div class="pb-2">
             @svg('heroicon-o-credit-card', ['class' => 'square-32'])
         </div>

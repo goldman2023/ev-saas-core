@@ -10,9 +10,9 @@
 
         @if($template === 'input')
             <div class="input-group-prepend">
-                <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+                <div class="input-group-text input-group-text-sm bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
             </div>
-            <div class="form-control file-amount">{{ $placeholder }}</div>
+            <div class="form-control form-control-sm file-amount">{{ $placeholder }}</div>
         @elseif($template === 'avatar')
             <span class="avatar avatar-circle">
                 <img class="avatar-img" src="{{ $selectedFile ?: static_asset('images/photo-placeholder.jpg', false, true) }}">

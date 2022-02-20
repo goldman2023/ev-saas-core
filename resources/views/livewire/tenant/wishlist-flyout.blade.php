@@ -10,7 +10,7 @@
                 @php
                     $item = $item->subject;
                 @endphp
-                <a href="{{ $item->permalink }}" class="flyout-wishlist__item card p-3 d-flex flex-row align-items-start mb-3" x-data="{
+                <a href="{{ $item->getPermalink() }}" class="flyout-wishlist__item card p-3 d-flex flex-row align-items-start mb-3" x-data="{
                     processing: false,
                     qty: 1,
                     model_id: {{ $item->id }},

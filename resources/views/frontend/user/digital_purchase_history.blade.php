@@ -19,7 +19,7 @@
                           $order = \App\Models\OrderDetail::find($order_id->id);
                       @endphp
                       <tr>
-                          <td><a href="{{ $order->product->permalink }}">{{ $order->product->getTranslation('name') }}</a></td>
+                          <td><a href="{{ $order->product->getPermalink() }}">{{ $order->product->getTranslation('name') }}</a></td>
                           <td>
                             <a class="btn btn-soft-info btn-icon btn-circle btn-sm" href="{{route('digitalproducts.download', encrypt($order->product->id))}}" title="{{ translate('Download') }}">
                                 <i class="las la-download"></i>

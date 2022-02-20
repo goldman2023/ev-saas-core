@@ -70,7 +70,7 @@ class ProductForm extends Component
         ];
 
         $this->rulesSets['price_stock_shipping'] = [
-            'product.temp_sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
+            'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
             'product.min_qty' => 'required|numeric|min:1',
             'product.current_stock' => 'required|numeric|min:1',
             'product.low_stock_qty' => 'required|numeric|min:0',
@@ -378,7 +378,7 @@ class ProductForm extends Component
     /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
-        $product_stock->sku = $this->product->temp_sku;
+        $product_stock->sku = $this->product->sku;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->low_stock_qty = $this->product->low_stock_qty;
         $product_stock->save();

@@ -152,7 +152,7 @@
                                 <div class="carousel-box">
                                     <div class="aiz-card-box border bg-white border-light rounded shadow-sm hov-shadow-md my-2 has-transition">
                                         <div class="position-relative">
-                                            <a href="{{ $product->permalink }}" class="d-block">
+                                            <a href="{{ $product->getPermalink() }}" class="d-block">
                                                 <img
                                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
                                                     src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -184,7 +184,7 @@
                                                 {{ renderStarRating($product->rating) }}
                                             </div>
                                             <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                                <a href="{{ $product->permalink }}" class="d-block text-reset">{{  $product->getTranslation('name')  }}</a>
+                                                <a href="{{ $product->getPermalink() }}" class="d-block text-reset">{{  $product->getTranslation('name')  }}</a>
                                             </h3>
                                             @if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated)
                                                 <div class="rounded px-2 mt-2 bg-soft-primary border-soft-primary border">
@@ -234,7 +234,7 @@
                     <div class="col mb-3">
                         <div class="aiz-card-box border border-light rounded shadow-sm hov-shadow-md h-100 has-transition bg-white">
                             <div class="position-relative">
-                                <a href="{{ $product->permalink }}" class="d-block">
+                                <a href="{{ $product->getPermalink() }}" class="d-block">
                                     <img
                                         class="img-fit lazyload mx-auto h-160px h-sm-200px h-md-220px h-xl-270px"
                                         src="{{ static_asset('assets/img/placeholder.jpg') }}"
@@ -266,7 +266,7 @@
                                     {{ renderStarRating($product->rating) }}
                                 </div>
                                 <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0">
-                                    <a href="{{ $product->permalink }}" class="d-block text-reset">{{  $product->getTranslation('name')  }}</a>
+                                    <a href="{{ $product->getPermalink() }}" class="d-block text-reset">{{  $product->getTranslation('name')  }}</a>
                                 </h3>
 
                                 @if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated)

@@ -4,7 +4,7 @@
 
 <div class="aiz-titlebar text-left mt-2 mb-3">
 		<div class="text-md-right">
-			<a href="{{ route('digitalproducts.create') }}" class="btn btn-circle btn-info">
+			<a href="{{ route('digitalproduct.create') }}" class="btn btn-circle btn-info">
 				<span>{{translate('Add New Digital Product')}}</span>
 			</a>
 		</div>
@@ -44,7 +44,7 @@
                     @foreach($products as $key => $product)
                         <tr>
                             <td>{{ ($key+1) + ($products->currentPage() - 1)*$products->perPage() }}</td>
-                            <td><a href="{{ $product->permalink }}" class="text-muted" target="_blank"><b>{{ $product->getTranslation('name') }}</b></a></td>
+                            <td><a href="{{ $product->getPermalink() }}" class="text-muted" target="_blank"><b>{{ $product->getTranslation('name') }}</b></a></td>
                             <td>{{ ucfirst($product->added_by) }}</td>
                             <td>
 								<img src="{{ uploaded_asset($product->thumbnail_img)}}" alt="Image" class="w-50px">
@@ -69,7 +69,7 @@
                                 </label>
                             </td>
                             <td class="text-right">
-                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('digitalproducts.edit', ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
+                                <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('digitalproduct.edit', ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
                                     <i class="las la-edit"></i>
                                 </a>
                                 <a href="#" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('digitalproducts.destroy', $product->id)}}" title="{{ translate('Delete') }}">

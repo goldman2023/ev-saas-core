@@ -14,6 +14,7 @@ trait Purchasable
      */
     public function initializePurchasable(): void
     {
+        $this->appendCoreProperties(['purchase_quantity']);
         $this->append(['purchase_quantity']);
         $this->fillable(array_unique(array_merge($this->fillable, ['purchase_quantity'])));
     }
@@ -32,6 +33,16 @@ trait Purchasable
     public function getPurchaseQuantityAttribute()
     {
         return $this->purchase_quantity;
+    }
+
+    public function getSingleCheckoutPermalink() {
+        $data = base64_encode(json_encode([
+            'id' => $this->id,
+            'class' => $this::class,
+            'qty' => 1
+        ]));
+
+        return route('checkout.single.page').'?data='.$data;
     }
 
 }

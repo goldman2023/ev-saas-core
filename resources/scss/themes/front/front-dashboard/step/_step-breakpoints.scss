@@ -27,7 +27,7 @@
     }
 
     .step-icon::after {
-      top: $step-icon-height / 2;
+      top: $step-icon-height * 0.5;
       left: $step-padding-x + $step-icon-width;
       width: calc(100% - #{$step-padding-x + $step-icon-width});
       height: $step-border-width + $step-padding-x;
@@ -37,21 +37,21 @@
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
       left: $step-padding-x + $step-icon-xs-width;
       width: calc(100% - #{$step-padding-x + $step-icon-xs-width});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
       left: $step-padding-x + $step-icon-sm-width;
       width: calc(100% - #{$step-padding-x + $step-icon-sm-width});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
       left: $step-padding-x + $step-icon-lg-width;
       width: calc(100% - #{$step-padding-x + $step-icon-lg-width});
     }
@@ -83,7 +83,7 @@
     }
 
     .step-icon::after {
-      top: $step-icon-height / 2;
+      top: $step-icon-height * 0.5;
       left: $step-padding-x + $step-icon-width;
       width: calc(100% - #{$step-padding-x + $step-icon-width});
       height: $step-border-width + $step-padding-x;
@@ -93,21 +93,21 @@
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
       left: $step-padding-x + $step-icon-xs-width;
       width: calc(100% - #{$step-padding-x + $step-icon-xs-width});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
       left: $step-padding-x + $step-icon-sm-width;
       width: calc(100% - #{$step-padding-x + $step-icon-sm-width});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
       left: $step-padding-x + $step-icon-lg-width;
       width: calc(100% - #{$step-padding-x + $step-icon-lg-width});
     }
@@ -139,7 +139,7 @@
     }
 
     .step-icon::after {
-      top: $step-icon-height / 2;
+      top: $step-icon-height * 0.5;
       left: $step-padding-x + $step-icon-width;
       width: calc(100% - #{$step-padding-x + $step-icon-width});
       height: $step-border-width + $step-padding-x;
@@ -149,21 +149,21 @@
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
       left: $step-padding-x + $step-icon-xs-width;
       width: calc(100% - #{$step-padding-x + $step-icon-xs-width});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
       left: $step-padding-x + $step-icon-sm-width;
       width: calc(100% - #{$step-padding-x + $step-icon-sm-width});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
       left: $step-padding-x + $step-icon-lg-width;
       width: calc(100% - #{$step-padding-x + $step-icon-lg-width});
     }
@@ -195,7 +195,7 @@
     }
 
     .step-icon::after {
-      top: $step-icon-height / 2;
+      top: $step-icon-height * 0.5;
       left: $step-padding-x + $step-icon-width;
       width: calc(100% - #{$step-padding-x + $step-icon-width});
       height: $step-border-width + $step-padding-x;
@@ -205,21 +205,21 @@
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
-      top: $step-icon-xs-height / 2;
+      top: $step-icon-xs-height * 0.5;
       left: $step-padding-x + $step-icon-xs-width;
       width: calc(100% - #{$step-padding-x + $step-icon-xs-width});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
-      top: $step-icon-sm-height / 2;
+      top: $step-icon-sm-height * 0.5;
       left: $step-padding-x + $step-icon-sm-width;
       width: calc(100% - #{$step-padding-x + $step-icon-sm-width});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
-      top: $step-icon-lg-height / 2;
+      top: $step-icon-lg-height * 0.5;
       left: $step-padding-x + $step-icon-lg-width;
       width: calc(100% - #{$step-padding-x + $step-icon-lg-width});
     }

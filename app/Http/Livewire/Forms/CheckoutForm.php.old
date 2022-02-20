@@ -276,7 +276,7 @@ class CheckoutForm extends Component
 
     protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
-        $product_stock->sku = $this->product->temp_sku;
+        $product_stock->sku = $this->product->sku;
         $product_stock->qty = $this->product->current_stock;
         $product_stock->low_stock_qty = $this->product->low_stock_qty;
         $product_stock->save();

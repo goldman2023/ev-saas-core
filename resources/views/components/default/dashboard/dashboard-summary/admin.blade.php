@@ -29,7 +29,7 @@
 
         <div class="col-md-5 text-md-right">
           <a class="btn btn-sm btn-white mr-1 mb-0 mb-md-2" href="#">{{ translate('Book support meeting') }}</a>
-          <a class="btn btn-sm btn-primary transition-3d-hover mb-0 mb-md-2" href="{{ route('ev-products.index') }}">
+          <a class="btn btn-sm btn-primary transition-3d-hover mb-0 mb-md-2" href="{{ route('products.index') }}">
             {{ translate('Manage Products') }}
         </a>
         </div>

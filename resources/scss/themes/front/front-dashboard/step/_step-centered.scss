@@ -20,25 +20,25 @@
 
     .step-icon::after {
       width: calc(100% - #{$step-icon-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-width * 0.5});
     }
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
       width: calc(100% - #{$step-icon-xs-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-xs-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-xs-width * 0.5});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
       width: calc(100% - #{$step-icon-sm-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-sm-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-sm-width * 0.5});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
       width: calc(100% - #{$step-icon-lg-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-lg-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-lg-width * 0.5});
     }
   }
 }
@@ -61,25 +61,25 @@
 
     .step-icon::after {
       width: calc(100% - #{$step-icon-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-width * 0.5});
     }
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
       width: calc(100% - #{$step-icon-xs-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-xs-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-xs-width * 0.5});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
       width: calc(100% - #{$step-icon-sm-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-sm-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-sm-width * 0.5});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
       width: calc(100% - #{$step-icon-lg-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-lg-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-lg-width * 0.5});
     }
   }
 }
@@ -102,25 +102,25 @@
 
     .step-icon::after {
       width: calc(100% - #{$step-icon-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-width * 0.5});
     }
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
       width: calc(100% - #{$step-icon-xs-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-xs-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-xs-width * 0.5});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
       width: calc(100% - #{$step-icon-sm-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-sm-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-sm-width * 0.5});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
       width: calc(100% - #{$step-icon-lg-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-lg-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-lg-width * 0.5});
     }
   }
 }
@@ -143,25 +143,25 @@
 
     .step-icon::after {
       width: calc(100% - #{$step-icon-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-width * 0.5});
     }
 
     &.step-icon-xs .step-icon::after,
     .step-icon.step-icon-xs::after {
       width: calc(100% - #{$step-icon-xs-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-xs-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-xs-width * 0.5});
     }
 
     &.step-icon-sm .step-icon::after,
     .step-icon.step-icon-sm::after {
       width: calc(100% - #{$step-icon-sm-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-sm-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-sm-width * 0.5});
     }
 
     &.step-icon-lg .step-icon::after,
     .step-icon.step-icon-lg::after {
       width: calc(100% - #{$step-icon-lg-width});
-      left: calc(50% + #{$step-padding-x + $step-icon-lg-width / 2});
+      left: calc(50% + #{$step-padding-x + $step-icon-lg-width * 0.5});
     }
   }
 }

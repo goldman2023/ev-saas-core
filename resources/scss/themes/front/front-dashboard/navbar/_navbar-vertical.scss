@@ -192,12 +192,12 @@
 .navbar-vertical:not([class*="container"]) {
   .navbar-nav {
     &.navbar-nav-lg .nav-link {
-      margin-top: $nav-link-padding-y / 2;
-      margin-bottom: $nav-link-padding-y / 2;
+      margin-top: $nav-link-padding-y * 0.5;
+      margin-bottom: $nav-link-padding-y * 0.5;
     }
 
     .nav-link {
-      padding: $nav-link-padding-y / 2 $navbar-vertical-menu-nav-link-padding-x;
+      padding: $nav-link-padding-y * 0.5 $navbar-vertical-menu-nav-link-padding-x;
     }
 
     .nav .nav-link {

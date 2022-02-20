@@ -1,5 +1,32 @@
-# We-SaaS Core
-We-SaaS is a no-code SaaS and Customer Self-Service Platform. 
+We-SaaS Core. This is a repository of multitenancy SaaS Application builder We-SaaS. 
+
+# General Information
+
+Documentation URL: https://docs.we-saas.com
+
+Production url: https://app.we-saas.com
+
+Staging URL: https://ev-saas.com
+
+Cypress Dashboard: https://dashboard.cypress.io/projects/teqkyz/runs
+
+Asana Board: https://app.asana.com/0/1201613541420424/list
+
+<div style="position: relative; padding-bottom: 60.810810810810814%; height: 0;">
+<iframe src="https://www.loom.com/embed/3f94edc7d7fd450391b1710156151f69" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+</div>
+
+# Features
+
+- multi-tenancy
+- multilanguage
+- multcurrency
+- advanced permissions management
+- stripe payment gateway and stripe checkout option
+- scheduling
+- email templates
+- email notifications
+- real-time chat
 
 ## Documentation
 Documentation can be found at: https://docs.we-saas.com/
@@ -35,9 +62,6 @@ https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 `kool run up`
 
 # Local setup for assets
-In case you running into issues with wcompile permissions run
-`chmod 777 wcompile.sh`
-
 To download dependecies and build assets:
 
 -   `yarn install`
@@ -75,45 +99,16 @@ Run: UniversalPaymentMethodsTableSeeder.php:
 
 `php artisan tenants:seed --class=UniversalPaymentMethodsTableSeeder`
 
+# Ceating Products stock for all products which don't have it (like legacy products)
+Runs: CreateStockForAllProducts.php: 
+
+`php artisan command:create_product_stock --tenant_id={tenant_id}`
+
 # Dynamic Components for Label/Image/Button
 
--   Labels
+Documentation can be found here:
+https://we-saas.gitbook.io/we-saas-internal-dev-docs/dynamic-components-for-label-image-button
 
-Example usage
-
-```
-<x-ev.label :label="ev_dynamic_translate('Add New Category', true)">
-</x-ev.label>
-```
-
--   Buttons and links
-
-Example usage
-
-```
-
-<x-ev.link-button :href="ev_dynamic_translate('#button1')"
-:label="ev_dynamic_translate('Button 1')" class="ev-button">
-</x-ev.link-button>
-
-```
-
-* Dynamic Images
-
-Example usage
-
-
-```
-<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
-</x-ev.dynamic-image>
-
-```
-
-<x-ev.link-button :href="ev_dynamic_translate('#button1')"
-:label="ev_dynamic_translate('Button 1')" class="ev-button">
-</x-ev.link-button>
-
-```
 
 # Data tables
 This project uses Livewire DataTables package: https://github.com/mediconesystems/livewire-datatables
@@ -205,6 +200,14 @@ dwightwatson/rememberable
 kalnoy/nestedset
 ```
 
+
+# Cypress Testing Guidelines
+
+Please check and review documentation for any questions
+
+https://we-saas.gitbook.io/we-saas-internal-dev-docs/cypress-testing/example-basic-login-test
+
+
 **Project URL:**
 
 https://app.ev-saas.com
@@ -212,6 +215,7 @@ https://app.ev-saas.com
 ## Documentation:
 
 https://docs.ev-saas/
+
 
 ## Demo Login Details:
 

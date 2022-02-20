@@ -2,11 +2,13 @@
   Avatar Sizes
 ------------------------------------*/
 
+@use "sass:math";
+
 .avatar {
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
@@ -19,8 +21,8 @@
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-height-lg / 5);
-      right: -($avatar-status-height-lg / 5);
+      bottom: -($avatar-status-height-lg * 0.2);
+      right: -($avatar-status-height-lg * 0.2);
     }
   }
 }
@@ -44,22 +46,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: -($avatar-status-height-sm / 8);
-      right: -($avatar-status-height-sm / 8);
+      bottom: -($avatar-status-height-sm * 0.125);
+      right: -($avatar-status-height-sm * 0.125);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-height-lg / 5);
-      right: -($avatar-status-height-lg / 5);
+      bottom: -($avatar-status-height-lg * 0.2);
+      right: -($avatar-status-height-lg * 0.2);
     }
   }
 }
@@ -74,22 +76,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: -($avatar-status-height-sm / 8);
-      right: -($avatar-status-height-sm / 8);
+      bottom: -($avatar-status-height-sm * 0.125);
+      right: -($avatar-status-height-sm * 0.125);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-height-lg / 5);
-      right: -($avatar-status-height-lg / 5);
+      bottom: -($avatar-status-height-lg * 0.2);
+      right: -($avatar-status-height-lg * 0.2);
     }
   }
 }
@@ -104,22 +106,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 6);
-      right: -($avatar-status-height / 6);
+      bottom: -(math.div($avatar-status-height, 6));
+      right: -(math.div($avatar-status-height, 6));
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: -($avatar-status-height-sm / 10);
-      right: -($avatar-status-height-sm / 10);
+      bottom: -($avatar-status-height-sm * 0.1);
+      right: -($avatar-status-height-sm * 0.1);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-height-lg / 4);
-      right: -($avatar-status-height-lg / 4);
+      bottom: -($avatar-status-height-lg * 0.25);
+      right: -($avatar-status-height-lg * 0.25);
     }
   }
 }
@@ -134,22 +136,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: -($avatar-status-height / 10);
-      right: -($avatar-status-height / 10);
+      bottom: -($avatar-status-height * 0.1);
+      right: -($avatar-status-height * 0.1);
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: ($avatar-status-height-sm / 10);
-      right: ($avatar-status-height-sm / 10);
+      bottom: ($avatar-status-height-sm * 0.1);
+      right: ($avatar-status-height-sm * 0.1);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: -($avatar-status-height-lg / 8);
-      right: -($avatar-status-height-lg / 8);
+      bottom: -($avatar-status-height-lg * 0.125);
+      right: -($avatar-status-height-lg * 0.125);
     }
   }
 }
@@ -164,22 +166,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: ($avatar-status-height / 8);
-      right: ($avatar-status-height / 8);
+      bottom: ($avatar-status-height * 0.125);
+      right: ($avatar-status-height * 0.125);
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: ($avatar-status-height-sm / 4);
-      right: ($avatar-status-height-sm / 4);
+      bottom: ($avatar-status-height-sm * 0.25);
+      right: ($avatar-status-height-sm * 0.25);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: ($avatar-status-height-lg / 12);
-      right: ($avatar-status-height-lg / 12);
+      bottom: math.div($avatar-status-height-lg, 12);
+      right: math.div($avatar-status-height-lg, 12);
     }
   }
 }
@@ -194,22 +196,22 @@
 
   &.avatar-circle {
     .avatar-status {
-      bottom: ($avatar-status-height / 3);
-      right: ($avatar-status-height / 3);
+      bottom: math.div($avatar-status-height, 3);
+      right: math.div($avatar-status-height, 3);
     }
   }
 
   &.avatar-circle {
     .avatar-sm-status {
-      bottom: ($avatar-status-height / 2.25);
-      right: ($avatar-status-height / 2.25);
+      bottom: math.div($avatar-status-height, 2.25);
+      right: math.div($avatar-status-height, 2.25);
     }
   }
 
   &.avatar-circle {
     .avatar-lg-status {
-      bottom: ($avatar-status-height-lg / 5.5);
-      right: ($avatar-status-height-lg / 5.5);
+      bottom: math.div($avatar-status-height-lg, 5.5);
+      right: math.div($avatar-status-height-lg, 5.5);
     }
   }
 }

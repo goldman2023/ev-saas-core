@@ -111,6 +111,13 @@ img {
         object-fit: cover;
     }
 
+    &-list {
+        .ev-product-card__img {
+            height: 100%;
+            min-height: 120px;
+        }
+    }
+
     .hover-only {
         position: absolute;
         bottom: 20px;
@@ -256,11 +263,11 @@ img {
 [data-toggle="aizuploader"] {
     cursor: pointer;
 }
-.aiz-uploader-all {
+body .aiz-uploader-all {
     margin-left: -10px;
     margin-right: -10px;
     overflow-y: auto;
-    height: calc(100vh - 303px);
+    height: 100%;
 }
 .uppy-Dashboard-files {
     max-height: calc(100vh - 363px);
@@ -660,4 +667,10 @@ img {
 .avatar-xxl .avatar-uploader-icon {
     width: 2.1875rem;
     height: 2.1875rem;
+}
+
+
+// Flatpickr
+.flatpickr-custom {
+    opacity: 1 !important;
 }

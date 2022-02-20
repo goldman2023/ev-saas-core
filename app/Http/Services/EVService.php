@@ -96,10 +96,20 @@ class EVService
                     [
                         'label' => translate('Products'),
                         'icon' => 'heroicon-o-shopping-cart',
-                        'route' => route('ev-products.index'),
-                        'is_active' => areActiveRoutes(['ev-products.index']),
+                        'route' => route('products.index'),
+                        'is_active' => areActiveRoutes(['products.index']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['all_products', 'browse_products']
+                        'permissions' => ['all_products', 'browse_products'],
+                        'children' => [
+                            [
+                                'label' => translate('Attributes'),
+                                'icon' => 'heroicon-o-view-list',
+                                'route' => route('attributes.index', base64_encode(Product::class)),
+                                'is_active' => areActiveRoutes(['attributes.index']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['view_product_attributes']
+                            ],
+                        ]
                     ],
                     [
                         'label' => translate('Plans'),

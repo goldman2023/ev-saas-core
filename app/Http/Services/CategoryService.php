@@ -27,7 +27,7 @@ class CategoryService
 
         $cache_key = tenant('id') . '_categories';
         $cache_key_flat = tenant('id') . '_categories_flat';
-        $this->clearCache(); // TODO: remove later to use cache fully
+        // $this->clearCache(); // TODO: remove later to use cache fully
         $categories = Cache::get($cache_key, null);
         $categories_flat = Cache::get($cache_key_flat, null);
         $default = [];

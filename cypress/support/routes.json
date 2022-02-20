@@ -1,0 +1,7458 @@
+{
+  "debugbar.openhandler": {
+    "name": "debugbar.openhandler",
+    "domain": null,
+    "action": "Barryvdh\\Debugbar\\Controllers\\OpenHandlerController@handle",
+    "uri": "_debugbar/open",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "debugbar.clockwork": {
+    "name": "debugbar.clockwork",
+    "domain": null,
+    "action": "Barryvdh\\Debugbar\\Controllers\\OpenHandlerController@clockwork",
+    "uri": "_debugbar/clockwork/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "debugbar.assets.css": {
+    "name": "debugbar.assets.css",
+    "domain": null,
+    "action": "Barryvdh\\Debugbar\\Controllers\\AssetController@css",
+    "uri": "_debugbar/assets/stylesheets",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "debugbar.assets.js": {
+    "name": "debugbar.assets.js",
+    "domain": null,
+    "action": "Barryvdh\\Debugbar\\Controllers\\AssetController@js",
+    "uri": "_debugbar/assets/javascript",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "debugbar.cache.delete": {
+    "name": "debugbar.cache.delete",
+    "domain": null,
+    "action": "Barryvdh\\Debugbar\\Controllers\\CacheController@delete",
+    "uri": "_debugbar/cache/{key}/{tags?}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "larecipe.search": {
+    "name": "larecipe.search",
+    "domain": null,
+    "action": "BinaryTorch\\LaRecipe\\Http\\Controllers\\SearchController",
+    "uri": "docs/search-index/{version}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "larecipe.styles": {
+    "name": "larecipe.styles",
+    "domain": null,
+    "action": "BinaryTorch\\LaRecipe\\Http\\Controllers\\StyleController",
+    "uri": "docs/styles/{style}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "larecipe.scripts": {
+    "name": "larecipe.scripts",
+    "domain": null,
+    "action": "BinaryTorch\\LaRecipe\\Http\\Controllers\\ScriptController",
+    "uri": "docs/scripts/{script}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "larecipe.index": {
+    "name": "larecipe.index",
+    "domain": null,
+    "action": "BinaryTorch\\LaRecipe\\Http\\Controllers\\DocumentationController@index",
+    "uri": "docs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "larecipe.show": {
+    "name": "larecipe.show",
+    "domain": null,
+    "action": "BinaryTorch\\LaRecipe\\Http\\Controllers\\DocumentationController@show",
+    "uri": "docs/{version}/{page?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cypress.factory": {
+    "name": "cypress.factory",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@factory",
+    "uri": "__cypress__/factory",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.login": {
+    "name": "cypress.login",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@login",
+    "uri": "__cypress__/login",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.logout": {
+    "name": "cypress.logout",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@logout",
+    "uri": "__cypress__/logout",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.artisan": {
+    "name": "cypress.artisan",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@artisan",
+    "uri": "__cypress__/artisan",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.run-php": {
+    "name": "cypress.run-php",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@runPhp",
+    "uri": "__cypress__/run-php",
+    "method": [
+      "POST"
+    ]
+  },
+  "cypress.csrf-token": {
+    "name": "cypress.csrf-token",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@csrfToken",
+    "uri": "__cypress__/csrf_token",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cypress.routes": {
+    "name": "cypress.routes",
+    "domain": null,
+    "action": "Laracasts\\Cypress\\Controllers\\CypressController@routes",
+    "uri": "__cypress__/routes",
+    "method": [
+      "POST"
+    ]
+  },
+  "cashier.payment": {
+    "name": "cashier.payment",
+    "domain": null,
+    "action": "Laravel\\Cashier\\Http\\Controllers\\PaymentController@show",
+    "uri": "stripe/payment/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cashier.webhook": {
+    "name": "cashier.webhook",
+    "domain": null,
+    "action": "Laravel\\Cashier\\Http\\Controllers\\WebhookController@handleWebhook",
+    "uri": "stripe/webhook",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::sP6mysSFA7fbz6rS": {
+    "name": "generated::sP6mysSFA7fbz6rS",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\WebhookController@handleWebhook",
+    "uri": "spark/webhook",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::0uNCWQtUQfrqrjU3": {
+    "name": "generated::0uNCWQtUQfrqrjU3",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\NewSubscriptionController",
+    "uri": "spark/subscription",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::YTyHKRNiGic3UkbO": {
+    "name": "generated::YTyHKRNiGic3UkbO",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\UpdateSubscriptionController",
+    "uri": "spark/subscription",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::sSZtMuDd8EBpuPIF": {
+    "name": "generated::sSZtMuDd8EBpuPIF",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\CancelSubscriptionController",
+    "uri": "spark/subscription/cancel",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::hZDNvN7SjbWBMbtU": {
+    "name": "generated::hZDNvN7SjbWBMbtU",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\ResumeSubscriptionController",
+    "uri": "spark/subscription/resume",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::eyVYVyDpt6ylZuEM": {
+    "name": "generated::eyVYVyDpt6ylZuEM",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\UpdatePaymentMethodController",
+    "uri": "spark/subscription/payment-method",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::nSLzfLS98s75OIIn": {
+    "name": "generated::nSLzfLS98s75OIIn",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\UpdateBillingInformationController",
+    "uri": "spark/billing-information",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::Sq0yLoQIjlSXz7oJ": {
+    "name": "generated::Sq0yLoQIjlSXz7oJ",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\UpdateReceiptEmailsController",
+    "uri": "spark/receipt-emails",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::WpJYa1rhjnSQZMFJ": {
+    "name": "generated::WpJYa1rhjnSQZMFJ",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\ApplyCouponController",
+    "uri": "spark/coupon",
+    "method": [
+      "PUT"
+    ]
+  },
+  "generated::aACy1kjLwxsyCn2k": {
+    "name": "generated::aACy1kjLwxsyCn2k",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\StripeTokenController",
+    "uri": "spark/token",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::aCK5U0grsJevN2ah": {
+    "name": "generated::aCK5U0grsJevN2ah",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\TaxController",
+    "uri": "spark/tax-rate",
+    "method": [
+      "POST"
+    ]
+  },
+  "receipts.download": {
+    "name": "receipts.download",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\DownloadReceiptController",
+    "uri": "spark/{type}/{id}/receipts/{receiptId}/download",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "spark.portal": {
+    "name": "spark.portal",
+    "domain": null,
+    "action": "Spark\\Http\\Controllers\\BillingPortalController",
+    "uri": "spark/{type?}/{id?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "livewire.message": {
+    "name": "livewire.message",
+    "domain": null,
+    "action": "Livewire\\Controllers\\HttpConnectionHandler",
+    "uri": "livewire/message/{name}",
+    "method": [
+      "POST"
+    ]
+  },
+  "livewire.upload-file": {
+    "name": "livewire.upload-file",
+    "domain": null,
+    "action": "Livewire\\Controllers\\FileUploadHandler@handle",
+    "uri": "livewire/upload-file",
+    "method": [
+      "POST"
+    ]
+  },
+  "livewire.preview-file": {
+    "name": "livewire.preview-file",
+    "domain": null,
+    "action": "Livewire\\Controllers\\FilePreviewHandler@handle",
+    "uri": "livewire/preview-file/{filename}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::GbRbLrI128nvSlqn": {
+    "name": "generated::GbRbLrI128nvSlqn",
+    "domain": null,
+    "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@source",
+    "uri": "livewire/livewire.js",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::X6HIslvtbd2bCOyC": {
+    "name": "generated::X6HIslvtbd2bCOyC",
+    "domain": null,
+    "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@maps",
+    "uri": "livewire/livewire.js.map",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::QTuPJfjKpCVu2LFt": {
+    "name": "generated::QTuPJfjKpCVu2LFt",
+    "domain": null,
+    "action": "Mediconesystems\\LivewireDatatables\\Http\\Controllers\\FileExportController@handle",
+    "uri": "datatables/{filename}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::7Irnac4c37JH3AAL": {
+    "name": "generated::7Irnac4c37JH3AAL",
+    "domain": null,
+    "action": "Mpociot\\VatCalculator\\Http\\Controller@getTaxRateForLocation",
+    "uri": "vatcalculator/tax-rate-for-location/{country?}/{postal_code?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::Tk10AXg0UpChyIBk": {
+    "name": "generated::Tk10AXg0UpChyIBk",
+    "domain": null,
+    "action": "Mpociot\\VatCalculator\\Http\\Controller@calculateGrossPrice",
+    "uri": "vatcalculator/calculate",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::urrdA4B9fteNOon7": {
+    "name": "generated::urrdA4B9fteNOon7",
+    "domain": null,
+    "action": "Mpociot\\VatCalculator\\Http\\Controller@getCountryCode",
+    "uri": "vatcalculator/country-code",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::tGbsKbL2X98pMdyh": {
+    "name": "generated::tGbsKbL2X98pMdyh",
+    "domain": null,
+    "action": "Mpociot\\VatCalculator\\Http\\Controller@validateVATID",
+    "uri": "vatcalculator/validate-vat-id/{vat_id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "stancl.tenancy.asset": {
+    "name": "stancl.tenancy.asset",
+    "domain": null,
+    "action": "Stancl\\Tenancy\\Controllers\\TenantAssetsController@asset",
+    "uri": "tenancy/assets/{path?}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.dashboard": {
+    "name": "admin.dashboard",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@admin_dashboard",
+    "uri": "admin",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.activities.index": {
+    "name": "admin.activities.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ActivityController@index",
+    "uri": "admin/activities",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.activities.user.index": {
+    "name": "admin.activities.user.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ActivityController@user_activity",
+    "uri": "admin/my-activities",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.categories.index": {
+    "name": "admin.categories.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@index",
+    "uri": "admin/categories",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.categories.create": {
+    "name": "admin.categories.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@create",
+    "uri": "admin/categories/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.categories.store": {
+    "name": "admin.categories.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@store",
+    "uri": "admin/categories",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.categories.show": {
+    "name": "admin.categories.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@show",
+    "uri": "admin/categories/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.categories.edit": {
+    "name": "admin.categories.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@edit",
+    "uri": "admin/categories/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.categories.update": {
+    "name": "admin.categories.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@update",
+    "uri": "admin/categories/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.categories.destroy": {
+    "name": "admin.categories.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@destroy",
+    "uri": "admin/categories/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.categories.featured": {
+    "name": "admin.categories.featured",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CategoryController@updateFeatured",
+    "uri": "admin/categories/featured",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.brands.index": {
+    "name": "admin.brands.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@index",
+    "uri": "admin/brands",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.brands.create": {
+    "name": "admin.brands.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@create",
+    "uri": "admin/brands/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.brands.store": {
+    "name": "admin.brands.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@store",
+    "uri": "admin/brands",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.brands.show": {
+    "name": "admin.brands.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@show",
+    "uri": "admin/brands/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.brands.edit": {
+    "name": "admin.brands.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@edit",
+    "uri": "admin/brands/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.brands.update": {
+    "name": "admin.brands.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@update",
+    "uri": "admin/brands/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.brands.destroy": {
+    "name": "admin.brands.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BrandController@destroy",
+    "uri": "admin/brands/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.products": {
+    "name": "admin.products",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@admin_products",
+    "uri": "admin/products/admin",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.products.seller": {
+    "name": "admin.products.seller",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@seller_products",
+    "uri": "admin/products/seller",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.products.all": {
+    "name": "admin.products.all",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@all_products",
+    "uri": "admin/products/all",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.product.create": {
+    "name": "admin.product.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@create",
+    "uri": "admin/products/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.product.edit": {
+    "name": "admin.product.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@admin_product_edit",
+    "uri": "admin/products/admin/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.products.seller.edit": {
+    "name": "admin.products.seller.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@seller_product_edit",
+    "uri": "admin/products/seller/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.products.todays_deal": {
+    "name": "admin.products.todays_deal",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@updateTodaysDeal",
+    "uri": "admin/products/todays_deal",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.products.featured": {
+    "name": "admin.products.featured",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@updateFeatured",
+    "uri": "admin/products/featured",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.products.get_products_by_subcategory": {
+    "name": "admin.products.get_products_by_subcategory",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProductController@get_products_by_subcategory",
+    "uri": "admin/products/get_products_by_subcategory",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.sellers.index": {
+    "name": "admin.sellers.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@index",
+    "uri": "admin/sellers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.create": {
+    "name": "admin.sellers.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@create",
+    "uri": "admin/sellers/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.store": {
+    "name": "admin.sellers.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@store",
+    "uri": "admin/sellers",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.sellers.show": {
+    "name": "admin.sellers.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@show",
+    "uri": "admin/sellers/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.edit": {
+    "name": "admin.sellers.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@edit",
+    "uri": "admin/sellers/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.update": {
+    "name": "admin.sellers.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@update",
+    "uri": "admin/sellers/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.sellers.ban": {
+    "name": "admin.sellers.ban",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@ban",
+    "uri": "admin/sellers_ban/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.destroy": {
+    "name": "admin.sellers.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@destroy",
+    "uri": "admin/sellers/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.documentgallery": {
+    "name": "admin.sellers.documentgallery",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DocumentGalleryController@seller_document_gallery",
+    "uri": "admin/sellers/documentgallery/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.documentgallery.edit": {
+    "name": "admin.sellers.documentgallery.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\DocumentGalleryController@seller_document_gallery_edit",
+    "uri": "admin/sellers/documentgallery/edit/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.show_verification_request": {
+    "name": "admin.sellers.show_verification_request",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@show_verification_request",
+    "uri": "admin/sellers/view/{id}/verification",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.approve": {
+    "name": "admin.sellers.approve",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@approve_seller",
+    "uri": "admin/sellers/approve/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.reject": {
+    "name": "admin.sellers.reject",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@reject_seller",
+    "uri": "admin/sellers/reject/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.login": {
+    "name": "admin.sellers.login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@login",
+    "uri": "admin/sellers/login/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.payment_modal": {
+    "name": "admin.sellers.payment_modal",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@payment_modal",
+    "uri": "admin/sellers/payment_modal",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.sellers.payment_histories": {
+    "name": "admin.sellers.payment_histories",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PaymentController@payment_histories",
+    "uri": "admin/seller/payments",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.payment_history": {
+    "name": "admin.sellers.payment_history",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PaymentController@show",
+    "uri": "admin/seller/payments/show/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.attribute_history": {
+    "name": "admin.sellers.attribute_history",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@attribute_history",
+    "uri": "admin/seller/attributes/show/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.index": {
+    "name": "admin.customers.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@index",
+    "uri": "admin/customers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.create": {
+    "name": "admin.customers.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@create",
+    "uri": "admin/customers/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.store": {
+    "name": "admin.customers.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@store",
+    "uri": "admin/customers",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.customers.show": {
+    "name": "admin.customers.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@show",
+    "uri": "admin/customers/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.edit": {
+    "name": "admin.customers.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@edit",
+    "uri": "admin/customers/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.update": {
+    "name": "admin.customers.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@update",
+    "uri": "admin/customers/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.customers.ban": {
+    "name": "admin.customers.ban",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@ban",
+    "uri": "admin/customers_ban/{customer}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.login": {
+    "name": "admin.customers.login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@login",
+    "uri": "admin/customers/login/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customers.destroy": {
+    "name": "admin.customers.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerController@destroy",
+    "uri": "admin/customers/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.newsletters.index": {
+    "name": "admin.newsletters.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\NewsletterController@index",
+    "uri": "admin/newsletter",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.newsletters.send": {
+    "name": "admin.newsletters.send",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\NewsletterController@send",
+    "uri": "admin/newsletter/send",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.test.smtp": {
+    "name": "admin.test.smtp",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\NewsletterController@testEmail",
+    "uri": "admin/newsletter/test/smtp",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.profile.index": {
+    "name": "admin.profile.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@index",
+    "uri": "admin/profile",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.profile.create": {
+    "name": "admin.profile.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@create",
+    "uri": "admin/profile/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.profile.store": {
+    "name": "admin.profile.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@store",
+    "uri": "admin/profile",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.profile.show": {
+    "name": "admin.profile.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@show",
+    "uri": "admin/profile/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.profile.edit": {
+    "name": "admin.profile.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@edit",
+    "uri": "admin/profile/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.profile.update": {
+    "name": "admin.profile.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@update",
+    "uri": "admin/profile/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.profile.destroy": {
+    "name": "admin.profile.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ProfileController@destroy",
+    "uri": "admin/profile/{id}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "admin.tenant_settings.update": {
+    "name": "admin.tenant_settings.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@update",
+    "uri": "admin/business-settings/update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.tenant_settings.update.activation": {
+    "name": "admin.tenant_settings.update.activation",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@updateActivationSettings",
+    "uri": "admin/business-settings/update/activation",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.general_setting.index": {
+    "name": "admin.general_setting.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@general_setting",
+    "uri": "admin/general-setting",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.checkout_flow.index": {
+    "name": "admin.checkout_flow.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@checkout_flow",
+    "uri": "admin/checkout-flow",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.activation.index": {
+    "name": "admin.activation.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@activation",
+    "uri": "admin/activation",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.payment_method.index": {
+    "name": "admin.payment_method.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@payment_method",
+    "uri": "admin/payment-method",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.file_system.index": {
+    "name": "admin.file_system.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@file_system",
+    "uri": "admin/file_system",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.social_login.index": {
+    "name": "admin.social_login.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@social_login",
+    "uri": "admin/social-login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.smtp_settings.index": {
+    "name": "admin.smtp_settings.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@smtp_settings",
+    "uri": "admin/smtp-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.google_analytics.index": {
+    "name": "admin.google_analytics.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@google_analytics",
+    "uri": "admin/google-analytics",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.google_recaptcha.index": {
+    "name": "admin.google_recaptcha.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@google_recaptcha",
+    "uri": "admin/google-recaptcha",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.facebook_chat.index": {
+    "name": "admin.facebook_chat.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@facebook_chat",
+    "uri": "admin/facebook-chat",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.facebook_chat.update": {
+    "name": "admin.facebook_chat.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@facebook_chat_update",
+    "uri": "admin/facebook_chat",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.facebook-comment": {
+    "name": "admin.facebook-comment",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@facebook_comment",
+    "uri": "admin/facebook-comment",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.facebook-comment.update": {
+    "name": "admin.facebook-comment.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@facebook_comment_update",
+    "uri": "admin/facebook-comment",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.facebook_pixel.update": {
+    "name": "admin.facebook_pixel.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@facebook_pixel_update",
+    "uri": "admin/facebook_pixel",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.env_key_update.update": {
+    "name": "admin.env_key_update.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@env_key_update",
+    "uri": "admin/env_key_update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.payment_method.update": {
+    "name": "admin.payment_method.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@payment_method_update",
+    "uri": "admin/payment_method_update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.google_analytics.update": {
+    "name": "admin.google_analytics.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@google_analytics_update",
+    "uri": "admin/google_analytics",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.google_recaptcha.update": {
+    "name": "admin.google_recaptcha.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@google_recaptcha_update",
+    "uri": "admin/google_recaptcha",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.currency.index": {
+    "name": "admin.currency.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@currency",
+    "uri": "admin/currency",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.currency.update": {
+    "name": "admin.currency.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@updateCurrency",
+    "uri": "admin/currency/update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.your_currency.update": {
+    "name": "admin.your_currency.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@updateYourCurrency",
+    "uri": "admin/your-currency/update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.currency.create": {
+    "name": "admin.currency.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@create",
+    "uri": "admin/currency/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.currency.store": {
+    "name": "admin.currency.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@store",
+    "uri": "admin/currency/store",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.currency.edit": {
+    "name": "admin.currency.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@edit",
+    "uri": "admin/currency/currency_edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.currency.update_status": {
+    "name": "admin.currency.update_status",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@update_status",
+    "uri": "admin/currency/update_status",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.tax.index": {
+    "name": "admin.tax.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@index",
+    "uri": "admin/tax",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.tax.create": {
+    "name": "admin.tax.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@create",
+    "uri": "admin/tax/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.tax.store": {
+    "name": "admin.tax.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@store",
+    "uri": "admin/tax",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.tax.show": {
+    "name": "admin.tax.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@show",
+    "uri": "admin/tax/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.tax.edit": {
+    "name": "admin.tax.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@edit",
+    "uri": "admin/tax/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.tax.update": {
+    "name": "admin.tax.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@update",
+    "uri": "admin/tax/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.tax.destroy": {
+    "name": "admin.tax.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@destroy",
+    "uri": "admin/tax/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.taxes.tax-status": {
+    "name": "admin.taxes.tax-status",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TaxController@change_tax_status",
+    "uri": "admin/tax-status",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.seller_verification_form.index": {
+    "name": "admin.seller_verification_form.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@seller_verification_form",
+    "uri": "admin/verification/form",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.seller_verification_form.update": {
+    "name": "admin.seller_verification_form.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@seller_verification_form_update",
+    "uri": "admin/verification/form",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.tenant_settings.vendor_commission": {
+    "name": "admin.tenant_settings.vendor_commission",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@vendor_commission",
+    "uri": "admin/vendor_commission",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.tenant_settings.vendor_commission.update": {
+    "name": "admin.tenant_settings.vendor_commission.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@vendor_commission_update",
+    "uri": "admin/vendor_commission_update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.languages.index": {
+    "name": "admin.languages.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@index",
+    "uri": "admin/languages",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.languages.create": {
+    "name": "admin.languages.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@create",
+    "uri": "admin/languages/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.languages.store": {
+    "name": "admin.languages.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@store",
+    "uri": "admin/languages",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.languages.show": {
+    "name": "admin.languages.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@show",
+    "uri": "admin/languages/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.languages.edit": {
+    "name": "admin.languages.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@edit",
+    "uri": "admin/languages/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.languages.update": {
+    "name": "admin.languages.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@update",
+    "uri": "admin/languages/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.languages.destroy": {
+    "name": "admin.languages.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@destroy",
+    "uri": "admin/languages/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.languages.update_rtl_status": {
+    "name": "admin.languages.update_rtl_status",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@update_rtl_status",
+    "uri": "admin/languages/update_rtl_status",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.languages.key_value_store": {
+    "name": "admin.languages.key_value_store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@key_value_store",
+    "uri": "admin/languages/key_value_store",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.seo.index": {
+    "name": "admin.seo.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@seo_setting",
+    "uri": "admin/seo",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.seo.update_seo_setting": {
+    "name": "admin.seo.update_seo_setting",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@update_seo_setting",
+    "uri": "admin/seo/update_seo_setting",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.website.header": {
+    "name": "admin.website.header",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "admin/website/header",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.website.footer": {
+    "name": "admin.website.footer",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "admin/website/footer",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.website.pages": {
+    "name": "admin.website.pages",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "admin/website/pages",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.website.appearance": {
+    "name": "admin.website.appearance",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "admin/website/appearance",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.custom-pages.index": {
+    "name": "admin.custom-pages.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@index",
+    "uri": "admin/website/custom-pages",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.custom-pages.create": {
+    "name": "admin.custom-pages.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@create",
+    "uri": "admin/website/custom-pages/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.custom-pages.store": {
+    "name": "admin.custom-pages.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@store",
+    "uri": "admin/website/custom-pages",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.custom-pages.show": {
+    "name": "admin.custom-pages.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@show",
+    "uri": "admin/website/custom-pages/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.custom-pages.edit": {
+    "name": "admin.custom-pages.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@edit",
+    "uri": "admin/website/custom-pages/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.custom-pages.update": {
+    "name": "admin.custom-pages.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@update",
+    "uri": "admin/website/custom-pages/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.custom-pages.destroy": {
+    "name": "admin.custom-pages.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PageController@destroy",
+    "uri": "admin/website/custom-pages/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.roles.index": {
+    "name": "admin.roles.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@index",
+    "uri": "admin/roles",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.roles.create": {
+    "name": "admin.roles.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@create",
+    "uri": "admin/roles/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.roles.store": {
+    "name": "admin.roles.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@store",
+    "uri": "admin/roles",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.roles.show": {
+    "name": "admin.roles.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@show",
+    "uri": "admin/roles/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.roles.edit": {
+    "name": "admin.roles.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@edit",
+    "uri": "admin/roles/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.roles.update": {
+    "name": "admin.roles.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@update",
+    "uri": "admin/roles/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.roles.destroy": {
+    "name": "admin.roles.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\RoleController@destroy",
+    "uri": "admin/roles/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.staffs.index": {
+    "name": "admin.staffs.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@index",
+    "uri": "admin/staffs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.staffs.create": {
+    "name": "admin.staffs.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@create",
+    "uri": "admin/staffs/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.staffs.store": {
+    "name": "admin.staffs.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@store",
+    "uri": "admin/staffs",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.staffs.show": {
+    "name": "admin.staffs.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@show",
+    "uri": "admin/staffs/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.staffs.edit": {
+    "name": "admin.staffs.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@edit",
+    "uri": "admin/staffs/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.staffs.update": {
+    "name": "admin.staffs.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@update",
+    "uri": "admin/staffs/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.staffs.destroy": {
+    "name": "admin.staffs.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StaffController@destroy",
+    "uri": "admin/staffs/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.affiliate_banner.index": {
+    "name": "admin.affiliate_banner.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@index",
+    "uri": "admin/affiliate_banner",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.affiliate_banner.create": {
+    "name": "admin.affiliate_banner.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@create",
+    "uri": "admin/affiliate_banner/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.affiliate_banner.store": {
+    "name": "admin.affiliate_banner.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@store",
+    "uri": "admin/affiliate_banner",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.affiliate_banner.show": {
+    "name": "admin.affiliate_banner.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@show",
+    "uri": "admin/affiliate_banner/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.affiliate_banner.edit": {
+    "name": "admin.affiliate_banner.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@edit",
+    "uri": "admin/affiliate_banner/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.affiliate_banner.update": {
+    "name": "admin.affiliate_banner.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@update",
+    "uri": "admin/affiliate_banner/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.affiliate_banner.destroy": {
+    "name": "admin.affiliate_banner.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@destroy",
+    "uri": "admin/affiliate_banner/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.flash_deals.index": {
+    "name": "admin.flash_deals.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@index",
+    "uri": "admin/flash_deals",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.flash_deals.create": {
+    "name": "admin.flash_deals.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@create",
+    "uri": "admin/flash_deals/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.flash_deals.store": {
+    "name": "admin.flash_deals.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@store",
+    "uri": "admin/flash_deals",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.flash_deals.show": {
+    "name": "admin.flash_deals.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@show",
+    "uri": "admin/flash_deals/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.flash_deals.edit": {
+    "name": "admin.flash_deals.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@edit",
+    "uri": "admin/flash_deals/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.flash_deals.update": {
+    "name": "admin.flash_deals.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@update",
+    "uri": "admin/flash_deals/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.flash_deals.destroy": {
+    "name": "admin.flash_deals.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@destroy",
+    "uri": "admin/flash_deals/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.flash_deals.update_status": {
+    "name": "admin.flash_deals.update_status",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@update_status",
+    "uri": "admin/flash_deals/update_status",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.flash_deals.update_featured": {
+    "name": "admin.flash_deals.update_featured",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@update_featured",
+    "uri": "admin/flash_deals/update_featured",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.flash_deals.product_discount": {
+    "name": "admin.flash_deals.product_discount",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@product_discount",
+    "uri": "admin/flash_deals/product_discount",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.flash_deals.product_discount_edit": {
+    "name": "admin.flash_deals.product_discount_edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FlashDealController@product_discount_edit",
+    "uri": "admin/flash_deals/product_discount_edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.subscribers.index": {
+    "name": "admin.subscribers.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SubscriberController@index",
+    "uri": "admin/subscribers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.subscriber.destroy": {
+    "name": "admin.subscriber.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SubscriberController@destroy",
+    "uri": "admin/subscribers/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.all_orders.index": {
+    "name": "admin.all_orders.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@all_orders",
+    "uri": "admin/all_orders",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.all_orders.show": {
+    "name": "admin.all_orders.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@all_orders_show",
+    "uri": "admin/all_orders/{id}/show",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.inhouse_orders.index": {
+    "name": "admin.inhouse_orders.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@admin_orders",
+    "uri": "admin/inhouse-orders",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.inhouse_orders.show": {
+    "name": "admin.inhouse_orders.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@show",
+    "uri": "admin/inhouse-orders/{id}/show",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.seller_orders.index": {
+    "name": "admin.seller_orders.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@seller_orders",
+    "uri": "admin/seller_orders",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.seller_orders.show": {
+    "name": "admin.seller_orders.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@seller_orders_show",
+    "uri": "admin/seller_orders/{id}/show",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.pick_up_point.order_index": {
+    "name": "admin.pick_up_point.order_index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@pickup_point_order_index",
+    "uri": "admin/orders_by_pickup_point",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.pick_up_point.order_show": {
+    "name": "admin.pick_up_point.order_show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@pickup_point_order_sales_show",
+    "uri": "admin/orders_by_pickup_point/{id}/show",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.orders.destroy": {
+    "name": "admin.orders.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OrderController@destroy",
+    "uri": "admin/orders/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.commissions.pay_to_seller": {
+    "name": "admin.commissions.pay_to_seller",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CommissionController@pay_to_seller",
+    "uri": "admin/pay_to_seller",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.stock_report.index": {
+    "name": "admin.stock_report.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReportController@stock_report",
+    "uri": "admin/stock_report",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.in_house_sale_report.index": {
+    "name": "admin.in_house_sale_report.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReportController@in_house_sale_report",
+    "uri": "admin/in_house_sale_report",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.seller_sale_report.index": {
+    "name": "admin.seller_sale_report.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReportController@seller_sale_report",
+    "uri": "admin/seller_sale_report",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.wish_report.index": {
+    "name": "admin.wish_report.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReportController@wish_report",
+    "uri": "admin/wish_report",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.user_search_report.index": {
+    "name": "admin.user_search_report.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReportController@user_search_report",
+    "uri": "admin/user_search_report",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.wallet-history.index": {
+    "name": "admin.wallet-history.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReportController@wallet_transaction_history",
+    "uri": "admin/wallet-history",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.blog.index": {
+    "name": "admin.blog.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@index",
+    "uri": "admin/blog",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.blog.create": {
+    "name": "admin.blog.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@create",
+    "uri": "admin/blog/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.blog.store": {
+    "name": "admin.blog.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@store",
+    "uri": "admin/blog",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.blog.show": {
+    "name": "admin.blog.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@show",
+    "uri": "admin/blog/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.blog.edit": {
+    "name": "admin.blog.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@edit",
+    "uri": "admin/blog/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.blog.update": {
+    "name": "admin.blog.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@update",
+    "uri": "admin/blog/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.blog.destroy": {
+    "name": "admin.blog.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@destroy",
+    "uri": "admin/blog/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.blog.change-status": {
+    "name": "admin.blog.change-status",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@change_status",
+    "uri": "admin/blog/change-status",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.coupon.index": {
+    "name": "admin.coupon.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@index",
+    "uri": "admin/coupon",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.coupon.create": {
+    "name": "admin.coupon.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@create",
+    "uri": "admin/coupon/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.coupon.store": {
+    "name": "admin.coupon.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@store",
+    "uri": "admin/coupon",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.coupon.show": {
+    "name": "admin.coupon.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@show",
+    "uri": "admin/coupon/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.coupon.edit": {
+    "name": "admin.coupon.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@edit",
+    "uri": "admin/coupon/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.coupon.update": {
+    "name": "admin.coupon.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@update",
+    "uri": "admin/coupon/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.coupon.get_coupon_form": {
+    "name": "admin.coupon.get_coupon_form",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@get_coupon_form",
+    "uri": "admin/coupon/get_form",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.coupon.get_coupon_form_edit": {
+    "name": "admin.coupon.get_coupon_form_edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@get_coupon_form_edit",
+    "uri": "admin/coupon/get_form_edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.coupon.destroy": {
+    "name": "admin.coupon.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CouponController@destroy",
+    "uri": "admin/coupon/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.reviews.index": {
+    "name": "admin.reviews.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@index",
+    "uri": "admin/reviews",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.reviews.create": {
+    "name": "admin.reviews.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@create",
+    "uri": "admin/reviews/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.reviews.store": {
+    "name": "admin.reviews.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@store",
+    "uri": "admin/reviews",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.reviews.show": {
+    "name": "admin.reviews.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@show",
+    "uri": "admin/reviews/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.reviews.edit": {
+    "name": "admin.reviews.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@edit",
+    "uri": "admin/reviews/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.reviews.update": {
+    "name": "admin.reviews.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@update",
+    "uri": "admin/reviews/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.reviews.destroy": {
+    "name": "admin.reviews.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@destroy",
+    "uri": "admin/reviews/{id}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "admin.reviews.published": {
+    "name": "admin.reviews.published",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ReviewController@updatePublished",
+    "uri": "admin/reviews/published",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.support_ticket.index": {
+    "name": "admin.support_ticket.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SupportTicketController@admin_index",
+    "uri": "admin/support_ticket",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.support_ticket.show": {
+    "name": "admin.support_ticket.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SupportTicketController@admin_show",
+    "uri": "admin/support_ticket/{id}/show",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.support_ticket.store": {
+    "name": "admin.support_ticket.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SupportTicketController@admin_store",
+    "uri": "admin/support_ticket/reply",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.pick_up_points.index": {
+    "name": "admin.pick_up_points.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@index",
+    "uri": "admin/pick_up_points",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.pick_up_points.create": {
+    "name": "admin.pick_up_points.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@create",
+    "uri": "admin/pick_up_points/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.pick_up_points.store": {
+    "name": "admin.pick_up_points.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@store",
+    "uri": "admin/pick_up_points",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.pick_up_points.show": {
+    "name": "admin.pick_up_points.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@show",
+    "uri": "admin/pick_up_points/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.pick_up_points.edit": {
+    "name": "admin.pick_up_points.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@edit",
+    "uri": "admin/pick_up_points/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.pick_up_points.update": {
+    "name": "admin.pick_up_points.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@update",
+    "uri": "admin/pick_up_points/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.pick_up_points.destroy": {
+    "name": "admin.pick_up_points.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\PickupPointController@destroy",
+    "uri": "admin/pick_up_points/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.conversations.index": {
+    "name": "admin.conversations.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ConversationController@admin_index",
+    "uri": "admin/conversations",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.conversations.show": {
+    "name": "admin.conversations.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ConversationController@admin_show",
+    "uri": "admin/conversations/{id}/show",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.sellers.profile_modal": {
+    "name": "admin.sellers.profile_modal",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@profile_modal",
+    "uri": "admin/sellers/profile_modal",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.sellers.approved": {
+    "name": "admin.sellers.approved",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\SellerController@updateApproved",
+    "uri": "admin/sellers/approved",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.attributes.index": {
+    "name": "admin.attributes.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@index",
+    "uri": "admin/attributes",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attributes.create": {
+    "name": "admin.attributes.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@create",
+    "uri": "admin/attributes/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attributes.store": {
+    "name": "admin.attributes.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@store",
+    "uri": "admin/attributes",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.attributes.edit": {
+    "name": "admin.attributes.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@edit",
+    "uri": "admin/attributes/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attributes.update": {
+    "name": "admin.attributes.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@update",
+    "uri": "admin/attributes/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.attributes.destroy": {
+    "name": "admin.attributes.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@destroy",
+    "uri": "admin/attributes/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attributes.slug_index": {
+    "name": "admin.attributes.slug_index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeController@slug_index",
+    "uri": "admin/attributes/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attribute_value.index": {
+    "name": "admin.attribute_value.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@index",
+    "uri": "admin/attribute_value",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attribute_value.create": {
+    "name": "admin.attribute_value.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@create",
+    "uri": "admin/attribute_value/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attribute_value.store": {
+    "name": "admin.attribute_value.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@store",
+    "uri": "admin/attribute_value",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.attribute_value.show": {
+    "name": "admin.attribute_value.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@show",
+    "uri": "admin/attribute_value/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attribute_value.edit": {
+    "name": "admin.attribute_value.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@edit",
+    "uri": "admin/attribute_value/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.attribute_value.update": {
+    "name": "admin.attribute_value.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@update",
+    "uri": "admin/attribute_value/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.attribute_value.destroy": {
+    "name": "admin.attribute_value.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AttributeValueController@destroy",
+    "uri": "admin/attribute_value/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.addons.index": {
+    "name": "admin.addons.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@index",
+    "uri": "admin/addons",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.addons.create": {
+    "name": "admin.addons.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@create",
+    "uri": "admin/addons/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.addons.store": {
+    "name": "admin.addons.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@store",
+    "uri": "admin/addons",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.addons.show": {
+    "name": "admin.addons.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@show",
+    "uri": "admin/addons/{addon}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.addons.edit": {
+    "name": "admin.addons.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@edit",
+    "uri": "admin/addons/{addon}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.addons.update": {
+    "name": "admin.addons.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@update",
+    "uri": "admin/addons/{addon}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.addons.destroy": {
+    "name": "admin.addons.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@destroy",
+    "uri": "admin/addons/{addon}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "admin.addons.activation": {
+    "name": "admin.addons.activation",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AddonController@activation",
+    "uri": "admin/addons/activation",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.customer_bulk_upload.index": {
+    "name": "admin.customer_bulk_upload.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerBulkUploadController@index",
+    "uri": "admin/customer-bulk-upload/index",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.bulk_user_upload": {
+    "name": "admin.bulk_user_upload",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerBulkUploadController@user_bulk_upload",
+    "uri": "admin/bulk-user-upload",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.bulk_customer_upload": {
+    "name": "admin.bulk_customer_upload",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerBulkUploadController@customer_bulk_file",
+    "uri": "admin/bulk-customer-upload",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.pdf.download_user": {
+    "name": "admin.pdf.download_user",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerBulkUploadController@pdf_download_user",
+    "uri": "admin/user",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customer_packages.index": {
+    "name": "admin.customer_packages.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@index",
+    "uri": "admin/customer_packages",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customer_packages.create": {
+    "name": "admin.customer_packages.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@create",
+    "uri": "admin/customer_packages/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customer_packages.store": {
+    "name": "admin.customer_packages.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@store",
+    "uri": "admin/customer_packages",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.customer_packages.show": {
+    "name": "admin.customer_packages.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@show",
+    "uri": "admin/customer_packages/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customer_packages.edit": {
+    "name": "admin.customer_packages.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@edit",
+    "uri": "admin/customer_packages/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.customer_packages.update": {
+    "name": "admin.customer_packages.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@update",
+    "uri": "admin/customer_packages/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.customer_packages.destroy": {
+    "name": "admin.customer_packages.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerPackageController@destroy",
+    "uri": "admin/customer_packages/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.classified_products": {
+    "name": "admin.classified_products",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@customer_product_index",
+    "uri": "admin/classified_products",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.classified_products.published": {
+    "name": "admin.classified_products.published",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@updatePublished",
+    "uri": "admin/classified_products/published",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.shipping_configuration.index": {
+    "name": "admin.shipping_configuration.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@shipping_configuration",
+    "uri": "admin/shipping_configuration",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.shipping_configuration.update": {
+    "name": "admin.shipping_configuration.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\TenantSettingsController@shipping_configuration_update",
+    "uri": "admin/shipping_configuration/update",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.countries.index": {
+    "name": "admin.countries.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@index",
+    "uri": "admin/countries",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.countries.create": {
+    "name": "admin.countries.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@create",
+    "uri": "admin/countries/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.countries.store": {
+    "name": "admin.countries.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@store",
+    "uri": "admin/countries",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.countries.show": {
+    "name": "admin.countries.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@show",
+    "uri": "admin/countries/{country}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.countries.edit": {
+    "name": "admin.countries.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@edit",
+    "uri": "admin/countries/{country}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.countries.update": {
+    "name": "admin.countries.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@update",
+    "uri": "admin/countries/{country}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.countries.destroy": {
+    "name": "admin.countries.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@destroy",
+    "uri": "admin/countries/{country}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "admin.countries.status": {
+    "name": "admin.countries.status",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CountryController@updateStatus",
+    "uri": "admin/countries/status",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.cities.index": {
+    "name": "admin.cities.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@index",
+    "uri": "admin/cities",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.cities.create": {
+    "name": "admin.cities.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@create",
+    "uri": "admin/cities/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.cities.store": {
+    "name": "admin.cities.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@store",
+    "uri": "admin/cities",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.cities.show": {
+    "name": "admin.cities.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@show",
+    "uri": "admin/cities/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.cities.edit": {
+    "name": "admin.cities.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@edit",
+    "uri": "admin/cities/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.cities.update": {
+    "name": "admin.cities.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@update",
+    "uri": "admin/cities/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.cities.destroy": {
+    "name": "admin.cities.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CityController@destroy",
+    "uri": "admin/cities/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.system_update": {
+    "name": "admin.system_update",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "admin/system/update",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.system_server": {
+    "name": "admin.system_server",
+    "domain": null,
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "admin/system/server-status",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.uploaded-files.info": {
+    "name": "admin.uploaded-files.info",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@file_info",
+    "uri": "admin/uploaded-files/file-info",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "admin.uploaded-files.index": {
+    "name": "admin.uploaded-files.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@index",
+    "uri": "admin/uploaded-files",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.uploaded-files.create": {
+    "name": "admin.uploaded-files.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@create",
+    "uri": "admin/uploaded-files/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.uploaded-files.store": {
+    "name": "admin.uploaded-files.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@store",
+    "uri": "admin/uploaded-files",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.uploaded-files.show": {
+    "name": "admin.uploaded-files.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@show",
+    "uri": "admin/uploaded-files/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.uploaded-files.edit": {
+    "name": "admin.uploaded-files.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@edit",
+    "uri": "admin/uploaded-files/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.uploaded-files.update": {
+    "name": "admin.uploaded-files.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@update",
+    "uri": "admin/uploaded-files/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.uploaded-files.destroy": {
+    "name": "admin.uploaded-files.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@destroy",
+    "uri": "admin/uploaded-files/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.events.index": {
+    "name": "admin.events.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@index",
+    "uri": "admin/events",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.events.create": {
+    "name": "admin.events.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@create",
+    "uri": "admin/events/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.events.store": {
+    "name": "admin.events.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@store",
+    "uri": "admin/events",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.events.show": {
+    "name": "admin.events.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@show",
+    "uri": "admin/events/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.events.edit": {
+    "name": "admin.events.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@edit",
+    "uri": "admin/events/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.events.update": {
+    "name": "admin.events.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@update",
+    "uri": "admin/events/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.events.login": {
+    "name": "admin.events.login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@login",
+    "uri": "admin/events/login/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.events.destroy": {
+    "name": "admin.events.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@destroy",
+    "uri": "admin/events/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.jobs.index": {
+    "name": "admin.jobs.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@index",
+    "uri": "admin/jobs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.jobs.create": {
+    "name": "admin.jobs.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@create",
+    "uri": "admin/jobs/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.jobs.store": {
+    "name": "admin.jobs.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@store",
+    "uri": "admin/jobs",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.jobs.show": {
+    "name": "admin.jobs.show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@show",
+    "uri": "admin/jobs/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.jobs.edit": {
+    "name": "admin.jobs.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@edit",
+    "uri": "admin/jobs/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "admin.jobs.update": {
+    "name": "admin.jobs.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@update",
+    "uri": "admin/jobs/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "admin.jobs.destroy": {
+    "name": "admin.jobs.destroy",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\JobController@destroy",
+    "uri": "admin/jobs/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::oR0ssDFsarzAr2St": {
+    "name": "generated::oR0ssDFsarzAr2St",
+    "domain": "ev-saas.localhost",
+    "action": "Closure",
+    "uri": "refresh-csrf",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "central.landing": {
+    "name": "central.landing",
+    "domain": "ev-saas.localhost",
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "/",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "central.pricing": {
+    "name": "central.pricing",
+    "domain": "ev-saas.localhost",
+    "action": "\\Illuminate\\Routing\\ViewController",
+    "uri": "pricing",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "central.tenants.register": {
+    "name": "central.tenants.register",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\Central\\RegisterTenantController@show",
+    "uri": "register",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "central.tenants.register.submit": {
+    "name": "central.tenants.register.submit",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\Central\\RegisterTenantController@submit",
+    "uri": "register/submit",
+    "method": [
+      "POST"
+    ]
+  },
+  "central.tenants.login": {
+    "name": "central.tenants.login",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\Central\\LoginTenantController@show",
+    "uri": "login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "central.tenants.login.submit": {
+    "name": "central.tenants.login.submit",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\Central\\LoginTenantController@submit",
+    "uri": "login/submit",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::V3N0Hwjlzj6mpU9B": {
+    "name": "generated::V3N0Hwjlzj6mpU9B",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@index",
+    "uri": "sslcommerz/pay",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::Sxzvf9tbd1nwhbEa": {
+    "name": "generated::Sxzvf9tbd1nwhbEa",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@success",
+    "uri": "sslcommerz/success",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::QOIVqioGYmLfbAGw": {
+    "name": "generated::QOIVqioGYmLfbAGw",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@fail",
+    "uri": "sslcommerz/fail",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::96LakKURxGLn0CWe": {
+    "name": "generated::96LakKURxGLn0CWe",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@cancel",
+    "uri": "sslcommerz/cancel",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::kC4D7Q9lcrrd599K": {
+    "name": "generated::kC4D7Q9lcrrd599K",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@ipn",
+    "uri": "sslcommerz/ipn",
+    "method": [
+      "POST"
+    ]
+  },
+  "instamojo.success": {
+    "name": "instamojo.success",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\InstamojoController@success",
+    "uri": "instamojo/payment/pay-success",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payment.rozer": {
+    "name": "payment.rozer",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\RazorpayController@payment",
+    "uri": "rozer/payment/pay-success",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::rJEiqB67NvpPW9vv": {
+    "name": "generated::rJEiqB67NvpPW9vv",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PaystackController@handleGatewayCallback",
+    "uri": "paystack/payment/callback",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::mggkZGomnW1r6IAD": {
+    "name": "generated::mggkZGomnW1r6IAD",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\VoguePayController@showForm",
+    "uri": "vogue-pay",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::skbBX4Uim9rPQrgy": {
+    "name": "generated::skbBX4Uim9rPQrgy",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\VoguePayController@paymentSuccess",
+    "uri": "vogue-pay/success/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::wbI19umpOu1c5BvI": {
+    "name": "generated::wbI19umpOu1c5BvI",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\VoguePayController@paymentFailure",
+    "uri": "vogue-pay/failure/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "iyzico.callback": {
+    "name": "iyzico.callback",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\IyzicoController@callback",
+    "uri": "iyzico/payment/callback/{payment_type}/{amount?}/{payment_method?}/{order_id?}/{customer_package_id?}/{seller_package_id?}",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "get-city": {
+    "name": "get-city",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\CityController@get_city",
+    "uri": "get-city",
+    "method": [
+      "POST"
+    ]
+  },
+  "payhere.checkout.testing": {
+    "name": "payhere.checkout.testing",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@checkout_testing",
+    "uri": "payhere/checkout/testing",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payhere.wallet.testing": {
+    "name": "payhere.wallet.testing",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@wallet_testing",
+    "uri": "payhere/wallet/testing",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payhere.customer_package.testing": {
+    "name": "payhere.customer_package.testing",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@customer_package_testing",
+    "uri": "payhere/customer_package/testing",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payhere.checkout.notify": {
+    "name": "payhere.checkout.notify",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@checkout_notify",
+    "uri": "payhere/checkout/notify",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.checkout.return": {
+    "name": "payhere.checkout.return",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@checkout_return",
+    "uri": "payhere/checkout/return",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.checkout.cancel": {
+    "name": "payhere.checkout.cancel",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@chekout_cancel",
+    "uri": "payhere/checkout/cancel",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.wallet.notify": {
+    "name": "payhere.wallet.notify",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@wallet_notify",
+    "uri": "payhere/wallet/notify",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.wallet.return": {
+    "name": "payhere.wallet.return",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@wallet_return",
+    "uri": "payhere/wallet/return",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.wallet.cancel": {
+    "name": "payhere.wallet.cancel",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@wallet_cancel",
+    "uri": "payhere/wallet/cancel",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.seller_package_payment.notify": {
+    "name": "payhere.seller_package_payment.notify",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@seller_package_notify",
+    "uri": "payhere/seller_package_payment/notify",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.seller_package_payment.return": {
+    "name": "payhere.seller_package_payment.return",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@seller_package_payment_return",
+    "uri": "payhere/seller_package_payment/return",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.seller_package_payment.cancel": {
+    "name": "payhere.seller_package_payment.cancel",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@seller_package_payment_cancel",
+    "uri": "payhere/seller_package_payment/cancel",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "generated::r9dOBCpNsyBUYI22": {
+    "name": "generated::r9dOBCpNsyBUYI22",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@migrate_seller_package_payment",
+    "uri": "migrate/products",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payhere.customer_package_payment.notify": {
+    "name": "payhere.customer_package_payment.notify",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@customer_package_notify",
+    "uri": "payhere/customer_package_payment/notify",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.customer_package_payment.return": {
+    "name": "payhere.customer_package_payment.return",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@customer_package_return",
+    "uri": "payhere/customer_package_payment/return",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "payhere.customer_package_payment.cancel": {
+    "name": "payhere.customer_package_payment.cancel",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\PayhereController@customer_package_cancel",
+    "uri": "payhere/customer_package_payment/cancel",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "ngenius.cart_payment_callback": {
+    "name": "ngenius.cart_payment_callback",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\NgeniusController@cart_payment_callback",
+    "uri": "ngenius/cart_payment_callback",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "ngenius.wallet_payment_callback": {
+    "name": "ngenius.wallet_payment_callback",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\NgeniusController@wallet_payment_callback",
+    "uri": "ngenius/wallet_payment_callback",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "generated::OzjbKgked7T1lR6Y": {
+    "name": "generated::OzjbKgked7T1lR6Y",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\NgeniusController@migrate_ngenius",
+    "uri": "migrate/database",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ngenius.customer_package_payment_callback": {
+    "name": "ngenius.customer_package_payment_callback",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\NgeniusController@customer_package_payment_callback",
+    "uri": "ngenius/customer_package_payment_callback",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "ngenius.seller_package_payment_callback": {
+    "name": "ngenius.seller_package_payment_callback",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\NgeniusController@seller_package_payment_callback",
+    "uri": "ngenius/seller_package_payment_callback",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "bkash.checkout": {
+    "name": "bkash.checkout",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\BkashController@checkout",
+    "uri": "bkash/createpayment",
+    "method": [
+      "POST"
+    ]
+  },
+  "bkash.excecute": {
+    "name": "bkash.excecute",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\BkashController@excecute",
+    "uri": "bkash/executepayment",
+    "method": [
+      "POST"
+    ]
+  },
+  "bkash.success": {
+    "name": "bkash.success",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\BkashController@success",
+    "uri": "bkash/success",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "nagad.callback": {
+    "name": "nagad.callback",
+    "domain": "ev-saas.localhost",
+    "action": "App\\Http\\Controllers\\NagadController@verify",
+    "uri": "nagad/callback",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "components.index": {
+    "name": "components.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@index",
+    "uri": "ev-docs/components",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "components.create": {
+    "name": "components.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@create",
+    "uri": "ev-docs/components/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "components.store": {
+    "name": "components.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@store",
+    "uri": "ev-docs/components",
+    "method": [
+      "POST"
+    ]
+  },
+  "components.show": {
+    "name": "components.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@show",
+    "uri": "ev-docs/components/{component}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "components.edit": {
+    "name": "components.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@edit",
+    "uri": "ev-docs/components/{component}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "components.update": {
+    "name": "components.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@update",
+    "uri": "ev-docs/components/{component}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "components.destroy": {
+    "name": "components.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Ev\\ComponentController@destroy",
+    "uri": "ev-docs/components/{component}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "analytics.index": {
+    "name": "analytics.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WeAnalyticsController@index",
+    "uri": "we-analytics",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "menu.index": {
+    "name": "menu.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WeMenuController@index",
+    "uri": "we-menu",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tenant.welcome": {
+    "name": "tenant.welcome",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\OnboardingController@welcome",
+    "uri": "welcome",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "home": {
+    "name": "home",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@index",
+    "uri": "/",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "feed.home": {
+    "name": "feed.home",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\FeedController@index",
+    "uri": "feed",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "category.elements": {
+    "name": "category.elements",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@get_category_items",
+    "uri": "category/nav-element-list",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::boA7xp3n8epHSDnJ": {
+    "name": "generated::boA7xp3n8epHSDnJ",
+    "domain": null,
+    "action": "Closure",
+    "uri": "sitemap.xml",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::kQHgrpSHRatiXaBe": {
+    "name": "generated::kQHgrpSHRatiXaBe",
+    "domain": null,
+    "action": "Closure",
+    "uri": "refresh-csrf",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::mhhOOfF8NI7Jeqo5": {
+    "name": "generated::mhhOOfF8NI7Jeqo5",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@show_uploader",
+    "uri": "aiz-uploader",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::d9EZsoP7SMfLatND": {
+    "name": "generated::d9EZsoP7SMfLatND",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@upload",
+    "uri": "aiz-uploader/upload",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::MpGYh0CLvK0BgEPC": {
+    "name": "generated::MpGYh0CLvK0BgEPC",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@get_uploaded_files",
+    "uri": "aiz-uploader/get_uploaded_files",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::syCOfi0NAAgj71ax": {
+    "name": "generated::syCOfi0NAAgj71ax",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@get_preview_files",
+    "uri": "aiz-uploader/get_file_by_ids",
+    "method": [
+      "POST"
+    ]
+  },
+  "download_attachment": {
+    "name": "download_attachment",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AizUploadController@attachment_download",
+    "uri": "aiz-uploader/download/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "affiliate_banner.track": {
+    "name": "affiliate_banner.track",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\AffiliateBannerController@track",
+    "uri": "aff{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "website_clicks.track": {
+    "name": "website_clicks.track",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CompanyController@track_website_clicks",
+    "uri": "link{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shop.index": {
+    "name": "shop.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\MerchantController@index",
+    "uri": "shops",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shops.create": {
+    "name": "shops.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@create",
+    "uri": "shops/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shops.store": {
+    "name": "shops.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@store",
+    "uri": "shops",
+    "method": [
+      "POST"
+    ]
+  },
+  "shops.show": {
+    "name": "shops.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@show",
+    "uri": "shops/{shop}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shops.edit": {
+    "name": "shops.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@edit",
+    "uri": "shops/{shop}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shops.update": {
+    "name": "shops.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@update",
+    "uri": "shops/{shop}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "shops.destroy": {
+    "name": "shops.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@destroy",
+    "uri": "shops/{shop}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "courses.index": {
+    "name": "courses.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@index",
+    "uri": "courses",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "courses.create": {
+    "name": "courses.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@create",
+    "uri": "courses/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "courses.store": {
+    "name": "courses.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@store",
+    "uri": "courses",
+    "method": [
+      "POST"
+    ]
+  },
+  "courses.show": {
+    "name": "courses.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@show",
+    "uri": "courses/{course}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "courses.edit": {
+    "name": "courses.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@edit",
+    "uri": "courses/{course}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "courses.update": {
+    "name": "courses.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@update",
+    "uri": "courses/{course}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "courses.destroy": {
+    "name": "courses.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CoursesController@destroy",
+    "uri": "courses/{course}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "ev-social-commerce.index": {
+    "name": "ev-social-commerce.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@index",
+    "uri": "ev-social-commerce",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-social-commerce.create": {
+    "name": "ev-social-commerce.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@create",
+    "uri": "ev-social-commerce/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-social-commerce.store": {
+    "name": "ev-social-commerce.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@store",
+    "uri": "ev-social-commerce",
+    "method": [
+      "POST"
+    ]
+  },
+  "ev-social-commerce.show": {
+    "name": "ev-social-commerce.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@show",
+    "uri": "ev-social-commerce/{ev_social_commerce}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-social-commerce.edit": {
+    "name": "ev-social-commerce.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@edit",
+    "uri": "ev-social-commerce/{ev_social_commerce}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-social-commerce.update": {
+    "name": "ev-social-commerce.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@update",
+    "uri": "ev-social-commerce/{ev_social_commerce}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "ev-social-commerce.destroy": {
+    "name": "ev-social-commerce.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SocialCommerceController@destroy",
+    "uri": "ev-social-commerce/{ev_social_commerce}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "ev-tutorials.index": {
+    "name": "ev-tutorials.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@index",
+    "uri": "ev-tutorials",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-tutorials.create": {
+    "name": "ev-tutorials.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@create",
+    "uri": "ev-tutorials/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-tutorials.store": {
+    "name": "ev-tutorials.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@store",
+    "uri": "ev-tutorials",
+    "method": [
+      "POST"
+    ]
+  },
+  "ev-tutorials.show": {
+    "name": "ev-tutorials.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@show",
+    "uri": "ev-tutorials/{ev_tutorial}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-tutorials.edit": {
+    "name": "ev-tutorials.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@edit",
+    "uri": "ev-tutorials/{ev_tutorial}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "ev-tutorials.update": {
+    "name": "ev-tutorials.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@update",
+    "uri": "ev-tutorials/{ev_tutorial}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "ev-tutorials.destroy": {
+    "name": "ev-tutorials.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\TutorialController@destroy",
+    "uri": "ev-tutorials/{ev_tutorial}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "business.register": {
+    "name": "business.register",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@create",
+    "uri": "business/register",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "login": {
+    "name": "login",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\LoginController@showLoginForm",
+    "uri": "login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::aJUUQik6ZZhjix7g": {
+    "name": "generated::aJUUQik6ZZhjix7g",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\LoginController@login",
+    "uri": "login",
+    "method": [
+      "POST"
+    ]
+  },
+  "logout": {
+    "name": "logout",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\LoginController@logout",
+    "uri": "logout",
+    "method": [
+      "POST"
+    ]
+  },
+  "register": {
+    "name": "register",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\RegisterController@showRegistrationForm",
+    "uri": "register",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::fZri5tBGAL42XG7m": {
+    "name": "generated::fZri5tBGAL42XG7m",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\RegisterController@register",
+    "uri": "register",
+    "method": [
+      "POST"
+    ]
+  },
+  "password.request": {
+    "name": "password.request",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\ForgotPasswordController@showLinkRequestForm",
+    "uri": "password/reset",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "password.email": {
+    "name": "password.email",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\ForgotPasswordController@sendResetLinkEmail",
+    "uri": "password/email",
+    "method": [
+      "POST"
+    ]
+  },
+  "password.reset": {
+    "name": "password.reset",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\ResetPasswordController@showResetForm",
+    "uri": "password/reset/{token}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "password.update": {
+    "name": "password.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\ResetPasswordController@reset",
+    "uri": "password/reset",
+    "method": [
+      "POST"
+    ]
+  },
+  "verification.notice": {
+    "name": "verification.notice",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\VerificationController@show",
+    "uri": "email/verify",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "verification.verify": {
+    "name": "verification.verify",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\VerificationController@verify",
+    "uri": "email/verify/{id}/{hash}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "verification.resend": {
+    "name": "verification.resend",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\VerificationController@resend",
+    "uri": "email/resend",
+    "method": [
+      "POST"
+    ]
+  },
+  "user.logout": {
+    "name": "user.logout",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\LoginController@logout",
+    "uri": "logout",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "email.verification.resend": {
+    "name": "email.verification.resend",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\VerificationController@resend",
+    "uri": "email/resend",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "email.verification.confirmation": {
+    "name": "email.verification.confirmation",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\VerificationController@verification_confirmation",
+    "uri": "verification-confirmation/{code}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "email_change.callback": {
+    "name": "email_change.callback",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@email_change_callback",
+    "uri": "email_change/callback",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "user.password.update": {
+    "name": "user.password.update",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@reset_password_with_code",
+    "uri": "password/reset/email/submit",
+    "method": [
+      "POST"
+    ]
+  },
+  "language.change": {
+    "name": "language.change",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\LanguageController@changeLanguage",
+    "uri": "language",
+    "method": [
+      "POST"
+    ]
+  },
+  "currency.change": {
+    "name": "currency.change",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CurrencyController@changeCurrency",
+    "uri": "currency",
+    "method": [
+      "POST"
+    ]
+  },
+  "social.login": {
+    "name": "social.login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\SocialController@redirectLoginToProvider",
+    "uri": "social-login/redirect/{provider}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "social.login.callback": {
+    "name": "social.login.callback",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\SocialController@handleProviderLoginCallback",
+    "uri": "social-login/{provider}/callback",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "social.connect": {
+    "name": "social.connect",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\SocialController@redirectConnectToProvider",
+    "uri": "social-connect/redirect/{provider}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "social.connect.callback": {
+    "name": "social.connect.callback",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Auth\\SocialController@handleProviderConnectCallback",
+    "uri": "social-connect/{provider}/callback",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "business.login": {
+    "name": "business.login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@login",
+    "uri": "business/login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "business.login.submit": {
+    "name": "business.login.submit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@business_login",
+    "uri": "business/login",
+    "method": [
+      "POST"
+    ]
+  },
+  "user.login": {
+    "name": "user.login",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@login_users",
+    "uri": "users/login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "user.registration": {
+    "name": "user.registration",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@registration",
+    "uri": "users/register",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cart.login.submit": {
+    "name": "cart.login.submit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@cart_login",
+    "uri": "users/login/cart",
+    "method": [
+      "POST"
+    ]
+  },
+  "admin.login": {
+    "name": "admin.login",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\LoginController@showLoginForm",
+    "uri": "admin/login",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "login.attempt": {
+    "name": "login.attempt",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Auth\\LoginController@login",
+    "uri": "admin/login",
+    "method": [
+      "POST"
+    ]
+  },
+  "customer.products": {
+    "name": "customer.products",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@customer_products_listing",
+    "uri": "customer-products",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_category.products.index": {
+    "name": "customer_category.products.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@search",
+    "uri": "customer-products?category={category_slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_products.city": {
+    "name": "customer_products.city",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@search",
+    "uri": "customer-products?city={city_id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_products.search": {
+    "name": "customer_products.search",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@search",
+    "uri": "customer-products?q={search}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer.profile.edit": {
+    "name": "customer.profile.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@profile_edit",
+    "uri": "customer-products/admin",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer.product": {
+    "name": "customer.product",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CustomerProductController@customer_product",
+    "uri": "customer-product/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_packages_list_show": {
+    "name": "customer_packages_list_show",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@premium_package_index",
+    "uri": "customer-packages",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "search": {
+    "name": "search",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@search",
+    "uri": "search",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "suggestion.search": {
+    "name": "suggestion.search",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@search",
+    "uri": "search?q={search}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "search.ajax": {
+    "name": "search.ajax",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@ajax_search",
+    "uri": "ajax-search",
+    "method": [
+      "POST"
+    ]
+  },
+  "product.single": {
+    "name": "product.single",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@show",
+    "uri": "product/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "category.index": {
+    "name": "category.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCategoryController@archiveByCategory",
+    "uri": "category/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "category.products.index": {
+    "name": "category.products.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@productsByCategory",
+    "uri": "products/category/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "products.brand": {
+    "name": "products.brand",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@listingByBrand",
+    "uri": "products/brand/{brand_slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shop.blog.post.index": {
+    "name": "shop.blog.post.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCategoryController@archiveByCategory",
+    "uri": "shop/{shop_slug}/blog/posts/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shop.single": {
+    "name": "shop.single",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVShopController@single",
+    "uri": "shop/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shop.sub-page": {
+    "name": "shop.sub-page",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CompanyController@show",
+    "uri": "shop/{slug}/info/{sub_page}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shop.visit.type": {
+    "name": "shop.visit.type",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@filter_shop",
+    "uri": "shop/{slug}/{type}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "event.visit": {
+    "name": "event.visit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EventController@show",
+    "uri": "event/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cart": {
+    "name": "cart",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCartController@index",
+    "uri": "cart",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wishlist": {
+    "name": "wishlist",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVWishlistController@index",
+    "uri": "wishlist",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wishlist.views": {
+    "name": "wishlist.views",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVWishlistController@views",
+    "uri": "wishlist/views",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "checkout": {
+    "name": "checkout",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCheckoutController@index",
+    "uri": "checkout",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "checkout.post": {
+    "name": "checkout.post",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCheckoutController@store",
+    "uri": "checkout",
+    "method": [
+      "POST"
+    ]
+  },
+  "checkout.single.page": {
+    "name": "checkout.single.page",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCheckoutController@single",
+    "uri": "checkout-single",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "checkout.order.received": {
+    "name": "checkout.order.received",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCheckoutController@orderReceived",
+    "uri": "order-received/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "cart.nav_cart": {
+    "name": "cart.nav_cart",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CartController@updateNavCart",
+    "uri": "cart/nav-cart-items",
+    "method": [
+      "POST"
+    ]
+  },
+  "cart.showCartModal": {
+    "name": "cart.showCartModal",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CartController@showCartModal",
+    "uri": "cart/show-cart-modal",
+    "method": [
+      "POST"
+    ]
+  },
+  "cart.addToCart": {
+    "name": "cart.addToCart",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CartController@addToCart",
+    "uri": "cart/addtocart",
+    "method": [
+      "POST"
+    ]
+  },
+  "cart.removeFromCart": {
+    "name": "cart.removeFromCart",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CartController@removeFromCart",
+    "uri": "cart/removeFromCart",
+    "method": [
+      "POST"
+    ]
+  },
+  "cart.updateQuantity": {
+    "name": "cart.updateQuantity",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CartController@updateQuantity",
+    "uri": "cart/updateQuantity",
+    "method": [
+      "POST"
+    ]
+  },
+  "generated::iMg4FNJZ6qlTgV5A": {
+    "name": "generated::iMg4FNJZ6qlTgV5A",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StripePaymentController@stripe",
+    "uri": "stripe",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "stripe.get_token": {
+    "name": "stripe.get_token",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StripePaymentController@stripe",
+    "uri": "stripe/create-checkout-session",
+    "method": [
+      "POST"
+    ]
+  },
+  "stripe.callback": {
+    "name": "stripe.callback",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StripePaymentController@callback",
+    "uri": "stripe/payment/callback",
+    "method": [
+      "GET",
+      "HEAD",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "OPTIONS"
+    ]
+  },
+  "stripe.success": {
+    "name": "stripe.success",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StripePaymentController@success",
+    "uri": "stripe/success",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "stripe.cancel": {
+    "name": "stripe.cancel",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\StripePaymentController@cancel",
+    "uri": "stripe/cancel",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "compare": {
+    "name": "compare",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CompareController@index",
+    "uri": "compare",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "compare.reset": {
+    "name": "compare.reset",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CompareController@reset",
+    "uri": "compare/reset",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "compare.addToCompare": {
+    "name": "compare.addToCompare",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CompareController@addToCompare",
+    "uri": "compare/addToCompare",
+    "method": [
+      "POST"
+    ]
+  },
+  "subscribers.index": {
+    "name": "subscribers.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@index",
+    "uri": "subscribers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "subscribers.create": {
+    "name": "subscribers.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@create",
+    "uri": "subscribers/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "subscribers.store": {
+    "name": "subscribers.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@store",
+    "uri": "subscribers",
+    "method": [
+      "POST"
+    ]
+  },
+  "subscribers.show": {
+    "name": "subscribers.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@show",
+    "uri": "subscribers/{subscriber}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "subscribers.edit": {
+    "name": "subscribers.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@edit",
+    "uri": "subscribers/{subscriber}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "subscribers.update": {
+    "name": "subscribers.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@update",
+    "uri": "subscribers/{subscriber}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "subscribers.destroy": {
+    "name": "subscribers.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SubscriberController@destroy",
+    "uri": "subscribers/{subscriber}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "brands.all": {
+    "name": "brands.all",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@all_brands",
+    "uri": "brands",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "categories.all": {
+    "name": "categories.all",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\HomeController@all_categories",
+    "uri": "categories",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "sellers": {
+    "name": "sellers",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\CompanyController@index",
+    "uri": "sellers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "company.thank-you": {
+    "name": "company.thank-you",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@thankYouPage",
+    "uri": "dashboard/thank-you",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "profile": {
+    "name": "profile",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@profile",
+    "uri": "profile",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "attributes": {
+    "name": "attributes",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@attributes",
+    "uri": "attributes",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "user.new.verify": {
+    "name": "user.new.verify",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@new_verify",
+    "uri": "new-user-verification",
+    "method": [
+      "POST"
+    ]
+  },
+  "user.change.email": {
+    "name": "user.change.email",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@update_email",
+    "uri": "new-user-email",
+    "method": [
+      "POST"
+    ]
+  },
+  "customer.profile.update": {
+    "name": "customer.profile.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@customer_update_profile",
+    "uri": "customer/update-profile",
+    "method": [
+      "POST"
+    ]
+  },
+  "seller.profile.update": {
+    "name": "seller.profile.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@seller_update_profile",
+    "uri": "seller/update-profile",
+    "method": [
+      "POST"
+    ]
+  },
+  "seller.category.update": {
+    "name": "seller.category.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@seller_update_category",
+    "uri": "seller/update-category",
+    "method": [
+      "POST"
+    ]
+  },
+  "frontend.attributes.update": {
+    "name": "frontend.attributes.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@update_attributes",
+    "uri": "update_attributes",
+    "method": [
+      "POST"
+    ]
+  },
+  "purchase_history.index": {
+    "name": "purchase_history.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@index",
+    "uri": "purchase_history",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "purchase_history.create": {
+    "name": "purchase_history.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@create",
+    "uri": "purchase_history/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "purchase_history.store": {
+    "name": "purchase_history.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@store",
+    "uri": "purchase_history",
+    "method": [
+      "POST"
+    ]
+  },
+  "purchase_history.show": {
+    "name": "purchase_history.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@show",
+    "uri": "purchase_history/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "purchase_history.edit": {
+    "name": "purchase_history.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@edit",
+    "uri": "purchase_history/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "purchase_history.update": {
+    "name": "purchase_history.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@update",
+    "uri": "purchase_history/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "purchase_history.destroy": {
+    "name": "purchase_history.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@destroy",
+    "uri": "purchase_history/{id}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "purchase_history.details": {
+    "name": "purchase_history.details",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@purchase_history_details",
+    "uri": "purchase_history/details",
+    "method": [
+      "POST"
+    ]
+  },
+  "wishlists.index": {
+    "name": "wishlists.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@index",
+    "uri": "wishlists",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wishlists.create": {
+    "name": "wishlists.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@create",
+    "uri": "wishlists/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wishlists.store": {
+    "name": "wishlists.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@store",
+    "uri": "wishlists",
+    "method": [
+      "POST"
+    ]
+  },
+  "wishlists.show": {
+    "name": "wishlists.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@show",
+    "uri": "wishlists/{wishlist}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wishlists.edit": {
+    "name": "wishlists.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@edit",
+    "uri": "wishlists/{wishlist}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wishlists.update": {
+    "name": "wishlists.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@update",
+    "uri": "wishlists/{wishlist}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "wishlists.destroy": {
+    "name": "wishlists.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@destroy",
+    "uri": "wishlists/{wishlist}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "wishlists.remove": {
+    "name": "wishlists.remove",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WishlistController@destroy",
+    "uri": "wishlists/remove",
+    "method": [
+      "POST"
+    ]
+  },
+  "wallet.index": {
+    "name": "wallet.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WalletController@index",
+    "uri": "wallet",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "wallet.recharge": {
+    "name": "wallet.recharge",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\WalletController@recharge",
+    "uri": "recharge",
+    "method": [
+      "POST"
+    ]
+  },
+  "support_ticket.index": {
+    "name": "support_ticket.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@index",
+    "uri": "support_ticket",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "support_ticket.create": {
+    "name": "support_ticket.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@create",
+    "uri": "support_ticket/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "support_ticket.store": {
+    "name": "support_ticket.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@store",
+    "uri": "support_ticket",
+    "method": [
+      "POST"
+    ]
+  },
+  "support_ticket.show": {
+    "name": "support_ticket.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@show",
+    "uri": "support_ticket/{support_ticket}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "support_ticket.edit": {
+    "name": "support_ticket.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@edit",
+    "uri": "support_ticket/{support_ticket}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "support_ticket.update": {
+    "name": "support_ticket.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@update",
+    "uri": "support_ticket/{support_ticket}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "support_ticket.destroy": {
+    "name": "support_ticket.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@destroy",
+    "uri": "support_ticket/{support_ticket}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "support_ticket.seller_store": {
+    "name": "support_ticket.seller_store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SupportTicketController@seller_store",
+    "uri": "support_ticket/reply",
+    "method": [
+      "POST"
+    ]
+  },
+  "customer_products.index": {
+    "name": "customer_products.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@index",
+    "uri": "customer_products",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_product.create": {
+    "name": "customer_product.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@create",
+    "uri": "customer_products/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_products.store": {
+    "name": "customer_products.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@store",
+    "uri": "customer_products",
+    "method": [
+      "POST"
+    ]
+  },
+  "customer_products.show": {
+    "name": "customer_products.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@show",
+    "uri": "customer_products/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_product.edit": {
+    "name": "customer_product.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@edit",
+    "uri": "customer_products/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customer_products.update": {
+    "name": "customer_products.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@update",
+    "uri": "customer_products/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "customer_products.destroy": {
+    "name": "customer_products.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@destroy",
+    "uri": "customer_products/{id}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "customer_packages.purchase": {
+    "name": "customer_packages.purchase",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerPackageController@purchase_package",
+    "uri": "customer_packages/purchase",
+    "method": [
+      "POST"
+    ]
+  },
+  "customer_products.published": {
+    "name": "customer_products.published",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@updatePublished",
+    "uri": "customer_products/published",
+    "method": [
+      "POST"
+    ]
+  },
+  "customer_products.update.status": {
+    "name": "customer_products.update.status",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerProductController@updateStatus",
+    "uri": "customer_products/status",
+    "method": [
+      "POST"
+    ]
+  },
+  "digital_purchase_history.index": {
+    "name": "digital_purchase_history.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PurchaseHistoryController@digital_index",
+    "uri": "digital_purchase_history",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.products": {
+    "name": "seller.products",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@seller_product_list",
+    "uri": "seller/products",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.products.upload": {
+    "name": "seller.products.upload",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@show_product_upload_form",
+    "uri": "seller/product/upload",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.product.edit": {
+    "name": "seller.product.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@show_product_edit_form",
+    "uri": "seller/product/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "products.featured": {
+    "name": "products.featured",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@updateFeatured",
+    "uri": "seller/products/featured",
+    "method": [
+      "POST"
+    ]
+  },
+  "payments.index": {
+    "name": "payments.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@index",
+    "uri": "seller/payments",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payments.create": {
+    "name": "payments.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@create",
+    "uri": "seller/payments/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payments.store": {
+    "name": "payments.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@store",
+    "uri": "seller/payments",
+    "method": [
+      "POST"
+    ]
+  },
+  "payments.show": {
+    "name": "payments.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@show",
+    "uri": "seller/payments/{payment}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payments.edit": {
+    "name": "payments.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@edit",
+    "uri": "seller/payments/{payment}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "payments.update": {
+    "name": "payments.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@update",
+    "uri": "seller/payments/{payment}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "payments.destroy": {
+    "name": "payments.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PaymentController@destroy",
+    "uri": "seller/payments/{payment}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "shop.verify": {
+    "name": "shop.verify",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@verify_form",
+    "uri": "seller/shop/apply_for_verification",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "shop.verify.store": {
+    "name": "shop.verify.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ShopController@verify_form_store",
+    "uri": "seller/shop/apply_for_verification",
+    "method": [
+      "POST"
+    ]
+  },
+  "reviews.seller": {
+    "name": "reviews.seller",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ReviewController@seller_reviews",
+    "uri": "seller/reviews",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.digitalproducts": {
+    "name": "seller.digitalproducts",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@seller_digital_product_list",
+    "uri": "seller/digitalproducts",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.digitalproducts.upload": {
+    "name": "seller.digitalproducts.upload",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@show_digital_product_upload_form",
+    "uri": "seller/digitalproducts/upload",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.digitalproduct.edit": {
+    "name": "seller.digitalproduct.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@show_digital_product_edit_form",
+    "uri": "seller/digitalproducts/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.events": {
+    "name": "seller.events",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@seller_events",
+    "uri": "seller/events",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.event.create": {
+    "name": "seller.event.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@seller_event_create",
+    "uri": "seller/events/upload",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.event.edit": {
+    "name": "seller.event.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@seller_event_edit",
+    "uri": "seller/events/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.jobs": {
+    "name": "seller.jobs",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@seller_jobs",
+    "uri": "seller/jobs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.jobs.upload": {
+    "name": "seller.jobs.upload",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@seller_jobs_create",
+    "uri": "seller/jobs/upload",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "seller.jobs.edit": {
+    "name": "seller.jobs.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@seller_jobs_edit",
+    "uri": "seller/jobs/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "orders.track": {
+    "name": "orders.track",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@trackOrder",
+    "uri": "track_your_order",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.all": {
+    "name": "jobs.all",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@all_jobs",
+    "uri": "all_jobs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.visit": {
+    "name": "jobs.visit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@job",
+    "uri": "shops/{shop_slug}/jobs/{job_slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "sellerpolicy": {
+    "name": "sellerpolicy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@sellerpolicy",
+    "uri": "sellerpolicy",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "returnpolicy": {
+    "name": "returnpolicy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@returnpolicy",
+    "uri": "returnpolicy",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "supportpolicy": {
+    "name": "supportpolicy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@supportpolicy",
+    "uri": "supportpolicy",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "terms": {
+    "name": "terms",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@terms",
+    "uri": "terms",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "privacypolicy": {
+    "name": "privacypolicy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@privacypolicy",
+    "uri": "privacypolicy",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "companies.index": {
+    "name": "companies.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@index",
+    "uri": "companies",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "companies.create": {
+    "name": "companies.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@create",
+    "uri": "companies/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "companies.store": {
+    "name": "companies.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@store",
+    "uri": "companies",
+    "method": [
+      "POST"
+    ]
+  },
+  "companies.show": {
+    "name": "companies.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@show",
+    "uri": "companies/{company}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "companies.edit": {
+    "name": "companies.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@edit",
+    "uri": "companies/{company}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "companies.update": {
+    "name": "companies.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@update",
+    "uri": "companies/{company}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "companies.destroy": {
+    "name": "companies.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CompanyController@destroy",
+    "uri": "companies/{company}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "news": {
+    "name": "news",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@all_blog",
+    "uri": "news",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "news.details": {
+    "name": "news.details",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@blog_details",
+    "uri": "news/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "news.category": {
+    "name": "news.category",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\BlogController@blog_category",
+    "uri": "news/category/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "styleguide.index": {
+    "name": "styleguide.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PageController@styleguide",
+    "uri": "styleguide",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "chat.index": {
+    "name": "chat.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ChatController@index",
+    "uri": "chat",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "landing.pricing": {
+    "name": "landing.pricing",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PageController@pricing",
+    "uri": "pricing",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "mailchimp.subscribe": {
+    "name": "mailchimp.subscribe",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Integrations\\MailchimpController@subscribe",
+    "uri": "subscribe/{type}",
+    "method": [
+      "POST"
+    ]
+  },
+  "custom-pages.show_custom_page": {
+    "name": "custom-pages.show_custom_page",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\PageController@show_custom_page",
+    "uri": "page/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "generated::G8ul9pF0peH3cRFu": {
+    "name": "generated::G8ul9pF0peH3cRFu",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Integrations\\GetStreamControler@index",
+    "uri": "feed/all",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customers.index": {
+    "name": "customers.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@index",
+    "uri": "customers",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customers.create": {
+    "name": "customers.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@create",
+    "uri": "customers/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customers.store": {
+    "name": "customers.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@store",
+    "uri": "customers",
+    "method": [
+      "POST"
+    ]
+  },
+  "customers.show": {
+    "name": "customers.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@show",
+    "uri": "customers/{customer}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customers.edit": {
+    "name": "customers.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@edit",
+    "uri": "customers/{customer}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "customers.update": {
+    "name": "customers.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@update",
+    "uri": "customers/{customer}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "customers.destroy": {
+    "name": "customers.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\CustomerController@destroy",
+    "uri": "customers/{customer}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "knowledge-base.index": {
+    "name": "knowledge-base.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@index",
+    "uri": "knowledge-base",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "knowledge-base.create": {
+    "name": "knowledge-base.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@create",
+    "uri": "knowledge-base/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "knowledge-base.store": {
+    "name": "knowledge-base.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@store",
+    "uri": "knowledge-base",
+    "method": [
+      "POST"
+    ]
+  },
+  "knowledge-base.show": {
+    "name": "knowledge-base.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@show",
+    "uri": "knowledge-base/{knowledge_base}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "knowledge-base.edit": {
+    "name": "knowledge-base.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@edit",
+    "uri": "knowledge-base/{knowledge_base}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "knowledge-base.update": {
+    "name": "knowledge-base.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@update",
+    "uri": "knowledge-base/{knowledge_base}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "knowledge-base.destroy": {
+    "name": "knowledge-base.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\KnowledgeBaseController@destroy",
+    "uri": "knowledge-base/{knowledge_base}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "tenant.impersonate": {
+    "name": "tenant.impersonate",
+    "domain": null,
+    "action": "Closure",
+    "uri": "impersonate/{token}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tenant.settings.user": {
+    "name": "tenant.settings.user",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Tenant\\UserSettingsController@show",
+    "uri": "settings/user",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tenant.settings.user.personal": {
+    "name": "tenant.settings.user.personal",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\UserSettingsController@personal",
+    "uri": "settings/user/personal",
+    "method": [
+      "POST"
+    ]
+  },
+  "tenant.settings.user.password": {
+    "name": "tenant.settings.user.password",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\UserSettingsController@password",
+    "uri": "settings/user/password",
+    "method": [
+      "POST"
+    ]
+  },
+  "tenant.settings.application": {
+    "name": "tenant.settings.application",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Tenant\\ApplicationSettingsController@show",
+    "uri": "settings/application",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "tenant.settings.application.configuration": {
+    "name": "tenant.settings.application.configuration",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\Tenant\\ApplicationSettingsController@storeConfiguration",
+    "uri": "settings/application/configuration",
+    "method": [
+      "POST"
+    ]
+  },
+  "tenant.invoice.download": {
+    "name": "tenant.invoice.download",
+    "domain": null,
+    "action": "Closure",
+    "uri": "settings/application/invoice/{id}/download",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "categories.index": {
+    "name": "categories.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCategoryController@index",
+    "uri": "dashboard/categories",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "category.create": {
+    "name": "category.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCategoryController@create",
+    "uri": "dashboard/categories/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "category.edit": {
+    "name": "category.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCategoryController@edit",
+    "uri": "dashboard/categories/edit/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "dashboard": {
+    "name": "dashboard",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\HomeController@dashboard",
+    "uri": "dashboard",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "leads.success": {
+    "name": "leads.success",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@success",
+    "uri": "dashboard/leads/success",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "leads.index": {
+    "name": "leads.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@index",
+    "uri": "dashboard/leads",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "leads.create": {
+    "name": "leads.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@create",
+    "uri": "dashboard/leads/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "leads.store": {
+    "name": "leads.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@store",
+    "uri": "dashboard/leads",
+    "method": [
+      "POST"
+    ]
+  },
+  "leads.show": {
+    "name": "leads.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@show",
+    "uri": "dashboard/leads/{lead}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "leads.edit": {
+    "name": "leads.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@edit",
+    "uri": "dashboard/leads/{lead}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "leads.update": {
+    "name": "leads.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@update",
+    "uri": "dashboard/leads/{lead}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "leads.destroy": {
+    "name": "leads.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\LeadController@destroy",
+    "uri": "dashboard/leads/{lead}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "activity.index": {
+    "name": "activity.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\ActivityController@index_frontend",
+    "uri": "dashboard/ev-activity",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "products.index": {
+    "name": "products.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@index",
+    "uri": "dashboard/ev-products",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product.create": {
+    "name": "product.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@create",
+    "uri": "dashboard/ev-products/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product.edit": {
+    "name": "product.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@edit",
+    "uri": "dashboard/ev-products/edit/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product.details": {
+    "name": "product.details",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@product_details",
+    "uri": "dashboard/ev-products/edit/{slug}/details",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product.activity": {
+    "name": "product.activity",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@product_activity",
+    "uri": "dashboard/ev-products/edit/{slug}/details/activity",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product.edit.variations": {
+    "name": "product.edit.variations",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@edit_variations",
+    "uri": "dashboard/ev-products/edit/{slug}/variations",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product.edit.stocks": {
+    "name": "product.edit.stocks",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVProductController@edit_stocks",
+    "uri": "dashboard/ev-products/edit/{slug}/stock-management",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "blog.posts.index": {
+    "name": "blog.posts.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVBlogPostController@index",
+    "uri": "dashboard/blog/posts",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "blog.post.create": {
+    "name": "blog.post.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVBlogPostController@create",
+    "uri": "dashboard/blog/posts/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "blog.post.edit": {
+    "name": "blog.post.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVBlogPostController@edit",
+    "uri": "dashboard/blog/posts/edit/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "plans.index": {
+    "name": "plans.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVPlanController@index",
+    "uri": "dashboard/plans",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "plan.create": {
+    "name": "plan.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVPlanController@create",
+    "uri": "dashboard/plans/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "plan.edit": {
+    "name": "plan.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVPlanController@edit",
+    "uri": "dashboard/plans/edit/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "orders.index": {
+    "name": "orders.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVOrderController@index",
+    "uri": "dashboard/orders",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "order.create": {
+    "name": "order.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVOrderController@create",
+    "uri": "dashboard/order/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "order.details": {
+    "name": "order.details",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVOrderController@details",
+    "uri": "dashboard/order/view/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "orders.destroy": {
+    "name": "orders.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\OrderController@destroy",
+    "uri": "dashboard/orders/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "orders.details": {
+    "name": "orders.details",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\OrderController@order_details",
+    "uri": "dashboard/orders/details",
+    "method": [
+      "POST"
+    ]
+  },
+  "orders.update_delivery_status": {
+    "name": "orders.update_delivery_status",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\OrderController@update_delivery_status",
+    "uri": "dashboard/orders/update_delivery_status",
+    "method": [
+      "POST"
+    ]
+  },
+  "orders.update_payment_status": {
+    "name": "orders.update_payment_status",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\OrderController@update_payment_status",
+    "uri": "dashboard/orders/update_payment_status",
+    "method": [
+      "POST"
+    ]
+  },
+  "my.purchases.all": {
+    "name": "my.purchases.all",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVOrderController@my_purchases",
+    "uri": "dashboard/purchases/all",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "my.account.settings": {
+    "name": "my.account.settings",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@account_settings",
+    "uri": "dashboard/account-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "user.profile": {
+    "name": "user.profile",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@user_profile",
+    "uri": "dashboard/profile/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "settings.design": {
+    "name": "settings.design",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@design_settings",
+    "uri": "dashboard/ev-design-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "settings.design.store": {
+    "name": "settings.design.store",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@design_settings_store",
+    "uri": "dashboard/ev-design-settings",
+    "method": [
+      "POST"
+    ]
+  },
+  "settings.payment_methods": {
+    "name": "settings.payment_methods",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@payment_methods_settings",
+    "uri": "dashboard/ev-payment-methods-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "settings.domains": {
+    "name": "settings.domains",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@domain_settings",
+    "uri": "dashboard/domain-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "settings.staff_settings": {
+    "name": "settings.staff_settings",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@staff_settings",
+    "uri": "dashboard/staff-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "settings.shop_settings": {
+    "name": "settings.shop_settings",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAccountController@shop_settings",
+    "uri": "dashboard/shop-settings",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "gateway.paysera.accepted": {
+    "name": "gateway.paysera.accepted",
+    "domain": null,
+    "action": "App\\Http\\Services\\PaymentMethods\\PayseraGateway@accepted",
+    "uri": "dashboard/checkout/paysera/accepted/{invoice_id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "gateway.paysera.canceled": {
+    "name": "gateway.paysera.canceled",
+    "domain": null,
+    "action": "App\\Http\\Services\\PaymentMethods\\PayseraGateway@canceled",
+    "uri": "dashboard/checkout/paysera/canceled/{invoice_id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "gateway.paysera.callback": {
+    "name": "gateway.paysera.callback",
+    "domain": null,
+    "action": "App\\Http\\Services\\PaymentMethods\\PayseraGateway@callback",
+    "uri": "dashboard/checkout/paysera/callback/{invoice_id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "checkout.execute.payment": {
+    "name": "checkout.execute.payment",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVCheckoutController@executePayment",
+    "uri": "dashboard/checkout/execute/payment/{invoice_id}",
+    "method": [
+      "POST"
+    ]
+  },
+  "products.store": {
+    "name": "products.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@store",
+    "uri": "dashboard/products/store",
+    "method": [
+      "POST"
+    ]
+  },
+  "products.update": {
+    "name": "products.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@update",
+    "uri": "dashboard/products/update/{id}",
+    "method": [
+      "POST"
+    ]
+  },
+  "products.destroy": {
+    "name": "products.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@destroy",
+    "uri": "dashboard/products/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "products.duplicate": {
+    "name": "products.duplicate",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@duplicate",
+    "uri": "dashboard/products/duplicate/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "products.sku_combination": {
+    "name": "products.sku_combination",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@sku_combination",
+    "uri": "dashboard/products/sku_combination",
+    "method": [
+      "POST"
+    ]
+  },
+  "products.sku_combination_edit": {
+    "name": "products.sku_combination_edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@sku_combination_edit",
+    "uri": "dashboard/products/sku_combination_edit",
+    "method": [
+      "POST"
+    ]
+  },
+  "products.seller.featured": {
+    "name": "products.seller.featured",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@updateSellerFeatured",
+    "uri": "dashboard/products/seller/featured",
+    "method": [
+      "POST"
+    ]
+  },
+  "products.published": {
+    "name": "products.published",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductController@updatePublished",
+    "uri": "dashboard/products/published",
+    "method": [
+      "POST"
+    ]
+  },
+  "invoice.download": {
+    "name": "invoice.download",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\InvoiceController@invoice_download",
+    "uri": "dashboard/invoice/{order_id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "reviews.index": {
+    "name": "reviews.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ReviewController@index",
+    "uri": "dashboard/reviews",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "reviews.create": {
+    "name": "reviews.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ReviewController@create",
+    "uri": "dashboard/shop/{company_name}/review/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "reviews.store": {
+    "name": "reviews.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ReviewController@store",
+    "uri": "dashboard/review/store",
+    "method": [
+      "POST"
+    ]
+  },
+  "reviews.published": {
+    "name": "reviews.published",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ReviewController@updatePublished",
+    "uri": "dashboard/review/published",
+    "method": [
+      "POST"
+    ]
+  },
+  "withdraw_requests.index": {
+    "name": "withdraw_requests.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@index",
+    "uri": "dashboard/withdraw_requests",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "withdraw_requests.create": {
+    "name": "withdraw_requests.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@create",
+    "uri": "dashboard/withdraw_requests/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "withdraw_requests.store": {
+    "name": "withdraw_requests.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@store",
+    "uri": "dashboard/withdraw_requests",
+    "method": [
+      "POST"
+    ]
+  },
+  "withdraw_requests.show": {
+    "name": "withdraw_requests.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@show",
+    "uri": "dashboard/withdraw_requests/{withdraw_request}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "withdraw_requests.edit": {
+    "name": "withdraw_requests.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@edit",
+    "uri": "dashboard/withdraw_requests/{withdraw_request}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "withdraw_requests.update": {
+    "name": "withdraw_requests.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@update",
+    "uri": "dashboard/withdraw_requests/{withdraw_request}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "withdraw_requests.destroy": {
+    "name": "withdraw_requests.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@destroy",
+    "uri": "dashboard/withdraw_requests/{withdraw_request}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "withdraw_requests_all": {
+    "name": "withdraw_requests_all",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@request_index",
+    "uri": "dashboard/withdraw_requests_all",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "withdraw_request.payment_modal": {
+    "name": "withdraw_request.payment_modal",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@payment_modal",
+    "uri": "dashboard/withdraw_request/payment_modal",
+    "method": [
+      "POST"
+    ]
+  },
+  "withdraw_request.message_modal": {
+    "name": "withdraw_request.message_modal",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\SellerWithdrawRequestController@message_modal",
+    "uri": "dashboard/withdraw_request/message_modal",
+    "method": [
+      "POST"
+    ]
+  },
+  "conversations.index": {
+    "name": "conversations.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@index",
+    "uri": "dashboard/conversations",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "conversations.create": {
+    "name": "conversations.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@create",
+    "uri": "dashboard/conversations/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "conversations.store": {
+    "name": "conversations.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@store",
+    "uri": "dashboard/conversations",
+    "method": [
+      "POST"
+    ]
+  },
+  "conversations.show": {
+    "name": "conversations.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@show",
+    "uri": "dashboard/conversations/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "conversations.edit": {
+    "name": "conversations.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@edit",
+    "uri": "dashboard/conversations/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "conversations.update": {
+    "name": "conversations.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@update",
+    "uri": "dashboard/conversations/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "conversations.destroy": {
+    "name": "conversations.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@destroy",
+    "uri": "dashboard/conversations/{id}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "conversations.refresh": {
+    "name": "conversations.refresh",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@refresh",
+    "uri": "dashboard/conversations/refresh",
+    "method": [
+      "POST"
+    ]
+  },
+  "conversations.save": {
+    "name": "conversations.save",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ConversationController@saveConversation",
+    "uri": "dashboard/conversations/save",
+    "method": [
+      "POST"
+    ]
+  },
+  "messages.index": {
+    "name": "messages.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@index",
+    "uri": "dashboard/messages",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "messages.create": {
+    "name": "messages.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@create",
+    "uri": "dashboard/messages/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "messages.store": {
+    "name": "messages.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@store",
+    "uri": "dashboard/messages",
+    "method": [
+      "POST"
+    ]
+  },
+  "messages.show": {
+    "name": "messages.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@show",
+    "uri": "dashboard/messages/{message}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "messages.edit": {
+    "name": "messages.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@edit",
+    "uri": "dashboard/messages/{message}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "messages.update": {
+    "name": "messages.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@update",
+    "uri": "dashboard/messages/{message}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "messages.destroy": {
+    "name": "messages.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\MessageController@destroy",
+    "uri": "dashboard/messages/{message}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "product_bulk_upload.index": {
+    "name": "product_bulk_upload.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@index",
+    "uri": "dashboard/product-bulk-upload/index",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "bulk_product_upload": {
+    "name": "bulk_product_upload",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@bulk_upload",
+    "uri": "dashboard/bulk-product-upload",
+    "method": [
+      "POST"
+    ]
+  },
+  "product_csv.download": {
+    "name": "product_csv.download",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@import_product",
+    "uri": "dashboard/product-csv-download/{type}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "import_vendor_product.download": {
+    "name": "import_vendor_product.download",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@import_vendor_product",
+    "uri": "dashboard/vendor-product-csv-download/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "pdf.download_category": {
+    "name": "pdf.download_category",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@pdf_download_category",
+    "uri": "dashboard/bulk-upload/download/category",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "pdf.download_brand": {
+    "name": "pdf.download_brand",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@pdf_download_brand",
+    "uri": "dashboard/bulk-upload/download/brand",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "pdf.download_seller": {
+    "name": "pdf.download_seller",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@pdf_download_seller",
+    "uri": "dashboard/bulk-upload/download/seller",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "product_bulk_export.index": {
+    "name": "product_bulk_export.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ProductBulkUploadController@export",
+    "uri": "dashboard/product-bulk-export",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "digitalproducts.index": {
+    "name": "digitalproducts.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@index",
+    "uri": "dashboard/digitalproducts",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "digitalproduct.create": {
+    "name": "digitalproduct.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@create",
+    "uri": "dashboard/digitalproducts/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "digitalproducts.store": {
+    "name": "digitalproducts.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@store",
+    "uri": "dashboard/digitalproducts",
+    "method": [
+      "POST"
+    ]
+  },
+  "digitalproducts.show": {
+    "name": "digitalproducts.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@show",
+    "uri": "dashboard/digitalproducts/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "digitalproduct.edit": {
+    "name": "digitalproduct.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@edit",
+    "uri": "dashboard/digitalproducts/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "digitalproducts.update": {
+    "name": "digitalproducts.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@update",
+    "uri": "dashboard/digitalproducts/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "digitalproducts.destroy": {
+    "name": "digitalproducts.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@destroy",
+    "uri": "dashboard/digitalproducts/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "digitalproducts.download": {
+    "name": "digitalproducts.download",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DigitalProductController@download",
+    "uri": "dashboard/digitalproducts/download/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "commission-log.index": {
+    "name": "commission-log.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\ReportController@commission_history",
+    "uri": "dashboard/commission-log",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "documentgallery.index": {
+    "name": "documentgallery.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@index",
+    "uri": "dashboard/documentgallery",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "documentgallery.create": {
+    "name": "documentgallery.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@create",
+    "uri": "dashboard/documentgallery/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "documentgallery.store": {
+    "name": "documentgallery.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@store",
+    "uri": "dashboard/documentgallery",
+    "method": [
+      "POST"
+    ]
+  },
+  "documentgallery.show": {
+    "name": "documentgallery.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@show",
+    "uri": "dashboard/documentgallery/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "documentgallery.edit": {
+    "name": "documentgallery.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@edit",
+    "uri": "dashboard/documentgallery/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "documentgallery.update": {
+    "name": "documentgallery.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@update",
+    "uri": "dashboard/documentgallery/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "documentgallery.destroy": {
+    "name": "documentgallery.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\DocumentGalleryController@destroy",
+    "uri": "dashboard/documentgallery/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "notifications.index": {
+    "name": "notifications.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@index",
+    "uri": "dashboard/notifications",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "notifications.create": {
+    "name": "notifications.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@create",
+    "uri": "dashboard/notifications/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "notifications.store": {
+    "name": "notifications.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@store",
+    "uri": "dashboard/notifications",
+    "method": [
+      "POST"
+    ]
+  },
+  "notifications.show": {
+    "name": "notifications.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@show",
+    "uri": "dashboard/notifications/{notification}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "notifications.edit": {
+    "name": "notifications.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@edit",
+    "uri": "dashboard/notifications/{notification}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "notifications.update": {
+    "name": "notifications.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@update",
+    "uri": "dashboard/notifications/{notification}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "notifications.destroy": {
+    "name": "notifications.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@destroy",
+    "uri": "dashboard/notifications/{notification}",
+    "method": [
+      "DELETE"
+    ]
+  },
+  "notifications.mark_all_as_read": {
+    "name": "notifications.mark_all_as_read",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\NotificationController@markAllAsRead",
+    "uri": "dashboard/notifications/mark-all-as-read",
+    "method": [
+      "POST"
+    ]
+  },
+  "events.create": {
+    "name": "events.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@create",
+    "uri": "dashboard/events/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "events.store": {
+    "name": "events.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@store",
+    "uri": "dashboard/events",
+    "method": [
+      "POST"
+    ]
+  },
+  "events.edit": {
+    "name": "events.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@edit",
+    "uri": "dashboard/events/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "events.update": {
+    "name": "events.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@update",
+    "uri": "dashboard/events/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "events": {
+    "name": "events",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@all_events",
+    "uri": "dashboard/events",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "event.show": {
+    "name": "event.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@show",
+    "uri": "dashboard/events/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "events.category": {
+    "name": "events.category",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@listingByCategory",
+    "uri": "dashboard/events/category/{category_slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "event.destroy": {
+    "name": "event.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EventController@destroy",
+    "uri": "dashboard/events/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.index": {
+    "name": "jobs.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@index",
+    "uri": "dashboard/jobs",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.create": {
+    "name": "jobs.create",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@create",
+    "uri": "dashboard/jobs/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.store": {
+    "name": "jobs.store",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@store",
+    "uri": "dashboard/jobs",
+    "method": [
+      "POST"
+    ]
+  },
+  "jobs.show": {
+    "name": "jobs.show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@show",
+    "uri": "dashboard/jobs/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.edit": {
+    "name": "jobs.edit",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@edit",
+    "uri": "dashboard/jobs/{id}/edit",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "jobs.update": {
+    "name": "jobs.update",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@update",
+    "uri": "dashboard/jobs/{id}",
+    "method": [
+      "PUT",
+      "PATCH"
+    ]
+  },
+  "jobs.destroy": {
+    "name": "jobs.destroy",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\JobController@destroy",
+    "uri": "dashboard/jobs/destroy/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "integrations.index": {
+    "name": "integrations.index",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Integrations\\IntegrationsController@index",
+    "uri": "integrations",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "integrations.facebook-business.export": {
+    "name": "integrations.facebook-business.export",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\Integrations\\FacebookBusinessController@export",
+    "uri": "integrations/facebook-business-export",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  }
+}

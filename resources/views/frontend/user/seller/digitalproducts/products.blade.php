@@ -83,9 +83,9 @@
                     @foreach ($products as $key => $product)
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td><a href="{{ $product->permalink }}" target="_blank">{{   $product->getTranslation('name')  }}</a></td>
+                            <td><a href="{{ $product->getPermalink() }}" target="_blank">{{   $product->getTranslation('name')  }}</a></td>
                             <td>
-                                <a href="{{ $product->permalink }}" target="_blank" class="text-reset">
+                                <a href="{{ $product->getPermalink() }}" target="_blank" class="text-reset">
                                     {{ $product->getTranslation('name') }}
                                 </a>
                             </td>
@@ -99,7 +99,7 @@
                                 <span class="slider round"></span></label>
                             </td>
                             <td class="text-right">
-                                <a href="{{route('seller.digitalproducts.edit',  ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="{{ translate('Edit') }}">
+                                <a href="{{route('seller.digitalproduct.edit',  ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="{{ translate('Edit') }}">
                                   <i class="las la-edit"></i>
                                 </a>
                                 <a class="btn btn-soft-success btn-icon btn-circle btn-sm" href="{{route('digitalproducts.download', encrypt($product->id))}}" title="{{ translate('Download') }}">

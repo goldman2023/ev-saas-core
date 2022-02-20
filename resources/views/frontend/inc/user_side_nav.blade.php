@@ -69,6 +69,24 @@
                                                 </span>
                                             @endif
                                         </a>
+                                        @if(!empty($item['children'] ?? false))
+                                            <ul class="nav nav-sub nav-sm nav-tabs nav-list-y-2 pl-3">
+                                                @foreach($item['children'] as $child)
+                                                    <li class="nav-item">
+                                                        <a class="nav-link {{ $child['is_active'] }}" href="{{ $child['route'] }}">
+                                                            @svg($child['icon'], ['class' => 'nav-icon'])
+                                                            {{ $child['label'] }}
+                
+                                                            @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count = $child['badge']['content']() ?? null)
+                                                                <span class="badge {{ $child['badge']['class'] }} text-12 ml-2 rounded">
+                                                                    {{ $count }}
+                                                                </span>
+                                                            @endif
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
                                     </li>
                                 @endforeach
                             </ul>

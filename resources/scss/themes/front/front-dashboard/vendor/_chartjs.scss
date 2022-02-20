@@ -25,7 +25,7 @@
 
   &::before {
     position: absolute;
-    left: calc(50% - #{$chartjs-tooltip-arrow-pointer-pseudo-width / 2});
+    left: calc(50% - #{$chartjs-tooltip-arrow-pointer-pseudo-width * 0.5});
     bottom: -$chartjs-tooltip-arrow-pointer-pseudo-height + .0625rem;
     width: $chartjs-tooltip-arrow-pointer-pseudo-width;
     height: $chartjs-tooltip-arrow-pointer-pseudo-height;

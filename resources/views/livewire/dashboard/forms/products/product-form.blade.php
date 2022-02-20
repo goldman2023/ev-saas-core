@@ -17,9 +17,9 @@
             @endif
         </span>
         <div class="d-flex align-items-center mt-3">
-            <a class="btn btn-white btn-sm mr-3" href="{{ $product->permalink }}" target="_blank">{{ translate('Preview') }}</a>
+            <a class="btn btn-white btn-sm mr-3" href="{{ $product->getPermalink() }}" target="_blank">{{ translate('Preview') }}</a>
             @if(!empty($product->id) && $insert_success)
-                <a class="btn btn-white btn-sm mr-3" href="{{ route('ev-products.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
+                <a class="btn btn-white btn-sm mr-3" href="{{ route('product.edit', $product->slug) }}" target="_parent">{{ translate('Edit') }}</a>
             @endif
         </div>
     </x-ev.alert>
@@ -50,7 +50,7 @@
     <div class="card mb-3 mb-lg-5">
             <!-- Header -->
             <div class="card-header">
-                <a href="{{ $product->id ? route('ev-products.details', $product->slug) : route('ev-products.index') }}" class="text-secondary mr-3" style="height: 24px;">
+                <a href="{{ $product->id ? route('product.details', $product->slug) : route('products.index') }}" class="text-secondary mr-3" style="height: 24px;">
                     @svg('heroicon-o-chevron-left', ['class' => 'square-24'])
                 </a>
 
@@ -65,13 +65,13 @@
                 <div class="ml-auto d-flex align-items-center">
                     @if(!empty($product->id))
                         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
-                           href="{{ route('ev-products.details', $product->slug) }}">
+                           href="{{ route('product.details', $product->slug) }}">
                             @svg('heroicon-o-eye', ['class' => 'square-16 mr-2'])
                             {{ translate('Details') }}
                         </a>
 
                         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
-                           href="{{ route('ev-products.edit.stocks', $product->slug) }}">
+                           href="{{ route('product.edit.stocks', $product->slug) }}">
                             @svg('heroicon-o-archive', ['class' => 'square-16 mr-2'])
                             {{ translate('Stock Management') }}
                         </a>
@@ -79,7 +79,7 @@
 
                     @if(!empty($product->useVariations()))
                         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-3"
-                           href="{{ route('ev-products.edit.variations', $product->slug) }}">
+                           href="{{ route('product.edit.variations', $product->slug) }}">
                             @svg('heroicon-o-variable', ['class' => 'square-16 mr-2'])
                             {{ translate('Variations') }}
                         </a>
@@ -318,7 +318,7 @@
                                     <!-- Body -->
                                     <div class="">
                                         <!-- Main Product SKU -->
-                                        <x-ev.form.input name="product.temp_sku" type="text" label="{{ translate('SKU') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
+                                        <x-ev.form.input name="product.sku" type="text" label="{{ translate('SKU') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
                                             <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
                                         </x-ev.form.input>
 
