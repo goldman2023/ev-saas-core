@@ -1,3 +1,6 @@
+[![NodeJS with Webpack](https://github.com/eim-solutions/ev-saas-core/actions/workflows/webpack.yml/badge.svg)](https://github.com/eim-solutions/ev-saas-core/actions/workflows/webpack.yml)
+
+
 We-SaaS Core. This is a repository of multitenancy SaaS Application builder We-SaaS. 
 
 # General Information
