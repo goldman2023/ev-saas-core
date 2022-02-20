@@ -12,9 +12,11 @@ class AttributeValue extends EVBaseModel
     use HasFactory;
     use TranslationTrait;
 
+    public $selected;
+
     protected $appends = ['selected'];
 
-    protected $fillable = ['attribute_id', 'values'];
+    protected $fillable = ['attribute_id', 'values', 'selected'];
 
     public static function boot() {
         parent::boot();
@@ -30,7 +32,17 @@ class AttributeValue extends EVBaseModel
     }
 
     public function getSelectedAttribute() {
-        return false;
+        if(empty($this->selected)) {
+            $this->selected = false;
+        }
+        
+        return $this->selected;
+    }
+
+    public function setSelectedAttribute($value) {
+        $this->selected = $value;
+
+        return $this->selected;
     }
 
     public function getTranslationModel(): ?string {

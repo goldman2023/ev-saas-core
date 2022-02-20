@@ -55,9 +55,15 @@
             attribute.attribute_values.splice(index, 1);
         },
     }"
-     class="container-fluid"
+     class="lw-form container-fluid"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
+
+     @push('pre_head_scripts')
+        <script>
+            let all_categories = @json(\Categories::getAllFormatted());
+        </script>
+    @endpush
 
     <div class="row">
 
@@ -474,18 +480,16 @@
 
 
             {{-- Card Attributes --}}
-            <div class="card mb-3 mb-lg-5" wire:ignore>
+            <div class="card mb-3 mb-lg-5" >
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Attributes') }}</h5>
 
-                    <template x-for="attribute in attributes" wire:ignore>
+                    <template x-for="attribute in attributes" >
                         <div class="w-100 mb-3" x-data="{}" x-init="
                                 $nextTick(() => {
                                     if(predefined_types.indexOf(attribute.type) !== -1) {
                                         $('#'+getSelectorID(attribute)).on('select2:select select2:unselect select2:clear', (event) => {
                                             selected_attribute_values['attribute.'+attribute.id] = $('#'+getSelectorID(attribute)).select2('data').map(x => x.id);
-
-                                            console.log(selected_attribute_values);
                                         });
                                         $watch('selected_attribute_values', (value, oldValue) => {
                                             if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
@@ -494,11 +498,11 @@
                                         });
                                     }
                                 });
-                            " x-cloak wire:ignore>
+                            " x-cloak >
 
                             {{-- Dropdown --}}
                             <template x-if="attribute.type === 'dropdown'">
-                                <div class="w-100" x-data="{}" wire:ignore> 
+                                <div class="w-100" x-data="{}" > 
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                         <select class="form-control custom-select custom-select-sm"
@@ -708,120 +712,19 @@
                                 </div>
                             </template> --}}
                             {{-- END Image --}}
-
-
                         </div>
                     </template>
+                </div>
 
-                    <hr />
-
-                    <div class="w-100">
-
-                        @if($attributes)
-                            @foreach($attributes as $attribute)
-                                @php
-                                    $attribute = (object) $attribute; // NOTE: Retard doesn't work properly without a cast, even though it is an object in livewire component (facepalm)
-                                    $custom_properties = (object) $attribute->custom_properties;
-                                @endphp
-                                @if($attribute->selected ?? null)
-                                     @if($attribute->type === 'dropdown')
-                                        {{--<x-ev.form.select name="attributes.{{ $attribute->id }}.attribute_values"
-                                                        error-bag-name="attributes.{{ $attribute->id }}"
-                                                        label="{{ $attribute->name }}"
-                                                        :items="$attribute->attribute_values"
-                                                        value-property="id"
-                                                        label-property="values"
-                                                        :multiple="($custom_properties->multiple ?? null) ? true : false"
-                                                        placeholder="{{ translate('Search or add values...') }}"
-                                                        data-attribute-id="{{ $attribute->id }}"
-                                                        data-type="{{ $attribute->type }}"
-                                                        wireType="defer"
-                                                    >
-                                            @if($custom_properties->multiple ?? null)
-                                                <x-ev.form.toggle name="attributes.{{ $attribute->id }}.for_variations"
-                                                                class="mt-2 mb-2"
-                                                                class-label="d-flex align-items-center"
-                                                                append-text="{{ translate('Used for variations') }}"
-                                                                :selected="$attribute->for_variations ?? false"
-                                                                >
-                                                </x-ev.form.toggle>
-                                            @endif
-                                        </x-ev.form.select> --}}
-                                    @elseif($attribute->type === 'plain_text')
-                                        {{-- <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
-                                                        type="text"
-                                                        label="{{ $attribute->name }}"
-                                                        data-attribute-id="{{ $attribute->id }}"
-                                                        error-bag-name="attributes.{{ $attribute->id }}"
-                                                        :value="$attribute->attribute_values->values ?? ''"
-                                                        data-type="{{ $attribute->type }}"
-                                                        wireType="defer">
-                                        </x-ev.form.input> --}}
-                                    @elseif($attribute->type === 'number')
-                                        {{-- <x-ev.form.input name="attributes.{{ $attribute->id }}.attribute_values.0.values"
-                                                        type="number"
-                                                        label="{{ $attribute->name }}"
-                                                        :placement="!empty($custom_properties->unit ?? null) ? 'append' : 'prepend'"
-                                                        :text="!empty($custom_properties->unit ?? null) ? $custom_properties->unit : ''"
-                                                        data-attribute-id="{{ $attribute->id }}"
-                                                        error-bag-name="attributes.{{ $attribute->id }}"
-                                                        :value="$attribute->attribute_values->values ?? ''"
-                                                        :min="isset($custom_properties->min_value) ? $custom_properties->min_value : 0"
-                                                        :max="isset($custom_properties->max_value) ? $custom_properties->max_value : 999999999999999999999"
-                                                        data-type="{{ $attribute->type }}"
-                                                        wireType="defer">
-                                        </x-ev.form.input> --}}
-                                    @elseif($attribute->type === 'date')
-                                        {{-- @php
-                                            $options = [
-                                                'dateFormat' => ($custom_properties->with_time ?? false) ? 'd.m.Y H:i' : 'd.m.Y',
-                                                'enableTime' => (bool) ($custom_properties->with_time ?? false),
-                                                'mode' => ($custom_properties->range ?? false) ? 'range' : 'single',
-                                            ];
-                                        @endphp
-                                        <x-ev.form.date-time-picker name="attributes.{{ $attribute->id }}.attribute_values.0.values"
-                                                                    id="{{ 'date_' . $attribute->id }}"
-                                                                    label="{{ $attribute->name }}"
-                                                                    placeholder="{{ translate('Choose Date(s)...') }}"
-                                                                    error-bag-name="attributes.{{ $attribute->id }}"
-                                                                    data-attribute-id="{{ $attribute->id }}"
-                                                                    value="$attribute->attribute_values->values ?? []"
-                                                                    :options="$options"
-                                                                    icon="heroicon-o-calendar"
-                                                                    data-type="{{ $attribute->type }}"
-                                                                    wireType="defer"
-                                                                    style="text-indent: 25px;">
-                                        </x-ev.form.date-time-picker> --}}
-                                    @elseif($attribute->type === 'checkbox')
-                                        {{-- <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
-                                                            :append-to-name="true"
-                                                            value-property="selected"
-                                                            label-property="values"
-                                                            :items="$attribute->attribute_values"
-                                                            error-bag-name="attributes.{{ $attribute->id }}"
-                                                            data-attribute-id="{{ $attribute->id }}"
-                                                            label="{{ $attribute->name }}"
-                                                            data-type="{{ $attribute->type }}"
-                                                            wireType="defer">
-                                        </x-ev.form.checkbox> --}}
-                                    @elseif($attribute->type === 'radio')
-                                        {{-- <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
-                                                        :append-to-name="true"
-                                                        value-property="selected"
-                                                        label-property="values"
-                                                        :items="$attribute->attribute_values"
-                                                        error-bag-name="attributes.{{ $attribute->id }}"
-                                                        data-attribute-id="{{ $attribute->id }}"
-                                                        label="{{ $attribute->name }}"
-                                                        data-type="{{ $attribute->type }}"
-                                                        :isWired="false">
-                                        </x-ev.form.radio> --}}
-                                    @endif
-                                @endif
-                            @endforeach
-                        @endif
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('selected_predefined_attribute_values', selected_attribute_values, true);
+                                $wire.set('attributes', attributes, true);
+                            "
+                            wire:click="saveAttributes()">
+                        {{ translate('Save') }}
                     </div>
-                    
                 </div>
             </div>
             {{-- END Card Attributes --}}
@@ -937,37 +840,65 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.status', status, true);
+                            "
+                            wire:click="updateStatus()">
+                        {{ translate('Update') }}
+                    </div>
+                </div>
             </div>
             {{-- END Card Status --}}
 
-
             {{-- Card Categories and Tags --}}
-            <div class="card mb-3 mb-lg-5" x-data="{
-                
-            }">
+            <div class="card mb-3 mb-lg-5" x-data="{}">
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Categories and Tags') }}</h5>
 
                     <div class="w-100">
                         <x-ev.form.categories-selector class="mb-3" error-bag-name="selected_categories" :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
 
-                        <x-ev.form.select name="product.tags" :tags="true" label="{{ translate('Tags') }}" :multiple="true" placeholder="{{ translate('Type and hit enter to add a tag...') }}">
+                        <x-ev.form.select name="product.tags" class="mb-0" :tags="true" label="{{ translate('Tags') }}" :multiple="true" placeholder="{{ translate('Type and hit enter to add a tag...') }}">
                             <small class="text-muted">{{ translate('This is used for search. Input relevant words by which customer can find this product.') }}</small>
                         </x-ev.form.select>
+                    </div>
+                </div>
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.tags', $('[name=\'product.tags\']').select2('data').map(x => x.id), true);
+                                let $selected_categories = [];
+                                $('[name=\'selected_categories\']').each(function(index, item) {
+                                    $selected_categories = [...$selected_categories, ...$(item).select2('data').map(x => x.id)];
+                                });
+                                $wire.set('selected_categories', $selected_categories, true);
+                            "
+                            wire:click="saveCategoriesAndTags()">
+                        {{ translate('Save') }}
                     </div>
                 </div>
             </div>
             {{-- END Card Categories and Tags --}}
 
             {{-- Card Brand --}}
-            <div class="card mb-3 mb-lg-5" x-data="{
-                
-            }">
+            <div class="card mb-3 mb-lg-5" x-data="{}">
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Brand') }}</h5>
 
                     <div class="w-100">
                         <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" class="mb-1" :search="true" placeholder="{{ translate('Select Brand...') }}" />
+                    </div>
+                </div>
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.brand_id', getSafe(fn => $('[name=\'product.brand_id\']').select2('data')[0].id, null), true);
+                            "
+                            wire:click="saveBrand()">
+                        {{ translate('Save') }}
                     </div>
                 </div>
             </div>

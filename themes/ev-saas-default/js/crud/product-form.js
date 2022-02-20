@@ -107,29 +107,36 @@ window.EVProductFormInit = function(event) {
     // =======================================================
     const selects = document.querySelectorAll(".lw-form select.custom-select");
     for (const select of selects) {
-        let name = select.getAttribute('name')
-        let data = Livewire.find($(select).closest('.lw-form').attr('wire:id')).get(name); // get tags property from livewire form component instance
-
-        if($(select).is('[dynamic-items]')) {
-            try {
-                let select2options = $(select).is('[data-hs-select2-options]') ? JSON.parse($(select).attr('data-hs-select2-options')) : null;
-                if(select2options.tags) {
-                    // Create a DOM Option and pre-select by default
-                    data.forEach(function(value, key) {
-                        $(select).append(new Option(value, value, true, true)).trigger('change');
-                    });
-                }
-            } catch(error) {}
-        } else {
-            if(name === 'attributes' || name.match(/attributes\.[0-9]+/g)) {
-                // get only selected attributes
-                $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
-            } else if(name === 'selected_categories') {
-                // Preselect livewire selected categories
-                //window.EV.form.select.preselectCategories(data);
+        try {
+            let name = select.getAttribute('name')
+            let data = Livewire.find($(select).closest('.lw-form').attr('wire:id')).get(name); // get tags property from livewire form component instance
+            
+            if($(select).is('[dynamic-items]')) { 
+                try {
+                    let select2options = $(select).is('[data-hs-select2-options]') ? JSON.parse($(select).attr('data-hs-select2-options')) : null;
+                    if(select2options.tags) {
+                        // Create a DOM Option and pre-select by default
+                        data.forEach(function(value, key) {
+                            
+                            $(select).append(new Option(value, value, true, true)).trigger('change');
+                        });
+                    }
+                } catch(error) {}
             }
-
+            // } else {
+            //     if(name === 'attributes' || name.match(/attributes\.[0-9]+/g)) {
+            //         // get only selected attributes
+            //         $(select).val(Object.keys(data).filter(x=>data[x].selected).map(f=>data[f].id)).trigger('change', [{init:true}]);
+            //     } else if(name === 'selected_categories') {
+            //         // Preselect livewire selected categories
+            //         //window.EV.form.select.preselectCategories(data);
+            //     }
+    
+            // }
+        } catch(error) {
+            console.log(error);
         }
+        
     }
 
     /* Select multiple attributes change */
@@ -222,6 +229,9 @@ window.EVProductFormInit = function(event) {
             variations_component.setAttributeValueRemoveFlag(getSelectedAttributeValuesForVariations()); // make removeFlag FALSE
         });
     });
+
+    /* Initialize Category selectors */
+    window.EV.form.select.initCategoriesSelectors();
 }
 
 $(window).on('load', window.EVProductFormInit);

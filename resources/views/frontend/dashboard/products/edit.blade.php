@@ -29,6 +29,6 @@
     <script src="{{ static_asset('vendor/hs.datatables.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
-    <script src="{{ static_asset('js/crud/product-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/new-product-form.js', false, true, true) }}"></script>
     <script src="{{ static_asset('js/crud/product-variations-table.js', false, true, true) }}"></script>
 @endpush
