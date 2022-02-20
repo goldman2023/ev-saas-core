@@ -43,6 +43,9 @@ trait VariationTrait
 
     public function useVariations(): ?bool
     {
+        if(empty($this->getVariationModelClass()))
+            return false;
+
         // Does NOT query the database
         return $this->variant_attributes()->count() > 0;
     }
@@ -61,10 +64,13 @@ trait VariationTrait
     }
 
     public function variations() {
-        return $this->hasMany(ProductVariation::class);
+        return $this->hasMany($this->getVariationModelClass()['class'] ?? null);
     }
 
     public function getMappedVariations($convert_uploads = true, $refresh = false) {
+        if(empty($this->getVariationModelClass()))
+            return null;
+
         if($refresh) {
             return $this->variations->get()->map(fn($item) => $convert_uploads ? $item->convertUploadModelsToIDs() : $item )->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']));
         }
@@ -95,6 +101,9 @@ trait VariationTrait
 //    }
 
     public function getVariationByVariant($variant) {
+        if(empty($this->getVariationModelClass()))
+            return null;
+
         // Get the first ProductVariation
         return $this->variations->filter(function($item, $key) use ($variant) {
             $item_variant = $variant instanceof Collection ? collect($item->variant)->values()->toArray() : array_values($item->variant); // reset keys just in case
@@ -109,6 +118,9 @@ trait VariationTrait
     }
 
     public function getMissingVariations($return_as_variants = false) {
+        if(empty($this->getVariationModelClass()))
+            return null;
+
         $missing_combinations = $return_as_variants ? collect() : new \Illuminate\Database\Eloquent\Collection();
 
         $available_variants = $this->variations->pluck('variant');
@@ -144,6 +156,9 @@ trait VariationTrait
      * Basically, it's same as calling Model->toArray() for each model inside collection. So, for Models use Eloquent/Collection!
      */
     public function createAllVariationsCombinations($return_as_variants = false) {
+        if(empty($this->getVariationModelClass()))
+            return null;
+
         $all_combinations = $return_as_variants ? collect() : new \Illuminate\Database\Eloquent\Collection();
 
         // Create all possible combinations
