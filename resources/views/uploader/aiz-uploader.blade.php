@@ -16,9 +16,11 @@
                     @svg('heroicon-o-x')
 				</button>
 			</div>
-			<div class="modal-body">
-				<div class="tab-content h-100">
-					<div class="tab-pane active h-100" id="aiz-select-file">
+            {{-- TODO: Move this to propper css, just a quick fix --}}
+			<div class="modal-body" style="max-height: 80vh;
+            overflow: scroll;">
+				<div class="tab-content">
+					<div class="tab-pane active" id="aiz-select-file">
 						<div class="aiz-uploader-filter pt-1 pb-3 border-bottom mb-4">
 							<div class="row align-items-center gutters-5 gutters-md-10 position-relative">
 								<div class="col-xl-2 col-md-3 col-5">
