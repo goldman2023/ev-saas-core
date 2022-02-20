@@ -131,53 +131,6 @@ class ProductForm2 extends Component
         return [];
     }
 
-    // protected function rules()
-    // {
-
-    //     // Define rules sets
-    //     $this->rulesSets['content'] = [
-    //         'product.thumbnail' => 'required|exists:App\Models\Upload,id',
-    //         'product.gallery' => ['required', new EVModelsExist(Upload::class)],
-    //         'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
-    //         'product.video_link' => 'nullable|active_url',
-    //         'product.pdf' => 'nullable|exists:App\Models\Upload,id',
-            
-    //     ];
-
-    //     $this->rulesSets['price_stock_shipping'] = [
-    //         'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
-    //         'product.min_qty' => 'required|numeric|min:1',
-    //         'product.current_stock' => 'required|numeric|min:1',
-    //         'product.low_stock_qty' => 'required|numeric|min:0',
-    //         'product.unit_price' => 'required|numeric',
-    //         'product.purchase_price' => 'nullable|numeric',
-    //         'product.discount' => 'required|numeric',
-    //         'product.discount_type' => 'required|in:amount,percent',
-    //         'product.stock_visibility_state' => 'required|in:quantity,text,hide',
-    //         'product.shipping_type' => 'required|in:flat_rate,product_wise,free',
-    //         'product.shipping_cost' => 'required_if:product.shipping_type,flat_rate',
-    //         'product.is_quantity_multiplied' => 'required|boolean',
-    //         'product.est_shipping_days' => 'nullable|numeric'
-    //     ];
-
-    //     $this->rulesSets['attributes'] = [
-    //         'attributes.*' => 'required', //[ new AttributeValuesSelected() ]
-    //     ];
-
-    //     $this->rulesSets['seo'] = [
-    //         'product.meta_title' => 'nullable',
-    //         'product.meta_description' => 'nullable',
-    //         'product.meta_img' => 'nullable',
-    //     ];
-
-    //     $rules = [];
-    //     foreach($this->rulesSets as $key => $items) {
-    //         $rules = array_merge($rules, $items);
-    //     }
-
-    //     return $rules;
-    // }
-
     protected function setPredefinedAttributeValues($model) {
         // Set predefined attribute values AND select specific values if it's necessary
         foreach($this->attributes as $attribute) {
@@ -299,10 +252,10 @@ class ProductForm2 extends Component
 
     public function validateData($set = 'minimum_required') {
         try {
-            $this->validate($this->getRuleSet($set));
+            $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
-            $this->validate($this->getRuleSet($set));
+            $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
         }
     }
 
@@ -416,9 +369,6 @@ class ProductForm2 extends Component
         try {
             $this->saveMinimumRequired();
 
-            $this->product->syncUploads();
-
-            // Save Basic Info
             $this->product->update([
                 'unit_price' => $this->product->unit_price,
                 'discount' => $this->product->discount,
@@ -592,7 +542,7 @@ class ProductForm2 extends Component
 
         try {
             $this->saveMinimumRequired();
-            
+
             // Update status
             $this->product->update([
                 'product.status' => $this->product->status
@@ -634,7 +584,36 @@ class ProductForm2 extends Component
     }
 
 
+    public function saveProduct() {
+        $this->validateData('all');
 
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Save product data
+            $this->product->save();
+
+            // Sync Uploads
+            $this->product->syncUploads();
+
+            // Save Categories
+            $this->setCategories($this->product);
+
+            // Set Attributes
+            $this->setAttributes();
+
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
 
     protected function insert(): void
     {

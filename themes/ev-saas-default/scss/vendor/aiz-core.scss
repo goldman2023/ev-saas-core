@@ -4832,7 +4832,7 @@ input[type="number"] {
     margin-left: -10px;
     margin-right: -10px;
     overflow-y: auto;
-    height: calc(100vh - 303px);
+    height: 100%; 
 }
 .uppy-Dashboard-files {
     max-height: calc(100vh - 363px);
