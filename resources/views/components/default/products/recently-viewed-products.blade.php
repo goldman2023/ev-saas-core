@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="card-body">
-        <div class="row">
+        <div class="row we-horizontal-slider__desktop">
             @foreach($products as $productActivity)
 
             @php

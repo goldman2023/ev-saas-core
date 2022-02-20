@@ -87,7 +87,7 @@ class ProductVariation extends EVBaseModel
     public function main()
     {
         //dd($this->belongsTo(Product::class, 'product_id', 'id')->without(Product::$defaultEagerLoads)->first());
-        return $this->belongsTo(Product::class, 'product_id', 'id')->without(Product::$defaultEagerLoads);
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
     public function getNameAttribute() {
