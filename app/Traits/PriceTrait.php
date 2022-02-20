@@ -32,13 +32,13 @@ trait PriceTrait
             // dd($builder);
         });
 
-        
+
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
             if(!$model->relationLoaded('flash_deals')) {
                 $model->load('flash_deals');
             }
-            
+
             $model->getTotalPrice();
             $model->getDiscountedPrice();
             $model->getBasePrice();
@@ -90,7 +90,7 @@ trait PriceTrait
     // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
     public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
     {
-        
+
         if(empty($this->attributes[$this->getPriceColumn()])) {
             $this->total_price = 0;
         } else if(empty($this->total_price)) {
@@ -123,9 +123,9 @@ trait PriceTrait
                         $this->total_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
+                    if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
+                    } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $this->attributes['discount'];
                     }
                 }
@@ -140,9 +140,9 @@ trait PriceTrait
                         $this->total_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
+                    if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->total_price -= ($this->total_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
+                    } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->total_price -= $this->attributes['discount'];
                     }
                 }
@@ -209,14 +209,14 @@ trait PriceTrait
                         $this->discounted_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
+                    if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
+                    } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $this->attributes['discount'];
                     }
                 }
             } else {
-                
+
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
                 if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty()) ) {
                     $flash_deal = $this->flash_deals->first();
@@ -227,9 +227,9 @@ trait PriceTrait
                         $this->discounted_price -= $flash_deal->discount;
                     }
                 } else {
-                    if ($this->attributes['discount_type'] === AmountPercentTypeEnum::percent()->value) {
+                    if ($this->discount_type === AmountPercentTypeEnum::percent()->value) {
                         $this->discounted_price -= ($this->discounted_price * $this->attributes['discount']) / 100;
-                    } elseif ($this->attributes['discount_type'] === AmountPercentTypeEnum::amount()->value) {
+                    } elseif ($this->discount_type === AmountPercentTypeEnum::amount()->value) {
                         $this->discounted_price -= $this->attributes['discount'];
                     }
                 }
