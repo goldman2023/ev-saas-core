@@ -32,16 +32,10 @@
                                 href="{{ $product->getPermalink() }}">
                                 @if($product->brand)
                                 <x-tenant.system.image class="ev-brand-image-small"
-                                    :image='$product->brand()->getThumbnail()'>
+                                    :image='$product->brand->getThumbnail()'>
                                 </x-tenant.system.image>
 
                                 @endif
-
-                                <div>
-                                    {{-- TODO: Fix Brand --}}
-                                   Brand {{ $product->brand_id }}
-                                </div>
-
 
                             </a>
                         </div>
