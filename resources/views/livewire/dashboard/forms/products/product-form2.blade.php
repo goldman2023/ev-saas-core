@@ -1,4 +1,5 @@
 <div x-data="{
+        status: @js($product->status ?? App\Enums\StatusEnum::draft()->value),
         is_digital: {{ $product->digital === true ? 'true' : 'false' }},
         use_serial: {{ $product->use_serial === 1 ? 'true' : 'false' }},
         base_currency: @js($product->base_currency),
@@ -6,6 +7,53 @@
         tax_type: @js($product->tax_type),
         attributes: @js($attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
+        predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
+        getSelectorID(attribute) { return 'attributes_'+attribute.id+'_attribute_values'; } ,
+        hasCustomProperty(attribute, name) {
+            return attribute.custom_properties !== null && 
+                    attribute.custom_properties !== undefined && 
+                    attribute.custom_properties.hasOwnProperty(name);
+        },
+        isMultiple(attribute) { return this.hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple; },
+        getDateOptions(attribute) {
+            let options = {
+                mode: 'single',
+                enableTime: false,
+            };
+            
+            if(this.hasCustomProperty(attribute, 'with_time') && attribute.custom_properties.with_time) {
+                options.enableTime = true;
+                options.dateFormat = 'd.m.Y H:i';
+            } 
+            
+            if(this.hasCustomProperty(attribute, 'range') && attribute.custom_properties.range) {
+                options.mode = 'range';
+            }
+
+            return JSON.stringify(options);
+        },
+        getMinValue(attribute) { return hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : 0; },
+        getMaxValue(attribute) { return hasCustomProperty(attribute, 'max_value') ? attribute.custom_properties.max_value : 999; },
+        getListCount(attribute) {
+            if(attribute.attribute_values === undefined || attribute.attribute_values === null) {
+                attribute.attribute_values = [{values: ''}];
+            }
+
+            return attribute.attribute_values.length;
+        },
+        hasID(attribute, index) {
+            return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
+        },
+        addToList(attribute) {
+            attribute.attribute_values.push({values:''});
+        },
+        removeFromList(attribute, index) {
+            console.log(this.hasID(attribute, index));
+            if(this.hasID(attribute, index)) {
+                $wire.removeAttributeValue(attribute.attribute_values[index]['id']);
+            }
+            attribute.attribute_values.splice(index, 1);
+        },
     }"
      class="container-fluid"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
@@ -30,7 +78,16 @@
                         {{-- TODO: Add a function to check height of the content - if it's bigger then height of the editor, make editor bigger! Same as Shopify! --}}
                         <x-ev.form.wysiwyg name="product.description" options='{"height":"300px","minHeight":"300px"}' label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
                     </div>
-                    
+                </div>
+
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.description', $('[name=\'product.description\']').val(), true);
+                            "
+                            wire:click="saveBasic()">
+                        {{ translate('Save') }}
+                    </div>
                 </div>
             </div>
             {{-- END Card Basic --}}
@@ -86,6 +143,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.thumbnail', $('[name=\'product.thumbnail\']').val(), true);
+                                $wire.set('product.gallery', $('[name=\'product.gallery\']').val(), true);
+                                $wire.set('product.pdf', $('[name=\'product.pdf\']').val(), true);
+                                $wire.set('product.video_provider', getSafe(fn => $('[name=\'product.video_provider\']').select2('data')[0].id, null), true);
+                            "
+                            wire:click="saveMedia()">
+                        {{ translate('Save') }}
+                    </div>
+                </div>
             </div>
             {{-- END Card Media --}}
 
@@ -111,7 +180,7 @@
                                             wire:model.defer="product.unit_price" />
                                 </div>
 
-                                <x-default.system.invalid-msg field="product.unit_price"></x-default.system.invalid-msg>
+                                <x-default.system.invalid-msg field="product.unit_price" type="slim"></x-default.system.invalid-msg>
                             </div>
 
                             <div class="col-12 col-sm-5"  x-init="
@@ -157,7 +226,7 @@
                                             wire:model.defer="product.discount" />
                                 </div>
 
-                                <x-default.system.invalid-msg field="product.discount"></x-default.system.invalid-msg>
+                                <x-default.system.invalid-msg field="product.discount" type="slim"></x-default.system.invalid-msg>
                             </div>
 
                             <div class="col-12 col-sm-5" x-data="{}" x-init="
@@ -214,7 +283,7 @@
                                             wire:model.defer="product.tax" />
                                 </div>
 
-                                <x-default.system.invalid-msg field="plan.tax"></x-default.system.invalid-msg>
+                                <x-default.system.invalid-msg field="product.tax" type="slim"></x-default.system.invalid-msg>
                             </div>
 
                             <div class="col-12 col-sm-5" x-data="{}" x-init="
@@ -263,11 +332,22 @@
                                     </small>
                                 </div>
 
-                                <x-default.system.invalid-msg field="product.purchase_price"></x-default.system.invalid-msg>
+                                <x-default.system.invalid-msg field="product.purchase_price" type="slim"></x-default.system.invalid-msg>
                             </div>
                         </div>
                     </div>
-                    
+                </div>
+
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.base_currency', getSafe(fn => $('[name=\'product.base_currency\']').select2('data')[0].id, null), true);
+                                $wire.set('product.discount_type', getSafe(fn => $('[name=\'product.discount_type\']').select2('data')[0].id, null), true);
+                                $wire.set('product.tax_type', getSafe(fn => $('[name=\'product.tax_type\']').select2('data')[0].id, null), true);
+                            "
+                            wire:click="savePricing()">
+                        {{ translate('Save') }}
+                    </div>
                 </div>
             </div>
             {{-- END Card Pricing --}}
@@ -322,7 +402,7 @@
 
                     <!-- Standard Inventory tracking -->
                     <div class="w-100 pt-3" :class="{'d-none': use_serial}">
-                        <x-ev.form.input name="product.min_qty" class="form-control-sm"  type="number" label="{{ translate('Minimum quantity') }}" :required="true" min="1" step="1">
+                        <x-ev.form.input name="product.min_qty" class="form-control-sm"  type="number" label="{{ translate('Minimum quantity user can purchase') }}" :required="true" min="1" step="1">
                             <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
                         </x-ev.form.input>
 
@@ -334,11 +414,23 @@
 
                     <!-- Low stock quantity warning threshold -->
                     <div class="w-100 pt-3">
+                        <x-ev.form.input name="product.unit" class="form-control-sm" type="text" label="{{ translate('Unit') }}" placeholder="{{ translate('pc/kg/m/per meter/gram etc.') }}">
+                        </x-ev.form.input>
+
                         <x-ev.form.input name="product.low_stock_qty" class="form-control-sm" groupclass="mb-0" type="number" label="{{ translate('Low stock quantity warning threshold') }}"  min="0" step="1">
                         </x-ev.form.input>
                     </div>
                     <!-- END ow stock quantity warning threshold -->
+                </div>
 
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.use_serial', use_serial, true);
+                            "
+                            wire:click="saveInventory()">
+                        {{ translate('Save') }}
+                    </div>
                 </div>
             </div>
             {{-- END Card Inventory --}}
@@ -367,49 +459,51 @@
                        {{-- TODO: Add Shipping methods first and then edit this part --}}
                     </div>
                 </div>
+
+                <div class="card-footer d-flex">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.digital', is_digital, true);
+                            "
+                            wire:click="saveShipping()">
+                        {{ translate('Save') }}
+                    </div>
+                </div>
             </div>
             {{-- END Card Shipping --}}
 
 
             {{-- Card Attributes --}}
-            <div class="card mb-3 mb-lg-5">
+            <div class="card mb-3 mb-lg-5" wire:ignore>
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Attributes') }}</h5>
 
-                    <template x-for="attribute in attributes">
-                        <div class="w-100 mb-3" x-data="{
-                                selector_id: 'attributes_'+attribute.id+'_attribute_values',
-                                predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
-                                hasCustomProperty(name) {
-                                    return attribute.custom_properties !== null && 
-                                            attribute.custom_properties !== undefined && 
-                                            attribute.custom_properties.hasOwnProperty(name);
-                                },
-                            }" x-init="
+                    <template x-for="attribute in attributes" wire:ignore>
+                        <div class="w-100 mb-3" x-data="{}" x-init="
                                 $nextTick(() => {
                                     if(predefined_types.indexOf(attribute.type) !== -1) {
-                                        $('#'+selector_id).on('select2:select select2:unselect select2:clear', (event) => {
-                                            selected_attribute_values['attribute.'+attribute.id] = $('#'+selector_id).select2('data').map(x => x.id);
+                                        $('#'+getSelectorID(attribute)).on('select2:select select2:unselect select2:clear', (event) => {
+                                            selected_attribute_values['attribute.'+attribute.id] = $('#'+getSelectorID(attribute)).select2('data').map(x => x.id);
+
+                                            console.log(selected_attribute_values);
                                         });
                                         $watch('selected_attribute_values', (value, oldValue) => {
                                             if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
-                                                $('#'+selector_id).val(value).trigger('change');
+                                                $('#'+getSelectorID(attribute)).val(value).trigger('change');
                                             }
                                         });
                                     }
                                 });
-                            " x-cloak>
+                            " x-cloak wire:ignore>
 
                             {{-- Dropdown --}}
                             <template x-if="attribute.type === 'dropdown'">
-                                <div class="w-100" x-data="{
-                                        isMultiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
-                                    }"> 
+                                <div class="w-100" x-data="{}" wire:ignore> 
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                         <select class="form-control custom-select custom-select-sm"
-                                                :id="selector_id"
-                                                x-bind:multiple="isMultiple"
+                                                :id="'attributes_'+attribute.id+'_attribute_values'"
+                                                x-bind:multiple="isMultiple(attribute)"
                                                 x-model="selected_attribute_values['attribute.'+attribute.id]"
                                                 data-hs-select2-options='{
                                                     "minimumResultsForSearch": "Infinity",
@@ -423,7 +517,7 @@
                                                 </template>
                                         </select>
 
-                                        <template x-if="hasCustomProperty('multiple') && attribute.custom_properties.multiple">
+                                        <template x-if="hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple">
                                             <div class="w-100 d-flex mt-2 mb-2">
                                                 <label class="toggle-switch mr-3">
                                                     <input type="checkbox" x-model="attribute.for_variations" class="js-toggle-switch toggle-switch-input">
@@ -447,8 +541,8 @@
 
                                     <input type="text" 
                                         class="form-control form-control-sm"
-                                        :id="selector_id"
-                                        x-model="attributes[attribute.id].attribute_values[0].values" />
+                                        :id="'attributes_'+attribute.id+'_attribute_values'"
+                                        x-model="attribute.attribute_values[0].values" />
                                 </div>
                             </template>
                             {{-- END Plain Text --}}
@@ -458,16 +552,16 @@
                                 <div class="w-100" x-data="{}" x-init="">
                                     <label class="w-100 input-label" x-text="attribute.name"></label>
 
-                                    <div class="input-group" :class="{'input-group-merge': !hasCustomProperty('unit')}">
+                                    <div class="input-group" :class="{'input-group-merge': !hasCustomProperty(attribute, 'unit')}">
 
                                         <input type="number" 
                                         class="form-control form-control-sm"
-                                        :id="selector_id"
-                                        x-bind:min="hasCustomProperty('min_value') ? attribute.custom_properties.min_value : ''"
-                                        x-bind:max="hasCustomProperty('max_value') ? attribute.custom_properties.max_value : ''"
-                                        x-model="attributes[attribute.id].attribute_values[0].values" />
+                                        :id="'attributes_'+attribute.id+'_attribute_values'"
+                                        x-bind:min="hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : ''"
+                                        x-bind:max="hasCustomProperty(attribute, 'max_value') ? attribute.custom_properties.max_value : ''"
+                                        x-model="attribute.attribute_values[0].values" />
 
-                                        <template x-if="hasCustomProperty('unit')">
+                                        <template x-if="hasCustomProperty(attribute, 'unit')">
                                             <div class="input-group-append">
                                                 <span class="input-group-text input-group-text-sm" x-text="attribute.custom_properties.unit"></span>
                                             </div>
@@ -481,32 +575,14 @@
 
                             {{-- Date --}}
                             <template x-if="attribute.type === 'date'">
-                                <div class="w-100" x-data="{
-                                        getDateOptions() {
-                                            let options = {
-                                                mode: 'single',
-                                                enableTime: false,
-                                            };
-                                            
-                                            if(hasCustomProperty('with_time') && attribute.custom_properties.with_time) {
-                                                options.enableTime = true;
-                                                options.dateFormat = 'd.m.Y H:i';
-                                            } 
-                                            
-                                            if(hasCustomProperty('range') && attribute.custom_properties.range) {
-                                                options.mode = 'range';
-                                            }
-
-                                            return JSON.stringify(options);
-                                        }
-                                    }" x-init="">
+                                <div class="w-100" x-data="{}" x-init="">
                                     <label class="w-100 input-label" x-text="attribute.name"></label>
 
-                                    <input x-model="attributes[attribute.id].attribute_values[0].values"
+                                    <input x-model="attribute.attribute_values[0].values"
                                                 type="text"
                                                 class="js-flatpickr form-control form-control-sm flatpickr-custom"
                                                 placeholder="{{ translate('Pick date') }}"
-                                                :data-hs-flatpickr-options='getDateOptions()'
+                                                :data-hs-flatpickr-options='getDateOptions(attribute)'
                                                 data-input />
                                     
                                 </div>
@@ -559,6 +635,81 @@
                                 </div>
                             </template>
                             {{-- END Radio --}}
+
+
+                            {{-- Text List --}}
+                            <template x-if="attribute.type === 'text_list'">
+                                <div class="w-100" x-data="{}" x-init="">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+                                    {{-- FIX: There's an 'cannot acces X of undefined' error when removing item, but it doesn't fuck up the logic  --}}
+                                    <div class="row form-group" x-data="{}"
+                                    >
+                                    <div class="col-12 col-sm-9">
+                                        <template x-if="getListCount(attribute) <= 1">
+                                            <div class="d-flex">
+                                                <input type="text" 
+                                                        class="form-control"
+                                                        placeholder="{{ translate('Value 1') }}"
+                                                        x-model="attribute.attribute_values[0]['values']" />
+                                            </div>
+                                        </template>
+                                        <template x-if="getListCount(attribute) > 1">
+                                            <template x-for="[key, value] of Object.entries(attribute.attribute_values)">
+                                                <div class="d-flex" :class="{'mt-2': key > 0}">
+                                                    <input type="text" 
+                                                        class="form-control"
+                                                        x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
+                                                        x-model="attribute.attribute_values[key]['values']" />
+                                                    <template x-if="key > 0">
+                                                        <span class="ml-2 d-flex align-items-center pointer" @click="removeFromList(attribute, key)">
+                                                            @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
+                                                        </span>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                        </template>
+
+                                        <a href="javascript:;"
+                                            class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="addToList(attribute)">
+                                            <i class="tio-add"></i> {{ translate('Add value') }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </template>
+                            {{-- END Text List --}}
+
+                            {{-- TODO: Add wysiwyg, image, gallery, country type attribute --}}
+
+                            {{-- Image --}}
+                            {{-- <template x-if="attribute.type === 'image'">
+                                <div class="w-100" x-data="{}" x-init="
+                                    $nextTick(() => {
+                                        console.log($('#attribute_'+attribute.id));
+                                        $('#attribute_'+attribute.id).on('change', function() {
+                                            console.log('asdasd');
+                                        });
+                                    });
+                                    
+                                ">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                    <div class="input-group" data-toggle="aizuploader" 
+                                        data-type="image"
+                                        data-is-sortable="false"
+                                        data-template="input">
+
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text input-group-text-sm bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
+                                        </div>
+                                        <div class="form-control form-control-sm file-amount">{{ translate('Choose image') }}</div>
+
+                                        <input type="hidden" :id="'attribute_'+attribute.id" class="selected-files" x-model="attribute.attribute_values[0].values">
+                                    </div>
+                                </div>
+                            </template> --}}
+                            {{-- END Image --}}
+
+
                         </div>
                     </template>
 
@@ -679,14 +830,14 @@
             <div class="card mb-3 mb-lg-5" x-data="{
                     collapse: true,
                 }">
-                <div class="card-body position-relative">
-                    <h5 class="mb-0 d-flex justify-content-between pointer" @click="collapse = !collapse">
+                <div class="card-body position-relative pt-0 pb-0">
+                    <h5 class="mb-0 pt-4 d-flex justify-content-between pointer" :class="{'pb-4': collapse, 'pb-3': !collapse}" @click="collapse = !collapse">
                         {{ translate('SEO') }}
 
                         @svg('heroicon-o-chevron-down', ['class' => 'square-20', ':class' => "{'rotate-180': !collapse}"])
                     </h5>
 
-                    <div class="w-100 pt-3 mt-3 border-top d-none" :class="{'d-none': collapse}">
+                    <div class="w-100 pt-3 border-top" :class="{'d-none': collapse}">
                         <!-- SEO Meta Title -->
                         <x-ev.form.input name="product.meta_title" class="form-control-sm" type="text" label="{{ translate('Meta Title') }}" placeholder="{{ translate('Meta title is used for Meta, OpenGraph, Twitter...') }}" >
                             <small class="text-muted">{{ translate('This title will be used for SEO and Social. Real product title will be used as fallback if this is empty.') }}</small>
@@ -702,6 +853,16 @@
                     </div>
                     
                 </div>
+
+                <div class="card-footer" :class="{'d-none': collapse, 'd-flex': !collapse}">
+                    <div type="button" class="btn btn-primary ml-auto btn-sm pointer"
+                            @click="
+                                $wire.set('product.meta_img', $('[name=\'product.meta_img\']').val(), true);
+                            "
+                            wire:click="saveSEO()">
+                        {{ translate('Save') }}
+                    </div>
+                </div>
             </div>
             {{-- END Card SEO --}}
         </div>
@@ -710,9 +871,7 @@
         {{-- Right column --}}
         <div class="col-12 col-md-4">
             {{-- Card Status --}}
-            <div class="card mb-3 mb-lg-5" x-data="{
-                status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
-            }">
+            <div class="card mb-3 mb-lg-5" x-data="{}">
                 <div class="card-body position-relative">
                     <h5 class="pb-2 mb-3 border-bottom">{{ translate('Status') }}</h5>
 
@@ -774,7 +933,7 @@
                                 @endif
                             </div>
     
-                            <x-default.system.invalid-msg field="plan.status"></x-default.system.invalid-msg>
+                            <x-default.system.invalid-msg field="product.status" type="slim"></x-default.system.invalid-msg>
                         </div>
                     </div>
                 </div>

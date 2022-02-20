@@ -26,4 +26,14 @@ class ProductsObserver
         // When product is saved - invalidate the cache!
         $product->cache()->invalidate(true);
     }
+
+    /**
+     * Handle the Products "deleting" event.
+     *
+     * @param Product $product
+     * @return void
+     */
+    public function deleting(Product $product) {
+        // TODO: Add removing stocks/uplaods-relations/attribute-relations/and other polymorphic relations!
+    }
 }

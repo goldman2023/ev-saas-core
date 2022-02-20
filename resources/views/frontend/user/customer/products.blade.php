@@ -23,7 +23,7 @@
         </div>
 
         <div class="col-md-4 mx-auto mb-3" >
-            <a href="{{ route('customer_products.create')}}">
+            <a href="{{ route('customer_product.create')}}">
               <div class="p-3 rounded mb-3 c-pointer text-center bg-white shadow-sm hov-shadow-lg has-transition">
                   <span class="size-60px rounded-circle mx-auto bg-secondary d-flex align-items-center justify-content-center mb-3">
                       <i class="las la-plus la-3x text-white"></i>
@@ -88,10 +88,10 @@
                             @endif
                         </td>
                         <td class="text-right">
-                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('customer_products.edit', ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
+                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('customer_product.edit', ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
 							   <i class="las la-edit"></i>
 						    </a>
-                            {{-- <a href="{{route('customer_products.edit',encrypt($product->id))}}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="{{ translate('Edit') }}">
+                            {{-- <a href="{{route('customer_product.edit',encrypt($product->id))}}" class="btn btn-soft-info btn-icon btn-circle btn-sm" title="{{ translate('Edit') }}">
                               <i class="las la-edit"></i>
                             </a> --}}
                             <a href="javascript:void(0)" class="btn btn-soft-danger btn-icon btn-circle btn-sm confirm-delete" data-href="{{route('customer_products.destroy', $product->id)}}" title="{{ translate('Delete') }}">

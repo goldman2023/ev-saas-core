@@ -22,7 +22,7 @@
     <div class="row mb-3">
         <div class="col-sm-4">
             <x-default.dashboard.widgets.products-widget>
-                <a href="{{ route('ev-products.index') }}">
+                <a href="{{ route('products.index') }}">
                     {{ translate('View all') }}
                 </a>
             </x-default.dashboard.widgets.products-widget>
@@ -54,7 +54,7 @@
                 {{-- TODO : make this company name dynamic --}}
                 <div class="h5 fw-600">{{ translate('Products') }} </div>
                 <p>{{ translate('Manage & organize your inventory and products') }}</p>
-                <a href="{{ route('ev-products.index') }}" class="btn btn-soft-primary">{{ translate('Manage Products')
+                <a href="{{ route('products.index') }}" class="btn btn-soft-primary">{{ translate('Manage Products')
                     }}</a>
             </div>
         </div>
@@ -84,7 +84,7 @@
 <section>
     <div class="row">
         <div class="col-sm-6">
-            <x-default.dashboard.widgets.integration-stats-widget url="{{ route('ev-products.create') }}"
+            <x-default.dashboard.widgets.integration-stats-widget url="{{ route('product.create') }}"
                 title="Add A Product"
                 img="https://cdns.iconmonstr.com/wp-content/assets/preview/2019/240/iconmonstr-product-3.png">
                 {{ translate('Create a new product') }}

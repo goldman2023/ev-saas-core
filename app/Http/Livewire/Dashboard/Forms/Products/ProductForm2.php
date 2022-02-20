@@ -51,25 +51,16 @@ class ProductForm2 extends Component
 
     protected function getRuleSet($set = null) {
         $rulesSets = collect([
+            'minimum_required' => [
+                'product.name' => 'required|min:6',
+                'product.unit_price' => 'required|numeric',
+                // 'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
+            ],
             'basic' => [
                 'product.name' => 'required|min:6',
                 'product.description' => 'required|min:20',
                 'product.excerpt' => 'nullable',
-            ],
-            'media' => [
-                'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id'],
-                'product.gallery' => ['required', 'if_id_exists:App\Models\Upload,id,true'],
-                'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
-                'product.video_link' => 'nullable|active_url',
-                'product.pdf' => ['nullable', 'if_id_exists:App\Models\Upload,id,true'],
-            ],
-            'pricing' => [
-                'product.unit_price' => 'required|numeric',
-                'product.purchase_price' => 'nullable|numeric',
-                'product.discount' => 'nullable|numeric',
-                'product.discount_type' => 'nullable|in:amount,percent',
-                'product.tax' => 'nullable|numeric',
-                'product.tax_type' => 'nullable|in:amount,percent',
+                'product.status' => [Rule::in(StatusEnum::toValues())],
             ],
             'categories_and_tags' => [
                 'selected_categories' => 'required',
@@ -78,6 +69,22 @@ class ProductForm2 extends Component
             'brand' => [
                 'product.brand_id' => 'nullable|exists:App\Models\Brand,id',
             ],
+            'media' => [
+                'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id'],
+                'product.gallery' => ['if_id_exists:App\Models\Upload,id,true'],
+                'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
+                'product.video_link' => 'nullable|active_url',
+                'product.pdf' => ['nullable', 'if_id_exists:App\Models\Upload,id,true'],
+            ],
+            'pricing' => [
+                'product.unit_price' => 'required|numeric',
+                'product.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
+                'product.purchase_price' => 'nullable|numeric',
+                'product.discount' => 'nullable|numeric',
+                'product.discount_type' => 'nullable|in:amount,percent',
+                'product.tax' => 'nullable|numeric',
+                'product.tax_type' => 'nullable|in:amount,percent',
+            ],
             'inventory' => [
                 'product.unit' => 'required',
                 'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
@@ -85,6 +92,8 @@ class ProductForm2 extends Component
                 'product.min_qty' => 'required|numeric|min:1',
                 'product.current_stock' => 'required|numeric|min:1',
                 'product.low_stock_qty' => 'required|numeric|min:0',
+                'product.use_serial' => 'required|boolean',
+                'product.allow_out_of_stock_purchases' => 'required|boolean'
             ],
             'shipping' => [
                 'product.digital' => 'required|boolean',
@@ -197,14 +206,15 @@ class ProductForm2 extends Component
         // Set default params
         if($product) {
             $this->product = $product;
-            $this->is_update = false;
-        } else {
             $this->is_update = true;
+        } else {
+            $this->is_update = false;
 
             $this->product = new Product();
 
             $this->product->slug = '';
             $this->product->status = StatusEnum::draft()->value;
+            $this->product->user_id = auth()->user()->id;
             $this->product->shop_id = MyShop::getShop()->id;
             $this->product->is_quantity_multiplied = 1;
             $this->product->shipping_type = 'product_wise';
@@ -264,9 +274,254 @@ class ProductForm2 extends Component
         //$this->emit('updatedAttributeValues', $this->variations_attributes);
     }
 
-    public function saveBasic() {
-        dd($this->product);
+    public function removeAttributeValue($id) {
+        DB::beginTransaction();
+
+        try {
+            // remove the attribute -> this will remove attribute value translations and relationships too!
+            AttributeValue::destroy($id);
+
+            DB::commit();
+
+            $this->toastify(translate('Attribute value successfully removed!'), 'success');
+
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while removing an attribute value...Please try again.'));
+            $this->toastify(translate('There was an error while removing an attribute value...Please try again. ').$e->getMessage(), 'danger');
+        }
     }
+
+    public function validateData($set = 'minimum_required') {
+        try {
+            $this->validate($this->getRuleSet($set));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($this->getRuleSet($set));
+        }
+    }
+
+    public function saveMinimumRequired() {
+        // TODO: Check if editor is trying to change status to published if not enough data is present
+        
+        if(!$this->is_update) {
+            // Insert
+            $new_product = Product::create([
+                'shop_id' => MyShop::getShopID(),
+                'user_id' => auth()->user()->id,
+                'name' => $this->product->name,
+                'unit_price' => $this->product->unit_price
+            ]);
+
+            $new_product->fill($this->product->attributesToArray()); // forceFill new product with $this->product attributes (without core properties of course)!
+            $this->product = $new_product; // Swap $this->product with $new_product cuz $new_product is linked to the DB 
+
+            $this->is_update = true; // Change is_update flag to true! From now on, product is being only updated!
+        } else {
+            // Update 
+            $this->product->update([
+                'shop_id' => MyShop::getShopID(),
+                'user_id' => auth()->user()->id,
+                'name' => $this->product->name,
+                'unit_price' => $this->product->unit_price
+            ]); // update only minimum required fields
+        }
+        
+        // Set Product Stock
+        $this->setProductStocks();
+    }
+
+    /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
+    protected function setProductStocks() {
+        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
+        $product_stock->sku = empty($this->product->sku) ? Str::slug($this->product->name) : $this->product->sku ;
+        $product_stock->barcode = empty($this->product->barcode) ? null : $this->product->barcode ;
+        $product_stock->qty = empty($this->product->current_stock) ? 0 : $this->product->current_stock;
+        $product_stock->low_stock_qty = empty($this->product->low_stock_qty) ? 0 : $this->product->low_stock_qty;
+        $product_stock->use_serial = ($this->product->use_serial ?? false) === true;
+        $product_stock->allow_out_of_stock_purchases = ($this->product->allow_out_of_stock_purchases ?? false) === true;
+        $product_stock->save();
+    }
+
+    public function saveBasic() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Save Basic Info
+            $this->product->update([
+                'excerpt' => $this->product->excerpt,
+                'description' => $this->product->description,
+                'status' => $this->product->status
+            ]);
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function saveMedia() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('media');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            $this->product->syncUploads();
+
+            // Save Media data
+            $this->product->update([
+                'video_provider' => $this->product->video_provider,
+                'video_link' => $this->product->video_link
+            ]);
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function savePricing() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('pricing');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            $this->product->syncUploads();
+
+            // Save Basic Info
+            $this->product->update([
+                'unit_price' => $this->product->unit_price,
+                'discount' => $this->product->discount,
+                'tax' => $this->product->tax,
+                'purchase_price' => $this->product->purchase_price,
+            ]);
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+
+    public function saveInventory() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('inventory');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Save Inventory data
+            $this->product->update([
+                'unit' => $this->product->unit,
+            ]);
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function saveShipping() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('shipping');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // TODO: Needs Shipping Methods and Shipping Logic overall for it to be finished!
+
+            // Save Shipping data
+            $this->product->update([
+                'digital' => $this->product->digital,
+            ]);
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function saveSEO() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('seo');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Update Meta Image
+            $this->product->syncUploads('meta_img');
+
+            // Save Shipping data
+            $this->product->update([
+                'meta_title' => $this->product->meta_title,
+                'meta_description' => $this->product->meta_description
+            ]);
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+
 
 
     protected function insert(): void
@@ -428,14 +683,7 @@ class ProductForm2 extends Component
         $product_translation->save();
     }
 
-    /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
-    protected function setProductStocks() {
-        $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
-        $product_stock->sku = $this->product->sku;
-        $product_stock->qty = $this->product->current_stock;
-        $product_stock->low_stock_qty = $this->product->low_stock_qty;
-        $product_stock->save();
-    }
+    
 
     /**
      * @throws \Exception

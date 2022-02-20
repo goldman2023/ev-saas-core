@@ -81,7 +81,7 @@
 
                 @if (get_setting( 'classified_product') == 1)
                     {{-- <li class="aiz-side-nav-item">
-                        <a href="{{ route('customer_products.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer_products.index', 'customer_products.create', 'customer_products.edit'])}}">
+                        <a href="{{ route('customer_products.index') }}" class="aiz-side-nav-link {{ areActiveRoutes(['customer_products.index', 'customer_product.create', 'customer_product.edit'])}}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Classified Products') }}</span>
                         </a>
@@ -299,7 +299,7 @@
                 @if (auth()->user()->isSeller())
                     <li class="aiz-side-nav-item d-none">
                         <a href="{{ route('seller.products') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.products.edit']) }}">
+                           class="aiz-side-nav-link {{ areActiveRoutes(['seller.products', 'seller.products.upload', 'seller.product.edit']) }}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Products') }}</span>
                         </a>
@@ -313,7 +313,7 @@
                     </li>
                     <li class="aiz-side-nav-item">
                         <a href="{{ route('seller.digitalproducts') }}"
-                           class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.upload', 'seller.digitalproducts.edit']) }}">
+                           class="aiz-side-nav-link {{ areActiveRoutes(['seller.digitalproducts', 'seller.digitalproducts.upload', 'seller.digitalproduct.edit']) }}">
                             <i class="lab la-sketch aiz-side-nav-icon"></i>
                             <span class="aiz-side-nav-text">{{ translate('Products') }}</span>
                         </a>

@@ -11,7 +11,7 @@
     <ul class="nav nav-tabs nav-fill border-light">
 			@foreach (\App\Models\Language::all() as $key => $language)
 				<li class="nav-item">
-					<a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3" href="{{ route('customer_products.edit', ['id'=>$product->id, 'lang'=> $language->code] ) }}">
+					<a class="nav-link text-reset @if ($language->code == $lang) active @else bg-soft-dark border-light border-left-0 @endif py-3" href="{{ route('customer_product.edit', ['id'=>$product->id, 'lang'=> $language->code] ) }}">
 						<img src="{{ static_asset('assets/img/flags/'.$language->code.'.png') }}" height="11" class="mr-1">
 						<span>{{ $language->name }}</span>
 					</a>

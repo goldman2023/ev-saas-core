@@ -186,50 +186,53 @@ trait UploadTrait
         }
     }
 
-    public function syncUploads() {
+    public function syncUploads($specific_property = null) {
         // Construct dynamic uploads sync array
-        $this->dynamicUploadPropertiesWalker(function($property) {
-            $upload = $this->{$property['property_name']};
+        $this->dynamicUploadPropertiesWalker(function($property) use($specific_property) {
+            if(empty($specific_property) || $specific_property === $property['property_name']) {
+                $upload = $this->{$property['property_name']};
 
-            if($property['multiple']) {
-                if(is_string($upload)) {
-                    // property is either multiple IDs (1,2,3...) or numeric string single ID ("55")
-                    $upload_keys = explode(',', $upload);
-                } else if ($upload instanceof Collection) {
-                    $upload_keys = $upload->toArray();
-                } else if (is_array($upload)) {
-                    $upload_keys = $upload;
+                if($property['multiple']) {
+                    if(is_string($upload)) {
+                        // property is either multiple IDs (1,2,3...) or numeric string single ID ("55")
+                        $upload_keys = explode(',', $upload);
+                    } else if ($upload instanceof Collection) {
+                        $upload_keys = $upload->toArray();
+                    } else if (is_array($upload)) {
+                        $upload_keys = $upload;
+                    } else {
+                        $upload_keys = null;
+                    }
                 } else {
-                    $upload_keys = null;
+                    if($upload instanceof Upload) {
+                        $upload_keys = [$upload->id];
+                    } else if(ctype_digit($upload) || is_int($upload)) {
+                        $upload_keys = [$upload];
+                    } else {
+                        $upload_keys = null;
+                    }
                 }
-            } else {
-                if($upload instanceof Upload) {
-                    $upload_keys = [$upload->id];
-                } else if(ctype_digit($upload) || is_int($upload)) {
-                    $upload_keys = [$upload];
-                } else {
-                    $upload_keys = null;
+
+                if($upload_keys) {
+                    $upload_values = $upload_keys;
+                    array_walk($upload_values, function(&$value, $key) use($property) {
+                        $value = [
+                            'relation_type' => $property['relation_type'],
+                            'order' => $key
+                        ];
+                    });
                 }
+
+                $sync_array = $upload_keys ? array_combine($upload_keys, $upload_values) : null;
+
+                $this->uploads()->wherePivot('relation_type', $property['relation_type'])->sync($sync_array);
             }
-
-            if($upload_keys) {
-                $upload_values = $upload_keys;
-                array_walk($upload_values, function(&$value, $key) use($property) {
-                    $value = [
-                        'relation_type' => $property['relation_type'],
-                        'order' => $key
-                    ];
-                });
-            }
-
-            $sync_array = $upload_keys ? array_combine($upload_keys, $upload_values) : null;
-
-            $this->uploads()->wherePivot('relation_type', $property['relation_type'])->sync($sync_array);
+            
         });
 
         // Sync Gallery uploads
         if(method_exists($this, 'syncGalleryUploads')) {
-            $this->syncGalleryUploads();
+            $this->syncGalleryUploads($specific_property);
         }
     }
 }

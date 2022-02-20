@@ -64,15 +64,16 @@ Route::middleware([
         // ---------------------------------------------------- //
 
         /* Products */
-        Route::get('/ev-products', [EVProductController::class, 'index'])->name('ev-products.index');
-        Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('ev-products.create');
-        Route::get('/ev-products/edit/{slug}', [EVProductController::class, 'edit'])->name('ev-products.edit');
-        Route::get('/ev-products/edit/{slug}/details', [EVProductController::class, 'product_details'])->name('ev-products.details');
-        Route::get('/ev-products/edit/{slug}/details/activity', [EVProductController::class, 'product_activity'])->name('ev-products.activity');
-        Route::get('/ev-products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('ev-products.edit.variations');
-        Route::get('/ev-products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('ev-products.edit.stocks');
+        Route::get('/products', [EVProductController::class, 'index'])->name('products.index');
+        Route::get('/products/create', [EVProductController::class, 'create2'])->name('product.create');
+        // Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('product.create');
+        Route::get('/products/edit/{slug}', [EVProductController::class, 'edit'])->name('product.edit');
+        Route::get('/products/edit/{slug}/details', [EVProductController::class, 'product_details'])->name('product.details');
+        Route::get('/products/edit/{slug}/details/activity', [EVProductController::class, 'product_activity'])->name('product.activity');
+        Route::get('/products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
+        Route::get('/products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
 
-        Route::get('/products/create', [EVProductController::class, 'create2'])->name('products.create');
+        
 
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
@@ -175,7 +176,7 @@ Route::middleware([
         Route::resource('digitalproducts', 'DigitalProductController')->parameters([
             'digitalproducts' => 'id',
         ])->except(['destroy']);
-//    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproducts.edit');
+//    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproduct.edit');
         Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
         Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
 
