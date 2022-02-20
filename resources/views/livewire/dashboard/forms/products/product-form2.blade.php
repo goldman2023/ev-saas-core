@@ -82,12 +82,6 @@
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
 
-     @push('pre_head_scripts')
-        <script>
-            let all_categories = @json(\Categories::getAllFormatted());
-        </script>
-    @endpush
-
     <div class="position-relative">
         <x-ev.loaders.spinner class="absolute-center z-10 d-none"
                               wire:target="saveProduct"
