@@ -7,7 +7,9 @@
                         @svg('heroicon-o-search', ['class' => 'ev-icon'])
                         </button>
                 </div>
-                <div class="input-group">
+                <div class="search-overlay"></div>
+
+                <div class="input-group bg-white" style="z-index: 99;">
                     <input type="text" class="border-0 border-lg form-control" id="search" name="q"
                         placeholder="{{ translate('Search Products, Companies or News') }}"
                         value="@isset($_GET['q']) {{ $_GET['q'] }} @endisset"

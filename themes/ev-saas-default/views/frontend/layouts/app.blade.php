@@ -55,7 +55,7 @@
     </script>
 
     <!-- Vendor Styles -->
-    <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}">
+    {{-- <link rel="stylesheet" href="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.css', false, true) }}"> --}}
 
     @livewireStyles
     {{-- Include overides and custom css for child theme if needed --}}
