@@ -280,11 +280,11 @@ if (!function_exists('verified_sellers_id')) {
 if (!function_exists('convert_price')) {
     function convert_price($price, $base_currency = null)
     {
-        if(($base_currency === \FX::getCurrency()->code) || empty($base_currency)) {
+        if (($base_currency === \FX::getCurrency()->code) || empty($base_currency)) {
             return $price;
         }
 
-        $code = Cache::remember(tenant('id').'_system_default_currency', config('cache.stores.redis.ttl_redis_cache', 60), function () {
+        $code = Cache::remember(tenant('id') . '_system_default_currency', config('cache.stores.redis.ttl_redis_cache', 60), function () {
             return \App\Models\Currency::findOrFail(get_setting('system_default_currency'))->code;
         });
 
@@ -853,7 +853,7 @@ if (!function_exists('api_asset')) {
 
 //return file uploaded via uploader
 if (!function_exists('uploaded_asset')) {
-    function uploaded_asset($id, $width = 0 )
+    function uploaded_asset($id, $width = 0)
     {
         /*  TODO: Fix this logic to unify images management */
         if (is_numeric($id)) {
@@ -909,15 +909,19 @@ if (!function_exists('static_asset')) {
         $filemtime = '';
 
         try {
-            if($cache_bust) {
+            if ($cache_bust) {
                 $filemtime = filemtime(public_path('themes/' . Theme::parent() . '/' . $path));
             }
-        } catch(\Exception $e) {}
-
-
-        if ($theme) {
-            return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure).($cache_bust ? '?v='.$filemtime : '');
+        } catch (\Exception $e) {
         }
+        if($theme) {
+            if (config('app.force_https')) {
+                return app('url')->asset('themes/' . Theme::parent() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
+            } else {
+                return app('url')->asset('themes/' . Theme::parent() . '/' . $path, $secure) . ($cache_bust ? '?v=' . $filemtime : '');
+            }
+        }
+
         return app('url')->asset($path, $secure);
     }
 }
@@ -933,9 +937,9 @@ if (!function_exists('static_asset_root')) {
     function static_assets_root($path, $secure = null, $theme = false)
     {
         if ($theme) {
-            return url('themes/' . Theme::parent().'/'.$path);
+            return url('themes/' . Theme::parent() . '/' . $path);
         }
-        return url('/'.$path);
+        return url('/' . $path);
     }
 }
 
@@ -964,7 +968,7 @@ if (!function_exists('getStorageBaseURL')) {
     function getStorageBaseURL()
     {
         if (config('filesystems.default') === 's3') {
-            return config('filesystems.disks.s3.subdomain_endpoint'). '/';
+            return config('filesystems.disks.s3.subdomain_endpoint') . '/';
         } else {
             return getBaseURL();
         }
@@ -972,9 +976,10 @@ if (!function_exists('getStorageBaseURL')) {
 }
 
 if (!function_exists('getBucketBaseURL')) {
-    function getBucketBaseURL() {
+    function getBucketBaseURL()
+    {
         if (config('filesystems.default') === 's3') {
-            return config('filesystems.disks.s3.subdomain_endpoint'). '/';
+            return config('filesystems.disks.s3.subdomain_endpoint') . '/';
         } else {
             return getBaseURL();
         }
@@ -1112,7 +1117,7 @@ if (!function_exists('get_images')) {
             ? $given_ids
             : (is_null($given_ids) ? [] : explode(",", $given_ids));
 
-        if(empty($ids))
+        if (empty($ids))
             return collect([]);
 
         return $with_trashed
@@ -1297,7 +1302,7 @@ function get_pricing_plans_array()
 
 function country_name_by_code($code)
 {
-    if(empty($code)) {
+    if (empty($code)) {
         $code = 'default';
     }
 
