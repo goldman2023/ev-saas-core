@@ -181,8 +181,8 @@
       "POST"
     ]
   },
-  "generated::sP6mysSFA7fbz6rS": {
-    "name": "generated::sP6mysSFA7fbz6rS",
+  "generated::PpRFifCACmvASlbo": {
+    "name": "generated::PpRFifCACmvASlbo",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\WebhookController@handleWebhook",
     "uri": "spark/webhook",
@@ -190,8 +190,8 @@
       "POST"
     ]
   },
-  "generated::0uNCWQtUQfrqrjU3": {
-    "name": "generated::0uNCWQtUQfrqrjU3",
+  "generated::WVR48n3eiaR8Y7Nc": {
+    "name": "generated::WVR48n3eiaR8Y7Nc",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\NewSubscriptionController",
     "uri": "spark/subscription",
@@ -199,8 +199,8 @@
       "POST"
     ]
   },
-  "generated::YTyHKRNiGic3UkbO": {
-    "name": "generated::YTyHKRNiGic3UkbO",
+  "generated::HC2nYVCpsqYNMfW4": {
+    "name": "generated::HC2nYVCpsqYNMfW4",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdateSubscriptionController",
     "uri": "spark/subscription",
@@ -208,8 +208,8 @@
       "PUT"
     ]
   },
-  "generated::sSZtMuDd8EBpuPIF": {
-    "name": "generated::sSZtMuDd8EBpuPIF",
+  "generated::np0jELx4vuwGfu3B": {
+    "name": "generated::np0jELx4vuwGfu3B",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\CancelSubscriptionController",
     "uri": "spark/subscription/cancel",
@@ -217,8 +217,8 @@
       "PUT"
     ]
   },
-  "generated::hZDNvN7SjbWBMbtU": {
-    "name": "generated::hZDNvN7SjbWBMbtU",
+  "generated::eNilmFLJ0dakjYBn": {
+    "name": "generated::eNilmFLJ0dakjYBn",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\ResumeSubscriptionController",
     "uri": "spark/subscription/resume",
@@ -226,8 +226,8 @@
       "PUT"
     ]
   },
-  "generated::eyVYVyDpt6ylZuEM": {
-    "name": "generated::eyVYVyDpt6ylZuEM",
+  "generated::R4aUaoQ26J38ehWA": {
+    "name": "generated::R4aUaoQ26J38ehWA",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdatePaymentMethodController",
     "uri": "spark/subscription/payment-method",
@@ -235,8 +235,8 @@
       "PUT"
     ]
   },
-  "generated::nSLzfLS98s75OIIn": {
-    "name": "generated::nSLzfLS98s75OIIn",
+  "generated::n4bQoWcP0oOGnmq0": {
+    "name": "generated::n4bQoWcP0oOGnmq0",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdateBillingInformationController",
     "uri": "spark/billing-information",
@@ -244,8 +244,8 @@
       "PUT"
     ]
   },
-  "generated::Sq0yLoQIjlSXz7oJ": {
-    "name": "generated::Sq0yLoQIjlSXz7oJ",
+  "generated::qW95G58ZzWhPC60z": {
+    "name": "generated::qW95G58ZzWhPC60z",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\UpdateReceiptEmailsController",
     "uri": "spark/receipt-emails",
@@ -253,8 +253,8 @@
       "PUT"
     ]
   },
-  "generated::WpJYa1rhjnSQZMFJ": {
-    "name": "generated::WpJYa1rhjnSQZMFJ",
+  "generated::gEidyWPRVlONJhbl": {
+    "name": "generated::gEidyWPRVlONJhbl",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\ApplyCouponController",
     "uri": "spark/coupon",
@@ -262,8 +262,8 @@
       "PUT"
     ]
   },
-  "generated::aACy1kjLwxsyCn2k": {
-    "name": "generated::aACy1kjLwxsyCn2k",
+  "generated::mIWEzuBr8bLxiXK7": {
+    "name": "generated::mIWEzuBr8bLxiXK7",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\StripeTokenController",
     "uri": "spark/token",
@@ -272,8 +272,8 @@
       "HEAD"
     ]
   },
-  "generated::aCK5U0grsJevN2ah": {
-    "name": "generated::aCK5U0grsJevN2ah",
+  "generated::QGG7U7q6OwZ8av2F": {
+    "name": "generated::QGG7U7q6OwZ8av2F",
     "domain": null,
     "action": "Spark\\Http\\Controllers\\TaxController",
     "uri": "spark/tax-rate",
@@ -329,8 +329,8 @@
       "HEAD"
     ]
   },
-  "generated::GbRbLrI128nvSlqn": {
-    "name": "generated::GbRbLrI128nvSlqn",
+  "generated::5JVD6s0VBVMM19FT": {
+    "name": "generated::5JVD6s0VBVMM19FT",
     "domain": null,
     "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@source",
     "uri": "livewire/livewire.js",
@@ -339,8 +339,8 @@
       "HEAD"
     ]
   },
-  "generated::X6HIslvtbd2bCOyC": {
-    "name": "generated::X6HIslvtbd2bCOyC",
+  "generated::99HTB8U0ggpKIMLj": {
+    "name": "generated::99HTB8U0ggpKIMLj",
     "domain": null,
     "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@maps",
     "uri": "livewire/livewire.js.map",
@@ -349,8 +349,8 @@
       "HEAD"
     ]
   },
-  "generated::QTuPJfjKpCVu2LFt": {
-    "name": "generated::QTuPJfjKpCVu2LFt",
+  "generated::g1n2L3kzgbsFepC9": {
+    "name": "generated::g1n2L3kzgbsFepC9",
     "domain": null,
     "action": "Mediconesystems\\LivewireDatatables\\Http\\Controllers\\FileExportController@handle",
     "uri": "datatables/{filename}",
@@ -359,8 +359,8 @@
       "HEAD"
     ]
   },
-  "generated::7Irnac4c37JH3AAL": {
-    "name": "generated::7Irnac4c37JH3AAL",
+  "generated::ogAATxJ3crNxXaOM": {
+    "name": "generated::ogAATxJ3crNxXaOM",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@getTaxRateForLocation",
     "uri": "vatcalculator/tax-rate-for-location/{country?}/{postal_code?}",
@@ -369,8 +369,8 @@
       "HEAD"
     ]
   },
-  "generated::Tk10AXg0UpChyIBk": {
-    "name": "generated::Tk10AXg0UpChyIBk",
+  "generated::jZFNwMignEMKAYSX": {
+    "name": "generated::jZFNwMignEMKAYSX",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@calculateGrossPrice",
     "uri": "vatcalculator/calculate",
@@ -379,8 +379,8 @@
       "HEAD"
     ]
   },
-  "generated::urrdA4B9fteNOon7": {
-    "name": "generated::urrdA4B9fteNOon7",
+  "generated::xTNQK3rUwoHwUo6n": {
+    "name": "generated::xTNQK3rUwoHwUo6n",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@getCountryCode",
     "uri": "vatcalculator/country-code",
@@ -389,8 +389,8 @@
       "HEAD"
     ]
   },
-  "generated::tGbsKbL2X98pMdyh": {
-    "name": "generated::tGbsKbL2X98pMdyh",
+  "generated::dQtVHxAFVw9PARdW": {
+    "name": "generated::dQtVHxAFVw9PARdW",
     "domain": null,
     "action": "Mpociot\\VatCalculator\\Http\\Controller@validateVATID",
     "uri": "vatcalculator/validate-vat-id/{vat_id}",
@@ -3250,8 +3250,8 @@
       "HEAD"
     ]
   },
-  "generated::oR0ssDFsarzAr2St": {
-    "name": "generated::oR0ssDFsarzAr2St",
+  "generated::5xrcQXQHgVXg2RgM": {
+    "name": "generated::5xrcQXQHgVXg2RgM",
     "domain": "ev-saas.localhost",
     "action": "Closure",
     "uri": "refresh-csrf",
@@ -3318,8 +3318,8 @@
       "POST"
     ]
   },
-  "generated::V3N0Hwjlzj6mpU9B": {
-    "name": "generated::V3N0Hwjlzj6mpU9B",
+  "generated::qrHgHCyIZKlTbeFc": {
+    "name": "generated::qrHgHCyIZKlTbeFc",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@index",
     "uri": "sslcommerz/pay",
@@ -3328,8 +3328,8 @@
       "HEAD"
     ]
   },
-  "generated::Sxzvf9tbd1nwhbEa": {
-    "name": "generated::Sxzvf9tbd1nwhbEa",
+  "generated::kQnNgs5onxITN9Po": {
+    "name": "generated::kQnNgs5onxITN9Po",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@success",
     "uri": "sslcommerz/success",
@@ -3337,8 +3337,8 @@
       "POST"
     ]
   },
-  "generated::QOIVqioGYmLfbAGw": {
-    "name": "generated::QOIVqioGYmLfbAGw",
+  "generated::yDoIXA0aVITv66Hw": {
+    "name": "generated::yDoIXA0aVITv66Hw",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@fail",
     "uri": "sslcommerz/fail",
@@ -3346,8 +3346,8 @@
       "POST"
     ]
   },
-  "generated::96LakKURxGLn0CWe": {
-    "name": "generated::96LakKURxGLn0CWe",
+  "generated::XVZ8q2sS97OlOCIk": {
+    "name": "generated::XVZ8q2sS97OlOCIk",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@cancel",
     "uri": "sslcommerz/cancel",
@@ -3355,8 +3355,8 @@
       "POST"
     ]
   },
-  "generated::kC4D7Q9lcrrd599K": {
-    "name": "generated::kC4D7Q9lcrrd599K",
+  "generated::2eadYjHjouT63Cvq": {
+    "name": "generated::2eadYjHjouT63Cvq",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PublicSslCommerzPaymentController@ipn",
     "uri": "sslcommerz/ipn",
@@ -3383,8 +3383,8 @@
       "POST"
     ]
   },
-  "generated::rJEiqB67NvpPW9vv": {
-    "name": "generated::rJEiqB67NvpPW9vv",
+  "generated::QG06bQbFI1QWv27v": {
+    "name": "generated::QG06bQbFI1QWv27v",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PaystackController@handleGatewayCallback",
     "uri": "paystack/payment/callback",
@@ -3393,8 +3393,8 @@
       "HEAD"
     ]
   },
-  "generated::mggkZGomnW1r6IAD": {
-    "name": "generated::mggkZGomnW1r6IAD",
+  "generated::54HMSWGMM8VI4z3O": {
+    "name": "generated::54HMSWGMM8VI4z3O",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\VoguePayController@showForm",
     "uri": "vogue-pay",
@@ -3403,8 +3403,8 @@
       "HEAD"
     ]
   },
-  "generated::skbBX4Uim9rPQrgy": {
-    "name": "generated::skbBX4Uim9rPQrgy",
+  "generated::MOJ8hjpBAmQnOecJ": {
+    "name": "generated::MOJ8hjpBAmQnOecJ",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\VoguePayController@paymentSuccess",
     "uri": "vogue-pay/success/{id}",
@@ -3413,8 +3413,8 @@
       "HEAD"
     ]
   },
-  "generated::wbI19umpOu1c5BvI": {
-    "name": "generated::wbI19umpOu1c5BvI",
+  "generated::Qc0yHKtpqWqD3zRe": {
+    "name": "generated::Qc0yHKtpqWqD3zRe",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\VoguePayController@paymentFailure",
     "uri": "vogue-pay/failure/{id}",
@@ -3612,8 +3612,8 @@
       "OPTIONS"
     ]
   },
-  "generated::r9dOBCpNsyBUYI22": {
-    "name": "generated::r9dOBCpNsyBUYI22",
+  "generated::mUPGJCQkJZMZQWpN": {
+    "name": "generated::mUPGJCQkJZMZQWpN",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\PayhereController@migrate_seller_package_payment",
     "uri": "migrate/products",
@@ -3697,8 +3697,8 @@
       "OPTIONS"
     ]
   },
-  "generated::OzjbKgked7T1lR6Y": {
-    "name": "generated::OzjbKgked7T1lR6Y",
+  "generated::yy4pWTwVICBXesyE": {
+    "name": "generated::yy4pWTwVICBXesyE",
     "domain": "ev-saas.localhost",
     "action": "App\\Http\\Controllers\\NgeniusController@migrate_ngenius",
     "uri": "migrate/database",
@@ -3902,8 +3902,8 @@
       "POST"
     ]
   },
-  "generated::boA7xp3n8epHSDnJ": {
-    "name": "generated::boA7xp3n8epHSDnJ",
+  "generated::9cDyb6dTwaKC5oN2": {
+    "name": "generated::9cDyb6dTwaKC5oN2",
     "domain": null,
     "action": "Closure",
     "uri": "sitemap.xml",
@@ -3912,8 +3912,8 @@
       "HEAD"
     ]
   },
-  "generated::kQHgrpSHRatiXaBe": {
-    "name": "generated::kQHgrpSHRatiXaBe",
+  "generated::tKegz61rYQQvF6Eb": {
+    "name": "generated::tKegz61rYQQvF6Eb",
     "domain": null,
     "action": "Closure",
     "uri": "refresh-csrf",
@@ -3922,8 +3922,8 @@
       "HEAD"
     ]
   },
-  "generated::mhhOOfF8NI7Jeqo5": {
-    "name": "generated::mhhOOfF8NI7Jeqo5",
+  "generated::YutSwuj7hJoWkLAe": {
+    "name": "generated::YutSwuj7hJoWkLAe",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@show_uploader",
     "uri": "aiz-uploader",
@@ -3931,8 +3931,8 @@
       "POST"
     ]
   },
-  "generated::d9EZsoP7SMfLatND": {
-    "name": "generated::d9EZsoP7SMfLatND",
+  "generated::uRdd1lZkVcesW92Q": {
+    "name": "generated::uRdd1lZkVcesW92Q",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@upload",
     "uri": "aiz-uploader/upload",
@@ -3940,8 +3940,8 @@
       "POST"
     ]
   },
-  "generated::MpGYh0CLvK0BgEPC": {
-    "name": "generated::MpGYh0CLvK0BgEPC",
+  "generated::4QAFwTKmMKDNPlDe": {
+    "name": "generated::4QAFwTKmMKDNPlDe",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@get_uploaded_files",
     "uri": "aiz-uploader/get_uploaded_files",
@@ -3950,8 +3950,8 @@
       "HEAD"
     ]
   },
-  "generated::syCOfi0NAAgj71ax": {
-    "name": "generated::syCOfi0NAAgj71ax",
+  "generated::rkalSebvPPdtofs1": {
+    "name": "generated::rkalSebvPPdtofs1",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@get_preview_files",
     "uri": "aiz-uploader/get_file_by_ids",
@@ -4281,8 +4281,8 @@
       "HEAD"
     ]
   },
-  "generated::aJUUQik6ZZhjix7g": {
-    "name": "generated::aJUUQik6ZZhjix7g",
+  "generated::nebzGze8pMZ44B5N": {
+    "name": "generated::nebzGze8pMZ44B5N",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Auth\\LoginController@login",
     "uri": "login",
@@ -4309,8 +4309,8 @@
       "HEAD"
     ]
   },
-  "generated::fZri5tBGAL42XG7m": {
-    "name": "generated::fZri5tBGAL42XG7m",
+  "generated::ZSFVJXUEucA6ZDIJ": {
+    "name": "generated::ZSFVJXUEucA6ZDIJ",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Auth\\RegisterController@register",
     "uri": "register",
@@ -4862,8 +4862,8 @@
       "POST"
     ]
   },
-  "generated::iMg4FNJZ6qlTgV5A": {
-    "name": "generated::iMg4FNJZ6qlTgV5A",
+  "generated::MJN5AXI1BZEviSJg": {
+    "name": "generated::MJN5AXI1BZEviSJg",
     "domain": null,
     "action": "App\\Http\\Controllers\\StripePaymentController@stripe",
     "uri": "stripe",
@@ -5387,8 +5387,8 @@
       "HEAD"
     ]
   },
-  "customer_product.create": {
-    "name": "customer_product.create",
+  "customer_products.create": {
+    "name": "customer_products.create",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\CustomerProductController@create",
     "uri": "customer_products/create",
@@ -5416,8 +5416,8 @@
       "HEAD"
     ]
   },
-  "customer_product.edit": {
-    "name": "customer_product.edit",
+  "customer_products.edit": {
+    "name": "customer_products.edit",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\CustomerProductController@edit",
     "uri": "customer_products/{id}/edit",
@@ -5935,8 +5935,8 @@
       "HEAD"
     ]
   },
-  "generated::G8ul9pF0peH3cRFu": {
-    "name": "generated::G8ul9pF0peH3cRFu",
+  "generated::ZjpT2bsxOeXlPW8V": {
+    "name": "generated::ZjpT2bsxOeXlPW8V",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Integrations\\GetStreamControler@index",
     "uri": "feed/all",
@@ -6280,7 +6280,7 @@
     "name": "products.index",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@index",
-    "uri": "dashboard/ev-products",
+    "uri": "dashboard/products",
     "method": [
       "GET",
       "HEAD"
@@ -6289,8 +6289,8 @@
   "product.create": {
     "name": "product.create",
     "domain": null,
-    "action": "App\\Http\\Controllers\\EVProductController@create",
-    "uri": "dashboard/ev-products/create",
+    "action": "App\\Http\\Controllers\\EVProductController@create2",
+    "uri": "dashboard/products/create",
     "method": [
       "GET",
       "HEAD"
@@ -6300,7 +6300,7 @@
     "name": "product.edit",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@edit",
-    "uri": "dashboard/ev-products/edit/{slug}",
+    "uri": "dashboard/products/edit/{slug}",
     "method": [
       "GET",
       "HEAD"
@@ -6310,7 +6310,7 @@
     "name": "product.details",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@product_details",
-    "uri": "dashboard/ev-products/edit/{slug}/details",
+    "uri": "dashboard/products/edit/{slug}/details",
     "method": [
       "GET",
       "HEAD"
@@ -6320,7 +6320,7 @@
     "name": "product.activity",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@product_activity",
-    "uri": "dashboard/ev-products/edit/{slug}/details/activity",
+    "uri": "dashboard/products/edit/{slug}/details/activity",
     "method": [
       "GET",
       "HEAD"
@@ -6330,7 +6330,7 @@
     "name": "product.edit.variations",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@edit_variations",
-    "uri": "dashboard/ev-products/edit/{slug}/variations",
+    "uri": "dashboard/products/edit/{slug}/variations",
     "method": [
       "GET",
       "HEAD"
@@ -6340,7 +6340,7 @@
     "name": "product.edit.stocks",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@edit_stocks",
-    "uri": "dashboard/ev-products/edit/{slug}/stock-management",
+    "uri": "dashboard/products/edit/{slug}/stock-management",
     "method": [
       "GET",
       "HEAD"
@@ -6401,6 +6401,36 @@
     "domain": null,
     "action": "App\\Http\\Controllers\\EVPlanController@edit",
     "uri": "dashboard/plans/edit/{id}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "attributes.index": {
+    "name": "attributes.index",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAttributesController@index",
+    "uri": "dashboard/attributes/type/{content_type}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "attributes.create": {
+    "name": "attributes.create",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAttributesController@create",
+    "uri": "dashboard/attributes/type/{content_type}/create",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "attributes.edit": {
+    "name": "attributes.edit",
+    "domain": null,
+    "action": "App\\Http\\Controllers\\EVAttributesController@edit",
+    "uri": "dashboard/attributes/edit/{id}",
     "method": [
       "GET",
       "HEAD"
@@ -7062,8 +7092,8 @@
       "HEAD"
     ]
   },
-  "digitalproduct.create": {
-    "name": "digitalproduct.create",
+  "digitalproducts.create": {
+    "name": "digitalproducts.create",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\DigitalProductController@create",
     "uri": "dashboard/digitalproducts/create",
@@ -7091,8 +7121,8 @@
       "HEAD"
     ]
   },
-  "digitalproduct.edit": {
-    "name": "digitalproduct.edit",
+  "digitalproducts.edit": {
+    "name": "digitalproducts.edit",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\DigitalProductController@edit",
     "uri": "dashboard/digitalproducts/{id}/edit",

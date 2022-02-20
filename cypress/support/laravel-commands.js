@@ -32,8 +32,10 @@ Cypress.Commands.add('login', (attributes = {}) => {
         Cypress.log({
             name: 'login',
             message: JSON.stringify('login as an admin'),
-            consoleProps: () => ({ user: 'login' }),
+            consoleProps: () => ({ info: 'login' }),
         });
+
+        cy.wait(1000);
 });
 
 Cypress.Commands.add('loginAsSeller', (attributes = {}) => {

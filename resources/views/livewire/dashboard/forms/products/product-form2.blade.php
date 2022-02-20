@@ -10,8 +10,8 @@
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         getSelectorID(attribute) { return 'attributes_'+attribute.id+'_attribute_values'; } ,
         hasCustomProperty(attribute, name) {
-            return attribute.custom_properties !== null && 
-                    attribute.custom_properties !== undefined && 
+            return attribute.custom_properties !== null &&
+                    attribute.custom_properties !== undefined &&
                     attribute.custom_properties.hasOwnProperty(name);
         },
         isMultiple(attribute) { return this.hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple; },
@@ -20,12 +20,12 @@
                 mode: 'single',
                 enableTime: false,
             };
-            
+
             if(this.hasCustomProperty(attribute, 'with_time') && attribute.custom_properties.with_time) {
                 options.enableTime = true;
                 options.dateFormat = 'd.m.Y H:i';
-            } 
-            
+            }
+
             if(this.hasCustomProperty(attribute, 'range') && attribute.custom_properties.range) {
                 options.mode = 'range';
             }
@@ -90,8 +90,8 @@
         {{-- FIXME: The opacity issue --}}
         <div class="row w-100"
             wire:loading.class="opacity-6 prevent-pointer-events"
-            wire:target="saveProduct">     
-            
+            wire:target="saveProduct">
+
             {{-- Left column --}}
             <div class="col-12 col-md-8">
                 {{-- Card Basic --}}
@@ -136,7 +136,7 @@
                                     <span class="toggle-switch-label">
                                         <span class="toggle-switch-indicator"></span>
                                     </span>
-        
+
                                     <span class="ml-3">{{ translate('Has video') }}</span>
                                 </label>
 
@@ -145,7 +145,7 @@
                                     <span class="toggle-switch-label">
                                         <span class="toggle-switch-indicator"></span>
                                     </span>
-        
+
                                     <span class="ml-3">{{ translate('Has specification document') }}</span>
                                 </label>
                             </div>
@@ -157,7 +157,7 @@
                                     <small class="text-muted">{{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}</small>
                                 </x-ev.form.input>
                             </div>
-                            
+
                             <div class="w-100" :class="{'d-none': !show_pdf}">
                                 <!-- PDF Specification -->
                                 <x-ev.form.file-selector name="product.pdf" class="form-control-sm" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
@@ -181,7 +181,7 @@
                                     <label class="w-100">{{ translate('Price') }}</label>
 
                                     <div class="input-group input-group-sm-down-break">
-                                        <input type="number" 
+                                        <input type="number"
                                                 step="0.01"
                                                 min="0"
                                                 class="form-control form-control-sm @error('product.unit_price') is-invalid @enderror"
@@ -199,11 +199,11 @@
                                     $watch('base_currency', (value) => {
                                         $('#product-base_currency').val(value).trigger('change');
                                     });
-                                "> 
+                                ">
                                     <label class="w-100">{{ translate('Base currency') }}</label>
 
-                                    <select class="form-control custom-select custom-select-sm" 
-                                            name="product.base_currency" 
+                                    <select class="form-control custom-select custom-select-sm"
+                                            name="product.base_currency"
                                             id="product-base_currency"
                                             x-model="base_currency"
                                             data-hs-select2-options='{
@@ -222,7 +222,7 @@
 
                             <!-- Discount and Discount type -->
                             <div class="row form-group mt-3">
-                                
+
                                 <div class="col-12 col-sm-7">
                                     <label class="w-100">{{ translate('Discount') }}</label>
 
@@ -245,11 +245,11 @@
                                     $watch('discount_type', (value) => {
                                         $('#product-discount_type').val(value).trigger('change');
                                     });
-                                "> 
+                                ">
                                     <label class="w-100">{{ translate('Discount type') }}</label>
 
-                                    <select class="form-control custom-select custom-select-sm" 
-                                            name="product.discount_type" 
+                                    <select class="form-control custom-select custom-select-sm"
+                                            name="product.discount_type"
                                             id="product-discount_type"
                                             x-model="discount_type"
                                             data-hs-select2-options='{
@@ -273,7 +273,7 @@
                                     <span class="toggle-switch-label">
                                         <span class="toggle-switch-indicator"></span>
                                     </span>
-        
+
                                     <span class="ml-3">{{ translate('Additional fee') }}</span>
                                 </label>
                             </div>
@@ -302,11 +302,11 @@
                                     $watch('tax_type', (value) => {
                                         $('#product-tax_type').val(value).trigger('change');
                                     });
-                                "> 
+                                ">
                                     <label class="w-100">{{ translate('Fee type') }}</label>
 
-                                    <select class="form-control custom-select custom-select-sm" 
-                                            name="product.tax_type" 
+                                    <select class="form-control custom-select custom-select-sm"
+                                            name="product.tax_type"
                                             id="product-tax_type"
                                             x-model="tax_type"
                                             data-hs-select2-options='{
@@ -329,7 +329,7 @@
                                     <label class="w-100 col-form-label input-label pt-1">{{ translate('Cost per item') }}</label>
 
                                     <div class="input-group input-group-sm-down-break">
-                                        <input type="number" 
+                                        <input type="number"
                                                 step="0.01"
                                                 min="0"
                                                 class="form-control form-control-sm @error('product.purchase_price') is-invalid @enderror"
@@ -348,7 +348,7 @@
                     </div>
                 </div>
                 {{-- END Card Pricing --}}
-                
+
 
                 {{-- Card Inventory --}}
                 <div class="card mb-3 mb-lg-5" x-data="{}">
@@ -370,7 +370,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Uses Serial -->
                         <div class="w-100 pt-3 d-flex">
                             <label class="toggle-switch mr-3">
@@ -436,7 +436,7 @@
                                     <span class="toggle-switch-label">
                                         <span class="toggle-switch-indicator"></span>
                                     </span>
-        
+
                                     <span class="ml-3">{{ translate('Is this a digital product?') }}</span>
                                 </label>
                             </div>
@@ -473,7 +473,7 @@
 
                                 {{-- Dropdown --}}
                                 <template x-if="attribute.type === 'dropdown'">
-                                    <div class="w-100" x-data="{}" > 
+                                    <div class="w-100" x-data="{}" >
                                             <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                             <select class="form-control custom-select custom-select-sm"
@@ -499,7 +499,7 @@
                                                         <span class="toggle-switch-label">
                                                             <span class="toggle-switch-indicator"></span>
                                                         </span>
-                            
+
                                                         <span class="ml-3">{{ translate('Used for variations') }}</span>
                                                     </label>
                                                 </div>
@@ -514,7 +514,7 @@
                                     <div class="w-100" x-data="{}" x-init="">
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
-                                        <input type="text" 
+                                        <input type="text"
                                             class="form-control form-control-sm"
                                             :id="'attributes_'+attribute.id+'_attribute_values'"
                                             x-model="attribute.attribute_values[0].values" />
@@ -529,7 +529,7 @@
 
                                         <div class="input-group" :class="{'input-group-merge': !hasCustomProperty(attribute, 'unit')}">
 
-                                            <input type="number" 
+                                            <input type="number"
                                             class="form-control form-control-sm"
                                             :id="'attributes_'+attribute.id+'_attribute_values'"
                                             x-bind:min="hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : ''"
@@ -542,7 +542,7 @@
                                                 </div>
                                             </template>
                                         </div>
-                                        
+
                                     </div>
                                 </template>
                                 {{-- END Number --}}
@@ -559,11 +559,11 @@
                                                     placeholder="{{ translate('Pick date') }}"
                                                     :data-hs-flatpickr-options='getDateOptions(attribute)'
                                                     data-input />
-                                        
+
                                     </div>
                                 </template>
                                 {{-- END Date --}}
-                                
+
 
                                 {{-- Checkbox --}}
                                 <template x-if="attribute.type === 'checkbox'">
@@ -573,17 +573,17 @@
                                         <template x-for="attribute_value in attribute.attribute_values">
                                             <div class="form-control form-control-sm mb-2">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input x-model="selected_attribute_values['attribute.'+attribute.id]" 
+                                                    <input x-model="selected_attribute_values['attribute.'+attribute.id]"
                                                         type="checkbox"
                                                         :value="attribute_value.id"
                                                         :id="'attribute_'+attribute_value.id"
                                                         class="custom-control-input">
-                            
+
                                                     <label class="custom-control-label" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id">
                                                     </label>
                                                 </div>
                                             </div>
-                                        </template>    
+                                        </template>
                                     </div>
                                 </template>
                                 {{-- END Checkbox --}}
@@ -596,17 +596,17 @@
                                         <template x-for="attribute_value in attribute.attribute_values">
                                             <div class="form-control form-control-sm mb-2">
                                                 <div class="custom-control custom-radio">
-                                                    <input x-model="selected_attribute_values['attribute.'+attribute.id]" 
+                                                    <input x-model="selected_attribute_values['attribute.'+attribute.id]"
                                                         type="radio"
                                                         :value="attribute_value.id"
                                                         :id="'attribute_'+attribute_value.id"
                                                         class="custom-control-input">
-                            
+
                                                     <label class="custom-control-label" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id">
                                                     </label>
                                                 </div>
                                             </div>
-                                        </template>    
+                                        </template>
                                     </div>
                                 </template>
                                 {{-- END Radio --}}
@@ -622,7 +622,7 @@
                                         <div class="col-12 col-sm-9">
                                             <template x-if="getListCount(attribute) <= 1">
                                                 <div class="d-flex">
-                                                    <input type="text" 
+                                                    <input type="text"
                                                             class="form-control"
                                                             placeholder="{{ translate('Value 1') }}"
                                                             x-model="attribute.attribute_values[0]['values']" />
@@ -631,7 +631,7 @@
                                             <template x-if="getListCount(attribute) > 1">
                                                 <template x-for="[key, value] of Object.entries(attribute.attribute_values)">
                                                     <div class="d-flex" :class="{'mt-2': key > 0}">
-                                                        <input type="text" 
+                                                        <input type="text"
                                                             class="form-control"
                                                             x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
                                                             x-model="attribute.attribute_values[key]['values']" />
@@ -664,11 +664,11 @@
                                                 console.log('asdasd');
                                             });
                                         });
-                                        
+
                                     ">
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
-                                        <div class="input-group" data-toggle="aizuploader" 
+                                        <div class="input-group" data-toggle="aizuploader"
                                             data-type="image"
                                             data-is-sortable="false"
                                             data-template="input">
@@ -733,13 +733,15 @@
                                 {{ translate('Delete') }}
                             </div> --}}
 
-                            <div type="button" class="btn btn-primary btn-sm pointer ml-auto"
+                            <div type="button"
+                            data-test="we-product-submit"
+                            class="btn btn-primary btn-sm pointer ml-auto"
                                     @click="onSave()"
                                     wire:click="saveProduct()">
                                 {{ translate('Save') }}
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 {{-- Card Actions --}}
@@ -755,7 +757,7 @@
                                     $($refs.status_selector).on('select2:select', (event) => {
                                         status = event.target.value;
                                     });
-        
+
                                     $watch('status', (value) => {
                                         $($refs.status_selector).val(value).trigger('change');
                                     });
@@ -776,10 +778,10 @@
                                         </option>
                                     @endforeach
                                 </select>
-        
+
                                 <div class="d-flex align-items-center mt-2 pl-1">
                                     <span class="mr-2 text-14">{{ translate('Current status:') }}</span>
-        
+
                                     @if($product->status === App\Enums\StatusEnum::published()->value)
                                         <span class="badge badge-soft-success">
                                             <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($product->status) }}
@@ -802,7 +804,7 @@
                                         </span>
                                     @endif
                                 </div>
-        
+
                                 <x-default.system.invalid-msg field="product.status" type="slim"></x-default.system.invalid-msg>
                             </div>
                         </div>
@@ -854,6 +856,6 @@
             {{-- END Right column --}}
         </div>
 
-        
+
     </div>
 </div>

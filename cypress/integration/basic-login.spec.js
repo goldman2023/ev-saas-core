@@ -36,7 +36,7 @@ describe('logged in user, should be able to access dashboard', () => {
             .type('team@eim.solutions')
 
         cy.get('[data-test="we-login-password"]')
-            .type('123456')
+            .type('syska007')
 
         cy.get('[data-test="we-login-submit"]')
             .click()
