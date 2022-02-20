@@ -1,11 +1,12 @@
 <div class="ev-product-card card card-bordered shadow-none text-left h-100">
     <div class="position-relative">
-
+        @if($product->getThumbnail())
         <a class="card-img-top" href="{{ $product->getPermalink() }}">
             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
                 class="card-img-top ev-product-card__img" fit="cover" :image="$product->getThumbnail()">
             </x-tenant.system.image>
         </a>
+        @endif
 
 
         <div class="position-absolute top-0 left-0 pt-3 pl-3">
@@ -37,14 +38,15 @@
                             href="{{ $product->getPermalink() }}">
                             @if($product->brand)
                             <x-tenant.system.image class="ev-brand-image-small"
-                                :image='$product->brand()->getThumbnail()'>
+                                :image='$product->brand->getThumbnail()'>
                             </x-tenant.system.image>
 
                             @endif
 
+
                             <div>
                                 {{-- TODO: Fix Brand --}}
-                               Brand {{ $product->brand_id }}
+
                             </div>
 
 
@@ -61,9 +63,9 @@
 
             <span class="text-dark font-weight-bold">
                 @if ($product->getBasePrice() != $product->getTotalPrice())
-                <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del>
+                {{-- <del class="fw-600 opacity-50 mr-1">{{ $product->getBasePrice(true) }}</del> --}}
                 @endif
-                <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span>
+                {{-- <span class="fw-700 text-primary">{{ $product->getTotalPrice(true) }}</span> --}}
             </span>
         </div>
 
