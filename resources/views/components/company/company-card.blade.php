@@ -1,14 +1,14 @@
 @php
 $class_media = 'd-sm-flex align-items-center';
-$class_col_body_1 = 'col-md-7';
+$class_col_body_1 = 'col-md-12';
 $class_top_level = '';
-$class_col_body_2 = 'col-md-5';
+$class_col_body_2 = 'col-md-12';
 
 
 @endphp
 
 <div class="{{ $class_top_level }}">
-    <div class="card card-bordered card-hover-shadow mb-5 {{ $class_top_level }}">
+    <div class="card card-bordered card-hover-shadow h-100 mb-5 {{ $class_top_level }}">
         <div class="card-body">
             <!-- Media -->
             <div class="{{ $class_media }}">
@@ -17,14 +17,13 @@ $class_col_body_2 = 'col-md-5';
 
                     <div class="media-body d-none">
                         <h6 class="mb-0">
-                            <a class="text-dark" href="{{  $company->permalink }}">
+                            <a class="text-dark" href="{{  $company->getPermalink() }}">
                                 {{ $company->name }}
                             </a>
-
-                            <x-company.company-star-rating :company="$company"></x-company.company-star-rating>
-
-
                         </h6>
+                        <div class="w-100">
+                            <x-company.company-star-rating :company="$company"></x-company.company-star-rating>
+                        </div>
                     </div>
                 </div>
 
@@ -33,13 +32,18 @@ $class_col_body_2 = 'col-md-5';
                         <div class="col {{ $class_col_body_1 }}">
                             <h3 class="mb-0">
                                 {{-- TODO: Add --}}
-                                <a class="text-dark" href="{{ $company->permalink }}">
+                                <a class="text-dark" href="{{ $company->getPermalink() }}">
                                     {{ $company->name }}
                                 </a>
-                                {{-- TODO: Create company avatar component, because we need to use it in separate places --}}
+                                {{-- TODO: Create company avatar component, because we need to use it in separate places
+                                --}}
                                 {{-- <x-company.company-avatar :company="$company"> </x-company.company-avatar> --}}
-                                <x-company.company-star-rating :company="$company"></x-company.company-star-rating>
                             </h3>
+
+                            <div class="mb-3">
+                                <x-company.company-star-rating :company="$company"></x-company.company-star-rating>
+                            </div>
+
                             <div class="d-none d-sm-inline-block">
 
                             </div>
@@ -85,23 +89,23 @@ $class_col_body_2 = 'col-md-5';
         <div class="card-footer">
             <ul class="list-inline list-separator small text-body">
                 {{-- TODO: create a country column- not a simple attribute, we will need filtering based on that --}}
-                <li class="list-inline-item">{{ country_name_by_code($company->country)  }}</li>
-                <li class="list-inline-item">{{ translate('Company Type:') }} {{ $company->get_attribute_value_by_id(1)  }}</li>
+                <li class="list-inline-item">
+                    {{ country_name_by_code($company->settings()->where('company_country')->last()) }}
+                </li>
             </ul>
 
             {{-- TODO: This should be shown only for sellers with active --}}
             @php
-                $seller_package = \App\Models\SellerPackage::find(1);
+            $is_verified = $company->isVerified();
 
             @endphp
-            @if ($seller_package != null)
-
-
+            @if ($is_verified == true)
+            <span class="badge badge-soft-success w-auto">
+                {{-- <span class="legend-indicator bg-info"></span> --}}
+                {{ __('Verified Seller') }}
+            </span>
             @else
-                <span class="badge badge-soft-success w-auto">
-                    {{-- <span class="legend-indicator bg-info"></span> --}}
-                    {{ __('Verified Seller') }}
-                </span>
+
             @endif
 
         </div>

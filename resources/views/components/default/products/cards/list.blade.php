@@ -34,9 +34,7 @@
                                 <x-tenant.system.image class="ev-brand-image-small"
                                     :image='$product->brand->getThumbnail()'>
                                 </x-tenant.system.image>
-
                                 @endif
-
                             </a>
                         </div>
                     </a>

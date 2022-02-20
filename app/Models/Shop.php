@@ -59,7 +59,7 @@ class Shop extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
-    use PermalinkTrait; 
+    use PermalinkTrait;
 
     protected $table = 'shops';
 
@@ -282,13 +282,13 @@ class Shop extends EVBaseModel
         }
     }
 
-    public function company_is_verified()
+    public function isVerified()
     {
 
         /* TODO: Add dynamic verification column to shops table */
         $verification_status = true;
 
-        if ($verification_status === 'yes') {
+        if ($verification_status === true) {
             return true;
         } else {
             return false;
