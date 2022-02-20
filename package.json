@@ -55,6 +55,7 @@
         "datatables.net-buttons-bs4": "^1.7.1",
         "daterangepicker": "^3.1.0",
         "dropzone": "^5.7.1",
+        "faker": "^6.6.6",
         "flag-icon-css": "^3.5.0",
         "flatpickr": "^4.6.9",
         "get-sass-vars": "^3.1.0",
