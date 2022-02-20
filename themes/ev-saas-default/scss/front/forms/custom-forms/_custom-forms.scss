@@ -10,5 +10,9 @@
 .form-control {
   .custom-control-label {
     width: 100%;
+
+    &::before, &::after {
+      top: 0.2rem;
+    }
   }
 }

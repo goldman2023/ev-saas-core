@@ -83,7 +83,7 @@ class Product extends EVBaseModel
 
 
     protected $casts = [
-        'digital' => 'boolean',
+        'digital' => 'boolean'
     ];
 
     /**
@@ -124,7 +124,20 @@ class Product extends EVBaseModel
     public function getRouteKeyName()
     {
         return 'slug';
-    } 
+    }
+    
+    /*
+     * Scope searchable parameters
+     */
+    public function scopeSearch($query, $term)
+    {
+        return $query->where(
+            fn ($query) =>  $query
+                ->where('name', 'like', '%'.$term.'%')
+                ->orWhere('excerpt', 'like', '%'.$term.'%')
+                ->orWhere('description', 'like', '%'.$term.'%')
+        );
+    }
 
     /**
      * Stream: Add extra activity data - task name, and user's display name:

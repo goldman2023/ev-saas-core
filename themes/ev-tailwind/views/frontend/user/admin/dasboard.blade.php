@@ -74,7 +74,7 @@
                                 <div
                                     class="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
                                     <div class="px-6 py-5 text-sm font-medium text-center">
-                                        <a href="{{ route('ev-products.index') }}">
+                                        <a href="{{ route('products.index') }}">
                                             <span class="text-gray-900"> {{ App\Models\Product::count() }}</span>
                                             <span class="text-gray-600">{{ translate('Products') }}</span>
                                         </a>
@@ -126,7 +126,7 @@
                                 <x-tenant.dashboard.dashboard-card
                                     class="rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
                                     <x-slot name="title">
-                                        <a href="{{ route('ev-products.index') }}">
+                                        <a href="{{ route('products.index') }}">
                                             {{ translate('Add Product') }}
                                         </a>
                                     </x-slot>
@@ -139,7 +139,7 @@
                                         </svg>
                                     </x-slot>
                                     {{ translate('Update your Products and Catalog') }}
-                                    <a href="{{ route('ev-products.index') }}">
+                                    <a href="{{ route('products.index') }}">
                                         {{ translate('Go To Admin Panel') }}
                                     </a>
                                 </x-tenant.dashboard.dashboard-card>

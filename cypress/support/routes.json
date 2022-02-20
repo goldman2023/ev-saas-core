@@ -616,8 +616,8 @@
       "HEAD"
     ]
   },
-  "admin.products.create": {
-    "name": "admin.products.create",
+  "admin.product.create": {
+    "name": "admin.product.create",
     "domain": null,
     "action": "App\\Http\\Controllers\\ProductController@create",
     "uri": "admin/products/create",
@@ -626,8 +626,8 @@
       "HEAD"
     ]
   },
-  "admin.products.edit": {
-    "name": "admin.products.edit",
+  "admin.product.edit": {
+    "name": "admin.product.edit",
     "domain": null,
     "action": "App\\Http\\Controllers\\ProductController@admin_product_edit",
     "uri": "admin/products/admin/{id}/edit",
@@ -5387,8 +5387,8 @@
       "HEAD"
     ]
   },
-  "customer_products.create": {
-    "name": "customer_products.create",
+  "customer_product.create": {
+    "name": "customer_product.create",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\CustomerProductController@create",
     "uri": "customer_products/create",
@@ -5416,8 +5416,8 @@
       "HEAD"
     ]
   },
-  "customer_products.edit": {
-    "name": "customer_products.edit",
+  "customer_product.edit": {
+    "name": "customer_product.edit",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\CustomerProductController@edit",
     "uri": "customer_products/{id}/edit",
@@ -5502,8 +5502,8 @@
       "HEAD"
     ]
   },
-  "seller.products.edit": {
-    "name": "seller.products.edit",
+  "seller.product.edit": {
+    "name": "seller.product.edit",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\HomeController@show_product_edit_form",
     "uri": "seller/product/{id}/edit",
@@ -5638,8 +5638,8 @@
       "HEAD"
     ]
   },
-  "seller.digitalproducts.edit": {
-    "name": "seller.digitalproducts.edit",
+  "seller.digitalproduct.edit": {
+    "name": "seller.digitalproduct.edit",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\HomeController@show_digital_product_edit_form",
     "uri": "seller/digitalproducts/{id}/edit",
@@ -6276,8 +6276,8 @@
       "HEAD"
     ]
   },
-  "ev-products.index": {
-    "name": "ev-products.index",
+  "products.index": {
+    "name": "products.index",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@index",
     "uri": "dashboard/ev-products",
@@ -6286,8 +6286,8 @@
       "HEAD"
     ]
   },
-  "ev-products.create": {
-    "name": "ev-products.create",
+  "product.create": {
+    "name": "product.create",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@create",
     "uri": "dashboard/ev-products/create",
@@ -6296,8 +6296,8 @@
       "HEAD"
     ]
   },
-  "ev-products.edit": {
-    "name": "ev-products.edit",
+  "product.edit": {
+    "name": "product.edit",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@edit",
     "uri": "dashboard/ev-products/edit/{slug}",
@@ -6306,8 +6306,8 @@
       "HEAD"
     ]
   },
-  "ev-products.details": {
-    "name": "ev-products.details",
+  "product.details": {
+    "name": "product.details",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@product_details",
     "uri": "dashboard/ev-products/edit/{slug}/details",
@@ -6316,8 +6316,8 @@
       "HEAD"
     ]
   },
-  "ev-products.activity": {
-    "name": "ev-products.activity",
+  "product.activity": {
+    "name": "product.activity",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@product_activity",
     "uri": "dashboard/ev-products/edit/{slug}/details/activity",
@@ -6326,8 +6326,8 @@
       "HEAD"
     ]
   },
-  "ev-products.edit.variations": {
-    "name": "ev-products.edit.variations",
+  "product.edit.variations": {
+    "name": "product.edit.variations",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@edit_variations",
     "uri": "dashboard/ev-products/edit/{slug}/variations",
@@ -6336,8 +6336,8 @@
       "HEAD"
     ]
   },
-  "ev-products.edit.stocks": {
-    "name": "ev-products.edit.stocks",
+  "product.edit.stocks": {
+    "name": "product.edit.stocks",
     "domain": null,
     "action": "App\\Http\\Controllers\\EVProductController@edit_stocks",
     "uri": "dashboard/ev-products/edit/{slug}/stock-management",
@@ -7062,8 +7062,8 @@
       "HEAD"
     ]
   },
-  "digitalproducts.create": {
-    "name": "digitalproducts.create",
+  "digitalproduct.create": {
+    "name": "digitalproduct.create",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\DigitalProductController@create",
     "uri": "dashboard/digitalproducts/create",
@@ -7091,8 +7091,8 @@
       "HEAD"
     ]
   },
-  "digitalproducts.edit": {
-    "name": "digitalproducts.edit",
+  "digitalproduct.edit": {
+    "name": "digitalproduct.edit",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\DigitalProductController@edit",
     "uri": "dashboard/digitalproducts/{id}/edit",

@@ -218,7 +218,7 @@ class ProductVariationsTable extends \Livewire\Component
     public function setGenericSKUs() {
         if($this->variations->isNotEmpty()) {
             $this->variations = $this->variations->map(function($variation) {
-                $variation['temp_stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
+                $variation['stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
                 return $variation;
             })->sortKeys();
         }

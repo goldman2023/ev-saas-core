@@ -40,7 +40,7 @@ class DigitalProductController extends Controller
         $categories = Category::where('parent_id', 0)
             ->with('childrenCategories')
             ->get();
-        return view('backend.product.digital_products.create', compact('categories'));
+        return view('backend.product.digital_product.create', compact('categories'));
     }
 
     /**
@@ -143,7 +143,7 @@ class DigitalProductController extends Controller
         $categories = Category::where('parent_id', 0)
             ->with('childrenCategories')
             ->get();
-        return view('backend.product.digital_products.edit', compact('product','lang', 'categories'));
+        return view('backend.product.digital_product.edit', compact('product','lang', 'categories'));
     }
 
     /**

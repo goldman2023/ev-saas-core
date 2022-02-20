@@ -3,8 +3,12 @@
 namespace App\Enums;
 
 /**
- * @method static self amount()
- * @method static self percent()
+ * @method static self pc()
+ * @method static self kg()
+ * @method static self l()
+ * @method static self oz()
+ * @method static self m()
+ * @method static self s()
  */
 class UnitsEnum extends EVBaseEnum
 {

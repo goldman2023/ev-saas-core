@@ -269,7 +269,7 @@ Route::middleware([
     Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user']], function () {
         Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
         Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
-        Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.products.edit');
+        Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.product.edit');
         Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
 
         Route::resource('payments', 'PaymentController');
@@ -282,7 +282,7 @@ Route::middleware([
         //digital Product
         Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
         Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
-        Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproducts.edit');
+        Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproduct.edit');
 
         //Events
         Route::get('/events', 'EventController@seller_events')->name('seller.events');

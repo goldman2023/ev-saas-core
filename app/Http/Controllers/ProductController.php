@@ -136,7 +136,7 @@ class ProductController extends Controller
     {
         $categories = EVS::getMappedCategories();
 
-        return view('backend.product.products.create', compact('categories'));
+        return view('backend.product.product.create', compact('categories'));
     }
 
     /**
@@ -351,7 +351,7 @@ class ProductController extends Controller
         $categories = EVS::getMappedCategories();
         $product_attributes = Attribute::where('content_type', Product::class)->orderBy('created_at', 'desc')->get();
 
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));
+        return view('backend.product.product.edit', compact('product', 'categories', 'tags', 'lang', 'product_attributes'));
     }
 
     /**
@@ -366,7 +366,7 @@ class ProductController extends Controller
         $lang = $request->lang;
         $tags = $product->tags;
         $categories = Category::all();
-        return view('backend.product.products.edit', compact('product', 'categories', 'tags', 'lang'));
+        return view('backend.product.product.edit', compact('product', 'categories', 'tags', 'lang'));
     }
 
     /**

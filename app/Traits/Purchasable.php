@@ -14,6 +14,7 @@ trait Purchasable
      */
     public function initializePurchasable(): void
     {
+        $this->appendCoreProperties(['purchase_quantity']);
         $this->append(['purchase_quantity']);
         $this->fillable(array_unique(array_merge($this->fillable, ['purchase_quantity'])));
     }

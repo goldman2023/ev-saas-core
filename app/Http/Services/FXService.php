@@ -20,11 +20,13 @@ class FXService
     }
 
     protected function setAllCurrencies() {
-        $this->currencies = Currency::get(); // Get all currencies with fx_rates
+        $this->currencies = Cache::remember(tenant('id').'_all_currencies',  60 * 60 * 24, function () {
+            return $this->currencies = Currency::get();
+        }); // Get all currencies with fx_rates
     }
 
     public function getAllCurrencies($only_enabled = true) {
-        // When only_enabled is true, we will return only Currencies with status: 1, otherwise all categories will be returned
+        // When only_enabled is true, we will return only Currencies with status: 1, otherwise all currencies will be returned
         if($only_enabled) {
             $this->currencies = $this->currencies->filter(fn($item) => $item->status === true);
         }

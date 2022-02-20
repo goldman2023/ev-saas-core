@@ -9,7 +9,7 @@
         </div>
         @if($type != 'Seller')
         <div class="col text-right">
-            <a href="{{ route('admin.products.create') }}" class="btn btn-circle btn-info">
+            <a href="{{ route('admin.product.create') }}" class="btn btn-circle btn-info">
                 <span>{{translate('Add New Product')}}</span>
             </a>
         </div>
@@ -148,7 +148,7 @@
                                 <i class="las la-edit"></i>
                             </a>
                             @else
-                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('admin.products.edit', ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
+                            <a class="btn btn-soft-primary btn-icon btn-circle btn-sm" href="{{route('admin.product.edit', ['id'=>$product->id, 'lang'=>config('app.locale')] )}}" title="{{ translate('Edit') }}">
                                 <i class="las la-edit"></i>
                             </a>
                             @endif

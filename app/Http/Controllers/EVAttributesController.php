@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attribute;
+use App\Enums\ContentTypeEnum;
 use MyShop;
 use Illuminate\Http\Request;
 use Permissions;
@@ -12,20 +13,26 @@ use Categories;
 
 class EVAttributesController extends Controller
 {
-    public function index(Request $request, $content = null) {
-        if(empty($content))
+    public function index(Request $request, $content_type = null) {
+        if(empty($content_type))
             abort(404);
 
-        $content = base64_decode($content);
+        $content_type = base64_decode($content_type);
 
-        $attributes = Attribute::where('content_type', $content)->get();
+        $attributes = Attribute::where('content_type', $content_type)->get();
  
-        return view('frontend.dashboard.attributes.index', compact('attributes'));
+        return view('frontend.dashboard.attributes.index', compact('attributes', 'content_type'));
     }
 
-    // public function create(Request $request) {
-    //     return view('frontend.dashboard.blog-posts.create');
-    // }
+    public function create(Request $request, $content_type = null) {
+        $content_type = base64_decode($content_type);
+
+        if(collect(ContentTypeEnum::values())->search($content_type) === false) {
+            abort(404);
+        }
+
+        return view('frontend.dashboard.attributes.create', compact('content_type'));
+    }
 
     public function edit(Request $request, $id) {
         $attribute = Attribute::findOrFail($id);

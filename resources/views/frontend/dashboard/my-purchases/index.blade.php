@@ -13,7 +13,7 @@
         <!-- Header -->
         <div class="card-header">
             <h5 class="card-header-title">{{ translate('My purchases') }}</h5>
-{{--            <a href="{{ route('ev-products.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>--}}
+{{--            <a href="{{ route('product.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>--}}
 
             <!-- Unfold -->
             <div class="hs-unfold">

@@ -36,7 +36,8 @@ class AttributeValuesObserver
     public function deleting(AttributeValue $attribute_value)
     {
         // When deleting an AttributeValue, remove it's translations and relationships too!
-        $attribute_value->translations()->delete();
-        $attribute_value->attribute_value_relationship()->delete();
+        // IMPORTANT: This is already done by MySQL constraints!
+        // $attribute_value->translations()->delete();
+        // $attribute_value->attribute_value_relationship()->delete();
     }
 }

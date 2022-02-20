@@ -67,6 +67,7 @@ trait StockManagementTrait
      */
     public function initializeStockManagementTrait(): void
     {
+        $this->appendCoreProperties(['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
         $this->append(['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
         $this->fillable(array_unique(array_merge($this->fillable, ['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases'])));
     }
@@ -159,15 +160,15 @@ trait StockManagementTrait
 
     public function setAllowOutOfStockPurchasesAttribute($value)
     {
-        $this->allow_out_of_stock_purchases = $value;
+        $this->allow_out_of_stock_purchases = (bool) $value;
     }
 
     public function getAllowOutOfStockPurchasesAttribute() {
         if(!isset($this->allow_out_of_stock_purchases)) {
-            $this->allow_out_of_stock_purchases = (string) (empty($this->stock) ? null : ($this->stock->allow_out_of_stock_purchases ?? false));
+            $this->allow_out_of_stock_purchases = (bool) (empty($this->stock) ? false : ($this->stock->allow_out_of_stock_purchases ?? false));
         }
 
-        return $this->allow_out_of_stock_purchases ?? false;
+        return $this->allow_out_of_stock_purchases;
     }
 
 

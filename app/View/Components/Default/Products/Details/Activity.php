@@ -26,6 +26,6 @@ class Activity extends Component
      */
     public function render()
     {
-        return view('components.default.products.details.activity');
+        return view('components.default.product.details.activity');
     }
 }

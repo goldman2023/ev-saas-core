@@ -11,7 +11,16 @@
         'range': false,
     }, ...@js($attribute->custom_properties ?? ((object) []))},
     attribute_values: @js($attribute->attribute_values ?? []),
-}">
+    countAttributeValues() {
+        if(this.attribute_values === null || this.attribute_values === undefined || this.attribute_values.length <= 0) {
+            this.attribute_values.push({
+                values: '',
+            });
+        }
+
+        return this.attribute_values.length;
+    },
+}" x-init="countAttributeValues()">
     {{-- FIXME: If $attribute->custom_properties is {} and not null, it will rise livewire checksum error on saveAttribute() --}}
     
     {{-- Attribute Card --}}
@@ -35,6 +44,12 @@
                          wire:loading.class="opacity-3 prevent-pointer-events"
                          wire:target="saveAttribute"
                     >
+                        
+                        <span class="d-flex flex-row align-items-center">
+                            <strong class="text-dark">{{ translate('Attribute for:') }}</strong>
+                            <span class="badge badge-inline badge-primary text-white ml-3">{{ $content_type_label }}</span>
+                        </span>
+
                         <!-- Name -->
                         <div class="row form-group mt-5" x-data="{}">
                             <label for="attribute-name" class="col-sm-3 col-form-label input-label">{{ translate('Name') }}</label>
@@ -327,6 +342,42 @@
                         </div>
                         <!-- END Date Custom properties -->
 
+                        <!-- Text Repeater -->
+                        <div x-show="type === 'text_list'">
+                            <!-- Min. value -->
+                            <div class="row form-group mt-5" x-data="{}">
+                                <label class="col-sm-3 col-form-label input-label">{{ translate('Min. value') }}</label>
+        
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <input type="number" 
+                                                class="form-control"
+                                                min="0"
+                                                placeholder="{{ translate('Minimum value') }}"
+                                                x-model="custom_properties.min_value" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Min. value -->
+        
+                            <!-- Max. value -->
+                            <div class="row form-group mt-5" x-data="{}">
+                                <label class="col-sm-3 col-form-label input-label">{{ translate('Max. value') }}</label>
+        
+                                <div class="col-sm-9">
+                                    <div class="input-group input-group-sm-down-break">
+                                        <input type="number" 
+                                                class="form-control"
+                                                min="1"
+                                                placeholder="{{ translate('Maximum value') }}"
+                                                x-model="custom_properties.max_value" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Max. value -->
+                        </div>
+                        <!-- END Text Repeater -->
+
                         <hr/>
             
                         <div class="row form-group mb-0">
@@ -358,6 +409,7 @@
     </div>
     {{-- END Attribute Card --}}
 
+    @if($is_update)
     {{-- Attribute Values Card --}}
     <div class="card mt-4" x-show="predefined_types.indexOf(type) !== -1">
         <!-- Header -->
@@ -382,28 +434,28 @@
                         <div class="w-100">
                             <!-- Values of Predefined Types -->
                             <div class="row form-group" x-data="{
-                                count() {
-                                    if(this.attribute_values === undefined || this.attribute_values === null) {
-                                        this.attribute_values = [{values: ''}];
-                                    }
+                                    count() {
+                                        if(this.attribute_values === undefined || this.attribute_values === null) {
+                                            this.attribute_values = [{values: ''}];
+                                        }
 
-                                    return this.attribute_values.length;
-                                },
-                                hasID(index) {
-                                    return this.attribute_values[index].hasOwnProperty('id') ? true : false;
-                                },
-                                add() {
-                                    this.attribute_values.push({values:''});
-                                },
-                                remove(index) {
-                                    console.log(this.hasID(index));
-                                    if(this.hasID(index)) {
-                                        $wire.removeAttributeValue(this.attribute_values[index]['id']);
-                                    }
-                                    this.attribute_values.splice(index, 1);
-                                },
-                            }"
-                            >
+                                        return this.attribute_values.length;
+                                    },
+                                    hasID(index) {
+                                        return this.attribute_values[index].hasOwnProperty('id') ? true : false;
+                                    },
+                                    add() {
+                                        this.attribute_values.push({values:''});
+                                    },
+                                    remove(index) {
+                                        console.log(this.hasID(index));
+                                        if(this.hasID(index)) {
+                                            $wire.removeAttributeValue(this.attribute_values[index]['id']);
+                                        }
+                                        this.attribute_values.splice(index, 1);
+                                    },
+                                }"
+                                >
                                 <div class="col-sm-9">
                                     <template x-if="count() <= 1">
                                         <div class="d-flex">
@@ -459,6 +511,7 @@
         </div>
     </div>
     {{-- END Attribute Values Card --}}
+    @endif
 </div>
 
 

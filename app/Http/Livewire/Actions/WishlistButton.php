@@ -27,7 +27,7 @@ class WishlistButton extends Component
     public function mount($object, $template = 'default', $action = 'Like')
     {
         $this->template = $template;
-        $this->model_class = $object->getMorphClass();
+        $this->model_class = $object::class;
         $this->object = $object;
         $this->added = $this->checkIfProductExistsInWishlist();
         $this->action = $action;
