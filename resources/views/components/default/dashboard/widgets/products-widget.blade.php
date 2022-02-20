@@ -5,10 +5,10 @@
         <div class="row align-items-center gx-2">
             <div class="col">
                 <span class="js-counter display-4 text-dark" data-value="24">
-                    {{ App\Models\Product::count() }}
+                   {{  MyShop::getShop()->products()->count() }}
                 </span>
                 <span class="text-body font-size-sm ml-1">{{ translate('from') }}
-                    {{ App\Models\Product::count() }}</span>
+                    {{ MyShop::getShop()->products()->count() }}</span>
             </div>
 
             <div class="col-auto">
