@@ -83,7 +83,8 @@ class Product extends EVBaseModel
 
 
     protected $casts = [
-        'digital' => 'boolean'
+        'digital' => 'boolean',
+        'tags' => 'array'
     ];
 
     /**

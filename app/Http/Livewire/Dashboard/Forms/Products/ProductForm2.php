@@ -62,6 +62,9 @@ class ProductForm2 extends Component
                 'product.excerpt' => 'nullable',
                 'product.status' => [Rule::in(StatusEnum::toValues())],
             ],
+            'status' => [
+                'product.status' => [Rule::in(StatusEnum::toValues())],
+            ],
             'categories_and_tags' => [
                 'selected_categories' => 'required',
                 'product.tags' => 'nullable|array',
@@ -184,7 +187,7 @@ class ProductForm2 extends Component
                     $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
 
                     if($product_attribute instanceof \App\Models\Attribute) {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck();
+                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id');
                     } else {
                         $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
                     }
@@ -253,6 +256,7 @@ class ProductForm2 extends Component
                 }
             }
         }
+
         $this->setPredefinedAttributeValues($product);
 
         $this->initCategories($this->product);
@@ -521,6 +525,112 @@ class ProductForm2 extends Component
         }
     }
 
+    public function saveCategoriesAndTags() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('categories_and_tags');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Save Tags
+            $this->product->update([
+                'product.tags' => $this->product->tags
+            ]);
+            
+            // Save Categories
+            $this->setCategories($this->product);
+
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function saveBrand() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('brand');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Save Brand
+            $this->product->update([
+                'product.brand_id' => $this->product->brand_id
+            ]);
+
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function updateStatus() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('status');
+
+        DB::beginTransaction();
+
+        try {
+            // Update status
+            $this->product->update([
+                'product.status' => $this->product->status
+            ]);
+
+            DB::commit();
+
+            $this->toastify(translate('Status successfully updated to').': '.$this->product->status, 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while updating the status.'));
+            $this->toastify(translate('There was an error while updating the status. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function saveAttributes() {
+        // Validate minimum required fields and insert/update row
+        $this->validateData('minimum_required');
+
+        $this->validateData('attributes');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            $this->setAttributes();
+            
+            DB::commit();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
 
 
 
@@ -693,32 +803,51 @@ class ProductForm2 extends Component
             $att = (object) $att;
             return $att->selected === true;
         });
-
+ 
         if($selected_attributes) {
             foreach($selected_attributes as $att) {
+                $attribute = new Attribute();
+                
                 $att = (object) $att;
                 $att_values = $att->attribute_values;
 
-                if($att_values) {
+                if(!empty($att_values)) {
+
                     // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
                     // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
                     if(!$att->is_predefined) {
-                        // Create the value first
-                        $att_val = (!empty($att_values[0]['id'])) ? AttributeValue::find($att_values[0]['id']) : new AttributeValue();
-                        $att_val->attribute_id = (!empty($att_values[0]['id'])) ? $att_val->attribute_id : $att->id;
-                        $att_val->values = $att_values[0]['values'] ?? null;
-                        $att_val->save();
 
-                        if(empty($att_values[0]['id'])) {
-                            $att_values[0]['id'] = $att_val->id;
+                        foreach($att_values as $att_value) {
+                            // Create the value first
+                            $att_val = (!empty($att_value['id'])) ? AttributeValue::find($att_value['id']) : new AttributeValue();
+                            $att_val->attribute_id = (!empty($att_value['id'])) ? $att_val->attribute_id : $att->id;
+                            $att_val->values = $att_value['values'] ?? null;
+                            $att_val->selected = true;
+                            $att_val->save();
 
-                            // Set attribute value translations for non-predefined attributes
-                            $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
-                            $attribute_value_translation->name = $att_val->values;
-                            $attribute_value_translation->save();
+                            if(empty($att_value['id'])) {
+                                $att_value['id'] = $att_val->id;
+    
+                                // Set attribute value translations for non-predefined attributes
+                                $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
+                                $attribute_value_translation->name = $att_val->values;
+                                $attribute_value_translation->save();
+                            }
+                        }
+                    } else {
+                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
+                        
+                        foreach($att_values as $key => $att_value) {
+                            if(is_array($selected_attribute_values) && in_array($att_value['id'], $selected_attribute_values)) {
+                                $att_values[$key]['selected'] = true;
+                            } else if(is_numeric($selected_attribute_values) && ((int) $selected_attribute_values) == $att_value['id']) {
+                                $att_values[$key]['selected'] = true;
+                            } else {
+                                $att_values[$key]['selected'] = false;
+                            }
                         }
                     }
-
+                    
                     foreach($att_values as $att_value) {
                         $att_value = (object) $att_value;
 
