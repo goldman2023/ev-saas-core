@@ -10,27 +10,88 @@
 Cypress.Commands.add('login', (attributes = {}) => {
     // Are we using the new object system.
     let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
+    cy.visit({
+        route: 'home'
+    });
 
-    return cy
-        .csrfToken()
-        .then((token) => {
-            return cy.request({
-                method: 'POST',
-                url: '/__cypress__/login',
-                body: { ...requestBody, _token: token },
-                log: false,
-            });
-        })
-        .then(({ body }) => {
-            Cypress.Laravel.currentUser = body;
+    /* Get the header login button on desktop */
+    cy.get('[data-test="we-login-header"]')
+        .click()
 
-            Cypress.log({
-                name: 'login',
-                message: JSON.stringify(body),
-                consoleProps: () => ({ user: body }),
-            });
-        })
-        .its('body', { log: false });
+    cy.get('[data-test="we-login-email"]')
+        .type('team@eim.solutions')
+
+    cy.get('[data-test="we-login-password"]')
+        .type('syska007')
+
+    cy.get('[data-test="we-login-submit"]')
+        .click()
+
+        // Cypress.Laravel.currentUser = body;
+
+        Cypress.log({
+            name: 'login',
+            message: JSON.stringify('login as an admin'),
+            consoleProps: () => ({ user: 'login' }),
+        });
+});
+
+Cypress.Commands.add('loginAsSeller', (attributes = {}) => {
+    // Are we using the new object system.
+    let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
+    cy.visit({
+        route: 'home'
+    });
+
+    /* Get the header login button on desktop */
+    cy.get('[data-test="we-login-header"]')
+        .click()
+
+    cy.get('[data-test="we-login-email"]')
+        .type('seller@eim.solutions')
+
+    cy.get('[data-test="we-login-password"]')
+        .type('123456789')
+
+    cy.get('[data-test="we-login-submit"]')
+        .click()
+
+        // Cypress.Laravel.currentUser = body;
+
+        Cypress.log({
+            name: 'login',
+            message: JSON.stringify('login as seller'),
+            consoleProps: () => ({ user: 'login' }),
+        });
+});
+
+Cypress.Commands.add('loginAsCustomer', (attributes = {}) => {
+    // Are we using the new object system.
+    let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
+    cy.visit({
+        route: 'home'
+    });
+
+    /* Get the header login button on desktop */
+    cy.get('[data-test="we-login-header"]')
+        .click()
+
+    cy.get('[data-test="we-login-email"]')
+        .type('customer@eim.solutions')
+
+    cy.get('[data-test="we-login-password"]')
+        .type('123456789')
+
+    cy.get('[data-test="we-login-submit"]')
+        .click()
+
+        // Cypress.Laravel.currentUser = body;
+
+        Cypress.log({
+            name: 'login',
+            message: JSON.stringify('login as seller'),
+            consoleProps: () => ({ user: 'login' }),
+        });
 });
 
 
@@ -40,19 +101,8 @@ Cypress.Commands.add('login', (attributes = {}) => {
  * @example cy.logout();
  */
 Cypress.Commands.add('logout', () => {
-    return cy
-        .csrfToken()
-        .then((token) => {
-            return cy.request({
-                method: 'POST',
-                url: '/__cypress__/logout',
-                body: { _token: token },
-                log: false,
-            });
-        })
-        .then(() => {
-            Cypress.log({ name: 'logout', message: '' });
-        });
+    cy.get('[data-test="we-logout-header"]')
+    .click()
 });
 
 

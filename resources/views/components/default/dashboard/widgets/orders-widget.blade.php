@@ -5,7 +5,6 @@
         <div class="row align-items-center gx-2">
             <div class="col">
                 <span class="js-counter display-4 text-dark" data-value="24">
-                    {{ App\Models\Order::count() }}
                 </span>
                 <span class="text-body font-size-sm ml-1">{{ translate('New Orders') }}
                 </span>
@@ -15,7 +14,6 @@
                 <span class="badge badge-soft-success p-1 w-auto text-wrap">
                     <x-heroicon-o-trending-up class="ev-icon__small" />
                     <br>
-                    {{ App\Models\Order::trend() }} %
                 </span>
             </div>
         </div>

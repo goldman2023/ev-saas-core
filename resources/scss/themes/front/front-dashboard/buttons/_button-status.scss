@@ -2,6 +2,8 @@
   Button Status
 ------------------------------------*/
 
+@use "sass:math";
+
 .btn-status {
   position: absolute;
   top: -$btn-status-top-offset;
@@ -20,7 +22,7 @@
   @include border-radius($btn-status-border-radius);
 
   .btn.rounded-circle & {
-    top: -$btn-status-top-offset / 1.5;
-    right: -$btn-status-right-offset / 1.5;
+    top: math.div(-$btn-status-top-offset, 1.5);
+    right: math.div(-$btn-status-right-offset, 1.5);
   }
 }

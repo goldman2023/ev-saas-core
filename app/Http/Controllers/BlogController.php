@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\LoggingTrait;
 use Illuminate\Http\Request;
 use App\Models\BlogCategory;
-use App\Models\Blog;
+use App\Models\BlogPost;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +23,7 @@ class BlogController extends Controller
         $sort_search = null;
 
 
-        $blogs = Blog::orderBy('created_at', 'desc');
+        $blogs = BlogPost::orderBy('created_at', 'desc');
 
         if ($request->search != null) {
             $blogs = $blogs->where('title', 'like', '%' . $request->search . '%');
@@ -60,7 +60,7 @@ class BlogController extends Controller
             'title' => 'required|max:255',
         ]);
 
-        $blog = new Blog;
+        $blog = new BlogPost;
 
         $blog->category_id = $request->category_id;
         $blog->title = $request->title;
@@ -101,7 +101,7 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        $blog = Blog::find($id);
+        $blog = BlogPost::find($id);
         $blog_categories = Category::all();
         return view('backend.blog_system.blog.edit', compact('blog', 'blog_categories'));
     }
@@ -120,7 +120,7 @@ class BlogController extends Controller
             'title' => 'required|max:255',
         ]);
 
-        $blog = Blog::find($id);
+        $blog = BlogPost::find($id);
 
         $blog->category_id = $request->category_id;
         $blog->title = $request->title;
@@ -141,7 +141,7 @@ class BlogController extends Controller
 
     public function change_status(Request $request)
     {
-        $blog = Blog::find($request->id);
+        $blog = BlogPost::find($request->id);
         $blog->status = $request->status;
 
         $blog->save();
@@ -156,7 +156,7 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-        $blog = Blog::find($id);
+        $blog = BlogPost::find($id);
         $this->log($blog,"Blog post is removed.");
         $blog->delete();
 
@@ -166,7 +166,7 @@ class BlogController extends Controller
 
     public function all_blog()
     {
-        $blogs = Blog::where('status', 1)->orderBy('created_at', 'desc')->paginate(12);
+        $blogs = BlogPost::where('subscription_only', 0)->orderBy('created_at', 'desc')->paginate(12);
         $categories = $categories = Category::where('level', 0)->orderBy('order_level', 'desc')->get();
         return view("frontend.blog.index", compact('blogs', 'categories'));
     }
@@ -174,14 +174,9 @@ class BlogController extends Controller
     public function blog_details($slug)
     {
 
-        $blog = Blog::with('visit')->where('slug', $slug)->first();
+        $blog = BlogPost::where('slug', $slug)->first();
 
-        if (\auth()->user()) {
-            visits($blog, "auth")->increment();
-            $this->log($blog,"User viewed this news post ");
-        } else {
-            visits($blog)->increment();
-        }
+       /* TODO: Add visits and views counting  */
         return view("frontend.blog.show", compact('blog'));
     }
 

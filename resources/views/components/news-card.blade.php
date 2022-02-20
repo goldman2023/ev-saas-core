@@ -1,18 +1,17 @@
 <!-- Property Item -->
-<a class="card card-no-gutters h-100"
+<a class="card h-100"
    href="{{ route('news.details', $item->slug) }}"
 >
 
     <div>
-        <img class="img-fluid rounded-lg" src="{{ uploaded_asset($item->banner) }}"
-             data-src="{{ uploaded_asset($item->banner) }}" alt="{{ $item->title }}"
-             class="img-fluid lazyload ">
+        <x-tenant.system.image class="img-fluid w-100 mb-3"
+        :image="$item->getThumbnail(['w'=>600]) ?? ''">
+    </x-tenant.system.image>
     </div>
 
     <!-- Body -->
     <div class="card-body">
-        <span class="d-block font-size-1 text-body"> {{ $item->category->name }}</span>
-
+        {{-- TODO: Add  parent category with link here category --}}
         @if ($item->user != null)
             <span class="d-block font-size-2 text-body"><i class="las la-user text-muted mr-1"></i></span>
         @endif
@@ -24,7 +23,7 @@
                 <h4 class="text-hover-primary">{{ $item->title }}</h4>
 
                 <p>
-                    {{ $item->short_description }}
+                    {!! $item->short_description !!}
                 </p>
             </div>
 

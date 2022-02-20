@@ -10,16 +10,16 @@
     height: $step-avatar-xs-height;
 
     &::after {
-      top: $step-avatar-xs-height + $step-padding-x / 2;
-      left: $step-avatar-xs-width / 2 - ($step-border-width / 2);
+      top: $step-avatar-xs-height + $step-padding-x * 0.5;
+      left: $step-avatar-xs-width * 0.5 - ($step-border-width * 0.5);
       width: $step-border-width + $step-padding-x;
-      height: calc(100% - #{$step-avatar-xs-height + $step-padding-x / 2 - $step-padding-x});
+      height: calc(100% - #{$step-avatar-xs-height + $step-padding-x * 0.5 - $step-padding-x});
     }
   }
 
   .step-divider {
     &::after {
-      left: $step-icon-xs-width / 2;
+      left: $step-icon-xs-width * 0.5;
     }
   }
 }
@@ -32,16 +32,16 @@
     height: $step-avatar-sm-height;
 
     &::after {
-      top: $step-avatar-sm-height + $step-padding-x / 2;
-      left: $step-avatar-sm-width / 2 - ($step-border-width / 2);
+      top: $step-avatar-sm-height + $step-padding-x * 0.5;
+      left: $step-avatar-sm-width * 0.5 - ($step-border-width * 0.5);
       width: $step-border-width + $step-padding-x;
-      height: calc(100% - #{$step-avatar-sm-height + $step-padding-x / 2 - $step-padding-x});
+      height: calc(100% - #{$step-avatar-sm-height + $step-padding-x * 0.5 - $step-padding-x});
     }
   }
 
   .step-divider {
     &::after {
-      left: $step-icon-sm-width / 2;
+      left: $step-icon-sm-width * 0.5;
     }
   }
 }
@@ -54,16 +54,16 @@
     height: $step-avatar-lg-height;
 
     &::after {
-      top: $step-avatar-lg-height + $step-padding-x / 2;
-      left: $step-avatar-lg-width / 2 - ($step-border-width / 2);
+      top: $step-avatar-lg-height + $step-padding-x * 0.5;
+      left: $step-avatar-lg-width * 0.5 - ($step-border-width * 0.5);
       width: $step-border-width + $step-padding-x;
-      height: calc(100% - #{$step-avatar-lg-height + $step-padding-x / 2 - $step-padding-x});
+      height: calc(100% - #{$step-avatar-lg-height + $step-padding-x * 0.5 - $step-padding-x});
     }
   }
 
   .step-divider {
     &::after {
-      left: $step-icon-lg-width / 2;
+      left: $step-icon-lg-width * 0.5;
     }
   }
 }

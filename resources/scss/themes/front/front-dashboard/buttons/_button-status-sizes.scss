@@ -2,6 +2,8 @@
   Button Status Sizes
 ------------------------------------*/
 
+@use "sass:math";
+
 .btn-xs-status {
   top: -$btn-status-xs-top-offset;
   right: -$btn-status-xs-right-offset;
@@ -11,8 +13,8 @@
   border-width: $btn-xs-status-border-width;
 
   .btn.rounded-circle & {
-    top: -$btn-status-xs-top-offset / 4;
-    right: -$btn-status-xs-right-offset / 4;
+    top: -$btn-status-xs-top-offset * 0.25;
+    right: -$btn-status-xs-right-offset * 0.25;
   }
 }
 
@@ -24,8 +26,8 @@
   height: $btn-status-sm-height;
 
   .btn.rounded-circle & {
-    top: -$btn-status-sm-top-offset / 2;
-    right: -$btn-status-sm-right-offset / 2;
+    top: -$btn-status-sm-top-offset * 0.5;
+    right: -$btn-status-sm-right-offset * 0.5;
   }
 }
 
@@ -37,7 +39,7 @@
   height: $btn-status-lg-height;
 
   .btn.rounded-circle & {
-    top: -$btn-status-lg-top-offset / 1.25;
-    right: -$btn-status-lg-right-offset / 1.25;
+    top: math.div(-$btn-status-lg-top-offset, 1.25);
+    right: math.div(-$btn-status-lg-right-offset, 1.25);
   }
 }

@@ -257,7 +257,10 @@
                         @else
                         <li class="list-inline-item">
                             <div class="hs-unfold">
-                                <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-secondary"
+                                <a
+                                id="we-login-header"
+                                data-test="we-login-header"
+                                class="js-hs-unfold-invoker btn btn-icon btn-xs btn-secondary"
                                     js-hs-unfold-invoker btn btn-icon btn-xs btn-secondaryhref="javascript:;"
                                     x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" >
                                     <!--data-toggle="modal" data-target="#signupModal">-->

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
+use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
@@ -33,7 +34,7 @@ class Brand extends EVBaseModel
 {
     use Cachable;
     use TranslationTrait;
-
+    use GalleryTrait;
 
 
     protected static function boot()

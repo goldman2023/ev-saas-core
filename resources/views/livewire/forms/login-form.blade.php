@@ -13,9 +13,10 @@
             <div class="input-group input-group-sm mb-2">
 
                 <input type="email"
+                    data-test="we-login-email"
                     class="form-control @error('email') is-invalid @enderror"
                     value="{{ old('email') }}" placeholder="{{ translate('Email') }}"
-                    name="email" 
+                    name="email"
                     wire:model.defer="email">
             </div>
             <x-default.system.invalid-msg field="email" type="slim"></x-default.system.invalid-msg>
@@ -25,6 +26,7 @@
             <label class="input-label">{{ translate('Password') }}</label>
             <div class="input-group input-group-sm mb-2">
                 <input type="password"
+                    data-test="we-login-password"
                     class="form-control @error('password') is-invalid @enderror"
                     placeholder="{{ translate('Password') }}" name="password" id="password"
                     wire:model.defer="password">
@@ -40,14 +42,16 @@
                 </label>
             </div>
             <div class="col-6 text-right">
-                <a href="{{ route('password.request') }}" class="small link-underline"> 
+                <a href="{{ route('password.request') }}" class="small link-underline">
                     {{ translate('Forgot password?') }}
                 </a>
             </div>
         </div>
 
         <div class="mb-3">
-            <button type="button" class="btn btn-sm btn-primary btn-block" wire:click="login()">
+            <button type="button"
+            data-test="we-login-submit"
+            class="btn btn-sm btn-primary btn-block" wire:click="login()">
                 {{ translate('Login')}}
             </button>
         </div>

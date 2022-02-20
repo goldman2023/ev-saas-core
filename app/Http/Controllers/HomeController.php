@@ -493,7 +493,7 @@ class HomeController extends Controller
     public function ajax_search(Request $request)
     {
         $keywords = array();
-        $products = Product::where('published', 1)->where('tags', 'like', '%' . $request->search . '%')->get();
+        $products = Product::where('tags', 'like', '%' . $request->search . '%')->get();
         foreach ($products as $key => $product) {
             foreach (explode(',', $product->tags) as $key => $tag) {
                 if (stripos($tag, $request->search) !== false) {
@@ -508,7 +508,7 @@ class HomeController extends Controller
             }
         }
 
-        $products = filter_products(Product::where('published', 1)->where('name', 'like', '%' . $request->search . '%'))->get()->take(3);
+        $products = filter_products(Product::where('name', 'like', '%' . $request->search . '%'))->get()->take(3);
 
         $categories = Category::where('name', 'like', '%' . $request->search . '%')->get()->take(3);
 
@@ -555,7 +555,7 @@ class HomeController extends Controller
         $content = $request->content;
 
 
-        $conditions = ['published' => 1];
+        $conditions = [];
 
         if ($seller_id != null) {
             // ADD TRY CATCH BLOCK to capture the exception on fail!

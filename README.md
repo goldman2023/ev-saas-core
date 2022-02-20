@@ -8,7 +8,7 @@ Production url: https://app.we-saas.com
 
 Staging URL: https://ev-saas.com
 
-Cypress Dashboard: https://dashboard.cypress.io/projects/1fmcmw/runs
+Cypress Dashboard: https://dashboard.cypress.io/projects/teqkyz/runs
 
 Asana Board: https://app.asana.com/0/1201613541420424/list
 
@@ -62,9 +62,6 @@ https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 `kool run up`
 
 # Local setup for assets
-In case you running into issues with wcompile permissions run
-`chmod 777 wcompile.sh`
-
 To download dependecies and build assets:
 
 -   `yarn install`
@@ -109,43 +106,9 @@ Runs: CreateStockForAllProducts.php:
 
 # Dynamic Components for Label/Image/Button
 
--   Labels
+Documentation can be found here:
+https://we-saas.gitbook.io/we-saas-internal-dev-docs/dynamic-components-for-label-image-button
 
-Example usage
-
-```
-<x-ev.label :label="ev_dynamic_translate('Add New Category', true)">
-</x-ev.label>
-```
-
--   Buttons and links
-
-Example usage
-
-```
-
-<x-ev.link-button :href="ev_dynamic_translate('#button1')"
-:label="ev_dynamic_translate('Button 1')" class="ev-button">
-</x-ev.link-button>
-
-```
-
-* Dynamic Images
-
-Example usage
-
-
-```
-<x-ev.dynamic-image :src="ev_dynamic_translate('#testimonial-logo', true)" alt="Any alt text" :widthInfos="[[300, '200w'], [1000, '1000w']]">
-</x-ev.dynamic-image>
-
-```
-
-<x-ev.link-button :href="ev_dynamic_translate('#button1')"
-:label="ev_dynamic_translate('Button 1')" class="ev-button">
-</x-ev.link-button>
-
-```
 
 # Data tables
 This project uses Livewire DataTables package: https://github.com/mediconesystems/livewire-datatables
@@ -237,6 +200,14 @@ dwightwatson/rememberable
 kalnoy/nestedset
 ```
 
+
+# Cypress Testing Guidelines
+
+Please check and review documentation for any questions
+
+https://we-saas.gitbook.io/we-saas-internal-dev-docs/cypress-testing/example-basic-login-test
+
+
 **Project URL:**
 
 https://app.ev-saas.com
@@ -244,6 +215,7 @@ https://app.ev-saas.com
 ## Documentation:
 
 https://docs.ev-saas/
+
 
 ## Demo Login Details:
 

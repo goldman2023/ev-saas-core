@@ -33,7 +33,7 @@
 
   &::before {
     position: absolute;
-    left: calc(50% - #{$jvectormap-tooltip-arrow-pointer-pseudo-width / 2});
+    left: calc(50% - #{$jvectormap-tooltip-arrow-pointer-pseudo-width * 0.5});
     bottom: -$jvectormap-tooltip-arrow-pointer-pseudo-height + .0625rem;
     width: $jvectormap-tooltip-arrow-pointer-pseudo-width;
     height: $jvectormap-tooltip-arrow-pointer-pseudo-height;

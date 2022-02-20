@@ -191,6 +191,7 @@ class Shop extends EVBaseModel
         return $website;
     }
 
+
     public function get_company_logo()
     {
 
