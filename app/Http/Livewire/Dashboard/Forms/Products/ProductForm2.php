@@ -591,6 +591,8 @@ class ProductForm2 extends Component
         DB::beginTransaction();
 
         try {
+            $this->saveMinimumRequired();
+            
             // Update status
             $this->product->update([
                 'product.status' => $this->product->status
