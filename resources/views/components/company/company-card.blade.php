@@ -8,7 +8,7 @@ $class_col_body_2 = 'col-md-12';
 @endphp
 
 <div class="{{ $class_top_level }}">
-    <div class="card card-bordered card-hover-shadow h-100 mb-5 {{ $class_top_level }}">
+    <div class="card card-bordered card-hover-shadow mb-5 {{ $class_top_level }}">
         <div class="card-body">
             <!-- Media -->
             <div class="{{ $class_media }}">
