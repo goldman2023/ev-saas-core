@@ -11,6 +11,7 @@ use App\Traits\PriceTrait;
 use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
+use App\Traits\VariationTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -28,6 +29,7 @@ class Plan extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use TranslationTrait;
+    use VariationTrait;
 
     protected $table = 'plans';
 
@@ -102,5 +104,15 @@ class Plan extends EVBaseModel
         }
 
         return is_array($value) ? $value : json_decode($value, true);
+    }
+
+    public function main()
+    {
+        return null;
+    }
+
+    public function getVariationModelClass()
+    {
+        return null;
     }
 }
