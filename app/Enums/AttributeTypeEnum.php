@@ -2,6 +2,19 @@
 
 namespace App\Enums;
 
+/**
+ * @method static self checkbox()
+ * @method static self dropdown()
+ * @method static self radio()
+ * @method static self plain_text()
+ * @method static self country()
+ * @method static self number()
+ * @method static self date()
+ * @method static self image()
+ * @method static self gallery()
+ * @method static self text_list()
+ * @method static self wysiwyg()
+ */
 class AttributeTypeEnum extends EVBaseEnum
 {
     public static function values(): array

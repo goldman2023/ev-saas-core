@@ -8,6 +8,7 @@ use App\Models\CategoryRelationship;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductVariation;
+use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\SerialNumber;
 use App\Models\TenantSetting;
@@ -17,6 +18,7 @@ use App\Observers\ProductStocksObserver;
 use App\Observers\ProductVariationsObserver;
 use App\Observers\SerialNumbersObserver;
 use App\Observers\TenantSettingsObserver;
+use App\Observers\AttributeObserver;
 use App\Observers\AttributeValuesObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -54,6 +56,7 @@ class EventServiceProvider extends ServiceProvider
         ProductStock::class => [ProductStocksObserver::class],
         SerialNumber::class => [SerialNumbersObserver::class],
         CategoryRelationship::class => [CategoryRelationshipsObserver::class],
+        Attribute::class => [AttributeObserver::class],
         AttributeValue::class => [AttributeValuesObserver::class],
     ];
 

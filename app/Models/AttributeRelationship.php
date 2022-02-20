@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable;
 
-class AttributeRelationship extends Model //implements \OwenIt\Auditing\Contracts\Auditable
+class AttributeRelationship extends EVBaseModel //implements \OwenIt\Auditing\Contracts\Auditable
 {
     use HasFactory;
 

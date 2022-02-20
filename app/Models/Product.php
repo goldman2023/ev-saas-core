@@ -84,6 +84,7 @@ class Product extends EVBaseModel
 
     protected $casts = [
         'digital' => 'boolean',
+        'allow_out_of_stock_purchases' => 'boolean',
     ];
 
     /**

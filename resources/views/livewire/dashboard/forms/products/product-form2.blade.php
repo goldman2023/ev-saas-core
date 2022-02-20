@@ -379,36 +379,37 @@
                     <template x-for="attribute in attributes">
                         <div class="w-100 mb-3" x-data="{
                                 selector_id: 'attributes_'+attribute.id+'_attribute_values',
+                                predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
                                 hasCustomProperty(name) {
                                     return attribute.custom_properties !== null && 
                                             attribute.custom_properties !== undefined && 
                                             attribute.custom_properties.hasOwnProperty(name);
                                 },
-                            }" x-cloak>
+                            }" x-init="
+                                $nextTick(() => {
+                                    if(predefined_types.indexOf(attribute.type) !== -1) {
+                                        $('#'+selector_id).on('select2:select select2:unselect select2:clear', (event) => {
+                                            selected_attribute_values['attribute.'+attribute.id] = $('#'+selector_id).select2('data').map(x => x.id);
+                                        });
+                                        $watch('selected_attribute_values', (value, oldValue) => {
+                                            if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
+                                                $('#'+selector_id).val(value).trigger('change');
+                                            }
+                                        });
+                                    }
+                                });
+                            " x-cloak>
 
                             {{-- Dropdown --}}
                             <template x-if="attribute.type === 'dropdown'">
                                 <div class="w-100" x-data="{
-                                        isMultiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple
-                                    }" x-init="
-                                        $nextTick(() => {
-                                            $('#'+selector_id).on('select2:select', (event) => {
-                                                console.log(isMultiple);
-                                                selected_attribute_values['attribute.'+attribute.id] = event.target.value;
-                                            });
-                                            $watch('selected_attribute_values', (value, oldValue) => {
-                                                if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
-                                                    $('#'+selector_id).val(value).trigger('change');
-                                                }
-                                            });
-                                        });
-                                        
-                                    "> 
+                                        isMultiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
+                                    }"> 
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                         <select class="form-control custom-select custom-select-sm"
                                                 :id="selector_id"
-                                                x-bind:multiple="hasCustomProperty('multiple') && attribute.custom_properties.multiple"
+                                                x-bind:multiple="isMultiple"
                                                 x-model="selected_attribute_values['attribute.'+attribute.id]"
                                                 data-hs-select2-options='{
                                                     "minimumResultsForSearch": "Infinity",
@@ -514,8 +515,8 @@
                             
 
                             {{-- Checkbox --}}
-                            {{-- <template x-if="attribute.type === 'checkbox'">
-                                <div class="w-100" x-data="{}" x-init="">
+                            <template x-if="attribute.type === 'checkbox'">
+                                <div class="w-100" x-data="{}" >
                                     <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                     <template x-for="attribute_value in attribute.attribute_values">
@@ -523,36 +524,41 @@
                                             <div class="custom-control custom-checkbox">
                                                 <input x-model="selected_attribute_values['attribute.'+attribute.id]" 
                                                        type="checkbox"
-                                                       class="custom-control-input"
-                                                       @if(!empty($value) || !empty($valueProperty)) value="{{ is_object($item) ? ($item->{$valueProperty}??'') : $key }}" @endif
-                                                       @if((!is_object($item) && $key === $value) || (is_object($item) && $item->selected)) checked @endif
-                                                       {{ $attributes }}>
+                                                       :value="attribute_value.id"
+                                                       :id="'attribute_'+attribute_value.id"
+                                                       class="custom-control-input">
                         
-                                                <label class="custom-control-label" x-text="attribute_value.values">
+                                                <label class="custom-control-label" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id">
                                                 </label>
                                             </div>
                                         </div>
-                                    </template>
-
-                                    <div class="input-group" :class="{'input-group-merge': !hasCustomProperty('unit')}">
-
-                                        <input type="number" 
-                                        class="form-control form-control-sm"
-                                        :id="selector_id"
-                                        x-bind:min="hasCustomProperty('min_value') ? attribute.custom_properties.min_value : ''"
-                                        x-bind:max="hasCustomProperty('max_value') ? attribute.custom_properties.max_value : ''"
-                                        x-model="attributes[attribute.id].attribute_values[0].values" />
-
-                                        <template x-if="hasCustomProperty('unit')">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text input-group-text-sm" x-text="attribute.custom_properties.unit"></span>
-                                            </div>
-                                        </template>
-                                    </div>
-                                    
+                                    </template>    
                                 </div>
-                            </template> --}}
+                            </template>
                             {{-- END Checkbox --}}
+
+                            {{-- Radio --}}
+                            <template x-if="attribute.type === 'radio'">
+                                <div class="w-100" x-data="{}">
+                                    <label class="w-100 input-label" x-text="attribute.name"></label>
+
+                                    <template x-for="attribute_value in attribute.attribute_values">
+                                        <div class="form-control form-control-sm mb-2">
+                                            <div class="custom-control custom-radio">
+                                                <input x-model="selected_attribute_values['attribute.'+attribute.id]" 
+                                                       type="radio"
+                                                       :value="attribute_value.id"
+                                                       :id="'attribute_'+attribute_value.id"
+                                                       class="custom-control-input">
+                        
+                                                <label class="custom-control-label" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </template>    
+                                </div>
+                            </template>
+                            {{-- END Radio --}}
                         </div>
                     </template>
 
@@ -636,7 +642,7 @@
                                                                     style="text-indent: 25px;">
                                         </x-ev.form.date-time-picker> --}}
                                     @elseif($attribute->type === 'checkbox')
-                                        <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
+                                        {{-- <x-ev.form.checkbox name="attributes.{{ $attribute->id }}.attribute_values"
                                                             :append-to-name="true"
                                                             value-property="selected"
                                                             label-property="values"
@@ -646,9 +652,9 @@
                                                             label="{{ $attribute->name }}"
                                                             data-type="{{ $attribute->type }}"
                                                             wireType="defer">
-                                        </x-ev.form.checkbox>
+                                        </x-ev.form.checkbox> --}}
                                     @elseif($attribute->type === 'radio')
-                                        <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
+                                        {{-- <x-ev.form.radio name="attributes.{{ $attribute->id }}.attribute_values"
                                                         :append-to-name="true"
                                                         value-property="selected"
                                                         label-property="values"
@@ -658,7 +664,7 @@
                                                         label="{{ $attribute->name }}"
                                                         data-type="{{ $attribute->type }}"
                                                         :isWired="false">
-                                        </x-ev.form.radio>
+                                        </x-ev.form.radio> --}}
                                     @endif
                                 @endif
                             @endforeach

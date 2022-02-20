@@ -11,7 +11,16 @@
         'range': false,
     }, ...@js($attribute->custom_properties ?? ((object) []))},
     attribute_values: @js($attribute->attribute_values ?? []),
-}">
+    countAttributeValues() {
+        if(this.attribute_values === null || this.attribute_values === undefined || this.attribute_values.length <= 0) {
+            this.attribute_values.push({
+                values: '',
+            });
+        }
+
+        return this.attribute_values.length;
+    },
+}" x-init="countAttributeValues()">
     {{-- FIXME: If $attribute->custom_properties is {} and not null, it will rise livewire checksum error on saveAttribute() --}}
     
     {{-- Attribute Card --}}
@@ -35,6 +44,12 @@
                          wire:loading.class="opacity-3 prevent-pointer-events"
                          wire:target="saveAttribute"
                     >
+                        
+                        <span class="d-flex flex-row align-items-center">
+                            <strong class="text-dark">{{ translate('Attribute for:') }}</strong>
+                            <span class="badge badge-inline badge-primary text-white ml-3">{{ $content_type_label }}</span>
+                        </span>
+
                         <!-- Name -->
                         <div class="row form-group mt-5" x-data="{}">
                             <label for="attribute-name" class="col-sm-3 col-form-label input-label">{{ translate('Name') }}</label>
@@ -358,6 +373,7 @@
     </div>
     {{-- END Attribute Card --}}
 
+    @if($is_update)
     {{-- Attribute Values Card --}}
     <div class="card mt-4" x-show="predefined_types.indexOf(type) !== -1">
         <!-- Header -->
@@ -459,6 +475,7 @@
         </div>
     </div>
     {{-- END Attribute Values Card --}}
+    @endif
 </div>
 
 

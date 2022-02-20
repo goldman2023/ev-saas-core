@@ -32,6 +32,8 @@ class AttributeForm extends Component
     use DispatchSupport;
     use HasCategories;
 
+    public $content_type;
+    public $content_type_label;
     public $attribute;
     public $attribute_values;
     public $is_update;
@@ -41,15 +43,39 @@ class AttributeForm extends Component
      *
      * @return void
      */
-    public function mount($attribute = null)
+    public function mount($attribute = null, $content_type = null)
     {
+        
         $this->attribute = empty($attribute) ? new Attribute() : $attribute;
-        $this->attribute_values = $attribute->attribute_values;
         $this->is_update = isset($this->attribute->id) && !empty($this->attribute->id);
 
         if(!$this->is_update) {
             // If insert
+            $this->content_type = $content_type;
+            $this->attribute->setDefault($content_type);
+
+            
+            $blank_att_value = new AttributeValue();
+            $blank_att_value->id = null;
+            $blank_att_value->attribute_id = null;
+            $blank_att_value->values = null;
+
+            $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
+        } else {
+            $this->content_type = $this->attribute->content_type;
+            $this->attribute_values = $attribute->attribute_values;
+
+            if($this->attribute_values->isEmpty()) {
+                $blank_att_value = new AttributeValue();
+                $blank_att_value->id = null;
+                $blank_att_value->attribute_id = null;
+                $blank_att_value->values = null;
+
+                $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
+            }
         }
+        
+        $this->content_type_label = collect(\App\Enums\ContentTypeEnum::labels())->get(collect(\App\Enums\ContentTypeEnum::values())->search($this->content_type));
 
         // $this->initCategories($this->plan);
     }
@@ -59,6 +85,7 @@ class AttributeForm extends Component
         return [
             // 'selected_categories' => 'required',
             'attribute.name' => 'required|min:2',
+            'attribute.content_type' => '',
             'attribute.type' => [Rule::in(AttributeTypeEnum::toValues())],
             'attribute.filterable' => 'required|boolean',
             'attribute.is_admin' => 'required|boolean',
@@ -66,6 +93,7 @@ class AttributeForm extends Component
             'attribute.schema_key' => 'nullable',
             'attribute.schema_value' => 'nullable',
             'attribute.custom_properties' => '',
+            'attribute.custom_properties.*' => '',
             'attribute_values.*.values' => ''
         ];
     }
@@ -108,7 +136,7 @@ class AttributeForm extends Component
             }
         }
 
-        $this->attribute->custom_properties = $custom_properties;
+        $this->attribute->custom_properties = empty((array) $custom_properties) ? null : $custom_properties;
     }
 
     public function saveAttribute() {
@@ -122,8 +150,6 @@ class AttributeForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate();
         }
-
-        $this->filterCustomProperties();
         
         DB::beginTransaction();
         
@@ -136,7 +162,13 @@ class AttributeForm extends Component
                 $msg = $this->is_update ? translate('You don\'t have sufficent permission to update product attributes') : translate('You don\'t have sufficent permission to insert product attributes');
                 throw new \Exception();
             }
-            
+
+            if(!$this->is_update) {
+                // Insert
+                $this->attribute->content_type = $this->content_type;
+            }
+    
+            $this->filterCustomProperties();
             $this->attribute->save();
 
             // Set Attribute Categories relationship
@@ -150,6 +182,9 @@ class AttributeForm extends Component
                 $this->toastify(translate('Attribute successfully updated!').' '.$msg, 'success');
             } else {
                 $this->toastify(translate('Attribute successfully created!').' '.$msg, 'success');
+
+                // Redirect to update page
+                return redirect()->route('attributes.edit', $this->attribute->id);
             }
         } catch(\Exception $e) {
             DB::rollBack();

@@ -16,7 +16,9 @@ class Attribute extends EVBaseModel
     use TranslationTrait;
 
     // TODO: Think about uncommenting this because Attribute inherits EVBaseModel
-//    protected $with = ['attribute_relationships', 'attributes_values'];
+    // protected $with = ['attribute_relationships', 'attributes_values'];
+
+    protected $fillable = ['name', 'type', 'group', 'filterable', 'content_type', 'is_admin', 'is_default', 'is_schema', 'schema_key', 'schema_value', 'custom_properties'];
 
     protected $casts = [
         'custom_properties' => 'object',
@@ -32,13 +34,9 @@ class Attribute extends EVBaseModel
     {
         parent::boot();
 
-        // TODO: Move this AttributeObserver
+        // TODO: Move this to AttributeObserver
         static::deleting(function ($attribute) {
-            $attribute->attribute_translations()->delete();
-            $attribute->attribute_relationships()->delete();
-            foreach ($attribute->attribute_values as $value) {
-                $value->delete();
-            }
+            
         });
     }
 
@@ -67,6 +65,20 @@ class Attribute extends EVBaseModel
         return $query->where(
             fn ($query) =>  $query->where('name', 'like', '%'.$term.'%')
         );
+    }
+
+    public function setDefault($content_type) {
+        $this->content_type = $content_type;
+        $this->name = "";
+        $this->type = "plain_text";
+        $this->group = null;
+        $this->filterable = false;
+        $this->is_admin = false;
+        $this->is_schema = false;
+        $this->is_default = false;
+        $this->schema_key = null;
+        $this->schema_value = null;
+        $this->custom_properties = null;
     }
 
     /**

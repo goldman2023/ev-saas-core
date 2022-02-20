@@ -11,7 +11,7 @@ use Storage;
 class Upload extends EVBaseModel
 {
     use SoftDeletes;
-    use Cachable;
+    // use Cachable;
 
     /**
     * The attributes that are mass assignable.

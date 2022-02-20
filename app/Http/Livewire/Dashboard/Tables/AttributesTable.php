@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
+use DB;
 
 class AttributesTable extends DataTableComponent
 {
@@ -43,7 +44,7 @@ class AttributesTable extends DataTableComponent
     protected string $tableName = 'attributes';
 
     public function mount() {
-        $this->content = base64_decode(request()->content);
+        $this->content_type = base64_decode(request()->content_type);
     }
 
     public function filters(): array
@@ -88,17 +89,36 @@ class AttributesTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return Attribute::query()->where('content_type', $this->content)
+        return Attribute::query()->where('content_type', $this->content_type)
             //->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
             // ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('filterable'), fn ($query, $filterable) => $query->where('filterable', $filterable))
             ->when($this->getFilter('has_schema'), fn ($query, $has_schema) => $query->where('is_schema', $has_schema));
-      }
+    }
 
     public function rowView(): string
     {
         return 'frontend.dashboard.attributes.row';
+    }
+
+    public function removeAttribute($id) {
+        $attribute = Attribute::findOrFail($id);
+
+        DB::beginTransaction();
+
+        // TODO: Add delete modal with warning - don't forget to prevent attributedeletion IF attribute is used for variations in any content_type!!!
+
+        try {
+            $attribute->delete();
+
+            DB::commit();
+
+            $this->toastify(translate('Attribute successfully deleted!'), 'success');
+        } catch(\Exception $e) { dd($e);
+            $this->dispatchGeneralError(translate('here was an error while deleting an attribute and it\'s translations, values and relationships: '.$e->getMessage()));
+            $this->toastify(translate('There was an error while deleting an attribute and it\'s translations, values and relationships: '.$e->getMessage()), 'danger');
+        }
     }
 }

@@ -14,7 +14,7 @@
             <h5 class="card-header-title">
                 {{ translate('All Attributes') }}
             </h5>
-            {{-- <a href="{{ route('blog.post.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a> --}}
+            <a href="{{ route('attributes.create', base64_encode($content_type)) }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
         </div>
         <!-- End Header -->
 

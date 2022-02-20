@@ -50,7 +50,7 @@ class ProductVariation extends EVBaseModel
     use PriceTrait;
     use Purchasable;
 
-    use ReviewTrait; // TODO: Is this necessary?
+    use ReviewTrait;
 
     use VariationTrait;
 

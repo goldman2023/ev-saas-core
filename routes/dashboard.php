@@ -85,8 +85,8 @@ Route::middleware([
         Route::get('/plans/edit/{id}', [EVPlanController::class, 'edit'])->name('plan.edit');
 
         /* Attributes */
-        Route::get('/attributes/{content}', [EVAttributesController::class, 'index'])->name('attributes.index');
-        // Route::get('/attributes/create', [EVOrderController::class, 'create'])->name('order.create');
+        Route::get('/attributes/type/{content_type}', [EVAttributesController::class, 'index'])->name('attributes.index');
+        Route::get('/attributes/type/{content_type}/create', [EVAttributesController::class, 'create'])->name('attributes.create');
         Route::get('/attributes/edit/{id}', [EVAttributesController::class, 'edit'])->name('attributes.edit');
 
         /* Orders */

@@ -62,7 +62,6 @@ class StockManagementForm extends Component
             'product.sku.required' => translate('This field is required'),
             'product.sku.filled' => translate('This field cannot be empty'),
             'product.sku.unique' => translate('SKU must be unique. Another item is using it already.'),
-            'product.temp_stock.unique' => translate('This SKU is already taken'),
             'product.current_stock.required' => translate('This field is required'),
             'product.current_stock.numeric' => translate('Quantity must be numeric'),
             'product.current_stock.min' => translate('Quantity cannot be less than 0'),
