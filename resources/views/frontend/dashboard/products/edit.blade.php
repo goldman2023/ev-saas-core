@@ -2,6 +2,12 @@
 
 @section('page_title', translate('Edit Product').': '.$product->getTranslation('name'))
 
+@push('pre_head_scripts')
+    <script>
+        let all_categories = @json(\Categories::getAllFormatted());
+    </script>
+@endpush
+
 @push('head_scripts')
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 @endpush
