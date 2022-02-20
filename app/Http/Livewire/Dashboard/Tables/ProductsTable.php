@@ -63,7 +63,7 @@ class ProductsTable extends DataTableComponent
             Column::make('ID')
                 ->sortable()
                 ->excludeFromSelectable(),
-            Column::make('Title')
+            Column::make('Title', 'name')
                 ->sortable()
                 ->excludeFromSelectable(),
             Column::make('Status', 'status')
