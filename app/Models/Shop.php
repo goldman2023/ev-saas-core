@@ -59,7 +59,7 @@ class Shop extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
-    use PermalinkTrait;
+    use PermalinkTrait; 
 
     protected $table = 'shops';
 
