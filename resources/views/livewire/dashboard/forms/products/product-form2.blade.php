@@ -63,12 +63,12 @@
             $wire.set('product.base_currency', getSafe(fn => $('[name=\'product.base_currency\']').select2('data')[0].id, null), true);
             $wire.set('product.discount_type', getSafe(fn => $('[name=\'product.discount_type\']').select2('data')[0].id, null), true);
             $wire.set('product.tax_type', getSafe(fn => $('[name=\'product.tax_type\']').select2('data')[0].id, null), true);
-            $wire.set('product.use_serial', use_serial, true);
-            $wire.set('product.digital', is_digital, true);
-            $wire.set('selected_predefined_attribute_values', selected_attribute_values, true);
-            $wire.set('attributes', attributes, true);
+            $wire.set('product.use_serial', this.use_serial, true);
+            $wire.set('product.digital', this.is_digital, true);
+            $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
+            $wire.set('attributes', this.attributes, true);
             $wire.set('product.meta_img', $('[name=\'product.meta_img\']').val(), true);
-            $wire.set('product.status', status, true);
+            $wire.set('product.status', this.status, true);
             $wire.set('product.tags', $('[name=\'product.tags\']').select2('data').map(x => x.id), true);
             let $selected_categories = [];
             $('[name=\'selected_categories\']').each(function(index, item) {
