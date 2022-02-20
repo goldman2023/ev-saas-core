@@ -90,7 +90,7 @@ $class_col_body_2 = 'col-md-12';
             <ul class="list-inline list-separator small text-body">
                 {{-- TODO: create a country column- not a simple attribute, we will need filtering based on that --}}
                 <li class="list-inline-item">
-                    {{ country_name_by_code($company->settings()->where('company_country')->last()) }}
+                    {{ country_name_by_code($company->country) }}
                 </li>
             </ul>
 
