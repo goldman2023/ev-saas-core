@@ -70,8 +70,8 @@ class ProductsTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Price', 'price')
                 ->excludeFromSelectable(),
-            Column::make('Created', 'created_at')
-                ->sortable(),
+            Column::make('Views', 'views')
+                ->excludeFromSelectable(),
             Column::make('Last Update', 'updated_at')
                 ->sortable(),
             Column::make('Actions')
