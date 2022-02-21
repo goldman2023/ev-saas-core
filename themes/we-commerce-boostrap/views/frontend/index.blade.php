@@ -2,9 +2,9 @@
 
 @section('content')
 
-<section style="max-width: 100%; overflow: scroll;">
-    <x-default.brands.brands-list>
-    </x-default.brands.brands-list>
+
+<section>
+    <x-default.hero.ecommerce-hero></x-default.hero.ecommerce-hero>
 </section>
 
 @php
