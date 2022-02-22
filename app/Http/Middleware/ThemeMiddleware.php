@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use \Qirolab\Theme\Theme as Theme;
 
 class ThemeMiddleware
@@ -30,6 +31,12 @@ class ThemeMiddleware
                 /* Set parent theme for tailwind child themes */
                 if(str_contains($domain->theme, 'tailwind')) {
                     Theme::set($domain->theme, 'ev-tailwind');
+                    /*
+                        TODO: Define this better but dashboard allways uses boostrap version for now
+                    */
+                    if( Route::currentRouteName() == 'dashboard') {
+                        Theme::set('ev-saas-guns', 'ev-saas-default');
+                    }
                 } else {
                     Theme::set($domain->theme, 'ev-saas-default');
                 }
