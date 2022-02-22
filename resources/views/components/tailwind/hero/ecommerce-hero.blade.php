@@ -1,5 +1,4 @@
-<div
-{{ $attributes->merge(['class' => 'grid grid-cols-1 lg:grid-cols-7 2xl:grid-cols-9 gap-5 xl:gap-7 lg:gap-y-14']) }}>
+<div class="grid grid-cols-1 lg:grid-cols-7 2xl:grid-cols-9 gap-5 xl:gap-7 lg:gap-y-14">
     <x-tailwind.category.list.category-list-basic></x-tailwind.category.list.category-list-basic>
     <div
         class="col-span-full lg:col-span-5 xl:col-span-5 row-span-full lg:row-auto grid grid-cols-2 gap-2 md:gap-3.5 lg:gap-5 xl:gap-7">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Page;
 use Livewire\Component;
 
 class WeEdit extends Component
@@ -33,8 +34,15 @@ class WeEdit extends Component
         ]
     ];
 
+    public $page;
+    public $sections;
+
     public function render()
     {
+
+        $this->page = Page::where('slug', 'home')->first();
+        $this->sections =  json_decode($this->page->content, JSON_OBJECT_AS_ARRAY);
+
         return view('livewire.we-edit');
     }
 }

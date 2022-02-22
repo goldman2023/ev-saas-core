@@ -304,7 +304,6 @@
                     <!-- Start main area-->
                     <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
                         <div class="h-full border-2 border-gray-200 border-dashed rounded-lg">
-
                         </div>
                     </div>
                     <!-- End main area -->
@@ -378,6 +377,20 @@
                     </div>
                     <!-- End secondary column -->
                 </aside>
+            </div>
+        </div>
+
+        <div class="flex flex-col relative px-6 pt-20">
+            <h1 class="text-xl font-medium text-gray-900 mb-3 mt-6">
+                {{ translate('Page Preview') }}
+            </h1>
+            <img src="/assets/tailwind/img/empty-state.png" style="max-width: 800px;" alt="">
+            <div class="">
+                <div id="render-container" class="bg-white px-6 absolute top-[200px] left-0" style="max-height: 500px; overflow:hidden; overflow-y: scroll;">
+                    @foreach ($sections as $key => $section)
+                    <x-dynamic-component :component="$key" :dataOverides="$section['data']" class="mt-4" />
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
