@@ -386,10 +386,18 @@
             </h1>
             <img src="/assets/tailwind/img/empty-state.png" style="max-width: 800px;" alt="">
             <div class="">
-                <div id="render-container" class="bg-white px-6 absolute top-[200px] left-0" style="max-height: 500px; overflow:hidden; overflow-y: scroll;">
+                <div id="render-container" class="bg-white px-6 absolute top-[200px] left-0"
+                    style="max-height: 500px; overflow:hidden; overflow-y: scroll;">
+
                     @foreach ($sections as $key => $section)
                     <x-dynamic-component :component="$key" :dataOverides="$section['data']" class="mt-4" />
                     @endforeach
+                    {{--
+                    TODO: Move this to iframe renderer view, so we can pass a
+                    state and render responsive views/etc
+                    --}}
+                    {{-- <iframe class="w-full" src="/">
+                    </iframe> --}}
                 </div>
             </div>
         </div>
