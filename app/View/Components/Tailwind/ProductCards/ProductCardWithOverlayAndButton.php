@@ -4,7 +4,7 @@ namespace App\View\Components\Tailwind\ProductCards;
 
 use Illuminate\View\Component;
 
-class ProductCardWithOverlayAndButton extends Component
+class ProductCardWithOverlayAndButton extends ProductCard
 {
     /**
      * Create a new component instance.

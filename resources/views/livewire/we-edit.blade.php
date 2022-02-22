@@ -310,12 +310,14 @@
                     <!-- End main area -->
                 </main>
                 <aside
-                    class="hidden relative xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200 overflow-y-auto">
+                    class="hidden relative xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200 ">
                     <!-- Start secondary column (hidden on smaller screens) -->
                     <div class="absolute inset-0 py-6 px-4 sm:px-6 lg:px-8">
-                        <div class="h-full border-2 border-gray-200 border-dashed rounded-lg">
+                        <div class="h-full border-2 border-gray-200 border-dashed rounded-lg overflow-y-auto">
                             <div class="px-6 pt-6 pb-4">
-                                <h2 class="text-lg font-medium text-gray-900">{{ translate('Available sections') }}</h2>
+                                <h2 class="text-lg font-medium text-gray-900">
+                                    {{ translate('Available sections') }}
+                                </h2>
                                 <p class="mt-1 text-sm text-gray-600">
                                     Search directory of 3,018 sections and landing pages
                                 </p>
@@ -341,6 +343,36 @@
                                     </div>
 
                                 </form>
+                            </div>
+                            <div class="px-6 mb-3">
+                                <ul role="list"
+                                    class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-1 sm:gap-x-6 lg:grid-cols-1 xl:gap-x-8">
+                                    @foreach($available_sections as $key => $section)
+
+                                    <li class="relative">
+                                        <div
+                                            class="group block w-full aspect-w-10 aspect-h-5 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
+                                            <x-tenant.system.image alt="{{ $key }}"
+                                                class="object-contain pointer-events-none group-hover:opacity-75"
+                                                :image="$section['thumbnail']">
+                                            </x-tenant.system.image>
+                                            <button type="button" class="absolute inset-0 focus:outline-none">
+                                                <span class="sr-only">View details for IMG_4985.HEIC</span>
+                                            </button>
+                                        </div>
+                                        <p
+                                            class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
+                                            {{ $section['title'] }}
+
+                                        </p>
+                                        <p class="block text-sm font-medium text-gray-500 pointer-events-none">3.9 MB
+                                        </p>
+                                    </li>
+                                    @endforeach
+                                    <!-- More files... -->
+                                </ul>
+
+
                             </div>
                         </div>
                     </div>
