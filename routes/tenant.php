@@ -68,6 +68,7 @@ Route::middleware([
 
     Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
     Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
+    Route::get('/we-edit', 'WeEditController@index')->name('we-edit.index');
 
     // Route to show after creating new tenant:
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');

@@ -9,14 +9,31 @@
                 <div class="flex items-center">
                     <div
                         class="bg-gray-300 inline-flex items-center flex-shrink-0 rounded-full 2xl:w-12 2xl:h-12 3xl:w-auto 3xl:h-auto">
-                        <img alt="category image"
-                            src="{{ $category->getThumbnail() }}"
-                            class="w-14 md:w-16 lg:w-12 2xl:w-16 transition-opacity duration-500">
+                        @php
+                        $category_product_image = $category
+                        ->products()
+                        ->latest('id')
+                        ->first();
+                        @endphp
+
+                        @if($category_product_image)
+                        <x-tenant.system.image
+                            class="w-14 md:w-16 lg:w-12 2xl:w-16 transition-opacity duration-500"
+                            :image="$category_product_image->getThumbnail()">
+                        </x-tenant.system.image>
+                        @else
+                        <x-tenant.system.image
+                            class="w-14 md:w-16 lg:w-12 2xl:w-16 transition-opacity duration-500"
+                            :image="$category->getThumbnail()">
+                        </x-tenant.system.image>
+
+
+                        @endif
 
                     </div>
                     <h3
                         class="category_name font-normal mb-0 text-sm md:text-base 2xl:text-sm 3xl:text-base text-heading capitalize pl-2.5 md:pl-4 2xl:pl-3 3xl:pl-4">
-                       {{ $category->getTranslation('name') }}
+                        {{ $category->getTranslation('name') }}
                     </h3>
                 </div>
                 <div class="flex items-center">
@@ -25,7 +42,7 @@
                         {{ $category->products()->count() }}
                     </div>
 
-                        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512"
+                    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512"
                         class="text-sm text-heading" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z">
