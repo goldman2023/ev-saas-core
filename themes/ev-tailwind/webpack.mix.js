@@ -19,6 +19,7 @@ let theme = 'ev-tailwind';
 
 mix.setPublicPath(`public/themes/${theme}`)
     .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
+    .js(`${__dirname}/we-edit/src/index.js`, `public/themes/${theme}/we-edit`).version()
     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`, {}, [
         tailwindcss(`${__dirname}/tailwind.config.js`), // IT HAS TO BE ADDED HERE, OTHERWISE IT WON'T WORK!
     ]).options({
