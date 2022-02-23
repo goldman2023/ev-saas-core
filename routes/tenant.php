@@ -68,6 +68,7 @@ Route::middleware([
 
     Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
     Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
+
     Route::get('/we-edit', 'WeEditController@index')->name('we-edit.index');
     Route::get('/we-edit/flow', 'WeEditController@flow')->name('we-edit.flow.pages');
     Route::get('/we-edit/flow/menu', 'WeEditController@menuFlow')->name('we-edit.flow.menu');

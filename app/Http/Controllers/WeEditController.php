@@ -28,14 +28,15 @@ class WeEditController extends Controller
         }
         $menu_flow = [];
         $available_pages = [];
+        $weEditData = [
+            'pages' => json_encode($pages),
+            'available_pages' => json_encode($available_pages),
+            'menu_flow' => json_encode($menu_flow)
+        ];
 
         return view(
             'we-edit.flow',
-            [
-                'pages' => json_encode($pages),
-                'available_pages' => json_encode($available_pages),
-                'menu_flow' => json_encode($menu_flow)
-            ]
+            $weEditData
         );
     }
 
