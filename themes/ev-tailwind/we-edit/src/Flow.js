@@ -50,6 +50,8 @@ const DnDFlow = () => {
 
     const onElementClick = (element) => {
         console.log('element clicked', element);
+        console.log(element.detail);
+
     }
 
     const onDrop = (event) => {

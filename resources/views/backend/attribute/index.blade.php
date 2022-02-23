@@ -25,8 +25,8 @@
 							<th class="text-right">{{ translate('Options')}}</th>
 						</tr>
 					</thead>
-					<tbody>						
-						@foreach($attributes as $key => $attribute)	
+					<tbody>
+						@foreach($attributes as $key => $attribute)
 							<tr>
 								<td>{{$key+1}}</td>
 								<td>{{$attribute->getTranslation('name')}}</td>
@@ -135,10 +135,8 @@
 @endsection
 
 @push('footer_scripts')
-	
+
     <!-- JS Front -->
-	<script src="{{ global_asset('front/js/hs.core.js') }}"></script>
-    <script src="{{ global_asset('front/js/hs.select2.js') }}"></script>
 
 	<script type="text/javascript">
         function onChangeType(evt){

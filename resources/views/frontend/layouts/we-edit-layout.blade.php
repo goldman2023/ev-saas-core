@@ -27,7 +27,6 @@
         </x-default.system.og-meta>
     @endif
 
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
     <!-- Vendor Styles -->
 
@@ -38,7 +37,6 @@
 
     <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
     <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
 
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>
@@ -63,7 +61,7 @@
     <!-- JS Plugins Init. -->
     <script>
         $(function() {
-        
+
         });
     </script>
 

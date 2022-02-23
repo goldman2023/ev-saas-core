@@ -744,8 +744,6 @@
 
  <script src="{{ static_asset('assets/admin/js/ev-saas.js') }}" > </script>
  {{-- <script src="{{ mix('js/app.js', 'themes/'.Theme::active()) }}"></script> --}}
- <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
- <script src="{{ static_asset('vendor/hs.quill.js', false, true) }}"></script>
  <script>
      // INITIALIZATION OF QUILLJS EDITOR
      // =======================================================
