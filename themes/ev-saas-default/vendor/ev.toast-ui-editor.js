@@ -42,7 +42,6 @@
                 let editor = new toastui.Editor(settings);
                 editor.on('change', function() { console.log($input);
                     $input.val(editor.getHTML());
-                    //$input.get(0).dispatchEvent(new Event('input'));
                 });
             });
         }

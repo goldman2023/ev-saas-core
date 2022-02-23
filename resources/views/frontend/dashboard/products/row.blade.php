@@ -71,16 +71,18 @@
             @svg('heroicon-o-pencil', ['class' => 'square-18 mr-2']) {{ translate('Edit') }}
         </a>
 
-        <a class="btn btn-xs btn-white d-flex align-items-center ml-3" href="{{ $row->getPermalink() }} "
-            target="_blank">
-            @svg('heroicon-o-eye', ['class' => 'square-18 mr-2']) {{ translate('Preview') }}
-        </a>
-
         <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="d-flex align-items-center btn btn-xs">
             @svg('heroicon-o-chevron-down', ['class' => 'square-18'])
         </button>
         <ul x-show="isOpen" @click.away="isOpen = false"
             class="position-absolute bg-white z-10 list-style-none p-0 border rounded mt-7 shadow">
+            <li>
+                <a class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14" href="{{ $row->getPermalink() }} "
+                    target="_blank">
+                    @svg('heroicon-o-eye', ['class' => 'square-18 mr-2']) 
+                    <span class="ml-2">{{ translate('Preview') }}</span>
+                </a>
+            </li>
             <li>
                 <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank"
                     class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14">

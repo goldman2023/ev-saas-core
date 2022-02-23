@@ -161,9 +161,11 @@ class ProductForm2 extends Component
     {
         // Set default params
         if($product) {
+            // Update
             $this->product = $product;
             $this->is_update = true;
         } else {
+            // Insert
             $this->is_update = false;
 
             $this->product = new Product();
@@ -182,35 +184,12 @@ class ProductForm2 extends Component
             $this->product->unit_price = 0;
             $this->product->brand_id = null;
 
-            // If insert
             $this->product->base_currency = FX::getCurrency()->code;
             $this->product->discount_type = AmountPercentTypeEnum::amount()->value;
             $this->product->tax_type = AmountPercentTypeEnum::amount()->value;
         }
 
-        $this->attributes = $this->product->getMappedAttributes();
-
-        // Set default attributes
-        foreach($this->attributes as $key => $attribute) {
-            if($attribute->is_predefined) {
-                $attribute->selcted_values = '';
-            }
-
-            if(empty($this->attributes[$key]->attribute_values)) {
-                if(!$attribute->is_predefined) {
-                    $this->attributes[$key]->attribute_values[] = [
-                        "id" => null,
-                        "attribute_id" => $attribute->id,
-                        "values" => '',
-                        "selected" => true,
-                    ];
-                } else {
-                    $this->attributes[$key]->attribute_values = [];
-                }
-            }
-        }
-
-        $this->setPredefinedAttributeValues($product);
+        $this->refreshAttributes();
 
         $this->initCategories($this->product);
     }
@@ -300,6 +279,162 @@ class ProductForm2 extends Component
         $product_stock->allow_out_of_stock_purchases = ($this->product->allow_out_of_stock_purchases ?? false) === true;
         $product_stock->save();
     }
+
+    public function saveProduct() {
+        $this->validateData('all');
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveMinimumRequired();
+
+            // Save product data
+            $this->product->tags = [];
+            $this->product->save();
+
+            // Sync Uploads
+            $this->product->syncUploads();
+
+            // Save Categories
+            $this->setCategories($this->product);
+
+            // Set Attributes
+            $this->setAttributes();
+
+            DB::commit();
+
+            // Refresh Attributes
+            $this->refreshAttributes();
+
+            $this->toastify(translate('Product successfully saved!'), 'success');
+
+            $this->dispatchBrowserEvent('init-product-form', ['newName' => 'yeey']);
+        } catch(\Exception $e) {
+            DB::rollBack();
+
+            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
+            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+        }
+    }
+
+    public function refreshAttributes() {
+        $this->attributes = $this->product->getMappedAttributes();
+
+        // Set default attributes
+        foreach($this->attributes as $key => $attribute) {
+            if($attribute->is_predefined) {
+                $attribute->selcted_values = '';
+            }
+
+            if(empty($this->attributes[$key]->attribute_values)) {
+                if(!$attribute->is_predefined) {
+                    $this->attributes[$key]->attribute_values[] = [
+                        "id" => null,
+                        "attribute_id" => $attribute->id,
+                        "values" => '',
+                        "selected" => true,
+                    ];
+                } else {
+                    $this->attributes[$key]->attribute_values = [];
+                }
+            }
+        }
+
+        $this->setPredefinedAttributeValues($this->product);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function setAttributes() {
+        $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
+            $att = (object) $att;
+            return $att->selected === true;
+        });
+ 
+        if($selected_attributes) {
+            foreach($selected_attributes as $att) {
+                $attribute = new Attribute();
+                
+                $att = (object) $att;
+                $att_values = $att->attribute_values;
+
+                if(!empty($att_values)) {
+
+                    // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
+                    // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
+                    if(!$att->is_predefined) {
+                        
+                        foreach($att_values as $key => $att_value) {
+                            $attribute_value_row = (!empty($att_value['id'])) ? AttributeValue::find($att_value['id']) : new AttributeValue();
+
+                            // Create the value first
+                            $attribute_value_row->attribute_id = (!empty($att_value['id'])) ? $attribute_value_row->attribute_id : $att->id;
+                            $attribute_value_row->values = $att_value['values'] ?? null;
+                            $attribute_value_row->selected = true;
+                            $attribute_value_row->save();
+
+                            // Set attribute value translations for non-predefined attributes
+                            $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $attribute_value_row->id]);
+                            $attribute_value_translation->name = $att_value['values'] ?? null;
+                            $attribute_value_translation->save();
+
+                            $att_values[$key] = $attribute_value_row;
+                        }
+
+                        
+                    } else {
+                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
+                        
+                        foreach($att_values as $key => $att_value) {
+                            $attribute_value_row = AttributeValue::find($att_value['id']);
+
+                            if(is_array($selected_attribute_values) && in_array($attribute_value_row->id, $selected_attribute_values)) {
+                                $attribute_value_row->selected = true;
+                            } else if(is_numeric($selected_attribute_values) && ((int) $selected_attribute_values) == $att_value['id']) {
+                                $attribute_value_row->selected = true;
+                            } else {
+                                $attribute_value_row->selected = false;
+                            }
+
+                            $att_values[$key] = $attribute_value_row;
+                        }
+                    }
+                    
+                    foreach($att_values as $key => $att_value) {
+                        if($att_value->id ?? null) {
+                            if($att_value->selected ?? null) {
+                                // Create or find product-attribute relationship, but don't yet persist anything to DB
+                                $att_rel = AttributeRelationship::firstOrNew([
+                                    'subject_type' => Product::class,
+                                    'subject_id' => $this->product->id,
+                                    'attribute_id' => $att->id,
+                                    'attribute_value_id' => $att_value->id
+                                ]);
+                                $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
+
+                                if($att->type === 'text_list') {
+                                    $att_rel->order = $key;
+                                }
+
+                                $att_rel->save();
+                            } else {
+                                // Remove attribute relationship if "selected" is false/null
+                                AttributeRelationship::where([
+                                    'subject_type' => Product::class,
+                                    'subject_id' => $this->product->id,
+                                    'attribute_id' => $att->id,
+                                    'attribute_value_id' => $att_value->id
+                                ])->delete();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // END
 
     public function saveBasic() {
         // Validate minimum required fields and insert/update row
@@ -568,11 +703,8 @@ class ProductForm2 extends Component
         DB::beginTransaction();
 
         try {
-            $this->saveMinimumRequired();
-
             $this->setAttributes();
-            
-            DB::commit();
+
 
             $this->toastify(translate('Product successfully saved!'), 'success');
         } catch(\Exception $e) {
@@ -583,311 +715,35 @@ class ProductForm2 extends Component
         }
     }
 
+    // public function updateAttributeValuesForVariations() {
+    //     $atts = collect($this->attributes)->filter(function($att, $key) {
+    //         $att = (object) $att;
+    //         return $att->selected === true && $att->for_variations === true;
+    //     });
 
-    public function saveProduct() {
-        $this->validateData('all');
+    //     if($atts) {
+    //         foreach ($atts as $att) {
+    //             $att = (object)$att;
+    //             $att_values = $att->attribute_values;
 
-        DB::beginTransaction();
+    //             if ($att_values) {
+    //                 // ????
+    //                 // TODO: What happens when attribute values (used for variations) are changed AND product is saved without touching the variations modal?
+    //                 // FIX: It should SOFT DELETE product variations related to attribute value! IMPORTANT thing is to use SOFT DELETES, because if vendor wants to
+    //                 // revive the attribute value for some reason and generate variations related to it, we need to bring back the old variations in the DB from the dead.
+    //                 // This way we can always generate proper sales reports and never miss data!
+    //                 // SOFT DELETES FOR PRODUCT VARIATIONS ARE VERY IMPORTANT!!!!
+    //                 // NOTE: There can always be ONE product variation combination for certain product in the DB! We should never remove it fully, cuz we'll lose the data associated with it (number of variation sales, etc.)
+    //             }
+    //         }
+    //     }
+    // }
 
-        try {
-            $this->saveMinimumRequired();
+    // public function getVariationsAttributesProperty() {
+    //     $atts_for_variations = collect($this->attributes)->filter(function($att, $key) {
+    //         return ((object) $att)->for_variations === true;
+    //     });
 
-            // Save product data
-            $this->product->save();
-
-            // Sync Uploads
-            $this->product->syncUploads();
-
-            // Save Categories
-            $this->setCategories($this->product);
-
-            // Set Attributes
-            $this->setAttributes();
-
-            DB::commit();
-
-            $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
-            DB::rollBack();
-
-            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
-        }
-    }
-
-    protected function insert(): void
-    {
-        DB::beginTransaction();
-        $this->insert_success = false;
-
-        try {
-            // SET: Product Data
-            $this->setProductData($partial ? 0 : 1);
-
-            // SET: Product Categories
-            $this->setProductCategories();
-
-            // SET: Product Translations
-            $this->setProductTranslation();
-
-            // SET: Main Product Stocks
-            $this->setProductStocks();
-
-            // TODO: VAT & TAX, Flash Deals
-
-            if(!$partial) {
-                // SET: Attribute relationships
-                $this->setAttributes();
-            }
-
-            DB::commit();
-
-            $this->insert_success = true;
-
-            //$this->emit('setProduct', $this->product);
-            $this->dispatchBrowserEvent('goToTop');
-        } catch(\Exception $e) {
-            DB::rollBack();
-            dd($e->getMessage());
-        }
-    }
-
-    protected function update() {
-        $this->update_success = false;
-
-        DB::beginTransaction();
-
-        try {
-            // SET: Product Data
-            $this->setProductData();
-
-            // SET: Product Categories
-            $this->setProductCategories();
-
-            // SET: Product Translations
-            $this->setProductTranslation();
-
-            // SET: Main & Variations Product Stocks
-            $this->setProductStocks();
-
-            // TODO: VAT & TAX, Flash Deals
-
-            // SET: Attribute relationships
-            $this->setAttributes();
-
-            DB::commit();
-
-            $this->update_success = true;
-
-            $this->dispatchBrowserEvent('toastit', ['id' => '#product-updated-toast']);
-            $this->dispatchBrowserEvent('goToTop');
-        } catch(\Exception $e) {
-            DB::rollBack();
-            dd($e);
-        }
-    }
-
-    protected function setProductData($published = 1) {
-        if(empty($this->product->brand_id)) {
-            $this->product->brand_id = null;
-        }
-
-        if($this->action === 'insert') {
-            if (auth()->user()->isSeller()) {
-                $this->product->user_id = auth()->user()->id;
-                $this->product->added_by = 'seller';
-            } else {
-                $this->product->user_id = \App\Models\User::where('user_type', 'admin')->first()->id;
-                $this->product->added_by = 'admin';
-            }
-        }
-
-        $this->product->tags = implode(',', $this->product->tags);
-
-        if ($this->product->shipping_type === 'free') {
-            $this->product->shipping_cost = 0;
-        } elseif ($this->product->shipping_type === 'product_wise') {
-            $this->product->shipping_cost = json_encode([]);
-        }
-
-        // Purify WYSIWYG before saving
-        $this->product->description = Purifier::clean($this->product->description);
-
-        if(empty($this->product->excerpt)) {
-            $this->product->excerpt = strip_tags(Str::limit($this->product->description, 320, '...'));
-        } else {
-            $this->product->excerpt = strip_tags(Str::limit($this->product->excerpt, 320, '...'));
-        }
-
-        // SEO
-        if (empty($this->product->meta_title)) {
-            $this->product->meta_img = $this->product->name;
-        }
-
-        if (empty($this->product->meta_description)) {
-            $this->product->meta_description = trim(strip_tags($this->product->description ?? ''));
-        }
-
-        // TODO: Add Featured, Cash on delivery, Today's deal to the form
-        $this->product->cash_on_delivery = 0;
-        $this->product->featured = 0;
-        $this->product->todays_deal = 0;
-
-        // TODO: Add Product status option to the form - published, draft
-        $this->product->published = 1;
-
-        // TODO: Remove following columns from the products table: variant_product, choice_options, colors, variations, current_stock, min_qty, low_stock_quantity
-        // TODO: Move current_stock, min_qty and low_stock_quantity to Product Stocks table!
-
-        // Save product
-        $this->product->save();
-
-        // DONE: Sync thumbnail, gallery, meta_img and other dynamic uploads
-        $this->product->syncUploads();
-    }
-
-    protected function setProductCategories() {
-        if(!empty($this->selected_categories)) {
-            $categories_idx = collect([]);
-
-            foreach($this->selected_categories as $selected) {
-                // $selected is a slug_path of the category
-                $cat = Categories::getBySlugPath($selected);
-
-                if($cat) {
-                    $categories_idx->push($cat['id']);
-                }
-            }
-
-            $this->product->categories()->sync($categories_idx->toArray());
-        }
-    }
-
-    protected function setProductTranslation() {
-        $product_translation = ProductTranslation::firstOrNew(['lang' => config('app.locale'), 'product_id' => $this->product->id]);
-        $product_translation->name = $this->product->name;
-        $product_translation->unit = $this->product->unit;
-        $product_translation->description = $this->product->description;
-        // $product_translation->excerpt = $this->product->excerpt;
-        // $product_translation->meta_title = $this->product->meta_title;
-        // $product_translation->meta_description = $this->product->meta_description;
-        $product_translation->save();
-    }
-
-    
-
-    /**
-     * @throws \Exception
-     */
-    protected function setAttributes() {
-        $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
-            $att = (object) $att;
-            return $att->selected === true;
-        });
- 
-        if($selected_attributes) {
-            foreach($selected_attributes as $att) {
-                $attribute = new Attribute();
-                
-                $att = (object) $att;
-                $att_values = $att->attribute_values;
-
-                if(!empty($att_values)) {
-
-                    // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
-                    // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
-                    if(!$att->is_predefined) {
-
-                        foreach($att_values as $att_value) {
-                            // Create the value first
-                            $att_val = (!empty($att_value['id'])) ? AttributeValue::find($att_value['id']) : new AttributeValue();
-                            $att_val->attribute_id = (!empty($att_value['id'])) ? $att_val->attribute_id : $att->id;
-                            $att_val->values = $att_value['values'] ?? null;
-                            $att_val->selected = true;
-                            $att_val->save();
-
-                            if(empty($att_value['id'])) {
-                                $att_value['id'] = $att_val->id;
-    
-                                // Set attribute value translations for non-predefined attributes
-                                $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $att_val->id]);
-                                $attribute_value_translation->name = $att_val->values;
-                                $attribute_value_translation->save();
-                            }
-                        }
-                    } else {
-                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
-                        
-                        foreach($att_values as $key => $att_value) {
-                            if(is_array($selected_attribute_values) && in_array($att_value['id'], $selected_attribute_values)) {
-                                $att_values[$key]['selected'] = true;
-                            } else if(is_numeric($selected_attribute_values) && ((int) $selected_attribute_values) == $att_value['id']) {
-                                $att_values[$key]['selected'] = true;
-                            } else {
-                                $att_values[$key]['selected'] = false;
-                            }
-                        }
-                    }
-                    
-                    foreach($att_values as $att_value) {
-                        $att_value = (object) $att_value;
-
-                        if($att_value->id ?? null) {
-                            if($att_value->selected ?? null) {
-                                // Create or find product-attribute relationship, but don't yet persist anything to DB
-                                $att_rel = AttributeRelationship::firstOrNew([
-                                    'subject_type' => Product::class,
-                                    'subject_id' => $this->product->id,
-                                    'attribute_id' => $att->id,
-                                    'attribute_value_id' => $att_value->id
-                                ]);
-                                $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
-                                $att_rel->save();
-                            } else {
-                                // Remove attribute relationship if "selected" is false/null
-                                AttributeRelationship::where([
-                                    'subject_type' => Product::class,
-                                    'subject_id' => $this->product->id,
-                                    'attribute_id' => $att->id,
-                                    'attribute_value_id' => $att_value->id
-                                ])->delete();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public function updateAttributeValuesForVariations() {
-        $atts = collect($this->attributes)->filter(function($att, $key) {
-            $att = (object) $att;
-            return $att->selected === true && $att->for_variations === true;
-        });
-
-        if($atts) {
-            foreach ($atts as $att) {
-                $att = (object)$att;
-                $att_values = $att->attribute_values;
-
-                if ($att_values) {
-                    // ????
-                    // TODO: What happens when attribute values (used for variations) are changed AND product is saved without touching the variations modal?
-                    // FIX: It should SOFT DELETE product variations related to attribute value! IMPORTANT thing is to use SOFT DELETES, because if vendor wants to
-                    // revive the attribute value for some reason and generate variations related to it, we need to bring back the old variations in the DB from the dead.
-                    // This way we can always generate proper sales reports and never miss data!
-                    // SOFT DELETES FOR PRODUCT VARIATIONS ARE VERY IMPORTANT!!!!
-                    // NOTE: There can always be ONE product variation combination for certain product in the DB! We should never remove it fully, cuz we'll lose the data associated with it (number of variation sales, etc.)
-                }
-            }
-        }
-    }
-
-    public function getVariationsAttributesProperty() {
-        $atts_for_variations = collect($this->attributes)->filter(function($att, $key) {
-            return ((object) $att)->for_variations === true;
-        });
-
-        return $atts_for_variations;
-    }
+    //     return $atts_for_variations;
+    // }
 }
