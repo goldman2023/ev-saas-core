@@ -1,28 +1,15 @@
-<div id="we-edit" class="h-full w-full flex">
+<div id="we-edit" class="h-full w-full flex" x-data="{}">
 
-    <livewire:we-edit.navigation.sidebar />
+    <livewire:we-edit.navigation.sidebar :menu="$we_menu" />
 
     <div class="flex-1 flex flex-col overflow-hidden">
         <livewire:we-edit.navigation.topbar />
 
         <!-- Main content -->
-        <main class="min-w-0 flex-1 border-t border-gray-200 lg:flex">
-            <!-- Primary column -->
-            <section aria-labelledby="primary-heading" class="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last">
-                <h1 id="primary-heading" class="sr-only">Home</h1>
-                <!-- Your content -->
-            </section>
-        
-            <!-- Secondary column (hidden on smaller screens) -->
-            <aside class="hidden lg:block lg:flex-shrink-0 lg:order-first">
-                <div class="h-full relative flex flex-col w-96 border-r border-gray-200 bg-gray-100 overflow-y-auto">
-                <!-- Your content -->
-                </div>
-            </aside>
-        </main>
+        <livewire:we-edit.router-outlet :selected_page="$selected_page" />
     </div>
 
-    {{-- <!-- This example requires Tailwind CSS v2.0+ -->
+ <!-- This example requires Tailwind CSS v2.0+ -->
     <!--
   This example requires updating your template:
 
@@ -31,7 +18,7 @@
   <body class="h-full overflow-hidden">
   ```
 -->
-    <div class="h-full flex">
+    {{-- <div class="h-full flex">
         <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
         <div class="fixed inset-0 flex z-40 lg:hidden" role="dialog" aria-modal="true">
             <!--
@@ -430,6 +417,5 @@
                 {{-- </div>
             </div>
         </div>
-    </div> --}}
-
+    </div>  --}}
 </div>

@@ -1,4 +1,3 @@
-<!-- Narrow sidebar -->
 <div class="hidden w-28 bg-indigo-700 overflow-y-auto md:block">
     <div class="w-full py-6 flex flex-col items-center">
       <div class="flex-shrink-0 flex items-center">
@@ -6,11 +5,11 @@
       </div>
       <div class="flex-1 mt-6 w-full px-2 space-y-1">
 
-        @if(!empty($we_menu))
-            @foreach($we_menu as $menu_item)
+        @if(!empty($menu))
+            @foreach($menu as $menu_item)
             <!-- Current: "bg-indigo-800 text-white", Default: "text-indigo-100 hover:bg-indigo-800 hover:text-white" -->
         
-            <a href="#" class="text-indigo-100 hover:bg-indigo-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+            <a href="#" wire:click="changePage('{{ $menu_item['template'] ?? '' }}')" class="text-indigo-100 hover:bg-indigo-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
                 <!--
                   Heroicon name: outline/home
       

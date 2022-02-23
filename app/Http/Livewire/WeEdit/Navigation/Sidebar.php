@@ -3,35 +3,23 @@
 namespace App\Http\Livewire\WeEdit\Navigation;
 
 use Livewire\Component;
+use App\Enums\WeEditLayoutEnum;
 
 class Sidebar extends Component
 {
-    public $we_menu;
+    public $menu;
 
-    public function mount()
+    public function mount($menu)
     {
-        $this->we_menu = [
-            [
-                'title' => translate('Pages'),
-                'icon' => 'heroicon-o-document'
-            ],
-            [
-                'title' => translate('Menus'),
-                'icon' => 'heroicon-o-menu'
-            ],
-            [
-                'title' => translate('Templates'),
-                'icon' => 'heroicon-o-archive'
-            ],
-            [
-                'title' => translate('Site structure'),
-                'icon' => 'heroicon-o-globe-alt'
-            ]
-        ];
+        $this->menu = $menu;
     }
 
     public function render()
     {
         return view('livewire.we-edit.navigation.sidebar');
+    }
+
+    public function changePage($template) { 
+        $this->emit( 'changePageEvent', $template);
     }
 }
