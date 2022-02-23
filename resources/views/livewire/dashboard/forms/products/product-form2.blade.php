@@ -679,46 +679,68 @@
                                 {{-- Text List --}}
                                 <template x-if="attribute.type === 'text_list'">
                                     <div class="w-100" x-data="{
+                                            items: attribute.attribute_values.map(x => x.values),
                                             hasID(index) {
-                                                return this.attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(this.attribute.attribute_values[index].id) ? true : false;
+                                                return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
                                             },
                                             count() {
-                                                if(this.attribute.attribute_values === undefined || this.attribute.attribute_values === null) {
-                                                    this.attribute.attribute_values = [{values: ''}];
+                                                if(this.items === undefined || this.items === null) {
+                                                    this.items = [''];
                                                 }
                                     
-                                                return this.attribute.attribute_values.length;
+                                                return this.items.length;
                                             },
                                             add() {
-                                                this.attribute.attribute_values.push({values:''});
+                                                this.items.push('');
                                             },
                                             remove(index) {
                                                 if(this.hasID(index)) {
-                                                    $wire.removeAttributeValue(this.attribute.attribute_values[index]['id']);
+                                                    $wire.removeAttributeValue(attribute.attribute_values[index].id);
                                                 }
-                                                this.attribute.attribute_values.splice(index, 1);
+
+                                                this.items.splice(index, 1);
                                             },
-                                        }">
+                                        }" x-init="
+                                            $watch('items', items => {
+                                                items.forEach((item, index) => {
+                                                    if(attribute.attribute_values[index] === undefined || attribute.attribute_values[index] === null) {
+                                                        attribute.attribute_values[index] = { 
+                                                            values: item
+                                                        };
+                                                    } else {
+                                                        attribute.attribute_values[index].values = item;
+                                                    }
+                                                });
+
+                                                let diff = attribute.attribute_values.length - items.length;
+
+                                                if(diff > 0) {
+                                                    {{-- Remove difference between attribute.attribute_values and mapped items. --}}
+                                                    attribute.attribute_values = attribute.attribute_values.slice(0, -(diff));
+                                                }
+                                            });
+                                        ">
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
                                         {{-- FIX: There's an 'cannot acces X of undefined' error when removing item, but it doesn't fuck up the logic  --}}
-                                        <div class="row form-group" x-data="{}"
-                                        >
+                                        <div class="row form-group" x-data="{}">
                                         <div class="col-12 col-sm-9">
                                             <template x-if="count() <= 1">
                                                 <div class="d-flex">
                                                     <input type="text"
                                                             class="form-control"
                                                             placeholder="{{ translate('Value 1') }}"
-                                                            x-model="attribute.attribute_values[0]['values']" />
+                                                            :id="'attribute-'+attribute.id+'-text-list-input-'+key"
+                                                            x-model="items[0]" />
                                                 </div>
                                             </template>
                                             <template x-if="count() > 1">
-                                                <template x-for="[key, value] of Object.entries(attribute.attribute_values)">
+                                                <template x-for="[key, value] of Object.entries(items)">
                                                     <div class="d-flex" :class="{'mt-2': key > 0}">
                                                         <input type="text"
                                                             class="form-control"
+                                                            :id="'attribute-'+attribute.id+'-text-list-input-'+key"
                                                             x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                                                            x-model="attribute.attribute_values[key]['values']" />
+                                                            x-model="items[key]" />
                                                         <template x-if="key > 0">
                                                             <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
                                                                 @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])

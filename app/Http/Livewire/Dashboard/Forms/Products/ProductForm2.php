@@ -366,6 +366,12 @@ class ProductForm2 extends Component
                     if(!$att->is_predefined) {
                         
                         foreach($att_values as $key => $att_value) {
+                            if(empty($att_value['values'] ?? null)) {
+                                // If value is empty, unset it and later on reset array_values
+                                unset($att_values[$key]);
+                                continue;
+                            }
+
                             $attribute_value_row = (!empty($att_value['id'])) ? AttributeValue::find($att_value['id']) : new AttributeValue();
 
                             // Create the value first
@@ -400,6 +406,12 @@ class ProductForm2 extends Component
                             $att_values[$key] = $attribute_value_row;
                         }
                     }
+
+                    $att_values = array_values($att_values);
+
+                    if($att->id === 27) {
+                        // dd($att_values);
+                    }
                     
                     foreach($att_values as $key => $att_value) {
                         if($att_value->id ?? null) {
@@ -414,7 +426,7 @@ class ProductForm2 extends Component
                                 $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
 
                                 if($att->type === 'text_list') {
-                                    $att_rel->order = $key;
+                                    $att_rel->order = $key; // respect order for the text_list
                                 }
 
                                 $att_rel->save();
@@ -429,6 +441,24 @@ class ProductForm2 extends Component
                             }
                         }
                     }
+
+                    // if($att->type === 'text_list') {
+                    //     $vals = AttributeValue::where('attribute_id', $att->id)->get();
+                    //     dd($vals);
+                    //     foreach($att_values as $key => $att_value) {
+                    //         if(empty($vals->firstWhere('id', $att_value->id))) {
+                    //             dd($att_value);
+                    //         }
+                    //     }
+                        
+                    //     // remove missing attribute relationships and values 
+                    //     $rels = AttributeRelationship::where([
+                    //         'subject_type' => Product::class,
+                    //         'subject_id' => $this->product->id,
+                    //         'attribute_id' => $att->id,
+                    //         '' 
+                    //     ]);
+                    // }
                 }
             }
         }
