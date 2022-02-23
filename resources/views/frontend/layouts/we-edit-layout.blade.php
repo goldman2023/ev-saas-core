@@ -44,6 +44,8 @@
     </x-default.system.tracking-pixels>
 
     @stack('head_scripts')
+
+    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 </head>
 <body class="h-full">
     <div class="main-wrapper h-full">

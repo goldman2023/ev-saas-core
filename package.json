@@ -13,6 +13,7 @@
     "devDependencies": {
         "@babel/preset-react": "^7.14.5",
         "autoprefixer": "^10.2.6",
+        "chromatic": "^6.5.1",
         "cross-env": "^5.1",
         "cypress": "9.4.1",
         "laravel-mix": "^6.0.16",

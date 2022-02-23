@@ -4,46 +4,76 @@ namespace App\Http\Livewire;
 
 use App\Models\Page;
 use Livewire\Component;
+use App\Enums\WeEditLayoutEnum;
 
 class WeEdit extends Component
 {
-    public $available_sections = [
-        'tailwind.hero.ecommerce-hero' => [
-            'id' => 'tailwind.hero.ecommerce-hero',
-            'title' => 'Ecommerce Hero',
-            'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
-            'order' => -1,
-        ],
-        'tailwind.product-lists.simple' => [
-            'id' => 'tailwind.product-lists.simple',
-            'title' => 'Ecommerce Hero',
-            'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
-            'order' => -1
-        ],
-        'tailwind.product-lists.simple-3' => [
-            'id' => 'tailwind.product-lists.simple',
-            'title' => 'Ecommerce Hero',
-            'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
-            'order' => -1
-        ],
-        'tailwind.product-lists.simple-2' => [
-            'id' => 'tailwind.product-lists.simple',
-            'title' => 'Ecommerce Hero',
-            'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
-            'order' => -1
-        ]
-    ];
-
     public $page;
+    public $we_edit_data;
     public $sections;
+
+    public $we_menu;
+    public $selected_page;
+
+    public function mount() 
+    {
+        $this->we_menu = [
+            [
+                'title' => translate('Pages'),
+                'icon' => 'heroicon-o-document',
+                'template' => 'we-edit.pages.editor'
+            ],
+            [
+                'title' => translate('Menus'),
+                'icon' => 'heroicon-o-menu',
+                'template' => 'we-edit.pages.menu'
+            ],
+            [
+                'title' => translate('Templates'),
+                'icon' => 'heroicon-o-archive'
+            ],
+            [
+                'title' => translate('Site structure'),
+                'icon' => 'heroicon-o-globe-alt'
+            ]
+        ];
+    }
 
     public function render()
     {
-
+        $this->selected_page = $this->we_menu[0]['template'];
         $this->page = Page::where('slug', 'home')->first();
-        // dd($this->page->content);
         $this->sections =  $this->page->content;
+        $this->we_edit_data = $this->getEditData();
 
         return view('livewire.we-edit.we-edit');
+    }
+
+    public function getEditData()
+    {
+        $available_pages = Page::all();
+        $positions['x'] = 0;
+        $positions['y'] = 200;
+        $count = 0;
+        foreach ($available_pages as $page) {
+            $count++;
+            $page['data'] = ['label' => $page->title];
+            $page->type = 'default';
+            $page->type = 'system';
+            $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
+            $positions['x'] += 200;
+        }
+        $menu_flow = [];
+
+        $pages = [];
+
+
+        $weEditData = [
+            'pages' => json_encode($pages),
+            'available_pages' => json_encode($available_pages),
+            'menu_flow' => json_encode($menu_flow)
+        ];
+        
+        return $weEditData;
     }
 }
