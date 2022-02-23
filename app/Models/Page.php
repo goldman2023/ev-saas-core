@@ -7,6 +7,9 @@ use App;
 
 class Page extends Model
 {
+    protected $casts = [
+    'id' => 'string',
+  ];
   public function getTranslation($field = '', $lang = false){
       $lang = $lang == false ? App::getLocale() : $lang;
       $page_translation = $this->hasMany(PageTranslation::class)->where('lang', $lang)->first();

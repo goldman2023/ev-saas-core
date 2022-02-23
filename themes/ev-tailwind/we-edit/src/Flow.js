@@ -1,59 +1,87 @@
-import React, { useState } from "react";
-
+import React, { useState, useRef } from 'react';
 import ReactFlow, {
-    removeElements,
+    ReactFlowProvider,
     addEdge,
+    removeElements,
+    Controls,
     Background
-} from "react-flow-renderer";
+} from 'react-flow-renderer';
 
-const onNodeDragStop = (event, node) => console.log("drag stop", node);
-const onElementClick = (event, element) => console.log("click", element);
-const onLoad = (reactFlowInstance) => {
-    console.log(reactFlowInstance);
-    reactFlowInstance.fitView();
-};
+import Sidebar from './Sidebar';
 
-const initialElements = [
-    {
-        id: "1",
-        type: "input",
-        data: { label: "Homepage " },
-        position: { x: 250, y: 5 }
-    },
-    {
-        id: "2",
-        type: "input",
-        data: { label: "Pricing Page" }, position: { x: 100, y: 200 }
-    },
-    {
-        id: "6",
-        type: "input",
-        data: { label: "Login Page" }, position: { x: 200, y: 100 }
-    },
-    { id: "3", data: { label: "Node 3" }, position: { x: 400, y: 100 } },
-    { id: "4", data: { label: "Node 4" }, position: { x: 400, y: 200 } },
-    { id: "e1-2", source: "1", target: "2", animated: true },
-    { id: "e1-3", source: "1", target: "3" }
-];
+import './dnd.css';
+import './styles.css';
 
-const BasicFlow = () => {
+const initialElements = server_data;
+/* const initialElements = [
+    {
+        id: '1',
+        type: 'input',
+        data: { label: 'input node' },
+        position: { x: 250, y: 5 },
+      },
+    ]; */
+let id = server_data.length;
+const getId = () => `dndnode_${id++}`;
+
+const DnDFlow = () => {
+    const reactFlowWrapper = useRef(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const [elements, setElements] = useState(initialElements);
+    const onConnect = (params) => setElements((els) => addEdge(params, els));
     const onElementsRemove = (elementsToRemove) =>
         setElements((els) => removeElements(elementsToRemove, els));
-    const onConnect = (params) => setElements((els) => addEdge(params, els));
+
+    const onLoad = (_reactFlowInstance) =>
+        setReactFlowInstance(_reactFlowInstance);
+
+    const onDragOver = (event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    };
+
+    const onDrop = (event) => {
+        event.preventDefault();
+
+        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+        const type = event.dataTransfer.getData('application/reactflow');
+        const position = reactFlowInstance.project({
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+        });
+        const newNode = {
+            id: getId(),
+            type,
+            position,
+            data: { label: `${type} node` },
+        };
+
+        setElements((es) => {
+            console.log(es);
+            return es.concat(newNode)
+        }
+        );
+    };
 
     return (
-        <ReactFlow
-            elements={elements}
-            onLoad={onLoad}
-            onElementClick={onElementClick}
-            onElementsRemove={onElementsRemove}
-            onConnect={onConnect}
-            onNodeDragStop={onNodeDragStop}
-        >
-            <Background />
-        </ReactFlow>
+        <div className="dndflow">
+            <ReactFlowProvider>
+                <div className="reactflow-wrapper" ref={reactFlowWrapper}>
+                    <ReactFlow
+                        elements={elements}
+                        onConnect={onConnect}
+                        onElementsRemove={onElementsRemove}
+                        onLoad={onLoad}
+                        onDrop={onDrop}
+                        onDragOver={onDragOver}
+                    >
+                        <Controls />
+                    </ReactFlow>
+                </div>
+                <Sidebar />
+            </ReactFlowProvider>
+        </div>
     );
 };
 
-export default BasicFlow;
+export default DnDFlow;

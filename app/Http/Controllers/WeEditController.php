@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use Illuminate\Http\Request;
 
 class WeEditController extends Controller
@@ -12,6 +13,18 @@ class WeEditController extends Controller
     }
 
     public function flow() {
-        return view('we-edit.flow');
+        $pages = Page::all();
+        $positions['x'] = 0;
+        $positions['y'] = 200;
+        $count = 0;
+        foreach($pages as $page ) {
+            $count++;
+            $page['data'] = ['label' => $page->title];
+            $page->type = 'input';
+            $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
+            $positions['x'] += 200;
+        }
+        $pages = json_encode($pages);
+        return view('we-edit.flow', compact('pages'));
     }
 }
