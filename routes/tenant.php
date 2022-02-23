@@ -108,7 +108,6 @@ Route::middleware([
 
     Route::get('/business/register', 'ShopController@create')->name('business.register');
 
-
     Auth::routes(['verify' => true]);
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::get('/email/resend', [VerificationController::class, 'resend'])->name('email.verification.resend');
@@ -157,12 +156,6 @@ Route::middleware([
     Route::get('/shop/{slug}/info/{sub_page}', [CompanyController::class, 'show'])->name('shop.sub-page');
     Route::get('/shop/{slug}/{type}', [HomeController::class, 'filter_shop'])->name('shop.visit.type');
 
-    Route::get('/event/{slug}', [EventController::class, 'show'])->name('event.visit');
-
-
-    // Route::get('/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('brand.single');
-    // Route::post('/product/variant_price', [HomeController::class, 'variant_price'])->name(Product::ROUTING_PLURAL_NAME_PREFIX.'.variant_price');
-
     // Cart page
     Route::get('/cart', [EVCartController::class, 'index'])->name('cart');
     Route::get('/wishlist', [EVWishlistController::class, 'index'])->name('wishlist');
@@ -177,17 +170,13 @@ Route::middleware([
         Route::get('/order-received/{id}', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
     });
 
+    /* Old active commerce stripe routes */
     Route::get('stripe', [StripePaymentController::class, 'stripe']);
     Route::post('/stripe/create-checkout-session', [StripePaymentController::class, 'stripe'])->name('stripe.get_token');
     Route::any('/stripe/payment/callback', [StripePaymentController::class, 'callback'])->name('stripe.callback');
     Route::get('/stripe/success', [StripePaymentController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');
     //Stripe END
-
-
-    Route::get('/compare', [CompareController::class, 'index'])->name('compare');
-    Route::get('/compare/reset', [CompareController::class, 'reset'])->name('compare.reset');
-    Route::post('/compare/addToCompare', [CompareController::class, 'addToCompare'])->name('compare.addToCompare');
 
     Route::resource('subscribers', 'SubscriberController');
     /* TODO: Move some logic to brand, category, seller controllers as home controller holds too much logic*/
@@ -196,54 +185,9 @@ Route::middleware([
     Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
     Route::group(['middleware' => []], function () {
-        Route::get('/dashboard/thank-you', 'CompanyController@thankYouPage')->name('company.thank-you');
-        Route::get('/profile', 'HomeController@profile')->name('profile');
-        Route::get('/attributes', 'HomeController@attributes')->name('attributes');
-        Route::post('/new-user-verification', 'HomeController@new_verify')->name('user.new.verify');
-        Route::post('/new-user-email', 'HomeController@update_email')->name('user.change.email');
-        Route::post('/customer/update-profile', 'HomeController@customer_update_profile')->name('customer.profile.update');
-        Route::post('/seller/update-profile', 'HomeController@seller_update_profile')->name('seller.profile.update');
-        Route::post('/seller/update-category', 'HomeController@seller_update_category')->name('seller.category.update');
-        Route::post('/update_attributes', 'HomeController@update_attributes')->name('frontend.attributes.update');
-
-        Route::resource('purchase_history', 'PurchaseHistoryController')->parameters([
-            'purchase_history' => 'id',
-        ]);
-        Route::post('/purchase_history/details', 'PurchaseHistoryController@purchase_history_details')->name('purchase_history.details');
-        //    Route::get('/purchase_history/destroy/{id}', 'PurchaseHistoryController@destroy')->name('purchase_history.destroy');
-
-        Route::resource('wishlists', 'WishlistController');
-        Route::post('/wishlists/remove', 'WishlistController@destroy')->name('wishlists.remove');
-
         Route::resource('support_ticket', 'SupportTicketController');
         Route::post('support_ticket/reply', 'SupportTicketController@seller_store')->name('support_ticket.seller_store');
     });
-
-    Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user']], function () {
-        Route::get('/products', 'HomeController@seller_product_list')->name('seller.products');
-        Route::get('/product/upload', 'HomeController@show_product_upload_form')->name('seller.products.upload');
-        Route::get('/product/{id}/edit', 'HomeController@show_product_edit_form')->name('seller.product.edit');
-        Route::post('/products/featured', 'ProductController@updateFeatured')->name('products.featured');
-
-        Route::resource('payments', 'PaymentController');
-
-        Route::get('/shop/apply_for_verification', 'ShopController@verify_form')->name('shop.verify');
-        Route::post('/shop/apply_for_verification', 'ShopController@verify_form_store')->name('shop.verify.store');
-
-        Route::get('/reviews', 'ReviewController@seller_reviews')->name('reviews.seller');
-    });
-
-
-
-    Route::get('/track_your_order', 'HomeController@trackOrder')->name('orders.track');
-
-
-    Route::get('/all_jobs', 'JobController@all_jobs')->name('jobs.all');
-    Route::get('/shops/{shop_slug}/jobs/{job_slug}', 'JobController@job')->name('jobs.visit');
-
-
-    Route::resource('companies', 'CompanyController');
-
 
     //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
@@ -251,24 +195,12 @@ Route::middleware([
     Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
 
     // Chat
-    Route::get('/styleguide', 'PageController@styleguide')->name('styleguide.index');
 
     Route::get('/chat', 'ChatController@index')->name('chat.index');
-    Route::get('/pricing', 'PageController@pricing')->name('landing.pricing');
-
-
-    // Mailchimp subscriptions routes
-    Route::post('/subscribe/{type}', 'Integrations\MailchimpController@subscribe')
-        ->name('mailchimp.subscribe');
-
-    Route::get('/page/{slug}', 'PageController@show_static_page')->name('page.static_page');
 
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
-
-    Route::resource('knowledge-base', 'KnowledgeBaseController');
-
 
     // Tenant Management routes - added from SaaS Boilerplate
     Route::get('/impersonate/{token}', function ($token) {

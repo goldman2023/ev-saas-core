@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App;
+use App\Traits\Livewire\HasTranslations;
+use App\Traits\TranslationTrait;
 
 class Page extends EVBaseModel
 {
