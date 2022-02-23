@@ -104,9 +104,7 @@ Route::middleware([
 
 
     Route::resource('shops', 'ShopController');
-    Route::resource('courses', 'CoursesController');
     Route::resource('ev-social-commerce', 'SocialCommerceController');
-    Route::resource('ev-tutorials', 'TutorialController');
 
     Route::get('/business/register', 'ShopController@create')->name('business.register');
 
@@ -136,15 +134,6 @@ Route::middleware([
     Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
-    Route::get('/customer-products', [CustomerProductController::class, 'customer_products_listing'])->name('customer.products');
-    Route::get('/customer-products?category={category_slug}', [CustomerProductController::class, 'search'])->name('customer_category.products.index');
-    Route::get('/customer-products?city={city_id}', [CustomerProductController::class, 'search'])->name('customer_products.city');
-    Route::get('/customer-products?q={search}', [CustomerProductController::class, 'search'])->name('customer_products.search');
-    Route::get('/customer-products/admin', [HomeController::class, 'profile_edit'])->name('customer.profile.edit');
-    Route::get('/customer-product/{slug}', [CustomerProductController::class, 'customer_product'])->name('customer.product');
-    Route::get('/customer-packages', [HomeController::class, 'premium_package_index'])->name('customer_packages_list_show');
-
-    /* TODO: Investigate this is causing some issues */
     Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
@@ -186,31 +175,7 @@ Route::middleware([
         Route::get('/checkout-single', [EVCheckoutController::class, 'single'])->name('checkout.single.page');
 
         Route::get('/order-received/{id}', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
-
-
-
-//        Route::any('/checkout/delivery_info', 'CheckoutController@store_shipping_info')->name('checkout.store_shipping_infostore');
-//        Route::post('/checkout/payment_select', 'CheckoutController@store_delivery_info')->name('checkout.store_delivery_info');
-//
-//        Route::get('/order-confirmed', 'CheckoutController@order_confirmed')->name('order_confirmed');
-//        Route::post('/payment', 'CheckoutController@checkout')->name('payment.checkout');
-//        Route::post('/get_pick_up_points', 'HomeController@get_pick_up_points')->name('shipping_info.get_pick_up_points');
-//        Route::get('/payment-select', 'CheckoutController@get_payment_info')->name('checkout.payment_info');
-//        Route::post('/apply_coupon_code', 'CheckoutController@apply_coupon_code')->name('checkout.apply_coupon_code');
-//        Route::post('/remove_coupon_code', 'CheckoutController@remove_coupon_code')->name('checkout.remove_coupon_code');
-//        //Club point
-//        Route::post('/apply-club-point', 'CheckoutController@apply_club_point')->name('checkout.apply_club_point');
-//        Route::post('/remove-club-point', 'CheckoutController@remove_club_point')->name('checkout.remove_club_point');
     });
-
-
-
-
-    Route::post('/cart/nav-cart-items', [CartController::class, 'updateNavCart'])->name('cart.nav_cart');
-    Route::post('/cart/show-cart-modal', [CartController::class, 'showCartModal'])->name('cart.showCartModal');
-    Route::post('/cart/addtocart', [CartController::class, 'addToCart'])->name('cart.addToCart');
-    Route::post('/cart/removeFromCart', [CartController::class, 'removeFromCart'])->name('cart.removeFromCart');
-    Route::post('/cart/updateQuantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity');
 
     Route::get('stripe', [StripePaymentController::class, 'stripe']);
     Route::post('/stripe/create-checkout-session', [StripePaymentController::class, 'stripe'])->name('stripe.get_token');
@@ -252,8 +217,6 @@ Route::middleware([
 
         Route::resource('support_ticket', 'SupportTicketController');
         Route::post('support_ticket/reply', 'SupportTicketController@seller_store')->name('support_ticket.seller_store');
-
-
     });
 
     Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user']], function () {
@@ -268,7 +231,6 @@ Route::middleware([
         Route::post('/shop/apply_for_verification', 'ShopController@verify_form_store')->name('shop.verify.store');
 
         Route::get('/reviews', 'ReviewController@seller_reviews')->name('reviews.seller');
-
     });
 
 
