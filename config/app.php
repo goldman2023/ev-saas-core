@@ -40,6 +40,7 @@ return [
     */
 
     'debug' => env('APP_DEBUG', true),
+    'debug_bar' => env('DEBUGBAR_ENABLED', true),
 
     'debug_blacklist' => [
         '_ENV' => [
@@ -194,7 +195,7 @@ return [
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
         // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-
+        Illuminate\Mail\MailServiceProvider::class,
         /*
          * Package Service Providers...
          */

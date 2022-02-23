@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (config('app.debugbar_enabled')) {
+        if (config('app.debug_bar')) {
             \Debugbar::enable();
         } else {
             \Debugbar::disable();
