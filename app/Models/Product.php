@@ -78,8 +78,10 @@ class Product extends EVBaseModel
     protected $with = ['variations'];
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
-    protected $fillable = ['name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description', 'shop_id'];
+    protected $fillable = [
+        'name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
+        'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description', 'shop_id'
+    ];
 
 
     protected $casts = [
@@ -101,7 +103,7 @@ class Product extends EVBaseModel
     /**
      * Get the options for generating the slug.
      */
-    public function getSlugOptions() : SlugOptions
+    public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
             ->generateSlugsFrom('name')
@@ -113,7 +115,8 @@ class Product extends EVBaseModel
      *
      * @return string
      */
-    public static function getRouteName() {
+    public static function getRouteName()
+    {
         return 'product.single';
     }
 
@@ -134,9 +137,9 @@ class Product extends EVBaseModel
     {
         return $query->where(
             fn ($query) =>  $query
-                ->where('name', 'like', '%'.$term.'%')
-                ->orWhere('excerpt', 'like', '%'.$term.'%')
-                ->orWhere('description', 'like', '%'.$term.'%')
+                ->where('name', 'like', '%' . $term . '%')
+                ->orWhere('excerpt', 'like', '%' . $term . '%')
+                ->orWhere('description', 'like', '%' . $term . '%')
         );
     }
 
@@ -145,7 +148,7 @@ class Product extends EVBaseModel
      */
     public function activityExtraData()
     {
-        return array('name'=>'$this->name', 'display_name' =>' $this->display_name');
+        return array('name' => '$this->name', 'display_name' => ' $this->display_name');
     }
 
     /**
@@ -176,12 +179,14 @@ class Product extends EVBaseModel
         return $this->morphMany(Wishlist::class, 'subject');
     }
 
-    public function taxes() {
+    public function taxes()
+    {
         return $this->hasMany(ProductTax::class);
     }
 
     /* TODO: Implement product condition in backend: new/used/refurbished */
-    public function getCondition() {
+    public function getCondition()
+    {
         return translate("New");
     }
 
@@ -196,7 +201,8 @@ class Product extends EVBaseModel
         return 'unit_price';
     }
 
-    public function getLikesCount() {
+    public function getLikesCount()
+    {
         return $this->likes()->count();
     }
 
@@ -217,16 +223,21 @@ class Product extends EVBaseModel
         ];
     }
 
-    function public_view_count() {
+    function public_view_count($period = 'all')
+    {
 
         $ttl = 600;
         $product = $this;
-        $view_count = Cache::remember('product_view_count_' . $this->id, $ttl, function () use ($product) {
-            return \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)
-            ->whereJsonContains('properties->action', 'viewed')
-            ->orderBy('created_at','desc'
-            )->count();
-        });
+        if ($period == 'all') {
+            $view_count = Cache::remember('product_view_count_' . $this->id . '_' . $period, $ttl, function () use ($product) {
+                return \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)
+                    ->whereJsonContains('properties->action', 'viewed')
+                    ->orderBy(
+                        'created_at',
+                        'desc'
+                    )->count();
+            });
+        }
 
         return $view_count;
     }

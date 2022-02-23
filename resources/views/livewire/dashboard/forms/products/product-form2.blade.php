@@ -8,52 +8,6 @@
         attributes: @js($attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
-        getSelectorID(attribute) { return 'attributes_'+attribute.id+'_attribute_values'; } ,
-        hasCustomProperty(attribute, name) {
-            return attribute.custom_properties !== null &&
-                    attribute.custom_properties !== undefined &&
-                    attribute.custom_properties.hasOwnProperty(name);
-        },
-        isMultiple(attribute) { return this.hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple; },
-        getDateOptions(attribute) {
-            let options = {
-                mode: 'single',
-                enableTime: false,
-            };
-
-            if(this.hasCustomProperty(attribute, 'with_time') && attribute.custom_properties.with_time) {
-                options.enableTime = true;
-                options.dateFormat = 'd.m.Y H:i';
-            }
-
-            if(this.hasCustomProperty(attribute, 'range') && attribute.custom_properties.range) {
-                options.mode = 'range';
-            }
-
-            return JSON.stringify(options);
-        },
-        getMinValue(attribute) { return hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : 0; },
-        getMaxValue(attribute) { return hasCustomProperty(attribute, 'max_value') ? attribute.custom_properties.max_value : 999; },
-        getListCount(attribute) {
-            if(attribute.attribute_values === undefined || attribute.attribute_values === null) {
-                attribute.attribute_values = [{values: ''}];
-            }
-
-            return attribute.attribute_values.length;
-        },
-        hasID(attribute, index) {
-            return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
-        },
-        addToList(attribute) {
-            attribute.attribute_values.push({values:''});
-        },
-        removeFromList(attribute, index) {
-            console.log(this.hasID(attribute, index));
-            if(this.hasID(attribute, index)) {
-                $wire.removeAttributeValue(attribute.attribute_values[index]['id']);
-            }
-            attribute.attribute_values.splice(index, 1);
-        },
         onSave() {
             $wire.set('product.description', $('[name=\'product.description\']').val(), true);
             $wire.set('product.thumbnail', $('[name=\'product.thumbnail\']').val(), true);
@@ -79,6 +33,7 @@
         }
     }"
      class="lw-form container-fluid"
+     @init-product-form.window=""
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
 
@@ -451,32 +406,116 @@
 
 
                 {{-- Card Attributes --}}
-                <div class="card mb-3 mb-lg-5" >
+                <div class="card mb-3 mb-lg-5" x-data="" wire:ignore>
                     <div class="card-body position-relative">
                         <h5 class="pb-2 mb-3 border-bottom">{{ translate('Attributes') }}</h5>
 
                         <template x-for="attribute in attributes" >
-                            <div class="w-100 mb-3" x-data="{}" x-init="
-                                    $nextTick(() => {
-                                        if(predefined_types.indexOf(attribute.type) !== -1) {
-                                            $('#'+getSelectorID(attribute)).on('select2:select select2:unselect select2:clear', (event) => {
-                                                selected_attribute_values['attribute.'+attribute.id] = $('#'+getSelectorID(attribute)).select2('data').map(x => x.id);
-                                            });
-                                            $watch('selected_attribute_values', (value, oldValue) => {
-                                                if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
-                                                    $('#'+getSelectorID(attribute)).val(value).trigger('change');
-                                                }
-                                            });
-                                        }
-                                    });
-                                " x-cloak >
+                            <div class="w-100 mb-3" x-data="{
+                                    getSelectorID() { 
+                                        return 'attributes_'+this.attribute.id+'_attribute_values'; 
+                                    },
+                                    hasCustomProperty(name) {
+                                        return this.attribute.custom_properties !== null &&
+                                                this.attribute.custom_properties !== undefined &&
+                                                this.attribute.custom_properties.hasOwnProperty(name);
+                                    },
+                                }" x-cloak >
 
                                 {{-- Dropdown --}}
                                 <template x-if="attribute.type === 'dropdown'">
-                                    <div class="w-100" x-data="{}" >
+                                    <div class="w-100" x-data="{
+                                        items: attribute.attribute_values,
+                                        selected_items: selected_attribute_values['attribute.'+attribute.id],
+                                        show: false,
+                                        multiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
+                                        tag: false,
+                                        countSelected() {
+                                            if(this.selected_items === undefined || this.selected_items === null) {
+                                                this.selected_items = [];
+                                            }
+
+                                            return this.selected_items.length;
+                                        },
+                                        getPlaceholder() {
+                                            if(this.countSelected() === 1) {
+                                                return this.items.find(x => {
+                                                    return x.id == this.selected_items[0];
+                                                }).values || '';
+                                            } else if(this.countSelected() > 1) {
+                                                return '';
+                                            } else {
+                                                return '{{ translate('Choose option(s)') }}';
+                                            }
+                                        },
+                                        isSelected(key) {
+                                            return this.selected_items.indexOf(key) !== -1 ? true : false;
+                                        },
+                                        select(key, label) {
+                                            if(this.isSelected(key)) {
+                                                this.selected_items.splice(this.selected_items.indexOf(key), 1);
+                                            } else {
+                                                if(!this.multiple) {
+                                                    this.selected_items = [key];
+                                                } else {
+                                                    this.selected_items.push(Number(key));
+                                                }
+                                            }
+        
+                                            if(!this.multiple) {
+                                                this.show = false;
+                                                this.placeholder = label;
+                                            }
+    
+                                            selected_attribute_values['attribute.'+attribute.id] = this.selected_items;
+                                        }
+                                    }" >
                                             <label class="w-100 input-label" x-text="attribute.name"></label>
 
-                                            <select class="form-control custom-select custom-select-sm"
+                                            <div class="we-select position-relative w-100" x-data="{}" @click.outside="show = false">
+                                                <div class="we-select__selector noselect w-100 d-flex flex-wrap border pl-3 pt-2 pb-1 pr-6 position-relative pointer" 
+                                                     @click="show = !show">
+                                                    @svg('heroicon-o-chevron-down', ['class' => 'we-select__selector-arrow position-absolute square-16 vertical-center', ':class' => "{'rotate-180deg': show}"])
+                                
+                                                    <template x-if="!multiple">
+                                                        <span class="d-block pb-1" x-text="getPlaceholder()"></span>
+                                                    </template>
+
+                                                    <template x-if="multiple">
+                                                        <div class="w-100 d-flex flex-wrap">
+                                                            <template x-if="countSelected() > 0">
+                                                                <template x-for="item in items.filter(x => {
+                                                                    return selected_items.indexOf(x.id) !== -1;
+                                                                  })">
+                                                                    <div class="we-select__selector-selected-item rounded mr-2 mb-1 position-relative">
+                                                                        <span class="we-select__selector-selected-item-label pl-1 mr-1" x-text="item.values"></span>
+                                                                        <button type="button" class="we-select__selector-selected-item-remove px-2" 
+                                                                                @click="event.stopPropagation(); select(item.id, item.values)">
+                                                                            <span>×</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </template>
+                                                            </template>
+                                                            <template x-if="countSelected() <= 0">
+                                                                <span class="d-block pb-1" x-text="getPlaceholder()"></span>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                
+                                                <div class="we-select__dropdown  position-absolute bg-white shadow border rounded mt-1  w-100" x-show="show">
+                                                    <ul class="we-select__dropdown-list noselect w-100">
+                                                        <template x-for="item in items">
+                                                            <li class="we-select__dropdown-list-item py-2 px-3 pointer" 
+                                                                x-text="item.values"
+                                                                :class="{'selected': isSelected(item.id) }"
+                                                                @click="select(item.id, item.values)"></li>
+                                                        </template>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            {{-- <select class="form-control custom-select custom-select-sm"
                                                     :id="'attributes_'+attribute.id+'_attribute_values'"
                                                     x-bind:multiple="isMultiple(attribute)"
                                                     x-model="selected_attribute_values['attribute.'+attribute.id]"
@@ -490,9 +529,9 @@
                                                         <option :value="attribute_value.id" x-text="attribute_value.values">
                                                         </option>
                                                     </template>
-                                            </select>
+                                            </select> --}}
 
-                                            <template x-if="hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple">
+                                            <template x-if="hasCustomProperty('multiple') && attribute.custom_properties.multiple">
                                                 <div class="w-100 d-flex mt-2 mb-2">
                                                     <label class="toggle-switch mr-3">
                                                         <input type="checkbox" x-model="attribute.for_variations" class="js-toggle-switch toggle-switch-input">
@@ -524,19 +563,26 @@
 
                                 {{-- Number --}}
                                 <template x-if="attribute.type === 'number'">
-                                    <div class="w-100" x-data="{}" x-init="">
+                                    <div class="w-100" x-data="{
+                                        getMinValue() { 
+                                            return this.hasCustomProperty(this.attribute, 'min_value') ? this.attribute.custom_properties.min_value : 0; 
+                                        },
+                                        getMaxValue() { 
+                                            return this.hasCustomProperty(this.attribute, 'max_value') ? this.attribute.custom_properties.max_value : 999; 
+                                        },
+                                    }" x-init="">
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
-                                        <div class="input-group" :class="{'input-group-merge': !hasCustomProperty(attribute, 'unit')}">
+                                        <div class="input-group" :class="{'input-group-merge': !hasCustomProperty('unit')}">
 
                                             <input type="number"
                                             class="form-control form-control-sm"
                                             :id="'attributes_'+attribute.id+'_attribute_values'"
-                                            x-bind:min="hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : ''"
-                                            x-bind:max="hasCustomProperty(attribute, 'max_value') ? attribute.custom_properties.max_value : ''"
+                                            x-bind:min="getMinValue()"
+                                            x-bind:max="getMaxValue()"
                                             x-model="attribute.attribute_values[0].values" />
 
-                                            <template x-if="hasCustomProperty(attribute, 'unit')">
+                                            <template x-if="hasCustomProperty('unit')">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text input-group-text-sm" x-text="attribute.custom_properties.unit"></span>
                                                 </div>
@@ -550,14 +596,32 @@
 
                                 {{-- Date --}}
                                 <template x-if="attribute.type === 'date'">
-                                    <div class="w-100" x-data="{}" x-init="">
+                                    <div class="w-100" x-data="{
+                                            getDateOptions() {
+                                                let options = {
+                                                    mode: 'single',
+                                                    enableTime: false,
+                                                };
+                                    
+                                                if(this.hasCustomProperty('with_time') && this.attribute.custom_properties.with_time) {
+                                                    options.enableTime = true;
+                                                    options.dateFormat = 'd.m.Y H:i';
+                                                }
+                                    
+                                                if(this.hasCustomProperty('range') && this.attribute.custom_properties.range) {
+                                                    options.mode = 'range';
+                                                }
+                                    
+                                                return JSON.stringify(options);
+                                            },
+                                        }" x-init="">
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                         <input x-model="attribute.attribute_values[0].values"
                                                     type="text"
                                                     class="js-flatpickr form-control form-control-sm flatpickr-custom"
                                                     placeholder="{{ translate('Pick date') }}"
-                                                    :data-hs-flatpickr-options='getDateOptions(attribute)'
+                                                    :data-hs-flatpickr-options='getDateOptions()'
                                                     data-input />
 
                                     </div>
@@ -614,29 +678,71 @@
 
                                 {{-- Text List --}}
                                 <template x-if="attribute.type === 'text_list'">
-                                    <div class="w-100" x-data="{}" x-init="">
+                                    <div class="w-100" x-data="{
+                                            items: attribute.attribute_values.map(x => x.values),
+                                            hasID(index) {
+                                                return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
+                                            },
+                                            count() {
+                                                if(this.items === undefined || this.items === null) {
+                                                    this.items = [''];
+                                                }
+                                    
+                                                return this.items.length;
+                                            },
+                                            add() {
+                                                this.items.push('');
+                                            },
+                                            remove(index) {
+                                                if(this.hasID(index)) {
+                                                    $wire.removeAttributeValue(attribute.attribute_values[index].id);
+                                                }
+
+                                                this.items.splice(index, 1);
+                                            },
+                                        }" x-init="
+                                            $watch('items', items => {
+                                                items.forEach((item, index) => {
+                                                    if(attribute.attribute_values[index] === undefined || attribute.attribute_values[index] === null) {
+                                                        attribute.attribute_values[index] = { 
+                                                            values: item
+                                                        };
+                                                    } else {
+                                                        attribute.attribute_values[index].values = item;
+                                                    }
+                                                });
+
+                                                let diff = attribute.attribute_values.length - items.length;
+
+                                                if(diff > 0) {
+                                                    {{-- Remove difference between attribute.attribute_values and mapped items. --}}
+                                                    attribute.attribute_values = attribute.attribute_values.slice(0, -(diff));
+                                                }
+                                            });
+                                        ">
                                         <label class="w-100 input-label" x-text="attribute.name"></label>
                                         {{-- FIX: There's an 'cannot acces X of undefined' error when removing item, but it doesn't fuck up the logic  --}}
-                                        <div class="row form-group" x-data="{}"
-                                        >
+                                        <div class="row form-group" x-data="{}">
                                         <div class="col-12 col-sm-9">
-                                            <template x-if="getListCount(attribute) <= 1">
+                                            <template x-if="count() <= 1">
                                                 <div class="d-flex">
                                                     <input type="text"
                                                             class="form-control"
                                                             placeholder="{{ translate('Value 1') }}"
-                                                            x-model="attribute.attribute_values[0]['values']" />
+                                                            :id="'attribute-'+attribute.id+'-text-list-input-'+key"
+                                                            x-model="items[0]" />
                                                 </div>
                                             </template>
-                                            <template x-if="getListCount(attribute) > 1">
-                                                <template x-for="[key, value] of Object.entries(attribute.attribute_values)">
+                                            <template x-if="count() > 1">
+                                                <template x-for="[key, value] of Object.entries(items)">
                                                     <div class="d-flex" :class="{'mt-2': key > 0}">
                                                         <input type="text"
                                                             class="form-control"
+                                                            :id="'attribute-'+attribute.id+'-text-list-input-'+key"
                                                             x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                                                            x-model="attribute.attribute_values[key]['values']" />
+                                                            x-model="items[key]" />
                                                         <template x-if="key > 0">
-                                                            <span class="ml-2 d-flex align-items-center pointer" @click="removeFromList(attribute, key)">
+                                                            <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
                                                                 @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
                                                             </span>
                                                         </template>
@@ -645,7 +751,7 @@
                                             </template>
 
                                             <a href="javascript:;"
-                                                class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="addToList(attribute)">
+                                                class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="add()">
                                                 <i class="tio-add"></i> {{ translate('Add value') }}
                                             </a>
                                         </div>
@@ -856,6 +962,11 @@
             {{-- END Right column --}}
         </div>
 
-
+        {{-- <script type="text/javascript">
+            window.addEventListener('', event => {
+                alert('Name updated to: ' + event.detail.newName);
+            });
+        </script> --}}
     </div>
 </div>
+
