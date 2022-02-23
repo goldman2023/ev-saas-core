@@ -3,7 +3,9 @@
 @section('content')
 <div class="App">
     <div id="root"></div>
-
+    <div id="info-box">
+        This is an info box
+    </div>
     <style>
         html,
         body,

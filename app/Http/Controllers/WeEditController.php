@@ -20,7 +20,7 @@ class WeEditController extends Controller
         foreach($pages as $page ) {
             $count++;
             $page['data'] = ['label' => $page->title];
-            $page->type = 'input';
+            $page->type = 'default';
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
         }

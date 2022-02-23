@@ -4,7 +4,9 @@ import ReactFlow, {
     addEdge,
     removeElements,
     Controls,
-    Background
+    Background,
+    ControlButton,
+    DeleteIcon,
 } from 'react-flow-renderer';
 
 import Sidebar from './Sidebar';
@@ -22,6 +24,7 @@ const initialElements = server_data;
       },
     ]; */
 let id = server_data.length;
+let selected_node = null;
 const getId = () => `dndnode_${id++}`;
 
 const DnDFlow = () => {
@@ -39,6 +42,10 @@ const DnDFlow = () => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     };
+
+    const onElementClick = (element) => {
+        console.log('element clicked', element);
+    }
 
     const onDrop = (event) => {
         event.preventDefault();
@@ -68,6 +75,7 @@ const DnDFlow = () => {
             <ReactFlowProvider>
                 <div className="reactflow-wrapper" ref={reactFlowWrapper}>
                     <ReactFlow
+                        onElementClick={onElementClick}
                         elements={elements}
                         onConnect={onConnect}
                         onElementsRemove={onElementsRemove}
@@ -75,7 +83,13 @@ const DnDFlow = () => {
                         onDrop={onDrop}
                         onDragOver={onDragOver}
                     >
-                        <Controls />
+
+                            <Controls showInteractive={false}>
+                                <ControlButton onClick={onElementClick}>
+                                    labas
+                                </ControlButton>
+                            </Controls>
+                        <Background />
                     </ReactFlow>
                 </div>
                 <Sidebar />
