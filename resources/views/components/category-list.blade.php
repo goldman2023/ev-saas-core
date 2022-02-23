@@ -20,7 +20,7 @@
 
                 @foreach ($categoriesSorted as $category)
                     <a class="b2b-category-list__link btn btn-xs btn-soft-secondary btn-pill mx-sm-1 mb-1"
-                       href="{{ route('companies.category', $category->slug) }}">
+                       href="#">
                         {{-- <img
                             class="cat-image mr-2 opacity-60"
                             src="{{ uploaded_asset($category->icon) }}"
