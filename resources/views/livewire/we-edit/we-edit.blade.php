@@ -1,5 +1,28 @@
-<div id="we-edit">
-    <!-- This example requires Tailwind CSS v2.0+ -->
+<div id="we-edit" class="h-full w-full flex">
+
+    <livewire:we-edit.navigation.sidebar />
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <livewire:we-edit.navigation.topbar />
+
+        <!-- Main content -->
+        <main class="min-w-0 flex-1 border-t border-gray-200 lg:flex">
+            <!-- Primary column -->
+            <section aria-labelledby="primary-heading" class="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last">
+                <h1 id="primary-heading" class="sr-only">Home</h1>
+                <!-- Your content -->
+            </section>
+        
+            <!-- Secondary column (hidden on smaller screens) -->
+            <aside class="hidden lg:block lg:flex-shrink-0 lg:order-first">
+                <div class="h-full relative flex flex-col w-96 border-r border-gray-200 bg-gray-100 overflow-y-auto">
+                <!-- Your content -->
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    {{-- <!-- This example requires Tailwind CSS v2.0+ -->
     <!--
   This example requires updating your template:
 
@@ -346,28 +369,31 @@
                             <div class="px-6 mb-3">
                                 <ul role="list"
                                     class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-1 sm:gap-x-6 lg:grid-cols-1 xl:gap-x-8">
-                                    @foreach($available_sections as $key => $section)
+                                    
+                                    @if(!empty($available_sections))
+                                        @foreach($available_sections as $key => $section)
+                                            <li class="relative">
+                                                <div
+                                                    class="group block w-full aspect-w-10 aspect-h-5 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
+                                                    <x-tenant.system.image alt="{{ $key }}"
+                                                        class="object-contain pointer-events-none group-hover:opacity-75"
+                                                        :image="$section['thumbnail']">
+                                                    </x-tenant.system.image>
+                                                    <button type="button" class="absolute inset-0 focus:outline-none">
+                                                        <span class="sr-only">View details for IMG_4985.HEIC</span>
+                                                    </button>
+                                                </div>
+                                                <p
+                                                    class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
+                                                    {{ $section['title'] }}
 
-                                    <li class="relative">
-                                        <div
-                                            class="group block w-full aspect-w-10 aspect-h-5 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
-                                            <x-tenant.system.image alt="{{ $key }}"
-                                                class="object-contain pointer-events-none group-hover:opacity-75"
-                                                :image="$section['thumbnail']">
-                                            </x-tenant.system.image>
-                                            <button type="button" class="absolute inset-0 focus:outline-none">
-                                                <span class="sr-only">View details for IMG_4985.HEIC</span>
-                                            </button>
-                                        </div>
-                                        <p
-                                            class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none">
-                                            {{ $section['title'] }}
-
-                                        </p>
-                                        <p class="block text-sm font-medium text-gray-500 pointer-events-none">3.9 MB
-                                        </p>
-                                    </li>
-                                    @endforeach
+                                                </p>
+                                                <p class="block text-sm font-medium text-gray-500 pointer-events-none">3.9 MB
+                                                </p>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                    
                                     <!-- More files... -->
                                 </ul>
 
@@ -389,18 +415,21 @@
                 <div id="render-container" class="bg-white px-6 absolute top-[200px] left-0"
                     style="max-height: 500px; overflow:hidden; overflow-y: scroll;">
 
-                    @foreach ($sections as $key => $section)
-                    <x-dynamic-component :component="$key" :dataOverides="$section['data']" class="mt-4" />
-                    @endforeach
+                    @if(!empty($sections))
+                        @foreach ($sections as $key => $section)
+                            <x-dynamic-component :component="$key" :dataOverides="$section['data']" class="mt-4" />
+                        @endforeach
+                    @endif
+                    
                     {{--
                     TODO: Move this to iframe renderer view, so we can pass a
                     state and render responsive views/etc
                     --}}
                     {{-- <iframe class="w-full" src="/">
                     </iframe> --}}
-                </div>
+                {{-- </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 </div>

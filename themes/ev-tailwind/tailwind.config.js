@@ -2,8 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-    mode: 'jit',
-    purge: [
+    content: [
         `${__dirname}/views/**/*.blade.php`, // absolute path
         `./resources/views/components/**/*.blade.php`, // relative to root
         `./resources/views/livewire/**/*.blade.php`, // relative to root
@@ -13,20 +12,18 @@ module.exports = {
     ],
     theme: {
         screens: {
-            'xs': '500px',
-            'sm': '640px',
-            'md': '768px',
-            'lg': '1024px',
-            'xl': '1320px',
-            '2xl': '1536px',
-            '3xl': '1600px',
-        },
+            'sm': '600px',
+            'md': '950px',
+            'lg': '1200px',
+            'xl': '1500px',
+          },
         extend: {
             fontFamily: {
                 sans: ['Inter var', 'Poppins', ...defaultTheme.fontFamily.sans],
                 roboto: ['Roboto'],
             },
             fontSize: {
+                '10': '10px',
                 '11': '11px',
                 '12': '12px',
                 '13': '13px',
@@ -37,6 +34,10 @@ module.exports = {
                 '22': '22px',
                 '24': '24px',
                 '26': '26px',
+                '28': '28px',
+                '30': '30px',
+                '32': '32px',
+                '34': '34px',
                 '36': '36px',
                 '48': '48px',
                 '52': '52px',
@@ -69,11 +70,11 @@ module.exports = {
     },
 
     plugins: [
-        require("@tailwindcss/forms"),
-        require('@tailwindcss/typography'),
-        require('@tailwindcss/line-clamp'),
+        require('@tailwindcss/forms'),
         require('@tailwindcss/aspect-ratio'),
-        require('tailwindcss-pseudo-elements'),
+        require('@tailwindcss/typography'),
+        require('tailwindcss-children'),
+        require('@tailwindcss/line-clamp'),
 
         plugin(function({ addUtilities }) {
             // Add new classes if needed
