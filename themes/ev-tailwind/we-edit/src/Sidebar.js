@@ -26,8 +26,6 @@ export default () => {
                     {
                         (() => {
                             let container = [];
-                            console.log(availablePages);
-                            console.log("inside sidebar");
                             availablePages.forEach((val, index) => {
                                 container.push(
                                     <div className="dndnode input" onDragStart={(event) => onDragStart(event, val)} draggable>
