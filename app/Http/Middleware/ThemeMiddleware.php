@@ -34,9 +34,13 @@ class ThemeMiddleware
                     /*
                         TODO: Define this better but dashboard allways uses boostrap version for now
                     */
-                    if( Route::currentRouteName() == 'dashboard') {
-                        Theme::set('ev-saas-guns', 'ev-saas-default');
-                    }
+                    // dd(Route::current());
+                    if(isset(Route::current()->action['prefix'])) {
+                        if( str_contains(Route::current()->action['prefix'],'dashboard')) {
+                            Theme::set('ev-saas-guns', 'ev-saas-default');
+                        }
+                    };
+
                 } else {
                     Theme::set($domain->theme, 'ev-saas-default');
                 }
