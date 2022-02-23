@@ -12,7 +12,7 @@ class WeEdit extends Component
             'id' => 'tailwind.hero.ecommerce-hero',
             'title' => 'Ecommerce Hero',
             'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
-            'order' => -1
+            'order' => -1,
         ],
         'tailwind.product-lists.simple' => [
             'id' => 'tailwind.product-lists.simple',
