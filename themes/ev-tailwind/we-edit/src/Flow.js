@@ -51,7 +51,18 @@ const DnDFlow = () => {
         event.preventDefault();
 
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-        const type = event.dataTransfer.getData('application/reactflow');
+        const nodeData = event.dataTransfer.getData('application/reactflow');
+        console.log('node data');
+        console.log(nodeData);
+        let type = nodeData.type;
+        let nodeTitle = '';
+        if(nodeData.data) {
+            console.log(nodeData.data);
+            nodeTitle = nodeData.data.label;
+
+        } else {
+            nodeTitle = "Node title";
+        }
         const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
@@ -60,7 +71,7 @@ const DnDFlow = () => {
             id: getId(),
             type,
             position,
-            data: { label: `${type} node` },
+            data: { label: nodeTitle },
         };
 
         setElements((es) => {

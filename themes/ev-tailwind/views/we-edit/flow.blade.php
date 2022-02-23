@@ -23,8 +23,15 @@
     </style>
     <script>
         var server_data = {!! $pages !!};
+        var available_pages = {!! $available_pages !!};
+        var menu_flow = {!! $menu_flow !!};
         console.info("Server data: ");
         console.log(server_data);
+        console.info("Menu Flow data: ");
+        console.log(menu_flow);
+
+        console.info("Available pages data: ");
+        console.log(available_pages);
     </script>
     <h1> We Flow </h1>
 </div>

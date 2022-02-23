@@ -53,8 +53,8 @@
     .dndflow aside {
         width: 100%;
         max-width: 100%;
-        background: red;
-        height: 100px;
+        background: #fcfcfc;
+        border-top: 1px solid black;
         position: fixed;
         left: 0;
         bottom: 0;

@@ -27,6 +27,8 @@
         @yield('content')
     </main>
 
+    <x-tailwind.system.countdown></x-tailwind.system.countdown>
+
     <!-- Scripts -->
     {{-- <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script> --}}
     @livewireScripts
