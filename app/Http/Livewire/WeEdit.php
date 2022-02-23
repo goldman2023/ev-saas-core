@@ -41,8 +41,9 @@ class WeEdit extends Component
     {
 
         $this->page = Page::where('slug', 'home')->first();
-        $this->sections =  json_decode($this->page->content, JSON_OBJECT_AS_ARRAY);
+        // dd($this->page->content);
+        $this->sections =  $this->page->content;
 
-        return view('livewire.we-edit');
+        return view('livewire.we-edit.we-edit');
     }
 }
