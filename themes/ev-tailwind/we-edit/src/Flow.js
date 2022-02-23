@@ -9,10 +9,11 @@ import ReactFlow, {
     DeleteIcon,
 } from 'react-flow-renderer';
 
+import WeNode from './custom_nodes/WeNode';
+
 import Sidebar from './Sidebar';
 
 import './dnd.css';
-import './styles.css';
 
 const initialElements = server_data;
 /* const initialElements = [
@@ -26,6 +27,10 @@ const initialElements = server_data;
 let id = server_data.length;
 let selected_node = null;
 const getId = () => `dndnode_${id++}`;
+/* This is WE-SaaS Custom nodes */
+const nodeTypes = {
+    wenode: WeNode
+  };
 
 const DnDFlow = () => {
     const reactFlowWrapper = useRef(null);
@@ -54,8 +59,7 @@ const DnDFlow = () => {
         const nodeData = event.dataTransfer.getData('application/reactflow');
         console.log('node data');
         console.log(nodeData);
-        let type = nodeData.type;
-        let nodeTitle = '';
+        let type = 'wenode';
         if(nodeData.data) {
             console.log(nodeData.data);
             nodeTitle = nodeData.data.label;
@@ -63,6 +67,9 @@ const DnDFlow = () => {
         } else {
             nodeTitle = "Node title";
         }
+
+        let nodeTitle = nodeData;
+
         const position = reactFlowInstance.project({
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
@@ -88,6 +95,7 @@ const DnDFlow = () => {
                     <ReactFlow
                         onElementClick={onElementClick}
                         elements={elements}
+                        nodeTypes={ nodeTypes }
                         onConnect={onConnect}
                         onElementsRemove={onElementsRemove}
                         onLoad={onLoad}

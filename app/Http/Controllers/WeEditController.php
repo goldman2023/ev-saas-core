@@ -22,7 +22,8 @@ class WeEditController extends Controller
         foreach ($pages as $page) {
             $count++;
             $page['data'] = ['label' => $page->title];
-            $page->type = 'default';
+            $page->type = 'wenode';
+            $page->key = 'key_' . $count;
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
         }
@@ -51,7 +52,8 @@ class WeEditController extends Controller
         foreach ($available_pages as $page) {
             $count++;
             $page['data'] = ['label' => $page->title];
-            $page->type = 'default';
+            $page->type = 'wenode';
+            $page->key = 'key_' . $count;
             $page->type = 'system';
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
