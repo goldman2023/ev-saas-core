@@ -1,3 +1,3 @@
 <div class="">
-    asdasd
+    Available sections
 </div>
