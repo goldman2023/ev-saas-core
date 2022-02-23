@@ -11,10 +11,16 @@ export default () => {
 
     return (
         <aside>
-            <div className="description">
-                Available pages
+            <div className="we-flow-tabs">
+                <div className="we-flow-tab">
+                    Available pages
+                </div>
+
+                <div className="we-flow-tab">
+                    Available actions
+                </div>
             </div>
-            <div >
+            <div>
 
                 <div id="available_pages">
                     {
@@ -25,7 +31,19 @@ export default () => {
                             availablePages.forEach((val, index) => {
                                 container.push(
                                     <div className="dndnode input" onDragStart={(event) => onDragStart(event, val)} draggable>
-                                        {val.data.label }
+                                        <img
+                                            className="page-frame"
+                                            draggable="false"
+                                            src="/assets/we-edit/img/page-frame.svg" alt="page frame background" />
+
+                                        <img
+                                            draggable="false"
+                                            className="mb-3"
+                                            src="/assets/we-edit/img/page-placeholder.svg" alt="screen background" />
+
+                                        <span className="font-medium text-gray-700 hover:text-gray-800">
+                                            {val.data.label}
+                                        </span>
                                     </div>
                                 )
                             });
