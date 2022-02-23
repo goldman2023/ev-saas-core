@@ -30,13 +30,15 @@ class WeEditController extends Controller
         $available_pages = [];
         $weEditData = [
             'pages' => json_encode($pages),
-            'available_pages' => json_encode($available_pages),
+            'available_pages' => json_encode($pages),
             'menu_flow' => json_encode($menu_flow)
         ];
 
         return view(
             'we-edit.flow',
-            $weEditData
+            [
+                'weEditData' => $weEditData
+            ]
         );
     }
 
@@ -59,12 +61,15 @@ class WeEditController extends Controller
         $pages = [];
 
 
+        $weEditData = [
+            'pages' => json_encode($pages),
+            'available_pages' => json_encode($available_pages),
+            'menu_flow' => json_encode($menu_flow)
+        ];
         return view(
             'we-edit.flow',
             [
-                'pages' => json_encode($pages),
-                'available_pages' => json_encode($available_pages),
-                'menu_flow' => json_encode($menu_flow)
+                'weEditData' => $weEditData
             ]
         );
     }

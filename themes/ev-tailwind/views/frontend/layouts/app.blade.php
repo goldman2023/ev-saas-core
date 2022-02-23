@@ -23,8 +23,6 @@
 
     {{ seo()->render() }}
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
     @livewireStyles
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
