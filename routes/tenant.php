@@ -63,8 +63,6 @@ Route::middleware([
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
-    /* This is experimental, adding it here for now */
-    Route::resource('/ev-docs/components', 'Ev\ComponentController')->middleware('auth');
 
     Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
     Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
@@ -82,9 +80,7 @@ Route::middleware([
 
     // Feed Page (Possible new homepage)
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
-    //Home Page
 
-    //Category dropdown menu ajax call
     Route::post('/category/nav-element-list', [HomeController::class, 'get_category_items'])->name('category.elements');
 
     Route::get('/sitemap.xml', function () {
