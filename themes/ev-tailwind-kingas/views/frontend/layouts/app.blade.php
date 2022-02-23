@@ -22,8 +22,6 @@
 
     {{ seo()->render() }}
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
     @php
         echo get_setting('header_script');
     @endphp

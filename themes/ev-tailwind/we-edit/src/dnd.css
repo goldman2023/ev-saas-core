@@ -5,6 +5,20 @@ html, body, .App {
     "Droid Sans", "Helvetica Neue", sans-serif !important;
 }
 
+html,
+body,
+#root,
+.App {
+    height: 100%;
+    width: 100%;
+}
+
+.App {
+    font-family: sans-serif;
+    text-align: center;
+    margin-top: 20px;
+}
+
 .dndflow {
     flex-direction: column;
     display: flex;
