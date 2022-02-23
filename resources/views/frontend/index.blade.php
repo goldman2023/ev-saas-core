@@ -9,7 +9,6 @@
 
 <section class="overflow-hidden">
     <x-default.hero.product-hero></x-default.hero.product-hero>
-    {{-- <x-default.promo.countdown></x-default.promo.countdown> --}}
 </section>
 
 <section>
@@ -29,29 +28,16 @@
 </section>
 
 
-<section>
-
-    <x-default.promo.features></x-default.promo.features>
-</section>
 
 <section>
-
     <x-default.promo.reviews></x-default.promo.reviews>
 </section>
 
-<section>
-
-    <x-default.promo.integrations></x-default.promo.features>
-</section>
 
 @guest
 <section>
     <x-default.forms.contact-form></x-default.forms.contact-form>
 </section>
 @endguest
-
-@endsection
-
-@section('script')
 
 @endsection

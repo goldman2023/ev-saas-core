@@ -250,20 +250,10 @@ Route::middleware([
         Route::resource('wishlists', 'WishlistController');
         Route::post('/wishlists/remove', 'WishlistController@destroy')->name('wishlists.remove');
 
-        Route::get('/wallet', 'WalletController@index')->name('wallet.index');
-        Route::post('/recharge', 'WalletController@recharge')->name('wallet.recharge');
-
         Route::resource('support_ticket', 'SupportTicketController');
         Route::post('support_ticket/reply', 'SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
-        Route::resource('customer_products', 'CustomerProductController')->parameters([
-            'customer_products' => 'id',
-        ]);
-        Route::post('/customer_packages/purchase', 'CustomerPackageController@purchase_package')->name('customer_packages.purchase');
-        Route::post('/customer_products/published', 'CustomerProductController@updatePublished')->name('customer_products.published');
-        Route::post('/customer_products/status', 'CustomerProductController@updateStatus')->name('customer_products.update.status');
 
-        Route::get('digital_purchase_history', 'PurchaseHistoryController@digital_index')->name('digital_purchase_history.index');
     });
 
     Route::group(['prefix' => 'seller', 'middleware' => ['seller', 'verified', 'user']], function () {
@@ -279,20 +269,6 @@ Route::middleware([
 
         Route::get('/reviews', 'ReviewController@seller_reviews')->name('reviews.seller');
 
-        //digital Product
-        Route::get('/digitalproducts', 'HomeController@seller_digital_product_list')->name('seller.digitalproducts');
-        Route::get('/digitalproducts/upload', 'HomeController@show_digital_product_upload_form')->name('seller.digitalproducts.upload');
-        Route::get('/digitalproducts/{id}/edit', 'HomeController@show_digital_product_edit_form')->name('seller.digitalproduct.edit');
-
-        //Events
-        Route::get('/events', 'EventController@seller_events')->name('seller.events');
-        Route::get('/events/upload', 'EventController@seller_event_create')->name('seller.event.create');
-        Route::get('/events/{id}/edit', 'EventController@seller_event_edit')->name('seller.event.edit');
-
-        // jobs
-        Route::get('/jobs', 'JobController@seller_jobs')->name('seller.jobs');
-        Route::get('/jobs/upload', 'JobController@seller_jobs_create')->name('seller.jobs.upload');
-        Route::get('/jobs/{id}/edit', 'JobController@seller_jobs_edit')->name('seller.jobs.edit');
     });
 
 
@@ -303,14 +279,8 @@ Route::middleware([
     Route::get('/all_jobs', 'JobController@all_jobs')->name('jobs.all');
     Route::get('/shops/{shop_slug}/jobs/{job_slug}', 'JobController@job')->name('jobs.visit');
 
-    Route::get('/sellerpolicy', 'HomeController@sellerpolicy')->name('sellerpolicy');
-    Route::get('/returnpolicy', 'HomeController@returnpolicy')->name('returnpolicy');
-    Route::get('/supportpolicy', 'HomeController@supportpolicy')->name('supportpolicy');
-    Route::get('/terms', 'HomeController@terms')->name('terms');
-    Route::get('/privacypolicy', 'HomeController@privacypolicy')->name('privacypolicy');
 
     Route::resource('companies', 'CompanyController');
-//    Route::get('/companies/category/{category_slug}', 'CompanyController@listingByCategory')->name('companies.category');
 
 
     //Blog Section
@@ -331,14 +301,6 @@ Route::middleware([
 
     Route::get('/page/{slug}', 'PageController@show_static_page')->name('page.static_page');
 
-    // Get Stream Integration routes
-    Route::get('/feed/all', 'Integrations\GetStreamControler@index');
-
-
-//    Route::resource('addresses', 'AddressController');
-//    Route::post('/addresses/update/{id}', 'AddressController@update')->name('addresses.update');
-//    Route::get('/addresses/destroy/{id}', 'AddressController@destroy')->name('addresses.destroy');
-//    Route::get('/addresses/set_default/{id}', 'AddressController@set_default')->name('addresses.set_default');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
@@ -347,7 +309,6 @@ Route::middleware([
 
 
     // Tenant Management routes - added from SaaS Boilerplate
-
     Route::get('/impersonate/{token}', function ($token) {
         return UserImpersonation::makeResponse($token);
     })->name('tenant.impersonate');
