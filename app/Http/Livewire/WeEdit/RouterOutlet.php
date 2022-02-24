@@ -7,23 +7,23 @@ use App\Enums\WeEditLayoutEnum;
 
 class RouterOutlet extends Component
 {
-    public $selected_page;
+    public $selected_container;
 
     protected $listeners = [
         'changePageEvent' => 'changePage'
     ];
 
-    public function mount($selected_page = null)
+    public function mount($selected_container = null)
     {
-       $this->selected_page = $selected_page;
+       $this->selected_container = $selected_container;
     }
 
     public function render()
     {
-        return view($this->selected_page);
+        return view($this->selected_container['template'] ?? '');
     }
 
-    public function changePage($template) {
-        $this->selected_page = $template;
+    public function changePage($selected_container) {
+        $this->selected_container = $selected_container;
     }
 }

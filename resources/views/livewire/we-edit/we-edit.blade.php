@@ -6,7 +6,7 @@
         <livewire:we-edit.navigation.topbar />
 
         <!-- Main content -->
-        <livewire:we-edit.router-outlet :selected_page="$selected_page" />
+        <livewire:we-edit.router-outlet :selected_container="$selected_container" />
     </div>
 
  <!-- This example requires Tailwind CSS v2.0+ -->
