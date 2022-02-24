@@ -30,6 +30,7 @@ mix.setPublicPath(`public/themes/${theme}`)
     // .copyDirectory(`${__dirname}/fonts`, `public/themes/${theme}/fonts`)
     // .copyDirectory(`${__dirname}/svg`, `public/themes/${theme}/svg`)
     .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/images`)
+    .copyDirectory(`${__dirname}/images`, `public/themes/${theme}/js`)
     .webpackConfig({
         resolve: {
             alias: {

@@ -11,7 +11,7 @@
         foreach ($available_pages as $page) {
             $count++;
             $page['data'] = ['label' => $page->title];
-            $page->type = 'default';
+            $page->type = 'wenode';
             $page->type = 'system';
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
@@ -21,7 +21,7 @@
         $pages = [];
 
         $weEditData = [
-            'pages' => json_encode($available_pages),
+            'pages' => json_encode($pages),
             'available_pages' => json_encode($available_pages),
             'menu_flow' => json_encode($menu_flow)
         ];

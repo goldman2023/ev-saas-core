@@ -2,7 +2,7 @@
     @if (count($company->categories) > 0)
         {{ translate('Company Industries: ') }}
         @foreach ($company->categories as $category)
-            <a class="text-dark" href="{{ route('companies.category', $category->slug) }}">
+            <a class="text-dark" href="#">
                 {{ $category->name }}
             </a>
 

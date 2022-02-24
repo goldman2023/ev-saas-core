@@ -15,7 +15,7 @@ class WeEdit extends Component
     public $we_menu;
     public $selected_page;
 
-    public function mount() 
+    public function mount()
     {
         $this->we_menu = [
             [
@@ -30,11 +30,14 @@ class WeEdit extends Component
             ],
             [
                 'title' => translate('Templates'),
-                'icon' => 'heroicon-o-archive'
+                'icon' => 'heroicon-o-archive',
+                'template' => 'we-edit.pages.templates'
             ],
             [
                 'title' => translate('Site structure'),
-                'icon' => 'heroicon-o-globe-alt'
+                'icon' => 'heroicon-o-globe-alt',
+                'template' => 'we-edit.pages.structure'
+
             ]
         ];
     }
@@ -58,7 +61,7 @@ class WeEdit extends Component
         foreach ($available_pages as $page) {
             $count++;
             $page['data'] = ['label' => $page->title];
-            $page->type = 'default';
+            $page->type = 'wenode';
             $page->type = 'system';
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
@@ -73,7 +76,7 @@ class WeEdit extends Component
             'available_pages' => json_encode($available_pages),
             'menu_flow' => json_encode($menu_flow)
         ];
-        
+
         return $weEditData;
     }
 }

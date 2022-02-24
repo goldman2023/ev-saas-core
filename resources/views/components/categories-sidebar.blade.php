@@ -16,7 +16,7 @@
             @if (!isset($category_id))
                 @foreach (\App\Models\Category::where('level', 0)->get() as $category)
                     <li class="mb-2 ml-2">
-                        <a class="text-reset fs-14" href="{{ route($category_route, $category->slug) }}">{{ $category->getTranslation('name') }}</a>
+                        <a class="text-reset fs-14" href="#">{{ $category->getTranslation('name') }}</a>
                     </li>
                 @endforeach
             @else

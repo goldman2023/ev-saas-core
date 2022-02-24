@@ -23,18 +23,18 @@
             <div class="flex-shrink-0">
                 <a href="#">
                     <span class="sr-only">Brenna Goyette</span>
-<!--  TODO: Make this dynamic -->
+                    <!--  TODO: Make this dynamic -->
                     <img class="h-10 w-10 rounded-full"
-                         src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                         alt="">
+                        src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt="">
                 </a>
             </div>
             <div class="ml-3">
                 <p class="text-sm font-medium text-gray-900">
                     @if ($item->user != null)
-                        <a href="#" class="hover:underline">
-                            {{ $item->user->name }}
-                        </a>
+                    <a href="#" class="hover:underline">
+                        {{ $item->user->name }}
+                    </a>
                     @endif
                 </p>
                 <div class="flex space-x-1 text-sm text-gray-500">
@@ -42,20 +42,17 @@
                         {{ $item->created_at->diffForHumans() }}
                     </time>
                     <span aria-hidden="true">
-                  &middot;
-                </span>
+                        &middot;
+                    </span>
 
                     <span>
-                  {{$item->estimated_time ." " . translate('min. Read')}}
+                        {{$item->estimated_time ." " . translate('min. Read')}}
 
-                </span>
+                    </span>
 
 
                     <span>
-                         @if(visits($item)->count() != null || visits($item,'auth')->count() != null)
-                            .
-                            {{(visits($item)->count()+visits($item,'auth')->count()) ." " . translate('Views')}}
-                             @endif
+                        {{-- TODO: Add views --}}
                     </span>
                 </div>
             </div>

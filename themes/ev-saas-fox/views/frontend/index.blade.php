@@ -17,10 +17,6 @@
         </x-default.products.product-list>
     </section>
 
-    <section class="bg-light">
-        <x-default.categories.category-list :categories="$categories" slider="true"> </x-default.categories.category-list>
-    </section>
-
     <section class="">
         <div class="container">
             {{-- TODO: Document this component for dynamic use for different kind of recently viewed content types --}}
