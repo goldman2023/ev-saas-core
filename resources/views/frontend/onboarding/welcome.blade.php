@@ -74,8 +74,6 @@
 <section>
     <x-default.forms.contact-form></x-default.forms.contact-form>
 </section>
-{{-- TODO: Refactor this to blade components --}}
-{{-- @include('frontend.components.news') --}}
 @endsection
 
 @section('script')

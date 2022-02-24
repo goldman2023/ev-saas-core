@@ -39,8 +39,6 @@
 
     <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
     <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>

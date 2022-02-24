@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d1db1dd47a0e7f233473f5bdfd63a22",
+    "content-hash": "c29d0f47aaa25075d6eb6622a9fe66ce",
     "packages": [
         {
             "name": "anandsiddharth/laravel-paytm-wallet",
@@ -5350,6 +5350,74 @@
                 }
             ],
             "time": "2022-02-18T22:35:27+00:00"
+        },
+        {
+            "name": "lorisleiva/artisan-ui",
+            "version": "v0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lorisleiva/artisan-ui.git",
+                "reference": "4168ccc5908c54e7b8b27b6765164da8b92a44e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lorisleiva/artisan-ui/zipball/4168ccc5908c54e7b8b27b6765164da8b92a44e0",
+                "reference": "4168ccc5908c54e7b8b27b6765164da8b92a44e0",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^8.0",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.9"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "pestphp/pest": "^0.3.14",
+                "phpunit/phpunit": "^9.3.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Lorisleiva\\ArtisanUI\\ArtisanUIServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Lorisleiva\\ArtisanUI\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Loris Leiva",
+                    "email": "loris.leiva@gmail.com",
+                    "homepage": "https://lorisleiva.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Run your artisan commands by pressing buttons.",
+            "homepage": "https://github.com/lorisleiva/artisan-ui",
+            "keywords": [
+                "artisan",
+                "laravel",
+                "ui"
+            ],
+            "support": {
+                "issues": "https://github.com/lorisleiva/artisan-ui/issues",
+                "source": "https://github.com/lorisleiva/artisan-ui/tree/v0.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/lorisleiva",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-06-17T14:00:09+00:00"
         },
         {
             "name": "maatwebsite/excel",

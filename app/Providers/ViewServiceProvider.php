@@ -25,7 +25,7 @@ class ViewServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             /* Check if it's not central app */
             if (tenant() != null) {
-                $view->with('categories', Categories::getAll());
+                // $view->with('categories', Categories::getAll());
             }
         });
     }
