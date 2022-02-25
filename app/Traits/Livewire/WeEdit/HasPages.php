@@ -9,6 +9,10 @@ trait HasPages
     public $current_page;
     public $all_pages;
 
+    protected $currentPageRules = [
+        
+    ];
+
     public function initializeHasPages()
     {
         $this->listeners = array_merge($this->listeners, [

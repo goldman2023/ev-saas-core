@@ -9,7 +9,7 @@
             @foreach($menu as $container)
             <!-- Current: "bg-indigo-800 text-white", Default: "text-indigo-100 hover:bg-indigo-800 hover:text-white" -->
         
-            <a href="#" wire:click="changePage('@json($container)')" class="text-indigo-100 hover:bg-indigo-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
+            <a href="#" wire:click="changePage('{{ $container['slug'] ?? '' }}')" class="text-indigo-100 hover:bg-indigo-800 hover:text-white group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium">
                 <!--
                   Heroicon name: outline/home
       

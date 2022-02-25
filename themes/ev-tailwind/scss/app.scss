@@ -146,3 +146,13 @@
         }
     }
 }
+
+
+.p-pages-editor {
+    &__sections-list {
+        .sortable-chosen {
+            @apply bg-blue-500 text-white;
+            
+        }
+    }
+}

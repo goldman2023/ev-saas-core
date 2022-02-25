@@ -43,6 +43,9 @@
 
     @stack('head_scripts')
 
+    @livewireStyles
+    @livewireScripts
+
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 </head>
 <body class="h-full">
@@ -65,8 +68,5 @@
         });
     </script>
 
-
-    @livewireStyles
-    @livewireScripts
 </body>
 </html>

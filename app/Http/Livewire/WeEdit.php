@@ -20,21 +20,25 @@ class WeEdit extends Component
         $this->we_menu = [
             [
                 'title' => translate('Pages'),
+                'slug' => 'pages',
                 'icon' => 'heroicon-o-document',
                 'template' => 'we-edit.pages.editor'
             ],
             [
                 'title' => translate('Menus'),
+                'slug' => 'menus',
                 'icon' => 'heroicon-o-menu',
                 'template' => 'we-edit.pages.menu'
             ],
             [
                 'title' => translate('Templates'),
+                'slug' => 'templates',
                 'icon' => 'heroicon-o-archive',
                 'template' => 'we-edit.pages.templates'
             ],
             [
                 'title' => translate('Site structure'),
+                'slug' => 'site-structure',
                 'icon' => 'heroicon-o-globe-alt',
                 'template' => 'we-edit.pages.structure'
 
