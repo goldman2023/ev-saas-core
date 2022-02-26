@@ -73,7 +73,7 @@ Route::middleware([
         Route::get('/products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
         Route::get('/products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
 
-        
+
 
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
@@ -150,14 +150,6 @@ Route::middleware([
         Route::post('/withdraw_request/payment_modal', 'SellerWithdrawRequestController@payment_modal')->name('withdraw_request.payment_modal');
         Route::post('/withdraw_request/message_modal', 'SellerWithdrawRequestController@message_modal')->name('withdraw_request.message_modal');
 
-        Route::resource('conversations', 'ConversationController')->parameters([
-            'conversations' => 'id',
-        ]);
-//    Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
-        Route::post('conversations/refresh', 'ConversationController@refresh')->name('conversations.refresh');
-        Route::post('conversations/save', 'ConversationController@saveConversation')->name('conversations.save');
-
-        Route::resource('messages', 'MessageController');
 
 //Product Bulk Upload
         Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');

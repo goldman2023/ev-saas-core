@@ -1,5 +1,4 @@
 @auth
-@if(!auth()->user()->subscribed())
 <!-- CTA -->
 {{-- TODO: Make background image dynamice --}}
 <div class="bg-img-hero rounded-lg p-6 bg-dark text-white" style="">
@@ -20,6 +19,5 @@
         </div>
     </div>
 </div>
-@endif
 <!-- End CTA -->
 @endauth
