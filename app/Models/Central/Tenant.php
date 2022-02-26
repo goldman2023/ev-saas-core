@@ -4,7 +4,6 @@ namespace App\Models\Central;
 
 use App\Exceptions\NoPrimaryDomainException;
 use App\Models\SocialAccount;
-use Laravel\Cashier\Billable;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDatabase;
@@ -20,7 +19,7 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class Tenant extends BaseTenant implements TenantWithDatabase
 {
-    use HasDatabase, HasDomains, Billable;
+    use HasDatabase, HasDomains;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
