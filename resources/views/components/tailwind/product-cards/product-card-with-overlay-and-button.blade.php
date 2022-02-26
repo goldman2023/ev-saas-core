@@ -13,7 +13,7 @@
                 {{ $product->getTranslation('name') }}
             </h3>
             <p class="mt-1 text-sm text-gray-500">
-                {{ $product->brand->getTranslation('name') }}
+                {{ $product->brand->name }}
             </p>
         </div>
         <div class="absolute top-0 inset-x-0 h-72 rounded-lg p-4 flex items-end justify-end overflow-hidden">
