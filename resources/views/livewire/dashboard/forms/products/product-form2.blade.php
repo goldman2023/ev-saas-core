@@ -425,51 +425,51 @@
                                 {{-- Dropdown --}}
                                 <template x-if="attribute.type === 'dropdown'">
                                     <div class="w-100" x-data="{
-                                        items: attribute.attribute_values,
-                                        selected_items: selected_attribute_values['attribute.'+attribute.id],
-                                        show: false,
-                                        multiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
-                                        tag: false,
-                                        countSelected() {
-                                            if(this.selected_items === undefined || this.selected_items === null) {
-                                                this.selected_items = [];
-                                            }
-
-                                            return this.selected_items.length;
-                                        },
-                                        getPlaceholder() {
-                                            if(this.countSelected() === 1) {
-                                                return this.items.find(x => {
-                                                    return x.id == this.selected_items[0];
-                                                }).values || '';
-                                            } else if(this.countSelected() > 1) {
-                                                return '';
-                                            } else {
-                                                return '{{ translate('Choose option(s)') }}';
-                                            }
-                                        },
-                                        isSelected(key) {
-                                            return this.selected_items.indexOf(key) !== -1 ? true : false;
-                                        },
-                                        select(key, label) {
-                                            if(this.isSelected(key)) {
-                                                this.selected_items.splice(this.selected_items.indexOf(key), 1);
-                                            } else {
-                                                if(!this.multiple) {
-                                                    this.selected_items = [key];
-                                                } else {
-                                                    this.selected_items.push(Number(key));
+                                            items: attribute.attribute_values,
+                                            selected_items: selected_attribute_values['attribute.'+attribute.id],
+                                            show: false,
+                                            multiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
+                                            tag: false,
+                                            countSelected() {
+                                                if(this.selected_items === undefined || this.selected_items === null) {
+                                                    this.selected_items = [];
                                                 }
-                                            }
+
+                                                return this.selected_items.length;
+                                            },
+                                            getPlaceholder() {
+                                                if(this.countSelected() === 1) {
+                                                    return this.items.find(x => {
+                                                        return x.id == this.selected_items[0];
+                                                    }).values || '';
+                                                } else if(this.countSelected() > 1) {
+                                                    return '';
+                                                } else {
+                                                    return '{{ translate('Choose option(s)') }}';
+                                                }
+                                            },
+                                            isSelected(key) {
+                                                return this.selected_items.indexOf(key) !== -1 ? true : false;
+                                            },
+                                            select(key, label) {
+                                                if(this.isSelected(key)) {
+                                                    this.selected_items.splice(this.selected_items.indexOf(key), 1);
+                                                } else {
+                                                    if(!this.multiple) {
+                                                        this.selected_items = [key];
+                                                    } else {
+                                                        this.selected_items.push(Number(key));
+                                                    }
+                                                }
+            
+                                                if(!this.multiple) {
+                                                    this.show = false;
+                                                    this.placeholder = label;
+                                                }
         
-                                            if(!this.multiple) {
-                                                this.show = false;
-                                                this.placeholder = label;
+                                                selected_attribute_values['attribute.'+attribute.id] = this.selected_items;
                                             }
-    
-                                            selected_attribute_values['attribute.'+attribute.id] = this.selected_items;
-                                        }
-                                    }" >
+                                        }" >
                                             <label class="w-100 input-label" x-text="attribute.name"></label>
 
                                             <div class="we-select position-relative w-100" x-data="{}" @click.outside="show = false">

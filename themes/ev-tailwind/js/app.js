@@ -15,6 +15,9 @@ try {
     window.$ = window.jQuery = require('jquery');
 } catch (e) {}
 
+/* Reuire sortable plugin */
+require('./sortable');
+
 /* import Alpine from 'alpinejs';
 import persist from '@alpinejs/persist';
 import intersect from '@alpinejs/intersect';

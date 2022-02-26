@@ -13,13 +13,15 @@ class CreateWishlistsTable extends Migration
      */
     public function up()
     {
-        Schema::create('wishlists', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->integer('user_id');
-            $table->integer('product_id');
-            $table->timestamp('created_at')->nullable()->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
-        });
+        if (!Schema::hasTable('wishlists')) {
+            Schema::create('wishlists', function (Blueprint $table) {
+                $table->integer('id', true);
+                $table->integer('user_id');
+                $table->integer('product_id');
+                $table->timestamp('created_at')->nullable()->useCurrent();
+                $table->timestamp('updated_at')->useCurrent();
+            });
+        }
     }
 
     /**

@@ -11,7 +11,6 @@ use App\Models\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
 use App\Notifications\EmailVerificationNotification;
-use Spark\Billable;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -25,7 +24,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use HasRoles;
     use HasApiTokens;
     use Notifiable;
-    use Billable;
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;

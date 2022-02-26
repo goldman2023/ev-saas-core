@@ -13,42 +13,46 @@ class WeEdit extends Component
     public $sections;
 
     public $we_menu;
-    public $selected_page;
+    public $selected_container;
 
     public function mount()
     {
         $this->we_menu = [
             [
                 'title' => translate('Pages'),
+                'slug' => 'pages',
                 'icon' => 'heroicon-o-document',
                 'template' => 'we-edit.pages.editor'
             ],
             [
                 'title' => translate('Menus'),
+                'slug' => 'menus',
                 'icon' => 'heroicon-o-menu',
                 'template' => 'we-edit.pages.menu'
             ],
             [
                 'title' => translate('Templates'),
+                'slug' => 'templates',
                 'icon' => 'heroicon-o-archive',
                 'template' => 'we-edit.pages.templates'
             ],
             [
                 'title' => translate('Site structure'),
+                'slug' => 'site-structure',
                 'icon' => 'heroicon-o-globe-alt',
                 'template' => 'we-edit.pages.structure'
 
             ]
         ];
+
+        $this->selected_container = $this->we_menu[0];
+
+        
+        $this->we_edit_data = $this->getEditData();
     }
 
     public function render()
     {
-        $this->selected_page = $this->we_menu[0]['template'];
-        $this->page = Page::where('slug', 'home')->first();
-        $this->sections =  $this->page->content;
-        $this->we_edit_data = $this->getEditData();
-
         return view('livewire.we-edit.we-edit');
     }
 

@@ -19,7 +19,7 @@ class Sidebar extends Component
         return view('livewire.we-edit.navigation.sidebar');
     }
 
-    public function changePage($template) { 
-        $this->emit( 'changePageEvent', $template);
+    public function changePage($container_slug) { 
+        $this->emit( 'changePageEvent', $container_slug);
     }
 }

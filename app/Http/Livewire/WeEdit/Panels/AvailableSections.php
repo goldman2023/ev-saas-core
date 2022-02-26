@@ -26,30 +26,35 @@ class AvailableSections extends Component
                         'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
                         'order' => -1,
                     ],
+                ]
+            ],
+            'product_lists' => [
+                'title' => 'Product Lists',
+                'description' => 'A lovely description for hero sections',
+                'sections' => [
                     'tailwind.product-lists.simple' => [
                         'id' => 'tailwind.product-lists.simple',
-                        'title' => 'Ecommerce Hero',
+                        'title' => 'Product List 1',
                         'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
                         'order' => -1
                     ],
                     'tailwind.product-lists.simple-3' => [
                         'id' => 'tailwind.product-lists.simple',
-                        'title' => 'Ecommerce Hero',
+                        'title' => 'Product List 2',
                         'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
                         'order' => -1
                     ],
                     'tailwind.product-lists.simple-2' => [
                         'id' => 'tailwind.product-lists.simple',
-                        'title' => 'Ecommerce Hero',
+                        'title' => 'Product List 3',
                         'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
                         'order' => -1
                     ]
                 ]
-            ],
-            
+            ]
         ];
     }
-
+    
     public function render()
     {
         return view('livewire.we-edit.panels.available-sections');

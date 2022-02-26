@@ -18,7 +18,7 @@
                     <a href="{{ route('products.brand', $brand->slug) }}"
                         class="d-block rounded hov-shadow-md position-relative">
                         <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100 bg-white"
-                            alt="{{ $brand->getTranslation('name') }}">
+                            alt="{{ $brand->name }}">
 
                         {{-- <span class="badge badge-pill badge-primary mt-2">
                             {{ $brand->products_count }} {{ translate('Items') }}

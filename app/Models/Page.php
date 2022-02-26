@@ -15,6 +15,8 @@ class Page extends EVBaseModel
 
     protected $table = 'pages';
 
+    protected $fillable = ['title', 'type', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
+
     protected $casts = [
         'id' => 'string',
         'content' => 'json',

@@ -214,14 +214,7 @@ class EVService
             [
                 'label' => translate('CRM'),
                 'items' => [
-                    [
-                        'label' => translate('Messages'),
-                        'icon' => 'heroicon-o-chat',
-                        'route' => route('conversations.index'),
-                        'is_active' => areActiveRoutes(['conversations.index', 'conversations.show']),
-                        'user_types' => User::$non_customer_user_types,
-                        'permissions' => []
-                    ],
+
                     /* TODO: Uncomment this once we have customers page */
                     /* [
                         'label' => translate('Customers'),
@@ -428,7 +421,7 @@ class EVService
 
         if ($brands->isNotEmpty()) {
             foreach (\App\Models\Brand::all() as $brand) {
-                $mapped[$brand->id] = $brand->getTranslation('name');
+                $mapped[$brand->id] = $brand->name;
             }
         }
 

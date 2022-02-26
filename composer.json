@@ -8,7 +8,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "ext-gd": "*",
         "barryvdh/laravel-snappy": "^0.4.8",
         "bavix/laravel-wallet": "^7.3",
@@ -33,7 +33,6 @@
         "laravel/passport": "^10.1",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/socialite": "^5.2",
-        "laravel/spark-stripe": "^1.0",
         "laravel/ui": "^3.2",
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
@@ -120,9 +119,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://spark.laravel.com"
-        }
+
     ]
 }
