@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeEventsTable extends Migration
+class RemoveUnusedTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,7 @@ class ChangeEventsTable extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->string('slug', 255)->after('id')->unique();
-        });
+        //
     }
 
     /**
@@ -25,8 +23,6 @@ class ChangeEventsTable extends Migration
      */
     public function down()
     {
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('slug');
-        });
+        //
     }
 }
