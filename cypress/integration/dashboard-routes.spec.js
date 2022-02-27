@@ -59,7 +59,7 @@ describe('logged in user as admin, should be able to access all dashboard routes
     it('Shows dashboard blog pages for admin', () => {
         var test_routes = [
             'blog.posts.index',
-            'blog.posts.create'
+            'blog.post.create'
         ];
         cy.login('team@eim.solutions');
 
