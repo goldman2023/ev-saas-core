@@ -167,19 +167,33 @@
     <div class="hidden" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <!-- Current: "bg-indigo-700 text-white", Default: "text-white hover:bg-indigo-500 hover:bg-opacity-75" -->
-            <a href="#" class="bg-indigo-700 text-white block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+            <a href="#" class="bg-indigo-700 text-white block px-3 py-2 rounded-md text-base font-medium">
+                Dashboard</a>
 
             <a href="#"
-                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">Team</a>
+                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">
+                Team</a>
 
             <a href="#"
-                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">Projects</a>
+                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">
+                Projects</a>
 
             <a href="#"
-                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
+                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">
+                Calendar</a>
 
             <a href="#"
-                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">Reports</a>
+                class="text-white hover:bg-indigo-500 hover:bg-opacity-75 block px-3 py-2 rounded-md text-base font-medium">
+                Reports</a>
+                <a
+                                id="we-login-header"
+                                data-test="we-login-header"
+                                class="js-hs-unfold-invoker btn btn-icon btn-xs btn-secondary"
+                                    js-hs-unfold-invoker btn btn-icon btn-xs btn-secondaryhref="javascript:;"
+                                    x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})" >
+                                    <!--data-toggle="modal" data-target="#signupModal">-->
+                                    @svg('heroicon-s-user-circle', ['class' => 'square-2'])
+                                </a>
         </div>
         <div class="pt-4 pb-3 border-t border-indigo-700">
             <div class="flex items-center px-5">

@@ -8,10 +8,12 @@
  *          cy.login({ attributes: { name: 'JohnDoe' }, state: 'guest', load: ['comments] });
  */
 Cypress.Commands.add('login', (attributes = {}) => {
+    cy.viewport('macbook-13') // Set viewport to 550px x 750px
+
     // Are we using the new object system.
     let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
     cy.visit({
-        route: 'home'
+        route: 'user.login'
     });
 
     /* Get the header login button on desktop */

@@ -27,7 +27,9 @@
     </x-default.system.og-meta>
     @endif
 
+    @if(get_setting('site_icon'))
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
+    @endif
 
     <script>
         var AIZ = AIZ || {};
