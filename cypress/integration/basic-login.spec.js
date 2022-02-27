@@ -1,22 +1,8 @@
 describe('logged in user, should be able to access dashboard', () => {
     it('Shows dashboard page for admin', () => {
 
-        cy.visit({
-            route: 'home'
-        });
+        cy.login('team@eim.solutions');
 
-        /* Get the header login button on desktop */
-        cy.get('[data-test="we-login-header"]')
-            .click()
-
-        cy.get('[data-test="we-login-email"]')
-            .type('team@eim.solutions')
-
-        cy.get('[data-test="we-login-password"]')
-            .type('syska007')
-
-        cy.get('[data-test="we-login-submit"]')
-            .click()
 
         expect(cy.url().should('include', '/dashboard'));
 
@@ -25,12 +11,12 @@ describe('logged in user, should be able to access dashboard', () => {
     it('Shows error for invalid credentials', () => {
 
         cy.visit({
-            route: 'home'
+            route: 'user.login'
         });
 
         /* Get the header login button on desktop */
-        cy.get('[data-test="we-login-header"]')
-            .click()
+        // cy.get('[data-test="we-login-header"]')
+        //     .click()
 
         cy.get('[data-test="we-login-email"]')
             .type('team@eim.solutions')
