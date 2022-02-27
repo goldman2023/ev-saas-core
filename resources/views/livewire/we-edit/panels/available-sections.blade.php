@@ -1,25 +1,35 @@
 @push('head_scripts')
 <script>
     $(function() {
-        const swiper = new Swiper('.p-available-sections .swiper', {
-            // Optional parameters
-            direction: 'horizontal',
-            loop: false,
-            pagination: false,
-            scrollbar: false,
-            slidesPerView: 2.2,
-            spaceBetween: 15,
-    
-            // Navigation arrows
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
+        
     });
     </script>
 @endpush
-<div class="p-available-sections min-h-full w-full flex flex-col bg-white px-4 py-3">
+<div class="p-available-sections min-h-full w-full flex flex-col bg-white px-4 py-3" 
+        x-data="{
+            swiper() {
+                
+                const swiper = new Swiper('.p-available-sections .swiper', {
+                    // Optional parameters
+                    direction: 'horizontal',
+                    loop: false,
+                    pagination: false,
+                    scrollbar: false,
+                    slidesPerView: 2.2,
+                    spaceBetween: 15,
+            
+                    // Navigation arrows
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+            }
+        }"
+        @initAvailableSectionsPanel.window="console.log('asd'); this.swiper()"
+        x-init="swiper()"
+        wire:ignore
+>
     <div class="w-full">
         <div class="mt-1 relative flex items-center">
           <input type="text" name="search" id="search" placeholder="Search for a section" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md">
@@ -47,8 +57,15 @@
                             <div class="swiper-wrapper">
                                 <!-- Slides -->
                                 @if(!empty($group['sections'])) 
-                                    @foreach($group['sections'] as $section)
-                                        <div class="swiper-slide flex flex-col cursor-pointer">
+                                    @foreach($group['sections'] as $id => $section)
+                                        <div class="swiper-slide flex flex-col cursor-pointer relative ">
+                                            <div class="absolute inset-0 bg-cover bg-center z-1 rounded w-full h-full flex justify-center items-center bg-stone-800 opacity-0 hover:opacity-100 bg-opacity-80 duration-300">
+                                                <button type="button" class="cursor-pointer text-14 rounded text-white bg-sky-600 px-3 py-2"
+                                                        @click="$wire.addSectionToPage('{{ $section['id'] ?? '' }}')">
+                                                    {{ translate('Add to page') }}
+                                                </button>
+                                            </div>
+  
                                             <img class="rounded max-h-[100px] object-cover mb-2" src="{{ $section['thumbnail'] ?? '' }}" />
                                             <span class="text-14 line-clamp-1">{{ $section['title'] ?? '' }}</span>
                                         </div>

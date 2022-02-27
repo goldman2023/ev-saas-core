@@ -1,0 +1,29 @@
+.hidden {
+    display: none;
+}
+.absolute-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+
+  .badge {
+      @apply rounded-full inline-flex text-center text-12 whitespace-nowrap px-2 py-[0.125rem];
+  }
+
+  .card {
+      @apply rounded border shadow-md;
+  }
+
+  .btn {
+      @apply inline-flex rounded border px-4 py-2 items-center justify-center;
+
+      &-pill{
+        @apply rounded-full;
+      }
+  }
+
+  .input-invalid {
+      @apply border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500;
+  }

@@ -144,7 +144,7 @@
                                                 wire:model.defer="product.unit_price" />
                                     </div>
 
-                                    <x-default.system.invalid-msg field="product.unit_price" type="slim"></x-default.system.invalid-msg>
+                                    <x-system.invalid-msg field="product.unit_price" type="slim"></x-system.invalid-msg>
                                 </div>
 
                                 <div class="col-12 col-sm-5"  x-init="
@@ -190,7 +190,7 @@
                                                 wire:model.defer="product.discount" />
                                     </div>
 
-                                    <x-default.system.invalid-msg field="product.discount" type="slim"></x-default.system.invalid-msg>
+                                    <x-system.invalid-msg field="product.discount" type="slim"></x-system.invalid-msg>
                                 </div>
 
                                 <div class="col-12 col-sm-5" x-data="{}" x-init="
@@ -247,7 +247,7 @@
                                                 wire:model.defer="product.tax" />
                                     </div>
 
-                                    <x-default.system.invalid-msg field="product.tax" type="slim"></x-default.system.invalid-msg>
+                                    <x-system.invalid-msg field="product.tax" type="slim"></x-system.invalid-msg>
                                 </div>
 
                                 <div class="col-12 col-sm-5" x-data="{}" x-init="
@@ -296,7 +296,7 @@
                                         </small>
                                     </div>
 
-                                    <x-default.system.invalid-msg field="product.purchase_price" type="slim"></x-default.system.invalid-msg>
+                                    <x-system.invalid-msg field="product.purchase_price" type="slim"></x-system.invalid-msg>
                                 </div>
                             </div>
                         </div>
@@ -911,7 +911,7 @@
                                     @endif
                                 </div>
 
-                                <x-default.system.invalid-msg field="product.status" type="slim"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="product.status" type="slim"></x-system.invalid-msg>
                             </div>
                         </div>
                     </div>

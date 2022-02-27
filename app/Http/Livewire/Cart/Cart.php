@@ -110,6 +110,10 @@ class Cart extends Component
 
     public function render()
     {
-        return view('livewire.cart.'.$this->template);
+        if(session('style_framework') === 'tailwind') {
+            return view('livewire.tailwind.cart.'.$this->template);
+        }
+
+        return view('livewire.bootstrap.cart.'.$this->template);
     }
 }

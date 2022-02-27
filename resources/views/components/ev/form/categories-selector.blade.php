@@ -50,5 +50,5 @@
             @endforeach
         @endif
 
-        <x-default.system.invalid-msg field="{{ $errorBagName }}"></x-default.system.invalid-msg>
+        <x-system.invalid-msg field="{{ $errorBagName }}"></x-system.invalid-msg>
 </div>

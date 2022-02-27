@@ -32,7 +32,7 @@ x-cloak
                 class="tw-input-main @error('order.email') input-invalid @enderror"       
         />
 
-        <x-default.system.invalid-msg field="order.email" framework="tailwind"></x-default.system.invalid-msg>
+        <x-system.invalid-msg field="order.email" framework="tailwind"></x-system.invalid-msg>
     </div>
     <!-- END Email -->
 
@@ -62,7 +62,7 @@ x-cloak
                     />
                 </div>
             </div>
-            <x-default.system.invalid-msg field="account_password" framework="tailwind"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="account_password" framework="tailwind"></x-system.invalid-msg>
         </div>
     @endguest
 
@@ -79,7 +79,7 @@ x-cloak
                     class="tw-input-main @error('order.billing_first_name') input-invalid @enderror"       
             />
 
-            <x-default.system.invalid-msg field="order.billing_first_name" framework="tailwind"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="order.billing_first_name" framework="tailwind"></x-system.invalid-msg>
         </div>
         <div class="">
             <label for="order.billing_last_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
@@ -92,7 +92,7 @@ x-cloak
                     class="tw-input-main @error('order.billing_first_name') input-invalid @enderror"       
             />
 
-            <x-default.system.invalid-msg field="order.billing_last_name" framework="tailwind"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="order.billing_last_name" framework="tailwind"></x-system.invalid-msg>
         </div>
     </div>
     <!-- END First & Last name -->
@@ -109,7 +109,7 @@ x-cloak
                 class="tw-input-main @error('order.billing_company') input-invalid @enderror"       
         />
 
-        <x-default.system.invalid-msg field="order.billing_company" framework="tailwind"></x-default.system.invalid-msg>
+        <x-system.invalid-msg field="order.billing_company" framework="tailwind"></x-system.invalid-msg>
     </div>
     <!-- END Company -->
 
@@ -174,7 +174,7 @@ x-cloak
         </template>
 
 
-        <x-default.system.invalid-msg field="order.phone_numbers" framework="tailwind"></x-default.system.invalid-msg>
+        <x-system.invalid-msg field="order.phone_numbers" framework="tailwind"></x-system.invalid-msg>
     </div>
     <!-- END Phones -->
 
@@ -249,7 +249,7 @@ x-cloak
                             class="tw-input-main @error('order.billing_address') input-invalid @enderror"       
                     />
 
-                    <x-default.system.invalid-msg field="order.billing_address" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_address" framework="tailwind"></x-system.invalid-msg>
                 </div>
 
                 <div class="">
@@ -263,7 +263,7 @@ x-cloak
                             class="tw-input-main @error('order.billing_country') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.billing_country" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_country" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -282,7 +282,7 @@ x-cloak
                             class="tw-input-main @error('order.billing_state') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.billing_state" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_state" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -297,7 +297,7 @@ x-cloak
                             class="tw-input-main @error('order.billing_city') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.billing_city" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_city" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -312,7 +312,7 @@ x-cloak
                             class="tw-input-main @error('order.billing_zip') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.billing_zip" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_zip" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -415,7 +415,7 @@ x-cloak
                             class="tw-input-main @error('order.shipping_address') input-invalid @enderror"       
                     />
 
-                    <x-default.system.invalid-msg field="order.shipping_address" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_address" framework="tailwind"></x-system.invalid-msg>
                 </div>
 
                 <div class="">
@@ -429,7 +429,7 @@ x-cloak
                             class="tw-input-main @error('order.shipping_country') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.shipping_country" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_country" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -448,7 +448,7 @@ x-cloak
                             class="tw-input-main @error('order.shipping_state') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.shipping_state" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_state" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -463,7 +463,7 @@ x-cloak
                             class="tw-input-main @error('order.shipping_city') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.shipping_city" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_city" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -478,7 +478,7 @@ x-cloak
                             class="tw-input-main @error('order.shipping_zip') input-invalid @enderror"       
                     />
     
-                    <x-default.system.invalid-msg field="order.shipping_zip" framework="tailwind"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_zip" framework="tailwind"></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -538,7 +538,7 @@ x-cloak
                                         class="tw-input-main @error('cc_name') input-invalid @enderror"       
                                 />
             
-                                <x-default.system.invalid-msg field="cc_name" framework="tailwind"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="cc_name" framework="tailwind"></x-system.invalid-msg>
                             </div>
             
                             <div class="w-full mb-2">
@@ -553,7 +553,7 @@ x-cloak
                                         class="tw-input-main @error('cc_number') input-invalid @enderror"       
                                 />
             
-                                <x-default.system.invalid-msg field="cc_number" framework="tailwind"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="cc_number" framework="tailwind"></x-system.invalid-msg>
                             </div>
         
                             <div class="w-full grid grid-cols-2 gap-4">
@@ -597,7 +597,7 @@ x-cloak
                                             class="tw-input-main @error('cc_expiration_date') input-invalid @enderror"       
                                     />
             
-                                    <x-default.system.invalid-msg field="cc_expiration_date" framework="tailwind"></x-default.system.invalid-msg>
+                                    <x-system.invalid-msg field="cc_expiration_date" framework="tailwind"></x-system.invalid-msg>
                                 </div>
             
                                 <div class="">
@@ -615,7 +615,7 @@ x-cloak
                                             class="tw-input-main @error('cc_cvc') input-invalid @enderror"       
                                     />
                     
-                                    <x-default.system.invalid-msg field="cc_cvc" framework="tailwind"></x-default.system.invalid-msg>
+                                    <x-system.invalid-msg field="cc_cvc" framework="tailwind"></x-system.invalid-msg>
                                 </div>
                                 <!-- End Col -->
                             </div>
@@ -668,7 +668,7 @@ x-cloak
                 </div>
             </div>
 
-            <x-default.system.invalid-msg field="order.buyers_consent" framework="tailwind"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="order.buyers_consent" framework="tailwind"></x-system.invalid-msg>
         </div>
         <!-- End Checkbox -->
     </div>
