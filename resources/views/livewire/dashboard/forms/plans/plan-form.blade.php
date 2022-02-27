@@ -79,9 +79,9 @@
             </label>
             <!-- End Thumbnail -->
 
-            <x-default.system.invalid-msg field="plan.thumbnail"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
 
-            <x-default.system.invalid-msg field="plan.cover"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="plan.cover"></x-system.invalid-msg>
 
             <!-- Title -->
             <div class="row form-group mt-5" x-data="{
@@ -111,7 +111,7 @@
 {{--                        <span x-html="(url !== undefined) ? url : ''"></span>--}}
 {{--                    </div>--}}
 
-                    <x-default.system.invalid-msg field="plan.title"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.title"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Title -->
@@ -172,7 +172,7 @@
                         @endif
                     </div>
 
-                    <x-default.system.invalid-msg field="plan.status"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.status"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Status -->
@@ -208,7 +208,7 @@
                                 wire:model.defer="plan.price" />
                     </div>
 
-                    <x-default.system.invalid-msg field="plan.price"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.price"></x-system.invalid-msg>
                 </div>
 
                 <div class="col-sm-2" x-data="{
@@ -252,7 +252,7 @@
                                 wire:model.defer="plan.discount" />
                     </div>
 
-                    <x-default.system.invalid-msg field="plan.discount"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.discount"></x-system.invalid-msg>
                 </div>
 
                 <div class="col-sm-2" x-data="{
@@ -296,7 +296,7 @@
                     </div>
                     <small class="text-warning">{{ translate('*Note: If yearly discount is set, standard discount won\'t be applied to each month.') }}</small>
 
-                    <x-default.system.invalid-msg field="plan.yearly_discount"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.yearly_discount"></x-system.invalid-msg>
                 </div>
 
                 <div class="col-sm-2" x-data="{
@@ -340,7 +340,7 @@
                                 wire:model.defer="plan.tax" />
                     </div>
 
-                    <x-default.system.invalid-msg field="plan.tax"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.tax"></x-system.invalid-msg>
                 </div>
 
                 <div class="col-sm-2" x-data="{
@@ -385,7 +385,7 @@
                         </textarea>
                     </div>
 
-                    <x-default.system.invalid-msg field="plan.excerpt"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.excerpt"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Excerpt -->
@@ -409,7 +409,7 @@
                         </div>
                     </div>
 
-                    <x-default.system.invalid-msg field="plan.content"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.content"></x-system.invalid-msg>
                 </div>
             </div> --}}
             <!-- END Content -->
@@ -464,7 +464,7 @@
                         <i class="tio-add"></i> {{ translate('Add feature') }}
                     </a>
 
-                    <x-default.system.invalid-msg field="plan.features"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="plan.features"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Features -->
@@ -487,7 +487,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="plan.meta_title"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="plan.meta_title"></x-system.invalid-msg>
             </div>
             <!-- END Meta Title -->
 
@@ -506,7 +506,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="plan.meta_description"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="plan.meta_description"></x-system.invalid-msg>
             </div>
             <!-- END Meta Description -->
 
@@ -525,7 +525,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="plan.meta_keywords"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="plan.meta_keywords"></x-system.invalid-msg>
             </div>
             <!-- END Meta Keywords -->
 
@@ -553,7 +553,7 @@
                         <input type="hidden" x-bind:name="name" wire:model.defer="plan.meta_img" class="selected-files" data-preview-width="200">
                     </label>
 
-                    <x-default.system.invalid-msg class="mt-1" field="plan.meta_img"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg class="mt-1" field="plan.meta_img"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- End Meta Img -->

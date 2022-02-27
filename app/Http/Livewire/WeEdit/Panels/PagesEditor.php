@@ -17,6 +17,10 @@ class PagesEditor extends Component
     public $current_page;
     public $all_pages;
 
+    protected $listeners = [
+        'addSectionToPageEvent' => 'addSectionToPage'
+    ];
+
     protected $rules = [
         'all_pages.*' => '',
         'current_page.id' => '',
@@ -49,6 +53,12 @@ class PagesEditor extends Component
 
         Page::where('id', $this->current_page['id'])->update(['content' => $sorted_list]);
         $this->current_page = Page::where('id', $this->current_page['id'])->first()->toArray();
+    }
+
+    public function addSectionToPage($section_data) { 
+        if(isset($section_data['id']) && $section_data['section']) { 
+            $this->current_page['content'][$section_data['id']] = $section_data['section'];
+        }
     }
 
     public function render()

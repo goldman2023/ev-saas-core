@@ -19,7 +19,7 @@
                     name="email"
                     wire:model.defer="email">
             </div>
-            <x-default.system.invalid-msg field="email" type="slim"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="email" type="slim"></x-system.invalid-msg>
         </div>
 
         <div class="mb-3">
@@ -31,7 +31,7 @@
                     placeholder="{{ translate('Password') }}" name="password" id="password"
                     wire:model.defer="password">
             </div>
-            <x-default.system.invalid-msg field="password" type="slim"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="password" type="slim"></x-system.invalid-msg>
         </div>
 
         <div class="row mb-2">

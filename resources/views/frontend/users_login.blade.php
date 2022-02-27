@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
                     <div class="card p-4">
-                        <x-default.global.login-form> </x-default.global.login-form>
+                        <x-forms.login-form> </x-forms.login-form>
                     </div>
                 </div>
             </div>

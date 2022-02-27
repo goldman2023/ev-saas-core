@@ -213,7 +213,7 @@
                     <li class="list-inline-item">
                         <div class="hs-unfold">
                             <a class="btn btn-xs btn-icon btn-ghost-secondary position-relative" href="javascript:;"
-                                x-data="" @click="$dispatch('display-cart')">
+                                x-data="" @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'})">
                                 @svg('heroicon-o-shopping-cart', ['class' => 'square-22'])
                                 <div class="position-absolute badge badge-primary circle-dynamic"
                                     style="top: -6px; right: -6px; line-height: 0.8;   "
@@ -240,7 +240,7 @@
                     <li class="list-inline-item">
                         <div class="hs-unfold">
                             <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-ghost-secondary" href="javascript:;"
-                                x-data="" @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
+                                x-data="" @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
                                 <!--data-toggle="modal" data-target="#signupModal">-->
                                 @svg('heroicon-s-user-circle', ['class' => 'square-2'])
                             </a>
@@ -250,7 +250,7 @@
                     <li class="list-inline-item">
                         <a href="javascript:;" x-data=""
                         data-test="we-login-header"
-                            @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
+                            @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
                             {{ translate('Login') }}
                         </a>
                     </li>
@@ -266,7 +266,7 @@
             <div class="row">
 
                 <div class="col-sm-6 align-items-center d-none d-sm-block">
-                    <x-b2-b-search></x-b2-b-search>
+                    {{-- <x-b2-b-search></x-b2-b-search> --}}
                 </div>
 
                 <div class="col-sm-3 col-6">

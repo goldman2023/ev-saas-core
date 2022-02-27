@@ -25,12 +25,15 @@ class ThemeMiddleware
         // Get tenant info
 
             $domain = tenant()->domains()->first();
-
+            
             if($domain) {
                 // Set active theme
                 /* Set parent theme for tailwind child themes */
                 if(str_contains($domain->theme, 'tailwind')) {
                     Theme::set($domain->theme, 'ev-tailwind');
+
+                    session(['style_framework' => 'tailwind']);
+
                     /*
                         TODO: Define this better but dashboard allways uses boostrap version for now
                     */
@@ -43,14 +46,24 @@ class ThemeMiddleware
 
                 } else {
                     Theme::set($domain->theme, 'ev-saas-default');
+                    session(['style_framework' => 'bootstrap']);
                 }
 
             }
 
         }
 
+        // NOTE: Check if this approach is OK...
 
+        if(request()->is('dashboard') || request()->is('dashboard/*')) {
+            session(['style_framework' => 'bootstrap']);
+        }
 
+        if(request()->is('livewire/*') && str_contains(request()->header('referer'), 'dashboard')) {
+            // Is a livewire request? - Is it a 1) livewire request from dashboard or 2) from frontend?
+            session(['style_framework' => 'bootstrap']);  
+        }
+        
         return $next($request);
     }
 }

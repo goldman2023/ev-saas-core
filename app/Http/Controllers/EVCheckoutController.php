@@ -448,6 +448,8 @@ class EVCheckoutController extends Controller
             dd($e);
         }
     
+        session(['style_framework' => 'tailwind']);
+        
         return view('frontend.checkout-single', compact('model'));
     }
 
