@@ -13,11 +13,11 @@ Cypress.Commands.add('login', (attributes = {}) => {
     // Are we using the new object system.
     let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
     cy.visit({
-        route: 'user.login'
+        route: 'home'
     });
 
     /* Get the header login button on desktop */
-    cy.get('[data-test="we-login-header"]')
+    cy.get('#user-menu-button')
         .click()
 
     cy.get('[data-test="we-login-email"]')
@@ -50,12 +50,12 @@ Cypress.Commands.add('loginAsSeller', (attributes = {}) => {
     });
 
     /* Get the header login button on desktop */
-    // cy.get('[data-test="we-login-header"]')
-    //     .click()
+    cy.get('#user-menu-button')
+        .click()
 
-    cy.visit({
-        route: 'user.login'
-    });
+    // cy.visit({
+    //     route: 'user.login'
+    // });
 
     cy.get('[data-test="we-login-email"]')
         .type('seller@eim.solutions')
@@ -85,11 +85,11 @@ Cypress.Commands.add('loginAsCustomer', (attributes = {}) => {
     });
 
     /* Get the header login button on desktop */
-    // cy.get('[data-test="we-login-header"]')
-    //     .click()
-    cy.visit({
-        route: 'user.login'
-    });
+    cy.get('#user-menu-button')
+        .click()
+    // cy.visit({
+    //     route: 'user.login'
+    // });
 
     cy.get('[data-test="we-login-email"]')
         .type('customer@eim.solutions')

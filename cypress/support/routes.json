@@ -149,8 +149,8 @@
       "HEAD"
     ]
   },
-  "generated::Sauq47oMegBXU42s": {
-    "name": "generated::Sauq47oMegBXU42s",
+  "generated::CFSeOAj9GjnBqUU5": {
+    "name": "generated::CFSeOAj9GjnBqUU5",
     "domain": null,
     "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@source",
     "uri": "livewire/livewire.js",
@@ -159,8 +159,8 @@
       "HEAD"
     ]
   },
-  "generated::6NWQc8k4IOETcNaR": {
-    "name": "generated::6NWQc8k4IOETcNaR",
+  "generated::c2bOvIIO1aLXoPZG": {
+    "name": "generated::c2bOvIIO1aLXoPZG",
     "domain": null,
     "action": "Livewire\\Controllers\\LivewireJavaScriptAssets@maps",
     "uri": "livewire/livewire.js.map",
@@ -198,8 +198,8 @@
       "POST"
     ]
   },
-  "generated::P7i7tH9kCbXitKPu": {
-    "name": "generated::P7i7tH9kCbXitKPu",
+  "generated::Qd2I1x90ZFSo7fHg": {
+    "name": "generated::Qd2I1x90ZFSo7fHg",
     "domain": null,
     "action": "Mediconesystems\\LivewireDatatables\\Http\\Controllers\\FileExportController@handle",
     "uri": "datatables/{filename}",
@@ -218,8 +218,8 @@
       "HEAD"
     ]
   },
-  "generated::gBmhP8QLN9MNQb4E": {
-    "name": "generated::gBmhP8QLN9MNQb4E",
+  "generated::vSQUG8fqVtWz4l0k": {
+    "name": "generated::vSQUG8fqVtWz4l0k",
     "domain": "ev-saas.localhost",
     "action": "Closure",
     "uri": "refresh-csrf",
@@ -375,8 +375,8 @@
       "POST"
     ]
   },
-  "generated::LCWsokF7fw3QG4TR": {
-    "name": "generated::LCWsokF7fw3QG4TR",
+  "generated::tcFYWt5r0iHdvePL": {
+    "name": "generated::tcFYWt5r0iHdvePL",
     "domain": null,
     "action": "Closure",
     "uri": "sitemap.xml",
@@ -385,8 +385,8 @@
       "HEAD"
     ]
   },
-  "generated::bN0hcZjqnDjtgaBH": {
-    "name": "generated::bN0hcZjqnDjtgaBH",
+  "generated::9aTlZ0r89FnbzoX6": {
+    "name": "generated::9aTlZ0r89FnbzoX6",
     "domain": null,
     "action": "Closure",
     "uri": "refresh-csrf",
@@ -395,8 +395,8 @@
       "HEAD"
     ]
   },
-  "generated::Jj8B7ePxtuap7pcS": {
-    "name": "generated::Jj8B7ePxtuap7pcS",
+  "generated::hbYBjT188Btti6pU": {
+    "name": "generated::hbYBjT188Btti6pU",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@show_uploader",
     "uri": "aiz-uploader",
@@ -404,8 +404,8 @@
       "POST"
     ]
   },
-  "generated::NTpXyAW6PGpwDWE0": {
-    "name": "generated::NTpXyAW6PGpwDWE0",
+  "generated::MGq9gdMDFrkg6MFS": {
+    "name": "generated::MGq9gdMDFrkg6MFS",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@upload",
     "uri": "aiz-uploader/upload",
@@ -413,8 +413,8 @@
       "POST"
     ]
   },
-  "generated::DdhOtuL6tGJmByA7": {
-    "name": "generated::DdhOtuL6tGJmByA7",
+  "generated::NivmuKsEleuRnE6j": {
+    "name": "generated::NivmuKsEleuRnE6j",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@get_uploaded_files",
     "uri": "aiz-uploader/get_uploaded_files",
@@ -423,8 +423,8 @@
       "HEAD"
     ]
   },
-  "generated::1nytJD4D4XHlal7y": {
-    "name": "generated::1nytJD4D4XHlal7y",
+  "generated::Z6TtOsApQuwzFryY": {
+    "name": "generated::Z6TtOsApQuwzFryY",
     "domain": null,
     "action": "App\\Http\\Controllers\\AizUploadController@get_preview_files",
     "uri": "aiz-uploader/get_file_by_ids",
@@ -618,8 +618,8 @@
       "HEAD"
     ]
   },
-  "generated::a8NIHgUkkqrUDHVE": {
-    "name": "generated::a8NIHgUkkqrUDHVE",
+  "generated::TLPSIHjDf7Szx2e3": {
+    "name": "generated::TLPSIHjDf7Szx2e3",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Auth\\LoginController@login",
     "uri": "login",
@@ -646,8 +646,8 @@
       "HEAD"
     ]
   },
-  "generated::6fZ1MvFPGA9SyBTI": {
-    "name": "generated::6fZ1MvFPGA9SyBTI",
+  "generated::6xyl26PVuYOaR2tv": {
+    "name": "generated::6xyl26PVuYOaR2tv",
     "domain": null,
     "action": "\\App\\Http\\Controllers\\Auth\\RegisterController@register",
     "uri": "register",
@@ -1074,8 +1074,8 @@
       "HEAD"
     ]
   },
-  "generated::7Kk2WJUM4hABgPN0": {
-    "name": "generated::7Kk2WJUM4hABgPN0",
+  "generated::eX42ORtdObnaLHJh": {
+    "name": "generated::eX42ORtdObnaLHJh",
     "domain": null,
     "action": "App\\Http\\Controllers\\StripePaymentController@stripe",
     "uri": "stripe",
@@ -1483,6 +1483,16 @@
     "domain": null,
     "action": "\\App\\Http\\Controllers\\PageController@show_custom_page",
     "uri": "page/{slug}",
+    "method": [
+      "GET",
+      "HEAD"
+    ]
+  },
+  "show": {
+    "name": "show",
+    "domain": null,
+    "action": "\\App\\Http\\Controllers\\EVPreviewController@show",
+    "uri": "previews/show",
     "method": [
       "GET",
       "HEAD"

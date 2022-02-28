@@ -59,6 +59,10 @@ https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 
 - `npx mix --mix-config="themes/ev-saas-default/webpack.mix.js"`
 
+## Compiling for EV-Tailwind theme
+
+- `npx mix watch --mix-config="themes/ev-tailwind/webpack.mix.js"`
+
 # Running docker
 
 `chmod +x sail`

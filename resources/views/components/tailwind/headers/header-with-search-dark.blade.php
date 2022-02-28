@@ -38,14 +38,7 @@
                             class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Projects</a>
                         <a href="#"
                             class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
-                        <a id="we-login-header" data-test="we-login-header"
-                            class=""
-                            href="javascript:;" x-data=""
-                            @click="$dispatch('display-flyout-panel', {'id': 'guest-panel'})">
-                            <!--data-toggle="modal" data-target="#signupModal">-->
-                            @svg('heroicon-s-user-circle', ['class' => 'square-2'])
-                            Login
-                        </a>
+
                     </div>
                 </div>
             </div>
