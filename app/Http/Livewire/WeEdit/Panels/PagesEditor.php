@@ -15,18 +15,21 @@ class PagesEditor extends Component
     use DispatchSupport;
 
     public $current_page;
-    public $all_pages;
+    public $current_preview;
+    // public $all_pages;
 
     protected $listeners = [
         'addSectionToPageEvent' => 'addSectionToPage'
     ];
 
     protected $rules = [
-        'all_pages.*' => '',
-        'current_page.id' => '',
-        'current_page.title' => '',
-        'current_page.slug' => '',
-        'current_page.content' => '',
+        // 'all_pages.*' => '',
+        'current_page.id' => 'nullable',
+        'current_page.title' => 'nullable',
+        'current_page.slug' => 'nullable',
+        'current_page.content' => 'nullable',
+        'current_preview.id' => 'nullable',
+        'current_preview.content' => 'nullable',
     ];
 
     public function messages() {
@@ -35,29 +38,43 @@ class PagesEditor extends Component
 
     public function mount()
     {
-        $this->current_page = Page::where('slug', 'home')->first()->toArray();
-        $this->all_pages = Page::all()->toArray();
+        $this->current_page = Page::where('slug', 'home')->first();
+        // dd($this->current_page);
+        $this->current_preview = $this->current_page->page_previews()->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        // $this->all_pages = Page::all();
     }
 
     public function changeCurrentPage($page) {
         $this->current_page = $page;
+        $page_previews = $this->current_page->page_previews()->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+
+        if(empty($page_previews)) {
+            // If previews are empty for current user, create a preview
+            $this->current_preview = new PagePreview();
+            $this->current_preview->user_id = auth()->user()->id;
+            $this->current_preview->page_id = $this->current_page->id;
+            $this->current_preview->content = $this->current_page->content;
+            $this->current_preview->save();
+        } else {
+            $this->current_preview = $page_previews->first();
+        }
     }
 
-    public function reorderCurrentPageSections($keys) {
+    public function reorderCurrentPreviewSections($keys) {
         $sorted_list = [];
         if(!empty($keys)) {
             foreach($keys as $key) {
-                $sorted_list[$key] = $this->current_page['content'][$key];
+                $sorted_list[$key] = $this->current_preview->content[$key];
             }
         }
 
-        Page::where('id', $this->current_page['id'])->update(['content' => $sorted_list]);
-        $this->current_page = Page::where('id', $this->current_page['id'])->first()->toArray();
+        Page::where('id', $this->current_preview->id)->update(['content' => $sorted_list]);
+        $this->current_page = Page::where('id', $this->current_page->id)->first();
     }
 
     public function addSectionToPage($section_data) { 
         if(isset($section_data['id']) && $section_data['section']) { 
-            $this->current_page['content'][$section_data['id']] = $section_data['section'];
+            $this->current_page->content[$section_data['id']] = $section_data['section'];
         }
     }
 

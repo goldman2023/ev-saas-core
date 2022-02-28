@@ -17,7 +17,7 @@ class Page extends EVBaseModel
     protected $fillable = ['title', 'type', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'id' => 'string',
+        // 'id' => 'string',
         'content' => 'json',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
@@ -35,6 +35,10 @@ class Page extends EVBaseModel
         return 'slug';
     }
 
+
+    public function page_previews() {
+        return $this->hasMany(PagePreview::class, 'page_id');
+    }
 
     // public function getTranslation($field = '', $lang = false){
     //     $lang = $lang == false ? App::getLocale() : $lang;
