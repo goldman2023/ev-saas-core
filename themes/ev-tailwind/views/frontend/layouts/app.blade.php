@@ -25,7 +25,7 @@
 
     @livewireScripts
     @livewireStyles
-    
+
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
 </head>
@@ -43,10 +43,6 @@
             <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
         </footer>
     </div>
-
-    
-    <!-- Print SignUp Modal Component -->
-    <x-default.modals.signup-modal style="signup-modal" id="signupModal"></x-default.modals.signup-modal>
 
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
@@ -67,7 +63,7 @@
     <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
         :is_x="true" :timeout="4000">
     </x-ev.toast>
-    
+
     @yield('script')
 </body>
 
