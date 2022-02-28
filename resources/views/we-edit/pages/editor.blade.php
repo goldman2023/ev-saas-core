@@ -8,6 +8,6 @@
     <x-slot name="third_column">
         <h2 class="w-full text-center text-18 py-2 bg-sky-500 text-white">{{ translate('Page Preview') }}</h2>
 
-
+        
     </x-slot>
 </x-we-edit.layouts.three>
