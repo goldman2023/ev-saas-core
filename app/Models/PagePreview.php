@@ -12,7 +12,6 @@ class PagePreview extends EVBaseModel
     protected $fillable = ['page_id', 'user_id', 'content', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'content' => 'json',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
@@ -23,5 +22,13 @@ class PagePreview extends EVBaseModel
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getContentAttribute($value) {
+        return array_values(json_decode($value ?? '[]', true));
+    }
+
+    public function setContentAttribute($value) {
+        $this->attributes['content'] = json_encode(array_values($value ?? []));
     }
 }

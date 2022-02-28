@@ -18,7 +18,6 @@ class Page extends EVBaseModel
 
     protected $casts = [
         // 'id' => 'string',
-        'content' => 'json',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
@@ -38,6 +37,14 @@ class Page extends EVBaseModel
 
     public function page_previews() {
         return $this->hasMany(PagePreview::class, 'page_id');
+    }
+
+    public function getContentAttribute($value) {
+        return array_values(json_decode($value ?? '[]', true));
+    }
+
+    public function setContentAttribute($value) {
+        $this->attributes['content'] = json_encode(array_values($value));
     }
 
     // public function getTranslation($field = '', $lang = false){
