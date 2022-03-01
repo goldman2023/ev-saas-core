@@ -2,11 +2,18 @@
 
 namespace App\View\Components;
 
+use App\Models\Category;
 use Illuminate\View\Component;
 
+/**
+ * @param Category[] $categories
+ */
 class CategoryList extends Component
 {
+
     public $categories;
+
+
     /**
      * Create a new component instance.
      *
