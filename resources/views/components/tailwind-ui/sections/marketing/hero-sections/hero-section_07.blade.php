@@ -31,9 +31,55 @@
 
 
                         <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
-                            <x-slot name="section_cta">
-                                <div class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
+                            {{--
+                                Sections Array[]
+                                0 [{ // What are our section keys
+                                    'component': 'HeroSection', // Define the component that is used for this section
+                                    'order' : 1,
+                                    'background' : {
+                                        'type' : 'image', // video / color
+                                        'color' : '#ffffff',
+                                        'url' : '#'
+                                    },
+                                    'visibility' : 'all', // all / loggedin / loggedout / subscribers / non-subscribers
+                                    'responsive_visibility' : 'all', // all / sm / md / lg / xl
+                                    'extra_classes' : 'something d-none',
+                                    'spacing' : {
+                                       'top' : 'sm',
+                                       'bottom' : 'lg',
+                                    },
 
+                                    'slots': {
+                                        'section_cta': {
+                                            component: 'x-tailwind.categories-list',
+                                            'extra_classes' : 'something d-none',
+                                            options: {
+                                                style: 'grid', // list or style-1 , style-2, style-3
+                                                type : featured,
+                                                show_parent: 5,
+                                                show_image: true,
+                                                'extra_classes' : 'something d-none',
+                                            }
+                                          }
+                                    }
+                                }]
+                            --}}
+                            <x-slot name="section_cta">
+                                {{--
+                                    Example json to overide the default cta
+
+                                    {
+                                        data: {
+                                            component: 'x-tailwind.categories-list',
+                                            options: {
+                                                type : featured,
+                                                show_parent: 5,
+                                                show_image: true,
+                                            }
+                                        }
+                                    }
+                                --}}
+                                <div class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
                                     <x-ev.link-button
                                         class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-indigo-700 bg-white hover:bg-indigo-50 sm:px-8"
                                         :href="ev_dynamic_translate('#button1')"
@@ -46,7 +92,6 @@
                                         target="_blank"
                                         :label="ev_dynamic_translate('Button 2')" class="ev-button">
                                     </x-ev.link-button>
-
                                 </div>
                             </x-slot>
                         </div>

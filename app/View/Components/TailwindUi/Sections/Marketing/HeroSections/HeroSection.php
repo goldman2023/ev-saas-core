@@ -2,6 +2,7 @@
 
 namespace App\View\Components\TailwindUi\Sections\Marketing\HeroSections;
 
+use App\View\Components\TailwindUi\WeComponent;
 use Illuminate\View\Component;
 
 class HeroSection extends WeComponent

@@ -12,6 +12,14 @@ class CategoryList extends Component
 {
 
     public $categories;
+    public $options = [
+        'type' => 'featured/latest/popular',
+        'show_count' => false,
+        'show_parent' => 0,
+        'show_children' => 4,
+        'show_description' => false,
+        'show_image' => false,
+    ]; // Options Featured / Latest / Popular
 
 
     /**
