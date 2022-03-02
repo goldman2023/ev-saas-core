@@ -61,7 +61,7 @@
                                         <div class="swiper-slide flex flex-col cursor-pointer relative ">
                                             <div class="absolute inset-0 bg-cover bg-center z-1 rounded w-full h-full flex justify-center items-center bg-stone-800 opacity-0 hover:opacity-100 bg-opacity-80 duration-300">
                                                 <button type="button" class="cursor-pointer text-14 rounded text-white bg-sky-600 px-3 py-2"
-                                                        @click="$wire.addSectionToPage('{{ $section['id'] ?? '' }}')">
+                                                        @click="$wire.addSectionToPreview('{{ $section['id'] ?? '' }}')">
                                                     {{ translate('Add to page') }}
                                                 </button>
                                             </div>

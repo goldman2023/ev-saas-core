@@ -59,6 +59,7 @@
         "stancl/tenancy": "^3.4",
         "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
+        "webpatser/laravel-uuid": "^4.0",
         "webtopay/libwebtopay": "^1.6"
     },
     "require-dev": {

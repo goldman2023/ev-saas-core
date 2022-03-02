@@ -79,9 +79,9 @@ class AvailableSections extends Component
         $this->available_sections_flat = $available_sections_flat;
     }
 
-    public function addSectionToPage($section_id) {
+    public function addSectionToPreview($section_id) {
         if(isset($this->available_sections_flat[$section_id])) {
-            $this->emit('addSectionToPageEvent', [
+            $this->emit('addSectionToPreviewEvent', [
                 'id' => $section_id,
                 'section' => $this->available_sections_flat[$section_id]
             ]);

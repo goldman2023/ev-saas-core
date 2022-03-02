@@ -288,6 +288,7 @@ return [
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,
+        'UUID' => Webpatser\Uuid\Uuid::class,
     ],
 
 ];
