@@ -7,6 +7,17 @@
             @foreach ($preview['content'] as $key => $section)
                 <x-dynamic-component :component="$section['id'] ?? ''" :dataOverides="$section['data'] ?? []" class="mt-4" />
             @endforeach
+
+
+            {{-- The preview rendering idealy should become like this --}}
+            {{-- <x-dynamic-component :component="$section['id'] ?? ''" :dataOverides="$section['data'] ?? []" class="mt-4">
+                @foreach($section['slots'] as $key $slot)
+                    <x-slot :name="$key">
+                        <x-dynamic-component :component="$section['id']['slots']['section_title']">
+                        </x-dynamic-component>
+                    </x-slot>
+                @endforeach
+            </x-dynamic-component> --}}
         </div>
     @endif
 @endsection

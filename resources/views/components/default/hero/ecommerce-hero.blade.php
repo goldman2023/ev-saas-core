@@ -8,8 +8,10 @@ $categories = App\Models\Category::where('level', 0)
 <div class="container space-top-1">
     <div class="row">
         <div class="col-sm-3">
-            <x-default.categories.list.category-list :categories="$categories">
-            </x-default.categories.list.category-list>
+            <x-slot name="left-column">
+                <x-default.categories.list.category-list :categories="$categories">
+                </x-default.categories.list.category-list>
+            </x-slot>
         </div>
         <div class="col-sm-9">
             <x-default.brands.brands-list>
