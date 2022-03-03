@@ -24,7 +24,7 @@ class FlyoutAuth extends Component
     public function render()
     {
         if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind.panels.flyout-auth');
+            return view('components.tailwind-ui.panels.flyout-auth');
         }
 
         return view('components.bootstrap.panels.flyout-auth'); // TODO: Move this and fix structure!s

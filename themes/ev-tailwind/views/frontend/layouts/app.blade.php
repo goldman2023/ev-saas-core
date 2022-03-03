@@ -32,7 +32,7 @@
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
         <header>
-         <x-tailwind.headers.header></x-tailwind.headers.header>
+         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
         </header>
         <!-- Page Content -->
         <main>

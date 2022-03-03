@@ -36,8 +36,8 @@ class SectionEdit extends Component
         // $this->dispatchBrowserEvent('');
     }
 
-    public function setSection($section_identifier) {
-
+    public function setSection($section_uuid) {
+        $this->section = collect($this->current_preview->content)->firstWhere('uuid', $section_uuid);
     }
     
     public function render()

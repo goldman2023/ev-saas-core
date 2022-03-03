@@ -29,7 +29,7 @@ class FlyoutWishlist extends Component
     public function render()
     {
         if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind.panels.flyout-wishlist');
+            return view('components.tailwind-ui.panels.flyout-wishlist');
         }
 
         return view('components.bootstrap.panels.flyout-wishlist');

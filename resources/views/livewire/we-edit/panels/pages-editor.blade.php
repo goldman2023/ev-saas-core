@@ -133,7 +133,7 @@
                                             >
                                             <div class="py-1" role="none">
                                               <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                                                <a href="#" @click="open = false; $dispatch('display-flyout-panel', {'id': 'we-edit-section-panel', 'title': '{{ $section['title'] }}', 'section': @js($section), });" class="flex items-center text-gray-700 px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 " role="menuitem" >
+                                                <a href="#" @click="open = false; $dispatch('display-flyout-panel', {'id': 'we-edit-section-panel', 'title': '{{ $section['title'] }}', 'section_uuid': '{{ $section['uuid'] }}', });" class="flex items-center text-gray-700 px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 " role="menuitem" >
                                                     @svg('lineawesome-edit', ['class' => 'w-[18px] h-[18px] mr-3'])
                                                     {{ translate('Edit') }}
                                                 </a>

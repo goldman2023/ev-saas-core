@@ -29,7 +29,7 @@ class FlyoutPanel extends Component
     public function render()
     {
         if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind.panels.flyout-panel');
+            return view('components.tailwind-ui.panels.flyout-panel');
         }
         
         return view('components.bootstrap.panels.flyout-panel');

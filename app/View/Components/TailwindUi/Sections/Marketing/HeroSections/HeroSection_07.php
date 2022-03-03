@@ -4,7 +4,7 @@ namespace App\View\Components\TailwindUi\Sections\Marketing\HeroSections;
 
 use Illuminate\View\Component;
 
-class HeroSection_07 extends Component
+class HeroSection_07 extends HeroSection
 {
     /**
      * Create a new component instance.

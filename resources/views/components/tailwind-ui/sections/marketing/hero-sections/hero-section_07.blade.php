@@ -1,8 +1,5 @@
-{{-- This is a section that can be used in a page builer --}}
-<!-- This example requires Tailwind CSS v2.0+ -->
-
 {{-- This class should be dynamic and should be passed from parent HeroSection (or WeComponent) component --}}
-<div {{ $attributes }} class="bg-white">
+<section class="bg-white">
     <div>
         <!-- Hero card -->
         <div class="relative">
@@ -131,4 +128,4 @@
 
     <!-- More main page content here... -->
 
-</div>
+</section>

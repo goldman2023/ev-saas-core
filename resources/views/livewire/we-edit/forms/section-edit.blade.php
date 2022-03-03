@@ -2,7 +2,10 @@
     section: @entangle('section')
 }"
 @display-flyout-panel.window="if($event.detail.id === id) {
-    section = $event.detail.section;
+    {{-- TODO: Add loading spinner over whole section-edit form so we can indicate that section data is loading --}}
+    setTimeout(function() {
+        $wire.setSection($event.detail.section_uuid);
+    }, 500);
 }">
     
 </div>

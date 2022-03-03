@@ -17,7 +17,7 @@ class EVPreviewController extends Controller
         $preview = session('page_preview');
 
         if(empty($preview)) {
-            $preview = Page::where('slug', 'home')->first()->toArray();
+            $preview = Page::where('slug', 'home')->first()?->page_previews()->first()->toArray();
         }
         
         return view('we-edit.preview-show', compact('preview'));
