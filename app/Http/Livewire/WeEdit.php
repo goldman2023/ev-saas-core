@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Page;
 use Livewire\Component;
 use App\Enums\WeEditLayoutEnum;
+use WeBuilder;
 
 class WeEdit extends Component
 {
@@ -16,7 +17,7 @@ class WeEdit extends Component
     public $selected_container;
 
     public function mount()
-    {
+    { 
         $this->we_menu = [
             [
                 'title' => translate('Pages'),

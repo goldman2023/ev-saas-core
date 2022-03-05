@@ -7,5 +7,5 @@
         $wire.setSection($event.detail.section_uuid);
     }, 500);
 }">
-    
+    {!! $this->custom_fields_html !!}
 </div>
