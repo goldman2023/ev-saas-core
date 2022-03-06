@@ -2,7 +2,7 @@
 @section('content')
 
 <main id="content" role="main" class="bg-light" >
-    <section class="bg-dark" style="background-image: url('https://htmlstream.com/front/assets/svg/components/abstract-shapes-20.svg');">
+    <section class="bg-dark" style="">
         <div class="container space-1 space-top-lg-2 space-bottom-lg-3 d-none d-sm-block">
             <div class="row align-items-center">
                 <div class="col">

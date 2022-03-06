@@ -27,6 +27,14 @@ Route::middleware([
     SetDashboard::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
+        Route::group([
+                'middleware' => ['auth'],
+                'prefix' => 'previews'
+            ], function () {
+                Route::get('/show', 'EVPreviewController@show')->name('show');
+                
+            });
+        
     /* TODO: Admin only */
     Route::group([
         'middleware' => ['auth', 'admin'],

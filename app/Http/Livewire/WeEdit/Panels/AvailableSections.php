@@ -4,55 +4,32 @@ namespace App\Http\Livewire\WeEdit\Panels;
 
 use Livewire\Component;
 use App\Enums\WeEditLayoutEnum;
+use WeBuilder;
 
 class AvailableSections extends Component
 {
     public $available_sections;
+    public $available_sections_flat;
 
     public function mount()
     {
-        $this->initAvailableSections();
+        $this->available_sections = WeBuilder::getAllThemeSections('tailwind-ui');
+        $this->available_sections_flat = WeBuilder::getAllThemeSections('tailwind-ui', true);
     }
 
-    protected function initAvailableSections() {
-        $this->available_sections = [
-            'hero' => [
-                'title' => 'Hero',
-                'description' => 'A lovely description for hero sections',
-                'sections' => [
-                    'tailwind.hero.ecommerce-hero' => [
-                        'id' => 'tailwind.hero.ecommerce-hero',
-                        'title' => 'Ecommerce Hero',
-                        'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
-                        'order' => -1,
-                    ],
-                ]
-            ],
-            'product_lists' => [
-                'title' => 'Product Lists',
-                'description' => 'A lovely description for hero sections',
-                'sections' => [
-                    'tailwind.product-lists.simple' => [
-                        'id' => 'tailwind.product-lists.simple',
-                        'title' => 'Product List 1',
-                        'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
-                        'order' => -1
-                    ],
-                    'tailwind.product-lists.simple-3' => [
-                        'id' => 'tailwind.product-lists.simple',
-                        'title' => 'Product List 2',
-                        'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
-                        'order' => -1
-                    ],
-                    'tailwind.product-lists.simple-2' => [
-                        'id' => 'tailwind.product-lists.simple',
-                        'title' => 'Product List 3',
-                        'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.05-with-sign-in-form-xl.png',
-                        'order' => -1
-                    ]
-                ]
-            ]
-        ];
+    public function dehydrate() {
+        $this->dispatchBrowserEvent('initAvailableSectionsPanel');
+    }
+
+    
+
+    public function addSectionToPreview($section_id) {
+        if(isset($this->available_sections_flat[$section_id])) {
+            $this->emit('addSectionToPreviewEvent', [
+                'id' => $section_id,
+                'section' => $this->available_sections_flat[$section_id]
+            ]);
+        }
     }
     
     public function render()

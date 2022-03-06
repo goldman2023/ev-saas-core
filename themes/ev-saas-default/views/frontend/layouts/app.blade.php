@@ -27,7 +27,9 @@
     </x-default.system.og-meta>
     @endif
 
+    @if(get_setting('site_icon'))
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
+    @endif
 
     <script>
         var AIZ = AIZ || {};
@@ -125,15 +127,16 @@
 
         <!-- Wishlist -->
         {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-        <x-default.global.flyout-wishlist></x-default.global.flyout-wishlist>
-        {{-- Like this, will decide later --}}
-        <x-default.global.flyouts.guest></x-default.global.flyouts.guest>
-
-        <x-default.global.flyout-categories></x-default.global.flyout-categories>
+        <x-panels.flyout-wishlist></x-panels.flyout-wishlist>
+        <x-panels.flyout-categories></x-panels.flyout-categories>
 
         @auth
-        <x-default.global.flyout-profile></x-default.global.flyout-profile>
+            <x-panels.flyout-profile></x-panels.flyout-profile>
         @endauth
+
+        @guest
+            <x-panels.flyout-auth></x-panels.flyout-auth>
+        @endguest
 
         <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
             :is_x="true" :timeout="4000">

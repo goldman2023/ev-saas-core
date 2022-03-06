@@ -37,6 +37,7 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
+        "masterminds/html5": "^2.7",
         "mediconesystems/livewire-datatables": "^0.6.8",
         "mews/purifier": "^3.3",
         "nao-pon/flysystem-google-drive": "~1.1",
@@ -59,6 +60,8 @@
         "stancl/tenancy": "^3.4",
         "staudenmeir/laravel-adjacency-list": "^1.7",
         "stripe/stripe-php": "^7.83.0",
+        "symfony/dom-crawler": "^6.0",
+        "webpatser/laravel-uuid": "^4.0",
         "webtopay/libwebtopay": "^1.6"
     },
     "require-dev": {

@@ -17,6 +17,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Http\Services\EVService;
 use App\Http\Services\TenantSettingsService;
 use App\Http\Services\FXService;
+use App\Http\Services\WeBuilderService;
 
 class EVServiceProvider extends ServiceProvider
 {
@@ -78,6 +79,11 @@ class EVServiceProvider extends ServiceProvider
         // Register Countries Singleton
         $this->app->singleton('ev_countries', function() {
             return new CountryService(fn () => Container::getInstance());
+        });
+
+        // Register Countries Singleton
+        $this->app->singleton('we_builder_sections', function() {
+            return new WeBuilderService(fn () => Container::getInstance());
         });
     }
 

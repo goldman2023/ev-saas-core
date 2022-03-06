@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App;
-use App\Traits\Livewire\HasTranslations;
 use App\Traits\TranslationTrait;
 
 class Page extends EVBaseModel
@@ -18,8 +17,7 @@ class Page extends EVBaseModel
     protected $fillable = ['title', 'type', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'id' => 'string',
-        'content' => 'json',
+        // 'id' => 'string',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
@@ -36,6 +34,18 @@ class Page extends EVBaseModel
         return 'slug';
     }
 
+
+    public function page_previews() {
+        return $this->hasMany(PagePreview::class, 'page_id');
+    }
+
+    public function getContentAttribute($value) {
+        return array_values(json_decode($value ?? '[]', true));
+    }
+
+    public function setContentAttribute($value) {
+        $this->attributes['content'] = json_encode(array_values($value));
+    }
 
     // public function getTranslation($field = '', $lang = false){
     //     $lang = $lang == false ? App::getLocale() : $lang;

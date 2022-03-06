@@ -63,7 +63,7 @@
                                             wire:model.defer="attribute.name" />
                                 </div>
             
-                                <x-default.system.invalid-msg field="attribute.name" type="slim"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="attribute.name" type="slim"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Name -->
@@ -102,7 +102,7 @@
                                     @endforeach
                                 </select>
             
-                                <x-default.system.invalid-msg field="attribute.type" type="slim"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="attribute.type" type="slim"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Type -->
@@ -121,7 +121,7 @@
                                     </label>
                                 </div>
             
-                                <x-default.system.invalid-msg field="attribute.filterable" type="slim"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="attribute.filterable" type="slim"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Filterable -->
@@ -140,7 +140,7 @@
                                     </label>
                                 </div>
             
-                                <x-default.system.invalid-msg field="attribute.is_admin" type="slim"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="attribute.is_admin" type="slim"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END admin -->
@@ -159,7 +159,7 @@
                                     </label>
                                 </div>
             
-                                <x-default.system.invalid-msg field="attribute.is_schema" type="slim"></x-default.system.invalid-msg>
+                                <x-system.invalid-msg field="attribute.is_schema" type="slim"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Is Schema -->
@@ -179,7 +179,7 @@
                                                     wire:model.defer="attribute.schema_key" />
                                         </div>
             
-                                        <x-default.system.invalid-msg field="attribute.schema_key" type="slim"></x-default.system.invalid-msg>
+                                        <x-system.invalid-msg field="attribute.schema_key" type="slim"></x-system.invalid-msg>
                                     </div>
                                 </div>
                                 <!-- END Schema Key -->
@@ -197,7 +197,7 @@
                                                     wire:model.defer="attribute.schema_value" />
                                         </div>
             
-                                        <x-default.system.invalid-msg field="attribute.schema_value" type="slim"></x-default.system.invalid-msg>
+                                        <x-system.invalid-msg field="attribute.schema_value" type="slim"></x-system.invalid-msg>
                                     </div>
                                 </div>
                                 <!-- END Schema value -->
@@ -486,7 +486,7 @@
                                         <i class="tio-add"></i> {{ translate('Add value') }}
                                     </a>
     {{-- 
-                                    <x-default.system.invalid-msg field="plan.attribute_values"></x-default.system.invalid-msg> --}}
+                                    <x-system.invalid-msg field="plan.attribute_values"></x-system.invalid-msg> --}}
                                 </div>
                             </div>
                             <!-- END Values of Predefined Types --> 

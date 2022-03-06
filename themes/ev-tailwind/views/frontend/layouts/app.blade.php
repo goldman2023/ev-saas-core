@@ -23,14 +23,16 @@
 
     {{ seo()->render() }}
 
+    @livewireScripts
     @livewireStyles
+
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
 </head>
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
         <header>
-         <x-tailwind.headers.header></x-tailwind.headers.header>
+         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
         </header>
         <!-- Page Content -->
         <main>
@@ -42,7 +44,26 @@
         </footer>
     </div>
 
-    @livewireScripts
+    <!-- Carts -->
+    <livewire:cart.cart template="flyout-cart" />
+
+    <!-- Wishlist -->
+    {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
+    <x-panels.flyout-wishlist></x-panels.flyout-wishlist>
+    <x-panels.flyout-categories></x-panels.flyout-categories>
+
+    @auth
+        <x-panels.flyout-profile></x-panels.flyout-profile>
+    @endauth
+
+    @guest
+        <x-panels.flyout-auth></x-panels.flyout-auth>
+    @endguest
+
+    <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
+        :is_x="true" :timeout="4000">
+    </x-ev.toast>
+
     @yield('script')
 </body>
 

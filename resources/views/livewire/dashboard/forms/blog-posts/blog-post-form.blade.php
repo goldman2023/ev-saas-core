@@ -80,9 +80,9 @@
             </label>
             <!-- End Thumbnail -->
 
-            <x-default.system.invalid-msg field="blogPost.thumbnail"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="blogPost.thumbnail"></x-system.invalid-msg>
 
-            <x-default.system.invalid-msg field="blogPost.cover"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="blogPost.cover"></x-system.invalid-msg>
 
             <!-- Title -->
             <div class="row form-group mt-5" x-data="{
@@ -112,7 +112,7 @@
 {{--                        <span x-html="(url !== undefined) ? url : ''"></span>--}}
 {{--                    </div>--}}
 
-                    <x-default.system.invalid-msg field="blogPost.title"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="blogPost.title"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Title -->
@@ -150,7 +150,7 @@
                         @endforeach
                     </select>
 
-                    <x-default.system.invalid-msg field="blogPost.status"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="blogPost.status"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Status -->
@@ -209,7 +209,7 @@
                         </textarea>
                     </div>
 
-                    <x-default.system.invalid-msg field="blogPost.excerpt"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="blogPost.excerpt"></x-system.invalid-msg>
                 </div>
 
 
@@ -234,7 +234,7 @@
                         </div>
                     </div>
 
-                    <x-default.system.invalid-msg field="blogPost.content"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="blogPost.content"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Content -->
@@ -257,7 +257,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="blogPost.meta_title"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="blogPost.meta_title"></x-system.invalid-msg>
             </div>
             <!-- END Meta Title -->
 
@@ -276,7 +276,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="blogPost.meta_description"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="blogPost.meta_description"></x-system.invalid-msg>
             </div>
             <!-- END Meta Description -->
 
@@ -295,7 +295,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="blogPost.meta_keywords"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="blogPost.meta_keywords"></x-system.invalid-msg>
             </div>
             <!-- END Meta Keywords -->
 
@@ -323,7 +323,7 @@
                         <input type="hidden" x-bind:name="name" wire:model.defer="blogPost.meta_img" class="selected-files" data-preview-width="200">
                     </label>
 
-                    <x-default.system.invalid-msg class="mt-1" field="blogPost.meta_img"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg class="mt-1" field="blogPost.meta_img"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- End Meta Img -->

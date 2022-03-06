@@ -73,9 +73,9 @@
             </label>
             <!-- End Thumbnail -->
 
-            <x-default.system.invalid-msg field="category.thumbnail"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="category.thumbnail"></x-system.invalid-msg>
 
-            <x-default.system.invalid-msg field="category.cover"></x-default.system.invalid-msg>
+            <x-system.invalid-msg field="category.cover"></x-system.invalid-msg>
 
             <!-- Name -->
             <div class="row form-group mt-5">
@@ -90,7 +90,7 @@
                                wire:model.defer="category.name" />
                     </div>
 
-                    <x-default.system.invalid-msg field="category.name"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="category.name"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- END Name -->
@@ -133,7 +133,7 @@
                     </select>
                     <!-- End Select -->
 
-                    <x-default.system.invalid-msg field="category.parent_id"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg field="category.parent_id"></x-system.invalid-msg>
                 </div>
             </div>
 
@@ -179,7 +179,7 @@
                         <input type="hidden" x-bind:name="name" wire:model.defer="category.icon" class="selected-files" data-preview-width="200">
                     </label>
 
-                    <x-default.system.invalid-msg class="ml-3" field="category.icon"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg class="ml-3" field="category.icon"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- End Icon -->
@@ -200,7 +200,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="category.description"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="category.description"></x-system.invalid-msg>
             </div>
             <!-- END Description -->
 
@@ -218,7 +218,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="category.meta_title"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="category.meta_title"></x-system.invalid-msg>
             </div>
             <!-- END Meta Title -->
 
@@ -237,7 +237,7 @@
                     </div>
                 </div>
 
-                <x-default.system.invalid-msg field="category.meta_description"></x-default.system.invalid-msg>
+                <x-system.invalid-msg field="category.meta_description"></x-system.invalid-msg>
             </div>
             <!-- END Meta Description -->
 
@@ -265,7 +265,7 @@
                         <input type="hidden" x-bind:name="name" wire:model.defer="category.meta_img" class="selected-files" data-preview-width="200">
                     </label>
 
-                    <x-default.system.invalid-msg class="mt-1" field="category.meta_img"></x-default.system.invalid-msg>
+                    <x-system.invalid-msg class="mt-1" field="category.meta_img"></x-system.invalid-msg>
                 </div>
             </div>
             <!-- End Meta Img -->

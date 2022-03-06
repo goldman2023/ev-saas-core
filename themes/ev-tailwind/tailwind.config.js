@@ -13,8 +13,14 @@ module.exports = {
     ],
     theme: {
         screens: {
+            'mobile': {'min': '300px', 'max': '599px'},
+            'tablet-portrait-up': '600px',
+            'tablet-landscape-up': '900px',
+            'laptop-up': '1200px',
+            'desktop-up': '1500px',
+            'xs': {'min': '300px', 'max': '599px'},
             'sm': '600px',
-            'md': '950px',
+            'md': '900px',
             'lg': '1200px',
             'xl': '1500px',
           },

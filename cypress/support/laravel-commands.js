@@ -8,6 +8,8 @@
  *          cy.login({ attributes: { name: 'JohnDoe' }, state: 'guest', load: ['comments] });
  */
 Cypress.Commands.add('login', (attributes = {}) => {
+    cy.viewport('macbook-13') // Set viewport to 550px x 750px
+
     // Are we using the new object system.
     let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
     cy.visit({
@@ -15,7 +17,7 @@ Cypress.Commands.add('login', (attributes = {}) => {
     });
 
     /* Get the header login button on desktop */
-    cy.get('[data-test="we-login-header"]')
+    cy.get('#user-menu-button')
         .click()
 
     cy.get('[data-test="we-login-email"]')
@@ -39,6 +41,8 @@ Cypress.Commands.add('login', (attributes = {}) => {
 });
 
 Cypress.Commands.add('loginAsSeller', (attributes = {}) => {
+    cy.viewport('macbook-13') // Set viewport to 550px x 750px
+
     // Are we using the new object system.
     let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
     cy.visit({
@@ -46,8 +50,12 @@ Cypress.Commands.add('loginAsSeller', (attributes = {}) => {
     });
 
     /* Get the header login button on desktop */
-    cy.get('[data-test="we-login-header"]')
+    cy.get('#user-menu-button')
         .click()
+
+    // cy.visit({
+    //     route: 'user.login'
+    // });
 
     cy.get('[data-test="we-login-email"]')
         .type('seller@eim.solutions')
@@ -68,6 +76,8 @@ Cypress.Commands.add('loginAsSeller', (attributes = {}) => {
 });
 
 Cypress.Commands.add('loginAsCustomer', (attributes = {}) => {
+    cy.viewport('macbook-13') // Set viewport to 550px x 750px
+
     // Are we using the new object system.
     let requestBody = attributes.attributes || attributes.state || attributes.load ? attributes : { attributes };
     cy.visit({
@@ -75,8 +85,11 @@ Cypress.Commands.add('loginAsCustomer', (attributes = {}) => {
     });
 
     /* Get the header login button on desktop */
-    cy.get('[data-test="we-login-header"]')
+    cy.get('#user-menu-button')
         .click()
+    // cy.visit({
+    //     route: 'user.login'
+    // });
 
     cy.get('[data-test="we-login-email"]')
         .type('customer@eim.solutions')
@@ -103,6 +116,8 @@ Cypress.Commands.add('loginAsCustomer', (attributes = {}) => {
  * @example cy.logout();
  */
 Cypress.Commands.add('logout', () => {
+    cy.viewport('macbook-13') // Set viewport to 550px x 750px
+
     cy.get('[data-test="we-logout-header"]')
     .click()
 });
