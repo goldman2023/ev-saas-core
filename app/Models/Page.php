@@ -43,7 +43,7 @@ class Page extends EVBaseModel
         if(empty($value)) {
             return array_values(json_decode('[]', true));
         } else {
-            return array_values(json_decode($value ?? '[]', true));
+            return array_values(json_decode($value, true));
         }
     }
 
