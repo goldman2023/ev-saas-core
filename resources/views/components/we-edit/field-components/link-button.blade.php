@@ -1,10 +1,11 @@
 <div class="grid grid-cols-10 gap-4">
-    <div class="col-span-7 ">
-        <label class="block text-sm font-medium text-gray-700">{{ translate('Title') }}</label>
+    <div class="col-span-10 ">
+        <label class="block text-sm font-medium text-gray-700">{{ translate('Label') }}</label>
         <div class="mt-1">
           <input type="text" wire:model.lazy="section.data.{{ $slot_name }}.components.{{ $component_name }}.data.label" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
         </div>
     </div>
+    
     <div class="col-span-3" x-data="{
         open: false,
         items: @js(\App\Enums\TitleTagEnum::labels()),

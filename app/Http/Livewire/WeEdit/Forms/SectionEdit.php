@@ -58,14 +58,13 @@ class SectionEdit extends Component
             Container::getInstance()->make('blade.compiler')
         );
 
-        $custom_fields_crawler = new Crawler();
         $html5 = new HTML5(); // HTML5 wrapper used over DOMDocument
         $dom = $html5->loadHTML('<html><body></body></html>'); // Main DOMDocument
         
         $this->custom_fields_html = ''; // reset custom fields html before looping through the slots
         
         // Loop through the all defined slots in the component html
-        $crawler->filter('x-slot')->each(function (Crawler $node, $i) use(&$custom_fields_crawler, $compiler, &$html5, &$dom) {
+        $crawler->filter('x-slot')->each(function (Crawler $node, $i) use($compiler, &$html5, &$dom) {
             /**
              * In order to append HTML fragment to DOMDocument ($dom), we need to:
              * 1. Load HTML fragment from the blade view file using HTML5 - this will create a DOMDocumentFragment
@@ -73,6 +72,7 @@ class SectionEdit extends Component
              * 3. Select body tag inside DOM
              * 4. Append previously imported fragment to it (to body)
              **/
+            $count_slot_children = $node->children()->count();
             $slot_dom = $html5->loadHTML('<html><body></body></html>');
             $slot_html = $slot_dom->importNode($html5->loadHTMLFragment(app($compiler->componentClass('we-edit.field-partials.slot'))->render()->render()), true );
             $slot_dom->getElementsByTagName('body')->item(0)->appendChild($slot_html); // append slot to body inside dom
@@ -95,7 +95,7 @@ class SectionEdit extends Component
             }
 
             // loop through slot to identify all comonents inside the slot
-            $node->children()->each(function (Crawler $node, $i) use(&$custom_fields_crawler, $compiler, $slot_name, $slot_we_title, &$html5, &$slot_xpath) {
+            $node->children()->each(function (Crawler $node, $i) use($count_slot_children, $compiler, $slot_name, $slot_we_title, &$html5, &$slot_xpath) {
                 $component = $node;
                 $component_tag = $component->nodeName();
                 $component_we_name = $component->attr('we-name');
@@ -134,7 +134,6 @@ class SectionEdit extends Component
                     }
                     
                     // Edit SLOT DOM - append component title and HTML content to specified places inside we-slot-list
-
                     // Render component's blade view into string (HTML) and Import HHTML fragment to $slot_xpath->document
                     $component_node = $slot_xpath->document->importNode($html5->loadHTMLFragment($component_class->renderFieldComponent($slot_name, $component_we_name)->render()), true);
 

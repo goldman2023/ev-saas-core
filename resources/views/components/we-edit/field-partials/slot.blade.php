@@ -4,7 +4,7 @@
         <p class="mt-1 text-14 text-white" we-slot-description></p>
     </div>
 
-    <div we-slot-list class="flex flex-col divide-y divide-gray-200 px-3 mt-3">
+    <div we-slot-list class="w-full flex flex-col divide-y divide-gray-200 px-3 mt-3">
         <div we-slot-list-item class="w-full flex flex-col border rounded-lg mb-2" x-data="{
                 open_component: false,
             }">
