@@ -61,12 +61,6 @@
 
     @include('frontend.layouts.partials.app-js')
 
-    <!-- JS Plugins Init. -->
-    <script>
-        $(function() {
-
-        });
-    </script>
-
+    @stack('footer_scripts')
 </body>
 </html>

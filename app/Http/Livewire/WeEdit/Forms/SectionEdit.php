@@ -137,16 +137,18 @@ class SectionEdit extends Component
                     // Render component's blade view into string (HTML) and Import HHTML fragment to $slot_xpath->document
                     $component_node = $slot_xpath->document->importNode($html5->loadHTMLFragment($component_class->renderFieldComponent($slot_name, $component_we_name)->render()), true);
 
+                    $slot_xpath->query('//*[@we-slot-content]')->item(0)->appendChild($component_node);
+
+                    // DEPRECATION WARNING: Following commented code is deprecated!
                     // Get we-slot-list and count elements and based on that append/change new/existing we-slot-list-item and it's data
-                    $slot_list_elements_count = $slot_xpath->query('//*[@we-slot-list]')->count();
-                    if($slot_list_elements_count > 1) {
-                        // If there are multiple elements inside we-slot-list (it means that there are multiple components inside a slot)
-                    } else {
-                        // If there is one element inside we-slot-list (it means that there is only one component inside a slot)
-                        // Change last we-slot-list-item and append component data to it
-                        $slot_xpath->query('//*[@we-slot-list-item-title]')->item(0)->nodeValue = $component_we_title; // add component title to we-slot-list-item-title
-                        $slot_xpath->query('//*[@we-slot-list-item-content]')->item(0)->appendChild($component_node);
-                    }
+                    // $slot_list_elements_count = $slot_xpath->query('//*[@we-slot-list]')->count();
+                    // if($slot_list_elements_count > 1) {
+                    //     // If there are multiple elements inside we-slot-list (it means that there are multiple components inside a slot)
+                    // } else {
+                    //     // If there is one element inside we-slot-list (it means that there is only one component inside a slot)
+                    //     // Change last we-slot-list-item and append component data to it
+                    //     $slot_xpath->query('//*[@we-slot-list-item-title]')->item(0)->nodeValue = $component_we_title; // add component title to we-slot-list-item-title
+                    // }
                 }
             });
 

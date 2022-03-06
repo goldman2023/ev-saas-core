@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\EV;
+namespace App\View\Components\Ev;
 
 use App\Models\Models\EVLabel;
 use Illuminate\View\Component;
@@ -39,6 +39,16 @@ class LinkButton extends Component
     }
 
     // WeEdit Builder
+    public static function getDefaultData() {
+        return [
+            'label' => 'Link',
+            'class' => '',
+            'type' => 'link',
+            'href' => '#',
+            'target' => '_self',
+        ];
+    }
+
     public function getEditableData() {
         return [
             'label' => $this->label,
