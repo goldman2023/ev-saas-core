@@ -32,7 +32,7 @@ class InvalidMsg extends Component
     public function render()
     {
         if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind.system.invalid-msg');
+            return view('components.tailwind-ui.system.invalid-msg');
         }
 
         return view('components.bootstrap.system.invalid-msg');

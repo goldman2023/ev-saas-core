@@ -25,6 +25,6 @@ class Header extends Component
      */
     public function render()
     {
-        return view('components.tailwind.headers.' . $this->template);
+        return view('components.tailwind-ui.headers.' . $this->template);
     }
 }
