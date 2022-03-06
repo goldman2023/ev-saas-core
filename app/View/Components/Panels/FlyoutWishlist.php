@@ -16,7 +16,7 @@ class FlyoutWishlist extends Component
      */
     public function __construct()
     {
- 
+
         $this->count = auth()->user()?->wishlists()?->count() ?? 0;
         $this->wishlist = auth()->user()?->wishlists;
     }

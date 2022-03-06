@@ -28,7 +28,7 @@ class InvalidIcon extends Component
     public function render()
     {
         if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind.system.invalid-icon');
+            return view('components.tailwind-ui.system.invalid-icon');
         }
 
         return view('components.bootstrap.system.invalid-icon');

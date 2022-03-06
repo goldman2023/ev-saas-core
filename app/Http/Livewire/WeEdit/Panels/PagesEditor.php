@@ -50,6 +50,7 @@ class PagesEditor extends Component
     public function mount()
     {
         $this->current_page = Page::where('slug', !empty($this->selected_page_slug) ? $this->selected_page_slug : 'home')->first();
+
         $this->current_preview = $this->current_page->page_previews()->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
         $this->all_pages = Page::all();
 
@@ -69,7 +70,7 @@ class PagesEditor extends Component
                 foreach($this->current_preview->content as $section) {
                     // if there is a sction with same UUID already present in current preview sections, fire this function again (it'll generate another random UUID, and break the loop)
                     // Probability for this is so fucking low that I don't even know why I wrote it :D
-                    if(($section['uuid'] ?? '') === $target_section['uuid']) { 
+                    if(($section['uuid'] ?? '') === $target_section['uuid']) {
                         $this->setSectionUUID($target_section); // this means that
                         break;
                     }
@@ -82,7 +83,7 @@ class PagesEditor extends Component
         try {
             $this->current_page = Page::findOrFail($page_id);
             $this->selected_page_slug = $this->current_page->slug;
-            
+
             $this->setCurrentPagePreview();
         } catch(\Exception $e) {
             $this->dispatchGeneralError($e);
@@ -91,7 +92,7 @@ class PagesEditor extends Component
 
     public function setCurrentPagePreview() {
         $page_previews = $this->current_page->page_previews()->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
-  
+
         if($page_previews->isEmpty()) {
             // If previews are empty for current user, create a preview
             $this->current_preview = new PagePreview();
@@ -143,16 +144,16 @@ class PagesEditor extends Component
     }
 
     public function deleteSectionFromPreview($index) {
-        
+
         if(isset($this->current_preview->content[$index])) {
             $new_content = $this->current_preview->content;
             unset($new_content[$index]); // remove given index
             $new_content = array_values($new_content); // reset array indexes
-            
+
             foreach($new_content as $new_index => $section) {
                 $new_content[$new_index]['order'] = $new_index; // set new order to follow resetted indexes, from 0 to X
             }
-            
+
             $this->current_preview->content = $new_content; // set current preview to have a new content (old sections - section undex given index)
             $this->current_preview->save(); // save preview to DB
         } else {
@@ -164,7 +165,7 @@ class PagesEditor extends Component
         if(isset($this->current_preview->content[$index])) {
             $new_content = $this->current_preview->content;
             $new_content[] = $new_content[$index];
-            
+
             foreach($new_content as $new_index => $section) {
                 $new_content[$new_index]['order'] = $new_index; // set new order to follow resetted indexes, from 0 to X
             }

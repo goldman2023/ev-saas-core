@@ -23,6 +23,6 @@ class HeaderWithSearchDark extends Component
      */
     public function render()
     {
-        return view('components.tailwind.headers.header-with-search-dark');
+        return view('components.tailwind-ui.headers.header-with-search-dark');
     }
 }

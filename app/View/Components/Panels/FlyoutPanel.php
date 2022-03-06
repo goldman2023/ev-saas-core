@@ -15,7 +15,7 @@ class FlyoutPanel extends Component
      *
      * @return void
      */
-    public function __construct($id = 'flyout_panel', $title = 'Flyout panel') 
+    public function __construct($id = 'flyout_panel', $title = 'Flyout panel')
     {
         $this->id = $id;
         $this->title = $title;
@@ -31,7 +31,7 @@ class FlyoutPanel extends Component
         if(session('style_framework') === 'tailwind') {
             return view('components.tailwind-ui.panels.flyout-panel');
         }
-        
+
         return view('components.bootstrap.panels.flyout-panel');
     }
 }

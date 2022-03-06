@@ -5,7 +5,7 @@
 
     <div class="c-flyout-panel__items flex flex-col mb-1 grow">
         <div class="mt-3">
-            <x-tailwind.forms.login-form> </x-tailwind.forms.login-form>
+            <x-tailwind-ui.forms.login-form> </x-tailwind-ui.forms.login-form>
         </div>
     </div>
 </x-panels.flyout-panel>

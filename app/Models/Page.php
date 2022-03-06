@@ -40,7 +40,11 @@ class Page extends EVBaseModel
     }
 
     public function getContentAttribute($value) {
-        return array_values(json_decode($value ?? '[]', true));
+        if($value == '' || $value == null) {
+            return array_values(json_decode('[]', true));
+        } else {
+            return array_values(json_decode($value ?? '[]', true));
+        }
     }
 
     public function setContentAttribute($value) {
