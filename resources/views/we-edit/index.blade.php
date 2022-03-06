@@ -7,6 +7,7 @@
 />
 
 <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+@endpush
 
 @section('content')
     <livewire:we-edit />

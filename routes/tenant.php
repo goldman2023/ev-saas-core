@@ -63,6 +63,8 @@ Route::middleware([
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
+    Route::get('/we-edit-grape', 'WeEditController@grapejs_index')->name('we-edit-grape.index');
+
 
     Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
     Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');

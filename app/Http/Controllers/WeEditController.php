@@ -13,6 +13,11 @@ class WeEditController extends Controller
         return view('we-edit.index');
     }
 
+    public function grapejs_index()
+    {
+        return view('we-edit.grapejs-index');
+    }
+
     public function flow()
     {
         $pages = Page::all();
