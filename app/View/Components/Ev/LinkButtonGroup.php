@@ -34,6 +34,7 @@ class LinkButtonGroup extends Component
 
     // WeEdit Builder
     public function getEditableData() {
+       
         if(is_array($this->button_group)) {
             if(empty($this->button_group)) {
                 $this->button_group = [
@@ -41,6 +42,9 @@ class LinkButtonGroup extends Component
                 ];
             } else {
                 foreach($this->button_group as $key => $button) {
+                    
+                    // $this->button_group[$key] = array_merge(LinkButton::getDefaultData(), $button);
+                  
                     $this->button_group[$key] = array_merge(LinkButton::getDefaultData(), $button); // get default data for each button and merge set newly button data to it
                 }
             }
@@ -64,11 +68,9 @@ class LinkButtonGroup extends Component
             ];
         }
 
-        $this->button_group = [
-            'button_group' => $data['button_group'],
-            'class' => $data['class'],
-            // Other data for this component in the future, like style or something else
-        ];;
+        $this->button_group = $data['button_group'];
+        $this->class = $data['class'];
+        // Other data for this component in the future, like style or something else
     }
 
     public function renderFieldComponent($slot_name, $component_name) {

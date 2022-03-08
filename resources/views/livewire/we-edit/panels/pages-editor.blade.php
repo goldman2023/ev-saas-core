@@ -118,7 +118,7 @@
                                         }" class="!ml-auto" @click.outside="open = false">
                                         <button type="button"
                                                 class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-                                                @click="open = ! open">
+                                                @click="open = !open">
                                           @svg('lineawesome-cog-solid', ['class' => 'cursor-pointer w-[20px] h-[20px]'])
                                         </button>
 
@@ -160,5 +160,6 @@
         </div>
     </div>
 
-    <x-we-edit.flyout.flyout-edit-section :currentPreview="$current_preview"></x-we-edit.flyout.flyout-edit-section>
+    <livewire:we-edit.forms.section-edit :current_preview="$current_preview"></livewire:we-edit.forms.section-edit>
+    {{-- <x-we-edit.flyout.flyout-edit-section :currentPreview="$current_preview"></x-we-edit.flyout.flyout-edit-section> --}}
 </div>

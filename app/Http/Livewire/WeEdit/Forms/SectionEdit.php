@@ -5,6 +5,7 @@ namespace App\Http\Livewire\WeEdit\Forms;
 use Livewire\Component;
 use App\Traits\Livewire\DispatchSupport;
 use App\Enums\WeEditLayoutEnum;
+use App\Models\PagePreview;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Container\Container;
@@ -18,6 +19,10 @@ class SectionEdit extends Component
 
     public $section;
     public $current_preview;
+
+    protected $listeners = [
+        'reloadCurrentPreviewEvent' => 'reloadCurrentPreview'
+    ];
 
     public function mount($current_preview, $section = null)
     {
@@ -47,6 +52,26 @@ class SectionEdit extends Component
     public function setSection($section_uuid) {
         $this->section = collect($this->current_preview->content)->firstWhere('uuid', $section_uuid);
         $this->parseCustomFields();
+    }
+
+    public function saveSectionData() {
+        try {
+            $new_content = collect($this->current_preview->content)->map(function($item) {
+                if($item['uuid'] === $this->section['uuid']) {
+                    return $this->section;
+                } else {
+                    return $item;
+                }
+            });
+
+            $this->current_preview->content = $new_content;
+            $this->current_preview->save();
+
+            $this->emit('refreshPreviewEvent');
+            $this->inform(translate('Section saved successfully'), '', 'success');
+        } catch(\Exception $e) {
+            $this->dispatchGeneralError($e);
+        }
     }
 
     protected function parseCustomFields() {
@@ -159,9 +184,21 @@ class SectionEdit extends Component
             
         });
 
+        // dd($html5->saveHTML($dom));
         // Store MAIN_DOM html to custom_fields_html
         $this->custom_fields_html = $html5->saveHTML($dom);
+        // TODO: extract body innerHTML and then saveHTML()!!!
         
+    }
+
+    public function reloadCurrentPreview($preview) {
+        if($preview instanceof PagePreview) {
+            $this->current_preview = $preview;
+        } else if(is_array($preview) && !empty($preview['id'] ?? null)) {
+            $this->current_preview = PagePreview::find($preview['id']);
+        } else if(is_numeric($preview)) {
+            $this->current_preview = PagePreview::find($preview);
+        }
     }
     
     public function render()

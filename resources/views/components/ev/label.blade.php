@@ -6,7 +6,7 @@
         </{{ $tag }}>
     @else
 
-        @if (auth()->user()->isAdmin())
+        @if (auth()->user()->isAdmin() && isset($label->value))
             <{{ $tag }} {{ $attributes }} class="{{ $class }}">
                 {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
                 @livewire('dynamic-label', ['label' => $label])

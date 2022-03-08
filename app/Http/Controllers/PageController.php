@@ -15,6 +15,8 @@ class PageController extends Controller
     {
         $page = Page::where('slug', $slug)->first();
         $sections = $page->content;
+
+        
         if ($page != null) {
             return view('frontend.custom_page', [
                 'page' => $page,
