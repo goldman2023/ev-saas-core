@@ -23,7 +23,8 @@ class PagesEditor extends Component
     public $all_pages;
 
     protected $listeners = [
-        'addSectionToPreviewEvent' => 'addSectionToPreview'
+        'addSectionToPreviewEvent' => 'addSectionToPreview',
+        'refreshPreviewEvent' => 'setCurrentPagePreview'
     ];
 
     protected $queryString = [
@@ -116,6 +117,8 @@ class PagesEditor extends Component
             $this->current_preview->content = $new_content;
             $this->current_preview->save();
         }
+
+        $this->emit('reloadCurrentPreviewEvent', $this->current_preview);
     }
 
     public function reorderCurrentPreviewSections($map) {
@@ -130,6 +133,8 @@ class PagesEditor extends Component
 
         $this->current_preview->content = collect($sections)->sortBy('order')->values()->toArray();
         $this->current_preview->save();
+
+        $this->emit('reloadCurrentPreviewEvent', $this->current_preview);
     }
 
     public function addSectionToPreview($section_data) {
@@ -140,6 +145,8 @@ class PagesEditor extends Component
             $new_content[] = $section_data['section'];
             $this->current_preview->content = $new_content; // replace old content with new one (old sections + new section)
             $this->current_preview->save(); // save preview to DB
+
+            $this->emit('reloadCurrentPreviewEvent', $this->current_preview);
         }
     }
 
@@ -156,6 +163,8 @@ class PagesEditor extends Component
 
             $this->current_preview->content = $new_content; // set current preview to have a new content (old sections - section undex given index)
             $this->current_preview->save(); // save preview to DB
+
+            $this->emit('reloadCurrentPreviewEvent', $this->current_preview);
         } else {
             // Send general error that section under sent index does not exist and thus cannot be DELETED
         }
@@ -172,6 +181,8 @@ class PagesEditor extends Component
 
             $this->current_preview->content = $new_content; // set current preview to have a new content (old sections + duplicated section as the last one)
             $this->current_preview->save(); // save preview to DB
+
+            $this->emit('reloadCurrentPreviewEvent', $this->current_preview);
         } else {
             // Send general error that section under sent index does not exist and thus cannot be DUPLICATED
         }

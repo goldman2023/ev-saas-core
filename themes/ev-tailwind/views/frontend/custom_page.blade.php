@@ -2,6 +2,10 @@
 
 @section('content')
 
-<x-tenant.content.two-columns-with-testimonial>
-</x-tenant.content.two-columns-with-testimonial>
+@if(!empty($sections))
+    @foreach ($sections as $key => $section)
+        <x-dynamic-component :component="$section['id']" :dataOverides="$section['data']" class="mt-4" />
+    @endforeach
+@endif
+
 @endsection

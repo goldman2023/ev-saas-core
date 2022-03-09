@@ -5,9 +5,14 @@ namespace App\Traits\Livewire;
 trait DispatchSupport
 {
     public string $toast_id = 'global-toast';
+    public string $info_modal_basic_id = 'info-modal-basic';
 
     protected function toastify($msg = '', $type = 'info') {
         $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
+    }
+
+    protected function inform($title, $text, $type) {
+        $this->dispatchBrowserEvent('inform', ['id' => $this->info_modal_basic_id, 'title' => $title, 'text' => $text, 'type' => $type]);
     }
 
     protected function dispatchGeneralError(mixed $errors) {

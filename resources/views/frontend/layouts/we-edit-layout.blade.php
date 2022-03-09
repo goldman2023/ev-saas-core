@@ -55,7 +55,8 @@
 
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
-    {{-- Include WeEdit modal --}}
+    {{-- Include WeEdit modals --}}
+    <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
 
     {{-- TODO: Include this propertly --}}
 

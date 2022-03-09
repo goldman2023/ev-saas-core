@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class PagePreview extends EVBaseModel
 {
@@ -25,10 +26,16 @@ class PagePreview extends EVBaseModel
     }
 
     public function getContentAttribute($value) {
-        return array_values(json_decode($value ?? '[]', true));
+        return array_values(json_decode( (empty($value) || !is_string($value)) ? '[]' : $value, true));
     }
 
     public function setContentAttribute($value) {
-        $this->attributes['content'] = json_encode(array_values($value ?? []));
+        if($value instanceof Collection) {
+            $this->attributes['content'] = $value->values()->toJson();
+        } else if(is_array($value)) {
+            $this->attributes['content'] = json_encode(array_values($value ?? []));
+        } else {
+            $this->attributes['content'] = [];
+        }
     }
 }
