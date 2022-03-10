@@ -90,7 +90,7 @@
     <div class="main-wrapper">
         @yield('content')
     </div>
- 
+
     @include('frontend.partials.modal')
 
     <!-- Print SignUp Modal Component -->
@@ -100,7 +100,7 @@
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
     <x-panels.flyout-wishlist></x-panels.flyout-wishlist>
     {{-- Like this, will decide later --}}
-    <x-panels.flyouts.guest></x-panels.flyouts.guest>
+    {{-- <x-panels.flyouts.guest></x-panels.flyouts.guest> --}}
 
     <x-panels.flyout-categories></x-panels.flyout-categories>
 
