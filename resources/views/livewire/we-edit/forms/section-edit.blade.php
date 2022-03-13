@@ -1,6 +1,13 @@
 <x-we-edit.flyout.flyout-panel id="we-edit-section-panel" title="{{ translate('Your Profile') }}">
     <div class="h-0 flex-1 overflow-y-auto" x-data="{
+        section: @entangle('section'),
         errors: []
+    }"
+    @display-flyout-panel.window="if($event.detail.id === id) {
+        {{-- TODO: Add loading spinner over whole section-edit form so we can indicate that section data is loading --}}
+        setTimeout(function() {
+            $wire.setSection($event.detail.section_uuid);
+        }, 500);
     }"
     @validation-errors.window="errors = $event.detail.errors.general || []; console.log(errors);">
         {{-- Panel Header --}}
@@ -32,25 +39,24 @@
           <div class="divide-y divide-gray-200 px-4 sm:px-6">
             <div class="space-y-6 pt-6 pb-5">
 
-                <div x-data="{
-                    section: @entangle('section')
-                }"
-                @display-flyout-panel.window="if($event.detail.id === id) {
-                    {{-- TODO: Add loading spinner over whole section-edit form so we can indicate that section data is loading --}}
-                    setTimeout(function() {
-                        $wire.setSection($event.detail.section_uuid);
-                    }, 500);
-                }">
+                <div>
                     {!! $this->custom_fields_html !!}
                 </div>
                 
             </div>
           </div>
         </div>
+
+        <x-we-edit.modals.section-settings-modal></x-we-edit.modals.section-settings-modal>
     </div>
 
     {{-- Panel Footer --}}
     <div class="flex flex-shrink-0 justify-end px-4 py-4">
+        <button type="button" @click="$dispatch('display-section-settings-modal')" class="flex items-center mr-auto rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            @svg('lineawesome-cog-solid', ['class' => ' w-4 h-4 mr-2'])
+            {{ translate('Settings') }}
+        </button>
+
         <button type="button" @click="show = false" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             {{ translate('Cancel') }}
         </button>
@@ -58,5 +64,7 @@
             {{ translate('Save') }}
         </button>
     </div>
+
+    
 </x-we-edit.flyout.flyout-panel>
 

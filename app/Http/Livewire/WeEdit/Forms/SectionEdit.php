@@ -75,21 +75,32 @@ class SectionEdit extends Component
     }
 
     protected function parseCustomFields() {
-        $html = file_get_contents(resource_path('views/components/'.str_replace('.', '/', $this->section['id']).'.blade.php'));
-        $crawler = new Crawler($html);
         $compiler = new ComponentTagCompiler(
             Container::getInstance()->make('blade.compiler')->getClassComponentAliases(),
             Container::getInstance()->make('blade.compiler')->getClassComponentNamespaces(),
             Container::getInstance()->make('blade.compiler')
         );
+        
+        $html = file_get_contents(resource_path('views/components/'.str_replace('.', '/', $this->section['id']).'.blade.php'));
+        $crawler = new Crawler($html);
 
+        // Section settings
+        $section_class = app($compiler->componentClass($this->section['id']));
+
+        if(empty($this->section['settings'] ?? null)) {
+            $this->section['settings'] = $section_class->getDefaultSettings();
+        } else {
+            $this->section['settings'] = array_merge($section_class->getDefaultSettings(), $this->section['settings']); // replace defaults with section settings
+        }
+        // END: Section settings
+        
         $html5 = new HTML5(); // HTML5 wrapper used over DOMDocument
         $dom = $html5->loadHTML('<html><body></body></html>'); // Main DOMDocument
         
         $this->custom_fields_html = ''; // reset custom fields html before looping through the slots
         
-        // Loop through the all defined slots in the component html
-        $crawler->filter('x-slot')->each(function (Crawler $node, $i) use($compiler, &$html5, &$dom) {
+        // Section slots/components - Loop through the all defined slots in the component html
+        $crawler->filter('div[we-slot]')->each(function (Crawler $node, $i) use($compiler, &$html5, &$dom) {
             /**
              * In order to append HTML fragment to DOMDocument ($dom), we need to:
              * 1. Load HTML fragment from the blade view file using HTML5 - this will create a DOMDocumentFragment

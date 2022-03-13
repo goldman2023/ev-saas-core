@@ -8,7 +8,7 @@ use Illuminate\View\Component;
 // class LinkButtonGroup extends WeEditableComponent
 class LinkButtonGroup extends Component
 {
-    public $button_group;
+    public $buttonGroup;
     public $class;
 
     /**
@@ -16,9 +16,9 @@ class LinkButtonGroup extends Component
      *
      * @return void
      */
-    public function __construct($button_group = [], $class= '')
+    public function __construct($buttonGroup = [], $class= '')
     {
-        $this->button_group = $button_group;
+        $this->buttonGroup = $buttonGroup;
         $this->class = $class;
     }
 
@@ -35,23 +35,23 @@ class LinkButtonGroup extends Component
     // WeEdit Builder
     public function getEditableData() {
        
-        if(is_array($this->button_group)) {
-            if(empty($this->button_group)) {
-                $this->button_group = [
+        if(is_array($this->buttonGroup)) {
+            if(empty($this->buttonGroup)) {
+                $this->buttonGroup = [
                     LinkButton::getDefaultData() // Set button group to default to one button in array
                 ];
             } else {
-                foreach($this->button_group as $key => $button) {
+                foreach($this->buttonGroup as $key => $button) {
                     
-                    // $this->button_group[$key] = array_merge(LinkButton::getDefaultData(), $button);
+                    // $this->buttonGroup[$key] = array_merge(LinkButton::getDefaultData(), $button);
                   
-                    $this->button_group[$key] = array_merge(LinkButton::getDefaultData(), $button); // get default data for each button and merge set newly button data to it
+                    $this->buttonGroup[$key] = array_merge(LinkButton::getDefaultData(), $button); // get default data for each button and merge set newly button data to it
                 }
             }
         }
 
         return [
-            'button_group' => $this->button_group,
+            'button_group' => $this->buttonGroup,
             'class' => $this->class,
             // Other data for this component in the future, like style or something else
         ];
@@ -68,7 +68,7 @@ class LinkButtonGroup extends Component
             ];
         }
 
-        $this->button_group = $data['button_group'];
+        $this->buttonGroup = $data['button_group'];
         $this->class = $data['class'];
         // Other data for this component in the future, like style or something else
     }

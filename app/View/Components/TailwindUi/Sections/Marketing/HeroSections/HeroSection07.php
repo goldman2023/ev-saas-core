@@ -2,10 +2,9 @@
 
 namespace App\View\Components\TailwindUi\Sections\Marketing\HeroSections;
 
-use App\View\Components\TailwindUi\WeComponent;
 use Illuminate\View\Component;
 
-class HeroSection_02 extends HeroSection
+class HeroSection07 extends HeroSection
 {
     /**
      * Create a new component instance.
@@ -24,6 +23,6 @@ class HeroSection_02 extends HeroSection
      */
     public function render()
     {
-        return view('components.tailwind-ui.sections.marketing.hero-sections.hero-section_02');
+        return view('components.tailwind-ui.sections.marketing.hero-sections.hero-section_07');
     }
 }

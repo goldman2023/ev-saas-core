@@ -188,6 +188,19 @@ class PagesEditor extends Component
         }
     }
 
+    public function savePreviewToPage() {
+        try {
+            $this->setCurrentPagePreview(); // get the latest preview content and use it to replace content if the page
+
+            $this->current_page->content = $this->current_preview->content;
+            $this->current_page->save();
+
+            $this->inform(translate('Page successfully updated!'), '', 'success');
+        } catch(\Exception $e) {
+            $this->dispatchGeneralError($e);
+        }
+    }
+
     public function render()
     {
         return view('livewire.we-edit.panels.pages-editor');
