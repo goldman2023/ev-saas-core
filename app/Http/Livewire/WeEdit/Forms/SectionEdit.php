@@ -64,11 +64,31 @@ class SectionEdit extends Component
                 }
             });
 
-            $this->current_preview->content = $new_content;
+            $this->current_preview->content = $new_content->toArray();
             $this->current_preview->save();
 
             $this->emit('refreshPreviewEvent');
             $this->inform(translate('Section saved successfully'), '', 'success');
+        } catch(\Exception $e) {
+            $this->dispatchGeneralError($e);
+        }
+    }
+
+    public function saveSectionSettings() {
+        try {
+            $new_content = collect($this->current_preview->content)->map(function($item) {
+                if($item['uuid'] === $this->section['uuid']) {
+                    $item['settings'] = $this->section['settings']; // replace settings in same section inside current_preview, and return that $item
+                } 
+
+                return $item;
+            });
+
+            $this->current_preview->content = $new_content->toArray();
+            $this->current_preview->save();
+
+            $this->emit('refreshPreviewEvent');
+            $this->inform(translate('Section settings saved successfully'), '', 'success');
         } catch(\Exception $e) {
             $this->dispatchGeneralError($e);
         }

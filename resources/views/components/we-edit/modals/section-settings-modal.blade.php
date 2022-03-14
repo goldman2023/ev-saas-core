@@ -16,7 +16,6 @@
       <!-- This element is to trick the browser into centering the modal contents. -->
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-
       <div class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left  shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
             x-show="show"
             x-transition:enter="ease-out duration-300"
@@ -84,7 +83,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-up', ['class' => 'h-4 w-4']) </span>
                     </div>
-                    <input type="number" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
+                    <input type="number" x-model.lazy="section.settings.spacing.mobile.top" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm" > {{ translate('px') }} </span>
                     </div>
@@ -94,7 +93,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-down', ['class' => 'h-4 w-4']) </span>
                     </div>
-                    <input type="number"  class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
+                    <input type="number" x-model.lazy="section.settings.spacing.mobile.bottom" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> {{ translate('px') }} </span>
                     </div>
@@ -109,7 +108,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-up', ['class' => 'h-4 w-4']) </span>
                     </div>
-                    <input type="number" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
+                    <input type="number" x-model.lazy="section.settings.spacing.tablet.top" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm" > {{ translate('px') }} </span>
                     </div>
@@ -119,7 +118,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-down', ['class' => 'h-4 w-4']) </span>
                     </div>
-                    <input type="number"  class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
+                    <input type="number" x-model.lazy="section.settings.spacing.tablet.bottom" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> {{ translate('px') }} </span>
                     </div>
@@ -133,7 +132,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-up', ['class' => 'h-4 w-4']) </span>
                     </div>
-                    <input type="number" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
+                    <input type="number" x-model.lazy="section.settings.spacing.desktop.top" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm" > {{ translate('px') }} </span>
                     </div>
@@ -143,7 +142,7 @@
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> @svg('heroicon-o-arrow-narrow-down', ['class' => 'h-4 w-4']) </span>
                     </div>
-                    <input type="number"  class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
+                    <input type="number" x-model.lazy="section.settings.spacing.desktop.bottom" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" step="1">
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <span class="text-gray-500 sm:text-sm"> {{ translate('px') }} </span>
                     </div>
@@ -156,13 +155,7 @@
                 <div class="col-span-3" x-data="{
                     background_types: @js(\App\Enums\BackgroundTypeEnum::labels()),
                     show_type_dropdown: false,
-                }"
-                @aiz-selected.window=" console.log(event.detail.name);
-                  if(event.detail.name === name) {
-                    {{-- imageURL = event.detail.imageURL;
-                    $wire.set('blogPost.cover', $('input[name=\'blogPost.cover\']').val(), true); --}}
-                  }
-                ">
+                }">
                   <label id="listbox-label" class="block text-sm font-medium text-gray-700">{{ translate('Background type') }}</label>
                   <div class="mt-1 relative">
                     <button type="button" @click="show_type_dropdown = !show_type_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
@@ -226,69 +219,125 @@
                       <div class="w-full mt-4" x-show="section.settings.background.type === '{{ \App\Enums\BackgroundTypeEnum::image()->value }}'">
                       
                         {{-- Mobile image --}}
-                        <div class="w-full">
+                        <div class="w-full" x-data="{
+                            id: 'section-background-mobile'
+                          }" 
+                          @we-media-selected-event.window="
+                            if($event.detail.for_id === id) {
+                              section.settings.background.urls.mobile = $event.detail.selected[0] || '';
+                            }
+                          "
+                        >
                           <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Mobile image') }} </label>
                           
-                          <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'image')">
-                            <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                              <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600">
-                                  <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                    <span>{{ translate('Upload a file') }}</span>
-                                    <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                  </label>
-                                  <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                          <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'section-background-mobile', 'image', [section.settings.background.urls.mobile])">
+                            <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md"
+                                 :class="{'px-6 pt-5 pb-6':section.settings.background.urls.mobile.length <= 0}">
+                              
+                              <template x-if="section.settings.background.urls.mobile.length > 0">
+                                <div class="h-[200px] w-full rounded cursor-pointer">
+                                  <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(section.settings.background.urls.mobile)" />
                                 </div>
-                                <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
-                              </div>
+                              </template>
+
+                              <template x-if="section.settings.background.urls.mobile.length <= 0">
+                                <div class="space-y-1 text-center">
+                                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
+                                  </svg>
+                                  <div class="flex text-sm text-gray-600">
+                                    <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                      <span>{{ translate('Upload a file') }}</span>
+                                    </label>
+                                    <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                                  </div>
+                                  <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
+                                </div>
+                              </template>
+                              
                             </div>
                           </div>
                         </div>
 
                         {{-- Tablet image --}}
-                        <div class="w-full">
-                          <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Tablet image') }} </label>
-                          <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                              <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600">
-                                  <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                    <span>{{ translate('Upload a file') }}</span>
-                                    <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                  </label>
-                                  <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                        <div class="w-full" x-data="{
+                            id: 'section-background-tablet'
+                          }" 
+                          @we-media-selected-event.window="
+                            if($event.detail.for_id === id) {
+                              section.settings.background.urls.tablet = $event.detail.selected[0] || '';
+                            }
+                          "
+                        >
+                          <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Tablet image') }} </label>
+                          
+                          <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'section-background-tablet', 'image', [section.settings.background.urls.tablet])">
+                            <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md"
+                                :class="{'px-6 pt-5 pb-6':section.settings.background.urls.tablet.length <= 0}">
+                              
+                              <template x-if="section.settings.background.urls.tablet.length > 0">
+                                <div class="h-[200px] w-full rounded cursor-pointer">
+                                  <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(section.settings.background.urls.tablet)" />
                                 </div>
-                                <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
-                              </div>
+                              </template>
+
+                              <template x-if="section.settings.background.urls.tablet.length <= 0">
+                                <div class="space-y-1 text-center">
+                                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
+                                  </svg>
+                                  <div class="flex text-sm text-gray-600">
+                                    <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                      <span>{{ translate('Upload a file') }}</span>
+                                    </label>
+                                    <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                                  </div>
+                                  <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
+                                </div>
+                              </template>
+                              
                             </div>
                           </div>
                         </div>
 
 
                         {{-- Desktop image --}}
-                        <div class="w-full">
-                          <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Desktop image') }} </label>
-                          <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                              <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
-                                </svg>
-                                <div class="flex text-sm text-gray-600">
-                                  <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                    <span>{{ translate('Upload a file') }}</span>
-                                    <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                  </label>
-                                  <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                        <div class="w-full" x-data="{
+                            id: 'section-background-desktop'
+                          }"
+                          @we-media-selected-event.window="
+                            if($event.detail.for_id === id) {
+                              section.settings.background.urls.desktop = $event.detail.selected[0] || '';
+                            }
+                          "
+                        >
+                          <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Desktop image') }} </label>
+                          
+                          <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'section-background-desktop', 'image', [section.settings.background.urls.desktop])">
+                            <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md"
+                                :class="{'px-6 pt-5 pb-6':section.settings.background.urls.desktop.length <= 0}">
+                              
+                              <template x-if="section.settings.background.urls.desktop.length > 0">
+                                <div class="h-[200px] w-full rounded cursor-pointer">
+                                  <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(section.settings.background.urls.desktop)" />
                                 </div>
-                                <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
-                              </div>
+                              </template>
+
+                              <template x-if="section.settings.background.urls.desktop.length <= 0">
+                                <div class="space-y-1 text-center">
+                                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
+                                  </svg>
+                                  <div class="flex text-sm text-gray-600">
+                                    <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                      <span>{{ translate('Upload a file') }}</span>
+                                    </label>
+                                    <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                                  </div>
+                                  <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
+                                </div>
+                              </template>
+                              
                             </div>
                           </div>
                         </div>
@@ -301,11 +350,96 @@
 
               </div>
 
-              <div class="w-full grid grid-cols-3 gap-4" x-show="active_tab === 'visibility'">
+              <div class="w-full grid grid-cols-1 gap-4" x-show="active_tab === 'visibility'">
+                
+                {{-- Responsive Visibility --}}
+                <div class="col-span-3" x-data="{
+                    responsive_visibility: @js(\App\Enums\ResponsiveVisibilityEnum::labels()),
+                    show_responsive_visibility_dropdown: false,
+                  }">
+                  <label class="block text-sm font-medium text-gray-700">{{ translate('Responsive visibility') }}</label>
+                  <div class="mt-1 relative">
+                    <button type="button" @click="show_responsive_visibility_dropdown = !show_responsive_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label">
+                      <span class="block truncate" x-text="responsive_visibility[section.settings.responsive_visibility]"></span>
+                      <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        @svg('heroicon-s-selector', ['class' => 'w-5 h-5'])
+                      </span>
+                    </button>
 
+                    <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                        x-show="show_responsive_visibility_dropdown"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        @click.outside="show_responsive_visibility_dropdown = false">
+
+                      <template x-for="(type, key) in responsive_visibility">
+                        <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer" @click="section.settings.responsive_visibility = key; show_responsive_visibility_dropdown = false;">
+                          <span class="font-normal block truncate" 
+                                :class="{'font-semibold': key === section.settings.responsive_visibility, 'font-normal': key !== section.settings.responsive_visibility }"
+                                x-text="type">
+                          </span>
+
+                          <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4" 
+                                x-show="key === section.settings.responsive_visibility">
+                            @svg('heroicon-s-check', ['class' => 'w-5 h-5'])
+                          </span>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
+
+
+                {{-- User Visibility --}}
+                <div class="col-span-3" x-data="{
+                    user_visibility: @js(\App\Enums\UserVisibilityEnum::labels()),
+                    show_user_visibility_dropdown: false,
+                  }">
+                  <label class="block text-sm font-medium text-gray-700">{{ translate('User visibility') }}</label>
+                  
+                  <div class="mt-1 relative">
+                    <button type="button" @click="show_user_visibility_dropdown = !show_user_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <span class="block truncate" x-text="user_visibility[section.settings.user_visibility]"></span>
+                      <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        @svg('heroicon-s-selector', ['class' => 'w-5 h-5'])
+                      </span>
+                    </button>
+
+                    <ul class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                        x-show="show_user_visibility_dropdown"
+                        x-transition:leave="transition ease-in duration-100"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        @click.outside="show_user_visibility_dropdown = false">
+
+                      <template x-for="(type, key) in user_visibility">
+                        <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer" @click="section.settings.user_visibility = key; show_user_visibility_dropdown = false;">
+                          <span class="font-normal block truncate" 
+                                :class="{'font-semibold': key === section.settings.user_visibility, 'font-normal': key !== section.settings.user_visibility }"
+                                x-text="type">
+                          </span>
+
+                          <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4" 
+                                x-show="key === section.settings.user_visibility">
+                            @svg('heroicon-s-check', ['class' => 'w-5 h-5'])
+                          </span>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
               </div>
 
-              <div class="w-full grid grid-cols-3 gap-4" x-show="active_tab === 'other'">
+              <div class="w-full grid grid-cols-1 gap-4" x-show="active_tab === 'other'">
+
+                <div>
+                  <label class="flex items-center text-sm font-medium text-gray-700">{{ translate('Extra classes') }}</label>
+                  
+                  <div class="mt-1 relative rounded-md shadow-sm w-full">                    
+                    <input type="text" x-model.lazy="section.settings.extra_classes" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                  </div>
+                </div>
 
               </div>
             </div>
@@ -313,7 +447,7 @@
             {{-- Settings Actions --}}
             <div class="w-full">
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse border-t border-gray-200 pt-2">
-                <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                <button type="button" @click="$wire.saveSectionSettings()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
                   {{ translate('Save') }}
                 </button>
                 <button type="button" @click="show = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">

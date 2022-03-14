@@ -1,10 +1,43 @@
 <div class="fixed z-50 inset-0 overflow-y-auto" x-data="{
     displayModal: false,
+    for_id: @entangle('for_id'),
     media: @entangle('media'),
     media_type: @entangle('media_type'),
-    selected: @entangle('selected'),
+    selected: @js($selected),
+    multiple: @js($multiple),
     sort_by: @entangle('sort_by'),
     search_string: @entangle('search_string'),
+    page: @entangle('page'),
+    isMediaSelected(file_name) {
+      if(this.selected.indexOf(file_name) === -1) return false;
+      else return true;
+    },
+    selectMedia(file_name) {
+      if(this.selected === null || this.selected === undefined) {
+        this.selected = [];
+      }
+      
+      if(!this.isMediaSelected(file_name)) {
+        if(this.multiple) {
+          this.selected.push(file_name);
+        } else {
+          this.selected[0] = file_name;
+        }
+      } else {
+        if(this.multiple) {
+          this.selected.splice(this.selected.indexOf(file_name), 1);
+        } else {
+          this.selected = [];
+        }
+      }
+    },
+    saveSelection() {
+      {{-- Send event to element with (for_id) with selected item(s) --}}
+      $dispatch('we-media-selected-event', {
+        for_id: this.for_id,
+        selected: this.selected
+      });
+    }
 }"
 @display-media-library-modal.window="displayModal = true;"
 x-show="displayModal">
@@ -112,9 +145,10 @@ x-show="displayModal">
                   <template x-if="media !== null && media.length > 0">
                     <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
                       <template x-for="file in media">
-                        <li class="relative">
-                          <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
-                            <img x-bind:src="window.WE.IMG.url(file.file_name)" alt="" class="object-cover pointer-events-none group-hover:opacity-75">
+                        <li class="relative cursor-pointer" @click="selectMedia(file.file_name)">
+                          <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
+                                :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file.file_name)}">
+                            <img x-bind:src="window.WE.IMG.url(file.file_name)" class="object-cover pointer-events-none group-hover:opacity-75">
                             <button type="button" class="absolute inset-0 focus:outline-none"></button>
                           </div>
                           <p class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none" x-text="file.file_original_name"></p>
@@ -144,6 +178,38 @@ x-show="displayModal">
                     
                 </div>
 
+
+                {{-- Pagination --}}
+                <div class="w-full bg-white px-2 py-3 flex items-center justify-between border-t border-gray-200 sm:px-2">
+                  
+                  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                      <p class="text-sm text-gray-700">
+                        <span>Showing</span>
+                        <span class="font-medium">{{ ($page - 1) * $per_page }}</span>
+                        <span>to</span>
+                        <span class="font-medium">{{ $page * $per_page }}</span>
+                        <span>of</span>
+                        <span class="font-medium">{{ $mediaCount }}</span>
+                        <span>results</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex-1 flex justify-end">
+                    @if ($page <= 1)
+                      <div class="mr-2 opacity-50 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </div>
+                    @else
+                      <div @click="page -= 1" class="mr-2 cursor-pointer relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </div>
+                    @endif
+
+                    @if ($page == $lastPageNumber)
+                      <div class="mr-2 opacity-50 rml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </div>
+                    @else
+                      <div @click="page += 1" class="cursor-pointer rml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </div>
+                    @endif
+                    </div>
+                </div>
             </div>
 
             <div class="w-full grid grid-cols-3 gap-4" x-show="active_tab === 'upload_new'">
@@ -153,8 +219,8 @@ x-show="displayModal">
           </div>
 
           <div class="w-full">
-            <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse border-t border-gray-200 pt-2">
-              <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+            <div class="sm:flex sm:flex-row-reverse border-t border-gray-200 pt-2">
+              <button type="button" @click="saveSelection(); displayModal = false;" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
                 {{ translate('Save') }}
               </button>
               <button type="button" @click="displayModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
