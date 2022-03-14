@@ -247,7 +247,7 @@
                                   </svg>
                                   <div class="flex text-sm text-gray-600">
                                     <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                      <span>{{ translate('Upload a file') }}</span>
+                                      <span>{{ translate('Select a file') }}</span>
                                     </label>
                                     <p class="pl-1">{{ translate('or drag and drop') }}</p>
                                   </div>
@@ -288,7 +288,7 @@
                                   </svg>
                                   <div class="flex text-sm text-gray-600">
                                     <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                      <span>{{ translate('Upload a file') }}</span>
+                                      <span>{{ translate('Select a file') }}</span>
                                     </label>
                                     <p class="pl-1">{{ translate('or drag and drop') }}</p>
                                   </div>
@@ -330,7 +330,7 @@
                                   </svg>
                                   <div class="flex text-sm text-gray-600">
                                     <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                      <span>{{ translate('Upload a file') }}</span>
+                                      <span>{{ translate('Select a file') }}</span>
                                     </label>
                                     <p class="pl-1">{{ translate('or drag and drop') }}</p>
                                   </div>
