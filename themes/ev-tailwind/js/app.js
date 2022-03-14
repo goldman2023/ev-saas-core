@@ -15,21 +15,13 @@ try {
     window.$ = window.jQuery = require('jquery');
 } catch (e) {}
 
+window.WE = {};
+
+require('./IMG'); 
+require('./utils');
+
 /* Reuire sortable plugin */
 require('./sortable');
-
-/* import Alpine from 'alpinejs';
-import persist from '@alpinejs/persist';
-import intersect from '@alpinejs/intersect';
-Alpine.plugin(persist);
-Alpine.plugin(intersect);
-window.Alpine = Alpine;
-Alpine.start(); */
-
-/*import Vue from 'vue';
-import 'livewire-vue';
-
-window.Vue = Vue //this is important! Do not use require('vue')*/
 
 // LUXON
 // let { DateTime } = require('luxon');

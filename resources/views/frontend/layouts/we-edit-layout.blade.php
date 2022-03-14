@@ -11,7 +11,8 @@
     <meta name="app-url" content="{{ getBaseURL() }}">
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
-
+    <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
+    
     <title>@yield('meta_title')</title>
 
     <meta charset="utf-8">
@@ -21,6 +22,11 @@
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
 
     @yield('meta')
+
+    
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
         <x-default.system.og-meta>
@@ -58,9 +64,27 @@
     {{-- Include WeEdit modals --}}
     <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
 
+
     {{-- TODO: Include this propertly --}}
 
     @include('frontend.layouts.partials.app-js')
+
+    {{-- <script src="{{ static_asset('js/aiz-core.js', false, true) }}"></script> --}}
+    {{-- <script>
+        $(function() {
+            /* Init file managers */
+            $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
+                let selected_files = $.map($(element).find(".selected-files").val().split(','), function(value){
+                    let id = parseInt(value, 10);
+                    if(id) {
+                        return id;
+                    }
+                });
+
+                window.AIZ.uploader.inputSelectPreviewGenerate($(element), selected_files, true);
+            });
+        });
+    </script> --}}
 
     @stack('footer_scripts')
 </body>

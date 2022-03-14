@@ -1,11 +1,10 @@
 <?php
 
-namespace App\View\Components\TailwindUi\Sections\Marketing\HeroSections;
+namespace App\View\Components\WeEdit\Modals;
 
-use App\View\Components\TailwindUi\WeComponent;
 use Illuminate\View\Component;
 
-class HeroSection_01 extends HeroSection
+class SectionSettingsModal extends Component
 {
     /**
      * Create a new component instance.
@@ -14,7 +13,7 @@ class HeroSection_01 extends HeroSection
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
@@ -24,6 +23,6 @@ class HeroSection_01 extends HeroSection
      */
     public function render()
     {
-        return view('components.tailwind-ui.sections.marketing.hero-sections.hero-section_01');
+        return view('components.we-edit.modals.section-settings-modal');
     }
 }

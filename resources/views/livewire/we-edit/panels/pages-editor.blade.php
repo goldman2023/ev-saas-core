@@ -155,6 +155,12 @@
                         @endif
                     </ul>
                 </div>
+
+                <div class="w-full flex mt-3" x-data="" x-init="">
+                    <button type="button" wire:click="savePreviewToPage" class="ml-auto inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        {{ translate('Publish') }}
+                    </button>
+                </div>
             @endif
             {{-- END Sort sections --}}
         </div>

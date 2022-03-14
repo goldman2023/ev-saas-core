@@ -8,10 +8,10 @@
     
     <div class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
         @click="show = false"
-        x-transition:enter="transform ease-in-out duration-500"
+        x-transition:enter="transform ease-in-out duration-300"
         x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100 "
-        x-transition:leave="transition ease-in-out duration-500"
+        x-transition:leave="transition ease-in-out duration-300"
         x-transition:leave-start="opacity-100 "
         x-transition:leave-end="opacity-0">
     </div>
@@ -32,10 +32,10 @@
         @display-flyout-panel.window="($event.detail.id === id) ? (show = true) : (show = false)">
       <div class="pointer-events-auto w-screen max-w-md"
           x-show="show" 
-          x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+          x-transition:enter="transform transition ease-in-out duration-300 sm:duration-300"
           x-transition:enter-start="translate-x-full"
           x-transition:enter-end="translate-x-0 "
-          x-transition:leave="transition ease-in duration-500"
+          x-transition:leave="transition ease-in duration-300"
           x-transition:leave-start="translate-x-0 "
           x-transition:leave-end="translate-x-full">
         <form class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
