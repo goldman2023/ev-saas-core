@@ -3,6 +3,7 @@
 namespace App\Enums;
 
 /**
+ * @method static self all()
  * @method static self mobile()
  * @method static self tablet_portrait()
  * @method static self tablet_landscape()

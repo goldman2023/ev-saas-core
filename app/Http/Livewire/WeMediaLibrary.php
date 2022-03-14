@@ -13,13 +13,18 @@ class WeMediaLibrary extends Component
 {
     use DispatchSupport;
 
+    protected $paginator;
+    public $for_id = '';
     public $media = [];
     public $media_type = 'image';
-    public $selected = '';
+    public $selected = [];
+    public $multiple = false;
     public $sort_by = 'newest'; // newest, oldest, smallest, largest
     public $search_string = '';
     public $page = 1;
+    public $lastPageNumber = 0;
     public $per_page = 32;
+    public $mediaCount = 0;
 
     protected $listeners = [
         'showMediaLibrary' => 'changeMediaLibrary'
@@ -31,7 +36,8 @@ class WeMediaLibrary extends Component
             'media_type' => [],
             'selected' => [],
             'sort_by' => [Rule::in(SortMediaLibraryEnum::toValues())],
-            'search_string' => []
+            'search_string' => [],
+            'page' => [],
         ];
     }
 
@@ -47,20 +53,26 @@ class WeMediaLibrary extends Component
         return view('livewire.we-media-library');
     }
 
-    public function changeMediaLibrary($media_type, $selected = null) {
-        // dd($this->query()->items());
-        $this->media = $this->query()->items();
+    public function changeMediaLibrary($for_id, $media_type, $selected = null) {
+        $this->for_id = $for_id;
+        
+        $this->populateMedia();
+
         $this->selected = $selected;
 
         $this->dispatchBrowserEvent('display-media-library-modal');
     }
 
     public function updatedSortBy($value = 'newest') {
-        $this->media = $this->query()->items();
+        $this->populateMedia();
     }
 
     public function updatedSearchString($value) {
-        $this->media = $this->query()->items();
+        $this->populateMedia();
+    }
+
+    public function updatedPage($value) {
+        $this->populateMedia();
     }
 
     protected function query() {
@@ -71,6 +83,13 @@ class WeMediaLibrary extends Component
             ->when($this->sort_by === 'largest', fn($query, $value) => $query->largest())
             ->when(!empty($this->search_query), fn($query, $value) => $query->search($this->search_query))
             ->paginate(perPage: $this->per_page, page: $this->page);
+    }
+
+    protected function populateMedia() {
+        $this->paginator = $this->query();
+        $this->media = $this->paginator->items();
+        $this->mediaCount = $this->paginator->total();
+        $this->lastPageNumber = $this->paginator->lastPage();
     }
 
 
