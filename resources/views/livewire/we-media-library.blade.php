@@ -2,8 +2,9 @@
     displayModal: false,
     for_id: @entangle('for_id'),
     media: @entangle('media'),
+    new_media: @entangle('new_media'),
     media_type: @entangle('media_type'),
-    selected: @js($selected),
+    selected: @entangle('selected'),
     multiple: @js($multiple),
     sort_by: @entangle('sort_by'),
     search_string: @entangle('search_string'),
@@ -212,8 +213,50 @@ x-show="displayModal">
                 </div>
             </div>
 
-            <div class="w-full grid grid-cols-3 gap-4" x-show="active_tab === 'upload_new'">
+            {{-- Upload New --}}
+            <div class="w-full " x-show="active_tab === 'upload_new'">
 
+              <div class="w-full" :class="{ 'pb-5 mb-5 border-b pt-3': new_media !== null && new_media.length > 0 }">
+                <template x-if="new_media !== null && new_media.length > 0">
+                  <ul role="list" class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+                    <template x-for="file in new_media">
+                      <li class="relative cursor-pointer" @click="selectMedia(file.file_name)">
+                        <div class="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 overflow-hidden"
+                              :class="{'ring-2 ring-offset-2 ring-offset-gray-100 ring-indigo-500': isMediaSelected(file.file_name)}">
+                          <img x-bind:src="window.WE.IMG.url(file.file_name)" class="object-cover pointer-events-none group-hover:opacity-75">
+                          <button type="button" class="absolute inset-0 focus:outline-none"></button>
+                        </div>
+                        <p class="mt-2 block text-sm font-medium text-gray-900 truncate pointer-events-none" x-text="file.file_original_name"></p>
+                        <p class="block text-sm font-medium text-gray-500 pointer-events-none" x-text="window.WE.utils.formatSizeUnits(file.file_size)"></p>
+                      </li>
+                    </template>
+                  </ul>
+                </template>
+              </div>
+            
+              <input type="file" class="hidden" id="we-media-library__new-media-input" wire:model="new_media" multiple>
+
+              {{-- New image(s) --}}
+              <div class="w-full" x-data="{}">
+                <div class="mt-5 mb-5 cursor-pointer">
+                  <label for="we-media-library__new-media-input" class="mx-auto max-w-lg flex justify-center px-6 pt-5 pb-6 cursor-pointer border-2 border-gray-300 border-dashed rounded-md">
+                      <div class="space-y-1 text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                          <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
+                        </svg>
+                        <div class="flex text-sm text-gray-600">
+                          <span class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                            {{ translate('Upload a file(s)') }}
+                          </span>
+                          <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                        </div>
+                        <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 10MB') }}</p>
+                      </div>
+                  </label>
+                </div>
+
+                <x-system.invalid-msg field="new_media.*" class="mt-2 mb-4 flex justify-center"></x-system.invalid-msg>
+              </div>
             </div>
 
           </div>
