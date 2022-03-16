@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Tenancy;
 
 use Stancl\Tenancy\Contracts\Tenant;
 
