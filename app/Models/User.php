@@ -101,11 +101,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(SocialAccount::class);
     }
 
-    public function customer()
-    {
-    return $this->hasOne(Customer::class);
-    }
-
     public function seller()
     {
     return $this->hasOne(Seller::class);
@@ -138,47 +133,17 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function staff()
     {
-    return $this->hasOne(Staff::class);
+        return $this->hasOne(Staff::class);
     }
 
     public function orders()
     {
-    return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class);
     }
 
     public function wallets()
     {
-    return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
-    }
-
-    public function club_point()
-    {
-    return $this->hasOne(ClubPoint::class);
-    }
-
-    public function customer_package()
-    {
-        return $this->belongsTo(CustomerPackage::class);
-    }
-
-    public function customer_package_payments()
-    {
-        return $this->hasMany(CustomerPackagePayment::class);
-    }
-
-    public function customer_products()
-    {
-        return $this->hasMany(CustomerProduct::class);
-    }
-
-    public function seller_package_payments()
-    {
-        return $this->hasMany(SellerPackagePayment::class);
-    }
-
-    public function carts()
-    {
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
     }
 
     public function reviews()
@@ -221,6 +186,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->toArray();
     }
 
+
+    // OLD
     public function recently_viewed_products() {
         $data = Activity::where('subject_type', 'App\Models\Product')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')

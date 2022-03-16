@@ -1,19 +1,3 @@
-<!--
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
 <nav class="bg-gray-800">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div class="relative flex items-center justify-between h-16">

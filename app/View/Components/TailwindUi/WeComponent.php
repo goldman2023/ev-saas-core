@@ -8,6 +8,30 @@ use App\Enums\ResponsiveVisibilityEnum;
 
 class WeComponent extends Component
 {   
+    public $settings;
+    public $weData;
+
+    /**
+     * Create a new component instance.
+     *
+     * @return void
+     */
+    public function __construct($settings = [], $weData = [])
+    {
+        $this->settings = $settings;
+        $this->weData = $weData;
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\Contracts\View\View|\Closure|string
+     */
+    public function render()
+    {
+        return view('components.tailwind-ui.we-component');
+    }
+
     public function getDefaultSettings() {
         return [
             'background' => [
@@ -39,26 +63,4 @@ class WeComponent extends Component
             'responsive_visibility' => 'all' // Mobile (), Tablet portrait(sm), Tablet Landscape(md), Laptop(lg), Full Desktop(xl)
         ];
     }
-
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
-    public function render()
-    {
-        return view('components.tailwind-ui.we-component');
-    }
-
-    
 }

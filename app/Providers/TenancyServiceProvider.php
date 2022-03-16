@@ -38,8 +38,10 @@ class TenancyServiceProvider extends ServiceProvider
                     // Your own jobs to prepare the tenant.
                     // Provision API keys, create S3 buckets, anything you want!
 
-                    \App\Jobs\CreateFrameworkDirectoriesForTenant::class, // Create framework/cache directory for each tenant, because they need it for temp file storage
-
+                    \App\Jobs\Tenancy\CreateFrameworkDirectoriesForTenant::class, // Create framework/cache directory for each tenant, because they need it for temp file storage
+                    \App\Jobs\Tenancy\GeneratePermissionsAndRoles::class, // generate permissions and roles and attach permissions to roles
+                    
+                    // TODO: Populate Exchange Rates with FetchLatestFXRates::class
                 ])->send(function (Events\TenantCreated $event) {
                     return $event->tenant;
                 })->shouldBeQueued(false), // `false` by default, but you probably want to make this `true` for production.

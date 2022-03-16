@@ -21,12 +21,12 @@ class CreateTenantAction
             'trial_ends_at' => now()->addDays(config('saas.trial_days')),
         ]);
 
-        $tenant->domains()->create(['domain' => $domain, 'theme' => 'ev-saas-default']); // Set default theme to: ev-saas-default
+        $tenant->domains()->create(['domain' => $domain, 'theme' => 'ev-tailwind']); // Set default theme to: ev-saas-default
 
         $tenant->save();
 
         if ($createStripeCustomer) {
-            $tenant->createAsStripeCustomer();
+            // $tenant->createAsStripeCustomer(); // TODO: Enable this logic when Spark and Central App are properly set!
         }
 
         return $tenant;
