@@ -26,6 +26,7 @@ class MyShopService
         // TODO: Cache Shop with all necessary relations (like payment_methods and payment_methods_universal etc.)!
         if(auth()->user() instanceof User) {
             if (auth()->user()->isSeller() || auth()->user()->isStaff() || auth()->user()->isAdmin()) {
+                // dd(auth()->user()->shop);
                 $this->shop = auth()->user()->shop->first();
 
                 $this->setSettings();

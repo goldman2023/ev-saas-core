@@ -14,9 +14,9 @@ $central_domains = [
 
 
 if (env('APP_ENV') === 'production') {
-    $central_domains[] = 'app.ev-saas.com';
+    $central_domains[] = 'app.'.env('CENTRAL_DOMAIN').'.com';
 } else {
-    $central_domains[] = 'ev-saas.localhost';
+    $central_domains[] = env('CENTRAL_DOMAIN');
 }
 
 return [

@@ -43,6 +43,14 @@ class WeBuilderService
                             'title' => 'Hero',
                             'description' => 'A lovely description for hero sections',
                             'sections' => [
+                                'tailwind-ui.sections.marketing.hero-sections.hero-section_08' => [
+                                    'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_08',
+                                    'title' => 'Hero Section 08',
+                                    'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.07-card-with-background-image-xl.jpg',
+                                    'order' => -1,
+                                    'data' => [],
+                                    'settings' => []
+                                ],
                                 'tailwind-ui.sections.marketing.hero-sections.hero-section_01' => [
                                     'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_01',
                                     'title' => 'Hero Section 01',
@@ -83,6 +91,7 @@ class WeBuilderService
                                     'data' => [],
                                     'settings' => []
                                 ],
+                                
                             ]
                         ],
                         'header-sections' => [

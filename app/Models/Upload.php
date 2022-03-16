@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use IMG;
 use Storage;
+use MyShop;
 
 class Upload extends EVBaseModel
 {
@@ -24,11 +25,11 @@ class Upload extends EVBaseModel
 
     protected static function booted()
     {
-        static::addGlobalScope('uploads_from_my_shop', function ($builder) {
-            if(request()->is_dashboard) { // get uploads from my shop if user is in dashboard
-                $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
-            }
-        });
+        // static::addGlobalScope('uploads_from_my_shop', function ($builder) {
+        //     if(request()->is_dashboard) { // get uploads from my shop if user is in dashboard
+        //         $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+        //     }
+        // });
     }
 
     /*

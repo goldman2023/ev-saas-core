@@ -150,7 +150,7 @@ class SectionEdit extends Component
                 $slot_xpath->query('//*[@we-slot-description]')->item(0)->nodeValue = $slot_we_description;
             }
 
-            // loop through slot to identify all comonents inside the slot
+            // loop through slot to identify all components inside the slot
             $node->children()->each(function (Crawler $node, $i) use($count_slot_children, $compiler, $slot_name, $slot_we_title, &$html5, &$slot_xpath) {
                 $component = $node;
                 $component_tag = $component->nodeName();
