@@ -2,10 +2,9 @@
 
 namespace App\View\Components\TailwindUi\Sections\Marketing\FeatureSections;
 
-use App\View\Components\TailwindUi\WeComponent;
 use Illuminate\View\Component;
 
-class FeatureSection extends WeComponent
+class FeatureSection01 extends FeatureSection
 {
     /**
      * Get the view / contents that represent the component.
@@ -14,6 +13,6 @@ class FeatureSection extends WeComponent
      */
     public function render()
     {
-        return view('components.tailwind-ui.sections.marketing.feature-sections.feature-section');
+        return view('components.tailwind-ui.sections.marketing.feature-sections.feature-section01');
     }
 }
