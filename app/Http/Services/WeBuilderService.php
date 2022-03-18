@@ -199,8 +199,8 @@ class WeBuilderService
                             'title' => 'Features',
                             'description' => 'A lovely description for feature sections',
                             'sections' => [
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_01' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_01',
+                                'tailwind-ui.sections.marketing.feature-sections.feature-section01' => [
+                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section01',
                                     'title' => 'Feature Section 01',
                                     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.01-alternating-side-by-side-with-images-xl.png',
                                     'order' => -1,
