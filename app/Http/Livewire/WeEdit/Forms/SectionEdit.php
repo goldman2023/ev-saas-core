@@ -215,11 +215,16 @@ class SectionEdit extends Component
             
         });
 
-        // dd($html5->saveHTML($dom));
-        // Store MAIN_DOM html to custom_fields_html
-        $this->custom_fields_html = $html5->saveHTML($dom);
-        // TODO: extract body innerHTML and then saveHTML()!!!
+        $dom_xpath = new \DomXpath($dom);
+        // dd($dom_xpath->query('/html/body/*'));
         
+        
+        // Store MAIN_DOM html to custom_fields_html
+        $fields_html = str_replace ('<body>', '', $html5->saveHTML($dom->getElementsByTagName('body')->item(0)));
+        $fields_html = str_replace ('</body>', '', $fields_html);
+
+        // dd($fields_html);
+        $this->custom_fields_html = $fields_html;
     }
 
     public function reloadCurrentPreview($preview) {

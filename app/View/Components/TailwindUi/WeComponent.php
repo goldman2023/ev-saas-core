@@ -121,6 +121,6 @@ class WeComponent extends Component
     }
 
     public function getSectionSettingsClasses() {
-        return $this->getSpacingClasses().' '.$this->getBackgroundClasses().' '.$this->getResponsiveVisibilityClasses();
+        return $this->getSpacingClasses().' '.$this->getBackgroundClasses().' '.$this->getResponsiveVisibilityClasses().' '.($this->settings['extra_classes'] ?? '');
     }
 }

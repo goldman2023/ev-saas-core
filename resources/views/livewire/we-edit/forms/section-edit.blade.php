@@ -6,6 +6,7 @@
     @display-flyout-panel.window="if($event.detail.id === id) {
         {{-- TODO: Add loading spinner over whole section-edit form so we can indicate that section data is loading --}}
         setTimeout(function() {
+            $('#section-custom-fields-html').html('');
             $wire.setSection($event.detail.section_uuid);
         }, 500);
     }"
@@ -39,7 +40,7 @@
           <div class="divide-y divide-gray-200 px-4 sm:px-6">
             <div class="space-y-6 pt-6 pb-5">
 
-                <div>
+                <div id="section-custom-fields-html">
                     {!! $this->custom_fields_html !!}
                 </div>
                 
@@ -57,6 +58,9 @@
             {{ translate('Settings') }}
         </button>
 
+        <button type="button" wire:click="$refresh" class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          {{ translate('Refresh') }}
+        </button>
         <button type="button" @click="show = false" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             {{ translate('Cancel') }}
         </button>
