@@ -5,7 +5,7 @@
     <div class="col-span-7 ">
         <label class="block text-sm font-medium text-gray-700">{{ translate('Title') }}</label>
         <div class="mt-1">
-          <input type="text" wire:model.lazy="{{ $label }}.label" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+          <input type="text" x-model.lazy="{{ $label }}.label" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
         </div>
     </div>
     @php
@@ -35,7 +35,7 @@
               x-transition:leave-start="opacity-100"
               x-transition:leave-end="opacity-0">
 
-            <template x-for="[tag, label] of Object.entries(items)">
+            <template x-for="[tag, label] of Object.entries(items)" :key="tag">
               <li class="text-gray-900 hover:text-white hover:bg-indigo-600 cursor-pointer select-none relative py-2 pl-3 pr-9" role="option" 
                   x-on:click="{{ $selected_tag }} = tag; open = false;">
                 <!-- Selected: "font-semibold", Not Selected: "font-normal" -->

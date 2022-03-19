@@ -166,6 +166,6 @@
         </div>
     </div>
 
-    <livewire:we-edit.forms.section-edit :current_preview="$current_preview"></livewire:we-edit.forms.section-edit>
+    <livewire:we-edit.forms.section-edit :current_preview="$current_preview" key="{{ now() }}"></livewire:we-edit.forms.section-edit>
     {{-- <x-we-edit.flyout.flyout-edit-section :currentPreview="$current_preview"></x-we-edit.flyout.flyout-edit-section> --}}
 </div>
