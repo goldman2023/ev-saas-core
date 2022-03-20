@@ -102,6 +102,14 @@ class EVService
                         'permissions' => ['all_products', 'browse_products'],
                         'children' => [
                             [
+                                'label' => translate('All Products'),
+                                'icon' => 'heroicon-o-archive',
+                                'route' => route('products.index'),
+                                'is_active' => areActiveRoutes(['products.index']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['browse_products']
+                            ],
+                            [
                                 'label' => translate('Attributes'),
                                 'icon' => 'heroicon-o-view-list',
                                 'route' => route('attributes.index', base64_encode(Product::class)),

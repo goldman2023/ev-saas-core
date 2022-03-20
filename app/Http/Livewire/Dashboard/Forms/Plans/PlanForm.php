@@ -46,7 +46,9 @@ class PlanForm extends Component
             // If insert
             $this->plan->base_currency = FX::getCurrency()->code;
             $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
+            $this->plan->yearly_discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->tax_type = AmountPercentTypeEnum::amount()->value;
+            $this->plan->content = '<p>YEEEEEEEEEEEY</p>';
         }
 
         $this->initCategories($this->plan);
@@ -61,7 +63,7 @@ class PlanForm extends Component
             'plan.title' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'plan.excerpt' => 'required|min:10',
-            // 'plan.content' => 'required|min:10',
+            'plan.content' => 'required|min:10',
             'plan.features' => 'required|array',
             'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
             'plan.price' => 'required|numeric',
@@ -113,7 +115,7 @@ class PlanForm extends Component
     public function dehydrate()
     {
         //$this->dispatchBrowserEvent('initSlugGeneration');
-        $this->dispatchBrowserEvent('initPlanForm');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function savePlan() {
