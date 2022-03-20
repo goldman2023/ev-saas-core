@@ -25,8 +25,8 @@ Route::middleware([
     'universal',
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
-    VendorMode::class,
     SetDashboard::class,
+    VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
         Route::group([

@@ -90,20 +90,40 @@
           }
         }
     </script>
+
+    {{-- TODO: Make this into a tailwind-custom-classes.php file and include it here --}}
     <style type="text/tailwindcss">
         @layer utilities {
-          .badge-info {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-infoLight text-info;
-          }
-          .badge-success {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-successLight text-success;
-          }
-          .badge-warning {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warningLight text-warning;
-          }
-          .badge-danger {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dangerLight text-danger;
-          }
+            .btn-standard {
+                @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
+            }
+            .btn-primary {
+                @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+            }
+            .btn-ghost {
+                @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary bg-transparent hover:text-primaryDark;
+            }
+            .badge-info {
+                @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-infoLight text-info;
+            }
+            .badge-success {
+                @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-successLight text-success;
+            }
+            .badge-warning {
+                @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warningLight text-warning;
+            }
+            .badge-danger {
+                @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dangerLight text-danger;
+            }
+            .badge-dark {
+                @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-900 text-white;
+            }
+            .form-standard {
+                @apply flex-1 block w-full max-w-lg focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
+            }
+            .is-invalid {
+                @apply border-danger;
+            }
         }
     </style>
 
@@ -116,21 +136,23 @@
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 
     @stack('head_scripts')
+
 </head>
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
-        <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
+        {{-- <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header> --}}
 
         <!-- Page Content -->
         <main>
             @yield('content')
         </main>
 
-        <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header>
+        {{-- <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header> --}}
     </div>
 
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
+    <livewire:we-media-library />
 
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}

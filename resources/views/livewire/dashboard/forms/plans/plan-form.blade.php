@@ -4,7 +4,15 @@
     </script>
 @endpush
 
-<div x-data="{}"
+<div class="w-full" x-data="{
+    status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
+    base_currency: @js($plan->base_currency),
+    discount_type: @js($plan->discount_type),
+    yearly_discount_type: @js($plan->yearly_discount_type),
+    tax_type: @js($plan->tax_type),
+    features: @js($plan->features),
+    content: @js($plan->content),
+}"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
     <div class="col-lg-12 position-relative">
@@ -12,12 +20,277 @@
                               wire:target="savePlan"
                               wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
-        <div class=""
+        <div class="w-full"
              wire:loading.class="opacity-3 prevent-pointer-events"
              wire:target="savePlan"
         >
 
-            <!-- Cover -->
+        <div class="grid grid-cols-12 gap-8 mb-10">
+            <div class="col-span-8  ">
+                <div class="p-4 border border-gray-200 rounded-lg shadow">
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Profile</h3>
+                        <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p>
+                    </div>
+            
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                        <!-- Title -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label for="plan-title" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Title') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('plan.title') is-invalid @enderror"
+                                        name="plan.title"
+                                        id="plan-title"
+                                        placeholder="{{ translate('New post title') }}"
+                                        {{-- @input="generateURL($($el).val())" --}}
+                                        wire:model.defer="plan.title" />
+                            
+                                <x-system.invalid-msg field="plan.title"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Title -->
+
+                        <!-- Status -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <span class="mr-2">{{ translate('Status') }}</span>
+
+                                <span class="badge-success">{{ ucfirst('published') }}</span>
+                                @if($plan->status === App\Enums\StatusEnum::published()->value)
+                                    <span class="badge-success">{{ ucfirst($plan->status) }}</span>
+                                @elseif($plan->status === App\Enums\StatusEnum::draft()->value)
+                                    <span class="badge-warning">{{ ucfirst($plan->status) }}</span>
+                                @elseif($plan->status === App\Enums\StatusEnum::pending()->value)
+                                    <span class="badge-info">{{ ucfirst($plan->status) }}</span>
+                                @elseif($plan->status === App\Enums\StatusEnum::private()->value)
+                                    <span class="badge-dark">{{ ucfirst($plan->status) }}</span>
+                                @endif
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.select :items="\App\Enums\StatusEnum::toArray('archived')" selected="status"></x-dashboard.form.select>
+                            </div>
+                        </div>
+                        <!-- END Status -->
+                
+                        <!-- Price -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Price') }}
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div class="grid grid-cols-10 gap-3">
+                                    <div class="col-span-6">
+                                        <input type="number" 
+                                                step="0.01" 
+                                                class="form-standard @error('plan.price') is-invalid @enderror"
+                                                placeholder="{{ translate('Subscription plan price') }}"
+                                                wire:model.defer="plan.price" />
+                                    </div>
+
+                                    <div class="col-span-4" x-data="{}"> 
+                                        <x-dashboard.form.select :items="\FX::getAllCurrencies(formatted: true)" selected="base_currency"></x-dashboard.form.select>
+                                    </div>
+
+                                    <x-system.invalid-msg class="col-span-10" field="plan.price"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Price -->
+
+
+                        <!-- Discount and Discount type -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Monthly plan discount') }}
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div class="grid grid-cols-10 gap-3">
+                                    <div class="col-span-6">
+                                        <input type="number" 
+                                                step="0.01" 
+                                                class="form-standard @error('plan.discount') is-invalid @enderror"
+                                                placeholder="{{ translate('Subscription plan discount (fixed or percentage) - for monthly payment') }}"
+                                                wire:model.defer="plan.discount" />
+                                    </div>
+
+                                    <div class="col-span-4" x-data="{}"> 
+                                        <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="discount_type"></x-dashboard.form.select>
+                                    </div>
+
+                                    <x-system.invalid-msg class="col-span-10" field="plan.discount"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Discount and discount type -->
+
+                        <!-- Yearly discount and discount type -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Annual plan discount') }}
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div class="grid grid-cols-10 gap-3">
+                                    <div class="col-span-6">
+                                        <input type="number" 
+                                                step="0.01" 
+                                                class="form-standard @error('plan.yearly_discount') is-invalid @enderror"
+                                                placeholder="{{ translate('Subscription plan annual discount (fixed or percentage) - for annual payment') }}"
+                                                wire:model.defer="plan.yearly_discount" />
+                                    </div>
+
+                                    <div class="col-span-4" x-data="{}"> 
+                                        <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="yearly_discount_type"></x-dashboard.form.select>
+                                    </div>
+                                    
+                                    <div class="col-span-10">
+                                        <small class="text-warning">
+                                            {{ translate('*Note: If yearly discount is set, standard discount won\'t be applied to each month.') }}
+                                        </small>
+                                    </div>
+
+                                    <x-system.invalid-msg class="col-span-10" field="plan.yearly_discount"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Yearly discount and discount type -->
+
+
+                        <!-- Tax and Tax type -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Tax') }}
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <div class="grid grid-cols-10 gap-3">
+                                    <div class="col-span-6">
+                                        <input type="number" 
+                                                step="0.01" 
+                                                class="form-standard @error('plan.tax') is-invalid @enderror"
+                                                placeholder="{{ translate('Subscription specific tax (fixed or percentage)') }}"
+                                                wire:model.defer="plan.tax" />
+                                    </div>
+
+                                    <div class="col-span-4" x-data="{}"> 
+                                        <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type"></x-dashboard.form.select>
+                                    </div>
+                                    
+                                    <div class="col-span-10">
+                                        <small class="text-info">
+                                            {{ translate('*Note: This is a subscription plan specific tax/fee/commission, not a VAT') }}
+                                        </small>
+                                    </div>
+
+                                    <x-system.invalid-msg class="col-span-10" field="plan.tax"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END Tax and Tax type  -->
+
+
+                        <!-- Features -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Features') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.text-repeater field="features" placeholder="{{ translate('Feature') }}"></x-dashboard.form.text-repeater>
+                            </div>
+                        </div>
+                        <!-- END Features -->
+
+                        <!-- Excerpt -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Excerpt') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <textarea type="text" class="form-standard h-[80px] @error('plan.excerpt') is-invalid @enderror"
+                                            placeholder="{{ translate('Write a short promo description for this subscription plan') }}"
+                                            wire:model.defer="plan.excerpt">
+                                </textarea>
+                            
+                                <x-system.invalid-msg class="w-full" field="plan.excerpt"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Excerpt -->
+
+                        <!-- Content -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Content') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                <x-dashboard.form.froala field="content" id="plan-content-wysiwyg"></x-dashboard.form.froala>
+                            
+                                <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Content -->
+                    </div>
+                </div>
+            </div>
+
+            {{-- Right side --}}
+            <div class="col-span-4 ">
+                <div class="p-4 border border-gray-200 rounded-lg shadow">
+                    {{-- Thumbnail --}}
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-3">
+                        <label for="photo" class="block text-sm font-medium text-gray-700"> Photo </label>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <div class="flex items-center">
+                                <span class="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </span>
+                                <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Change</button>
+                            </div>
+                        </div>
+                    </div>
+            
+                    {{-- Cover --}}
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                        <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Cover photo </label>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+  
+
+            {{-- <!-- Cover -->
             <div class="profile-cover">
                 <div class="profile-cover-img-wrapper"
                      x-data="{
@@ -77,105 +350,47 @@
                   </i>
                 </span>
             </label>
-            <!-- End Thumbnail -->
+            <!-- End Thumbnail --> --}}
 
             <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
 
             <x-system.invalid-msg field="plan.cover"></x-system.invalid-msg>
 
-            <!-- Title -->
-            <div class="row form-group mt-5" x-data="{
-{{--                url_template: '{{ route('shop.blog.post.index', ['%shop_slug%', '%slug%'], false) }}',--}}
-{{--                url: '',--}}
-{{--                generateURL($slug) {--}}
-{{--                    this.url = this.url_template.replace('%shop_slug%', '{{ MyShop::getShop()->slug ?? '' }}').replace('%slug%', '<strong>'+$slug.slugify()+'</strong>');--}}
-{{--                }--}}
-            }"
-{{--            @initSlugGeneration.window="this.generateURL($('#plan-title').val())">--}}
-                >
-
-                <label for="plan-title" class="col-sm-3 col-form-label input-label">{{ translate('Title') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="text" class="form-control @error('plan.title') is-invalid @enderror"
-                               name="plan.title"
-                               id="plan-title"
-                               placeholder="{{ translate('New post title') }}"
-{{--                               @input="generateURL($($el).val())"--}}
-                               wire:model.defer="plan.title" />
-                    </div>
-
-{{--                    <div class="w-100 d-flex align-items-center mt-2">--}}
-{{--                        <strong class="mr-2">{{ translate('URL') }}:</strong>--}}
-{{--                        <span x-html="(url !== undefined) ? url : ''"></span>--}}
-{{--                    </div>--}}
-
-                    <x-system.invalid-msg field="plan.title"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- END Title -->
-
-            <!-- Status -->
-            <div class="row form-group mt-5">
-                <label for="plan-status" class="col-sm-3 col-form-label input-label d-flex align-items-center">
-                    {{ translate('Status') }}
-                </label>
-
-                <div class="col-sm-9" x-data="{
-                        status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
-                    }"
-                     x-init="
-                        $($refs.plan_status_selector).on('select2:select', (event) => {
-                          status = event.target.value;
-                        });
-
-                        $watch('status', (value) => {
-                          $($refs.plan_status_selector).val(value).trigger('change');
-                        });
-                     ">
-                    <select
-                        wire:model.defer="plan.status"
-                        name="plan.status"
-                        x-ref="plan_status_selector"
-                        id="blog-post-status-selector"
-                        class="js-select2-custom custom-select select2-hidden-accessible"
-                        data-hs-select2-options='
-                            {"minimumResultsForSearch":"Infinity"}
-                        '
+            
+                {{-- <!-- Title -->
+                <div class="row form-group mt-5" x-data="{
+                   url_template: '{{ route('shop.blog.post.index', ['%shop_slug%', '%slug%'], false) }}',
+                   url: '',
+                   generateURL($slug) {
+                       this.url = this.url_template.replace('%shop_slug%', '{{ MyShop::getShop()->slug ?? '' }}').replace('%slug%', '<strong>'+$slug.slugify()+'</strong>');
+                   }
+                }"
+               @initSlugGeneration.window="this.generateURL($('#plan-title').val())">
                     >
-                        @foreach(\App\Enums\StatusEnum::toArray('archived') as $key => $status)
-                            <option value="{{ $key }}">
-                                {{ $status }}
-                            </option>
-                        @endforeach
-                    </select>
-
-                    <div class="d-flex align-items-center mt-2 pl-1">
-                        <span class="mr-2 text-14">{{ translate('Current status:') }}</span>
-                        @if($plan->status === App\Enums\StatusEnum::published()->value)
-                            <span class="badge badge-soft-success">
-                                <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($plan->status) }}
-                            </span>
-                        @elseif($plan->status === App\Enums\StatusEnum::draft()->value)
-                            <span class="badge badge-soft-warning">
-                                <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($plan->status) }}
-                            </span>
-                        @elseif($plan->status === App\Enums\StatusEnum::pending()->value)
-                            <span class="badge badge-soft-info">
-                                <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($plan->status) }}
-                            </span>
-                        @elseif($plan->status === App\Enums\StatusEnum::private()->value)
-                            <span class="badge badge-soft-dark">
-                                <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($plan->status) }}
-                            </span>
-                        @endif
+    
+                    <label for="plan-title" class="col-sm-3 col-form-label input-label">{{ translate('Title') }}</label>
+    
+                    <div class="col-sm-9">
+                        <div class="input-group input-group-sm-down-break">
+                            <input type="text" class="form-control @error('plan.title') is-invalid @enderror"
+                                   name="plan.title"
+                                   id="plan-title"
+                                   placeholder="{{ translate('New post title') }}"
+                                  @input="generateURL($($el).val())"
+                                   wire:model.defer="plan.title" />
+                        </div>
+    
+                       <div class="w-100 d-flex align-items-center mt-2">
+                           <strong class="mr-2">{{ translate('URL') }}:</strong>
+                           <span x-html="(url !== undefined) ? url : ''"></span>
+                       </div>
+    
+                        <x-system.invalid-msg field="plan.title"></x-system.invalid-msg>
                     </div>
-
-                    <x-system.invalid-msg field="plan.status"></x-system.invalid-msg>
                 </div>
-            </div>
-            <!-- END Status -->
+                <!-- END Title --> --}}
+
+
 
 
             <!-- Category Selector -->
@@ -195,200 +410,10 @@
             </div>
             <!-- END Category Selector -->
 
-            <!-- Price -->
-            <div class="row form-group mt-3">
-                <label for="plan-price" class="col-sm-3 col-form-label input-label">{{ translate('Price') }}</label>
-
-                <div class="col-sm-7">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="number" step="0.01" class="form-control @error('plan.price') is-invalid @enderror"
-                                name="plan.price"
-                                id="plan-price"
-                                placeholder="{{ translate('Subscription plan price') }}"
-                                wire:model.defer="plan.price" />
-                    </div>
-
-                    <x-system.invalid-msg field="plan.price"></x-system.invalid-msg>
-                </div>
-
-                <div class="col-sm-2" x-data="{
-                    base_currency: @js($plan->base_currency),
-                }" x-init="
-                    $('#plan-base_currency').on('select2:select', (event) => {
-                        base_currency = event.target.value;
-                    });
-                    $watch('base_currency', (value) => {
-                        $('#plan-base_currency').val(value).trigger('change');
-                    });
-                "> 
-                    <select class="form-control custom-select" 
-                            name="plan.base_currency" 
-                            id="plan-base_currency"
-                            wire:model.defer="plan.base_currency"
-                            data-hs-select2-options='{
-                            "minimumResultsForSearch": "Infinity"
-                        }'>
-                        @foreach(\FX::getAllCurrencies() as $currency)
-                            <option value="{{ $currency->code }}" >
-                                {{ $currency->code }} ({{ $currency->symbol }})
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <!-- END Price -->
+        
 
 
-            <!-- Discount and Discount type -->
-            <div class="row form-group mt-3">
-                <label for="plan-discount" class="col-sm-3 col-form-label input-label">{{ translate('Monthly plan discount') }}</label>
-
-                <div class="col-sm-7">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="number" step="0.01" class="form-control @error('plan.discount') is-invalid @enderror"
-                                name="plan.discount"
-                                id="plan-discount"
-                                placeholder="{{ translate('Subscription plan discount (fixed or percentage) - for monthly payment') }}"
-                                wire:model.defer="plan.discount" />
-                    </div>
-
-                    <x-system.invalid-msg field="plan.discount"></x-system.invalid-msg>
-                </div>
-
-                <div class="col-sm-2" x-data="{
-                    discount_type: @js($plan->discount_type)
-                }" x-init="
-                    $('#plan-discount_type').on('select2:select', (event) => {
-                        discount_type = event.target.value;
-                    });
-                    $watch('discount_type', (value) => {
-                        $('#plan-discount_type').val(value).trigger('change');
-                    });
-                "> 
-                    <select class="form-control custom-select" 
-                            name="plan.discount_type" 
-                            id="plan-discount_type"
-                            wire:model.defer="plan.discount_type"
-                            data-hs-select2-options='{
-                                "minimumResultsForSearch": "Infinity"
-                        }'>
-                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                            <option value="{{ $type }}" >
-                                {{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <!-- END Discount and discount type -->
-
-            <!-- Yearly discount and discount type -->
-            <div class="row form-group mt-3">
-                <label for="plan-yearly_discount" class="col-sm-3 col-form-label input-label">{{ translate('Annual plan discount') }}</label>
-
-                <div class="col-sm-7">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="number" step="0.01" class="form-control @error('plan.yearly_discount') is-invalid @enderror"
-                                name="plan.yearly_discount"
-                                id="plan-yearly_discount"
-                                placeholder="{{ translate('Subscription plan yearly discount (fixed or percentage) - for annual payment') }}"
-                                wire:model.defer="plan.yearly_discount" />
-                    </div>
-                    <small class="text-warning">{{ translate('*Note: If yearly discount is set, standard discount won\'t be applied to each month.') }}</small>
-
-                    <x-system.invalid-msg field="plan.yearly_discount"></x-system.invalid-msg>
-                </div>
-
-                <div class="col-sm-2" x-data="{
-                    yearly_discount_type: @js($plan->yearly_discount_type)
-                }" x-init="
-                    $('#plan-yearly_discount_type').on('select2:select', (event) => {
-                        yearly_discount_type = event.target.value;
-                    });
-                    $watch('yearly_discount_type', (value) => {
-                        $('#plan-yearly_discount_type').val(value).trigger('change');
-                    });
-                "> 
-                    <select class="form-control custom-select" 
-                            name="plan.yearly_discount_type" 
-                            id="plan-yearly_discount_type"
-                            wire:model.defer="plan.yearly_discount_type"
-                            data-hs-select2-options='{
-                                "minimumResultsForSearch": "Infinity"
-                        }'>
-                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                            <option value="{{ $type }}" >
-                                {{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <!-- END Yearly discount and discount type -->
-
-
-            <!-- Tax and Tax type -->
-            <div class="row form-group mt-3">
-                <label for="plan-tax" class="col-sm-3 col-form-label input-label">{{ translate('Tax') }}</label>
-
-                <div class="col-sm-7">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="number" step="0.01" class="form-control @error('plan.tax') is-invalid @enderror"
-                                name="plan.tax"
-                                id="plan-tax"
-                                placeholder="{{ translate('Subscription specific tax (fixed or percentage)') }}"
-                                wire:model.defer="plan.tax" />
-                    </div>
-
-                    <x-system.invalid-msg field="plan.tax"></x-system.invalid-msg>
-                </div>
-
-                <div class="col-sm-2" x-data="{
-                    tax_type: @js($plan->tax_type)
-                }" x-init="
-                    $('#plan-tax_type').on('select2:select', (event) => {
-                        tax_type = event.target.value;
-                    });
-                    $watch('tax_type', (value) => {
-                        $('#plan-tax_type').val(value).trigger('change');
-                    });
-                "> 
-                    <select class="form-control custom-select" 
-                            name="plan.tax_type" 
-                            id="plan-tax_type"
-                            wire:model.defer="plan.tax_type"
-                            data-hs-select2-options='{
-                                "minimumResultsForSearch": "Infinity"
-                        }'>
-                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                            <option value="{{ $type }}" >
-                                {{ $label }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <!-- END Tax and Tax type -->
-
-
-            <!-- Excerpt -->
-            <div class="row form-group mt-3">
-                <label for="plan-excerpt" class="col-sm-3 col-form-label input-label">{{ translate('Excerpt') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('plan.excerpt') is-invalid @enderror"
-                                  name="plan.excerpt"
-                                  id="plan-excerpt"
-                                  placeholder="{{ translate('Write a short description for this subscription plan') }}"
-                                  wire:model.defer="plan.excerpt">
-                        </textarea>
-                    </div>
-
-                    <x-system.invalid-msg field="plan.excerpt"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- END Excerpt -->
+            
 
             <!-- Content -->
             <!-- TODO: Find out why ONLY THIS FUCKING PART OF FORM DOES NOT WORK AFTER SAVE!!!! WTF???? It works exactly the same in blog-post-form, but doesn't work here! DA FUQ????-->
@@ -416,58 +441,7 @@
 
             <hr class="my-4"/>
 
-            <!-- Features -->
-            <div class="row form-group" x-data="{
-                features: @js($plan->features),
-                count() {
-                    if(this.features === undefined || this.features === null) {
-                        this.features = [''];
-                    }
-
-                    return this.features.length;
-                },
-                add() {
-                    this.features.push('');
-                },
-                remove(index) {
-                    this.features.splice(index, 1);
-                },
-             }"
-             >
-                <label for="plan-features" class="col-sm-3 col-form-label input-label">{{ translate('Features') }}</label>
-
-                <div class="col-sm-9">
-                    <template x-if="count() <= 1">
-                        <div class="d-flex">
-                            <input type="text" class="form-control" name="plan.features[]"
-                            placeholder="{{ translate('Feature 1') }}"
-                            x-model="features[0]" />
-                        </div>
-                    </template>
-                    <template x-if="count() > 1">
-                        <template x-for="[key, value] of Object.entries(features)">
-                            <div class="d-flex" :class="{'mt-2': key > 0}">
-                                <input type="text" class="form-control" name="plan.features[]"
-                                       x-bind:placeholder="'{{ translate('Feature') }} '+(Number(key)+1)"
-                                       x-model="features[key]" />
-                                <template x-if="key > 0">
-                                    <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
-                                        @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
-                                    </span>
-                                </template>
-                            </div>
-                        </template>
-                    </template>
-
-                    <a href="javascript:;"
-                        class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="add()">
-                        <i class="tio-add"></i> {{ translate('Add feature') }}
-                    </a>
-
-                    <x-system.invalid-msg field="plan.features"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- END Features -->
+            
             
             <hr/>
 

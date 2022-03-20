@@ -7,21 +7,36 @@
 @endpush
 
 @section('panel_content')
-    <!-- Card -->
-    <div class="card">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">
-                {{ translate('All Plans') }}
-            </h5>
-            <a href="{{ route('plan.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
+    <section>
+        <div class="pb-5 mb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
+            <div class="">
+                <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('All Plans') }}</h3>
+                <p class="mt-2 max-w-4xl text-sm text-gray-500">Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.</p>    
+            </div>
+            <div class="flex sm:mt-0 sm:ml-4">
+                <a href="{{ route('plan.create') }}" class="btn-primary">
+                    @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('Add new Plan') }}</span>
+                </a>
+            </div>
         </div>
-        <!-- End Header -->
+  
+        <div class="w-full">
+            @if($plans->isNotEmpty())
+                <livewire:dashboard.tables.plans-table></livewire:dashboard.tables.plans-table>
+            @else
+                <x-dashboard.empty-states.no-items-in-collection 
+                    icon="heroicon-o-document" 
+                    title="{{ translate('No plans yet') }}" 
+                    text="{{ translate('Get your business going by creating a subscription plan!') }}"
+                    link-href-route="plan.create"
+                    link-text="{{ translate('Add new Plan') }}">
 
-        <div class="card-body">
-            <livewire:dashboard.tables.plans-table></livewire:dashboard.tables.plans-table>
+                </x-dashboard.empty-states.no-items-in-collection>
+            @endif
+            
         </div>
-    </div>
+    </section>
 @endsection
 
 @push('footer_scripts')

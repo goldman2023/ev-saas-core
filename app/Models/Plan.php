@@ -33,7 +33,7 @@ class Plan extends EVBaseModel
 
     protected $table = 'plans';
 
-    protected $fillable = ['title', 'excerpt', 'content', 'status', 'features', 'price', 'discount', 'discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['title', 'excerpt', 'content', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $casts = [
         'features' => 'array',

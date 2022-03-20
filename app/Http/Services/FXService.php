@@ -25,11 +25,15 @@ class FXService
         }); // Get all currencies with fx_rates
     }
 
-    public function getAllCurrencies($only_enabled = true) {
+    public function getAllCurrencies($only_enabled = true, $formatted = false) {
         // When only_enabled is true, we will return only Currencies with status: 1, otherwise all currencies will be returned
         if($only_enabled) {
             $this->currencies = $this->currencies->filter(fn($item) => $item->status === true);
         }
+
+        if($formatted) {
+            return $this->currencies->keyBy('code')->map(fn($item) => $item->code.' ('.$item->symbol.')')->toArray();
+        } 
 
         return $this->currencies;
     }

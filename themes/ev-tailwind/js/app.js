@@ -15,12 +15,18 @@ try {
     window.$ = window.jQuery = require('jquery');
 } catch (e) {}
 
+/**
+ * Require custom prototypes
+ */
+ require('./prototypes');
+
+
+// WE
 window.WE = {};
 
 require('./IMG'); 
 require('./utils');
-
-/* Reuire sortable plugin */
+require('./leaflet');
 require('./sortable');
 
 // LUXON
