@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\CoreMeta;
 use App\Models\Product;
+use App\Models\ProductStock;
 use App\Models\Upload;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Newsletter\NewsletterFacade as Newsletter;
 use MyShop;
+use Str;
 
 use Codexshaper\WooCommerce\Facades\Product as WooProduct;
 use Codexshaper\WooCommerce\Facades\Coupon as WooCoupon;
@@ -42,7 +44,6 @@ class IntegrationsController extends Controller
           // Get all products from woocommerce
           $products = WooProduct::all();
 
-          dd($products);
 
           /* Import all products as models */
           foreach ($products as $product) {
@@ -89,6 +90,8 @@ class IntegrationsController extends Controller
               $new_product->thumbnail = $upload->id;
               $new_product->syncUploads();
 
+              $new_product->save();
+
               /* Add import meta  */
               try {
                   $meta_row = new CoreMeta();
@@ -106,6 +109,11 @@ class IntegrationsController extends Controller
                   $meta_row->save();
               } catch (Exception $e) {
                   /* TODO: handle an error if unique key is duplicate */
+              }
+
+              /* TODO: add a check for updating/ignoring stock updates */
+              if(true) {
+                  $this->setProductStocks($new_product, $product);
               }
           }
     }
@@ -152,5 +160,18 @@ class IntegrationsController extends Controller
                 /* TODO: handle an error if unique key is duplicate */
             }
         }
+    }
+
+
+    /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
+    protected function setProductStocks($product, $wc_product) {
+        $product_stock = ProductStock::firstOrNew(['subject_id' => $product->id, 'subject_type' => Product::class]);
+        $product_stock->sku = empty($wc_product->sku) ? Str::slug($wc_product->name) : $wc_product->sku;
+        $product_stock->barcode = empty($product->barcode) ? null : $product->barcode ;
+        $product_stock->qty = empty($wc_product->stock_quantity) ? 1 : $wc_product->stock_quantity;
+        $product_stock->low_stock_qty = empty($product->low_stock_qty) ? 1 : $product->low_stock_qty;
+        $product_stock->use_serial = ($product->use_serial ?? false) === true;
+        $product_stock->allow_out_of_stock_purchases = ($product->allow_out_of_stock_purchases ?? false) === true;
+        $product_stock->save();
     }
 }
