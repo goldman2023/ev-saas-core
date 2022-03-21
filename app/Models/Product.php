@@ -255,4 +255,10 @@ class Product extends EVBaseModel
     {
         return null;
     }
+
+    /* TODO: Move this into trait once we know what it should be */
+    public function core_meta()
+    {
+        return $this->morphMany(CoreMeta::class, 'subject');
+    }
 }

@@ -62,7 +62,6 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-
     Route::get('/we-edit-grape', 'WeEditController@grapejs_index')->name('we-edit-grape.index');
 
     Route::group([
@@ -77,7 +76,7 @@ Route::middleware([
     });
 
 
-    
+
 
     // Route to show after creating new tenant:
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');
