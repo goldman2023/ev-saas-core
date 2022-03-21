@@ -231,8 +231,9 @@ Route::middleware([
     Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');
 
     Route::get('/integrations/facebook-business-export', 'Integrations\FacebookBusinessController@export')->name('integrations.facebook-business.export');
-    Route::get('/integrations/woocommerce', 'Integrations\IntegrationsController@woocommerce')->name('integrations.woocommerce');
-
+    Route::get('/integrations/woocommerce', 'Integrations\WooCommerceController@index')->name('integrations.woocommerce');
+    Route::get('/integrations/woocommerce/import/{type}', 'Integrations\WooCommerceController@import')->name('integrations.woocommerce.import');
+    Route::get('/integrations/woocommerce/import-results/{type}', 'Integrations\WooCommerceController@import_results')->name('integrations.woocommerce.import-results');
 
 
 });

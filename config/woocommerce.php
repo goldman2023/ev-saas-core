@@ -53,7 +53,7 @@ return [
      * Default WP timeout
      *================================================================================.
      */
-    'timeout'           => env('WOOCOMMERCE_WP_TIMEOUT', 15),
+    'timeout'           => env('WOOCOMMERCE_WP_TIMEOUT', 90),
 
     /**
      *================================================================================
@@ -61,7 +61,7 @@ return [
      * Default value X-WP-Total
      *================================================================================.
      */
-    'header_total'           => env('WOOCOMMERCE_WP_HEADER_TOTAL', 'X-WP-Total'),
+    'header_total'           => env('WOOCOMMERCE_WP_HEADER_TOTAL', '-1'),
 
     /**
      *================================================================================
@@ -69,5 +69,5 @@ return [
      * Default value X-WP-TotalPages
      *================================================================================.
      */
-    'header_total_pages'           => env('WOOCOMMERCE_WP_HEADER_TOTAL_PAGES', 'X-WP-TotalPages'),
+    'header_total_pages'           => env('WOOCOMMERCE_WP_HEADER_TOTAL_PAGES', '-1'),
 ];

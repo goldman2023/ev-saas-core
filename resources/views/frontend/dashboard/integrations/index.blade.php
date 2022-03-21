@@ -49,6 +49,23 @@
             </div>
         </div>
 
+
+    <div>
+        <div class="row">
+            <div class="col-12">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-4'>
+                <a class="btn btn-primary" href="{{ route('integrations.woocommerce.import', ['orders']) }}">
+                    {{ translate('WooCommerce orders synchronization') }}
+                </a>
+            </div>
+        </div>
+
+    </div>
+
     </div>
     <!-- End Header -->
 
