@@ -1,25 +1,8 @@
 @if ($label)
 
-    @guest
-        <{{ $tag }} {{ $attributes }} class="{{ $class }}">
-            {!! $label?->value ?? $label !!}
-        </{{ $tag }}>
-    @else
+<{{ $tag }} {{ $attributes }} class="{{ $class }}">
+    {!! $label?->value ?? $label !!}
+</{{ $tag }}>
 
-        @if (auth()->user()->isAdmin() && isset($label->value))
-            <{{ $tag }} {{ $attributes }} class="{{ $class }}">
-                {{-- TODO: Implement roles and check for owner only for this to be availabel --}}
-                @livewire('dynamic-label', ['label' => $label])
-            </{{ $tag }}>
-        @else
-            {{-- TODO: this is not good, need to create specific directives for admin only --}}
-            <{{ $tag }} {{ $attributes }} class="{{ $class }}">
-                {!! $label?->value ?? $label !!}
-            </{{ $tag }}>
-        @endif
-
-    @endguest
-
-@else
 
 @endif
