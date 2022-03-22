@@ -30,14 +30,20 @@
 
         {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise display Login and Try for free --}}
         <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-[32px]">
+            @guest
             <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
                 @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
                 {{ translate('Login') }}
             </div>
 
-            <a href="#" class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+            <a href="{{ route('custom-pages.show_custom_page', ['pricing']) }}" class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                 {{ translate('Try for free') }}
             </a>
+            @else
+            <a href="{{ route('dashboard') }}" class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                {{ translate('Dashboard') }}
+            </a>
+            @endguest
         </div>
 
       </div>
