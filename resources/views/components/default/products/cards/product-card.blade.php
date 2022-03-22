@@ -1,5 +1,5 @@
-<div class="group relative bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden">
-    <div class="aspect-w-3 aspect-h-4 bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-96">
+<div class="group relative bg-white border border-gray-200 rounded-lg flex flex-col overflow-hidden h-full">
+    <div class="aspect-w-3 aspect-h-2 bg-gray-200 group-hover:opacity-75 sm:aspect-none sm:h-60">
         @if($product->getThumbnail())
         <a class="card-img-top" href="{{ $product->getPermalink() }}">
             {{-- <div class="p-absolute top-0 left-0 pt-3 pl-3">
@@ -8,7 +8,7 @@
                 </span>
             </div> --}}
             <x-tenant.system.image alt="{{ $product->getTranslation('name') }}"
-                class="w-full h-full object-center object-cover sm:w-full sm:h-full" fit="cover"
+                class="w-full h-50 object-center object-cover sm:w-full sm:h-full" fit="cover"
                 :image="$product->getThumbnail()">
             </x-tenant.system.image>
         </a>

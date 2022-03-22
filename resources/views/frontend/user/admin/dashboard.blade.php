@@ -17,6 +17,9 @@
 
 <section>
     <div class="row">
+        <div class="grid">
+            <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
+        </div>
         <div class="grid grid-cols-4 gap-12 mb-12">
             <x-dashboard.elements.card class="lg:col-span-2 col-span-2">
                 <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
@@ -28,7 +31,8 @@
 
                     <x-slot name="cardBody" class="flow-root mt-6">
                         <ul role="list" class="-my-5 divide-y divide-gray-200">
-                            @foreach (Categories::getAll(true)->sortBy('created_at')->take(5) as $category) <li class="py-4">
+                            @foreach (Categories::getAll(true)->sortBy('created_at')->take(5) as $category) <li
+                                class="py-4">
                                 <div class="flex items-center space-x-4">
                                     <div class="flex-shrink-0">
                                         <img class="h-8 w-8 rounded-full"
@@ -37,33 +41,29 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-900 truncate">
-                                           {{ $category->name }}
+                                            {{ $category->name }}
                                         </p>
                                         <p class="text-sm text-gray-500 truncate">
-                                            321 Views / {{  $category->products()->count()  }} {{ translate('Products') }}
+                                            321 Views / {{ $category->products()->count() }} {{ translate('Products') }}
                                         </p>
                                     </div>
                                     <div>
-                                        <a href="{{ $category->getPermalink() }}"
-                                            target="blank"
+                                        <a href="{{ $category->getPermalink() }}" target="blank"
                                             class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
                                             {{ translate('View') }}
                                         </a>
                                     </div>
                                 </div>
-                                </li>
+                            </li>
                             @endforeach
                         </ul>
                     </x-slot>
 
 
                     <x-slot name="cardFooter">
-                        <a
-                        href="{{ route('categories.index') }}"
-                        type="button"
-                            class="btn btn-secondary">
+                        <a href="{{ route('categories.index') }}" type="button" class="btn btn-secondary">
                             {{ translate('View all categories') }}
-                    </a>
+                        </a>
                     </x-slot>
 
                 </div>
@@ -97,21 +97,21 @@
                 </x-slot>
                 <x-slot name="cardFooter">
                     <div class="overflow-x-auto sm:flex lg:block">
-                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
-                        🚚 {{ translate('Process Orders') }}
-                    </a>
+                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                            🚚 {{ translate('Process Orders') }}
+                        </a>
 
-                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
-                        📄 {{ translate('Create manual invoice') }}
-                    </a>
+                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                            📄 {{ translate('Create manual invoice') }}
+                        </a>
 
-                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
-                        📦 {{ translate('Manage Products') }}
-                    </a>
+                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                            📦 {{ translate('Manage Products') }}
+                        </a>
 
-                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
-                        🏷️ {{ translate('Manage Categories') }}
-                    </a>
+                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
+                            🏷️ {{ translate('Manage Categories') }}
+                        </a>
                     </div>
                 </x-slot>
             </x-dashboard.elements.card>
@@ -122,23 +122,16 @@
 
 
 <section class="stats mb-3">
-    <div class="row">
-        <div class="col-sm-6 col-12">
-        </div>
-        <div class="col-12 col-sm-6">
-            <div class="row">
-                <div class="col-12">
-                    <x-default.dashboard.widgets.integrations-widget>
+    <div class="grid grid-cols-2 gap-10">
+        <x-default.dashboard.widgets.integrations-widget>
 
-                    </x-default.dashboard.widgets.integrations-widget>
-                </div>
-            </div>
-        </div>
+        </x-default.dashboard.widgets.integrations-widget>
+
+        <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
     </div>
-
 </section>
 
 <section>
-    <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
+
 </section>
 @endsection
