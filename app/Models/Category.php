@@ -179,7 +179,7 @@ class Category extends EVBaseModel
         return $this->selected ?? false;
     }
 
-    public function getTitlePathAttribute() {
+    public function getTitlePathAttribute($value) {
         $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
 
         if(count($title_path) > 1) {
@@ -189,6 +189,11 @@ class Category extends EVBaseModel
         }
 
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
+    }
+
+    public function setTitlePathAttribute($value)
+    {
+        $this->title_path= $value;
     }
 
     public function getPermalink($content_type = null)

@@ -179,6 +179,8 @@
         <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
+    <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
+
     <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
         :is_x="true" :timeout="4000">
     </x-ev.toast>

@@ -59,10 +59,8 @@ class CategoryForm extends Component
             'category.icon.if_id_exists' => translate('Selected icon does not exist in Media Library. Please select again.'),
             'category.parent_id.if_id_exists' => translate('Selected parent category does not exist. Please select again.'),
             'category.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
-
             'category.name.required' => translate('Category name is required'),
             'category.name.min' => translate('Minimum category name length is :min'),
-
         ];
     }
 
@@ -107,17 +105,19 @@ class CategoryForm extends Component
             Categories::clearCache(); // clear cache after category is added/updated
 
             if($is_update) {
-                $this->toastify('Category successfully updated!', 'success');
+                $this->inform('Category successfully updated!', '', 'success');
             } else {
-                $this->toastify('Category successfully created!', 'success');
+                $this->inform('Category successfully created!', '', 'success');
             }
         } catch(\Exception $e) {
             DB::rollBack();
 
-            if($is_update) {
+            if($is_update) { dd($e);
                 $this->dispatchGeneralError(translate('There was an error while updating a category...Please try again.'));
+                $this->inform('There was an error while updating a category...Please try again.', '', 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a category...Please try again.'));
+                $this->inform('There was an error while creating a category...Please try again.', '', 'fail');
             }
 
         }

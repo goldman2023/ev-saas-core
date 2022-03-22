@@ -7,22 +7,36 @@
 @endpush
 
 @section('panel_content')
-    <!-- Card -->
-    <div class="card">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">
-                {{ translate('All Categories') }}
-            </h5>
-            <a href="{{ route('category.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
+    <section>
+        <div class="pb-5 mb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
+            <div class="">
+                <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('All Categories') }}</h3>
+                <p class="mt-2 max-w-4xl text-sm text-gray-500">Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.</p>    
+            </div>
+            <div class="flex sm:mt-0 sm:ml-4">
+                <a href="{{ route('category.create') }}" class="btn-primary">
+                    @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('Add new Category') }}</span>
+                </a>
+            </div>
         </div>
-        <!-- End Header -->
+  
+        <div class="w-full">
+            @if($all_categories->isNotEmpty())
+                <livewire:dashboard.tables.categories-table></livewire:dashboard.tables.categories-table>
+            @else
+                <x-dashboard.empty-states.no-items-in-collection 
+                    icon="heroicon-o-document" 
+                    title="{{ translate('No categories yet') }}" 
+                    text="{{ translate('Get your business going by creating categories!') }}"
+                    link-href-route="category.create"
+                    link-text="{{ translate('Add new category') }}">
 
-        <div class="card-body">
-            <livewire:dashboard.tables.categories-table></livewire:dashboard.tables.categories-table>
+                </x-dashboard.empty-states.no-items-in-collection>
+            @endif
+            
         </div>
-    </div>
-
+    </section>
 
 {{--    <div class="row mt-5">--}}
 {{--        <div class="col-12 col-md-6 col-lg-4 d-flex">--}}

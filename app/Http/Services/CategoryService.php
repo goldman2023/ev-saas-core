@@ -169,6 +169,7 @@ class CategoryService
                         'slug_path' => $item['slug_path'],
                         'path' => $item['path'],
                         'children' => $item['children'],
+                        'descendants_count' => $item['descendants_count']
                     ];
                 }
             ]]);

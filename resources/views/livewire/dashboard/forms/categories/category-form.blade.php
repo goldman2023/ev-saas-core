@@ -1,285 +1,257 @@
 <div x-data="{
-    category: @entangle('category').defer,
+    thumbnail: @js(['id' => $category->thumbnail->id ?? null, 'file_name' => $category->thumbnail->file_name ?? '']),
+    cover: @js(['id' => $category->cover->id ?? null, 'file_name' => $category->cover->file_name ?? '']),
+    meta_img: @js(['id' => $category->meta_img->id ?? null, 'file_name' => $category->meta_img->file_name ?? '']),
+    icon: @js(['id' => $category->icon->id ?? null, 'file_name' => $category->icon->file_name ?? '']),
+    parent_id: @js($category->parent_id),
+    featured: @js($category->featured),
 }" x-cloak>
-    <div class="col-lg-12 position-relative">
-        <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                              wire:target="saveCategory"
-                              wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                            wire:target="saveCategory"
+                            wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-        <div class=""
-             wire:loading.class="opacity-3 prevent-pointer-events"
-             wire:target="saveCategory"
+        <div class="w-full"
+            wire:loading.class="opacity-30 pointer-events-none"
+            wire:target="saveCategory"
         >
 
-            <!-- Cover -->
-            <div class="profile-cover">
-                <div class="profile-cover-img-wrapper"
-                     x-data="{
-                        name: 'category.cover',
-                        imageID: {{ $category->cover->id ?? 'null' }},
-                        imageURL: '{{ $category->getCover(['w'=>1200]) }}',
-                    }"
-                     @aiz-selected.window="
-                     if(event.detail.name === name) {
-                        imageURL = event.detail.imageURL;
-                        $wire.set('category.cover', $('input[name=\'category.cover\']').val(), true);
-                     }"
-                     data-toggle="aizuploader"
-                     data-type="image">
+            <div class="grid grid-cols-12 gap-8 mb-10">
+                {{-- Left side --}}
+                <div class="col-span-8  ">
+                    <div class="p-4 border border-gray-200 rounded-lg shadow">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Category') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                            <!-- Name -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                    
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Name') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('category.name') is-invalid @enderror"
+                                            placeholder="{{ translate('New category name') }}"
+                                            {{-- @input="generateURL($($el).val())" --}}
+                                            wire:model.defer="category.name" />
+                                
+                                    <x-system.invalid-msg field="category.name"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Name -->
 
-                    <img id="profileCoverImg" class="profile-cover-img" x-bind:src="imageURL">
+                            <!-- Parent category -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    <span class="mr-2">{{ translate('Parent category') }}</span>
+                                </label>
 
-                    <!-- Custom File Cover -->
-                    <div class="profile-cover-content profile-cover-btn custom-file-manager"
-                         data-toggle="aizuploader" data-type="image">
-                        <div class="custom-file-btn">
-                            <input type="hidden" x-bind:name="name" wire:model.defer="category.cover" class="selected-files" data-preview-width="1200">
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    @php
+                                        $cats = Categories::getAll(true)->keyBy('id')->map(fn($item) => str_repeat('-', $item->level).$item->getTranslation('name'));
+                                    @endphp
+                                    <x-dashboard.form.select :items="$cats" selected="parent_id"></x-dashboard.form.select>
+                                </div>
+                            </div>
+                            <!-- END Parent category -->
 
-                            <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg d-flex align-items-center" for="profileCoverUploader">
-                                @svg('heroicon-o-pencil', ['class' => 'square-16 mr-2'])
-                                <span class="d-none d-sm-inline-block">{{ translate('Update category cover') }}</span>
-                            </label>
+
+                            <!-- Featured -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Featured') }}</span>
+                                    <span class="text-sm text-gray-500" id="availability-description">{{ translate('Category will be featured on the site') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="featured = !featured" 
+                                                :class="{'bg-primary':featured, 'bg-gray-200':!featured}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':featured, 'translate-x-0':!featured}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+        
+                                    <x-system.invalid-msg field="category.featured"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Featured -->
+
+                            {{-- Icon --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    <span class="mr-2">{{ translate('Icon') }}</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.image-selector field="icon" id="category-icon-image" :selected-image="$category->icon"></x-dashboard.form.image-selector>
+
+                                    <x-system.invalid-msg field="category.icon"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Icon --}}
+
+
+                            {{-- Description --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    <span class="mr-2">{{ translate('Description') }}</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <textarea type="text" class="form-standard @error('category.description') is-invalid @enderror"
+                                        rows="5"
+                                        wire:model.defer="category.description">
+                                    </textarea>
+
+                                    <x-system.invalid-msg field="category.description"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Description --}}
                         </div>
                     </div>
-                    <!-- End Custom File Cover -->
                 </div>
-            </div>
-            <!-- End Cover -->
 
-            <!-- Thumbnail -->
-            <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader mx-auto profile-cover-avatar pointer border p-1" for="avatarUploader"
-                   style="margin-top: -60px;"
-                   x-data="{
-                        name: 'category.thumbnail',
-                        imageID: {{ $category->thumbnail->id ?? 'null' }},
-                        imageURL: '{{ $category->getThumbnail() }}',
-                    }"
-                   @aiz-selected.window="
-                     if(event.detail.name === name) {
-                        imageURL = event.detail.imageURL;
-                        $wire.set('category.thumbnail', $('input[name=\'category.thumbnail\']').val(), true);
-                     }"
-                   data-toggle="aizuploader"
-                   data-type="image">
-                <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
-
-                <input type="hidden" x-bind:name="name" wire:model.defer="category.thumbnail" class="selected-files" data-preview-width="200">
-
-                <span class="avatar-uploader-trigger">
-                  <i class="avatar-uploader-icon shadow-soft">
-                      @svg('heroicon-o-pencil', ['class' => 'square-16'])
-                  </i>
-                </span>
-            </label>
-            <!-- End Thumbnail -->
-
-            <x-system.invalid-msg field="category.thumbnail"></x-system.invalid-msg>
-
-            <x-system.invalid-msg field="category.cover"></x-system.invalid-msg>
-
-            <!-- Name -->
-            <div class="row form-group mt-5">
-                <label for="category-name" class="col-sm-3 col-form-label input-label">{{ translate('Name') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="text" class="form-control @error('category.name') is-invalid @enderror"
-                               name="category.name"
-                               id="category-name"
-                               placeholder="{{ translate('New category name') }}"
-                               wire:model.defer="category.name" />
+                {{-- Right side --}}
+                <div class="col-span-4">
+                    {{-- Actions --}}
+                    <div class="p-4 border border-gray-200 rounded-lg shadow">
+                        <div class="w-full flex">
+                        
+                            <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                @click="
+                                    $wire.set('category.thumbnail', thumbnail.id, true);
+                                    $wire.set('category.cover', cover.id, true);
+                                    $wire.set('category.meta_img', meta_img.id, true);
+                                    $wire.set('category.icon', icon.id, true);
+                                    $wire.set('category.parent_id', parent_id, true);
+                                    $wire.set('category.featured', featured, true);
+                                "
+                                wire:click="saveCategory()">
+                            {{ translate('Save') }}
+                            </button>
+                        </div>
                     </div>
-
-                    <x-system.invalid-msg field="category.name"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- END Name -->
+                    {{-- END Actions --}}
 
 
-            <div class="row form-group"
-                 x-data="{ parent_id: null }"
-                 x-init="
-                    $($refs.parent_category_selector).on('select2:select', (event) => {
-                        parent_id = event.target.value;
-                    });
-                    $watch('parent_id', (value) => {
-                      $($refs.parent_category_selector).val(value).trigger('change');
-{{--                        $wire.call('bulkAction', $($refs.bulk_permission_actions).val());--}}
-                     });
-            ">
+                    {{-- Media --}}
+                    <div class="mt-8 p-4 border border-gray-200 rounded-lg shadow">
+                        <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
+                        </div>
 
-                <label for="category-name" class="col-sm-3 col-form-label input-label">{{ translate('Parent category') }}</label>
+                        <div class="w-full">
+                            {{-- Thumbnail --}}
+                            <div class="sm:items-start">
+                                <div class="flex flex-col " x-data="{}">
+                                            
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Thumbnail image') }}
+                                    </label>
 
-                <div class="col-sm-9">
-                    <!-- Select -->
-                    <select class="js-select2-custom js-datatable-filter custom-select" size="1" style=""
-                            id="parent_category_selector"
-                            data-target-column-index="1"
-                            data-hs-select2-options='{
-                              "minimumResultsForSearch": "1",
-                              "customClass": "custom-select custom-select-sm",
-                              "dropdownAutoWidth": true,
-                              "width": true,
-                              "dropdownCssClass": "no-max-height"
-{{--                              "placeholder": "{{ translate('Select parent category...') }}"--}}
-                            }'
-                            x-ref="parent_category_selector"
-                            wire:model.defer="category.parent_id"
-                    >
-                        <option value="" {{ empty($category->parent_id) ? 'selected':'' }}>{{ translate('No parent category') }}</option>
-                        @foreach(Categories::getAll(true) as $item)
-                            <option value="{{ $item->id }}">{{ str_repeat('-', $item->level).$item->getTranslation('name') }}</option>
-                        @endforeach
-                    </select>
-                    <!-- End Select -->
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector field="thumbnail" id="category-thumbnail-image" :selected-image="$category->thumbnail"></x-dashboard.form.image-selector>
+                                        
+                                        <x-system.invalid-msg field="category.thumbnail"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Thumbnail --}}
+                            
 
-                    <x-system.invalid-msg field="category.parent_id"></x-system.invalid-msg>
-                </div>
-            </div>
+                            {{-- Cover --}}
+                            <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                                <div class="flex flex-col " x-data="{}">
+                                            
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Cover image') }}
+                                    </label>
 
-            <div class="row form-group">
-                <label for="category-featured" class="col-sm-3 col-form-label input-label">{{ translate('Featured') }}</label>
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector field="cover" id="category-cover-image" :selected-image="$category->cover"></x-dashboard.form.image-selector>
 
-                <div class="col-sm-9 d-flex align-items-center">
-                    <!-- Checkbox Switch -->
-                    <label class="toggle-switch d-flex align-items-center" for="category-featured">
-                        <input type="checkbox" class="toggle-switch-input" id="category-featured" wire:model.defer="category.featured">
-                        <span class="toggle-switch-label">
-                            <span class="toggle-switch-indicator"></span>
-                          </span>
-                        <span class="toggle-switch-content">
-                            <span class="d-block">{{ translate('Featured') }}</span>
-                          </span>
-                    </label>
-                    <!-- End Checkbox Switch -->
-                </div>
-            </div>
-
-            <!-- Icon -->
-            <div class="row form-group">
-                <div class="col-sm-3 col-form-label input-label">{{ translate('Icon') }}</div>
-
-                <div class="col-sm-9 d-flex align-items-center">
-                    <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar pointer border p-1 mb-0 mt-0" for="avatarUploader"
-                           style="width: 65px; height: 65px;"
-                           x-data="{
-                                name: 'category.icon',
-                                imageID: {{ $category->icon?->id ?? 'null' }},
-                                imageURL: '{{ $category->getUpload('icon', ['w'=>150]) }}',
-                            }"
-                           @aiz-selected.window="
-                             if(event.detail.name === name) {
-                                imageURL = event.detail.imageURL;
-                                $wire.set('category.icon', $('input[name=\'category.icon\']').val(), true);
-                             }"
-                           data-toggle="aizuploader"
-                           data-type="image">
-                        <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
-
-                        <input type="hidden" x-bind:name="name" wire:model.defer="category.icon" class="selected-files" data-preview-width="200">
-                    </label>
-
-                    <x-system.invalid-msg class="ml-3" field="category.icon"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- End Icon -->
-
-
-            <!-- Description -->
-            <div class="row form-group">
-                <label for="category-description" class="col-sm-3 col-form-label input-label">{{ translate('Description') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('category.description') is-invalid @enderror"
-                                  name="category.description"
-                                  id="category-description"
-                                  placeholder="{{ translate('Description') }}"
-                                  wire:model.defer="category.description">
-                        </textarea>
+                                        <x-system.invalid-msg field="category.cover"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Cover --}}
+                        </div>
+                        
                     </div>
-                </div>
+                    {{-- END Media --}}
 
-                <x-system.invalid-msg field="category.description"></x-system.invalid-msg>
-            </div>
-            <!-- END Description -->
+                    {{-- SEO --}}
+                    <div class="mt-8 border border-gray-200 rounded-lg shadow select-none" x-data="{
+                            open: false,
+                        }" :class="{'p-4': open}">
+                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('SEO') }}</h3>
+                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                        </div>
+                
+                        <div class="w-full" x-show="open">
+                            <!-- Meta Title -->
+                            <div class="flex flex-col " x-data="{}">
+                                        
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Meta title') }}
+                                </label>
 
-            <!-- Meta Title -->
-            <div class="row form-group">
-                <label for="category-meta_title" class="col-sm-3 col-form-label input-label">{{ translate('Meta title') }}</label>
+                                <div class="mt-1 sm:mt-0">
+                                    <input type="text" 
+                                            class="form-standard @error('category.meta_title') is-invalid @enderror"
+                                            {{-- placeholder="{{ translate('Write meta title...') }}" --}}
+                                            wire:model.defer="category.meta_title" />
+                                
+                                    <x-system.invalid-msg field="category.meta_title"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Meta Title -->
 
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="text" class="form-control @error('category.meta_title') is-invalid @enderror"
-                               name="category.meta_title"
-                               id="category-meta_title"
-                               placeholder="{{ translate('Category SEO/meta title') }}"
-                               wire:model.defer="category.meta_title" />
+                            <!-- Meta Description -->
+                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
+                
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Meta Description') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0">
+                                    <textarea type="text" class="form-standard h-[80px] @error('category.meta_description') is-invalid @enderror"
+                                                {{-- placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}" --}}
+                                                wire:model.defer="category.meta_description">
+                                    </textarea>
+                                
+                                    <x-system.invalid-msg class="w-full" field="category.meta_description"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Meta Description -->
+
+                            {{-- Meta Image --}}
+                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                                <div class=s"flex flex-col " x-data="{}">
+                                            
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Meta image') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector field="meta_img" id="category-meta-image" :selected-image="$category->meta_img"></x-dashboard.form.image-selector>
+                                        
+                                        <x-system.invalid-msg field="category.meta_img"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Meta Image --}}
+                            
+                        </div>
                     </div>
-                </div>
-
-                <x-system.invalid-msg field="category.meta_title"></x-system.invalid-msg>
-            </div>
-            <!-- END Meta Title -->
-
-            <!-- Meta Description -->
-            <div class="row form-group">
-                <label for="category-meta_description" class="col-sm-3 col-form-label input-label">{{ translate('Meta description') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('category.meta_description') is-invalid @enderror"
-                                  name="category.meta_description"
-                                  id="category-meta_description"
-                                  placeholder="{{ translate('Category SEO/meta description') }}"
-                                  wire:model.defer="category.meta_description">
-                        </textarea>
-                    </div>
-                </div>
-
-                <x-system.invalid-msg field="category.meta_description"></x-system.invalid-msg>
-            </div>
-            <!-- END Meta Description -->
-
-            <!-- Meta Img -->
-            <div class="row form-group">
-                <div class="col-sm-3 col-form-label input-label">{{ translate('Meta image') }}</div>
-
-                <div class="col-sm-9 d-flex flex-column justify-content-center align-items-start">
-                    <label class="card-img-top pointer border rounded p-1 mb-0 mt-0" for="avatarUploader"
-                           style="width: 180px; height: 115px;"
-                           x-data="{
-                                name: 'category.meta_img',
-                                imageID: {{ $category->meta_img?->id ?? 'null' }},
-                                imageURL: '{{ $category->getUpload('meta_img', ['w'=>220]) }}',
-                            }"
-                           @aiz-selected.window="
-                             if(event.detail.name === name) {
-                                imageURL = event.detail.imageURL;
-                                $wire.set('category.meta_img', $('input[name=\'category.meta_img\']').val(), true);
-                             }"
-                           data-toggle="aizuploader"
-                           data-type="image">
-                        <img id="avatarImg" class="avatar-img rounded w-100" x-bind:src="imageURL" >
-
-                        <input type="hidden" x-bind:name="name" wire:model.defer="category.meta_img" class="selected-files" data-preview-width="200">
-                    </label>
-
-                    <x-system.invalid-msg class="mt-1" field="category.meta_img"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- End Meta Img -->
-
-            <hr/>
-            <div class="row form-group mb-0">
-                <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto btn-sm"
-                            @click="$wire.set('category.parent_id', $('#parent_category_selector').val(), true); $wire.saveCategory();">
-                        {{ translate('Save') }}
-                    </button>
+                    {{-- END SEO --}}
                 </div>
             </div>
         </div>
-
     </div>
 </div>

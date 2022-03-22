@@ -2,6 +2,7 @@
     status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
     thumbnail: @js(['id' => $plan->thumbnail->id ?? null, 'file_name' => $plan->thumbnail->file_name ?? '']),
     cover: @js(['id' => $plan->cover->id ?? null, 'file_name' => $plan->cover->file_name ?? '']),
+    meta_img: @js(['id' => $plan->meta_img->id ?? null, 'file_name' => $plan->meta_img->file_name ?? '']),
     base_currency: @js($plan->base_currency),
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
@@ -12,13 +13,13 @@
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
-    <div class="col-lg-12 position-relative">
-        <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                               wire:target="savePlan"
-                              wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+                              wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
         <div class="w-full"
-             wire:loading.class="opacity-3 prevent-pointer-events"
+             wire:loading.class="opacity-30 pointer-events-none"
              wire:target="savePlan"
         >
 
@@ -26,7 +27,7 @@
             <div class="col-span-8  ">
                 <div class="p-4 border border-gray-200 rounded-lg shadow">
                     <div>
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Profile</h3>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Subscription plan') }}</h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p>
                     </div>
             
@@ -56,7 +57,6 @@
                             <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 <span class="mr-2">{{ translate('Status') }}</span>
 
-                                <span class="badge-success">{{ ucfirst('published') }}</span>
                                 @if($plan->status === App\Enums\StatusEnum::published()->value)
                                     <span class="badge-success">{{ ucfirst($plan->status) }}</span>
                                 @elseif($plan->status === App\Enums\StatusEnum::draft()->value)
@@ -224,27 +224,55 @@
                         <!-- END Excerpt -->
 
                         <!-- Content -->
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
             
                             <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                 {{ translate('Content') }}
                             </label>
             
-                            <div class="mt-1 sm:mt-0 sm:col-span-3">
+                            {{-- <div class="mt-1 sm:mt-0 sm:col-span-3">
                                 <x-dashboard.form.froala field="content" id="plan-content-wysiwyg"></x-dashboard.form.froala>
                             
                                 <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- END Content -->
                     </div>
                 </div>
             </div>
 
+
             {{-- Right side --}}
             <div class="col-span-4">
-               
+
+                {{-- Actions --}}
                 <div class="p-4 border border-gray-200 rounded-lg shadow">
+                    <div class="w-full flex">
+                    
+                        <button type="button" class="btn btn-primary ml-auto btn-sm"
+                            @click="
+                                $wire.set('selected_categories', selected_categories, true);
+                                $wire.set('plan.content', content, true);
+                                $wire.set('plan.status', status, true);
+                                $wire.set('plan.base_currency', base_currency, true);
+                                $wire.set('plan.discount_type', discount_type, true);
+                                $wire.set('plan.yearly_discount_type', yearly_discount_type, true);
+                                $wire.set('plan.tax_type', tax_type, true);
+                                $wire.set('plan.thumbnail', thumbnail.id, true);
+                                $wire.set('plan.cover', cover.id, true);
+                                $wire.set('plan.meta_img', meta_img.id, true);
+                                $wire.set('plan.features', features, true);
+                            "
+                            wire:click="savePlan()">
+                        {{ translate('Save') }}
+                        </button>
+                    </div>
+                </div>
+                {{-- END Actions --}}
+
+
+                {{-- Media --}}
+                <div class="mt-8 p-4 border border-gray-200 rounded-lg shadow">
                     <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
                     </div>
@@ -287,6 +315,7 @@
                     </div>
                     
                 </div>
+                {{-- END Media --}}
                 
 
                 {{-- Category Selector --}}
@@ -369,24 +398,17 @@
                         <!-- END Meta Keywords -->
 
                         {{-- Meta Image --}}
-                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
-                            
-                            <label class="col-span-3 block text-sm font-medium text-gray-700">{{ translate('Meta Image') }}</label>
-                            <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                    <div class="space-y-1 text-center">
-                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </svg>
-                                        <div class="flex text-sm text-gray-600">
-                                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                            <span>Upload a file</span>
-                                            <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                            </label>
-                                            <p class="pl-1">or drag and drop</p>
-                                        </div>
-                                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                                    </div>
+                        <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                            <div class=s"flex flex-col " x-data="{}">
+                                        
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Meta image') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0">
+                                    <x-dashboard.form.image-selector field="meta_img" id="plan-meta-image" :selected-image="$plan->meta_img"></x-dashboard.form.image-selector>
+                                    
+                                    <x-system.invalid-msg field="plan.meta_img"></x-system.invalid-msg>
                                 </div>
                             </div>
                         </div>
@@ -434,92 +456,5 @@
                     </div>
                 </div>
                 <!-- END Title --> --}}
-
-
-
-
-            <!-- Category Selector -->
-            <div class="row form-group mt-4">
-                <label for="plan-title" class="col-sm-3 col-form-label input-label">{{ translate('Category') }}</label>
-
-                <div class="col-sm-9">
-                    <x-ev.form.categories-selector
-                        error-bag-name="selected_categories"
-                        :items="$categories"
-                        :selected-categories="$this->levelSelectedCategories()"
-                        :multiple="true"
-                        :required="true"
-                        :search="true">
-                    </x-ev.form.categories-selector>
-                </div>
-            </div>
-            <!-- END Category Selector -->
-
-        
-
-
-            
-
-            <!-- Content -->
-            <!-- TODO: Find out why ONLY THIS FUCKING PART OF FORM DOES NOT WORK AFTER SAVE!!!! WTF???? It works exactly the same in blog-post-form, but doesn't work here! DA FUQ????-->
-            {{-- <div class="row form-group mt-3">
-                <label for="plan-content" class="col-sm-3 col-form-label input-label">{{ translate('Content') }}</label>
-                
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <div class="toast-ui-editor-custom w-100">
-                            <div class="js-toast-ui-editor"
-                                 data-ev-toastui-editor-options=""></div>
-
-                            <input type="text"
-                                   value=""
-                                   data-textarea
-                                   id="plan-content"
-                                   name="plan.content" style="display: none !important;" wire:model.delay="plan.content"/>
-                        </div>
-                    </div>
-
-                    <x-system.invalid-msg field="plan.content"></x-system.invalid-msg>
-                </div>
-            </div> --}}
-            <!-- END Content -->
-
-            <hr class="my-4"/>
-
-            
-            
-            <hr/>
-
-            <h3 class="h4"> {{ translate('SEO') }}</h3>
-
-            
-
-            <hr/>
-
-            <div class="row form-group mb-0">
-                <div class="col-12 d-flex">
-                    {{-- TODO: Standardize Categories selection for various Content Types --}}
-                    <button type="button" class="btn btn-primary ml-auto btn-sm"
-                            @click="
-                                //$wire.set('plan.content', $('#plan-content').val(), true);
-                                $wire.set('plan.status', $('#blog-post-status-selector').val(), true);
-                                let $selected_categories = [];
-                                $('[name=\'selected_categories\']').each(function(index, item) {
-                                    $selected_categories = [...$selected_categories, ...$(item).val()];
-                                });
-                                $wire.set('selected_categories', $selected_categories, true);
-                                $wire.set('plan.base_currency', $('#plan-base_currency').val(), true);
-                                $wire.set('plan.discount_type', $('#plan-discount_type').val(), true);
-                                $wire.set('plan.yearly_discount_type', $('#plan-yearly_discount_type').val(), true);
-                                $wire.set('plan.tax_type', $('#plan-tax_type').val(), true);
-                            "
-                            wire:click="savePlan()">
-                        {{ translate('Save') }}
-                    </button>
-                </div>
-            </div>
-            
-        </div>
-
     </div>
 </div>
