@@ -37,6 +37,7 @@ use App\Utility\CategoryUtility;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Http\Requests\LoginRequest;
 use App\Models\CategoryRelationship;
+use App\Models\Page;
 
 use function foo\func;
 use App\Notifications\CompanyVisit;
@@ -171,6 +172,16 @@ class HomeController extends Controller
             $shop = Vendor::getVendorShop();
             return view('frontend.company.profile', compact('shop'));
         } else {
+            $page = Page::where('slug', 'home')->first();
+            $sections = $page->content;
+
+            if ($page != null) {
+                return view('frontend.custom_page', [
+                    'page' => $page,
+                    'sections' => $sections,
+                ]);
+            }
+
             return view('frontend.index');
         }
     }
@@ -301,7 +312,6 @@ class HomeController extends Controller
             $searchController->store($request);
             $products = $products->where('name', 'like', '%' . $query . '%');
             $shops = $shops->where('name', 'like', '%' . $query . '%');
-
         }
 
         $attributes = array();
