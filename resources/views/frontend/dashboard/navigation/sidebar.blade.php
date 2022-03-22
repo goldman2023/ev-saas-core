@@ -6,7 +6,7 @@
                 @if($section['label'] === 'hr')
                     <div class="w-full border-t border-gray-300"></div>
                 @else
-                    <h6 class="text-14 font-semibold">{{ $section['label'] }}</h6>
+                    <h6 class="text-14 font-semibold gray-100">{{ $section['label'] }}</h6>
                 @endif
 
                 @if(!empty($section['items']))
@@ -47,7 +47,7 @@
                                 </div>
                             @else
                                 <div class="{{ $key > 0 ? 'space-y-1':'' }}">
-                                    <a href="{{ $item['route'] }}" class="bg-gray-100 text-gray-900 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+                                    <a href="{{ $item['route'] }}" class=" text-gray-300 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
                                         @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500'])
                                         <span class="flex-1">{{ $item['label'] }}</span>
 

@@ -54,7 +54,7 @@
                 <a type="button"
                     href="{{ route('product.create') }}"
                     class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
-                    <span class="emoji">📦</span> {{ translate("Add Products") }}
+                    <span class="emoji mr-2">📦 </span> {{ translate("Add Products") }}
             </a>
                 <a type="button"
                 href=" {{ route('custom-pages.show_custom_page', ['pricing']) }}"
