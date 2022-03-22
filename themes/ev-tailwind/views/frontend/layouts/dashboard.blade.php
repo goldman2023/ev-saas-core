@@ -83,6 +83,7 @@
                     secondaryLight: '#FFD53F',
                     secondaryDark: '',
                     info: '#219FFF',
+                    indigo: '#8BC53F',
                     infoLight: '#E9F6FF',
                     success: '#17BD8D',
                     successLight: '#E9FBF6',
@@ -131,7 +132,7 @@
             }
 
             .card {
-                @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg;
+                @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg p-3;
             }
         }
     </style>

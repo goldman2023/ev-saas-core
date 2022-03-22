@@ -2,9 +2,6 @@
 
 @section('panel_content')
 
-
-
-
 <section>
     <div class="grid grid-cols-3">
         <div class="col-span-1">
@@ -31,7 +28,7 @@
 
                     <x-slot name="cardBody" class="flow-root mt-6">
                         <ul role="list" class="-my-5 divide-y divide-gray-200">
-                            @for ($i = 0; $i < 3; $i++ ) <li class="py-4">
+                            @foreach (Categories::getAll(true)->sortBy('created_at')->take(5) as $category) <li class="py-4">
                                 <div class="flex items-center space-x-4">
                                     <div class="flex-shrink-0">
                                         <img class="h-8 w-8 rounded-full"
@@ -40,30 +37,33 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-900 truncate">
-                                            Category Name
+                                           {{ $category->name }}
                                         </p>
                                         <p class="text-sm text-gray-500 truncate">
-                                            321 Views / 123 Sales
+                                            321 Views / {{  $category->products()->count()  }} {{ translate('Products') }}
                                         </p>
                                     </div>
                                     <div>
-                                        <a href="#"
+                                        <a href="{{ $category->getPermalink() }}"
+                                            target="blank"
                                             class="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50">
-                                            View
+                                            {{ translate('View') }}
                                         </a>
                                     </div>
                                 </div>
                                 </li>
-                                @endfor
+                            @endforeach
                         </ul>
                     </x-slot>
 
 
                     <x-slot name="cardFooter">
-                        <button type="button"
+                        <a
+                        href="{{ route('categories.index') }}"
+                        type="button"
                             class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Advance to offer
-                        </button>
+                            {{ translate('View all categories') }}
+                    </a>
                     </x-slot>
 
                 </div>
