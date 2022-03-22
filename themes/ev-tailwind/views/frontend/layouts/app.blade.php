@@ -129,8 +129,8 @@
         <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header>
     </div>
 
-    {{-- <x-default.footers.app-bar>
-    </x-default.footers.app-bar> --}}
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
 
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />
