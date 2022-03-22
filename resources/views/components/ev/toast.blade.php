@@ -1,5 +1,5 @@
 <!-- Toast -->
-<div @if($id) id="{{ $id }}" @endif class="toast {{ $position }} {{ $class }} " role="alert" aria-live="assertive" aria-atomic="true"
+<div @if($id) id="{{ $id }}" @endif class="toast {{ $position }} {{ $class }} " role="alert"
     @if($isX)
         x-data="{
             show: false,

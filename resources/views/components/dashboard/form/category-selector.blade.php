@@ -19,12 +19,14 @@
             },
             renderCategory(category, slug) {
                 let hasChildren = category.children !== null && category.children !== undefined && Object.keys(category.children).length > 0;
+                // let show_children = ;
 
                 let html = `
                     <div x-data='{
                         has_children: ${hasChildren},
-                        show_children: false,
                         slug_path: "${category.slug_path}",
+                        show_children: selected_categories.indexOf("${category.slug_path}") !== -1,
+                        // Move following two functions outside the recursion!
                         selectCategory(slug_path) {
                             this.show_children = !this.show_children;
                             let index = selected_categories.indexOf(slug_path);
@@ -46,14 +48,18 @@
                     }' @hide-children-categories.window='if(slug_path.startsWith($event.detail.parent_slug_path+".")) show_children = false;'>
                         <div class='relative flex items-start justify-between py-2 cursor-pointer' x-on:click='selectCategory(category.slug_path);'>
                             <div class='w-full flex items-center cursor-pointer'>
-                                <div class='flex items-center h-5 cursor-pointer'>
-                                    <input type='checkbox' :checked='selected_categories.indexOf(category.slug_path) !== -1'  class='pointer-events-none focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded'>
+                                <div class='flex items-center h-6 cursor-pointer'>
+                                    <input type='checkbox' :checked='selected_categories.indexOf(category.slug_path) !== -1'  class='pointer-events-none focus:ring-primary h-5 w-5 text-primary border-gray-300 rounded'>
                                 </div>
-                                <div class='ml-3 text-sm'>
+                                <div class='ml-3 text-16'>
                                     <label class='font-medium text-gray-700 cursor-pointer' x-text='category.name'></label>
                                 </div>
                             </div>
-                            @svg('heroicon-o-chevron-right', ['class' => 'h-4 w-4', ':class' => "{'rotate-90':show_children}", 'x-show' => 'has_children'])
+                            <div class='w-full flex items-center justify-end'>
+                                <div class='badge-info mr-2' x-show='has_children' x-text="category.descendants_count"></div>
+                                @svg('heroicon-o-chevron-right', ['class' => 'h-4 w-4', ':class' => "{'rotate-90':show_children}", 'x-show' => 'has_children'])
+                            </div>
+                            
                         </div>
                 `;
 

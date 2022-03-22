@@ -3,12 +3,13 @@
 namespace App\View\Components\Dashboard\Form;
 
 use Illuminate\View\Component;
+use App\Models\Upload;
 
 class ImageSelector extends Component
 {
     public $field;
     public $id;
-    public ?Upload $selectedImage;
+    public Upload|int|null $selectedImage;
 
     /**
      * Create a new component instance.
@@ -19,7 +20,7 @@ class ImageSelector extends Component
     {
         $this->field = $field;
         $this->id = $id;
-        $this->selectedImage = $selectedImage;
+        $this->selectedImage = (is_numeric($selectedImage)) ? Upload::find($selectedImage) : $selectedImage;
     }
 
     /**

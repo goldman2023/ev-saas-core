@@ -64,7 +64,7 @@ class PlanForm extends Component
             'plan.title' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'plan.excerpt' => 'required|min:10',
-            'plan.content' => 'required|min:10',
+            'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
             'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
             'plan.price' => 'required|numeric',
@@ -126,6 +126,7 @@ class PlanForm extends Component
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
+            $this->plan->status = StatusEnum::draft()->value;
             $this->validate();
         }
 
@@ -137,7 +138,7 @@ class PlanForm extends Component
 
             // If user has no permissions to publish the post, change the status to Pending (all plans with pending will be visible to users who can publish the plan)
             if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_plan'], false)) {
-                $this->plan->status = StatusEnum::pending();
+                $this->plan->status = StatusEnum::pending()->value;
                 $msg = translate('Plan status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
             
@@ -152,17 +153,19 @@ class PlanForm extends Component
             DB::commit();
 
             if($this->is_update) {
-                $this->toastify(translate('Subscription plan successfully updated!').' '.$msg, 'success');
+                $this->inform(translate('Subscription plan successfully updated!').' '.$msg, '', 'success');
             } else {
-                $this->toastify(translate('Subscription plan successfully created!').' '.$msg, 'success');
+                $this->inform(translate('Subscription plan successfully created!').' '.$msg, '', 'success');
             }
         } catch(\Exception $e) {
             DB::rollBack();
             
             if($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a subscription plan...Please try again.'));
+                $this->inform(translate('There was an error while updating a subscription plan...Please try again.'), '', 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a subscription plan...Please try again.'));
+                $this->inform(translate('There was an error while creating a subscription plan...Please try again.'), '', 'fail');
             }
         }
     }
