@@ -148,7 +148,7 @@
     @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased bg-gray-200 {{ Route::currentRouteName() }}" x-data="{
+<body class="font-sans antialiased bg-gray-100 {{ Route::currentRouteName() }}" x-data="{
     all_categories: @js(Categories::getAllFormatted(true))
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
