@@ -34,7 +34,7 @@ Route::middleware([
                 'prefix' => 'tenant'
             ], function () {
                 Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
-                
+
             });
 
         Route::group([
@@ -42,9 +42,9 @@ Route::middleware([
                 'prefix' => 'previews'
             ], function () {
                 Route::get('/show', 'EVPreviewController@show')->name('show');
-                
+
             });
-        
+
     /* TODO: Admin only */
     Route::group([
         'middleware' => ['auth', 'admin'],
@@ -231,7 +231,9 @@ Route::middleware([
     Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');
 
     Route::get('/integrations/facebook-business-export', 'Integrations\FacebookBusinessController@export')->name('integrations.facebook-business.export');
-
+    Route::get('/integrations/woocommerce', 'Integrations\WooCommerceController@index')->name('integrations.woocommerce');
+    Route::get('/integrations/woocommerce/import/{type}', 'Integrations\WooCommerceController@import')->name('integrations.woocommerce.import');
+    Route::get('/integrations/woocommerce/import-results/{type}', 'Integrations\WooCommerceController@import_results')->name('integrations.woocommerce.import-results');
 
 
 });

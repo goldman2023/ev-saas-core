@@ -11,7 +11,7 @@
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
-    
+
     @yield('meta')
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -143,7 +143,7 @@
     @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{
+<body class="font-sans antialiased bg-gray-200 {{ Route::currentRouteName() }}" x-data="{
     all_categories: @js(Categories::getAllFormatted(true))
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">

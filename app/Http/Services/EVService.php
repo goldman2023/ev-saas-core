@@ -308,6 +308,14 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['browse_designs']
                     ],
+                    [
+                        'label' => translate('Page builder - We Edit'),
+                        'icon' => 'heroicon-o-cog',
+                        'route' => route('we-edit.index'),
+                        'is_active' => areActiveRoutes(['we-edit.index']),
+                        'user_types' => User::$non_customer_user_types,
+                        'permissions' => ['browse_designs']
+                    ],
                      [
                          'label' => translate('Payment settings'),
                          'icon' => 'heroicon-o-cash',

@@ -26,7 +26,14 @@ class AddIndexToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropIndex('user_type');
+            $sm = Schema::getConnection()->getDoctrineSchemaManager();
+            $doctrineTable = $sm->listTableDetails('users');
+
+            if ($doctrineTable->hasIndex('user_type')) {
+                $table->dropIndex('user_type');
+            }
+
+
         });
     }
 }

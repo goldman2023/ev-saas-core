@@ -295,17 +295,14 @@ class HomeController extends Controller
             $shops = Shop::where('id');
         }
 
-        $events = Event::whereIn('user_id', verified_sellers_id());
 
         if ($query != null) {
             $searchController = new SearchController;
             $searchController->store($request);
             $products = $products->where('name', 'like', '%' . $query . '%');
             $shops = $shops->where('name', 'like', '%' . $query . '%');
-            $events = $events->where('title', 'like', '%' . $query . '%')
-                ->orWhere('description', 'like', '%' . $query . '%');
+
         }
-        $event_count = $events->count();
 
         $attributes = array();
         $filters = array();
@@ -381,10 +378,9 @@ class HomeController extends Controller
         /* TODO: Make this to show products by actual category */
         $products = $products->paginate(12);
         $shops = $shops->paginate(10)->appends(request()->query());
-        $events = $events->paginate(10)->appends(request()->query());
 
         $selected_category = !empty($selected_categories) ? $selected_categories->first() : null;
-        return view('frontend.product_listing', compact('products', 'shops', 'events', 'attributes', 'event_count', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
+        return view('frontend.product_listing', compact('products', 'shops', 'attributes', 'query', 'selected_category', 'brand_id', 'sort_by', 'seller_id', 'content', 'contents', 'filters'));
     }
 
 
