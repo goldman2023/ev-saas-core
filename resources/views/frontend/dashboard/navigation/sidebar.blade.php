@@ -35,7 +35,7 @@
                                             <a href="{{ $child['route'] }}" class="group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
                                                 @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500'])
                                                 <span class="flex-1">{{ $child['label'] }}</span>
-                                                
+
                                                 @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count = $child['badge']['content']() ?? null)
                                                     <span class="badge-danger {{ $child['badge']['class'] }} text-12 ml-2 rounded">
                                                         {{ $count }}
@@ -45,12 +45,12 @@
                                         @endforeach
                                     </div>
                                 </div>
-                            @else 
+                            @else
                                 <div class="{{ $key > 0 ? 'space-y-1':'' }}">
                                     <a href="{{ $item['route'] }}" class="bg-gray-100 text-gray-900 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
                                         @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500'])
                                         <span class="flex-1">{{ $item['label'] }}</span>
-                                        
+
                                         @if(($item['badge'] ?? null) && $item['badge']['content'] instanceof \Closure && $count = $item['badge']['content']() ?? null)
                                             <span class="badge-danger {{ $item['badge']['class'] }} text-12 ml-2 rounded">
                                                 {{ $count }}
@@ -78,7 +78,7 @@
                                                 <a class="nav-link {{ $child['is_active'] }}" href="{{ $child['route'] }}">
                                                     @svg($child['icon'], ['class' => 'nav-icon'])
                                                     {{ $child['label'] }}
-        
+
                                                     @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count = $child['badge']['content']() ?? null)
                                                         <span class="badge {{ $child['badge']['class'] }} text-12 ml-2 rounded">
                                                             {{ $count }}

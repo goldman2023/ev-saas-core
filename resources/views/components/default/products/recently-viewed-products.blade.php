@@ -1,14 +1,19 @@
 @if($products->count() > 0)
 <div class="card">
     <div class="card-header">
+        <div class="grid grid-cols-3 py-3">
+            <div class="col-span-2 card-header text-xl font-medium text-gray-900">
+                <div class="h3 fw-600">{{ translate('Recently Viewed Products') }} </div>
+            </div>
 
-        <h5>
-            {{ translate('Recently Viewed Products') }}
-        </h5>
+            <a href="#" class="text-right">
+                {{ translate('View All') }}
+            </a>
+        </div>
 
-        <a href="#">
-            {{ translate('View All') }}
-        </a>
+
+
+
     </div>
     <div class="card-body">
         <div class="flex flex-nowrap basis-20 we-horizontal-slider__desktop" style="overflow:scroll;">
