@@ -6,13 +6,12 @@
 
 
 <section>
-    <div class="row">
-        <div class="col-12">
-            <h5 class="text-white">{{ translate('Setup your store') }} </h5>
+    <div class="grid grid-cols-3">
+        <div class="col-span-1">
             {{-- <x-default.dashboard.widgets.onboarding-widget></x-default.dashboard.widgets.onboarding-widget> --}}
         </div>
 
-        <div class="col-12 mb-3">
+        <div class="col-span-1">
             {{-- <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe> --}}
 
         </div>
@@ -20,52 +19,19 @@
 </section>
 
 <section>
-    <div class="row mb-3 we-horizontal-slider">
-        <div class="col-10 col-sm-4">
-            {{-- <x-default.dashboard.widgets.products-widget>
-                <a href="{{ route('products.index') }}">
-                    {{ translate('View all') }}
-                </a>
-            </x-default.dashboard.widgets.products-widget> --}}
-
-        </div>
-
-        <div class="col-10 col-sm-4">
-            {{-- <x-default.dashboard.widgets.orders-widget>
-                <a href="{{ route('orders.index') }}">
-                    {{ translate('View all') }}
-                </a>
-            </x-default.dashboard.widgets.orders-widget> --}}
-        </div>
-        <div class="col-10 col-sm-4">
-            {{-- <x-default.dashboard.widgets.leads-widget>
-
-                <a href="{{ route('leads.index') }}">
-                    {{ translate('View all') }}
-                </a>
-
-            </x-default.dashboard.widgets.leads-widget> --}}
-        </div>
-    </div>
-
-</section>
-<section>
     <div class="row">
         <div class="grid grid-cols-4 gap-12 mb-12">
             <x-dashboard.elements.card>
                 <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
                     <x-slot name="cardHeader" class="font-bold mb-3">
                         <div class="mb-3">
-                       {{translate('Most popular categories') }}
+                            {{translate('Most popular categories') }}
                         </div>
                     </x-slot>
 
                     <x-slot name="cardBody" class="flow-root mt-6">
                         <ul role="list" class="-my-5 divide-y divide-gray-200">
-                            @for ($i = 0; $i < 3; $i++ )
-
-
-                            <li class="py-4">
+                            @for ($i = 0; $i < 3; $i++ ) <li class="py-4">
                                 <div class="flex items-center space-x-4">
                                     <div class="flex-shrink-0">
                                         <img class="h-8 w-8 rounded-full"
@@ -87,8 +53,8 @@
                                         </a>
                                     </div>
                                 </div>
-                            </li>
-                            @endfor
+                                </li>
+                                @endfor
                         </ul>
                     </x-slot>
 
@@ -101,76 +67,33 @@
                     </x-slot>
 
                 </div>
-
-
             </x-dashboard.elements.card>
 
 
-            <div class="card bg-white p-4 text-center">
-                {{-- TODO : make this company name dynamic --}}
-                <div class="h5 fw-600">{{ translate('Products') }} </div>
-                <p>{{ translate('Manage & organize your inventory and products') }}</p>
-                <a href="{{ route('products.index') }}" class="btn btn-soft-primary">{{ translate('Manage Products')
-                    }}</a>
-            </div>
-        </div>
+            <x-dashboard.elements.card>
+                <x-slot name="cardHeader" class="flow-root mt-6">
+                    <div class="h5 fw-600">{{ translate('Products') }} </div>
+                </x-slot>
+                <x-slot name="cardBody" class="">
+                    {{-- TODO : make this company name dynamic --}}
+                    <p>{{ translate('Manage & organize your inventory and products') }}</p>
 
-        <div class="col-md-6 mb-3">
-            <div class="card bg-white p-4 text-center">
-                {{-- TODO : make this company name dynamic --}}
-                <div class="h5 fw-600">{{ translate('Your Website Admin Panel') }} </div>
-                <p>{{ translate('Manage & organize your website settings') }}</p>
-                <a href="/admin" class="btn btn-soft-primary">{{ translate('Manage your website') }}</a>
-            </div>
-        </div>
-
-    </div>
-</section>
-<section>
-    <div class="row">
-        <div class="col-12 col-sm-6">
-            <x-default.dashboard.widgets.integration-stats-widget url="{{ route('product.create') }}"
-                title="Add A Product"
-                img="https://cdns.iconmonstr.com/wp-content/assets/preview/2019/240/iconmonstr-product-3.png">
-                {{ translate('Create a new product') }}
-            </x-default.dashboard.widgets.integration-stats-widget>
-        </div>
-
-        <div class="col-12 col-sm-6">
-            <x-default.dashboard.widgets.integration-stats-widget url="#" title="Post an update"
-                img="https://banner2.cleanpng.com/20190914/tca/transparent-market-icon-news-icon-newspaper-icon-5d7ce8e6009aa0.6164315815684671740025.jpg">
-                {{ translate('Share an update with your followers and customers') }}
-            </x-default.dashboard.widgets.integration-stats-widget>
+                </x-slot>
+                <x-slot name="cardFooter">
+                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
+                        {{ translate('Manage Products') }}
+                    </a>
+                </x-slot>
+            </x-dashboard.elements.card>
         </div>
     </div>
 </section>
-<section>
-    <div class="row">
-        <div class="col-12 col-sm-6">
-            <x-default.dashboard.widgets.integration-stats-widget url="{{ route('analytics.index') }}"
-                title="Website Analytics"
-                img="https://developers.google.com/analytics/images/terms/logo_lockup_analytics_icon_vertical_black_2x.png?hl=ar">
-                {{ translate('Track your website statictics') }}
 
-            </x-default.dashboard.widgets.integration-stats-widget>
-        </div>
 
-        <div class="col-12 col-sm-6">
-            <x-default.dashboard.widgets.integration-stats-widget url="#" title="Mailchimp"
-                img="https://www.drupal.org/files/project-images/MC_Logo.jpg">
-                {{ translate('Send Emails and Newsletters') }}
-
-            </x-default.dashboard.widgets.integration-stats-widget>
-        </div>
-    </div>
-</section>
 
 <section class="stats mb-3">
     <div class="row">
         <div class="col-sm-6 col-12">
-
-            <x-default.dashboard.dashboard-summary.admin>
-            </x-default.dashboard.dashboard-summary.admin>
         </div>
         <div class="col-12 col-sm-6">
             <div class="row">

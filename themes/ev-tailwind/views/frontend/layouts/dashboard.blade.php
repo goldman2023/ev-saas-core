@@ -129,6 +129,10 @@
             .is-invalid {
                 @apply border-danger;
             }
+
+            .card {
+                @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg;
+            }
         }
     </style>
 
