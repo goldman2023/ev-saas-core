@@ -96,6 +96,7 @@
 
                 </x-slot>
                 <x-slot name="cardFooter">
+                    <div class="overflow-x-auto sm:flex lg:block">
                     <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
                         🚚 {{ translate('Process Orders') }}
                     </a>
@@ -111,6 +112,7 @@
                     <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
                         🏷️ {{ translate('Manage Categories') }}
                     </a>
+                    </div>
                 </x-slot>
             </x-dashboard.elements.card>
         </div>
