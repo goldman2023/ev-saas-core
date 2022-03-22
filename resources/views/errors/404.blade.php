@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-6 mx-auto">
                 <h1 class="h1 text-3xl font-bold mb-10">
-                    {{ translate('Oops. Content not found,') }} 👁️‍🗨️
+                    {{ translate('Oops. Page you are looking for not found,') }} 👁️‍🗨️
                 </h1>
                 <img src="{{ static_asset('assets/img/404.svg') }}" class="max-w-[400px] mx-auto mb-5" height="300">
 
