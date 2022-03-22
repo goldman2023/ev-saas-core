@@ -1,17 +1,14 @@
-@push('pre_head_scripts')
-    <script>
-        let all_categories = @json(Categories::getAllFormatted());
-    </script>
-@endpush
-
 <div class="w-full" x-data="{
     status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value),
+    thumbnail: @js(['id' => $plan->thumbnail->id ?? null, 'file_name' => $plan->thumbnail->file_name ?? '']),
+    cover: @js(['id' => $plan->cover->id ?? null, 'file_name' => $plan->cover->file_name ?? '']),
     base_currency: @js($plan->base_currency),
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
     tax_type: @js($plan->tax_type),
     features: @js($plan->features),
     content: @js($plan->content),
+    selected_categories: @js($selected_categories)
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
@@ -195,7 +192,6 @@
                         </div>
                         <!-- END Tax and Tax type  -->
 
-
                         <!-- Features -->
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
             
@@ -246,115 +242,164 @@
             </div>
 
             {{-- Right side --}}
-            <div class="col-span-4 ">
+            <div class="col-span-4">
+               
                 <div class="p-4 border border-gray-200 rounded-lg shadow">
-                    {{-- Thumbnail --}}
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-3">
-                        <label for="photo" class="block text-sm font-medium text-gray-700"> Photo </label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <div class="flex items-center">
-                                <span class="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                </span>
-                                <button type="button" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Change</button>
-                            </div>
-                        </div>
+                    <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
                     </div>
-            
-                    {{-- Cover --}}
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                        <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Cover photo </label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                <div class="space-y-1 text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    <div class="flex text-sm text-gray-600">
-                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                        <span>Upload a file</span>
-                                        <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                                        </label>
-                                        <p class="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+
+                    <div class="w-full">
+                        {{-- Thumbnail --}}
+                        <div class="sm:items-start">
+                            <div class="flex flex-col " x-data="{}">
+                                        
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Thumbnail image') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0">
+                                    <x-dashboard.form.image-selector field="thumbnail" id="plan-thumbnail-image" :selected-image="$plan->thumbnail"></x-dashboard.form.image-selector>
+                                    
+                                    <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
                                 </div>
                             </div>
                         </div>
+                        {{-- END Thumbnail --}}
+                        
+
+                        {{-- Cover --}}
+                        <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                            <div class="flex flex-col " x-data="{}">
+                                        
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Cover image') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0">
+                                    <x-dashboard.form.image-selector field="cover" id="plan-cover-image" :selected-image="$plan->cover"></x-dashboard.form.image-selector>
+
+                                    <x-system.invalid-msg field="plan.cover"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- END Cover --}}
+                    </div>
+                    
+                </div>
+                
+
+                {{-- Category Selector --}}
+                <div class="mt-8 border border-gray-200 rounded-lg shadow select-none" x-data="{
+                    open: true,
+                }" :class="{'p-4': open}">
+                    <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Categories') }}</h3>
+                        @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                    </div>
+            
+                    <div class="w-full" x-show="open">
+                        <x-dashboard.form.category-selector> </x-dashboard.form.category-selector>
                     </div>
                 </div>
+                {{-- END Category Selector --}}
+
+                {{-- SEO --}}
+                <div class="mt-8 border border-gray-200 rounded-lg shadow select-none" x-data="{
+                    open: false,
+                }" :class="{'p-4': open}">
+                    <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('SEO') }}</h3>
+                        @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                    </div>
+            
+                    <div class="w-full" x-show="open">
+                        <!-- Meta Title -->
+                        <div class="flex flex-col " x-data="{}">
+                                    
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ translate('Meta title') }}
+                            </label>
+
+                            <div class="mt-1 sm:mt-0">
+                                <input type="text" 
+                                        class="form-standard @error('plan.meta_title') is-invalid @enderror"
+                                        {{-- placeholder="{{ translate('Write meta title...') }}" --}}
+                                        wire:model.defer="plan.meta_title" />
+                            
+                                <x-system.invalid-msg field="plan.meta_title"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Meta Title -->
+
+                        <!-- Meta Description -->
+                        <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ translate('Meta Description') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0">
+                                <textarea type="text" class="form-standard h-[80px] @error('plan.meta_description') is-invalid @enderror"
+                                            {{-- placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}" --}}
+                                            wire:model.defer="plan.meta_description">
+                                </textarea>
+                            
+                                <x-system.invalid-msg class="w-full" field="plan.meta_description"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Meta Description -->
+
+                        <!-- Meta Keywords -->
+                        <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ translate('Meta Keywords') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 ">
+                                <textarea type="text" class="form-standard h-[80px] @error('plan.meta_keywords') is-invalid @enderror"
+                                            {{-- placeholder="{{ translate('Write a short promo description for this subscription plan') }}" --}}
+                                            wire:model.defer="plan.meta_keywords">
+                                </textarea>
+                            
+                                <x-system.invalid-msg class="w-full" field="plan.meta_keywords"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Meta Keywords -->
+
+                        {{-- Meta Image --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                            
+                            <label class="col-span-3 block text-sm font-medium text-gray-700">{{ translate('Meta Image') }}</label>
+                            <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                <div class="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                    <div class="space-y-1 text-center">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                        <div class="flex text-sm text-gray-600">
+                                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                            <span>Upload a file</span>
+                                            <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- END Meta Image --}}
+                        
+                    </div>
+                </div>
+                {{-- END SEO --}}
+
+                
             </div>
         
         </div>
-  
-
-            {{-- <!-- Cover -->
-            <div class="profile-cover">
-                <div class="profile-cover-img-wrapper"
-                     x-data="{
-                        name: 'plan.cover',
-                        imageID: {{ $plan->cover->id ?? 'null' }},
-                        imageURL: '{{ $plan->getCover(['w'=>1200]) }}',
-                    }"
-                     @aiz-selected.window="
-                     if(event.detail.name === name) {
-                        imageURL = event.detail.imageURL;
-                        $wire.set('plan.cover', $('input[name=\'plan.cover\']').val(), true);
-                     }"
-                     data-toggle="aizuploader"
-                     data-type="image">
-
-                    <img id="profileCoverImg" class="profile-cover-img" x-bind:src="imageURL">
-
-                    <!-- Custom File Cover -->
-                    <div class="profile-cover-content profile-cover-btn custom-file-manager"
-                         data-toggle="aizuploader" data-type="image">
-                        <div class="custom-file-btn">
-                            <input type="hidden" x-bind:name="name" wire:model.defer="plan.cover" class="selected-files" data-preview-width="1200">
-
-                            <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg d-flex align-items-center" for="profileCoverUploader">
-                                @svg('heroicon-o-pencil', ['class' => 'square-16 mr-2'])
-                                <span class="d-none d-sm-inline-block">{{ translate('Update post cover') }}</span>
-                            </label>
-                        </div>
-                    </div>
-                    <!-- End Custom File Cover -->
-                </div>
-            </div>
-            <!-- End Cover -->
-
-            <!-- Thumbnail -->
-            <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader mx-auto profile-cover-avatar pointer border p-1" for="avatarUploader"
-                   style="margin-top: -60px;"
-                   x-data="{
-                        name: 'plan.thumbnail',
-                        imageID: {{ $plan->thumbnail->id ?? 'null' }},
-                        imageURL: '{{ $plan->getThumbnail() }}',
-                    }"
-                   @aiz-selected.window="
-                     if(event.detail.name === name) {
-                        imageURL = event.detail.imageURL;
-                        $wire.set('plan.thumbnail', $('input[name=\'plan.thumbnail\']').val(), true);
-                     }"
-                   data-toggle="aizuploader"
-                   data-type="image">
-                <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
-
-                <input type="hidden" x-bind:name="name" wire:model.defer="plan.thumbnail" class="selected-files" data-preview-width="200">
-
-                <span class="avatar-uploader-trigger">
-                  <i class="avatar-uploader-icon shadow-soft">
-                      @svg('heroicon-o-pencil', ['class' => 'square-16'])
-                  </i>
-                </span>
-            </label>
-            <!-- End Thumbnail --> --}}
-
-            <x-system.invalid-msg field="plan.thumbnail"></x-system.invalid-msg>
-
-            <x-system.invalid-msg field="plan.cover"></x-system.invalid-msg>
 
             
                 {{-- <!-- Title -->
@@ -447,90 +492,7 @@
 
             <h3 class="h4"> {{ translate('SEO') }}</h3>
 
-            <!-- Meta Title -->
-            <div class="row form-group">
-                <label for="plan-meta_title" class="col-sm-3 col-form-label input-label">{{ translate('Meta title') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <input type="text" class="form-control @error('plan.meta_title') is-invalid @enderror"
-                               name="plan.meta_title"
-                               id="plan-meta_title"
-                               placeholder="{{ translate('Post SEO/meta title') }}"
-                               wire:model.defer="plan.meta_title" />
-                    </div>
-                </div>
-
-                <x-system.invalid-msg field="plan.meta_title"></x-system.invalid-msg>
-            </div>
-            <!-- END Meta Title -->
-
-            <!-- Meta Description -->
-            <div class="row form-group">
-                <label for="plan-meta_description" class="col-sm-3 col-form-label input-label">{{ translate('Meta description') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('plan.meta_description') is-invalid @enderror"
-                                  name="plan.meta_description"
-                                  id="plan-meta_description"
-                                  placeholder="{{ translate('Post SEO/meta description') }}"
-                                  wire:model.defer="plan.meta_description">
-                        </textarea>
-                    </div>
-                </div>
-
-                <x-system.invalid-msg field="plan.meta_description"></x-system.invalid-msg>
-            </div>
-            <!-- END Meta Description -->
-
-            <!-- Meta Keywords -->
-            <div class="row form-group">
-                <label for="plan-meta_keywords" class="col-sm-3 col-form-label input-label">{{ translate('Meta keywords') }}</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group input-group-sm-down-break">
-                        <textarea type="text" class="form-control @error('plan.meta_keywords') is-invalid @enderror"
-                                  name="plan.meta_keywords"
-                                  id="plan-meta_keywords"
-                                  placeholder="{{ translate('Post SEO/meta keywords') }}"
-                                  wire:model.defer="plan.meta_keywords">
-                        </textarea>
-                    </div>
-                </div>
-
-                <x-system.invalid-msg field="plan.meta_keywords"></x-system.invalid-msg>
-            </div>
-            <!-- END Meta Keywords -->
-
-            <!-- Meta Img -->
-            <div class="row form-group">
-                <div class="col-sm-3 col-form-label input-label">{{ translate('Meta image') }}</div>
-
-                <div class="col-sm-9 d-flex flex-column justify-content-center align-items-start">
-                    <label class="card-img-top pointer border rounded p-1 mb-0 mt-0" for="avatarUploader"
-                           style="width: 180px; height: 115px;"
-                           x-data="{
-                                name: 'plan.meta_img',
-                                imageID: {{ $plan->meta_img?->id ?? 'null' }},
-                                imageURL: '{{ $plan->getUpload('meta_img', ['w'=>220]) }}',
-                            }"
-                           @aiz-selected.window="
-                             if(event.detail.name === name) {
-                                imageURL = event.detail.imageURL;
-                                $wire.set('plan.meta_img', $('input[name=\'plan.meta_img\']').val(), true);
-                             }"
-                           data-toggle="aizuploader"
-                           data-type="image">
-                        <img id="avatarImg" class="avatar-img rounded w-100" x-bind:src="imageURL" >
-
-                        <input type="hidden" x-bind:name="name" wire:model.defer="plan.meta_img" class="selected-files" data-preview-width="200">
-                    </label>
-
-                    <x-system.invalid-msg class="mt-1" field="plan.meta_img"></x-system.invalid-msg>
-                </div>
-            </div>
-            <!-- End Meta Img -->
+            
 
             <hr/>
 

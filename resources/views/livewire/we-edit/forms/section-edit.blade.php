@@ -1,6 +1,7 @@
 <x-we-edit.flyout.flyout-panel id="we-edit-section-panel" title="{{ translate('Your Profile') }}">
     <div class="h-0 flex-1 overflow-y-auto" x-data="{
         section: @entangle('section'),
+        custom_fields_html: @entangle('custom_fields_html').defer, // THIS MUST BE ENTANGLED!
         errors: []
     }"
     @display-flyout-panel.window="if($event.detail.id === id) {
@@ -40,8 +41,8 @@
           <div class="divide-y divide-gray-200 px-4 sm:px-6">
             <div class="space-y-6 pt-6 pb-5">
 
-                <div id="section-custom-fields-html">
-                    {!! $this->custom_fields_html !!}
+                <div id="section-custom-fields-html" x-html="custom_fields_html">
+                    {{-- {!! $this->custom_fields_html !!} --}}
                 </div>
                 
             </div>

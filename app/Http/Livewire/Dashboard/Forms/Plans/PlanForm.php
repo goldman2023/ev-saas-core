@@ -38,7 +38,9 @@ class PlanForm extends Component
      * @return void
      */
     public function mount($plan = null)
-    {
+    { 
+        
+        // dd(Categories::getAllFormatted());
         $this->plan = empty($plan) ? new Plan() : $plan;
         $this->is_update = isset($this->plan->id) && !empty($this->plan->id);
         
@@ -48,7 +50,6 @@ class PlanForm extends Component
             $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->yearly_discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->tax_type = AmountPercentTypeEnum::amount()->value;
-            $this->plan->content = '<p>YEEEEEEEEEEEY</p>';
         }
 
         $this->initCategories($this->plan);

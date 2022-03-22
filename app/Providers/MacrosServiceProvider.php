@@ -54,15 +54,17 @@ class MacrosServiceProvider extends ServiceProvider
     protected function setCollectionMacros(): void
     {
         /* Add Collection RecursiveApply marco function */
-        Collection::macro('recursiveApply', function ($property_name, $method = []) {
+        Collection::macro('recursiveApply', function ($property_name, ...$method) {
             return $this->whenNotEmpty($recursive = function (&$items) use (&$recursive, $property_name, $method) {
 
                 if($items->isEmpty()) {
                     return collect([]);
                 }
 
-                $items = $items->{$method['fn']}(...$method['params']);
-
+                foreach($method as $m) {
+                    $items = $items->{$m['fn']}(...$m['params']);
+                }
+                
                 foreach($items as $key => &$item) {
                     if($item->relationLoaded($property_name)) {
                         // if relation
@@ -78,38 +80,39 @@ class MacrosServiceProvider extends ServiceProvider
         });
 
         // Static version of `recursiveApply` function. Models, Collections, arrays and objects can be used as $items!
-        Collection::macro('recursiveApplyStatic', function ($items, $property_name, $method = []) {
+        Collection::macro('recursiveApplyStatic', function ($items, $property_name, ...$method) {
             // If given $items are Collection type, call `recursiveApply` macro
             if($items instanceof Collection) {
                 return $items->recursiveApply($property_name, $method);
             }
 
-            $recursive = function (&$items, $property_name, $method) use (&$recursive) {
-
+            $recursive = function (&$items, $property_name, $methods) use (&$recursive) {
                 if(empty($items)) {
                     return [];
                 }
-
-                $items = collect($items)->{$method['fn']}(...$method['params'])->all();
+                
+                foreach($methods as $m) {
+                    $items = collect($items)->{$m['fn']}(...$m['params'])->all();
+                }
 
                 foreach($items as &$item) {
                     if($item instanceof Model) {
                         if($item->relationLoaded($property_name)) {
-                            $item->setRelation($property_name, $recursive($item->{$property_name}, $property_name, $method));
+                            $item->setRelation($property_name, $recursive($item->{$property_name}, $property_name, $methods));
                         } else {
-                            $item->{$property_name} = $recursive($item->{$property_name}, $property_name, $method);
+                            $item->{$property_name} = $recursive($item->{$property_name}, $property_name, $methods);
                         }
                     } else if(is_object($item)) {
-                        $item->$property_name = $recursive($item->$property_name, $property_name, $method);
+                        $item->$property_name = $recursive($item->$property_name, $property_name, $methods);
                     } else if(is_array($item)) {
-                        $item[$property_name] = $recursive($item[$property_name], $property_name, $method);
+                        $item[$property_name] = $recursive($item[$property_name], $property_name, $methods);
                     }
                 }
 
                 return $items;
             };
 
-            return $recursive($items, $property_name, $method);
+            return $recursive($items, $property_name, $method); // $method here is actually an array of methods because in macro function we have ...$method
         });
 
         /* Add Collection RecursiveFind marco function */
