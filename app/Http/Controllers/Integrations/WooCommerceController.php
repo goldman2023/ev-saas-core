@@ -1,20 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\Integrations;
-
 use App\Models\CoreMeta;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-
 use Codexshaper\WooCommerce\Facades\Product as WooProduct;
 use Codexshaper\WooCommerce\Facades\Coupon as WooCoupon;
 use Codexshaper\WooCommerce\Facades\Order as WooOrder;
 use Codexshaper\WooCommerce\Facades\Category as WooCategory;
 use Exception;
 use Illuminate\Support\Facades\Storage;
-
 use App\Exports\ProductsExport;
 use App\Models\Category;
 use App\Models\Order;
@@ -94,8 +89,6 @@ class WooCommerceController extends Controller
                 $tenant_path = 'uploads/' . tenant('id');
             }
 
-
-
             try {
                 $featured_image = Storage::disk('s3')->put($tenant_path . '/' . $product->images[0]->name, file_get_contents($product->images[0]->src), 'public');
                 $upload = new Upload();
@@ -118,9 +111,6 @@ class WooCommerceController extends Controller
             } catch(Exception $e) {
                 return $e;
             }
-
-
-
 
             $new_product->save();
 
