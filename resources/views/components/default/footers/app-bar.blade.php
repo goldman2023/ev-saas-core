@@ -24,7 +24,8 @@
 
     .nav-bottom .nav-link .icon {
         display: inline-block;
-        font-size: 26px
+        font-size: 26px;
+        margin-bottom: 10px;
     }
 
     .nav-bottom .nav-link .text {
@@ -64,10 +65,7 @@
         @svg('heroicon-s-home', ['style' => 'width: 24px;'])
         <span class="text">{{ translate('Home') }}</span>
     </a>
-    <span x-data="" @click="$dispatch('display-flyout-panel', {'id': 'categories-panel'})" class="nav-link text-dark">
-        @svg('heroicon-s-collection', ['style' => 'width: 24px;'])
-        <span class="text text-dark">{{ translate('Categories') }}</span>
-    </span>
+
     <span x-data="" @click="$dispatch('display-cart')" class="nav-link text-dark we-primary-mobile-button">
         @svg('heroicon-s-shopping-cart', ['style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('My cart') }}</span>
