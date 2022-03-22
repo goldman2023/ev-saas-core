@@ -71,7 +71,7 @@
                     12: '12',
                 },
                 colors: {
-                    primary: '#8BC53F',
+                    primary: '#EF0E50',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
                     secondary: '#FF8E3B',
