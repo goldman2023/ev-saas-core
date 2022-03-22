@@ -14,7 +14,7 @@
     <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
       <!--
         Off-canvas menu overlay, show/hide based on off-canvas menu state.
-  
+
         Entering: "transition-opacity ease-linear duration-300"
           From: "opacity-0"
           To: "opacity-100"
@@ -23,10 +23,10 @@
           To: "opacity-0"
       -->
       <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
-  
+
       <!--
         Off-canvas menu, show/hide based on off-canvas menu state.
-  
+
         Entering: "transition ease-in-out duration-300 transform"
           From: "-translate-x-full"
           To: "translate-x-0"
@@ -37,7 +37,7 @@
       <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800">
         <!--
           Close button, show/hide based on off-canvas menu state.
-  
+
           Entering: "ease-in-out duration-300"
             From: "opacity-0"
             To: "opacity-100"
@@ -54,7 +54,7 @@
             </svg>
           </button>
         </div>
-  
+
         <div class="flex-shrink-0 flex items-center px-4">
           <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow">
         </div>
@@ -64,7 +64,7 @@
             <a href="#" class="bg-gray-900 text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               <!--
                 Heroicon name: outline/home
-  
+
                 Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
               -->
               <svg class="text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -72,7 +72,7 @@
               </svg>
               Dashboard
             </a>
-  
+
             <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               <!-- Heroicon name: outline/users -->
               <svg class="text-gray-400 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -80,7 +80,7 @@
               </svg>
               Team
             </a>
-  
+
             <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               <!-- Heroicon name: outline/folder -->
               <svg class="text-gray-400 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -88,7 +88,7 @@
               </svg>
               Projects
             </a>
-  
+
             <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               <!-- Heroicon name: outline/calendar -->
               <svg class="text-gray-400 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -96,7 +96,7 @@
               </svg>
               Calendar
             </a>
-  
+
             <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               <!-- Heroicon name: outline/inbox -->
               <svg class="text-gray-400 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -104,7 +104,7 @@
               </svg>
               Documents
             </a>
-  
+
             <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white group flex items-center px-2 py-2 text-base font-medium rounded-md">
               <!-- Heroicon name: outline/chart-bar -->
               <svg class="text-gray-400 group-hover:text-gray-300 mr-4 flex-shrink-0 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -115,19 +115,19 @@
           </nav>
         </div>
       </div>
-  
+
       <div class="flex-shrink-0 w-14" aria-hidden="true">
         <!-- Dummy element to force sidebar to shrink to fit close icon -->
       </div>
     </div>
-  
-    
+
+
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-100">
         <div class="flex items-center flex-shrink-0 px-6">
             <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg" alt="Workflow">
         </div>
-        
+
 
         <div class="mt-6 h-0 flex-1 flex flex-col overflow-y-auto">
             <!-- User account dropdown -->
@@ -176,7 +176,7 @@
                     </div>
                 </div> --}}
             </div>
-        
+
 
             @include('frontend.dashboard.navigation.sidebar')
         </div>
@@ -185,7 +185,7 @@
 
     <div class="md:pl-64 flex flex-col">
       @include('frontend.dashboard.navigation.topbar')
-  
+
       <main class="flex-1">
         <div class="py-6">
           {{-- <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
@@ -199,7 +199,7 @@
 
     </div>
   </div>
-  
+
 
 {{-- <main id="content" role="main" class="bg-light" >
     <section class="bg-dark" style="">
