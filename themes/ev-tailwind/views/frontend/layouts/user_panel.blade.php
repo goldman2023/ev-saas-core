@@ -125,7 +125,9 @@
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-100">
         <div class="flex items-center flex-shrink-0 px-6">
-            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg" alt="Workflow">
+            <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-8 w-auto sm:h-10"
+                :image="get_tenant_setting('header_logo')">
+            </x-tenant.system.image>
         </div>
 
 

@@ -18,7 +18,7 @@
 <section>
     <div class="row">
         <div class="grid grid-cols-4 gap-12 mb-12">
-            <x-dashboard.elements.card>
+            <x-dashboard.elements.card class="lg:col-span-2 col-span-2">
                 <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
                     <x-slot name="cardHeader" class="font-bold mb-3">
                         <div class="mb-3">
@@ -61,7 +61,7 @@
                         <a
                         href="{{ route('categories.index') }}"
                         type="button"
-                            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="btn btn-secondary">
                             {{ translate('View all categories') }}
                     </a>
                     </x-slot>
@@ -82,6 +82,34 @@
                 <x-slot name="cardFooter">
                     <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
                         {{ translate('Manage Products') }}
+                    </a>
+                </x-slot>
+            </x-dashboard.elements.card>
+
+            <x-dashboard.elements.card>
+                <x-slot name="cardHeader" class="flow-root mt-6">
+                    <div class="h5 fw-600">{{ translate('Quick Actions') }} </div>
+                </x-slot>
+                <x-slot name="cardBody" class="">
+                    {{-- TODO : make this company name dynamic --}}
+                    <p>{{ translate('') }}</p>
+
+                </x-slot>
+                <x-slot name="cardFooter">
+                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                        🚚 {{ translate('Process Orders') }}
+                    </a>
+
+                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                        📄 {{ translate('Create manual invoice') }}
+                    </a>
+
+                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                        📦 {{ translate('Manage Products') }}
+                    </a>
+
+                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
+                        🏷️ {{ translate('Manage Categories') }}
                     </a>
                 </x-slot>
             </x-dashboard.elements.card>

@@ -1,12 +1,12 @@
 @extends('frontend.layouts.' . $globalLayout)
 
 @section('content')
-<section class="gry-bg py-5">
+<section class="bg-primary md:p-20 py-10">
     <div class="profile">
         <div class="container">
-            <div class="row">
-                <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-8 mx-auto">
-                    <div class="card p-4">
+            <div class="">
+                <div class="mx-auto">
+                    <div class="card max-w-[600px] p-10 md:px-20 bg-white">
                         <x-forms.login-form> </x-forms.login-form>
                     </div>
                 </div>

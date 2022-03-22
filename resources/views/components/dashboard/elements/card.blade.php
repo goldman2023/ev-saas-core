@@ -1,4 +1,4 @@
-<div {{ $attributes }} class="lg:col-span-1 rounded-lg bg-white overflow-hidden shadow px-4 py-5">
+<div {{ $attributes->merge(['class' => 'lg:col-span-1 rounded-lg bg-white overflow-hidden shadow px-4 py-5']) }}>
 
     @isset($cardHeader)
     <div class="card-header text-lg font-medium text-gray-900">

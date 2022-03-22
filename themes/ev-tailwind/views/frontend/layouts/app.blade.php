@@ -104,6 +104,12 @@
           .badge-danger {
             @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dangerLight text-danger;
           }
+
+          .container {
+              max-width: 100%;
+              width: 1140px;
+              margin: 0 auto;
+          }
         }
     </style>
 
