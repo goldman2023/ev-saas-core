@@ -235,6 +235,9 @@ Route::middleware([
     Route::get('/integrations/woocommerce/import/{type}', 'Integrations\WooCommerceController@import')->name('integrations.woocommerce.import');
     Route::get('/integrations/woocommerce/import-results/{type}', 'Integrations\WooCommerceController@import_results')->name('integrations.woocommerce.import-results');
 
+    /* FEED Routes */
+    /* TODO: Add this to separate feed.php routes file */
+    Route::get('/feed', 'FeedController@index')->name('feed.index');
     /* This is general route to catch all requests to /* */
     Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.index');
 
