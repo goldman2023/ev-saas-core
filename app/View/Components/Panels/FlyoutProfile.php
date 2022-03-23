@@ -23,10 +23,6 @@ class FlyoutProfile extends Component
      */
     public function render()
     {
-        if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind-ui.panels.flyout-profile');
-        }
-
-        return view('components.bootstrap.panels.flyout-profile');
+        return view('components.tailwind-ui.panels.flyout-profile');
     }
 }

@@ -1,4 +1,4 @@
-<div class="text-center border-2 border-gray-300 border-dashed rounded-lg p-12">
+<div class="text-center border-2 bg-white border-gray-300 border-dashed rounded-lg p-12">
     @if(!empty($icon))
         @svg($icon, ['class' => 'mx-auto h-12 w-12 text-gray-400'])
     @endif
