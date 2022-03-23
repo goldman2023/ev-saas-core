@@ -25,7 +25,7 @@
 
         <div class="grid grid-cols-12 gap-8 mb-10">
             <div class="col-span-8  ">
-                <div class="p-4 border border-gray-200 rounded-lg shadow">
+                <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                     <div>
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Subscription plan') }}</h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p>
@@ -246,7 +246,7 @@
             <div class="col-span-4">
 
                 {{-- Actions --}}
-                <div class="p-4 border border-gray-200 rounded-lg shadow">
+                <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                     <div class="w-full flex">
                     
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
@@ -272,7 +272,7 @@
 
 
                 {{-- Media --}}
-                <div class="mt-8 p-4 border border-gray-200 rounded-lg shadow">
+                <div class="mt-8 p-4 border bg-white border-gray-200 rounded-lg shadow">
                     <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
                     </div>
@@ -319,7 +319,7 @@
                 
 
                 {{-- Category Selector --}}
-                <div class="mt-8 border border-gray-200 rounded-lg shadow select-none" x-data="{
+                <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
                     open: true,
                 }" :class="{'p-4': open}">
                     <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
@@ -334,7 +334,7 @@
                 {{-- END Category Selector --}}
 
                 {{-- SEO --}}
-                <div class="mt-8 border border-gray-200 rounded-lg shadow select-none" x-data="{
+                <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
                     open: false,
                 }" :class="{'p-4': open}">
                     <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">

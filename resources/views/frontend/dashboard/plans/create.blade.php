@@ -9,18 +9,14 @@
 
 @section('panel_content')
     <section>
-        <div class="pb-5 mb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
-            <div class="">
-                <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ translate('New Plan') }}</h3>
-                {{-- <p class="mt-2 max-w-4xl text-sm text-gray-500">Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.</p>     --}}
-            </div>
-            <div class="flex sm:mt-0 sm:ml-4">
+        <x-dashboard.section-headers.section-header title="{{ translate('New Plan') }}" text="">
+            <x-slot name="content">
                 <a href="{{ route('plans.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
                     <span>{{ translate('All plans') }}</span>
                 </a>
-            </div>
-        </div>
+            </x-slot>
+        </x-dashboard.section-headers.section-header>
 
         <livewire:dashboard.forms.plans.plan-form ></livewire:dashboard.forms.plans.plan-form>
     </section>

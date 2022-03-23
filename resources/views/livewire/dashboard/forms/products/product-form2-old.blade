@@ -1,10 +1,4 @@
 <div x-data="{
-        thumbnail: @js(['id' => $product->thumbnail->id ?? null, 'file_name' => $product->thumbnail->file_name ?? '']),
-        cover: @js(['id' => $product->cover->id ?? null, 'file_name' => $product->cover->file_name ?? '']),
-        meta_img: @js(['id' => $product->meta_img->id ?? null, 'file_name' => $product->meta_img->file_name ?? '']),
-        gallery: @js($product->gallery?->map(fn($item) => ['id' => $item->id ?? null, 'file_name' => $item->file_name ?? '']) ?? []),
-        video_provider: @js($product->video_provider),
-
         status: @js($product->status ?? App\Enums\StatusEnum::draft()->value),
         is_digital: {{ $product->digital === true ? 'true' : 'false' }},
         use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
@@ -14,7 +8,6 @@
         description: @js($product->description),
         attributes: @js($attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
-        selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         onSave() {
             $wire.set('product.description', $('[name=\'product.description\']').val(), true);
@@ -120,188 +113,14 @@
                             <!-- END Description -->
                         </div>
                     </div>
-                    {{-- END Card Basic --}}
 
-                    
 
-                    
                 </div>
 
                 {{-- Right side --}}
                 <div class="col-span-4">
-                    {{-- Actions --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
-                        <div class="w-full flex">
-                        
-                            <button type="button" class="btn btn-primary ml-auto btn-sm"
-                                @click=""
-                                wire:click="savePlan()">
-                            {{ translate('Save') }}
-                            </button>
-                        </div>
-                    </div>
-                    {{-- END Actions --}}
 
-                    {{-- Card Media --}}
-                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">
-                        <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
-                        </div>
-                
-                        <div class="w-full" x-data="{
-                            show_video: {{ !empty($product->video_link) ? 'true':'false' }},
-                            show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
-                        }">
-                            {{-- Thumbnail --}}
-                            <div class="sm:items-start">
-                                <div class="flex flex-col " x-data="{}">
-                                            
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        {{ translate('Thumbnail image') }}
-                                    </label>
-    
-                                    <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="thumbnail" id="product-thumbnail-image" :selected-image="$product->thumbnail"></x-dashboard.form.image-selector>
-                                        
-                                        <x-system.invalid-msg field="product.thumbnail"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- END Thumbnail --}}
-
-                            {{-- Cover --}}
-                            <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                                <div class="flex flex-col " x-data="{}">
-                                            
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        {{ translate('Cover image') }}
-                                    </label>
-    
-                                    <div class="mt-1 sm:mt-0">
-                                        <x-dashboard.form.image-selector field="cover" id="product-cover-image" :selected-image="$product->cover"></x-dashboard.form.image-selector>
-    
-                                        <x-system.invalid-msg field="product.cover"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- END Cover --}}
-
-                            {{-- Video & Document --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Has Video') }}</span>
-                                </div>
-
-                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-
-                                    <button type="button" @click="show_video = !show_video" 
-                                                :class="{'bg-primary':show_video, 'bg-gray-200':!show_video}" 
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':show_video, 'translate-x-0':!show_video}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="w-100" x-show="show_video">
-                                <!-- Video Provider -->
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                                    <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        <span class="mr-2">{{ translate('Video provider') }}</span>
-                                    </label>
-
-                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.select :items="EVS::getMappedVideoProviders()" selected="video_provider"></x-dashboard.form.select>
-                                    </div>
-                                </div>
-                                <!-- END Video Provider -->
-
-                                <!-- Video Link -->
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                                                    
-                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Video link') }}
-                                    </label>
-
-                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <input type="text" class="form-standard @error('product.video_link') is-invalid @enderror"
-                                                placeholder="{{ translate('Link to the video...') }}"
-                                                wire:model.defer="product.video_link" />
-                                    
-                                        <x-system.invalid-msg field="product.video_link"></x-system.invalid-msg>
-                                    </div>
-
-                                    <div class="col-span-10">
-                                        <small class="text-warning">
-                                            {{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}
-                                        </small>
-                                    </div>
-                                </div>
-                                <!-- END Video Link -->
-
-                                <!-- Video -->
-                                {{-- <x-ev.form.select name="product.video_provider" :items="EVS::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
-                                <x-ev.form.input name="product.video_link" class="form-control-sm" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
-                                    <small class="text-muted">{{ translate('') }}</small>
-                                </x-ev.form.input> --}}
-                            </div>
-
-                            {{-- Card Media --}}
-                            <div class="card mb-3 mb-lg-5" >
-                            <div class="card-body position-relative pb-2">
-                                <h5 class="pb-2 mb-3 border-bottom">{{ translate('Media') }}</h5>
-
-                                <div class="w-100">
-                                    <!-- Images -->
-                                    {{-- <x-ev.form.file-selector name="product.thumbnail" class="form-control-sm" label="{{ translate('Thumbnail') }}" data_type="image" placeholder="{{ translate('Choose file...') }}" :required="true"></x-ev.form.file-selector>
-                                    <x-ev.form.file-selector name="product.gallery" class="form-control-sm" label="{{ translate('Gallery') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
-                                                            :sortable="true"
-                                                            :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
-                                    ></x-ev.form.file-selector> --}}
-
-                                    <div class="w-100 d-flex mb-4">
-                                       
-
-                                        <label class="toggle-switch mx-2">
-                                            <input type="checkbox" x-model="show_pdf" class="js-toggle-switch toggle-switch-input">
-                                            <span class="toggle-switch-label">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-
-                                            <span class="ml-3">{{ translate('Has specification document') }}</span>
-                                        </label>
-                                    </div>
-
-                                    
-
-                                    <div class="w-100" :class="{'d-none': !show_pdf}">
-                                        <!-- PDF Specification -->
-                                        <x-ev.form.file-selector name="product.pdf" class="form-control-sm" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{-- END Card Media --}}
-                        </div>
-                    </div>
-                    {{-- END Card Media --}}
-
-                    {{-- Category Selector --}}
-                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
-                        open: true,
-                    }" :class="{'p-4': open}">
-                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Categories') }}</h3>
-                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
-                        </div>
-                
-                        <div class="w-full" x-show="open">
-                            <x-dashboard.form.category-selector> </x-dashboard.form.category-selector>
-                        </div>
-                    </div>
-                    {{-- END Category Selector --}}
                 </div>
-
-
             </div>
         </div>
      </div>
@@ -318,8 +137,78 @@
 
             {{-- Left column --}}
             <div class="col-12 col-md-8">
+                {{-- Card Basic --}}
+                <div class="card mb-3 mb-lg-5">
+                    <div class="card-body position-relative">
+                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Basic info') }}</h5>
 
-                
+                        <div class="w-100">
+                            <x-ev.form.input name="product.name" class="form-control-sm" type="text" label="{{ translate('Title') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
+
+                            <x-ev.form.textarea name="product.excerpt" label="{{ translate('Excerpt (short description)') }}" >
+                                <small class="text-muted">{{ translate('If you leave excerpt empty, first 320 chars of description will be used as an excerpt.') }}</small>
+                            </x-ev.form.textarea>
+
+                            {{-- TODO: Add a function to check height of the content - if it's bigger then height of the editor, make editor bigger! Same as Shopify! --}}
+                            <x-ev.form.wysiwyg name="product.description" options='{"height":"300px","minHeight":"300px"}' label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
+                        </div>
+                    </div>
+                </div>
+                {{-- END Card Basic --}}
+
+
+                {{-- Card Media --}}
+                <div class="card mb-3 mb-lg-5" x-data="{
+                        show_video: {{ !empty($product->video_link) ? 'true':'false' }},
+                        show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
+                    }">
+                    <div class="card-body position-relative pb-2">
+                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Media') }}</h5>
+
+                        <div class="w-100">
+                            <!-- Images -->
+                            <x-ev.form.file-selector name="product.thumbnail" class="form-control-sm" label="{{ translate('Thumbnail') }}" data_type="image" placeholder="{{ translate('Choose file...') }}" :required="true"></x-ev.form.file-selector>
+                            <x-ev.form.file-selector name="product.gallery" class="form-control-sm" label="{{ translate('Gallery') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
+                                                    :sortable="true"
+                                                    :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
+                            ></x-ev.form.file-selector>
+
+                            <div class="w-100 d-flex mb-4">
+                                <label class="toggle-switch mr-3">
+                                    <input type="checkbox" x-model="show_video" class="js-toggle-switch toggle-switch-input">
+                                    <span class="toggle-switch-label">
+                                        <span class="toggle-switch-indicator"></span>
+                                    </span>
+
+                                    <span class="ml-3">{{ translate('Has video') }}</span>
+                                </label>
+
+                                <label class="toggle-switch mx-2">
+                                    <input type="checkbox" x-model="show_pdf" class="js-toggle-switch toggle-switch-input">
+                                    <span class="toggle-switch-label">
+                                        <span class="toggle-switch-indicator"></span>
+                                    </span>
+
+                                    <span class="ml-3">{{ translate('Has specification document') }}</span>
+                                </label>
+                            </div>
+
+                            <div class="w-100" :class="{'d-none': !show_video}">
+                                <!-- Video -->
+                                <x-ev.form.select name="product.video_provider" :items="EVS::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
+                                <x-ev.form.input name="product.video_link" class="form-control-sm" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
+                                    <small class="text-muted">{{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}</small>
+                                </x-ev.form.input>
+                            </div>
+
+                            <div class="w-100" :class="{'d-none': !show_pdf}">
+                                <!-- PDF Specification -->
+                                <x-ev.form.file-selector name="product.pdf" class="form-control-sm" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- END Card Media --}}
 
                 {{-- Card Pricing --}}
                 <div class="card mb-3 mb-lg-5" x-data="{
