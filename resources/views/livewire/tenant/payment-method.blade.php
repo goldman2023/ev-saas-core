@@ -2,8 +2,19 @@
     <h3 class="text-lg font-medium text-gray-900">Change payment method</h3>
     <div class="mt-2 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-5 bg-white sm:p-6">
-            {{-- Refreshing this component using an event breaks the Stripe Elements form, so we use a nested component. --}}
-            @livewire('current-payment-method')
+            <div>
+                <h4 class="font-medium text-gray-900">Current payment method</h4>
+                @if(tenant()->hasDefaultPaymentMethod())
+                    <p class="mt-2 text-sm text-gray-600">
+                        {{ ucfirst(tenant()->defaultPaymentMethod()->asStripePaymentMethod()->card->brand) }} ending in
+                        {{ tenant()->defaultPaymentMethod()->asStripePaymentMethod()->card->last4 }}
+                    </p>
+                @else
+                    <p class="mt-2 text-sm text-gray-600">
+                        No payment method set yet. Please add one below.
+                    </p>
+                @endif
+            </div>
             <div class="hidden sm:block">
                 <div class="py-4">
                     <div class="border-t border-gray-200"></div>
@@ -14,9 +25,9 @@
             <div class="mt-1 relative rounded-md shadow-sm">
                 <input id="card-holder-name" type="text" class="form-input block w-full sm:text-sm sm:leading-5" placeholder="Taylor Otwell">
             </div>
-            
+
             <!-- Stripe Elements Placeholder -->
-            <div class="mt-2 relative rounded-md shadow-sm">
+            <div class="mt-2 relative rounded-md shadow-sm" wire:ignore>
                 <div id="card-element" class="form-input block w-full sm:text-sm sm:leading-5"></div>
             </div>
             <p id="payment-method-message" class="text-sm"></p>
@@ -34,21 +45,21 @@
 
 <script>
     const stripe = Stripe('{{ config('saas.stripe_key') }}');
-    
+
     const elements = stripe.elements();
     const cardElement = elements.create('card');
-    
+
     cardElement.mount('#card-element');
-    
+
     const cardHolderName = document.getElementById('card-holder-name');
     const cardButton = document.getElementById('card-button');
     const clientSecret = cardButton.dataset.secret;
-    
+
     function paymentMethodMessage(message, success) {
         document.getElementById('payment-method-message').innerHTML = message;
         document.getElementById('payment-method-message').classList = 'text-sm mt-4 ' + (success ? 'text-green-500' : 'text-red-500');
     }
-    
+
     cardButton.addEventListener('click', async (e) => {
         const { setupIntent, error } = await stripe.confirmCardSetup(
         clientSecret, {
@@ -58,14 +69,14 @@
             }
         }
         );
-        
+
         if (error) {
             paymentMethodMessage(error.message, false);
         } else {
-            paymentMethodMessage('Payment method updated successfuly.', true);
-            
             @this.set('paymentMethod', setupIntent.payment_method);
             @this.call('save');
+
+            paymentMethodMessage('Payment method updated successfuly.', true);
         }
     });
 </script>

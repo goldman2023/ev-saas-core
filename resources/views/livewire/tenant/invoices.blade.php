@@ -1,7 +1,7 @@
 <div class="mt-8">
     <h3 class="text-lg font-medium text-gray-900">Invoices</h3>
     <div class="bg-white shadow overflow-hidden sm:rounded-md mt-2">
-        @if($invoices = tenant()->invoicesIncludingPending()->toArray())
+        @if($invoices = tenant()->invoicesIncludingPending()->all())
         <ul x-data>
             @foreach($invoices as $invoice)
             <li
