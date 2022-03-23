@@ -1,7 +1,9 @@
 <div class="w-100" x-data="{
     predefined_types: @js(App\Enums\AttributeTypeEnum::getPredefined()),
     type: @js($attribute->type ?? App\Enums\AttributeTypeEnum::dropdown()->value),
-    is_schema: @js($attribute->is_schema ?? false),
+    filterable: @js($attribute->filterable ?? 'false'),
+    is_schema: @js($attribute->is_schema ?? 'false'),
+    is_admin: @js($attribute->is_admin ?? 'false'),
     custom_properties: {...{
         'multiple': false,
         'min_value': 0,
@@ -10,7 +12,7 @@
         'with_time': false,
         'range': false,
     }, ...@js($attribute->custom_properties ?? ((object) []))},
-    attribute_values: @js($attribute->attribute_values ?? []),
+    attribute_values: @entangle('attribute_values').defer,
     countAttributeValues() {
         if(this.attribute_values === null || this.attribute_values === undefined || this.attribute_values.length <= 0) {
             this.attribute_values.push({
@@ -23,495 +25,427 @@
 }" x-init="countAttributeValues()">
     {{-- FIXME: If $attribute->custom_properties is {} and not null, it will rise livewire checksum error on saveAttribute() --}}
     
-    {{-- Attribute Card --}}
-    <div class="card">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">{{ translate('Edit') }}: {{ $attribute->getTranslation('name') }}</h5>
-            <a href="{{ route('attributes.index', base64_encode($attribute->content_type)) }}" class="btn btn-primary btn-xs">{{ translate('All attributes') }}</a>
-        </div>
-        <!-- End Header -->
-    
-        <div class="card-body" 
-            @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
-            >
-                <div class="col-lg-12 position-relative" x-cloak>
-                    <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                          wire:target="saveAttribute"
-                                          wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
-            
-                    <div class=""
-                         wire:loading.class="opacity-3 prevent-pointer-events"
-                         wire:target="saveAttribute"
-                    >
-                        
-                        <span class="d-flex flex-row align-items-center">
-                            <strong class="text-dark">{{ translate('Attribute for:') }}</strong>
-                            <span class="badge badge-inline badge-primary text-white ml-3">{{ $content_type_label }}</span>
-                        </span>
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                            wire:target="saveCategory"
+                            wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-                        <!-- Name -->
-                        <div class="row form-group mt-5" x-data="{}">
-                            <label for="attribute-name" class="col-sm-3 col-form-label input-label">{{ translate('Name') }}</label>
-            
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm-down-break">
-                                    <input type="text" class="form-control @error('attribute.name') is-invalid @enderror"
-                                            name="attribute.name"
-                                            id="attribute-name"
+        <div class="w-full"
+            wire:loading.class="opacity-30 pointer-events-none"
+            wire:target="saveCategory"
+        >
+
+            <div class="grid grid-cols-12 gap-8 mb-10">
+                {{-- Left side --}}
+                <div class="col-span-8  ">
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                        <div class="w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Attribute') }}</h3>
+                            <p class="flex items-center-1 max-w-2xl text-sm text-gray-500">
+                                {{ translate('Current attribute is related to ').': ' }}
+                                <span class="badge-info mx-1">{{ $content_type_label }}</span>
+                                {{ translate('content type') }}
+                            </p>
+                        </div>
+
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Name -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                                
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Name') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('attribute.name') is-invalid @enderror"
                                             placeholder="{{ translate('New attribute name') }}"
+                                            {{-- @input="generateURL($($el).val())" --}}
                                             wire:model.defer="attribute.name" />
-                                </div>
-            
-                                <x-system.invalid-msg field="attribute.name" type="slim"></x-system.invalid-msg>
-                            </div>
-                        </div>
-                        <!-- END Name -->
-            
-                        <!-- Type -->
-                        <div class="row form-group mt-5">
-                            <label for="attribute-type" class="col-sm-3 col-form-label input-label d-flex align-items-center">
-                                {{ translate('Type') }}
-                            </label>
-            
-                            <div class="col-sm-9" x-data="{}"
-                                x-init="
-                                    $($refs.attribute_type_selector).on('select2:select', (event) => {
-                                        type = event.target.value;
-                                    });
-            
-                                    $watch('type', (value) => {
-                                        $($refs.attribute_type_selector).val(value).trigger('change');
-                                    });
-                                "
-                            >
-                                <select
-                                    wire:model.defer="attribute.type"
-                                    name="attribute.type"
-                                    x-ref="attribute_type_selector"
-                                    id="attribute-type-status-selector"
-                                    class="js-select2-custom custom-select select2-hidden-accessible"
-                                    data-hs-select2-options='
-                                        {"minimumResultsForSearch":"Infinity"}
-                                    '
-                                >
-                                    @foreach(\App\Enums\AttributeTypeEnum::labels() as $key => $status)
-                                        <option value="{{ $key }}">
-                                            {{ $status }}
-                                        </option>
-                                    @endforeach
-                                </select>
-            
-                                <x-system.invalid-msg field="attribute.type" type="slim"></x-system.invalid-msg>
-                            </div>
-                        </div>
-                        <!-- END Type -->
-            
-                        <!-- Filterable -->
-                        <div class="row form-group mt-5" x-data="{}">
-                            <label for="attribute-filterable" class="col-sm-3 col-form-label input-label">{{ translate('Filterable') }}</label>
-            
-                            <div class="col-sm-9 d-flex align-items-center">
-                                <div class="input-group input-group-sm-down-break">
-                                    <label class="toggle-switch" for="connectedAccounts1">
-                                        <input id="connectedAccounts1" type="checkbox" class="toggle-switch-input" wire:model.defer="attribute.filterable">
-                                        <span class="toggle-switch-label">
-                                            <span class="toggle-switch-indicator"></span>
-                                        </span>
-                                    </label>
-                                </div>
-            
-                                <x-system.invalid-msg field="attribute.filterable" type="slim"></x-system.invalid-msg>
-                            </div>
-                        </div>
-                        <!-- END Filterable -->
-            
-                        <!-- Is admin -->
-                        <div class="row form-group mt-5" x-data="{}">
-                            <label for="attribute-is_admin" class="col-sm-3 col-form-label input-label">{{ translate('For admin') }}</label>
-            
-                            <div class="col-sm-9 d-flex align-items-center">
-                                <div class="input-group input-group-sm-down-break">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" class="toggle-switch-input" wire:model.defer="attribute.is_admin">
-                                        <span class="toggle-switch-label">
-                                            <span class="toggle-switch-indicator"></span>
-                                        </span>
-                                    </label>
-                                </div>
-            
-                                <x-system.invalid-msg field="attribute.is_admin" type="slim"></x-system.invalid-msg>
-                            </div>
-                        </div>
-                        <!-- END admin -->
-            
-                        <!-- Is Schema -->
-                        <div class="row form-group mt-5" x-data="{}">
-                            <label for="attribute-is_schema" class="col-sm-3 col-form-label input-label">{{ translate('Is schema') }}</label>
-            
-                            <div class="col-sm-9 d-flex align-items-center">
-                                <div class="input-group input-group-sm-down-break">
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" class="toggle-switch-input" x-model="is_schema">
-                                        <span class="toggle-switch-label">
-                                            <span class="toggle-switch-indicator"></span>
-                                        </span>
-                                    </label>
-                                </div>
-            
-                                <x-system.invalid-msg field="attribute.is_schema" type="slim"></x-system.invalid-msg>
-                            </div>
-                        </div>
-                        <!-- END Is Schema -->
-            
-                        {{-- <template x-if="is_schema"> --}}
-                            <div class="w-100" x-show="is_schema">
-                                <!-- Schema Key -->
-                                <div class="row form-group mt-5" x-data="{}">
-                                    <label for="attribute-schema_key" class="col-sm-3 col-form-label input-label">{{ translate('Schema Key') }}</label>
-            
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break">
-                                            <input type="text" class="form-control @error('attribute.schema_key') is-invalid @enderror"
-                                                    name="attribute.schema_key"
-                                                    id="attribute-schema_key"
-                                                    placeholder="{{ translate('Schema key') }}"
-                                                    wire:model.defer="attribute.schema_key" />
-                                        </div>
-            
-                                        <x-system.invalid-msg field="attribute.schema_key" type="slim"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                                <!-- END Schema Key -->
-            
-                                <!-- Schema value -->
-                                <div class="row form-group mt-5" x-data="{}">
-                                    <label for="attribute-schema_value" class="col-sm-3 col-form-label input-label">{{ translate('Schema value') }}</label>
-            
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break">
-                                            <input type="text" class="form-control @error('attribute.schema_value') is-invalid @enderror"
-                                                    name="attribute.schema_value"
-                                                    id="attribute-schema_value"
-                                                    placeholder="{{ translate('Schema value') }}"
-                                                    wire:model.defer="attribute.schema_value" />
-                                        </div>
-            
-                                        <x-system.invalid-msg field="attribute.schema_value" type="slim"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                                <!-- END Schema value -->
-                            </div>
-                            
-                        {{-- </template> --}}
-            
-                        <!-- Dropdown: Custom properties -->
-                        {{-- <template x-if="type === 'dropdown'"> --}}
-                            <div class="row form-group mt-5" x-data="{
-            
-                            }" x-show="type === 'dropdown'">
-                                <label for="attribute-multiple" class="col-sm-3 col-form-label input-label">{{ translate('Allow multiple selection') }}</label>
-                
-                                <div class="col-sm-9 d-flex align-items-center">
-                                    <div class="input-group input-group-sm-down-break">
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" class="toggle-switch-input" x-model="custom_properties.multiple">
-                                            <span class="toggle-switch-label">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
-                                    </div>
+                                
+                                    <x-system.invalid-msg field="attribute.name"></x-system.invalid-msg>
                                 </div>
                             </div>
-                        {{-- </template> --}}
-                        <!-- END Dropdown: Custom properties -->
-            
-                        <!-- Number Custom properties -->
-                        {{-- <template x-if="type === 'number'"> --}}
-                            <div x-show="type === 'number'">
+                            <!-- END Name -->
+
+                            <!-- Type -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    <span class="mr-2">{{ translate('Type') }}</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="\App\Enums\AttributeTypeEnum::labels()" selected="type"></x-dashboard.form.select>
+                                </div>
+                            </div>
+                            <!-- END Type -->
+
+                            <!-- Filterable -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Filterable') }}</span>
+                                    <span class="text-sm text-gray-500" id="availability-description">{{ translate('All filterable attributes will be displayed in archive pages filter section') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="filterable = !filterable" 
+                                                :class="{'bg-primary':filterable, 'bg-gray-200':!filterable}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':filterable, 'translate-x-0':!filterable}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+        
+                                    <x-system.invalid-msg field="attribute.filterable"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Filterable -->
+
+                            <!-- Is admin -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Is admin') }}</span>
+                                    <span class="text-sm text-gray-500" id="availability-description">{{ translate('Lorem ipsum olor sit amet') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="is_admin = !is_admin" 
+                                                :class="{'bg-primary':is_admin, 'bg-gray-200':!is_admin}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':is_admin, 'translate-x-0':!is_admin}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+        
+                                    <x-system.invalid-msg field="attribute.is_admin"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Is admin -->
+
+                            <!-- Is schema -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Is schema') }}</span>
+                                    <span class="text-sm text-gray-500" id="availability-description">{{ translate('All schema attributes will be used to populate corresponding Schema.org markup') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="is_schema = !is_schema" 
+                                                :class="{'bg-primary':is_schema, 'bg-gray-200':!is_schema}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':is_schema, 'translate-x-0':!is_schema}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+        
+                                    <x-system.invalid-msg field="attribute.is_schema"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Is schema -->
+
+                            {{-- Is schema - key and value --}}
+                            <div x-show="is_schema" class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                                
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Schema Key and Value') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-1">
+                                    <input type="text" class="form-standard @error('attribute.schema_key') is-invalid @enderror"
+                                            placeholder="{{ translate('Schema key') }}"
+                                            {{-- @input="generateURL($($el).val())" --}}
+                                            wire:model.defer="attribute.schema_key" />
+                                
+                                    <x-system.invalid-msg field="attribute.schema_key"></x-system.invalid-msg>
+                                </div>
+                                <div class="mt-1 sm:mt-0 sm:col-span-1">
+                                    <input type="text" class="form-standard @error('attribute.schema_value') is-invalid @enderror"
+                                            placeholder="{{ translate('Schema value') }}"
+                                            {{-- @input="generateURL($($el).val())" --}}
+                                            wire:model.defer="attribute.schema_value" />
+                                
+                                    <x-system.invalid-msg field="attribute.schema_value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Is schema - key and value --}}
+
+
+                            <!-- Dropdown: Custom properties -->
+                            <div x-show="type === 'dropdown'" class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Multiple') }}</span>
+                                    <span class="text-sm text-gray-500" id="availability-description">{{ translate('Allow multiple dropdown selection') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <button type="button" @click="custom_properties.multiple = !custom_properties.multiple" 
+                                                :class="{'bg-primary':custom_properties.multiple, 'bg-gray-200':!custom_properties.multiple}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':custom_properties.multiple, 'translate-x-0':!custom_properties.multiple}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>        
+                                </div>
+                            </div>
+                            <!-- END Dropdown: Custom properties -->
+
+                            <!-- Number Custom properties -->
+                            <div x-show="type === 'number'" class="w-full">
                                 <!-- Min. value -->
-                                <div class="row form-group mt-5" x-data="{}">
-                                    <label class="col-sm-3 col-form-label input-label">{{ translate('Min. value') }}</label>
-            
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break">
-                                            <input type="number" 
-                                                    class="form-control"
+                                <div  class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                                
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Minimum value') }}
+                                    </label>
+    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-1">
+                                        <input type="number" 
+                                                    class="form-standard"
                                                     placeholder="{{ translate('Minimum value') }}"
                                                     x-model="custom_properties.min_value" />
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- END Min. value -->
-            
+
                                 <!-- Max. value -->
-                                <div class="row form-group mt-5" x-data="{}">
-                                    <label class="col-sm-3 col-form-label input-label">{{ translate('Max. value') }}</label>
-            
-                                    <div class="col-sm-9">
-                                        <div class="input-group input-group-sm-down-break">
-                                            <input type="number" 
-                                                    class="form-control"
+                                <div  class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                                
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Maximum value') }}
+                                    </label>
+    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-1">
+                                        <input type="number" 
+                                                    class="form-standard"
                                                     placeholder="{{ translate('Maximum value') }}"
                                                     x-model="custom_properties.max_value" />
-                                        </div>
                                     </div>
                                 </div>
                                 <!-- END Max. value -->
-            
+
                                 <!-- Unit -->
-                                <div class="row form-group mt-5">
-                                    <label class="col-sm-3 col-form-label input-label d-flex align-items-center">
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                                    
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('Unit') }}
                                     </label>
-            
-                                    <div class="col-sm-9" 
-                                        x-data="{}"
-                                        x-init="
-                                            $($refs.custom_properties_unit_selector).on('select2:select', (event) => {
-                                                custom_properties.unit = event.target.value;
-                                            });
-            
-                                            $watch('custom_properties.unit', (value) => {
-                                                $($refs.custom_properties_unit_selector).val(value).trigger('change');
-                                            });
-                                        "
-                                    >
-                                        {{-- <select
-                                            x-ref="custom_properties_unit_selector"
-                                            class="js-select2-custom custom-select select2-hidden-accessible"
-                                            data-hs-select2-options='
-                                                {"minimumResultsForSearch":-1}
-                                            '
-                                        >
-                                            @foreach(\App\Enums\UnitsEnum::labels() as $key => $status)
-                                                <option value="{{ $key }}">
-                                                    {{ $status }}
-                                                </option>
-                                            @endforeach
-                                        </select> --}}
 
-                                        <div class="input-group input-group-sm-down-break">
-                                            <input type="text" 
-                                                    class="form-control"
-                                                    placeholder=""
-                                                    x-model="custom_properties.unit" />
-                                        </div>
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <input type="text" 
+                                                class="form-standard"
+                                                placeholder="{{ translate('Unit') }}"
+                                                x-model="custom_properties.unit" />                                    
                                     </div>
                                 </div>
-                                <!-- END Type -->
+                                <!-- END Unit -->
                             </div>
-                        {{-- </template> --}}
-                        <!-- END Number Custom properties -->
+                            <!-- END Number Custom properties -->
+
+                            <!-- Date Custom properties -->
+                            <div x-show="type === 'date'" class="w-full">
+                                {{-- With time --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('With time') }}</span>
+                                        <span class="text-sm text-gray-500" id="availability-description">{{ translate('Include time along with date') }}</span>
+                                    </div>
+    
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+    
+                                        <button type="button" @click="custom_properties.with_time = !custom_properties.with_time" 
+                                                    :class="{'bg-primary':custom_properties.with_time, 'bg-gray-200':!custom_properties.with_time}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':custom_properties.with_time, 'translate-x-0':!custom_properties.with_time}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
             
-                        <!-- Date Custom properties -->
-                        <div x-show="type === 'date'">
-                            <!-- With time -->
-                            <div class="row form-group mt-5" x-data="{}">
-                                <label class="col-sm-3 col-form-label input-label">{{ translate('With time') }}</label>
-        
-                                <div class="col-sm-9 d-flex align-items-center">
-                                    <div class="input-group input-group-sm-down-break">
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" class="toggle-switch-input" x-model="custom_properties.with_time">
-                                            <span class="toggle-switch-label">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- END With time -->
+                                {{-- END With time --}}
 
-                            <!-- Range -->
-                            <div class="row form-group mt-5" x-data="{}">
-                                <label class="col-sm-3 col-form-label input-label">{{ translate('Is range') }}</label>
-        
-                                <div class="col-sm-9 d-flex align-items-center">
-                                    <div class="input-group input-group-sm-down-break">
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" class="toggle-switch-input" x-model="custom_properties.range">
-                                            <span class="toggle-switch-label">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
+                                <!-- Range -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Is range') }}</span>
+                                        <span class="text-sm text-gray-500" id="availability-description">{{ translate('If enabled, date wil be a date range. From X to Y date.') }}</span>
+                                    </div>
+    
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <button type="button" @click="custom_properties.range = !custom_properties.range" 
+                                                    :class="{'bg-primary':custom_properties.range, 'bg-gray-200':!custom_properties.range}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':custom_properties.range, 'translate-x-0':!custom_properties.range}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
                                     </div>
                                 </div>
+                                <!-- END Range -->
                             </div>
-                            <!-- END Range -->
-                        </div>
-                        <!-- END Date Custom properties -->
+                            <!-- END Date Custom properties -->
 
-                        <!-- Text Repeater -->
-                        <div x-show="type === 'text_list'">
-                            <!-- Min. value -->
-                            <div class="row form-group mt-5" x-data="{}">
-                                <label class="col-sm-3 col-form-label input-label">{{ translate('Min. value') }}</label>
-        
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm-down-break">
+
+                            <!-- Text Repeater custom properties-->
+                            <div x-show="type === 'text_list'" class="w-full">
+                                <!-- Min. value -->
+                                <div  class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                                
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Minimum value') }}
+                                    </label>
+    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-1">
                                         <input type="number" 
-                                                class="form-control"
-                                                min="0"
-                                                placeholder="{{ translate('Minimum value') }}"
-                                                x-model="custom_properties.min_value" />
+                                                    class="form-standard"
+                                                    min="0"
+                                                    placeholder="{{ translate('Minimum value') }}"
+                                                    x-model="custom_properties.min_value" />
                                     </div>
                                 </div>
-                            </div>
-                            <!-- END Min. value -->
-        
-                            <!-- Max. value -->
-                            <div class="row form-group mt-5" x-data="{}">
-                                <label class="col-sm-3 col-form-label input-label">{{ translate('Max. value') }}</label>
-        
-                                <div class="col-sm-9">
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number" 
-                                                class="form-control"
-                                                min="1"
-                                                placeholder="{{ translate('Maximum value') }}"
-                                                x-model="custom_properties.max_value" />
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END Max. value -->
-                        </div>
-                        <!-- END Text Repeater -->
+                                <!-- END Min. value -->
 
-                        <hr/>
-            
-                        <div class="row form-group mb-0">
-                            <div class="col-12 d-flex">
-                                {{-- TODO: Standardize Categories selection for various Content Types --}}
-                                <button type="button" class="btn btn-primary ml-auto btn-sm"
-                                        @click="
-                                            $wire.set('attribute.custom_properties', custom_properties, true);
-                                            $wire.set('attribute.type', type, true);
-                                            $wire.set('attribute.is_schema', is_schema, true);
-                                            {{--let $selected_categories = [];
-                                            $('[name=\'selected_categories\']').each(function(index, item) {
-                                                $selected_categories = [...$selected_categories, ...$(item).val()];
-                                            });
-                                            $wire.set('selected_categories', $selected_categories, true);
-                                            $wire.set('plan.base_currency', $('#plan-base_currency').val(), true);
-                                            $wire.set('plan.discount_type', $('#plan-discount_type').val(), true);
-                                            $wire.set('plan.yearly_discount_type', $('#plan-yearly_discount_type').val(), true);
-                                            $wire.set('plan.tax_type', $('#plan-tax_type').val(), true); --}}
-                                        "
-                                        wire:click="saveAttribute()">
-                                    {{ translate('Save') }}
-                                </button>
+                                <!-- Max. value -->
+                                <div  class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                                
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Maximum value') }}
+                                    </label>
+    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-1">
+                                        <input type="number" 
+                                                    class="form-standard"
+                                                    min="0"
+                                                    placeholder="{{ translate('Maximum value') }}"
+                                                    x-model="custom_properties.max_value" />
+                                    </div>
+                                </div>
+                                <!-- END Max. value -->
+                            </div>
+                            <!-- END Text Repeater custom properties-->
+
+
+                            <div class="w-full sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                                <div class="w-full flex justify-end">
+                                    <button type="button" class="btn btn-primary ml-auto"
+                                            @click="
+                                                $wire.set('attribute.custom_properties', custom_properties, true);
+                                                $wire.set('attribute.type', type, true);
+                                                $wire.set('attribute.is_schema', is_schema, true);
+                                                $wire.set('attribute.is_admin', is_admin, true);
+                                                $wire.set('attribute.filterable', filterable, true);
+                                            "
+                                            wire:click="saveAttribute()">
+                                        {{ translate('Save') }}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
                 </div>
-        </div>
-    </div>
-    {{-- END Attribute Card --}}
 
-    @if($is_update)
-    {{-- Attribute Values Card --}}
-    <div class="card mt-4" x-show="predefined_types.indexOf(type) !== -1">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">{{ translate('Attribute Values') }}</h5>
-        </div>
-        <!-- End Header -->
-
-        <div class="card-body" 
-            @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
-            >
-            <div class="col-lg-12 position-relative" x-cloak>
-                <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                    wire:target="saveAttributeValues"
-                                    wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
-
-                <div class=""
-                    wire:loading.class="opacity-3 prevent-pointer-events"
-                    wire:target="saveAttributeValues"
-                >
-                    <template x-if="predefined_types.indexOf(type) !== -1">
-                        <div class="w-100">
-                            <!-- Values of Predefined Types -->
-                            <div class="row form-group" x-data="{
-                                    count() {
-                                        if(this.attribute_values === undefined || this.attribute_values === null) {
-                                            this.attribute_values = [{values: ''}];
-                                        }
-
-                                        return this.attribute_values.length;
-                                    },
-                                    hasID(index) {
-                                        return this.attribute_values[index].hasOwnProperty('id') ? true : false;
-                                    },
-                                    add() {
-                                        this.attribute_values.push({values:''});
-                                    },
-                                    remove(index) {
-                                        console.log(this.hasID(index));
-                                        if(this.hasID(index)) {
-                                            $wire.removeAttributeValue(this.attribute_values[index]['id']);
-                                        }
-                                        this.attribute_values.splice(index, 1);
-                                    },
-                                }"
-                                >
-                                <div class="col-sm-9">
-                                    <template x-if="count() <= 1">
-                                        <div class="d-flex">
-                                            <input type="text" 
-                                                    class="form-control"
-                                                    placeholder="{{ translate('Value 1') }}"
-                                                    x-model="attribute_values[0]['values']" />
-                                        </div>
-                                    </template>
-                                    <template x-if="count() > 1">
-                                        <template x-for="[key, value] of Object.entries(attribute_values)">
-                                            <div class="d-flex" :class="{'mt-2': key > 0}">
-                                                <input type="text" 
-                                                    class="form-control"
-                                                    x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                                                    x-model="attribute_values[key]['values']" />
-                                                <template x-if="key > 0">
-                                                    <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
-                                                        @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
-                                                    </span>
-                                                </template>
-                                            </div>
-                                        </template>
-                                    </template>
-
-                                    <a href="javascript:;"
-                                        class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="add()">
-                                        <i class="tio-add"></i> {{ translate('Add value') }}
-                                    </a>
-    {{-- 
-                                    <x-system.invalid-msg field="plan.attribute_values"></x-system.invalid-msg> --}}
-                                </div>
-                            </div>
-                            <!-- END Values of Predefined Types --> 
-                        </div>
-                    </template>
-
-                    <hr/>
-            
-                    <div class="row form-group mb-0">
-                        <div class="col-12 d-flex">
-                            <button type="button" class="btn btn-primary ml-auto btn-sm"
-                                    @click="
-                                        $wire.set('attribute_values', attribute_values, true);
-                                    "
-                                    wire:click="saveAttributeValues()">
-                                {{ translate('Save') }}
+                {{-- Right side --}}
+                <div class="col-span-4">
+                    {{-- Actions --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                        <div class="w-full flex">
+                        
+                            <button type="button" class="btn btn-primary ml-auto"
+                                @click="
+                                    $wire.set('attribute.custom_properties', custom_properties, true);
+                                    $wire.set('attribute.type', type, true);
+                                    $wire.set('attribute.is_schema', is_schema, true);
+                                    $wire.set('attribute.is_admin', is_schema, true);
+                                    $wire.set('attribute.filterable', is_schema, true);
+                                "
+                                wire:click="saveAttribute()">
+                            {{ translate('Save') }}
                             </button>
                         </div>
                     </div>
+                    {{-- END Actions --}}
+
+                    @if($is_update && in_array($attribute->type, App\Enums\AttributeTypeEnum::getPredefined()))
+                        {{-- Attribute Values --}}
+                        <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                                open: true,
+                            }" :class="{'p-4': open}" wire:ignore>
+                            <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Attribute values') }}</h3>
+                                @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                            </div>
+                    
+                            <div class="w-full" x-show="open" >
+                                <template x-if="predefined_types.indexOf(type) !== -1">
+                                    <!-- Values of Predefined Types -->
+                                    <div class="w-full grid grid-cols-12 gap-3" x-data="{
+                                        count() {
+                                            if(this.attribute_values === undefined || this.attribute_values === null) {
+                                                this.attribute_values = [{values: ''}];
+                                            }
+    
+                                            return this.attribute_values.length;
+                                        },
+                                        hasID(index) {
+                                            return this.attribute_values[index].hasOwnProperty('id') ? true : false;
+                                        },
+                                        add() {
+                                            this.attribute_values.push({values:''});
+                                        },
+                                        remove(index) {
+                                            if(this.hasID(index)) {
+                                                $wire.removeAttributeValue(this.attribute_values[index]['id']);
+                                            }
+                                            this.attribute_values.splice(index, 1);
+                                        },
+                                    }"
+                                    >
+                                        <div class="col-span-12">
+                                            <template x-if="count() <= 1">
+                                                <div class="flex">
+                                                    <input type="text" 
+                                                            class="form-standard"
+                                                            placeholder="{{ translate('Value 1') }}"
+                                                            x-model="attribute_values[0]['values']" />
+                                                </div>
+                                            </template>
+                                            <template x-if="count() > 1">
+                                                <template x-for="[key, attribute_value] of Object.entries(attribute_values)">
+                                                    <div class="flex" :class="{'mt-2': key > 0}">
+                                                        <input type="text" 
+                                                            class="form-standard"
+                                                            x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
+                                                            x-model="attribute_value.values" />
+                                                        <template x-if="key > 0">
+                                                            <span class="ml-2 flex items-center cursor-pointer" @click="remove(key)">
+                                                                @svg('heroicon-o-trash', ['class' => 'w-[22px] h-[22px] text-danger'])
+                                                            </span>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </template>
+        
+                                            <a href="javascript:;" class="btn-ghost !pl-0 !text-14 mt-1" @click="add()">
+                                                @svg('heroicon-o-plus', ['class' => 'h-3 w-3 mr-2'])
+                                                {{ translate('Add new') }}
+                                            </a>
+            
+                                            {{-- <x-system.invalid-msg field="attribute.attribute_values"></x-system.invalid-msg> --}}
+                                        </div>
+                                    </div>
+                                <!-- END Values of Predefined Types --> 
+                                </template>
+
+                                <div class="w-full flex justify-end">
+                                    <button type="button" class="btn btn-primary ml-auto"
+                                            @click="
+                                                $wire.set('attribute_values', attribute_values, true);
+                                            "
+                                            wire:click="saveAttributeValues()">
+                                        {{ translate('Save') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- END Attribute Values --}}
+                    @endif
+                    
                 </div>
             </div>
         </div>
     </div>
-    {{-- END Attribute Values Card --}}
-    @endif
+
 </div>
 
 

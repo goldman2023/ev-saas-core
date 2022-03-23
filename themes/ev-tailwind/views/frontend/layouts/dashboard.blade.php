@@ -176,9 +176,7 @@
 
     <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
 
-    <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
-        :is_x="true" :timeout="4000">
-    </x-ev.toast>
+    <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
     @yield('script')
 

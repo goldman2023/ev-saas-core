@@ -12,7 +12,7 @@
     
     @if(!empty($linkHrefRoute) && !empty($linkText))
         <div class="mt-6">
-            <a href="{{ route($linkHrefRoute) }}" class="btn-primary">
+            <a href="{{ Route::has($linkHrefRoute) ? route($linkHrefRoute) : $linkHrefRoute }}" class="btn-primary">
                 @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
                 <span>{{ $linkText }}</span>
             </a>
