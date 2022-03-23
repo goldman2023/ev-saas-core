@@ -146,7 +146,7 @@
 
                     {!! $product->description !!}
                 </div>
-                <livewire:actions.wishlist-button template="wishlist-button-detailed" :object="$product">
+                <livewire:actions.wishlist-button :key="$product->id" template="wishlist-button-detailed" :object="$product">
 
                 </livewire:actions.wishlist-button>
                 <a href="{{ $product->getPermalink() }}" class="btn btn-primary mt-4">
