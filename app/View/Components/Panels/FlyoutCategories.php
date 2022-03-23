@@ -27,10 +27,6 @@ class FlyoutCategories extends Component
      */
     public function render()
     {
-        if(session('style_framework') === 'tailwind') {
-            return view('components.tailwind-ui.panels.flyout-categories');
-        }
-
-        return view('components.bootstrap.panels.flyout-categories');
+        return view('components.tailwind-ui.panels.flyout-categories');
     }
 }
