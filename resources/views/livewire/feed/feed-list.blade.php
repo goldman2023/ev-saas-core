@@ -1,5 +1,7 @@
-@foreach($activities as $item)
-<x-feed.elements.feed-card :item="$item"></x-feed.elements.feed-card>
-@endforeach
+<div>
+    @foreach($activities as $item)
+        <x-feed.elements.feed-card :item="$item"></x-feed.elements.feed-card>
+    @endforeach
 
-{{ $activities->links() }}
+    {{ $activities->links() }}
+</div>
