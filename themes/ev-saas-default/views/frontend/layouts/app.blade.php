@@ -138,7 +138,7 @@
             <x-panels.flyout-auth></x-panels.flyout-auth>
         @endguest
 
-        <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3"
+        <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-16"
             :is_x="true" :timeout="4000">
         </x-ev.toast>
 
