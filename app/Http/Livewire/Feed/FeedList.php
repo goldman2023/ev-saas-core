@@ -17,15 +17,13 @@ class FeedList extends Component
     public function mount()
     {
         $this->perPage = 10;
-        $this->activitiesObjects = Activity::whereNotIn('description', ['viewed', 'deleted'])->orderBy('created_at', 'desc');
-
     }
 
     public function render()
     {
 
         return view('livewire.feed.feed-list', [
-            'activities' => $this->activitiesObjects->paginate($this->perPage),
+            'activities' => Activity::whereNotIn('description', ['viewed', 'deleted'])->orderBy('created_at', 'desc')->paginate($this->perPage),
         ]);
     }
 

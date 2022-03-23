@@ -2,13 +2,15 @@
         thumbnail: @js(['id' => $product->thumbnail->id ?? null, 'file_name' => $product->thumbnail->file_name ?? '']),
         cover: @js(['id' => $product->cover->id ?? null, 'file_name' => $product->cover->file_name ?? '']),
         meta_img: @js(['id' => $product->meta_img->id ?? null, 'file_name' => $product->meta_img->file_name ?? '']),
+        pdf: @js(['id' => $product->pdf->id ?? null, 'file_name' => $product->pdf->file_name ?? '']),
         gallery: @js($product->gallery?->map(fn($item) => ['id' => $item->id ?? null, 'file_name' => $item->file_name ?? '']) ?? []),
         video_provider: @js($product->video_provider),
+        base_currency: @js($product->base_currency),
 
         status: @js($product->status ?? App\Enums\StatusEnum::draft()->value),
         is_digital: {{ $product->digital === true ? 'true' : 'false' }},
         use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
-        base_currency: @js($product->base_currency),
+        
         discount_type: @js($product->discount_type),
         tax_type: @js($product->tax_type),
         description: @js($product->description),
@@ -123,8 +125,282 @@
                     {{-- END Card Basic --}}
 
                     
+                    {{-- Card Pricing --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{
+                            show_tax: {{ !empty($product->tax) ? 'true':'false' }},
+                        }">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Pricing') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Product pricing details') }}</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Price -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Price') }}
+                                </label>
 
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    class="form-standard @error('product.unit_price') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.unit_price" />
+                                        </div>
+
+                                        <div class="col-span-4" x-data="{}"> 
+                                            <x-dashboard.form.select :items="\FX::getAllCurrencies(formatted: true)" selected="base_currency" :nullable="false"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.unit_price"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Price -->
+
+                            <!-- Discount and Discount type -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Discount') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    min="0"
+                                                    class="form-standard @error('product.discount') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.discount" />
+                                        </div>
+
+                                        <div class="col-span-4" x-data="{}"> 
+                                            <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="discount_type" :nullable="false"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.discount"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Discount and Discount type -->
+
+                            {{-- Additional fee/tax --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Has additional fee?') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="show_tax = !show_tax" 
+                                                :class="{'bg-primary':show_tax, 'bg-gray-200':!show_tax}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':show_tax, 'translate-x-0':!show_tax}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="w-full mt-4" x-show="show_tax">
+                                <!-- Tax and Tax type -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Additional Fee') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        min="0"
+                                                        class="form-standard @error('product.tax') is-invalid @enderror"
+                                                        placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
+                                                        wire:model.defer="product.tax" />
+                                            </div>
+
+                                            <div class="col-span-4" x-data="{}"> 
+                                                <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type" :nullable="false"></x-dashboard.form.select>
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.tax"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Tax and Tax type -->
+                            </div>
+                            {{-- Additional fee/tax --}}
+
+                            <!-- Cost per item -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Cost per item') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    class="form-standard @error('product.purchase_price') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.purchase_price" />
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.purchase_price"></x-system.invalid-msg>
+
+                                        <small class="col-span-10 w-100">
+                                            {{ translate('Customers won\'t see this. For your reference and reports only.') }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Cost per item -->
+                        </div>
+                    </div>
+                    {{-- END Card Pricing --}}
                     
+
+                    {{-- Card Inventory --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{
+                        show_tax: {{ !empty($product->tax) ? 'true':'false' }},
+                    }">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Pricing') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Product pricing details') }}</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Price -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Price') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    class="form-standard @error('product.unit_price') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.unit_price" />
+                                        </div>
+
+                                        <div class="col-span-4" x-data="{}"> 
+                                            <x-dashboard.form.select :items="\FX::getAllCurrencies(formatted: true)" selected="base_currency" :nullable="false"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.unit_price"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Price -->
+
+                            <!-- Discount and Discount type -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Discount') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    min="0"
+                                                    class="form-standard @error('product.discount') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.discount" />
+                                        </div>
+
+                                        <div class="col-span-4" x-data="{}"> 
+                                            <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="discount_type" :nullable="false"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.discount"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Discount and Discount type -->
+
+                            {{-- Additional fee/tax --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Has additional fee?') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="show_tax = !show_tax" 
+                                                :class="{'bg-primary':show_tax, 'bg-gray-200':!show_tax}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':show_tax, 'translate-x-0':!show_tax}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="w-full mt-4" x-show="show_tax">
+                                <!-- Tax and Tax type -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Additional Fee') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        min="0"
+                                                        class="form-standard @error('product.tax') is-invalid @enderror"
+                                                        placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
+                                                        wire:model.defer="product.tax" />
+                                            </div>
+
+                                            <div class="col-span-4" x-data="{}"> 
+                                                <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type" :nullable="false"></x-dashboard.form.select>
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.tax"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Tax and Tax type -->
+                            </div>
+                            {{-- Additional fee/tax --}}
+
+                            <!-- Cost per item -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Cost per item') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    class="form-standard @error('product.purchase_price') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.purchase_price" />
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.purchase_price"></x-system.invalid-msg>
+
+                                        <small class="col-span-10 w-100">
+                                            {{ translate('Customers won\'t see this. For your reference and reports only.') }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Cost per item -->
+                        </div>
+                    </div>
+                    {{-- END Card Inventory --}}
                 </div>
 
                 {{-- Right side --}}
@@ -187,7 +463,7 @@
                             {{-- END Cover --}}
 
                             {{-- Video & Document --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Has Video') }}</span>
                                 </div>
@@ -202,7 +478,7 @@
                                 </div>
                             </div>
 
-                            <div class="w-100" x-show="show_video">
+                            <div class="w-100 mt-4" x-show="show_video">
                                 <!-- Video Provider -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                                     <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -216,7 +492,7 @@
                                 <!-- END Video Provider -->
 
                                 <!-- Video Link -->
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                                     
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('Video link') }}
@@ -228,59 +504,50 @@
                                                 wire:model.defer="product.video_link" />
                                     
                                         <x-system.invalid-msg field="product.video_link"></x-system.invalid-msg>
-                                    </div>
 
-                                    <div class="col-span-10">
-                                        <small class="text-warning">
-                                            {{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}
-                                        </small>
+                                        <div class="w-full">
+                                            <small class="text-warning">
+                                                {{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- END Video Link -->
-
-                                <!-- Video -->
-                                {{-- <x-ev.form.select name="product.video_provider" :items="EVS::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
-                                <x-ev.form.input name="product.video_link" class="form-control-sm" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
-                                    <small class="text-muted">{{ translate('') }}</small>
-                                </x-ev.form.input> --}}
                             </div>
 
-                            {{-- Card Media --}}
-                            <div class="card mb-3 mb-lg-5" >
-                            <div class="card-body position-relative pb-2">
-                                <h5 class="pb-2 mb-3 border-bottom">{{ translate('Media') }}</h5>
+                            {{-- Specificaion document --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Has specification document') }}</span>
+                                </div>
 
-                                <div class="w-100">
-                                    <!-- Images -->
-                                    {{-- <x-ev.form.file-selector name="product.thumbnail" class="form-control-sm" label="{{ translate('Thumbnail') }}" data_type="image" placeholder="{{ translate('Choose file...') }}" :required="true"></x-ev.form.file-selector>
-                                    <x-ev.form.file-selector name="product.gallery" class="form-control-sm" label="{{ translate('Gallery') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
-                                                            :sortable="true"
-                                                            :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
-                                    ></x-ev.form.file-selector> --}}
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <div class="w-100 d-flex mb-4">
-                                       
+                                    <button type="button" @click="show_pdf = !show_pdf" 
+                                                :class="{'bg-primary':show_pdf, 'bg-gray-200':!show_pdf}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':show_pdf, 'translate-x-0':!show_pdf}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
 
-                                        <label class="toggle-switch mx-2">
-                                            <input type="checkbox" x-model="show_pdf" class="js-toggle-switch toggle-switch-input">
-                                            <span class="toggle-switch-label">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-
-                                            <span class="ml-3">{{ translate('Has specification document') }}</span>
+                            <div class="w-100 mt-4" x-show="show_pdf">
+                                <div class="sm:items-start">
+                                    <div class="flex flex-col " x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            {{ translate('PDF Specification (optional)') }}
                                         </label>
-                                    </div>
-
-                                    
-
-                                    <div class="w-100" :class="{'d-none': !show_pdf}">
-                                        <!-- PDF Specification -->
-                                        <x-ev.form.file-selector name="product.pdf" class="form-control-sm" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
+        
+                                        <div class="mt-1 sm:mt-0">
+                                            <x-dashboard.form.image-selector field="pdf" id="product-document-pdf" :selected-image="$product->pdf"></x-dashboard.form.image-selector>
+                                            
+                                            <x-system.invalid-msg field="product.pdf"></x-system.invalid-msg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {{-- END Card Media --}}
+                            {{-- END Specificaion document --}}
+
                         </div>
                     </div>
                     {{-- END Card Media --}}
@@ -318,190 +585,6 @@
 
             {{-- Left column --}}
             <div class="col-12 col-md-8">
-
-                
-
-                {{-- Card Pricing --}}
-                <div class="card mb-3 mb-lg-5" x-data="{
-                        show_tax: {{ !empty($product->tax) ? 'true':'false' }},
-                    }">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Pricing') }}</h5>
-
-                        <div class="w-100">
-                            <!-- Price -->
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-7">
-                                    <label class="w-100">{{ translate('Price') }}</label>
-
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number"
-                                                step="0.01"
-                                                min="0"
-                                                class="form-control form-control-sm @error('product.unit_price') is-invalid @enderror"
-                                                placeholder="{{ translate('0.00') }}"
-                                                wire:model.defer="product.unit_price" />
-                                    </div>
-
-                                    <x-system.invalid-msg field="product.unit_price" type="slim"></x-system.invalid-msg>
-                                </div>
-
-                                <div class="col-12 col-sm-5"  x-init="
-                                    $('#product-base_currency').on('select2:select', (event) => {
-                                        base_currency = event.target.value;
-                                    });
-                                    $watch('base_currency', (value) => {
-                                        $('#product-base_currency').val(value).trigger('change');
-                                    });
-                                ">
-                                    <label class="w-100">{{ translate('Base currency') }}</label>
-
-                                    <select class="form-control custom-select custom-select-sm"
-                                            name="product.base_currency"
-                                            id="product-base_currency"
-                                            x-model="base_currency"
-                                            data-hs-select2-options='{
-                                                "minimumResultsForSearch": "Infinity",
-                                                "selectionCssClass": "custom-select-sm"
-                                            }'>
-                                        @foreach(\FX::getAllCurrencies() as $currency)
-                                            <option value="{{ $currency->code }}" >
-                                                {{ $currency->code }} ({{ $currency->symbol }})
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- END Price -->
-
-                            <!-- Discount and Discount type -->
-                            <div class="row form-group mt-3">
-
-                                <div class="col-12 col-sm-7">
-                                    <label class="w-100">{{ translate('Discount') }}</label>
-
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number" step="0.01" class="form-control form-control-sm @error('product.discount') is-invalid @enderror"
-                                                name="product.discount"
-                                                id="product-discount"
-                                                min="0"
-                                                placeholder="{{ translate('Product discount (fixed or percentage)') }}"
-                                                wire:model.defer="product.discount" />
-                                    </div>
-
-                                    <x-system.invalid-msg field="product.discount" type="slim"></x-system.invalid-msg>
-                                </div>
-
-                                <div class="col-12 col-sm-5" x-data="{}" x-init="
-                                    $('#product-discount_type').on('select2:select', (event) => {
-                                        discount_type = event.target.value;
-                                    });
-                                    $watch('discount_type', (value) => {
-                                        $('#product-discount_type').val(value).trigger('change');
-                                    });
-                                ">
-                                    <label class="w-100">{{ translate('Discount type') }}</label>
-
-                                    <select class="form-control custom-select custom-select-sm"
-                                            name="product.discount_type"
-                                            id="product-discount_type"
-                                            x-model="discount_type"
-                                            data-hs-select2-options='{
-                                                "minimumResultsForSearch": "Infinity",
-                                                "selectionCssClass": "custom-select-sm"
-                                        }'>
-                                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                                            <option value="{{ $type }}" >
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- END Discount and discount type -->
-
-                            <!-- Has additional fee -->
-                            <div class="w-100 d-flex">
-                                <label class="toggle-switch mr-3">
-                                    <input type="checkbox" x-model="show_tax" class="js-toggle-switch toggle-switch-input">
-                                    <span class="toggle-switch-label">
-                                        <span class="toggle-switch-indicator"></span>
-                                    </span>
-
-                                    <span class="ml-3">{{ translate('Additional fee') }}</span>
-                                </label>
-                            </div>
-
-                            <!-- Tax and Tax type -->
-                            <div class="row form-group mt-3" :class="{'d-none': !show_tax}">
-                                <div class="col-12 col-sm-7">
-                                    <label class="w-100 ">{{ translate('Additional Fee') }}</label>
-
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number" step="0.01" class="form-control @error('product.tax') is-invalid @enderror"
-                                                name="product.tax"
-                                                id="product-tax"
-                                                min="0"
-                                                placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
-                                                wire:model.defer="product.tax" />
-                                    </div>
-
-                                    <x-system.invalid-msg field="product.tax" type="slim"></x-system.invalid-msg>
-                                </div>
-
-                                <div class="col-12 col-sm-5" x-data="{}" x-init="
-                                    $('#product-tax_type').on('select2:select', (event) => {
-                                        tax_type = event.target.value;
-                                    });
-                                    $watch('tax_type', (value) => {
-                                        $('#product-tax_type').val(value).trigger('change');
-                                    });
-                                ">
-                                    <label class="w-100">{{ translate('Fee type') }}</label>
-
-                                    <select class="form-control custom-select custom-select-sm"
-                                            name="product.tax_type"
-                                            id="product-tax_type"
-                                            x-model="tax_type"
-                                            data-hs-select2-options='{
-                                                "minimumResultsForSearch": "Infinity"
-                                        }'>
-                                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                                            <option value="{{ $type }}" >
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- END Tax and Tax type -->
-
-                            <hr class="my-2 mt-3" />
-
-                            <div class="row form-group mt-0 mb-0">
-                                <div class="col-12">
-                                    <label class="w-100 col-form-label input-label pt-1">{{ translate('Cost per item') }}</label>
-
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number"
-                                                step="0.01"
-                                                min="0"
-                                                class="form-control form-control-sm @error('product.purchase_price') is-invalid @enderror"
-                                                placeholder="{{ translate('0.00') }}"
-                                                wire:model.defer="product.purchase_price" />
-
-                                        <small class="w-100 mt-2">
-                                            {{ translate('Customers won\'t see this. For your reference and reports only.') }}
-                                        </small>
-                                    </div>
-
-                                    <x-system.invalid-msg field="product.purchase_price" type="slim"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- END Card Pricing --}}
 
 
                 {{-- Card Inventory --}}
