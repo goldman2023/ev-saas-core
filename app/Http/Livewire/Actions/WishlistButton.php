@@ -77,8 +77,11 @@ class WishlistButton extends Component
             activity()
             ->performedOn($item->subject)
             ->causedBy(auth()->user())
-            ->withProperties(['action' => 'liked'])
-            ->log('User liked a product');
+            ->withProperties([
+                'action' => 'liked',
+                'action_title' => 'liked a product',
+                ])
+            ->log('liked');
 
             $this->toastify(translate('Item added to wishlist'), 'success');
 

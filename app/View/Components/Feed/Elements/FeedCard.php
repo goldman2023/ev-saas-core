@@ -8,6 +8,7 @@ class FeedCard extends Component
 {
     public $item;
     public $product;
+    private $ignore = true;
     /**
      * Create a new component instance.
      *
@@ -16,12 +17,19 @@ class FeedCard extends Component
     public function __construct($item)
     {
         //
+        $this->ignore = false;
         $this->item = $item;
-
-        if($item->subject_type == 'App\Models\Product') {
+        if(empty($item->causer)){
+            $this->ignore = true;
+        }
+        if ($item->subject_type == 'App\Models\Product') {
             $this->product = $item->subject;
-        } elseif($item->subject_type == 'App\Models\Wishlist') {
-            $this->product = $item->subject->subject;
+        } elseif ($item->subject_type == 'App\Models\Wishlist') {
+            if (empty($item->subject->subject)) {
+                $this->ignore = true;
+            } else {
+                $this->product = $item->subject->subject;
+            }
         }
     }
 
@@ -32,6 +40,8 @@ class FeedCard extends Component
      */
     public function render()
     {
-        return view('components.feed.elements.feed-card');
+        if (!$this->ignore) {
+            return view('components.feed.elements.feed-card');
+        }
     }
 }

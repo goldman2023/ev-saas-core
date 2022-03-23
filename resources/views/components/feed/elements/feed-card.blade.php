@@ -99,23 +99,32 @@
         <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
             @if($item->subject_type == 'App\Models\Wishlist')
 
-            {{ translate('Liked a product') }}
+            {{ translate('Liked a product') }} <span class="emoji ml-2">❤️</span>
 
             @elseif($item->subject_type == 'App\Models\Product')
             <a href="{{ $product->getPermalink() }}">
+                @if($item->description == 'created')
                 {{ translate('Added new product') }}
+                @elseif($item->description == 'viewed')
+                {{ $item->properties['action_title'] }} <span class="emoji ml-2">👁️‍🗨️</span>
+                @elseif($item->description == 'liked')
+                {{ $item->properties['action_title'] }} <span class="emoji ml-2">❤️</span>
+                @else
+                {{ $item->description }}
+                @endif
             </a>
             @endif
         </h2>
     </div>
     <div class="mt-2 text-sm text-gray-700 space-y-4">
+        @if($product)
         <div class="grid grid-cols-3  border-2 border-gray-300 border-dashed rounded-lg p-3 gap-10">
             <div class="flex items-center">
                 {{-- TODO: Implement quick view --}}
                 <a href="{{ $product->getPermalink() }}" class="text-lg font-bold">
-                <x-tenant.system.image alt="{{ get_site_name() }} logo" class="min-h-8 w-full mx-auto sm:min-h-10"
-                    :image="$product->getThumbnail()">
-                </x-tenant.system.image>
+                    <x-tenant.system.image alt="{{ get_site_name() }} logo" class="min-h-8 w-full mx-auto sm:min-h-10"
+                        :image="$product->getThumbnail()">
+                    </x-tenant.system.image>
                 </a>
             </div>
             <div class="col-span-2 truncate">
@@ -136,11 +145,15 @@
 
                     {!! $product->description !!}
                 </div>
+                <livewire:actions.wishlist-button template="wishlist-button-detailed" :object="$product">
+
+                </livewire:actions.wishlist-button>
                 <a href="{{ $product->getPermalink() }}" class="btn btn-primary mt-4">
                     {{ translate('View product') }}
                 </a>
             </div>
         </div>
+        @endif
 
     </div>
     <div class="mt-6 flex justify-between space-x-8">

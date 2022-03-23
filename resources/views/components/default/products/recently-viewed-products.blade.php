@@ -1,5 +1,5 @@
 @if($products->count() > 0)
-<div class="card">
+<div {{ $attributes->merge(['class' => 'p-3']) }}>
     <div class="card-header">
         <div class="grid grid-cols-3 py-3">
             <div class="col-span-2 card-header text-xl font-medium text-gray-900">

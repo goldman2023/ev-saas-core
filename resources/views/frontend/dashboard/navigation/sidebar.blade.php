@@ -1,6 +1,6 @@
 <!-- Navigation -->
 <nav class="px-3 mt-6">
-    <x-dashboard.elements.support-card></x-dashboard.elements.support-card>
+    {{-- <x-dashboard.elements.support-card></x-dashboard.elements.support-card> --}}
     <div class="space-y-1">
         @if($menu = \EVS::getDashboardMenu())
         @foreach($menu as $section)

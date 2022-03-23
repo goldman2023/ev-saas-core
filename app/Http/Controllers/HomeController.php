@@ -165,22 +165,30 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::fromCache()->paginate(12);
+        // $products = Product::fromCache()->paginate(12);
 
         /* Important, if vendor site is activated, then homepage is replaced with single-vendor page */
         if (Vendor::isVendorSite()) {
             $shop = Vendor::getVendorShop();
             return view('frontend.company.profile', compact('shop'));
         } else {
-            $page = Page::where('slug', 'home')->first();
-            $sections = $page->content;
 
-            if ($page != null) {
-                return view('frontend.custom_page', [
-                    'page' => $page,
-                    'sections' => $sections,
-                ]);
+            /* Check if feed is disabled for this tenant */
+            if(!get_tenant_setting('feed_disabled')) {
+                return redirect()->route('feed.index');
+            } else {
+                $page = Page::where('slug', 'home')->first();
+                $sections = $page->content;
+
+                if ($page != null) {
+                    return view('frontend.custom_page', [
+                        'page' => $page,
+                        'sections' => $sections,
+                    ]);
+                }
             }
+
+
 
             return view('frontend.index');
         }
