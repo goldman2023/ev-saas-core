@@ -84,7 +84,6 @@
           <div class="mt-4">
             <h1 class="sr-only">Recent questions</h1>
             <div role="list" class="space-y-4">
-                @livewire('feed.feed-list')
                 <livewire:feed.feed-list> </livewire:feed.feed-list>
 
 
