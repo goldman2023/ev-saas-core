@@ -44,11 +44,11 @@
 
     <div class="py-10">
       <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
-        <div class="hidden lg:block lg:col-span-3 xl:col-span-2">
+        <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
          <x-feed.elements.feed-sidebar>
             </x-feed.elements.feed-sidebar>
         </div>
-        <main class="lg:col-span-9 xl:col-span-6">
+        <main class="lg:col-span-6 xl:col-span-7">
           <div class="px-4 sm:px-0">
             <div class="sm:hidden">
               <label for="question-tabs" class="sr-only">Select a tab</label>
@@ -82,23 +82,21 @@
           </div>
           <div class="mt-4">
             <h1 class="sr-only">Recent questions</h1>
-            <ul role="list" class="space-y-4">
-              <li class="">
-                @foreach($activities as $key => $item)
-                <x-feed.elements.feed-card :item="$item"></x-feed.elements.feed-card>
-                @endforeach
-              </li>
+            <div role="list" class="space-y-4">
+                @livewire('feed.feed-list')
 
               <!-- More questions... -->
-            </ul>
+            </div>
           </div>
         </main>
-        <aside class="hidden xl:block xl:col-span-4">
+        <aside class="xl:block col-span-4 xl:col-span-3">
           <div class="sticky top-4 space-y-4">
             <section aria-labelledby="who-to-follow-heading">
               <div class="bg-white rounded-lg shadow">
                 <div class="p-6">
-                  <h2 id="who-to-follow-heading" class="text-base font-medium text-gray-900">Who to follow</h2>
+                  <h2 id="who-to-follow-heading" class="text-base font-medium text-gray-900">
+                      {{ translate('Popular Members') }}
+                  </h2>
                   <div class="mt-6 flow-root">
                     <ul role="list" class="-my-4 divide-y divide-gray-200">
                       <li class="flex items-center py-4 space-x-3">
@@ -107,10 +105,10 @@
                         </div>
                         <div class="min-w-0 flex-1">
                           <p class="text-sm font-medium text-gray-900">
-                            <a href="#">Leonard Krasner</a>
+                            <a href="#">MT Baltic</a>
                           </p>
                           <p class="text-sm text-gray-500">
-                            <a href="#">@leonardkrasner</a>
+                            <a href="#">@mtbaltic</a>
                           </p>
                         </div>
                         <div class="flex-shrink-0">
@@ -136,31 +134,11 @@
             <section aria-labelledby="trending-heading">
               <div class="bg-white rounded-lg shadow">
                 <div class="p-6">
-                  <h2 id="trending-heading" class="text-base font-medium text-gray-900">Trending</h2>
+                  <h2 id="trending-heading" class="text-base font-medium text-gray-900">
+                      {{ translate('Recently visited') }}
+                    </h2>
                   <div class="mt-6 flow-root">
-                    <ul role="list" class="-my-4 divide-y divide-gray-200">
-                      <li class="flex py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Floyd Miles">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm text-gray-800">What books do you have on your bookshelf just to look smarter than you actually are?</p>
-                          <div class="mt-2 flex">
-                            <span class="inline-flex items-center text-sm">
-                              <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                                <!-- Heroicon name: solid/chat-alt -->
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                  <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="font-medium text-gray-900">291</span>
-                              </button>
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-
-                      <!-- More posts... -->
-                    </ul>
+                   @livewire('feed.recently-viewed')
                   </div>
                   <div class="mt-6">
                     <a href="#" class="w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> View all </a>
