@@ -1,3 +1,4 @@
+<div>
 <article {{ $attributes->merge(['class' => 'mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg']) }}>
     <div>
         <div class="flex space-x-3">
@@ -213,3 +214,4 @@
         </div>
     </div>
 </article>
+</div>
