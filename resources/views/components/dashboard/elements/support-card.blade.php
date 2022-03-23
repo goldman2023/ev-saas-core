@@ -1,5 +1,25 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
-<div {{ $attributes->merge(['class' => 'p-3']) }}>
+<div {{ $attributes->merge(['class' => 'relative']) }}>
+    @if(!get_tenant_setting('support_phone'))
+    {{-- Empty state, ask user to fill out the details --}}
+    <div class="absolute bottom-0 right-0 block h-full w-full bg-white/90 z-10">
+
+        <!-- This example requires Tailwind CSS v2.0+ -->
+        <a type="button" href="{{ route('settings.shop_settings') }}"
+            class="relative block w-full h-full border-2 border-gray-300 border-dashed rounded-lg p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <span class="emoji">
+                📱
+            </span>
+            <span class="mt-2 mb-2 block text-md font-medium text-gray-700">
+                {{ translate("Enter your support contacts and working hours")}} </span>
+
+                <button type="button"
+                class="btn-primary inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {{ translate('Support settings') }}
+            </button>
+        </a>
+    </div>
+    @endif
     <div class="flex items-start flex-wrap">
         <div class="flex-shrink-0 pt-0.5 relative w-full">
             <div class="relative w-auto inline-block mb-3">
