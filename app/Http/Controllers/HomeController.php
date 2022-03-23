@@ -175,6 +175,9 @@ class HomeController extends Controller
 
             /* Check if feed is disabled for this tenant */
             if(!get_tenant_setting('feed_disabled')) {
+                if(auth()) {
+                    return redirect()->route('feed.index');
+                }
                 return redirect()->route('feed.index');
             } else {
                 $page = Page::where('slug', 'home')->first();

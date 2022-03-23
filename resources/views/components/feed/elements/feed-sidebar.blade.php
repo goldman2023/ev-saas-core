@@ -66,12 +66,7 @@
 
         </p>
         <div class="mt-3 space-y-2" aria-labelledby="communities-headline">
-            @foreach(Auth::user()->shop as $shop)
-            <a href="{{ $shop->getPermalink() }}"
-                class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
-                <span class="truncate"> {{ $shop->name }} </span>
-            </a>
-            @endforeach
+
         </div>
     </div>
 

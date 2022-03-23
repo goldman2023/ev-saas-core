@@ -80,6 +80,7 @@
               </nav>
             </div>
           </div>
+
           <div class="mt-4">
             <h1 class="sr-only">Recent questions</h1>
             <div role="list" class="space-y-4">
@@ -131,6 +132,7 @@
                 </div>
               </div>
             </section>
+            @auth
             <section aria-labelledby="trending-heading">
               <div class="bg-white rounded-lg shadow">
                 <div class="p-6">
@@ -146,6 +148,7 @@
                 </div>
               </div>
             </section>
+            @endauth
           </div>
         </aside>
       </div>
