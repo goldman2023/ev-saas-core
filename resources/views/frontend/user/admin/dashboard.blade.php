@@ -85,36 +85,40 @@
                     </a>
                 </x-slot>
             </x-dashboard.elements.card>
+            <div>
+                <x-dashboard.elements.support-card class="card mb-3">
+                </x-dashboard.elements.support-card>
+                <x-dashboard.elements.card>
+                    <x-slot name="cardHeader" class="flow-root mt-6">
+                        <div class="h5 fw-600">{{ translate('Quick Actions') }} </div>
+                    </x-slot>
+                    <x-slot name="cardBody" class="">
+                        {{-- TODO : make this company name dynamic --}}
+                        <p>{{ translate('') }}</p>
 
-            <x-dashboard.elements.card>
-                <x-slot name="cardHeader" class="flow-root mt-6">
-                    <div class="h5 fw-600">{{ translate('Quick Actions') }} </div>
-                </x-slot>
-                <x-slot name="cardBody" class="">
-                    {{-- TODO : make this company name dynamic --}}
-                    <p>{{ translate('') }}</p>
+                    </x-slot>
+                    <x-slot name="cardFooter">
+                        <div class="overflow-x-auto sm:flex lg:block">
+                            <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                                🚚 {{ translate('Process Orders') }}
+                            </a>
 
-                </x-slot>
-                <x-slot name="cardFooter">
-                    <div class="overflow-x-auto sm:flex lg:block">
-                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
-                            🚚 {{ translate('Process Orders') }}
-                        </a>
+                            <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                                📄 {{ translate('Create manual invoice') }}
+                            </a>
 
-                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
-                            📄 {{ translate('Create manual invoice') }}
-                        </a>
+                            <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
+                                📦 {{ translate('Manage Products') }}
+                            </a>
 
-                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary mb-3">
-                            📦 {{ translate('Manage Products') }}
-                        </a>
+                            <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
+                                🏷️ {{ translate('Manage Categories') }}
+                            </a>
+                        </div>
+                    </x-slot>
+                </x-dashboard.elements.card>
+            </div>
 
-                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
-                            🏷️ {{ translate('Manage Categories') }}
-                        </a>
-                    </div>
-                </x-slot>
-            </x-dashboard.elements.card>
         </div>
     </div>
 </section>
