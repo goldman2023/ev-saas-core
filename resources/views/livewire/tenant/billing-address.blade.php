@@ -55,6 +55,7 @@
                 </label>
                 <div class="mt-1 relative rounded-md shadow-sm">
                     <select id="country" wire:model="country" type="text" class="form-select block w-full sm:text-sm sm:leading-5">
+                        @include('partials.countries')
                     </select>
                 </div>
                 @error('country')

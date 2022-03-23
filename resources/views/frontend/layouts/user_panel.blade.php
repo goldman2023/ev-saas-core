@@ -40,7 +40,6 @@
     <section class="c-dashboard-panel container space-1 space-top-lg-0 space-bottom-lg-2 mt-lg-n10">
         <div class="row">
             <div class="c-user-side-nav d-none d-sm-block">
-                @include('frontend.inc.user_side_nav')
             </div>
             <div class="aiz-user-panel c-user-panel ">
                 @yield('panel_content')

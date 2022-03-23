@@ -914,7 +914,7 @@ if (!function_exists('static_asset')) {
             }
         } catch (\Exception $e) {
         }
-        if($theme) {
+        if ($theme) {
             if (config('app.force_https')) {
                 return app('url')->asset('themes/' . Theme::parent() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
             } else {
@@ -1009,7 +1009,13 @@ if (!function_exists('isUnique')) {
 }
 
 if (!function_exists('get_setting')) {
+    /* Het setting deprecated use  get_tenant_setting() instead */
     function get_setting($key, $default = null)
+    {
+        return TenantSettings::get($key, $default);
+    }
+
+    function  get_tenant_setting($key, $default = null)
     {
         return TenantSettings::get($key, $default);
     }

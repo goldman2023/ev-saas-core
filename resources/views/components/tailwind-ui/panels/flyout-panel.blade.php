@@ -38,7 +38,7 @@
 
     {{-- TODO: Fix FadeIn issue --}}
     <div class="c-flyout-panel__overlay"
-         x-show="show" 
+         x-show="show"
          x-cloak
          x-transition:enter="transition ease-out duration-500"
          x-transition:enter-start="opacity-0 "

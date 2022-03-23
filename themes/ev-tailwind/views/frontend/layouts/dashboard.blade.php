@@ -76,13 +76,14 @@
                     12: '12',
                 },
                 colors: {
-                    primary: '#8BC53F',
+                    primary: '#EF0E50',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
                     secondary: '#FF8E3B',
                     secondaryLight: '#FFD53F',
                     secondaryDark: '',
                     info: '#219FFF',
+                    indigo: '#8BC53F',
                     infoLight: '#E9F6FF',
                     success: '#17BD8D',
                     successLight: '#E9FBF6',
@@ -132,6 +133,10 @@
             .is-invalid {
                 @apply border-danger;
             }
+
+            .card {
+                @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg p-3;
+            }
         }
     </style>
 
@@ -146,7 +151,7 @@
     @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased bg-gray-200 {{ Route::currentRouteName() }}" x-data="{
+<body class="font-sans antialiased bg-gray-100 {{ Route::currentRouteName() }}" x-data="{
     all_categories: @js(Categories::getAllFormatted(true))
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">

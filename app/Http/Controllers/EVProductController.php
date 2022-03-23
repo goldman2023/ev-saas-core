@@ -109,7 +109,8 @@ class EVProductController extends Controller
             $product->shop = Shop::first();
         }
 
-        if (!empty($product) && $product->published) {
+        /* TODO: add this eventually: && $product->published */
+        if (!empty($product) ) {
 
             if (auth()->check()) {
                 $user = auth()->user();
@@ -120,8 +121,11 @@ class EVProductController extends Controller
             activity()
                 ->performedOn($product)
                 ->causedBy($user)
-                ->withProperties(['action' => 'viewed'])
-                ->log('User viewed a product');
+                ->withProperties([
+                    'action' => 'viewed',
+                    'action_title' => 'Viewed a product',
+                    ] )
+                ->log('viewed');
         }
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
 

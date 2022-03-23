@@ -24,9 +24,9 @@ try {
 // WE
 window.WE = {};
 
-require('./IMG'); 
+require('./IMG');
 require('./utils');
-require('./leaflet');
+// require('./leaflet');
 require('./sortable');
 
 // LUXON

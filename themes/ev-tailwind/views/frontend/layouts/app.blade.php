@@ -71,7 +71,7 @@
                     12: '12',
                 },
                 colors: {
-                    primary: '#8BC53F',
+                    primary: '#EF0E50',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
                     secondary: '#FF8E3B',
@@ -104,6 +104,12 @@
           .badge-danger {
             @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dangerLight text-danger;
           }
+
+          .container {
+              max-width: 100%;
+              width: 1140px;
+              margin: 0 auto;
+          }
         }
     </style>
 
@@ -128,6 +134,9 @@
 
         <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header>
     </div>
+
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
 
     <!-- Carts -->
     <livewire:cart.cart template="flyout-cart" />

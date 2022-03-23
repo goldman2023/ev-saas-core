@@ -13,6 +13,7 @@ class ThemeSelectForm extends Component
         'ev-saas-demo',
         'we-saas-boostrap-software',
         'ev-tailwind',
+        'we-tailwind-industrial',
         'we-commerce-boostrap'
     ];
     public $currentTheme;
