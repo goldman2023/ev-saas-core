@@ -129,9 +129,10 @@ class ProductForm2 extends Component
 
     protected function messages() {
         return [
-            'product.thumbnail.if_id_exists' => translate('Please select a valid thumbnail iamge from the media library'),
+            'product.thumbnail.if_id_exists' => translate('Please select a valid thumbnail image from the media library'),
             'product.cover.if_id_exists' => translate('Please select a valid cover image from the media library'),
-            'product.pdf.if_id_exists' => translate('Please select a valid Specification document from the media library'),
+            'product.pdf.if_id_exists' => translate('Please select a valid specification document from the media library'),
+            'selected_categories.required' => translate('You must select at least 1 category'),
         ];
     }
 

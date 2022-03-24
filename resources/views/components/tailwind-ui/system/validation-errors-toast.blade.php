@@ -8,9 +8,9 @@
           }
 
           let count = 0;
-          for(field_errors in this.errors) {
+          for(const field in this.errors) {
             try {
-              count += field_errors.length;
+              count += this.errors[field].length;
             } catch(err) {}
           }
 
@@ -31,7 +31,7 @@
     <div class="relative inline-block align-bottom bg-red-50 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
             x-on:click.outside="show = false"
             x-show="show"
-            x-transition:enter="ease-out duration-300"
+            x-transition:enter="ease-out duration-150"
             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
             x-transition:leave="ease-out duration-200"

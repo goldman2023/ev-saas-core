@@ -1085,7 +1085,7 @@
                             open: true,
                         }" :class="{'p-4': open}">
                         <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Categories') }}</h3>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 @error('selected_categories') !text-danger @enderror">{{ translate('Categories') }}</h3>
                             @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                         </div>
                 
