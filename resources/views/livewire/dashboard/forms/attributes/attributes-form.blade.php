@@ -8,6 +8,8 @@
         'multiple': false,
         'min_value': 0,
         'max_value': 0,
+        'max_rows': 0,
+        'min_rows': 0,
         'unit': '',
         'with_time': false,
         'range': false,
@@ -282,15 +284,15 @@
                                 <div  class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
                                                 
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Minimum value') }}
+                                        {{ translate('Minimum rows') }}
                                     </label>
     
                                     <div class="mt-1 sm:mt-0 sm:col-span-1">
                                         <input type="number" 
                                                     class="form-standard"
                                                     min="0"
-                                                    placeholder="{{ translate('Minimum value') }}"
-                                                    x-model="custom_properties.min_value" />
+                                                    placeholder="{{ translate('Minimum rows') }}"
+                                                    x-model="custom_properties.min_rows" />
                                     </div>
                                 </div>
                                 <!-- END Min. value -->
@@ -299,15 +301,15 @@
                                 <div  class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
                                                 
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Maximum value') }}
+                                        {{ translate('Maximum rows') }}
                                     </label>
     
                                     <div class="mt-1 sm:mt-0 sm:col-span-1">
                                         <input type="number" 
                                                     class="form-standard"
                                                     min="0"
-                                                    placeholder="{{ translate('Maximum value') }}"
-                                                    x-model="custom_properties.max_value" />
+                                                    placeholder="{{ translate('Maximum rows') }}"
+                                                    x-model="custom_properties.max_rows" />
                                     </div>
                                 </div>
                                 <!-- END Max. value -->
