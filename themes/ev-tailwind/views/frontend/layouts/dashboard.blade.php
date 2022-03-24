@@ -130,6 +130,12 @@
             .form-standard {
                 @apply flex-1 block w-full max-w-lg focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
             }
+            .form-checkbox-standard {
+                @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 rounded cursor-pointer;
+            }
+            .form-radio-standard {
+                @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 cursor-pointer;
+            }
             .is-invalid {
                 @apply border-danger;
             }
@@ -183,6 +189,8 @@
     @endguest
 
     <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
+    <x-tailwind-ui.system.validation-errors-toast timeout="5000" ></x-tailwind-ui.system.info-modal>
+
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 

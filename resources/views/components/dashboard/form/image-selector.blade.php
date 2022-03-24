@@ -1,13 +1,13 @@
 <div class="w-full" x-data="{
     id: '{{ $id }}',
 }"
-@we-media-selected-event.window="console.log($event.detail.for_id);
+@we-media-selected-event.window="
     if($event.detail.for_id === id) {
         {{ $field }}.id = $event.detail.selected[0]['id'] || '';
         {{ $field }}.file_name = $event.detail.selected[0]['file_name'] || '';
     }
 ">
-    <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+    <div class="max-w-lg flex justify-center border-2 border-gray-300 @error($errorField) !border-danger @enderror border-dashed rounded-md cursor-pointer"
             :class="{'px-6 pt-5 pb-6': {{ $field }}.id !== undefined && {{ $field }}.id !== null && {{ $field }}.id > 0 }"
             @click="$wire.emit('showMediaLibrary', id, 'image', [{id:{{ $field }}.id, file_name:{{ $field }}.file_name}])">
 

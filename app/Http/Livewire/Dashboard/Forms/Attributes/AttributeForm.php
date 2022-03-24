@@ -130,6 +130,8 @@ class AttributeForm extends Component
             $except = ['multiple'];
         } else if($this->attribute->type === 'date') {
             $except = ['with_time', 'range'];
+        } else if($this->attribute->type === 'text_list') {
+            $except = ['min_rows', 'max_rows'];
         }
         
         foreach($custom_properties as $key => $value) {

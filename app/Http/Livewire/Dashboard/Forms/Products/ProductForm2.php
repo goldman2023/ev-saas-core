@@ -74,7 +74,7 @@ class ProductForm2 extends Component
             ],
             'media' => [
                 'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id'],
-                'product.gallery' => ['if_id_exists:App\Models\Upload,id,true'],
+                'product.gallery' => [], // 'if_id_exists:App\Models\Upload,id,true'
                 'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
                 'product.video_link' => 'nullable|active_url',
                 'product.pdf' => ['nullable', 'if_id_exists:App\Models\Upload,id,true'],
@@ -93,7 +93,7 @@ class ProductForm2 extends Component
                 'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
                 'product.barcode' => ['nullable'],
                 'product.min_qty' => 'required|numeric|min:1',
-                'product.current_stock' => 'required|numeric|min:1',
+                'product.current_stock' => 'required|numeric|min:0',
                 'product.low_stock_qty' => 'required|numeric|min:0',
                 'product.use_serial' => 'required|boolean',
                 'product.allow_out_of_stock_purchases' => 'required|boolean'
@@ -128,7 +128,11 @@ class ProductForm2 extends Component
     }
 
     protected function messages() {
-        return [];
+        return [
+            'product.thumbnail.if_id_exists' => translate('Please select a valid thumbnail iamge from the media library'),
+            'product.cover.if_id_exists' => translate('Please select a valid cover image from the media library'),
+            'product.pdf.if_id_exists' => translate('Please select a valid Specification document from the media library'),
+        ];
     }
 
     protected function setPredefinedAttributeValues($model) {
@@ -234,6 +238,9 @@ class ProductForm2 extends Component
             $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
+
+            // Reset status to Draft!
+            $this->product->status = StatusEnum::draft()->value;
             $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
         }
     }
@@ -289,7 +296,7 @@ class ProductForm2 extends Component
             $this->saveMinimumRequired();
 
             // Save product data
-            $this->product->tags = [];
+            // $this->product->tags = [];
             $this->product->save();
 
             // Sync Uploads
@@ -306,14 +313,14 @@ class ProductForm2 extends Component
             // Refresh Attributes
             $this->refreshAttributes();
 
-            $this->toastify(translate('Product successfully saved!'), 'success');
+            $this->inform(translate('Product successfully saved!'), '', 'success');
 
-            $this->dispatchBrowserEvent('init-product-form', ['newName' => 'yeey']);
+            // $this->dispatchBrowserEvent('init-product-form', []);
         } catch(\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }
     }
 
@@ -466,6 +473,7 @@ class ProductForm2 extends Component
 
     // END
 
+    // DEPRECATED!!!
     public function saveBasic() {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
