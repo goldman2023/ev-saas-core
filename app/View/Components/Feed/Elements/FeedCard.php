@@ -18,6 +18,7 @@ class FeedCard extends Component
     {
         //
         $this->ignore = false;
+
         $this->item = $item;
         if(empty($item->causer)){
             $this->ignore = true;
@@ -43,5 +44,10 @@ class FeedCard extends Component
         if (!$this->ignore) {
             return view('components.feed.elements.feed-card');
         }
+    }
+
+    public function track_impression() {
+        $this->item->impressions++;
+        $this->item->save();
     }
 }
