@@ -58,7 +58,7 @@ class ProductForm2 extends Component
             ],
             'basic' => [
                 'product.name' => 'required|min:6',
-                'product.description' => 'required|min:20',
+                'product.description' => 'nullable|min:20',
                 'product.excerpt' => 'nullable',
                 'product.status' => [Rule::in(StatusEnum::toValues())],
             ],
@@ -73,7 +73,8 @@ class ProductForm2 extends Component
                 'product.brand_id' => 'nullable|exists:App\Models\Brand,id',
             ],
             'media' => [
-                'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id'],
+                'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id,true'],
+                'product.cover' => ['required', 'if_id_exists:App\Models\Upload,id,true'],
                 'product.gallery' => [], // 'if_id_exists:App\Models\Upload,id,true'
                 'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
                 'product.video_link' => 'nullable|active_url',
@@ -163,7 +164,7 @@ class ProductForm2 extends Component
      * @return void
      */
     public function mount(&$product = null)
-    {
+    {   
         // Set default params
         if($product) {
             // Update
@@ -184,6 +185,7 @@ class ProductForm2 extends Component
             $this->product->stock_visibility_state = 'quantity';
             $this->product->discount_type = 'amount';
             $this->product->discount = 0;
+            $this->product->tags = [];
             $this->product->low_stock_qty = 0;
             $this->product->min_qty = 1;
             $this->product->unit_price = 0;
@@ -197,6 +199,8 @@ class ProductForm2 extends Component
         $this->refreshAttributes();
 
         $this->initCategories($this->product);
+
+        
     }
 
     public function dehydrate()
@@ -319,7 +323,7 @@ class ProductForm2 extends Component
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch(\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }

@@ -5,94 +5,96 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle" style="width: 150px; box-sizing: content-box;">
-    <a class="media align-items-center text-14" href="{{ route('product.details', $row->slug) }}">
-        <x-tenant.system.image alt="{{ $row->name }}"
-            class="" style="width: 100px; height: 100px;" fit="cover" :image="$row->getThumbnail()">
+    <a class="media flex justify-center items-center text-14" href="{{ route('product.details', $row->slug) }}">
+        <x-tenant.system.image alt="{{ $row->name }}" class="w-[80px] h-[60px] object-contain"
+            fit="contain" :image="$row->getThumbnail()">
         </x-tenant.system.image>
     </a>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle" style="min-width: 200px;">
-
-    <a href="{{ route('product.details', $row->slug) }}">
+<x-livewire-tables::table.cell class="align-middle text-center" style="min-width: 200px;">
+    <a href="{{ route('product.details', $row->slug) }}" class="">
         {{ $row->getTranslation('name') }}
     </a>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->status === App\Enums\StatusEnum::published()->value)
-    <span class="badge badge-soft-success">
-        <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($row->status) }}
-    </span>
+        <span class="badge-success">
+          {{ ucfirst($row->status) }}
+        </span>
     @elseif($row->status === App\Enums\StatusEnum::draft()->value)
-    <span class="badge badge-soft-warning">
-        <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($row->status) }}
-    </span>
+        <span class="badge-warning">
+          {{ ucfirst($row->status) }}
+        </span>
     @elseif($row->status === App\Enums\StatusEnum::pending()->value)
-    <span class="badge badge-soft-info">
-        <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($row->status) }}
-    </span>
+        <span class="badge-info">
+          {{ ucfirst($row->status) }}
+        </span>
     @elseif($row->status === App\Enums\StatusEnum::private()->value)
-    <span class="badge badge-soft-dark">
-        <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($row->status) }}
-    </span>
+        <span class="badge-dark">
+          {{ ucfirst($row->status) }}
+        </span>
     @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle">
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
 </x-livewire-tables::table.cell>
 
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->public_view_count() > 10)
-
-    <span class="d-block text-14 mb-0 text-danger">
-        @svg('heroicon-o-eye', ['style' => 'height: 12px;', 'class' => 'mr-1'])
-        {{ $row->public_view_count() }}
-    </span>
+        <span class="flex justify-center items-center text-14 mb-0 text-danger">
+            @svg('heroicon-o-eye', ['class' => 'h-[12px] w-[12px] mr-1'])
+            {{ $row->public_view_count() }}
+        </span>
     @else
-    <span class="d-block text-14 mb-0">
-        @svg('heroicon-o-eye', ['style' => 'height: 12px;', 'class' => 'mr-1'])
-        {{ $row->public_view_count() }}
-    </span>
+        <span class="flex justify-center items-center text-14 mb-0">
+            @svg('heroicon-o-eye', ['class' => 'h-[12px] w-[12px] mr-1'])
+            {{ $row->public_view_count() }}
+        </span>
     @endif
-
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    <span class="d-block text-14 mb-0">{{ $row->updated_at?->diffForHumans() }}</span>
+    <span class="block text-14 mb-0 text-center">{{ $row->updated_at?->diffForHumans() }}</span>
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle position-static">
-    <div class="btn-group position-static" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-xs btn-white d-flex align-items-center"
-            href="{{ route('product.edit', ['slug' => $row->slug]) }}">
-            @svg('heroicon-o-pencil', ['class' => 'square-18 mr-2']) {{ translate('Edit') }}
+<x-livewire-tables::table.cell class="align-middle static">
+    <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+        <a class="btn btn-white flex items-center mr-2" href="{{ route('product.edit', ['slug' => $row->slug]) }}">
+            @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 
-        <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="d-flex align-items-center btn btn-xs">
-            @svg('heroicon-o-chevron-down', ['class' => 'square-18'])
+        <button 
+            @click="isOpen = !isOpen" 
+            @keydown.escape="isOpen = false" 
+            class="flex items-center btn" 
+        >
+            @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
-        <ul x-show="isOpen" @click.away="isOpen = false"
-            class="position-absolute bg-white z-10 list-style-none p-0 border rounded mt-7 shadow">
+        <ul x-show="isOpen"
+            @click.outside="isOpen = false"
+            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
+        >
             <li>
-                <a class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14" href="{{ $row->getPermalink() }} "
+                <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
                     target="_blank">
-                    @svg('heroicon-o-eye', ['class' => 'square-18 mr-2']) 
+                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) 
                     <span class="ml-2">{{ translate('Preview') }}</span>
                 </a>
             </li>
             <li>
                 <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank"
-                    class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14">
-                    @svg('heroicon-o-link', ['class' => 'square-18'])
+                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                    @svg('heroicon-o-link', ['class' => 'w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Copy checkout link') }}</span>
                 </a>
             </li>
             <li>
-                <a href="#" class="d-flex align-items-center px-3 py-3 pr-4 text-body text-14  border-top">
-                    @svg('heroicon-o-trash', ['class' => 'text-primary square-18'])
+                <a href="#" class="flex items-center px-3 py-3 pr-4 text-red-500 text-14 border-t">
+                    @svg('heroicon-o-trash', ['class' => 'text-red-500 w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Remove product') }}</span>
                 </a>
             </li>

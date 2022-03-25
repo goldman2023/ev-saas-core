@@ -112,7 +112,7 @@ class CategoryForm extends Component
         } catch(\Exception $e) {
             DB::rollBack();
 
-            if($is_update) { dd($e);
+            if($is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a category...Please try again.'));
                 $this->inform('There was an error while updating a category...Please try again.', '', 'fail');
             } else {

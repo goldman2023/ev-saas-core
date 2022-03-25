@@ -1,4 +1,4 @@
-<div class="w-100" x-data="{
+<div class="w-full" x-data="{
     predefined_types: @js(App\Enums\AttributeTypeEnum::getPredefined()),
     type: @js($attribute->type ?? App\Enums\AttributeTypeEnum::dropdown()->value),
     filterable: @js($attribute->filterable ?? 'false'),
@@ -29,12 +29,12 @@
     
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden"
-                            wire:target="saveCategory"
+                            wire:target="saveAttribute"
                             wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
         <div class="w-full"
             wire:loading.class="opacity-30 pointer-events-none"
-            wire:target="saveCategory"
+            wire:target="saveAttribute"
         >
 
             <div class="grid grid-cols-12 gap-8 mb-10">
