@@ -14,13 +14,13 @@ use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use App\Enums\StockVisibilityStateEnum;
 
 class StockManagementForm extends Component
 {
     use RulesSets;
 
     public $product;
-    public $edit_product;
     public $variations;
     public $attributes;
     public $serial_numbers;
@@ -30,7 +30,7 @@ class StockManagementForm extends Component
     public $edit_serial_numbers;
 
     protected $listeners = [
-
+        'refreshForm' => '$refresh'
     ];
 
     /*
@@ -42,10 +42,15 @@ class StockManagementForm extends Component
     {
         return [
             'product.sku' => ['required', 'filled', Rule::unique($this->product->stock->getTable(), 'sku')->ignore($this->product->stock->id ?? null)],
+            'product.barcode' => ['nullable'],
             'product.current_stock' => 'required|numeric|min:0',
             'product.low_stock_qty' => 'required|numeric|min:0',
             'product.use_serial' => 'required|bool',
             'product.stock_visibility_state' => 'required|in:quantity,text,hide',
+            'product.min_qty' => 'required|numeric|min:1',
+            'product.unit' => 'required',
+            'product.allow_out_of_stock_purchases' => 'required|boolean',
+
             'new_serial_numbers.*.serial_number' => 'required|unique:App\Models\SerialNumber,serial_number|distinct:ignore_case',
             'new_serial_numbers.*.status' => ['required', 'in:in_stock,out_of_stock,reserved'],
             'edit_serial_numbers.*.serial_number' => ['required'],
@@ -107,7 +112,6 @@ class StockManagementForm extends Component
         if($product) {
             $this->product = $product;
             $this->variations = $this->product->variations;
-            $this->edit_product = $this->product->toArray();
             $this->fetchSerialNumbers();
             $this->attributes = $this->product->variant_attributes();
             $this->status = '';

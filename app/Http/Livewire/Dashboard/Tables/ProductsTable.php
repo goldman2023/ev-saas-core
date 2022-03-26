@@ -66,7 +66,6 @@ class ProductsTable extends DataTableComponent
             Column::make('Image')
                 ->excludeFromSelectable(),
             Column::make('Title', 'name')
-                ->sortable()
                 ->excludeFromSelectable(),
             Column::make('Status', 'status')
                 ->excludeFromSelectable(),
@@ -74,8 +73,7 @@ class ProductsTable extends DataTableComponent
                 ->excludeFromSelectable(),
             Column::make('Views', 'views')
                 ->excludeFromSelectable(),
-            Column::make('Last Update', 'updated_at')
-                ->sortable(),
+            Column::make('Last Update', 'updated_at'),
             Column::make('Actions')
                 ->excludeFromSelectable(),
         ];

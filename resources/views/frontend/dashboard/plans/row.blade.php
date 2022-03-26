@@ -11,19 +11,19 @@
 <x-livewire-tables::table.cell class="align-middle ">
     @if($row->status === App\Enums\StatusEnum::published()->value)
         <span class="badge-success">
-          <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($row->status) }}
+          {{ ucfirst($row->status) }}
         </span>
     @elseif($row->status === App\Enums\StatusEnum::draft()->value)
         <span class="badge-warning">
-          <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($row->status) }}
+          {{ ucfirst($row->status) }}
         </span>
     @elseif($row->status === App\Enums\StatusEnum::pending()->value)
         <span class="badge-info">
-          <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($row->status) }}
+          {{ ucfirst($row->status) }}
         </span>
     @elseif($row->status === App\Enums\StatusEnum::private()->value)
         <span class="badge-dark">
-          <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($row->status) }}
+          {{ ucfirst($row->status) }}
         </span>
     @endif
 </x-livewire-tables::table.cell>
@@ -34,11 +34,11 @@
 
 
 <x-livewire-tables::table.cell class="align-middle ">
-    <span class="d-block text-14 mb-0">{{ $row->created_at?->format('d.m.Y') ?? '' }}</span>
+    <span class="block text-14 mb-0">{{ $row->created_at?->format('d.m.Y') ?? '' }}</span>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">
-    <span class="d-block text-14 mb-0">{{ $row->updated_at?->format('d.m.Y') ?? '' }}</span>
+    <span class="block text-14 mb-0">{{ $row->updated_at?->format('d.m.Y') ?? '' }}</span>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle static ">

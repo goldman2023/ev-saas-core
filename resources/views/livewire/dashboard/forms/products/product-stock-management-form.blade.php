@@ -1,15 +1,296 @@
-<div class="lw-form" x-data="{
-    get validation_errors() {
-        let errors = $('#stockManagementFormErrors').length > 0 ? JSON.parse($('#stockManagementFormErrors').html()) : {};
-        return (errors[0] !== undefined) ? errors[0] : {};
-    }
+<div class="w-full" x-data="{
+    use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
+    allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
+    stock_visibility_state: @js($product->stock_visibility_state ?? 'quantity'),
 }">
 
-    @if($errors->hasAny($errors->keys()))
-        <script id="stockManagementFormErrors" type="application/json">
-            @json([$errors->getMessages()])
-        </script>
-    @endif
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                            wire:target="updateMainStock"
+                            wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
+
+        <div class="w-full"
+            wire:loading.class="opacity-30 pointer-events-none"
+            wire:target="updateMainStock"
+        >
+
+            <div class="grid grid-cols-12 gap-8 mb-10">
+
+                {{-- Left panel --}}
+                <div class="col-span-8  ">
+                    {{-- Main Stock Management--}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                        <div class="w-full">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Main Stock Management') }}</h3>
+                            <p class="flex items-center-1 max-w-2xl text-sm text-gray-500">
+                                {{ translate('You are currently editing').' ' }}
+                                <a href="{{ route('product.details', ['slug' => $product->slug]) }}" target="_blank" class="badge-info mx-1">{{ $product->name }}</a>
+                                {{ translate('main stock options') }}
+                            </p>
+                        </div>
+
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            {{-- SKU --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('SKU') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('product.sku') is-invalid @enderror"
+                                            placeholder="{{ translate('Product SKU') }}"
+                                            wire:model.defer="product.sku" />
+
+                                    <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
+                                
+                                    <x-system.invalid-msg field="product.sku"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END SKU --}}
+
+                            {{-- Barcode --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                        
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Barcode') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('product.barcode') is-invalid @enderror"
+                                            placeholder="{{ translate('Product barcode') }}"
+                                            wire:model.defer="product.barcode" />
+                                
+                                    <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
+
+                                    <x-system.invalid-msg field="product.barcode"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Barcode --}}
+
+                            {{-- Use serial numbers --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Uses serial numbers?') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="use_serial = !use_serial" 
+                                                :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':use_serial, 'translate-x-0':!use_serial}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Use serial numbers --}}
+
+                            {{-- Allow out of stock purchases --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Allow selling even when out of stock?') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
+                                                :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':allow_out_of_stock_purchases, 'translate-x-0':!allow_out_of_stock_purchases}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Allow out of stock purchases --}}
+
+                            <div class="w-full" x-show="!use_serial">
+                                <!-- Minimum quantity user can purchase -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Minimum quantity user can purchase') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        class="form-standard @error('product.min_qty') is-invalid @enderror"
+                                                        placeholder="{{ translate('0.00') }}"
+                                                        wire:model.defer="product.min_qty" />
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.min_qty"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Minimum quantity user can purchase -->
+
+                                <!-- Stock quantity -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Stock quantity') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        class="form-standard @error('product.current_stock') is-invalid @enderror"
+                                                        placeholder="{{ translate('0.00') }}"
+                                                        wire:model.defer="product.current_stock" />
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.current_stock"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Stock quantity -->
+                            </div>
+
+                            {{-- Unit --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                            
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Unit') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="text" class="form-standard @error('product.unit') is-invalid @enderror"
+                                            placeholder="{{ translate('Product unit') }}"
+                                            wire:model.defer="product.unit" />
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10"  field="product.unit"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Unit --}}
+
+                            {{-- Stock Visibility State (Should override value from shop_settings, otherwise it should be the same) --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Stock visibility state') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col rounded-md shadow-sm ">
+                                    <template x-for="(value, key) in @js(\App\Enums\StockVisibilityStateEnum::labels())">
+                                        <div class="relative flex items-center mb-3">
+                                            <div class="flex items-center h-6">
+                                              <input
+                                                    type="radio"
+                                                    x-model="stock_visibility_state"
+                                                    :value="value"
+                                                    :id="'stock_visibility_state_'+key"
+                                                    class="form-radio-standard">
+                                            </div>
+                                            <div class="ml-3 text-sm">
+                                              <label class="font-medium text-gray-700 cursor-pointer" x-text="value" :for="'stock_visibility_state_'+key"></label>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                            {{-- END Stock Visibility State --}}
+
+                        </div>
+                        
+                    </div>
+                    {{-- END Main Stock Management --}}
+
+                    {{-- Main stock Serial Numbers --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-show="!use_serial">
+                        <div class="w-full flex justify-between items-center">
+                            <div class="shrink-0">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Serial numbers') }}</h3>
+                                <p class="flex items-center-1 max-w-2xl text-sm text-gray-500">
+                                    {{ translate('You are currently editing').' ' }}
+                                    <a href="{{ route('product.details', ['slug' => $product->slug]) }}" target="_blank" class="badge-info mx-1">{{ $product->name }}</a>
+                                    {{ translate('main product serial numbers') }}
+                                </p>
+                            </div>
+                            <div class="grow-0">
+                                <button type="button" class="btn-primary" @click="$dispatch('modal-show', {'id': 'serial-number-form-modal', 'serial_number_id': null})">
+                                    {{-- @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2']) --}}
+                                    <span>{{ translate('Add new') }}</span>
+                                </button>
+                            </div> 
+                        </div>
+
+                        <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                            {{-- Serial Numbers Table --}}
+                            <livewire:dashboard.tables.product-serial-numbers-table :product="$product"></livewire:dashboard.tables.product-serial-numbers-table>
+                            {{-- END Serial Numbers Table --}}
+
+                            <div class="w-full mt-4">
+                                {{-- Serial Numbers Stats --}}
+                                <div class="flex items-center border border-gray-200 rounded px-3 py-2 mt-3">
+                                    @php
+                                        $serial_stats = $this->product->getSerialNumbersStockStats();
+                                    @endphp
+                                    <div class="flex items-center mr-2 text-14">
+                                        <span class="mr-2 flex items-center ">
+                                            <svg class="mr-2 h-2 w-2 text-success" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            {{ translate('In stock:') }}
+                                        </span>
+                                        <span>{{ $serial_stats['in_stock'] }}</span>
+                                    </div>
+
+                                    <div class=" flex items-center pl-2 mr-2 text-14">
+                                        <span class="mr-2 flex items-center ">
+                                            <svg class="mr-2 h-2 w-2 text-danger" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            {{ translate('Out of stock:') }}
+                                        </span>
+                                        <span>{{ $serial_stats['out_of_stock'] }}</span>
+                                    </div>
+
+                                    <div class=" flex items-center pl-2 mr-2 text-14">
+                                        <span class="mr-2 flex items-center ">
+                                            <svg class="mr-2 h-2 w-2 text-warning" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            {{ translate('Reserved:') }}
+                                        </span>
+                                        <span>{{ $serial_stats['reserved'] }}</span>
+                                    </div>
+
+                                    <div class=" flex items-center pl-2 mr-2 text-14">
+                                        <span class="mr-2 flex items-center ">
+                                            <svg class="mr-2 h-2 w-2 text-gray-900" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3" />
+                                            </svg>
+                                            {{ translate('Total:') }}
+                                        </span>
+                                        <span>{{ $serial_stats['total'] }}</span>
+                                    </div>
+
+                                    <div class=" flex items-center pl-2 ml-auto text-14">
+                                        <span class="mr-2 flex items-center ">
+                                            @svg('heroicon-s-trash', ['class' => 'mr-2 w-[14px] h-[14px]'])
+                                            {{ translate('Trashed:') }}
+                                        </span>
+                                        <span>{{ $serial_stats['trashed'] }}</span>
+                                    </div>
+                                </div>
+                                {{-- END Serial Numbers Stats --}}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END Main stock Serial Numbers --}}
+                </div>
+                {{-- END Left panel --}}
+
+
+            </div>
+        </div>
+    </div>
+
+    <livewire:dashboard.forms.serial-numbers.serial-number-form-modal :product="$product"></livewire:dashboard.forms.serial-numbers.serial-number-form-modal>
 
     <!-- Main Product CARD -->
     <div class="card container-fluid py-3 mt-3">
@@ -71,357 +352,7 @@
             </form>
         </div>
 
-        <!-- Main Product Serial Numbers -->
-        <div class="row mt-3 {{ !$product->use_serial ? 'd-none':'' }}" :class="{'d-none':!$($refs.product_use_serial).is(':checked')}" x-ref="serial_numbers_forms" id="serial_numbers_forms">
-
-            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                  wire:target="status"
-                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
-
-            <!-- Card -->
-            <div class="card container-fluid shadow-none" wire:loading.class="opacity-3">
-                <!-- Header -->
-                <div class="card-header">
-                    <div class="row justify-content-between align-items-center flex-grow-1">
-                        <div class="col-12 col-md">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="card-header-title">{{ translate('Serial Numbers') }}</h5>
-                            </div>
-                        </div>
-
-                        <div class="col-md-auto">
-                            <!-- Filter -->
-                            <div class="row align-items-center">
-                                <div class="col-auto" x-data="{ serial_status: @entangle('serial_status') }"
-                                     x-init="
-                                        $($refs.select_serial_filter).on('select2:select', (event) => {
-                                          serial_status = event.target.value;
-                                        });
-                                        $watch('serial_status', (value) => {
-                                          $($refs.select_serial_filter).val(value).trigger('change');
-                                        });
-                                     "
-                                >
-                                    <!-- Select -->
-                                    <select class="js-select2-custom js-datatable-filter custom-select" size="1" style="opacity: 0;"
-                                            data-target-column-index="1"
-                                            data-hs-select2-options='{
-                                              "minimumResultsForSearch": "Infinity",
-                                              "customClass": "custom-select custom-select-sm",
-                                              "dropdownAutoWidth": true,
-                                              "width": true,
-                                              "dropdownCssClass": "no-max-height"
-                                            }'
-                                            x-ref="select_serial_filter"
-                                            x-on:change="$wire.set('serial_status', serial_status)">
-                                        <option value="">{{ translate('All') }}</option>
-                                        <option value="in_stock" @if($serial_status === 'in_stock') selected @endif>{{ translate('In stock') }}</option>
-                                        <option value="out_of_stock" @if($serial_status === 'out_of_stock') selected @endif>{{ translate('Out of stock') }}</option>
-                                        <option value="reserved" @if($serial_status === 'reserved') selected @endif>{{ translate('Reserved') }}</option>
-                                        <option value="trashed" @if($serial_status === 'trashed') selected @endif>{{ translate('Trashed') }}</option>
-                                    </select>
-                                    <!-- End Select -->
-                                </div>
-
-                                <div class="col">
-                                    <!-- Search -->
-                                    <div class="input-group input-group-merge input-group-flush">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="tio-search"></i>
-                                            </div>
-                                        </div>
-                                        <input id="serialNumbersDatatableSearch" x-on:submit.prevent wire:model.debounce.500ms="serial_search" type="search" class="form-control" placeholder="Search users" aria-label="{{ translate('Search serials...') }}">
-                                    </div>
-                                    <!-- End Search -->
-                                </div>
-                            </div>
-                            <!-- End Filter -->
-                        </div>
-                    </div>
-                </div>
-                <!-- End Header -->
-
-
-                <!-- Table -->
-                <div class="table-responsive datatable-custom">
-                    <table id="serialNumbersDatatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>{{ translate('Serial number') }}</th>
-                            <th>{{ translate('Status') }}</th>
-                            <th>{{ translate('Last status update') }}</th>
-                            <th>{{ translate('Created at') }}</th>
-                            <th class="d-flex justify-content-center">{{ translate('Actions') }}</th>
-                        </tr>
-                        </thead>
-
-                        <tbody x-data="{
-                                    original: @js($serial_numbers->keyBy('id')->toArray()),
-                                    items: @entangle('edit_serial_numbers').defer,
-                                    getStatusColorClass(status) {
-                                        let matches = {
-                                            'in_stock': 'bg-success',
-                                            'out_of_stock': 'bg-danger',
-                                            'reserved': 'bg-warning',
-                                            'default': 'bg-dark'
-                                          };
-                                        return (matches[status] || matches['default']);
-                                    },
-                                    getStatusSelectIDTemplate(item_id, no_hash = false) {
-                                        return  no_hash ? 'serial_number_status_select_'+item_id : '#serial_number_status_select_'+item_id;
-                                    },
-                                    resetRows(except) {
-                                        this.items.forEach((element, index) => {
-                                            if(except.id !== undefined && except.id === element.id)
-                                                return;
-
-                                            this.resetRow(element);
-                                        });
-                                    },
-                                    resetRow(item) {
-                                        item.edit_mode = false;
-                                        item.serial_number = this.original[item.id].serial_number;
-                                        item.status = this.original[item.id].status;
-                                        $('.edit_serial_number_row_'+item.id).find('input').removeClass('border-danger');
-                                        if($('.edit_serial_number_row_'+item.id).find('.error-msg').is(':visible')) {
-                                            fresh_validation_errors = this.validation_errors;
-                                            delete fresh_validation_errors['edit_serial_numbers.'+($('.edit_serial_number_row_'+item.id).data('row-index'))+'.serial_number'];
-                                            $('#stockManagementFormErrors').html( JSON.stringify([fresh_validation_errors]) );
-                                        }
-                                    }
-                                }"
-                        >
-                        <template x-for="(item, key) in items" :key="item.id" wire:key="item.id">
-                            <tr :style="item.trashed ? {background:'rgb(255 0 0 / 10%)'} : {}"
-                                x-bind:data-row-index="key"
-                                :class="'edit_serial_number_row_'+item.id"
-                                x-init="$watch('item.status', (value) => {
-                                      $(getStatusSelectIDTemplate(item.id)).val(value).trigger('change');
-                                    });
-                                    // When livewire changes html on first change, duplicate serial numbers are printed! This happens only on first html change. Prevent it manually by deleting wrong items!
-                                    if($('.edit_serial_number_row_'+item.id).length > 1) {
-                                        $('.edit_serial_number_row_'+item.id).last().remove();
-                                    }
-                               "
-                            >
-
-                                <td style="width: 240px;">
-                                        <span class="position-relative">
-                                            <input type="text" name="serial_number" class="form-control" :id="'serial_number_input_'+item.id"
-                                                   :class="{'border-danger': validation_errors.hasOwnProperty('edit_serial_numbers.'+key+'.serial_number')}"
-                                                   x-model="item.serial_number"
-                                                   x-show="item.edit_mode"
-                                                   style="width: 208px;"
-                                            />
-
-                                            <span x-show="!item.edit_mode">
-                                                <span x-text="item.serial_number"></span>
-                                                <small x-show="item.trashed" class="badge badge-danger position-absolute" style="top: -4px; left: calc(100% + 5px); height: 15px; font-size: 9px; padding: 3px 4px;">{{ translate('Trashed') }}</small>
-                                            </span>
-
-                                            <span
-                                                class="error-msg text-danger text-12"
-                                                x-show="item.edit_mode && validation_errors.hasOwnProperty('edit_serial_numbers.'+key+'.serial_number')"
-                                                x-text="getSafe(() => validation_errors['edit_serial_numbers.'+key+'.serial_number'][0], '')"></span>
-                                        </span>
-                                </td>
-
-                                <td>
-                                    <div class="" x-show="item.edit_mode">
-                                        <select :key="getStatusSelectIDTemplate(item.id, true)" :id="getStatusSelectIDTemplate(item.id, true)" class="custom-select js-custom-select-dynamic" name="serial_number_status" data-hs-select2-options='{
-                                                  "minimumResultsForSearch": "Infinity",
-                                                  "customClass": "custom-select custom-select-sm",
-                                                  "dropdownAutoWidth": true,
-                                                  "width": true
-                                            }' x-init="
-                                                $(getStatusSelectIDTemplate(item.id)).on('select2:select', (event) => {
-                                                  item.status = event.target.value;
-                                                });
-                                            ">
-                                            <option value="in_stock" :selected="item.status === 'in_stock'">{{ translate('In stock') }}</option>
-                                            <option value="out_of_stock" :selected="item.status === 'out_of_stock'">{{ translate('Out of stock') }}</option>
-                                            <option value="reserved" :selected="item.status === 'reserved'">{{ translate('Reserved') }}</option>
-                                        </select>
-                                    </div>
-                                    <div class="align-items-center" :class="{'d-flex':!item.edit_mode}" x-show="!item.edit_mode">
-                                        <span class="legend-indicator" :class="getStatusColorClass(item.status)"></span>
-                                        <span class="text-capitalize" x-text="item.status.replaceAll('_',' ')"></span>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <span x-text="item.updated_at"></span>
-                                </td>
-                                <td>
-                                    <span x-text="item.created_at"></span>
-                                </td>
-
-                                <td class="">
-                                    <div class="d-flex justify-content-center">
-                                        <button type="button" :class="{'d-inline-flex' : !item.trashed && item.edit_mode}" class="btn btn-success btn-xs text-white p-1 justify-content-center align-items-center mr-2"
-                                                x-show="!item.trashed && item.edit_mode"
-                                                @click="$wire.updateSerialNumber(item.id)">
-                                            @svg('heroicon-o-check', ['style' => 'height: 16px;'])
-                                        </button>
-
-                                        <button type="button" :class="{'d-inline-flex' : !item.trashed, 'btn-warning' : item.edit_mode, 'btn-info' : !item.edit_mode}"
-                                                class="btn btn-xs text-white p-1 justify-content-center align-items-center mr-2"
-                                                x-show="!item.trashed"
-                                                @click="item.edit_mode = !item.edit_mode; if(item.edit_mode) { resetRows(item); } else { resetRow(item); }">
-                                            @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;', 'x-show' => '!item.edit_mode'])
-                                            @svg('heroicon-o-x', ['style' => 'height: 16px;', 'x-show' => 'item.edit_mode'])
-                                        </button>
-
-                                        <template x-if="item.status === 'in_stock' && item.trashed">
-                                            <button type="button" class="btn btn-info btn-xs p-1" style="line-height: 1;"
-                                                    x-show="!item.edit_mode"
-                                                    @click="$wire.reviveSerialNumber(item.id)">
-                                                <!--@svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])-->
-                                                <span>{{ translate('Revive') }}</span>
-                                            </button>
-                                        </template>
-                                        <template x-if="item.status === 'in_stock' && !item.trashed">
-                                            <button type="button" class="btn btn-danger btn-xs p-1" style="line-height: 1;"
-                                                    x-show="!item.edit_mode"
-                                                    @click="$wire.invalidateSerialNumber(item.id)">
-                                                @svg('heroicon-o-trash', ['style' => 'width: 16px; height: 16px;'])
-                                            </button>
-                                        </template>
-
-                                    </div>
-                                </td>
-                            </tr>
-                        </template>
-                        </tbody>
-                    </table>
-
-                    <div class="d-flex align-items-center border rounded px-3 py-2 mt-3" style="border-color: #e7eaf3;">
-                        @php
-                            $serial_stats = $this->product->getSerialNumbersStockStats();
-                        @endphp
-                        <div class="d-flex align-items-center mr-2">
-                            <strong class="mr-2 d-flex align-items-center">
-                                <span class="legend-indicator bg-success mr-2"></span>
-                                {{ translate('In stock:') }}
-                            </strong>
-                            <span>{{ $serial_stats['in_stock'] }}</span>
-                        </div>
-
-                        <div class="column-divider d-flex align-items-center pl-2 mr-2">
-                            <strong class="mr-2 d-flex align-items-center">
-                                <span class="legend-indicator bg-danger mr-2"></span>
-                                {{ translate('Out of stock:') }}
-                            </strong>
-                            <span>{{ $serial_stats['out_of_stock'] }}</span>
-                        </div>
-
-                        <div class="column-divider d-flex align-items-center pl-2 mr-2">
-                            <strong class="mr-2 d-flex align-items-center">
-                                <span class="legend-indicator bg-warning mr-2"></span>
-                                {{ translate('Reserved:') }}
-                            </strong>
-                            <span>{{ $serial_stats['reserved'] }}</span>
-                        </div>
-
-                        <div class="column-divider d-flex align-items-center pl-2 mr-2">
-                            <strong class="mr-2 d-flex align-items-center">
-                                <span class="legend-indicator bg-dark mr-2"></span>
-                                {{ translate('Total:') }}
-                            </strong>
-                            <span>{{ $serial_stats['total'] }}</span>
-                        </div>
-
-                        <div class="column-divider d-flex align-items-center pl-2 ml-auto">
-                            <strong class="mr-2 d-flex align-items-center">
-                                @svg('heroicon-s-trash', ['class' => 'mr-2', 'style' => 'width: 14px; height: 14px;'])
-                                {{ translate('Trashed:') }}
-                            </strong>
-                            <span>{{ $serial_stats['trashed'] }}</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- End Table -->
-
-                <span class="divider mt-4">{{ translate('New serial numbers') }}</span>
-
-                <!-- Card Body (Add New Serial Numbers Panel) -->
-                <div class="card-body js-add-field " id="main-product-new-serial-numbers" data-hs-add-field-options='{
-                            "template": "#addSerialNumberTemplate",
-                            "container": "#addSerialNumberContainer",
-                            "defaultCreated": {{ count($new_serial_numbers) }},
-                            "limit": 9999
-                          }'>
-
-                    @if(count($new_serial_numbers) > 0)
-                        <script id="newSerialNumbersJSON" type="application/json">
-                            @json($new_serial_numbers)
-                        </script>
-                    @endif
-
-                    <div id="addSerialNumberContainer">
-
-                    </div>
-
-                    <div class="w-100 d-flex justify-content-between align-items-center mt-2">
-                        <a href="javascript:;" class="js-create-field form-link btn btn-sm btn-no-focus btn-secondary d-inline-flex align-items-center mt-0">
-                            @svg('heroicon-s-plus', ['style' => 'width: 16px; height:16px;'])
-                            <span>{{ translate('Add serial number') }}</span>
-                        </a>
-
-                        <a href="javascript:;" class="btn btn-sm btn-no-focus btn-primary d-none align-items-center mt-0 save-btn"
-                           onClick="document.dispatchEvent(new CustomEvent('save-new-serial-numbers', {detail: {component: @this, target: '#main-product-new-serial-numbers'}}))">
-                            <span>{{ translate('Save') }}</span>
-                        </a>
-                    </div>
-
-
-                </div>
-                <!-- End Card Body -->
-
-                <!-- Footer -->
-                <div class="card-footer">
-
-                    <!-- Add Serial Number Template -->
-                    <div id="addSerialNumberTemplate" class="w-100" style="display: none;">
-                        <div class="d-flex flex-row align-items-start w-100 pb-2">
-                            <div class="input-group-add-field mt-0 pr-3">
-                                <input type="text" name="serial_number" class="form-control" value="" />
-                            </div>
-                            <div class="input-group-add-field mt-1 mr-3">
-                                <select class="js-custom-select-dynamic" name="serial_number_status" data-hs-select2-options='{
-                                          "minimumResultsForSearch": "Infinity",
-                                          "customClass": "custom-select custom-select-sm",
-                                          "dropdownAutoWidth": true,
-                                          "width": true
-                                }'>
-                                    <option value="in_stock" >{{ translate('In stock') }}</option>
-                                    <option value="out_of_stock" >{{ translate('Out of stock') }}</option>
-                                    <option value="reserved" >{{ translate('Reserved') }}</option>
-                                </select>
-                            </div>
-
-                            <div class="input-group-add-field " style="margin-top: 12px;">
-                                <button type="button" class="btn btn-danger btn-xs p-1 rounded js-delete-field d-inline-flex">
-                                    @svg('heroicon-o-x', ['style' => 'width: 16px; height: 16px;'])
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Add Serial Number Template -->
-
-                    <!-- Pagination -->
-                    <div class="d-flex justify-content-center justify-content-sm-end">
-                        <nav id="serialNumbersDatatablePagination" aria-label="Activity pagination"></nav>
-                    </div>
-                    <!-- End Pagination -->
-                </div>
-                <!-- End Footer -->
-
-
-            </div>
-            <!-- End Card -->
-        </div>
+        
 
     </div>
     <!-- END: Main Product CARD -->

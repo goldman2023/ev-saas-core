@@ -31,9 +31,9 @@ class EVProductController extends Controller
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
-
+ 
         if($product) {
-            $product->convertUploadModelsToIDs();
+            // $product->convertUploadModelsToIDs(); // DEPRECATED, since we use livewire and alpinejs combo instead of shitty Front JS
         }
 
         return view('frontend.dashboard.products.edit')->with('product', $product);

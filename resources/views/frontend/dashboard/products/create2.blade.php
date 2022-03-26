@@ -6,9 +6,7 @@
 @endpush
 
 @push('pre_head_scripts')
-    <script>
-        let all_categories = @json(\Categories::getAllFormatted());
-    </script>
+
 @endpush
 
 @section('panel_content')

@@ -36,7 +36,17 @@ class IfIDExists implements Rule, ValidatorAwareRule, DataAwareRule
             return true;
         }
         
-        $value = $value instanceof Model ? $value->id : $value['id'];
+        if($value instanceof Model) {
+            $value = $value->id;
+        } else if(is_array($value)) {
+            $value = $value['id'];
+        } else if(is_object($value)) {
+            $value = $value->id;
+        } else if(is_numeric($value)) {
+            $value = (int) $value;
+        } else {
+            return false;
+        }
 
         if(!empty($model_type)) {
             // Check if user with email is not already registered.

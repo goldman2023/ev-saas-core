@@ -85,11 +85,12 @@ trait GalleryTrait
     /******* START THUMBNAIL *******/
     public function getThumbnailAttribute() {
         if(!isset($this->thumbnail)) {
+            
             $this->thumbnail = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
                 return $upload->pivot->relation_type === 'thumbnail';
             })->first();
         }
-
+        
         return $this->thumbnail;
     }
 
@@ -240,7 +241,12 @@ trait GalleryTrait
                         'order' => $property === 'gallery' ? $key : 0
                     ];
                 });
-                $sync_array = array_combine($upload_keys, $upload_values);
+                
+                try {
+                    $sync_array = array_combine($upload_keys, $upload_values);
+                } catch(\Exception $e) {
+                    continue;
+                }
 
                 $this->uploads()->wherePivot('relation_type', $property)->sync($sync_array);
             }

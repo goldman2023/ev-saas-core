@@ -28,9 +28,10 @@
 
         onSave() {
             $wire.set('product.description', this.description, true);
-            $wire.set('product.thumbnail', this.thumbnail, true);
-            $wire.set('product.gallery', this.gallery, true);
-            $wire.set('product.pdf', this.pdf, true);
+            $wire.set('product.thumbnail', this.thumbnail.id, true);
+            $wire.set('product.cover', this.cover.id, true);
+            $wire.set('product.gallery', [], true);
+            $wire.set('product.pdf', this.pdf.id, true);
             $wire.set('product.video_provider', this.video_provider, true);
             $wire.set('product.base_currency', this.base_currency, true);
             $wire.set('product.discount_type', this.discount_type, true);
@@ -40,7 +41,7 @@
             $wire.set('product.digital', this.is_digital, true);
             $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
             $wire.set('attributes', this.attributes, true);
-            $wire.set('product.meta_img', this.meta_img, true);
+            $wire.set('product.meta_img', this.meta_img.id, true);
             $wire.set('product.status', this.status, true);
             $wire.set('product.tags', this.tags, true);
             $wire.set('selected_categories', this.selected_categories, true);
@@ -403,11 +404,15 @@
                                 </label>
                 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('product.unit') is-invalid @enderror"
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="text" class="form-standard @error('product.unit') is-invalid @enderror"
                                             placeholder="{{ translate('Product unit') }}"
                                             wire:model.defer="product.unit" />
-                                
-                                    <x-system.invalid-msg field="product.unit"></x-system.invalid-msg>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10"  field="product.unit"></x-system.invalid-msg>
+                                    </div>
                                 </div>
                             </div>
                             {{-- END Unit --}}
@@ -765,15 +770,19 @@
                                                     return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
                                                 },
                                                 count() {
-                                                    if(this.items === undefined || this.items === null) {
-                                                        this.items = [''];
+                                                    if(this.attribute.attribute_values === undefined || this.attribute.attribute_values === null) {
+                                                        this.attribute.attribute_values = [{
+                                                            values: ''
+                                                        }];
                                                     }
                                         
-                                                    return this.items.length;
+                                                    return this.attribute.attribute_values.length;
                                                 },
                                                 add() {
                                                     if(this.count() < getMaxRows()) {
-                                                        this.items.push('');
+                                                        this.attribute.attribute_values.push({
+                                                            values: ''
+                                                        });
                                                     }
                                                 },
                                                 remove(index) {
@@ -781,10 +790,16 @@
                                                         $wire.removeAttributeValue(attribute.attribute_values[index].id);
                                                     }
 
-                                                    this.items.splice(index, 1);
+                                                    attribute.attribute_values.splice(index, 1);
                                                 },
                                             }" x-init="
-                                                $watch('items', items => {
+                                                if(getMinRows() > 1) {
+                                                    for(let i=1; i < getMinRows(); i++) {
+                                                        add();
+                                                    }
+                                                }
+                                            ">
+                                                {{-- $watch('items', items => {
                                                     items.forEach((item, index) => {
                                                         if(attribute.attribute_values[index] === undefined || attribute.attribute_values[index] === null) {
                                                             attribute.attribute_values[index] = { 
@@ -798,18 +813,10 @@
                                                     let diff = attribute.attribute_values.length - items.length;
 
                                                     if(diff > 0) {
-                                                        {{-- Remove difference between attribute.attribute_values and mapped items. --}}
+                                                        Remove difference between attribute.attribute_values and mapped items.
                                                         attribute.attribute_values = attribute.attribute_values.slice(0, -(diff));
                                                     }
-                                                });
-
-                                                if(getMinRows() > 1) {
-                                                    for(let i=1; i<getMinRows(); i++) {
-                                                        add();
-                                                    }
-                                                }
-                                            ">
-                
+                                                }); --}}
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
                             
                                             <div class="mt-1 sm:mt-0 sm:col-span-2">
@@ -822,14 +829,14 @@
                                                     </div>
                                                 </template>
                                                 <template x-if="count() > 1">
-                                                    <template x-for="[key, value] of Object.entries(items)">
+                                                    <template x-for="(attribute_value, key) in attribute.attribute_values">
                                                         <div class="flex" :class="{'mt-2': key > 0}">
                                                             <input type="text"
                                                                 class="form-standard"
                                                                 :id="'attribute-'+attribute.id+'-text-list-input-'+key"
                                                                 x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                                                                x-model="value" />
-                                                            <template x-if="(key+1) >= getMinRows()">
+                                                                x-model="attribute_value.values" />
+                                                            <template x-if="(key+1) > getMinRows()">
                                                                 <span class="ml-2 flex items-center cursor-pointer" @click="remove(key)">
                                                                     @svg('heroicon-o-trash', ['class' => 'w-[22px] h-[22px] text-danger'])
                                                                 </span>
@@ -1098,7 +1105,7 @@
 
                     {{-- Tags --}}
                     <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
-                            open: false,
+                            open: tags !== null && tags.length > 0,
                             add(value) {
                                 if(tags === undefined || tags === null || tags.length === 0) {
                                     tags = [];

@@ -6,7 +6,7 @@
 @endpush
 
 @section('panel_content')
-<div class="card d-flex flex-row justify-content-start pl-3 py-3 align-items-center">
+{{-- <div class="card d-flex flex-row justify-content-start pl-3 py-3 align-items-center">
     <a href="{{ back()->getTargetUrl() }}" class="text-secondary mr-4" style="height: 32px;">
         @svg('heroicon-o-chevron-left', ['style' => 'height: 32px;'])
     </a>
@@ -17,15 +17,26 @@
                 </span>
         <span>{{ $product->getTranslation('name') }}</span>
     </h2>
-</div>
+</div> --}}
 
-<livewire:dashboard.forms.products.stock-management-form :product="$product">
-</livewire:dashboard.forms.products.stock-management-form>
+
+<section>
+    <x-dashboard.section-headers.section-header title="{{ translate('Stock Management') }}" text="">
+        <x-slot name="content">
+            <a href="{{ route('product.details', ['slug' => $product->slug]) }}" class="btn-standard">
+                @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('Product details') }}</span>
+            </a>
+        </x-slot>
+    </x-dashboard.section-headers.section-header>
+
+    <livewire:dashboard.forms.products.stock-management-form :product="$product"></livewire:dashboard.forms.products.stock-management-form>
+</section>
 
 @endsection
 
 @push('footer_scripts')
-    <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>
+    {{-- <script src="{{ static_asset('vendor/hs-add-field/dist/hs-add-field.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-toggle-switch/dist/hs-toggle-switch.min.js', false, true) }}"></script>
 
     <!-- CDN stuff -->
@@ -37,5 +48,5 @@
     <script src="{{ static_asset('vendor/hs.select2.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs.datatables.js', false, true) }}"></script>
 
-    <script src="{{ static_asset('js/crud/stock-management-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/stock-management-form.js', false, true, true) }}"></script> --}}
 @endpush
