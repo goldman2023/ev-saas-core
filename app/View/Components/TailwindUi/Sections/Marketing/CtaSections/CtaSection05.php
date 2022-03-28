@@ -4,17 +4,8 @@ namespace App\View\Components\TailwindUi\Sections\Marketing\CtaSections;
 
 use Illuminate\View\Component;
 
-class CtaSection_05 extends Component
+class CtaSection05 extends CtaSection
 {
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Get the view / contents that represent the component.
