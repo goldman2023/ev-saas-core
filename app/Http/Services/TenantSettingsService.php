@@ -46,8 +46,8 @@ class TenantSettingsService
         $default = [];
 
         if (empty($settings)) {
-            $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
-            
+            // $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
+
             // Cache the settings if they are found in DB
             if (!empty($settings)) {
                 Cache::forget($cache_key);

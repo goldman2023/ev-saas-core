@@ -14,7 +14,7 @@ $central_domains = [
 
 
 if (env('APP_ENV') === 'production') {
-    $central_domains[] = 'app.'.env('CENTRAL_DOMAIN').'.com';
+    $central_domains[] = 'app.'.env('CENTRAL_DOMAIN');
 } else {
     $central_domains[] = env('CENTRAL_DOMAIN');
 }
