@@ -1,4 +1,4 @@
-<x-dashboard.elements.card class="lg:col-span-2 col-span-2">
+<x-dashboard.elements.card >
     <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
         <x-slot name="cardHeader" class="font-bold mb-3">
             <div class="mb-3">

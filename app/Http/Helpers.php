@@ -1157,52 +1157,9 @@ if (!function_exists('checkout_done')) {
         $order->payment_details = $payment;
         $order->save();
 
-        if (\App\Models\Addon::where('unique_identifier', 'affiliate_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first()->activated) {
-            $affiliateController = new AffiliateController;
-            $affiliateController->processAffiliatePoints($order);
-        }
 
-        if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated) {
-            if (Auth::check()) {
-                $clubpointController = new ClubPointController;
-                $clubpointController->processClubPoints($order);
-            }
-        }
-        if (\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first() == null || !\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
-            if (get_setting('category_wise_commission') != 1) {
-                $commission_percentage = get_setting('vendor_commission');
-                foreach ($order->orderDetails as $key => $orderDetail) {
-                    $orderDetail->payment_status = 'paid';
-                    $orderDetail->save();
-                    if ($orderDetail->product->user->user_type == 'seller') {
-                        $seller = $orderDetail->product->user->seller;
-                        $seller->admin_to_pay = $seller->admin_to_pay + ($orderDetail->price * (100 - $commission_percentage)) / 100 + $orderDetail->tax + $orderDetail->shipping_cost;
-                        $seller->save();
-                    }
-                }
-            } else {
-                foreach ($order->orderDetails as $key => $orderDetail) {
-                    $orderDetail->payment_status = 'paid';
-                    $orderDetail->save();
-                    if ($orderDetail->product->user->user_type == 'seller') {
-                        $commission_percentage = $orderDetail->product->category->commision_rate;
-                        $seller = $orderDetail->product->user->seller;
-                        $seller->admin_to_pay = $seller->admin_to_pay + ($orderDetail->price * (100 - $commission_percentage)) / 100 + $orderDetail->tax + $orderDetail->shipping_cost;
-                        $seller->save();
-                    }
-                }
-            }
-        } else {
-            foreach ($order->orderDetails as $key => $orderDetail) {
-                $orderDetail->payment_status = 'paid';
-                $orderDetail->save();
-                if ($orderDetail->product->user->user_type == 'seller') {
-                    $seller = $orderDetail->product->user->seller;
-                    $seller->admin_to_pay = $seller->admin_to_pay + $orderDetail->price + $orderDetail->tax + $orderDetail->shipping_cost;
-                    $seller->save();
-                }
-            }
-        }
+
+
 
         $order->commission_calculated = 1;
         $order->save();

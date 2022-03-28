@@ -83,21 +83,7 @@ class RegisterController extends Controller
             $customer->save();
         }
         else {
-            if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated){
-                $user = User::create([
-                    'name' => $data['name'],
-                    'phone' => '+'.$data['country_code'].$data['phone'],
-                    'password' => Hash::make($data['password']),
-                    'verification_code' => rand(100000, 999999)
-                ]);
 
-                $customer = new Customer;
-                $customer->user_id = $user->id;
-                $customer->save();
-
-                $otpController = new OTPVerificationController;
-                $otpController->send_code($user);
-            }
         }
 
         if(Cookie::has('referral_code')){

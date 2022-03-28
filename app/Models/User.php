@@ -210,6 +210,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $data;
     }
 
+    public function getFollowersCount() {
+
+    }
+
+    public function followers() {
+        return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
+    }
+
     /**
      * Get the route name for the model.
      *
@@ -218,4 +226,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public static function getRouteName() {
         return 'user.show';
     }
+
+
 }

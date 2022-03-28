@@ -21,9 +21,12 @@
             <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
         </div>
         <div class="grid grid-cols-4 gap-12 mb-12">
-           <x-dashboard.widgets.top-categories></x-dashboard.widgets.top-categories>
 
+            <div class="lg:col-span-2 col-span-2">
+                <x-dashboard.widgets.top-categories></x-dashboard.widgets.top-categories>
+            </div>
 
+            <div>
             <x-dashboard.elements.card>
                 <x-slot name="cardHeader" class="flow-root mt-6">
                     <div class="h5 fw-600">{{ translate('Products') }} </div>
@@ -39,7 +42,9 @@
                     </a>
                 </x-slot>
             </x-dashboard.elements.card>
+            </div>
             <div>
+
                 <x-dashboard.elements.support-card class="card mb-3">
                 </x-dashboard.elements.support-card>
                 <x-dashboard.elements.card>
@@ -86,6 +91,12 @@
         </x-default.dashboard.widgets.integrations-widget>
 
         <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
+
+        <div class="">
+             <div class="mt-3">
+                    @livewire('dashboard.elements.activity-log')
+                </div>
+        </div>
     </div>
 </section>
 
