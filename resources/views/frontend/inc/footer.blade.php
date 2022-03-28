@@ -46,7 +46,7 @@
                     </li>
                 </ul>
 
-                <x-b2b-newsletter-form-footer></x-b2b-newsletter-form-footer>
+                <x-></x-b2b-newsletter-form-footer>
             </div>
             <div class="col-lg-3 col-md-3 pt-4">
                 <div class="text-center text-md-left">
