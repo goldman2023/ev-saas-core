@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_MYSQL_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------

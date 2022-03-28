@@ -73,8 +73,8 @@ class ProductForm2 extends Component
                 'product.brand_id' => 'nullable|exists:App\Models\Brand,id',
             ],
             'media' => [
-                'product.thumbnail' => ['required', 'if_id_exists:App\Models\Upload,id,true'],
-                'product.cover' => ['required', 'if_id_exists:App\Models\Upload,id,true'],
+                'product.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
+                'product.cover' => ['if_id_exists:App\Models\Upload,id,true'],
                 'product.gallery' => [], // 'if_id_exists:App\Models\Upload,id,true'
                 'product.video_provider' => 'nullable|in:youtube,vimeo,dailymotion',
                 'product.video_link' => 'nullable|active_url',
