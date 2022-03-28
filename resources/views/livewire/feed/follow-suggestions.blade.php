@@ -4,7 +4,11 @@
             {{ translate('Popular Members') }}
         </h2>
         <div class="mt-6 flow-root">
-            <ul role="list" class="-my-4 divide-y divide-gray-200">
+            <div wire:loading wire:target="loadInit">
+                {{ translate('Loading...') }}
+            </div>
+            <ul role="list" class="-my-4 divide-y divide-gray-200"  wire:init="loadInit">
+                @if($readyToLoad)
                 @foreach($accounts as $account)
                 <li class="flex items-center py-4 space-x-3">
                     <div class="flex-shrink-0">
@@ -41,6 +45,8 @@
                     </div>
                 </li>
                 @endforeach
+
+                @endif
 
                 <!-- More people... -->
             </ul>

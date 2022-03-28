@@ -9,13 +9,20 @@ class FollowSuggestions extends Component
 {
 
     public $accounts;
+    public $readyToLoad = false;
 
-    public function mount() {
+    public function mount()
+    {
         $this->accounts = User::where('id', '!=', auth()->user()->id)->take(5)->get();
     }
 
     public function render()
     {
         return view('livewire.feed.follow-suggestions');
+    }
+
+    public function loadInit()
+    {
+        $this->readyToLoad  = true;
     }
 }
