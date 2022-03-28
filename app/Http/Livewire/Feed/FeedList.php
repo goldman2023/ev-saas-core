@@ -15,6 +15,7 @@ class FeedList extends Component
     public $links;
     public $readyToLoad = false;
     public $loading = false;
+    public $type = 'recent';
 
     public function mount()
     {
@@ -26,9 +27,14 @@ class FeedList extends Component
         $data = Activity::
             whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked'])
             ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User'])
-            ->where('causer_id', '<>', auth()->user()->id)
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage);
+            ->where('causer_id', '<>', auth()->user()->id);
+
+            if($this->type == "recent"){
+                $data = $data->orderBy('id', 'desc');
+            } elseif($this->type == 'trending') {
+                $data = $data->orderBy('impressions', 'desc');
+            }
+            $data = $data->paginate($this->perPage);
         $this->loading = false;
 
         return view('livewire.feed.feed-list', [
@@ -45,6 +51,11 @@ class FeedList extends Component
     {
         $this->loading = true;
         $this->perPage += 10;
+    }
+
+    public function loadType($type)
+    {
+        $this->type = $type;
     }
 
     public function track_impression($id)

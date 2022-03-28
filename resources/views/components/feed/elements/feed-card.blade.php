@@ -117,7 +117,9 @@
                     @endif
                 </a>
                 @else
+                @if(class_exists($item->subject_type))
                  {{ $item->description }}  {{ class_basename($item->subject)}} {{ $item->subject->name }}
+                 @endif
                 @endif
             </h2>
         </div>
@@ -205,7 +207,7 @@
                                 d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                                 clip-rule="evenodd" />
                         </svg>
-                        <span class="font-medium text-gray-900">2.7k</span>
+                        <span class="font-medium text-gray-900">{{ $item->impressions }}</span>
                         <span class="sr-only">views</span>
                     </button>
                 </span>
