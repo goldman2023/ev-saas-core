@@ -1,3 +1,244 @@
+<div class="w-full" x-data="{
+        current: 'basicInformation',
+        thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
+        cover: @js(['id' => $me->cover->id ?? null, 'file_name' => $me->cover->file_name ?? '']),
+         {{-- status: @js($plan->status ?? App\Enums\StatusEnum::draft()->value), --}}
+        {{--meta_img: @js(['id' => $plan->meta_img->id ?? null, 'file_name' => $plan->meta_img->file_name ?? '']),
+        base_currency: @js($plan->base_currency),
+        discount_type: @js($plan->discount_type),
+        yearly_discount_type: @js($plan->yearly_discount_type),
+        tax_type: @js($plan->tax_type),
+        features: @js($plan->features),
+        content: @js($plan->content),
+        selected_categories: @js($selected_categories) --}}
+    }"
+    x-init="$watch('current', function(value) {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $('#'+value).offset().top - $('#header').outerHeight()
+        }, 500);
+    })"
+     @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+     x-cloak>
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                              wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
+
+        <div class="w-full"
+             wire:loading.class="opacity-30 pointer-events-none"
+        >
+
+        <div class="grid grid-cols-12 gap-8 mb-10">
+            <div class="col-span-12 xl:col-span-3">
+
+            </div>
+
+            <div class="col-span-12 xl:col-span-9">
+                {{-- Account Media --}}
+                <div class="p-0 border bg-white border-gray-200 rounded-lg shadow">
+                    <div class="w-full border-b border-gray-200">
+                        <x-dashboard.form.image-selector field="cover" template="cover" id="my-account-cover-image" error-field="me.cover" :selected-image="$me->cover"></x-dashboard.form.image-selector>
+                    </div>
+                                   
+                    <div class="w-full pt-3 pb-5 pr-4 pl-[140px] relative">
+                        <div class="bg-white rounded-lg absolute left-6 bottom-6 border border-gray-200">
+                            <x-dashboard.form.image-selector field="thumbnail" template="avatar" id="my-account-thumbnail-image" error-field="me.thumbnail" :selected-image="$me->thumbnail"></x-dashboard.form.image-selector>
+                        </div>
+
+                        <div class="w-full flex flex-col">
+                            <strong class="block text-gray-700">{{ $me->name }}</strong>
+                            <span class="text-gray-500">{{ $me->email }}</span>
+                        </div>
+                    </div>
+
+                    {{-- TODO: Save media change! --}}
+                </div>
+                {{-- END Account Media --}}
+
+                {{-- Basic Information --}}
+                <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5">
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Basic Information') }}</h3>
+                        {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p> --}}
+                    </div>
+            
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                        <!-- Full name -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Full name') }}
+                                <span class="text-danger relative top-[-2px]">*</span>
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('me.title') is-invalid @enderror"
+                                        placeholder="{{ translate('My full name') }}"
+                                        wire:model.defer="me.name" />
+                            
+                                <x-system.invalid-msg field="me.name"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Full name -->
+
+                        <!-- Email -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Email') }}
+                                <span class="text-danger relative top-[-2px]">*</span>
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="email" class="form-standard @error('me.email') is-invalid @enderror"
+                                        placeholder="{{ translate('My Email') }}"
+                                        wire:model.defer="me.email" />
+                            
+                                <x-system.invalid-msg field="me.email"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Email -->
+
+                        <!-- Phone -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Phone') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('me.phone') is-invalid @enderror"
+                                        placeholder="{{ translate('My mobile phone') }}"
+                                        wire:model.defer="me.phone" />
+                            
+                                <x-system.invalid-msg field="me.phone"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Phone -->
+
+                        {{-- Save basic information --}}
+                        <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                @click="
+                                    $wire.set('me.thumbnail', thumbnail.id, true);
+                                    $wire.set('me.cover', cover.id, true);
+                                "
+                                wire:click="saveBasicInformation()">
+                            {{ translate('Save') }}
+                            </button>
+                        </div>
+                        {{-- END Save basic information --}}
+                        
+                    </div>
+                </div>
+                {{-- END Basic Information --}}
+
+                {{-- Change password --}}
+                <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-data="{
+                        currentPassword: '',
+                        newPassword: '',
+                        newPassword_confirmation: '',
+                        reset() {
+                            this.currentPassword = '';
+                            this.newPassword = '';
+                            this.newPassword_confirmation = ''; 
+                        }
+                    }" @init-form.window="reset()">
+                    <div>
+                        <h3  class="text-lg leading-6 font-medium text-gray-900">{{ translate('Change password') }}</h3>
+                        {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p> --}}
+                    </div>
+            
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                        <!-- Current password -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Current password') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="password" class="form-standard @error('currentPassword') is-invalid @enderror"
+                                        placeholder="{{ translate('Enter current password') }}"
+                                        x-model="currentPassword" />
+                            
+                                <x-system.invalid-msg field="currentPassword"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Current password -->
+
+                        <!-- New password -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('New password') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="password" class="form-standard @error('newPassword') is-invalid @enderror"
+                                        placeholder="{{ translate('Enter New password') }}"
+                                        x-model="newPassword" />
+                            
+                                <x-system.invalid-msg field="newPassword"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END New password -->
+
+                        <!-- New password confirmation-->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-0" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Confirm new password') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="password" class="form-standard "
+                                        placeholder="{{ translate('Confirm new password') }}"
+                                        x-model="newPassword_confirmation" />
+                            </div>
+
+                            <div></div>
+                            <div class="w-full sm:col-span-2">
+                                <h5 class="mb-2">{{ translate('Password requirements:') }}</h5>
+
+                                <ul class="text-14 text-gray-700 marker:text-sky-400 list-disc pl-4">
+                                    <li>{{ translate('Minimum 8 characters long - the more, the better') }}</li>
+                                    <li>{{ translate('At least one lowercase character') }}</li>
+                                    <li>{{ translate('At least one uppercase character') }}</li>
+                                    <li>{{ translate('At least one number') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- END New password confirmation -->
+                        
+                        {{-- Save Change password --}}
+                        <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                @click="
+                                    $wire.set('currentPassword', currentPassword, true);
+                                    $wire.set('newPassword', newPassword, true);
+                                    $wire.set('newPassword_confirmation', newPassword_confirmation, true);
+                                "
+                                wire:click="updatePassword()">
+                            {{ translate('Save') }}
+                            </button>
+                        </div>
+                        {{-- END Change password --}}
+                        
+                    </div>
+                </div>
+                {{-- END Change password --}}
+
+                <!-- Addresses -->
+                <livewire:dashboard.forms.addresses.addresses-form :addresses="$this->me->addresses" type="address">
+                </livewire:dashboard.forms.addresses.addresses-form>
+                <!-- END Addresses -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div class="my-account-form lw-form row"
      x-data="{
             current: 'basicInformation',
@@ -157,7 +398,7 @@
                  wire:loading.class="opacity-3 prevent-pointer-events"
                  wire:target="saveBasicInformation"
             >
-                <!-- Profile Cover -->
+                {{-- <!-- Profile Cover -->
                 <div class="profile-cover">
                     <div class="profile-cover-img-wrapper"
                          x-data="{
@@ -219,10 +460,10 @@
                       </i>
                     </span>
                 </label>
-                <!-- End Avatar -->
+                <!-- End Avatar --> --}}
 
                 <div class="card-body">
-                    @error('me.thumbnail')
+                    {{-- @error('me.thumbnail')
                     <div class="row form-group mb-1">
                         <div class="invalid-feedback d-block mx-3 py-2 rounded bg-danger text-white px-3">{{ $message }}</div>
                     </div>
@@ -232,7 +473,7 @@
                     <div class="row form-group mb-1">
                         <div class="invalid-feedback d-block mx-3 py-2 rounded bg-danger text-white px-3">{{ $message }}</div>
                     </div>
-                    @enderror
+                    @enderror --}}
 
                     <div class="row form-group">
                         <label for="me-name" class="col-sm-3 col-form-label input-label">{{ translate('Full name') }}</label>
@@ -481,10 +722,7 @@
         </div>
         <!-- END Password -->
 
-        <!-- Addresses -->
-        <livewire:dashboard.forms.addresses.addresses-form :addresses="$this->me->addresses" toast_it="my-account-updated-toast">
-        </livewire:dashboard.forms.addresses.addresses-form>
-        <!-- END Addresses -->
+        
 
         <!-- Social accounts -->
         <div id="socialAccountsSection" class="card mb-3 mb-lg-5">

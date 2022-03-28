@@ -1,4 +1,4 @@
-<div class="fixed z-50 inset-0 overflow-y-auto" x-data="{
+<div class="fixed z-[1000] inset-0 overflow-y-auto" x-data="{
         show: false,
         type: @js('type'),
         title: '',

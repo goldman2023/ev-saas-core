@@ -104,11 +104,12 @@ class ProductVariationsTable extends \Livewire\Component
         $this->attributes = $this->product->variant_attributes(); // these attributes are only attributes used for_variations*/
 
         $this->variations = $this->product->getMappedVariations();
-
+        
         $this->class = $class;
 
         // Create or Fetch all combinations.
         $this->createAllCombinations();
+
     }
 
     public function createAllCombinations()

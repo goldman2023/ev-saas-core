@@ -11,17 +11,19 @@ class ImageSelector extends Component
     public $errorField;
     public $id;
     public mixed $selectedImage;
+    public $template;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($field = '', $id = '', $selectedImage = null, $errorField = '')
+    public function __construct($field = '', $id = '', $template = 'image', $selectedImage = null, $errorField = '')
     {
         $this->field = $field;
         $this->errorField = $errorField;
         $this->id = $id;
+        $this->template = $template;
 
         if($selectedImage instanceof Upload) { // Upload class
             $this->selectedImage = $selectedImage;
@@ -44,6 +46,12 @@ class ImageSelector extends Component
      */
     public function render()
     {
+        if($this->template === 'cover') {
+            return view('components.dashboard.form.cover-selector');
+        } else if($this->template === 'avatar') {
+            return view('components.dashboard.form.avatar-selector');
+        } 
+
         return view('components.dashboard.form.image-selector');
     }
 }

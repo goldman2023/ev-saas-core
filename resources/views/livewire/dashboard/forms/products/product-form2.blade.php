@@ -340,7 +340,6 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-
                                     <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
                                                 :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >

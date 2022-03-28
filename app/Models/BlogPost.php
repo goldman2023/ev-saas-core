@@ -88,10 +88,10 @@ class BlogPost extends EVBaseModel
 //        return $this->morphedByMany(Category::class, 'subject', 'blog_post_relationships');
 //    }
 
-//    public function subscriptions()
-//    {
-//        return $this->morphedByMany(Subscription::class, 'subject', 'blog_post_relationships');
-//    }
+   public function plans()
+   {
+       return $this->morphedByMany(Plan::class, 'subject', 'blog_post_relationships');
+   }
 
 
     public function getDynamicModelUploadProperties(): array

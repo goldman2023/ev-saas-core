@@ -21,6 +21,7 @@ class AddressesForm extends Component
     use DispatchSupport;
 
     public $addresses;
+    public $type; // can be: 'address', 'shop_address'
     public ShopAddress|Address|null $currentAddress;
 
     /**
@@ -28,40 +29,65 @@ class AddressesForm extends Component
      *
      * @return void
      */
-    public function mount($addresses, $currentAddress = null)
+    public function mount($addresses, $type = 'address')
     {
         $this->addresses = $addresses;
-        $this->currentAddress = !empty($currentAddress) ? $currentAddress : $addresses->first();
+        $this->type = $type;
+
+        $this->initNewAddress();
+    }
+
+    public function initNewAddress() {
+        if($this->type === 'address') {
+            $this->currentAddress = new Address();
+            $this->currentAddress->user_id = auth()->user()->id;
+        } else if($this->type === 'shop_address') {
+            $this->currentAddress = new ShopAddress();
+            $this->currentAddress->shop_id = MyShop::getShopID();
+        }     
     }
 
     protected function rules()
     {
-        return [
-            'addresses.*' => [],
-            'currentAddress.*' => [],
-            'currentAddress.address' => ['required'],
-            'currentAddress.country' => ['required'],
-            'currentAddress.city' => ['required'],
-            'currentAddress.state' => ['required'],
-            'currentAddress.zip_code' => ['required'],
-            'currentAddress.phones' => ['check_array:1,4'],
-            'currentAddress.is_primary' => ['required'],
-            'currentAddress.is_billing' => ['required'],
-            'currentAddress.location' => [],
-            'currentAddress.features' => [],
-        ];
-    }
-
-    public function updatingCurrentAddress(&$address, $key) {
-        if(!$address instanceof Address && !$address instanceof ShopAddress) {
-            // alpinejs passes arrays as data instead of Model type. This is the reason why we have to convert it to ShopAddress|Address model.
-            if(isset($address['features'], $address['location'])) {
-                $address = new ShopAddress($address); // only ShopAddress has features and location
-            } else {
-                $address = new Address($address);
-            }
+        if($this->currentAddress instanceof ShopAddress) {
+            return [
+                'addresses.*' => [],
+                'currentAddress.address' => ['required'],
+                'currentAddress.country' => ['required'],
+                'currentAddress.city' => ['required'],
+                'currentAddress.state' => ['required'],
+                'currentAddress.zip_code' => ['required'],
+                'currentAddress.phones' => ['check_array:1,4'],
+                'currentAddress.is_primary' => ['required'],
+                'currentAddress.is_billing' => ['required'],
+                'currentAddress.location' => [],
+                'currentAddress.features' => [],
+            ];
+        } else if($this->currentAddress instanceof Address) {
+            return [
+                'addresses.*' => [],
+                'currentAddress.address' => ['required'],
+                'currentAddress.country' => ['required'],
+                'currentAddress.city' => ['required'],
+                'currentAddress.state' => ['required'],
+                'currentAddress.zip_code' => ['required'],
+                'currentAddress.phones' => ['check_array:1,4'],
+                'currentAddress.is_primary' => ['required'],
+                'currentAddress.is_billing' => ['required'],
+            ];
         }
     }
+
+    // public function updatingCurrentAddress(&$address, $key) {
+    //     if(!$address instanceof Address && !$address instanceof ShopAddress) {
+    //         // alpinejs passes arrays as data instead of Model type. This is the reason why we have to convert it to ShopAddress|Address model.
+    //         if(isset($address['features'], $address['location'])) {
+    //             $address = new ShopAddress($address); // only ShopAddress has features and location
+    //         } else {
+    //             $address = new Address($address);
+    //         }
+    //     }
+    // }
 
     public function changeCurrentAddress($key) {
         $this->currentAddress = $this->addresses->get($key);
@@ -89,7 +115,7 @@ class AddressesForm extends Component
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
-            $this->dispatchValidationErrors($e);
+            // $this->dispatchValidationErrors($e);
             $this->validate();
         }
 
@@ -97,12 +123,19 @@ class AddressesForm extends Component
 
         try {
             // Update address
-            $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
-            $address->save();
+            if($this->type === 'address') {
+                $this->currentAddress->user_id = auth()->user()->id;
+            } else if($this->type === 'shop_address') {
+                $this->currentAddress->shop_id = MyShop::getShopID();
+            }     
+            $this->currentAddress->save();
 
-            // if address IS PRIMARY, set other addresses to non-primary
-            if($address->is_primary) {
-                app($this->currentAddress::class)::where('id', '!=', $address->id)->update(['is_primary' => 0]);
+            // if address IS PRIMARY, set other user addresses to non-primary
+            if($this->currentAddress->is_primary) {
+                app($this->currentAddress::class)::where([
+                    ['id', '!=', $this->currentAddress->id],
+                    ['user_id', '=', auth()->user()->id]
+                ])->update(['is_primary' => 0]);
             }
 
             DB::commit();
@@ -113,11 +146,13 @@ class AddressesForm extends Component
                 $this->addresses = auth()->user()->addresses()->get(); // re-init user addresses
             }
 
-            $this->dispatchBrowserEvent('display-address-modal');
-            $this->toastify('Address successfully updated!', 'success');
+            $this->dispatchBrowserEvent('toggle-flyout-panel', ['id' => 'address-panel']);
+            $this->inform(translate('Address successfully saved!'), '', 'success');
+
+            $this->initNewAddress(); // restart current address
         } catch(\Exception $e) {
             DB::rollBack();
-            $this->dispatchGeneralError(translate('There was an error while updating the shop address...Try again.'));
+            $this->inform(translate('Address could not be saved'), $e->getMessage(), 'fail');
         }
     }
 

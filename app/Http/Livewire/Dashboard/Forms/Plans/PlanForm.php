@@ -46,6 +46,7 @@ class PlanForm extends Component
         
         if(!$this->is_update) {
             // If insert
+            $this->plan->status = StatusEnum::draft()->value;
             $this->plan->base_currency = FX::getCurrency()->code;
             $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->yearly_discount_type = AmountPercentTypeEnum::amount()->value;
