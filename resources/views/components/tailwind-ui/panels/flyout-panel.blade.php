@@ -18,7 +18,7 @@
         x-init="$watch('show', (value) => {
             (!value) ? hideWarnings() : '';
         })"
-        @toggle-flyout-panel.window="($event.detail.id === id) ? (show = !show) : null"
+        @toggle-flyout-panel.window="if($event.detail.id === id) { $event.detail.hasOwnProperty('timeout') ? setTimeout(() => { show = !show }, $event.detail.timeout) : (show = !show) }"
         @display-flyout-panel.window="($event.detail.id === id) ? (show = true) : (show = false)"
     >
         <div class="h-full flex flex-col relative p-4" >

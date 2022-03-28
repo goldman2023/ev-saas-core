@@ -17,7 +17,7 @@
             <div class="grid grid-cols-12 gap-8 mb-10">
 
                 {{-- Left panel --}}
-                <div class="col-span-8  ">
+                <div class="col-span-12 xl:col-span-8  ">
                     {{-- Main Stock Management--}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
                         <div class="w-full">

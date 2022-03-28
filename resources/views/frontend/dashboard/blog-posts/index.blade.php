@@ -7,21 +7,31 @@
 @endpush
 
 @section('panel_content')
-    <!-- Card -->
-    <div class="card">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">
-                {{ translate('All Blog Posts') }}
-            </h5>
-            <a href="{{ route('blog.post.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
-        </div>
-        <!-- End Header -->
+    <section>
+        <x-dashboard.section-headers.section-header title="{{ translate('All Blog Posts') }}" text="">
+            <x-slot name="content">
+                <a href="{{ route('blog.post.create') }}" class="btn-primary">
+                    @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('Add new post') }}</span>
+                </a>
+            </x-slot>
+        </x-dashboard.section-headers.section-header>
+  
+        <div class="w-full">
+            @if($blog_posts->isNotEmpty())
+                <livewire:dashboard.tables.blog-posts-table></livewire:dashboard.tables.blog-posts-table>
+            @else
+                <x-dashboard.empty-states.no-items-in-collection 
+                    icon="heroicon-o-document" 
+                    title="{{ translate('No posts yet') }}" 
+                    text="{{ translate('Get your business on first page by writing greatest content there is about any topic!') }}"
+                    link-href-route="blog.post.create"
+                    link-text="{{ translate('Add new Post') }}">
 
-        <div class="card-body">
-            <livewire:dashboard.tables.blog-posts-table></livewire:dashboard.tables.blog-posts-table>
+                </x-dashboard.empty-states.no-items-in-collection>
+            @endif
         </div>
-    </div>
+    </section>
 @endsection
 
 @push('footer_scripts')

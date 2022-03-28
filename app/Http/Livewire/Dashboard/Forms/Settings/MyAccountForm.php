@@ -93,7 +93,7 @@ class MyAccountForm extends Component
 
     public function dehydrate()
     {
-        $this->dispatchBrowserEvent('initAccountSettingsFormInit');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function render()
@@ -103,12 +103,18 @@ class MyAccountForm extends Component
 
 
     public function saveBasicInformation() {
-        $this->validate($this->getRuleSet('basic'));
+        try {
+            $this->validate($this->getRuleSet('basic'));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($this->getRuleSet('basic'));
+        }
+        
 
         $this->me->syncUploads();
         $this->me->save();
 
-        $this->toastify(translate('Basic information successfully updated!'), 'success');
+        $this->inform(translate('Basic information successfully updated!'), '', 'success');
     }
 
     public function saveEmail() {
@@ -118,7 +124,7 @@ class MyAccountForm extends Component
         $this->me->save();
 
         // TODO: Implement Email verification before email is really swapped with new email in the DB!
-        $this->toastify(translate('Please go to your email to verify email change!'), 'info');
+        $this->inform(translate('Please go to your email to verify email change!'), '', 'success');
     }
 
     public function updatePassword() {
@@ -129,7 +135,8 @@ class MyAccountForm extends Component
         $this->me->save();
 
         // TODO: Logout the User
+        // TODO: Send an email to user that password is changed
 
-        $this->toastify(translate('Your password is successfully updated. You will be logged out.'), 'success');
+        $this->inform(translate('Your password is successfully updated. You will be logged out.'), '', 'success');
     }
 }

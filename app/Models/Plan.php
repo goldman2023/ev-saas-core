@@ -12,6 +12,7 @@ use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
+use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -104,6 +105,11 @@ class Plan extends EVBaseModel
         }
 
         return is_array($value) ? $value : json_decode($value, true);
+    }
+
+    public function scopePublished($query)
+    {
+        $query->where('status', StatusEnum::published()->value);
     }
 
     public function main()

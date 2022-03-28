@@ -11,19 +11,21 @@ class NoItemsInCollection extends Component
     public $text;
     public $linkHrefRoute;
     public $linkText;
+    public $onClick;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($icon = null, $title = null, $text = null, $linkHrefRoute = null, $linkText = null)
+    public function __construct($icon = null, $title = null, $text = null, $linkHrefRoute = null, $linkText = null, $onClick = '')
     {
         $this->icon = $icon;
         $this->title = $title;
         $this->text = $text;
         $this->linkHrefRoute = $linkHrefRoute;
         $this->linkText = $linkText;
+        $this->onClick = $onClick;
     }
 
     /**
