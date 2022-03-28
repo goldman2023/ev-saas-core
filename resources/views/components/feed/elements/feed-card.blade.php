@@ -1,6 +1,6 @@
 <div>
     <article {{ $attributes->merge(['class' => 'mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg']) }}>
-        <div>
+        <div x-intersect:visible="$wire.track_impression({{ $item->id }})">
             <div class="flex space-x-3">
                 <div class="flex-shrink-0">
                     <div class="inline-block relative">
@@ -99,6 +99,7 @@
                 </div>
             </div>
             <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
+
                 @if($item->subject_type == 'App\Models\Wishlist')
 
                 {{ translate('Liked a product') }} <span class="emoji ml-2">❤️</span>
@@ -115,6 +116,8 @@
                     {{ $item->description }}
                     @endif
                 </a>
+                @else
+                 {{ $item->description }}  {{ class_basename($item->subject)}} {{ $item->subject->name }}
                 @endif
             </h2>
         </div>
@@ -169,9 +172,15 @@
                             <path
                                 d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                         </svg>
-                        <span class="font-medium text-gray-900">29</span>
+                        <span class="font-medium text-gray-900">
+                            {{ $likes }}
+                        </span>
                         <span class="sr-only">likes</span>
+
                     </button>
+                    <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}"
+                            :object="$item">
+                        </livewire:actions.wishlist-button>
                 </span>
                 <span class="inline-flex items-center text-sm">
                     <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">

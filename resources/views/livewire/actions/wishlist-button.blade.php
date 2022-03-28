@@ -1,5 +1,6 @@
 <div>
     <div wire:click="addToWishlist()">
+
         <button
             class="btn btn-secondary @if($added) btn-danger @endif align-items-center d-flex justify-content-center align-items-center">
             @if($added)

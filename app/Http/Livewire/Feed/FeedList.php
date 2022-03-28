@@ -23,7 +23,12 @@ class FeedList extends Component
 
     public function render()
     {
-        $data = Activity::whereNotIn('description', ['viewed', 'deleted', 'updated'])->orderBy('created_at', 'desc')->paginate($this->perPage);
+        $data = Activity::
+            whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked'])
+            ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User'])
+            ->where('causer_id', '<>', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage);
         $this->loading = false;
 
         return view('livewire.feed.feed-list', [
@@ -40,5 +45,12 @@ class FeedList extends Component
     {
         $this->loading = true;
         $this->perPage += 10;
+    }
+
+    public function track_impression($id)
+    {
+        $activity = Activity::find($id);
+        $activity->impressions++;
+        $activity->save();
     }
 }
