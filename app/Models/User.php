@@ -11,6 +11,7 @@ use App\Models\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
 use App\Notifications\EmailVerificationNotification;
+use App\Traits\PermalinkTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -29,6 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use GalleryTrait;
     use SocialAccounts;
     use HasWalletFloat;
+    use PermalinkTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -206,5 +208,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         ->paginate(18);
 
         return $data;
+    }
+
+    /**
+     * Get the route name for the model.
+     *
+     * @return string
+     */
+    public static function getRouteName() {
+        return 'user.show';
     }
 }

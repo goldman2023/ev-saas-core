@@ -23,7 +23,7 @@ class FeedList extends Component
 
     public function render()
     {
-        $data = Activity::whereNotIn('description', ['viewed', 'deleted'])->orderBy('created_at', 'desc')->paginate($this->perPage);
+        $data = Activity::whereNotIn('description', ['viewed', 'deleted', 'updated'])->orderBy('created_at', 'desc')->paginate($this->perPage);
         $this->loading = false;
 
         return view('livewire.feed.feed-list', [
