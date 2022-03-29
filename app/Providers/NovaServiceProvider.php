@@ -10,6 +10,7 @@ use App\Nova\Tenant\Post;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
 use App\Nova\Tenant\Blog;
+use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Product;
 use App\Nova\Tenant\Activity;
 use Illuminate\Support\Facades\Gate;
@@ -107,7 +108,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             ];
         } else {
             return [
-                new \Tighten\NovaStripe\NovaStripe,
+                // new \Tighten\NovaStripe\NovaStripe,
             ];
         }
     }
@@ -128,13 +129,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             Nova::resources([
                 Blog::class,
                 User::class,
-                Product::class,
+                // Product::class,
                 Activity::class,
+                Wishlist::class,
             ]);
         } else {
             Nova::resources([
                 // Admin::class,
-                // TenantResource::class,
+                TenantResource::class,
                 Domain::class,
                 // SubscriptionCancelation::class,
             ]);

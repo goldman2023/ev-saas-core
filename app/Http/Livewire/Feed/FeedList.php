@@ -58,10 +58,5 @@ class FeedList extends Component
         $this->type = $type;
     }
 
-    public function track_impression($id)
-    {
-        $activity = Activity::find($id);
-        $activity->impressions++;
-        $activity->save();
-    }
+
 }
