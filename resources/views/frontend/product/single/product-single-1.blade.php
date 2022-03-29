@@ -162,7 +162,7 @@
             </div>
 
             <div class="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
-               <x-tailwind-ui.sections.ecommerce.incentives-sections.incentives_07></x-tailwind-ui.sections.ecommerce.incentives-sections.incentives_07>
+               {{-- <x-tailwind-ui.sections.ecommerce.incentives-sections.incentives-section08></x-tailwind-ui.sections.ecommerce.incentives-sections.incentives-section08> --}}
                 <div>
                     <div class="border-b border-gray-200">
                         <div class="-mb-px flex space-x-8" aria-orientation="horizontal" role="tablist">

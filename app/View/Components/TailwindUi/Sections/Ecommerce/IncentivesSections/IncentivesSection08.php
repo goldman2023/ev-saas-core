@@ -7,9 +7,6 @@ use Illuminate\View\Component;
 
 class IncentivesSection08 extends WeComponent
 {
-
-
-
     /**
      * Get the view / contents that represent the component.
      *
