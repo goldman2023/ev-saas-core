@@ -1,9 +1,22 @@
 @extends('frontend.layouts.user_panel')
-@section('page_title', translate('Manage Design'))
+@section('page_title', translate('App Settings'))
 
 @section('panel_content')
+  <section>
+    <x-dashboard.section-headers.section-header title="{{ translate('App settings') }}" text="">
+        <x-slot name="content">
+            <a href="#" class="btn-primary">
+                @svg('heroicon-o-user', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('My shop') }}</span>
+            </a>
+        </x-slot>
+    </x-dashboard.section-headers.section-header>
+
+    <livewire:dashboard.forms.settings.app-settings-form></livewire:dashboard.forms.settings.app-settings-form>
+  </section>
+
 <!-- Basic Info-->
-<div class=" mb-3">
+{{-- <div class=" mb-3">
     <div class="card-header p-4">
         <h5 class="h3 text-xl fw-600">{{ translate('Design Settings')}}</h5>
     </div>
@@ -17,10 +30,10 @@
             <button type="submit" class="btn btn-primary">{{translate('Update Settings')}}</button>
         </div>
     </div>
-</div>
+</div> --}}
 
 
-<form action="{{ route('tenant.settings.application.configuration') }}" method="POST">
+{{-- <form action="{{ route('tenant.settings.application.configuration') }}" method="POST">
     @csrf
     <div class="shadow overflow-hidden sm:rounded-md">
       <div class="px-4 py-5 bg-white sm:p-6">
@@ -66,11 +79,11 @@
         </div>
     </div>
 </div>
-</form>
+</form> --}}
 
 
 {{-- Billing settings --}}
-<div>
+{{-- <div>
     <div class="flex flex-row flex-wrap">
       <div class="w-full md:w-1/3">
         <div class="px-4 md:px-0">
@@ -88,7 +101,7 @@
         {{-- @livewire('invoices') --}}
         {{-- @livewire('subscription-plan') --}}
         {{-- @livewire('payment-method') --}}
-      </div>
+      {{-- </div>
     </div>
-  </div>
+  </div> --}} 
 @endsection

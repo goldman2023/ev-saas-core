@@ -128,12 +128,12 @@ Route::middleware([
         Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
 
         /* Settings pages*/
-        Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('settings.design');
         Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('settings.design.store');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('settings.domains');
         Route::get('/staff-settings', [EVAccountController::class, 'staff_settings'])->name('settings.staff_settings');
         Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
+        Route::get('/app-settings', [EVAccountController::class, 'app_settings'])->name('settings.app_settings');
 
 
         // Payment Methods callback routes

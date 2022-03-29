@@ -301,11 +301,11 @@ class EVService
                         'permissions' => ['view_shop_data', 'view_shop_settings']
                     ],
                     [
-                        'label' => translate('Design settings'),
+                        'label' => translate('App settings'),
                         'icon' => 'heroicon-o-cog',
-                        'route' => route('settings.design'),
-                        'is_active' => areActiveRoutes(['settings.design']),
-                        'user_types' => User::$non_customer_user_types,
+                        'route' => route('settings.app_settings'),
+                        'is_active' => areActiveRoutes(['settings.app_settings']),
+                        'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_designs']
                     ],
                     [
@@ -313,7 +313,7 @@ class EVService
                         'icon' => 'heroicon-o-cog',
                         'route' => route('we-edit.index'),
                         'is_active' => areActiveRoutes(['we-edit.index']),
-                        'user_types' => User::$non_customer_user_types,
+                        'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_designs']
                     ],
                      [
