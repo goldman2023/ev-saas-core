@@ -46,6 +46,7 @@
         "mews/purifier": "^3.3",
         "nao-pon/flysystem-google-drive": "~1.1",
         "niklasravnsborg/laravel-pdf": "^4.0",
+        "optimistdigital/nova-menu-builder": "^6.1",
         "owen-it/laravel-auditing": "^12.0",
         "paypal/paypal-checkout-sdk": "dev-master",
         "predis/predis": "^1.1",

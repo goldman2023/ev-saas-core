@@ -51,19 +51,20 @@ class Activity extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            MorphTo::make(__('Causer'), 'causer'),
 
             Text::make(__('Description'), 'description'),
-            Number::make(__('Impressions Count'), 'impressions')->sortable(),
-            Text::make(__('Subject Id'), 'subject_id'),
-            Text::make(__('Subject Type'), 'subject_type'),
             MorphTo::make(__('Subject'), 'subject'),
-            MorphTo::make(__('Causer'), 'causer'),
+
+            Number::make(__('Impressions Count'), 'impressions')->sortable(),
+            // Text::make(__('Subject Id'), 'subject_id'),
+            // Text::make(__('Subject Type'), 'subject_type'),
             // Text::make(__('Causer Ip'), 'properties->ip')->onlyOnIndex(),
 
             Code::make(__('Properties'), 'properties')->json(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
             DateTime::make(__('Created At'), 'created_at'),
-            // BelongsTo::make('Author', 'author', User::class),
+            ID::make()->sortable(),
+
         ];
     }
 
