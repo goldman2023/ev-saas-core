@@ -1,476 +1,296 @@
-<div class="my-account-form lw-form row"
-     x-data="{
-            current: 'basicInformation',
-            shop: @entangle('shop').defer,
-            settings: @entangle('settings').defer,
-            addresses: @entangle('addresses').defer,
-            domains: @entangle('domains').defer,
-            showToast($el, $event) {
-                if($($el).attr('id') === $event.detail.id) {
+<div class="w-full" x-data="{
+        current: 'basicInformation',
+        thumbnail: @js(['id' => $shop->thumbnail->id ?? null, 'file_name' => $shop->thumbnail->file_name ?? '']),
+        cover: @js(['id' => $shop->cover->id ?? null, 'file_name' => $shop->cover->file_name ?? '']),
+        meta_img: @js(['id' => $shop->meta_img->id ?? null, 'file_name' => $shop->meta_img->file_name ?? '']),
+        content: @js($shop->content ?? ''),
+        settings: @entangle('settings').defer,
+    }"
+    x-init="$watch('current', function(value) {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
+        }, 500);
+    })"
+    @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+    x-cloak>
 
-                    $($el).find('.toast-body').text($event.detail.content);
-                    $($el).addClass('d-block opacity-10');
-                    setTimeout(function() {
-                        $($el).removeClass('d-block opacity-10');
-                    }, 4000);
-                }
-            },
-        }"
-        x-init="$watch('current', function(value) {
-            $([document.documentElement, document.body]).animate({
-                scrollTop: $('#'+value).offset().top - $('#header').outerHeight()
-            }, 500);
-        })">
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                            wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-    <div class="col-lg-3">
-        <!-- Navbar -->
-        <div class="navbar-vertical navbar-expand-lg mb-3 mb-lg-5">
-            <!-- Navbar Toggle -->
-            <button type="button" class="navbar-toggler btn btn-block btn-white mb-3" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarVerticalNavMenu" data-toggle="collapse" data-target="#navbarVerticalNavMenu">
-                <span class="d-flex justify-content-between align-items-center">
-                  <span class="h5 mb-0">Nav menu</span>
-
-                  <span class="navbar-toggle-default">
-                    <i class="tio-menu-hamburger"></i>
-                  </span>
-
-                  <span class="navbar-toggle-toggled">
-                    <i class="tio-clear"></i>
-                  </span>
-                </span>
-            </button>
-            <!-- End Navbar Toggle -->
-
-            <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
-                <!-- Navbar Nav -->
-                <ul id="navbarSettings" class="js-sticky-block js-scrollspy navbar-nav navbar-nav-lg nav-tabs card card-navbar-nav flex-column w-100"
-                    data-hs-sticky-block-options='{
-                       "parentSelector": "#navbarVerticalNavMenu",
-                       "breakpoint": "lg",
-                       "startPoint": "#navbarVerticalNavMenu",
-                       "endPoint": "#stickyBlockEndPoint",
-                       "stickyOffsetTop": 20
-                     }'>
-                    <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer active d-flex align-items-center "
-                           :class="{'active': current === 'basicInformation'}"
-                           @click="current = 'basicInformation';">
-                            @svg('heroicon-o-information-circle', ['class' => 'square-20 mr-2'])
-                            {{ translate('Basic info') }}
-                        </a>
-                    </li>
-                    <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer d-flex align-items-center"
-                           :class="{'active': current === 'companyInfoSection'}"
-                           @click="current = 'companyInfoSection';" >
-                            @svg('heroicon-o-office-building', ['class' => 'square-20 mr-2'])
-                            {{ translate('Company info') }}
-                        </a>
-                    </li>
-                    <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer d-flex align-items-center"
-                           :class="{'active': current === 'contactDetailsSection'}"
-                           @click="current = 'contactDetailsSection';" >
-                            @svg('heroicon-o-phone-incoming', ['class' => 'square-20 mr-2'])
-                            {{ translate('Contact details') }}
-                        </a>
-                    </li>
-                    <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer d-flex align-items-center"
-                           :class="{'active': current === 'addressesSection'}"
-                           @click="current = 'addressesSection';" >
-                            @svg('heroicon-o-location-marker', ['class' => 'square-20 mr-2'])
-                            {{ translate('Addresses') }}
-                        </a>
-                    </li>
-                    <li class="nav-item w-100">
-                        <a class="nav-link py-3 pointer d-flex align-items-center"
-                           :class="{'active': current === 'domainsSection'}"
-                           @click="current = 'domainsSection';" >
-                            @svg('heroicon-o-globe-alt', ['class' => 'square-20 mr-2'])
-                            {{ translate('Domains') }}
-                        </a>
-                    </li>
-                </ul>
-                <!-- End Navbar Nav -->
-            </div>
-        </div>
-        <!-- End Navbar -->
-    </div>
-
-    <div class="col-lg-9">
-        <!-- BasicInformation Card -->
-        <div class="card mb-3 mb-lg-5 position-relative"
-             id="basicInformation"
-             x-data="{}"
+        <div class="w-full"
+            wire:loading.class="opacity-30 pointer-events-none"
         >
-            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                  wire:target="saveBasicInformation"
-                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
 
-            <div class=""
-                 wire:loading.class="opacity-3 prevent-pointer-events"
-                 wire:target="saveBasicInformation"
-            >
-                <!-- Profile Cover -->
-                <div class="profile-cover">
-                    <div class="profile-cover-img-wrapper"
-                         x-data="{
-                            name: 'shop.cover',
-                            imageID: {{ $shop->cover->id ?? 'null' }},
-                            imageURL: '{{ $shop->getCover(['w'=>1200]) }}',
-                        }"
-                         @aiz-selected.window="
-                             if(event.detail.name === name) {
-                                imageURL = event.detail.imageURL;
-                                $($el).find('.selected-files').get(0).dispatchEvent(new Event('input'));
-                             }"
-                         data-toggle="aizuploader"
-                         data-type="image">
+        <div class="grid grid-cols-12 gap-8 mb-10">
+            
+            <div class="col-span-12 lg:col-span-3">
+                <nav class="space-y-1 p-4 bg-white rounded-lg border border-gray-200">
+                    <a href="#" :class="{'text-primary': current === 'basicInformation', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'basicInformation'}" 
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                        @click="current = 'basicInformation'">
 
-                        <img id="profileCoverImg" class="profile-cover-img" x-bind:src="imageURL">
+                        @svg('heroicon-o-user', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                        <span class="truncate">{{ translate('Basic information') }}</span>
+                    </a>
+                
+                    <a href="#" :class="{'text-primary': current === 'companyInfoSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'companyInfoSection'}" 
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                        @click="current = 'companyInfoSection'">
 
+                        @svg('heroicon-o-office-building', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                        <span class="truncate">{{ translate('Company information') }}</span>
+                    </a>
+                
+                    <a href="#" :class="{'text-primary': current === 'contactDetails', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'contactDetails'}" 
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                        @click="current = 'contactDetails'">
 
-                        <!-- Custom File Cover -->
-                        <div class="profile-cover-content profile-cover-btn custom-file-manager"
-                             data-toggle="aizuploader" data-type="image">
-                            <div class="custom-file-btn">
-                                <input type="hidden" x-bind:name="name" x-model="shop.cover" class="selected-files" data-preview-width="1200">
+                        @svg('heroicon-o-phone', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                        <span class="truncate">{{ translate('Contact details') }}</span>
+                    </a>        
 
-                                <label class="custom-file-btn-label btn btn-sm btn-white shadow-lg" for="profileCoverUploader">
-                                    <i class="tio-add-photo mr-sm-1"></i>
-                                    <span class="d-none d-sm-inline-block">{{ translate('Update your cover') }}</span>
-                                </label>
-                            </div>
-                        </div>
-                        <!-- End Custom File Cover -->
+                    <a href="#" :class="{'text-primary': current === 'addressesSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'addressesSection'}" 
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                        @click="current = 'addressesSection'">
+
+                        @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                        <span class="truncate">{{ translate('Addresses') }}</span>
+                    </a>
+            
+                </nav>
+
+            </div>
+
+            <div class="col-span-12 lg:col-span-9">
+                {{-- Shop Media --}}
+                <div class="p-0 border bg-white border-gray-200 rounded-lg shadow">
+                    <div class="w-full border-b border-gray-200">
+                        <x-dashboard.form.image-selector field="cover" template="cover" id="my-shop-cover-image" error-field="shop.cover" :selected-image="$shop->cover"></x-dashboard.form.image-selector>
                     </div>
+                                
+                    <div class="w-full pt-3 pb-5 pr-4 pl-[140px] relative">
+                        <div class="bg-white rounded-lg absolute left-6 bottom-6 border border-gray-200">
+                            <x-dashboard.form.image-selector field="thumbnail" template="avatar" id="my-shop-thumbnail-image" error-field="shop.thumbnail" :selected-image="$shop->thumbnail"></x-dashboard.form.image-selector>
+                        </div>
+
+                        <div class="w-full flex flex-col">
+                            <strong class="block text-gray-700">{{ $shop->name }}</strong>
+                            <span class="text-gray-500 truncate max-w-lg">{{ $shop->excerpt }}</span>
+                        </div>
+                    </div>
+
+                    {{-- TODO: Save media change! --}}
                 </div>
-                <!-- End Profile Cover -->
+                {{-- END Shop Media --}}
 
-                <!-- Avatar -->
-                <label class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader mx-auto profile-cover-avatar pointer border p-1" for="avatarUploader"
-                       style="margin-top: -60px;"
-                       x-data="{
-                            name: 'shop.thumbnail',
-                            imageID: {{ $shop->thumbnail->id ?? 'null' }},
-                            imageURL: '{{ $shop->getThumbnail() }}',
-                        }"
-                       @aiz-selected.window="
-                         if(event.detail.name === name) {
-                            imageURL = event.detail.imageURL;
-                            $($el).find('.selected-files').get(0).dispatchEvent(new Event('input'));
-                         }"
-                       data-toggle="aizuploader"
-                       data-type="image">
-                    <img id="avatarImg" class="avatar-img" x-bind:src="imageURL" >
-
-                    <input type="hidden" x-bind:name="name" x-model="shop.thumbnail" class="selected-files" data-preview-width="200">
-
-                    <span class="avatar-uploader-trigger">
-                  <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
-                </span>
-                </label>
-                <!-- End Avatar -->
-
-                <div class="card-body">
-
-                    @if ($errors->has('shop.thumbnail') || $errors->has('shop.cover'))
-                        <div class="mb-5">
-                            @error('shop.thumbnail')
-                            <div class="row form-group mb-1">
-                                <div class="invalid-feedback d-block mx-3 py-2 rounded bg-danger text-white px-3">{{ $message }}</div>
-                            </div>
-                            @enderror
-
-                            @error('shop.cover')
-                            <div class="row form-group mb-1">
-                                <div class="invalid-feedback d-block mx-3 py-2 rounded bg-danger text-white px-3">{{ $message }}</div>
-                            </div>
-                            @enderror
-                        </div>
-                    @endif
-
-
-                    <!-- Shop Title -->
-                    <div class="row form-group">
-                        <label for="shop-name" class="col-sm-3 col-form-label input-label">{{ translate('Title') }}</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm-down-break">
-                                <input type="text" class="form-control @error('shop.name') is-invalid @enderror" name="shop.name" id="shop-name" placeholder="{{ translate('Your full name') }}"
-                                       x-model="shop.name">
-                            </div>
-
-                            @error('shop.name')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
-                        </div>
+                {{-- Basic Information --}}
+                <div id="basicInformation" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5">
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Basic Information') }}</h3>
+                        {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p> --}}
                     </div>
-
-                    <!-- Shop Tagline/motto -->
-                    <div class="row form-group">
-                        <label for="shop-name" class="col-sm-3 col-form-label input-label">{{ translate('Tagline/Motto') }}</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm-down-break">
-                                <input type="text" class="form-control @error('settings.shop_tagline') is-invalid @enderror" name="settings.shop_tagline" id="settings-shop_tagline" placeholder="{{ translate('Your cool tagline!') }}"
-                                       x-model="settings.shop_tagline"/>
+            
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                        <!-- Title -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Title') }}
+                                <span class="text-danger relative top-[-2px]">*</span>
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('shop.name') is-invalid @enderror"
+                                        placeholder="{{ translate('My shop name') }}"
+                                        wire:model.defer="shop.name" />
+                            
+                                <x-system.invalid-msg field="shop.name"></x-system.invalid-msg>
                             </div>
-
-                            @error('settings.shop_tagline')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
                         </div>
-                    </div>
+                        <!-- END Title -->
 
-                    <!-- Shop Email -->
-                    <div class="row form-group">
-                        <label for="shop-email" class="col-sm-3 col-form-label input-label">{{ translate('Email (@)') }}</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm-down-break">
-                                <input type="email" class="form-control @error('settings.company_email') is-invalid @enderror" name="settings.company_email" id="settings-company_email" placeholder="{{ translate('Company email') }}"
-                                       x-model="settings.company_email"/>
+                        <!-- Tagline -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Tagline') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('settings.tagline') is-invalid @enderror"
+                                        placeholder="{{ translate('My shop tagline/motto/catchphrase') }}"
+                                        wire:model.defer="settings.tagline" />
+                            
+                                <x-system.invalid-msg field="settings.tagline"></x-system.invalid-msg>
                             </div>
-
-                            @error('settings.company_email')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
                         </div>
-                    </div>
+                        <!-- END Tagline -->
 
-                    <!-- Company phones-->
-                    <div class="row form-group" x-data="{
-                        phones_limit: 3,
-                        addNewPhoneNumber() {
-                            if(settings.company_phones.length < 3)
-                                settings.company_phones.push('');
-                        },
-                        removePhoneNumber(index) {
-                            settings.company_phones.splice(index, 1);
-                        },
-                    }" x-init="if(settings.company_phones === null || settings.company_phones === undefined) {
-                        settings.company_phones = [''];
-                    }">
-                        <label for="shop-phone" class="col-sm-3 col-form-label input-label">{{ translate('Phones') }}</label>
-
-                        <div class="col-sm-9">
-                            <template x-if="settings.company_phones.length <= 1">
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" name="phoneNumberField"
-                                           placeholder="{{ translate('Phone number 1') }}"
-                                           x-model="settings.company_phones[0]">
-                                </div>
-                            </template>
-                            <template x-if="settings.company_phones.length > 1">
-                                <template x-for="[key, value] of Object.entries(settings.company_phones)">
-                                    <div class="d-flex" :class="{'mt-2': key > 0}">
-                                        <input type="text" class="form-control" name="phoneNumberField"
-                                               x-bind:placeholder="'{{ translate('Phone number') }} '+(Number(key)+1)"
-                                               x-model="settings.company_phones[key]">
-                                        <template x-if="key > 0">
-                                                <span class="ml-2 d-flex align-items-center pointer" @click="removePhoneNumber(key)">
-                                                    @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
-                                                </span>
-                                        </template>
-                                    </div>
-                                </template>
-                            </template>
-
-                            <template x-if="settings.company_phones.length < phones_limit">
-                                <a href="javascript:;"
-                                   class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary"
-                                   @click="addNewPhoneNumber()">
-                                    <i class="tio-add"></i> {{ translate('Add phone') }}
-                                </a>
-                            </template>
-
-                            @error('settings.company_phones')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Company Websites -->
-                    <div class="row form-group" x-data="{
-                        limit: 3,
-                        addNew() {
-                            if(settings.websites.length < 3)
-                                settings.websites.push('');
-                        },
-                        remove(index) {
-                            settings.websites.splice(index, 1);
-                        },
-                    }" x-init="if(settings.websites === null || settings.websites === undefined) {
-                        settings.websites = [''];
-                    }">
-                        <label for="shop-phone" class="col-sm-3 col-form-label input-label">{{ translate('Websites') }}</label>
-
-                        <div class="col-sm-9">
-                            <template x-if="settings.websites.length <= 1">
-                                <div class="d-flex">
-                                    <input type="text" class="form-control" name="phoneNumberField"
-                                           placeholder="{{ translate('Website 1') }}"
-                                           x-model="settings.websites[0]">
-                                </div>
-                            </template>
-                            <template x-if="settings.websites.length > 1">
-                                <template x-for="[key, value] of Object.entries(settings.websites)">
-                                    <div class="d-flex" :class="{'mt-2': key > 0}">
-                                        <input type="text" class="form-control" name="phoneNumberField"
-                                               x-bind:placeholder="'{{ translate('Website') }} '+(Number(key)+1)"
-                                               x-model="settings.websites[key]">
-                                        <template x-if="key > 0">
-                                                <span class="ml-2 d-flex align-items-center pointer" @click="remove(key)">
-                                                    @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
-                                                </span>
-                                        </template>
-                                    </div>
-                                </template>
-                            </template>
-
-                            <template x-if="settings.websites.length < limit">
-                                <a href="javascript:;"
-                                   class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary"
-                                   @click="addNew()">
-                                    <i class="tio-add"></i> {{ translate('Add website') }}
-                                </a>
-                            </template>
-
-                            @error('settings.websites')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-
-                    <div class="row form-group">
-                        <label for="shop-excerpt" class="col-sm-3 col-form-label input-label">{{ translate('Short description') }}</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm-down-break">
-                                <textarea
-                                    class="form-control @error('shop.excerpt') is-invalid @enderror"
-                                    name="shop.excerpt"
-                                    id="shop-excerpt"
-                                    placeholder="{{ translate('Short promo description') }}"
-                                    x-model="shop.excerpt"></textarea>
+                        <!-- Email -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Email') }}
+                                <span class="text-danger relative top-[-2px]">*</span>
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="email" class="form-standard @error('settings.email') is-invalid @enderror"
+                                        placeholder="{{ translate('My shop email') }}"
+                                        wire:model.defer="settings.email" />
+                            
+                                <x-system.invalid-msg field="settings.email"></x-system.invalid-msg>
                             </div>
-
-                            @error('shop.excerpt')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
                         </div>
-                    </div>
+                        <!-- END Email -->
 
-
-                    <div class="row form-group">
-                        <label class="col-sm-12 col-form-label input-label">{{ translate('Content') }}</label>
-
-                        <!-- ToastUI Editor -->
-                        <div class="col-sm-12 mt-2">
-                            <div class="toast-ui-editor-custom input-group input-group-sm-down-break">
-                                <div class="js-toast-ui-editor w-100 @error('shop.content') is-invalid @enderror"></div>
-
-                                <input type="text"
-                                       x-model="shop.content"
-                                       data-textarea
-                                       name="shop.content"
-                                       class="d-none"
-                                />
+                        {{-- Phones --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Phones') }}
+                                <span class="text-danger relative top-[-2px]">*</span>
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.text-repeater field="settings.phones" limit="3" placeholder="{{ translate('Phone') }}"></x-dashboard.form.text-repeater>
+                                {{-- <x-system.invalid-msg field="settings.phones"></x-system.invalid-msg> --}}
                             </div>
-
-                            @error('shop.content')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
                         </div>
-                        <!-- End ToastUI Editor -->
-                    </div>
-                </div>
+                        {{-- END Phones --}}
 
-                <div class="card-footer">
-                    <div class="col-12 d-flex">
-                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$wire.saveBasicInformation()">
+                        {{-- Websites --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Websites') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.text-repeater field="settings.websites" limit="3" placeholder="{{ translate('Website') }}"></x-dashboard.form.text-repeater>
+                                {{-- <x-system.invalid-msg field="settings.websites"></x-system.invalid-msg> --}}
+                            </div>
+                        </div>
+                        {{-- END Websites --}}
+
+                        <!-- Excerpt -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Excerpt') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <textarea type="text" class="form-standard h-[80px] @error('shop.excerpt') is-invalid @enderror"
+                                            placeholder="{{ translate('Write a short promo description for your shop') }}"
+                                            wire:model.defer="shop.excerpt">
+                                </textarea>
+                            
+                                <x-system.invalid-msg class="w-full" field="shop.excerpt"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Excerpt -->
+
+                        <!-- Content -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
+            
+                            <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Content') }}
+                            </label>
+            
+                            {{-- <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                <x-dashboard.form.froala field="content" id="shop-content-wysiwyg"></x-dashboard.form.froala>
+                            
+                                <x-system.invalid-msg class="w-full" field="shop.content"></x-system.invalid-msg>
+                            </div> --}}
+                        </div>
+                        <!-- END Content -->
+
+                        {{-- Save basic information --}}
+                        <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                @click="
+                                    $wire.set('shop.thumbnail', thumbnail.id, true);
+                                    $wire.set('shop.cover', cover.id, true);
+                                    $wire.set('settings.websites', settings.websites, true);
+                                    $wire.set('settings.phones', settings.phones, true);
+                                    {{-- $wire.set('shop.content', content, true); --}}
+                                "
+                                wire:click="saveBasicInformation()">
                             {{ translate('Save') }}
-                        </button>
+                            </button>
+                        </div>
+                        {{-- END Save basic information --}}
+                        
                     </div>
                 </div>
+                {{-- END Basic Information --}}
+
+                {{-- Company Info Card --}}
+                <div id="companyInfoSection" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5">
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Company information') }}</h3>
+                        {{-- <p class="mt-1 max-w-2xl text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p> --}}
+                    </div>
+            
+                    <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                        <!-- Tax Number -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Company TAX number') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('settings.tax_number') is-invalid @enderror"
+                                        placeholder="{{ translate('Company tax number') }}"
+                                        wire:model.defer="settings.tax_number" />
+                            
+                                <x-system.invalid-msg field="settings.tax_number"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Tax Number -->
+
+                        <!-- Registration Number -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                {{ translate('Company registration number') }}
+                            </label>
+            
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <input type="text" class="form-standard @error('settings.registration_number') is-invalid @enderror"
+                                        placeholder="{{ translate('Company registration number') }}"
+                                        wire:model.defer="settings.registration_number" />
+                            
+                                <x-system.invalid-msg field="settings.registration_number"></x-system.invalid-msg>
+                            </div>
+                        </div>
+                        <!-- END Registration Number -->
+                        
+
+                        {{-- Save basic information --}}
+                        <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                @click=""
+                                wire:click="saveCompanyInfo()">
+                            {{ translate('Save') }}
+                            </button>
+                        </div>
+                        {{-- END Save basic information --}}
+                        
+                    </div>
+                </div>
+                {{-- END Company Info Card --}}
+
+                {{-- Contact Details --}}
+                @include('frontend.dashboard.settings.partials.shop-settings.contact-details')
+                {{-- END Contact Details --}}
+
+                <!-- Addresses -->
+                <livewire:dashboard.forms.addresses.addresses-form component-id="addressesSection" :addresses="$shop->addresses" type="shop_address">
+                </livewire:dashboard.forms.addresses.addresses-form>
+                <!-- END Addresses -->
             </div>
         </div>
-        <!-- END BasicInformation -->
-
-
-        <!-- Company Info Card -->
-        <div class="card mb-3 mb-lg-5 position-relative"
-             id="companyInfoSection"
-             x-data="{}"
-        >
-            <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                                  wire:target="saveBasicInformation"
-                                  wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
-
-            <div class="card-header">
-                <h2 class="card-title h4">{{ translate('Company information') }}</h2>
-            </div>
-
-            <div class=""
-                 wire:loading.class="opacity-3 prevent-pointer-events"
-                 wire:target="saveBasicInformation"
-            >
-                <div class="card-body">
-
-                    <!-- Settings Tax number -->
-                    <div class="row form-group">
-                        <label for="shop-name" class="col-sm-3 col-form-label input-label">{{ translate('Company TAX number') }}</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm-down-break">
-                                <input type="text" class="form-control @error('settings.tax_number') is-invalid @enderror" name="settings.tax_number" id="settings-tax_number" placeholder="{{ translate('Your company Tax number') }}"
-                                       x-model="settings.tax_number">
-                            </div>
-
-                            @error('settings.tax_number')
-                                <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Shop Tagline/motto -->
-                    <div class="row form-group">
-                        <label for="shop-name" class="col-sm-3 col-form-label input-label">{{ translate('Company registration number') }}</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group input-group-sm-down-break">
-                                <input type="text" class="form-control @error('settings.registration_number') is-invalid @enderror" name="settings.registration_number" id="settings-registration_number" placeholder="{{ translate('Your company Registration number') }}"
-                                       x-model="settings.registration_number">
-                            </div>
-
-                            @error('settings.registration_number')
-                            <div class="invalid-feedback d-block  py-2 rounded">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <div class="col-12 d-flex">
-                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$wire.saveCompanyInfo()">
-                            {{ translate('Save') }}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END Company Info -->
-
-        <!-- ContactDetails Card -->
-        @include('frontend.dashboard.settings.partials.shop-settings.contact-details')
-        <!-- END ContactDetails Card -->
-
-        <!-- Addresses -->
-        <livewire:dashboard.forms.addresses.addresses-form :addresses="$shop->addresses" toast_id="my-shop-updated-toast">
-        </livewire:dashboard.forms.addresses.addresses-form>
-        <!-- END Addresses -->
     </div>
 </div>
+
+
