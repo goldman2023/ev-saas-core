@@ -42,7 +42,7 @@ return [
         ],
         'admin' => [
             'driver' => 'session',
-            'provider' => 'admins',
+            'provider' => 'central_users',
         ],
 
         'api' => [
@@ -74,10 +74,15 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'central_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Central\User::class,
+        ],
+
+       /*  'users' => [
+            'driver' => 'database',
+            'table' => 'users',
+        ], */
     ],
 
     /*

@@ -17,7 +17,7 @@ class Domain extends Resource
      *
      * @var string
      */
-    public static $model = \App\Models\Domain::class;
+    public static $model = \App\Models\Central\Domain::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

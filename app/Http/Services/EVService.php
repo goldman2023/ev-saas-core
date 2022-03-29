@@ -159,6 +159,7 @@ class EVService
                         'badge' => [
                             'class' => 'badge-danger',
                             'content' => function () {
+                                return 0;
                                 return MyShop::getShop()->orders()->where('viewed', 0)->count();
                             }
                         ]

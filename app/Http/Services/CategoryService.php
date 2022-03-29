@@ -129,7 +129,12 @@ class CategoryService
         array_unshift($slugs, $category->slug);
 
         if (!is_null($category->parent_id)) {
-            $slugs = $this->determineCategorySlugs($categories[$category->parent_id], $categories, $slugs);
+            try {
+                $slugs = $this->determineCategorySlugs($categories[$category->parent_id], $categories, $slugs);
+
+            } catch(\Exception $e) {
+
+            }
         }
 
         return $slugs;
@@ -157,8 +162,8 @@ class CategoryService
      **/
     public function getAllFormatted($for_js = false) {
         if($for_js) {
-            return Collection::recursiveApplyStatic($this->categories->toArray(), 'children', 
-            ['fn' => 'keyBy', 'params' => ['slug']], 
+            return Collection::recursiveApplyStatic($this->categories->toArray(), 'children',
+            ['fn' => 'keyBy', 'params' => ['slug']],
             ['fn' => 'map', 'params' => [
                 function($item) {
                     return [
