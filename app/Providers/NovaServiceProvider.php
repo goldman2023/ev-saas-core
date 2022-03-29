@@ -9,6 +9,9 @@ use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\Post;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
+use App\Nova\Tenant\Blog;
+use App\Nova\Tenant\Product;
+use App\Nova\Tenant\Activity;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -99,7 +102,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function tools()
     {
         if (tenancy()->initialized) {
-            return [];
+            return [
+                // new \Bolechen\NovaActivitylog\NovaActivitylog(),
+            ];
         } else {
             return [
                 new \Tighten\NovaStripe\NovaStripe,
@@ -121,15 +126,17 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             Nova::resources([
-                Post::class,
+                Blog::class,
                 User::class,
+                Product::class,
+                Activity::class,
             ]);
         } else {
             Nova::resources([
-                Admin::class,
-                TenantResource::class,
+                // Admin::class,
+                // TenantResource::class,
                 Domain::class,
-                SubscriptionCancelation::class,
+                // SubscriptionCancelation::class,
             ]);
         }
     }

@@ -10,14 +10,14 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Post extends Resource
+class Product extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Post::class;
+    public static $model = \App\Models\Product::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -45,11 +45,9 @@ class Post extends Resource
     {
         return [
             ID::make()->sortable(),
+            Text::make('Name'),
+            // Textarea::make('Content'),
 
-            Text::make('Title'),
-            Textarea::make('Body'),
-
-            BelongsTo::make('Author', 'author', User::class),
         ];
     }
 

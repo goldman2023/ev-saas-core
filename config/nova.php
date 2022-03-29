@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VendorMode;
 use Laravel\Nova\Actions\ActionResource;
 use Laravel\Nova\Http\Middleware\Authenticate;
 use Laravel\Nova\Http\Middleware\Authorize;
@@ -71,7 +72,7 @@ return [
     |
     */
 
-    'guard' => env('NOVA_GUARD', null),
+    'guard' => env('NOVA_GUARD', 'web'),
 
     /*
     |--------------------------------------------------------------------------
@@ -98,7 +99,10 @@ return [
     */
 
     'middleware' => [
+        'tenant',
+        'universal',
         'web',
+        VendorMode::class,
         Authenticate::class,
         DispatchServingNovaEvent::class,
         BootTools::class,

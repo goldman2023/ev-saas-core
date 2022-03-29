@@ -8,6 +8,7 @@ use App\Http\Middleware\IsUser;
 use App\Http\Middleware\CheckoutMiddleware;
 use App\Http\Middleware\IsUnbanned;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomainOrSubdomain;
 
 class Kernel extends HttpKernel
 {
@@ -32,7 +33,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            //\App\Http\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
@@ -48,6 +49,11 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:100,1',
             'bindings',
+        ],
+
+        'tenant' => [
+            'web',
+            InitializeTenancyByDomainOrSubdomain::class,
         ],
 
         'universal' => [],
@@ -71,6 +77,7 @@ class Kernel extends HttpKernel
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
