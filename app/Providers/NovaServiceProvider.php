@@ -67,7 +67,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Gate::define('viewNova', function ($user) {
             if ($user instanceof \App\Models\User) {
-                return $user->isOwner();
+                // return $user->isOwner();
             }
 
             /** @var \App\Models\Admin $user */
@@ -108,6 +108,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         if (tenancy()->initialized) {
             return [
                 new \OptimistDigital\MenuBuilder\MenuBuilder,
+
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
