@@ -4,7 +4,7 @@
     <li class="flex py-4 space-x-3">
         <div class="flex-shrink-0 min-w-[80px]">
             <a href="{{ $product->subject->getPermalink() }}">
-                <x-tenant.system.image class="w-full rounded-xl"
+                <x-tenant.system.image class="w-full rounded-xl max-w-[80px]"
                     :image="$product->subject->getThumbnail(['w'=>80]) ?? ''">
                 </x-tenant.system.image>
             </a>

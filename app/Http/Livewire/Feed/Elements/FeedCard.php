@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Feed\Elements;
 
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Spatie\Activitylog\Models\Activity;
 
@@ -30,10 +31,11 @@ class FeedCard extends Component
         if ($item->subject_type == 'App\Models\Product') {
             $this->product = $item->subject;
         } elseif ($item->subject_type == 'App\Models\Wishlist') {
+            $this->ignore = true;
             if (empty($item->subject->subject)) {
-                // $this->ignore = true;
+                $this->ignore = true;
             } else {
-                $this->product = $item->subject->subject;
+                // $this->product = $item->subject->subject;
             }
         }
     }
@@ -48,8 +50,7 @@ class FeedCard extends Component
 
     public function track_impression($id)
     {
-        $activity = Activity::find($id);
-        $activity->impressions++;
-        $activity->save();
+        /* TODO: Push this data to local storage */
+        // Session::push('user.impressions_queue', $id);
     }
 }

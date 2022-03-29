@@ -2,7 +2,8 @@
     @if(!$ignore)
     <div>
         <article class='mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'>
-            <div x-intersect:visible="$wire.track_impression({{ $item->id }})">
+            {{-- x-intersect:visible="$wire.track_impression({{ $item->id }})" --}}
+            <div >
                 <div class="flex space-x-3">
                     <div class="flex-shrink-0">
                         <div class="inline-block relative">
