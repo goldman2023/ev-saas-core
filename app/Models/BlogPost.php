@@ -48,11 +48,15 @@ class BlogPost extends EVBaseModel
 
     protected static function booted()
     {
-        // TODO: Fix to show all blog posts in Frontend and only my posts in Backend
+
+        if(request()->is_dashboard) {
+   // TODO: Fix to show all blog posts in Frontend and only my posts in Backend
         // Show only MyShop Blog Posts
         static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
             $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1); // restrict to current user's shop blog posts
         });
+        }
+
     }
 
     public function getSlugOptions(): SlugOptions

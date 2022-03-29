@@ -116,10 +116,12 @@
                     {{ $item->description }}
                     @endif
                 </a>
+                @elseif($item->subject_type == 'App\Models\BlogPost')
+                Blog post
                 @else
                 @if(class_exists($item->subject_type))
-                 {{ $item->description }}  {{ class_basename($item->subject)}} {{ $item->subject->name }}
-                 @endif
+                {{-- {{ $item->description }} {{ class_basename($item->subject)}} {{ $item->subject->name }} --}}
+                @endif
                 @endif
             </h2>
         </div>
@@ -180,9 +182,8 @@
                         <span class="sr-only">likes</span>
 
                     </button>
-                    <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}"
-                            :object="$item">
-                        </livewire:actions.wishlist-button>
+                    <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item">
+                    </livewire:actions.wishlist-button>
                 </span>
                 <span class="inline-flex items-center text-sm">
                     <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">

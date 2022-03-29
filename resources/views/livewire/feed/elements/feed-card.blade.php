@@ -3,13 +3,13 @@
     <div>
         <article class='mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'>
             {{-- x-intersect:visible="$wire.track_impression({{ $item->id }})" --}}
-            <div >
+            <div>
                 <div class="flex space-x-3">
                     <div class="flex-shrink-0">
                         <div class="inline-block relative">
                             {{-- TODO: Implement quick view for person and for product click --}}
-                            <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-10 w-10 rounded-full border-3"
-                                :image="$item->causer->getAvatar()">
+                            <x-tenant.system.image alt="{{ get_site_name() }} logo"
+                                class="h-10 w-10 rounded-full border-3" :image="$item->causer->getAvatar()">
                             </x-tenant.system.image>
                             <span
                                 class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>
@@ -64,8 +64,8 @@
                                 tabindex="-1">
                                 <div class="py-1" role="none">
                                     <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-                                    <a href="#" class="text-gray-700 flex px-4 py-2 text-sm" role="menuitem" tabindex="-1"
-                                        id="options-menu-0-item-0">
+                                    <a href="#" class="text-gray-700 flex px-4 py-2 text-sm" role="menuitem"
+                                        tabindex="-1" id="options-menu-0-item-0">
                                         <!-- Heroicon name: solid/star -->
                                         <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -74,8 +74,8 @@
                                         </svg>
                                         <span>Add to favorites</span>
                                     </a>
-                                    <a href="#" class="text-gray-700 flex px-4 py-2 text-sm" role="menuitem" tabindex="-1"
-                                        id="options-menu-0-item-1">
+                                    <a href="#" class="text-gray-700 flex px-4 py-2 text-sm" role="menuitem"
+                                        tabindex="-1" id="options-menu-0-item-1">
                                         <!-- Heroicon name: solid/code -->
                                         <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -85,8 +85,8 @@
                                         </svg>
                                         <span>Embed</span>
                                     </a>
-                                    <a href="#" class="text-gray-700 flex px-4 py-2 text-sm" role="menuitem" tabindex="-1"
-                                        id="options-menu-0-item-2">
+                                    <a href="#" class="text-gray-700 flex px-4 py-2 text-sm" role="menuitem"
+                                        tabindex="-1" id="options-menu-0-item-2">
                                         <!-- Heroicon name: solid/flag -->
                                         <svg class="mr-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -119,10 +119,21 @@
                         {{ $item->description }}
                         @endif
                     </a>
+                    @elseif($item->subject_type == 'App\Models\BlogPost')
+                    {{ $item->description }} {{ translate('new status update') }}
+                    <a href="{{ $item->subject->getPermalink() }}" target="_blank">
+                        {{ $item->subject->title }}
+                    </a>
+
+                    <p class="text-xs font-gray-500 mt-3 font-normal">
+                        {{ $item->subject->excerpt}}
+                    </p>
                     @else
                     @if(class_exists($item->subject_type))
-                     {{ $item->description }}  {{ class_basename($item->subject)}} {{ $item->subject->name }}
-                     @endif
+                    {{ $item->description }} {{ class_basename($item->subject)}} {{ $item->subject->name }}
+
+
+                    @endif
                     @endif
                 </h2>
             </div>
@@ -146,7 +157,8 @@
                             </div>
 
                             @if ($product->getBasePrice() != $product->getTotalPrice())
-                            <del class="fw-600 text-danger opacity-50 text-sm mr-1">{{ $product->getBasePrice(true) }}</del>
+                            <del class="fw-600 text-danger opacity-50 text-sm mr-1">{{ $product->getBasePrice(true)
+                                }}</del>
                             @endif
                             <span class="fw-700 text-black">{{ $product->getTotalPrice(true) }}</span>
                         </span>
@@ -155,8 +167,8 @@
                             {!! $product->description !!}
                         </div>
                         <div>
-                            {{-- <livewire:actions.wishlist-button :key="'product_'.$item->id" template="wishlist-button-detailed"
-                                :object="$product">
+                            {{-- <livewire:actions.wishlist-button :key="'product_'.$item->id"
+                                template="wishlist-button-detailed" :object="$product">
                             </livewire:actions.wishlist-button> --}}
                         </div>
                         <a href="{{ $product->getPermalink() }}" class="btn btn-primary mt-4">
@@ -172,8 +184,8 @@
                     <span class="inline-flex items-center text-sm">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/thumb-up -->
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                aria-hidden="true">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
                                 <path
                                     d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
                             </svg>
@@ -183,15 +195,14 @@
                             <span class="sr-only">likes</span>
 
                         </button>
-                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}"
-                                :object="$item">
-                            </livewire:actions.wishlist-button>
+                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item">
+                        </livewire:actions.wishlist-button>
                     </span>
                     <span class="inline-flex items-center text-sm">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/chat-alt -->
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                aria-hidden="true">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"
                                     d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
                                     clip-rule="evenodd" />
@@ -203,8 +214,8 @@
                     <span class="inline-flex items-center text-sm">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/eye -->
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                aria-hidden="true">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                 <path fill-rule="evenodd"
                                     d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
@@ -219,8 +230,8 @@
                     <span class="inline-flex items-center text-sm">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/share -->
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                aria-hidden="true">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
                                 <path
                                     d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                             </svg>

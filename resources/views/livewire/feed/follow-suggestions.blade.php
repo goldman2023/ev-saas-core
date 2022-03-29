@@ -21,9 +21,7 @@
                             <a href="{{ $account->getPermalink() }}">{{ $account->name }}</a>
                         </p>
                         <p class="text-sm text-gray-500">
-                            @php
-                                // dd($account->followers()->get());
-                            @endphp
+
                             {{ $account->followers()->count() }} {{ translate('followers') }}
                             {{-- <a href="#">@ {{ $account->name }}</a> --}}
                         </p>
