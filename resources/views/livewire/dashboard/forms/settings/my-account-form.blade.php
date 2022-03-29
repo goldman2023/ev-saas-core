@@ -19,7 +19,7 @@
         >
 
         <div class="grid grid-cols-12 gap-8 mb-10">
-            <div class="col-span-12 xl:col-span-3">
+            <div class="col-span-12 lg:col-span-3">
                 <nav class="space-y-1 p-4 bg-white rounded-lg border border-gray-200">
                     <a href="#" :class="{'text-primary': current === 'basicInformation', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'basicInformation'}" 
                         class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
@@ -65,7 +65,7 @@
   
             </div>
 
-            <div class="col-span-12 xl:col-span-9">
+            <div class="col-span-12 lg:col-span-9">
                 {{-- Account Media --}}
                 <div class="p-0 border bg-white border-gray-200 rounded-lg shadow">
                     <div class="w-full border-b border-gray-200">
@@ -104,7 +104,7 @@
                             </label>
             
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input type="text" class="form-standard @error('me.title') is-invalid @enderror"
+                                <input type="text" class="form-standard @error('me.name') is-invalid @enderror"
                                         placeholder="{{ translate('My full name') }}"
                                         wire:model.defer="me.name" />
                             

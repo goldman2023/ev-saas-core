@@ -64,7 +64,7 @@ class AddressesForm extends Component
                 'currentAddress.city' => ['required'],
                 'currentAddress.state' => ['required'],
                 'currentAddress.zip_code' => ['required'],
-                'currentAddress.phones' => ['check_array:1,4'],
+                'currentAddress.phones' => [''],
                 'currentAddress.is_primary' => [],
                 'currentAddress.is_billing' => [],
                 'currentAddress.location' => [],
@@ -125,7 +125,7 @@ class AddressesForm extends Component
             // $this->dispatchValidationErrors($e);
             $this->validate();
         }
-
+        
         DB::beginTransaction();
 
         try {
@@ -139,18 +139,32 @@ class AddressesForm extends Component
 
             // if address IS PRIMARY, set other user addresses to non-primary
             if($this->currentAddress->is_primary) {
-                app($this->currentAddress::class)::where([
-                    ['id', '!=', $this->currentAddress->id],
-                    ['user_id', '=', auth()->user()->id]
-                ])->update(['is_primary' => 0]);
+                if($this->type === 'address') {
+                    app($this->currentAddress::class)::where([
+                        ['id', '!=', $this->currentAddress->id],
+                        ['user_id', '=', auth()->user()->id]
+                    ])->update(['is_primary' => 0]);
+                } else if($this->type === 'shop_address') {
+                    app($this->currentAddress::class)::where([
+                        ['id', '!=', $this->currentAddress->id],
+                        ['shop_id', '=', MyShop::getShopID()]
+                    ])->update(['is_primary' => 0]);
+                }
             }
 
             // if address IS BILLING, set other user addresses to non-billing
             if($this->currentAddress->is_billing) {
-                app($this->currentAddress::class)::where([
-                    ['id', '!=', $this->currentAddress->id],
-                    ['user_id', '=', auth()->user()->id]
-                ])->update(['is_billing' => 0]);
+                if($this->type === 'address') {
+                    app($this->currentAddress::class)::where([
+                        ['id', '!=', $this->currentAddress->id],
+                        ['user_id', '=', auth()->user()->id]
+                    ])->update(['is_billing' => 0]);
+                } else if($this->type === 'shop_address') {
+                    app($this->currentAddress::class)::where([
+                        ['id', '!=', $this->currentAddress->id],
+                        ['shop_id', '=', MyShop::getShopID()]
+                    ])->update(['is_billing' => 0]);
+                }
             }
 
             DB::commit();

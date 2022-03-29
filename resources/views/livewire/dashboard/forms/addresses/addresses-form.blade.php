@@ -177,6 +177,9 @@
             </div>
             {{-- END Is billing? --}}
 
+            {{-- TODO: Add features for ShopAddress --}}
+            {{-- TODO: Add location for ShopAddress --}}
+            
             <button type="button" class="w-full btn btn-primary ml-auto btn-sm mt-6" @click="
                     $wire.set('currentAddress.country', currentAddressCountry, true);
                     $wire.set('currentAddress.phones', currentAddressPhones, true);
