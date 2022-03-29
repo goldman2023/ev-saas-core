@@ -12,7 +12,9 @@ use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Product;
 use App\Nova\Tenant\Activity;
+use App\Nova\Tenant\Category;
 use App\Nova\Tenant\PaymentMethodUniversal;
+use App\Nova\Tenant\Plan;
 use App\Nova\Tenant\ShopSetting;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
@@ -130,7 +132,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             Nova::resources([
-                Shop::class,
                 Blog::class,
                 User::class,
                 Product::class,
@@ -138,6 +139,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Wishlist::class,
                 ShopSetting::class,
                 PaymentMethodUniversal::class,
+                Shop::class,
+                Category::class,
+                Plan::class,
             ]);
         } else {
             Nova::resources([
