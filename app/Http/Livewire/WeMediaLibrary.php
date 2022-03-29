@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use WeBuilder;
 use Auth;
+use Exception;
 use Image;
 use File;
 use MyShop;
@@ -55,7 +56,7 @@ class WeMediaLibrary extends Component
     }
 
     public function mount() {
-        
+
     }
 
     public function render() {
@@ -95,12 +96,12 @@ class WeMediaLibrary extends Component
             } else if($e instanceof \Exception) {
                 $title = $e->getMessage();
             }
-            
+
             $this->inform($title, '', 'fail');
             $this->new_media = []; // reset new_media (basically, get rid of the livewire temp files added to $new_media)
             return;
         }
-        
+
 
         if(!empty($this->new_media)) {
             foreach($this->new_media as $key => $media) {
@@ -110,7 +111,7 @@ class WeMediaLibrary extends Component
 
                 if(isset($this->getPermittedExtensions()[$extension])) {
                     $upload->file_original_name = null;
-                
+
                     $arr = explode('.', $media->getClientOriginalName());
                     for($i=0; $i < count($arr)-1; $i++){
                         if($i == 0) {
@@ -132,8 +133,9 @@ class WeMediaLibrary extends Component
                         Storage::makeDirectory($tenant_path, 0775, true, true);
                     }
 
+
                     $new_filename = time() . '_' . $media->getClientOriginalName();
-                    
+
                     $media->storePubliclyAs($tenant_path, $new_filename, 's3');
 
                     $upload->extension = $extension;
@@ -146,7 +148,7 @@ class WeMediaLibrary extends Component
 
 
                     $this->new_media[$key] = $upload;
-                } 
+                }
             }
         }
     }

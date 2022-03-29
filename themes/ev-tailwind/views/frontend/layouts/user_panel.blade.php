@@ -151,7 +151,7 @@
 
     <!-- Static sidebar for desktop -->
     <div
-        class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-100">
+        class="we-dashboard-sidebar-background hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-gray-200 lg:pt-5 lg:pb-4 lg:bg-gray-100">
         <div class="flex items-center flex-shrink-0 px-6">
             <a href="{{ route('dashboard') }} ">
                 <x-tenant.system.image alt="{{ get_site_name() }} logo" class="min-h-8 w-full mx-auto sm:min-h-10"

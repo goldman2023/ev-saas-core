@@ -178,7 +178,6 @@ class HomeController extends Controller
                 if(auth()) {
                     return redirect()->route('feed.index');
                 }
-                return redirect()->route('feed.index');
             } else {
                 $page = Page::where('slug', 'home')->first();
                 $sections = $page->content;
@@ -190,8 +189,6 @@ class HomeController extends Controller
                     ]);
                 }
             }
-
-
 
             return view('frontend.index');
         }

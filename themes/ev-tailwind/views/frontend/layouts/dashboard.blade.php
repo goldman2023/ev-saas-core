@@ -150,6 +150,10 @@
                 @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg p-3;
             }
         }
+
+        .we-dashboard-sidebar-background {
+              background-color: {{ get_setting('we_dashboard_sidebar_background_color', 'rgb(17, 24, 39)') }} !important;
+          }
     </style>
 
 

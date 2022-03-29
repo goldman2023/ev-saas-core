@@ -42,14 +42,6 @@
                                 style="{{ ev_dynamic_translate('product-card', true)->value }}">
                             </x-default.products.cards.product-card>
                             @endif
-
-                            @if($item->subject->getMorphClass() == 'App\Models\Shop')
-                            <x-company.company-card :company="$item->subject"></x-company.company-card>
-
-                            @endif
-
-
-
                         </div>
                         @endforeach
 

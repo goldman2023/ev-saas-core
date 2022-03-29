@@ -3,12 +3,14 @@
 namespace App\View\Components\Feed\Elements;
 
 use Illuminate\View\Component;
+use Spatie\Activitylog\Models\Activity;
 
 class FeedCard extends Component
 {
     public $item;
     public $product;
     private $ignore = true;
+    public $likes = 0;
     /**
      * Create a new component instance.
      *
@@ -18,7 +20,13 @@ class FeedCard extends Component
     {
         //
         $this->ignore = false;
+
         $this->item = $item;
+        $this->likes = Activity::where('subject_type', 'Spatie\Activitylog\Models\Activity')
+        ->where('description','liked')
+        ->where('subject_id', $item->id)
+        ->count();
+
         if(empty($item->causer)){
             $this->ignore = true;
         }
@@ -44,4 +52,6 @@ class FeedCard extends Component
             return view('components.feed.elements.feed-card');
         }
     }
+
+
 }

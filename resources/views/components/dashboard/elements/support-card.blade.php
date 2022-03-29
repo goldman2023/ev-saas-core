@@ -6,11 +6,11 @@
 
         <!-- This example requires Tailwind CSS v2.0+ -->
         <a type="button" href="{{ route('settings.shop_settings') }}"
-            class="relative block w-full h-full border-2 border-gray-300 border-dashed rounded-lg p-6 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            class="relative block w-full h-full border-2 border-gray-300 border-dashed rounded-lg p-4 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="emoji">
                 📱
             </span>
-            <span class="mt-2 mb-2 block text-md font-medium text-gray-700">
+            <span class="mt-2 mb-2 block text-sm font-medium text-gray-700">
                 {{ translate("Enter your support contacts and working hours")}} </span>
 
                 <button type="button"

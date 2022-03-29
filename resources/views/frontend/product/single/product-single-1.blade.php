@@ -23,11 +23,11 @@
   ```
 -->
 <div class="bg-white">
-    <div class="mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div class="mx-auto py-8 px-4 sm:py-18 sm:px-6 lg:max-w-7xl lg:px-4">
         <!-- Product -->
         <div class="lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
             <!-- Product image -->
-            <div class="lg:row-end-1 lg:col-span-2">
+            <div class="lg:row-end-1 lg:col-span-4">
                 <div class="w-full rounded-lg bg-gray-100 overflow-hidden">
                     <x-tenant.system.image class="object-center object-cover w-full"
                     :image="$product->getThumbnail(['w'=>600]) ?? ''">
@@ -162,6 +162,7 @@
             </div>
 
             <div class="w-full max-w-2xl mx-auto mt-16 lg:max-w-none lg:mt-0 lg:col-span-4">
+               <x-tailwind-ui.sections.ecommerce.incentives-sections.incentives_07></x-tailwind-ui.sections.ecommerce.incentives-sections.incentives_07>
                 <div>
                     <div class="border-b border-gray-200">
                         <div class="-mb-px flex space-x-8" aria-orientation="horizontal" role="tablist">

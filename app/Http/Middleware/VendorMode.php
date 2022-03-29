@@ -32,6 +32,11 @@ class VendorMode
             $globalLayout = 'dashboard';
         }
 
+        if($request->is('wishlist') || $request->is('chat')) {
+            $globalLayout = 'dashboard';
+
+        }
+
         View::share('globalShop', $globalShop);
         View::share('globalLayout', $globalLayout);
 

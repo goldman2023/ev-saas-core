@@ -22,21 +22,27 @@ class EVService
 {
     protected $tenantStylePath;
 
-    public function __construct($app) {
-        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant('id').'.css');
-        $default_css_path = public_path('themes/'.Theme::parent().'/css/app.css');
+    public function __construct($app)
+    {
+        $tenant_css_path = public_path('themes/' . Theme::parent() . '/css/' . tenant('id') . '.css');
+        $default_css_path = public_path('themes/' . Theme::parent() . '/css/app.css');
         $styling_url = '';
 
-        if(file_exists($tenant_css_path)) {
-            $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
-
+        if (file_exists($tenant_css_path)) {
+            $url = asset('themes/' . Theme::parent() . '/css/' . tenant('id') . '.css?ver=' . filemtime($tenant_css_path));
         } else {
-            $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
+            try {
+                $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
+            } catch (\Exception $e) {
+            }
         }
 
-        // TODO: Think of a way to implement better vendor design pattern!
-        $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path)); //$url;
-        $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
+        try {
+            // TODO: Think of a way to implement better vendor design pattern!
+            $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path)); //$url;
+            $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
+        } catch (\Exception $e) {
+        }
     }
 
     public function getThemeStyling()
@@ -46,23 +52,23 @@ class EVService
 
     public function getDashboardMenuByRole($role = 'customer')
     {
-        return collect($this->getDashboardMenuTemplate())->map(fn($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
-            if(isset($child['user_types'])) {
+        return collect($this->getDashboardMenuTemplate())->map(fn ($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
+            if (isset($child['user_types'])) {
                 return in_array($role, $child['user_types']);
-
             } else {
                 return true;
             }
         })->count() > 0 ? $item : null)->filter()->toArray();
     }
 
-    public function getDashboardMenu() {
-        return collect($this->getDashboardMenuTemplate())->map(function($group) {
-            $group['items'] = collect($group['items'])->filter(function($child) use($group) {
+    public function getDashboardMenu()
+    {
+        return collect($this->getDashboardMenuTemplate())->map(function ($group) {
+            $group['items'] = collect($group['items'])->filter(function ($child) use ($group) {
                 return \Permissions::canAccess($child['user_types'], $child['permissions'], false);
             })->toArray();
             return  $group;
-        })->filter(fn($group) => !empty($group['items']))->toArray();
+        })->filter(fn ($group) => !empty($group['items']))->toArray();
     }
 
     protected function getDashboardMenuTemplate(): array
@@ -152,7 +158,8 @@ class EVService
                         'permissions' => ['browse_orders'],
                         'badge' => [
                             'class' => 'badge-danger',
-                            'content' => function() {
+                            'content' => function () {
+                                return 0;
                                 return MyShop::getShop()->orders()->where('viewed', 0)->count();
                             }
                         ]
@@ -163,7 +170,7 @@ class EVService
                         'route' => route('leads.index'),
                         'is_active' => areActiveRoutes(['leads']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['all_leads','browse_leads']
+                        'permissions' => ['all_leads', 'browse_leads']
                     ],
                     // [
                     //     'label' => translate('Events'),
@@ -193,14 +200,14 @@ class EVService
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_posts', 'browse_posts']
                     ],
-//                    [
-//                        'label' => translate('Website'),
-//                        'icon' => 'heroicon-o-qrcode',
-//                        'route' => route('settings.domains'),
-//                        'is_active' => areActiveRoutes(['settings.domains']),
-//                        'user_types' => User::$non_customer_user_types,
-//                        'permissions' => [] // TODO: Don't know what this is about tbh
-//                    ],
+                    //                    [
+                    //                        'label' => translate('Website'),
+                    //                        'icon' => 'heroicon-o-qrcode',
+                    //                        'route' => route('settings.domains'),
+                    //                        'is_active' => areActiveRoutes(['settings.domains']),
+                    //                        'user_types' => User::$non_customer_user_types,
+                    //                        'permissions' => [] // TODO: Don't know what this is about tbh
+                    //                    ],
                     /* [
                         'label' => translate('Tutorials'),
                         'icon' => 'heroicon-o-academic-cap',
@@ -316,14 +323,14 @@ class EVService
                         'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_designs']
                     ],
-                     [
-                         'label' => translate('Payment settings'),
-                         'icon' => 'heroicon-o-cash',
-                         'route' => route('settings.payment_methods'),
-                         'is_active' => areActiveRoutes(['settings.payment_methods']),
-                         'user_types' => User::$tenant_user_types,
-                         'permissions' => ['browse_uni_payment_methods']
-                     ],
+                    [
+                        'label' => translate('Payment settings'),
+                        'icon' => 'heroicon-o-cash',
+                        'route' => route('settings.payment_methods'),
+                        'is_active' => areActiveRoutes(['settings.payment_methods']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['browse_uni_payment_methods']
+                    ],
                     [
                         'label' => translate('Staff settings'),
                         'icon' => 'heroicon-s-user-group',

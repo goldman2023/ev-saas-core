@@ -110,7 +110,13 @@
               width: 1140px;
               margin: 0 auto;
           }
+
+
         }
+
+        .we-dashboard-sidebar-background {
+              background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}";
+          }
     </style>
 
 
@@ -160,7 +166,12 @@
 
     @yield('script')
 
+    @auth
+        <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    @endauth
     @stack('footer_scripts')
+
+
 </body>
 
 </html>

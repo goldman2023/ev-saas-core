@@ -1,7 +1,67 @@
 <div>
-    @foreach($activities as $item)
-        <x-feed.elements.feed-card :item="$item"></x-feed.elements.feed-card>
-    @endforeach
+    <div class="px-4 sm:px-0">
+        <div class="sm:hidden">
+            <label for="question-tabs" class="sr-only">Select a tab</label>
+            <select id="question-tabs"
+                class="block w-full rounded-md border-gray-300 text-base font-medium text-gray-900 shadow-sm focus:border-rose-500 focus:ring-rose-500">
+                <option selected>Recent</option>
 
-    {{ $activities->links() }}
+                <option>Most Liked</option>
+
+                <option>Most Answers</option>
+            </select>
+        </div>
+        <div class="hidden sm:block">
+            <nav class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200" aria-label="Tabs">
+                <!-- Current: "text-gray-900", Default: "text-gray-500 hover:text-gray-700" -->
+                <a href="#" aria-current="page" wire:click="loadType('recent')"
+                    class="@if($type == 'recent') text-gray-900 @else text-gray-500 hover:text-gray-700 @endif  rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
+                    <span>Recent</span>
+                    @if($type == 'recent')
+                        <span aria-hidden="true" class="bg-rose-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                    @else
+                        <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
+                    @endif
+                </a>
+
+                <a href="#" wire:click="loadType('trending')"
+                    class="@if($type == 'trending') text-gray-900 @else text-gray-500 hover:text-gray-70 @endif group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
+                    <span>{{ translate('Trending') }}</span>
+                    @if($type == 'trending')
+                        <span aria-hidden="true" class="bg-rose-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                    @else
+                        <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
+                    @endif
+                </a>
+
+                <a href="#"
+                    class="text-gray-500 hover:text-gray-700 rounded-r-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
+                    <span>Most Answers</span>
+                    <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
+                </a>
+            </nav>
+        </div>
+    </div>
+    <div wire:loading wire:target="loadInit" class="w-full">
+        <div class="mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg w-full">
+            {{ translate('Loading Your Knowledge Feed...') }}
+        </div>
+    </div>
+    <div wire:init="loadInit">
+        @if($readyToLoad)
+        @foreach($activities as $item)
+        <livewire:feed.elements.feed-card wire:key="activity_{{ $item->id }}" :item="$item">
+        </livewire:feed.elements.feed-card>
+        @endforeach
+        @endif
+    </div>
+    <div class="w-full" x-intersect:margin.-400px="$wire.loadMore()">
+        <div class="mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg w-full">
+            {{ translate('Loading Your Knowledge Feed...') }}
+        </div>
+    </div>
+
+
+
+
 </div>

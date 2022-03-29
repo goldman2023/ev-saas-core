@@ -69,22 +69,12 @@
                                     <div class="js-form-message mb-4">
                                         <label class="input-label">{{ translate('Email') }}</label>
                                         <div class="input-group input-group-sm mb-2">
-                                            @if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated)
-                                                <input type="text"
-                                                    class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                                    value="{{ old('email') }}"
-                                                    placeholder="{{ translate('Email Or Phone') }}" name="email"
-                                                    data-test="email" id="email">
-                                            @else
+
                                                 <input type="email"
                                                     class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
                                                     value="{{ old('email') }}" placeholder="{{ translate('Email') }}"
                                                     name="email" data-test="email">
-                                            @endif
-                                            @if (\App\Models\Addon::where('unique_identifier', 'otp_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'otp_system')->first()->activated)
-                                                <span
-                                                    class="opacity-60">{{ translate('Use country code before number') }}</span>
-                                            @endif
+
                                             @error('email')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror

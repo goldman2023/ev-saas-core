@@ -3,34 +3,47 @@
 <script defer src="https://widget-js.cometchat.io/v3/cometchatwidget.js"></script>
 
 <script>
-
     window.addEventListener('DOMContentLoaded', (event) => {
+        var authKey = '1ae443addff490b0ac837b5b229b7e7cb945364f';
 		CometChatWidget.init({
-			"appID": "19844836fbbe443a",
+            "widgetID" : "2c7f9f3c-bf64-45df-ba75-649038e001fd",
+			"appID": "2062192784f94713",
 			"appRegion": "eu",
-			"authKey": "3ae679e7ea038faed86dc55249df79213d4c262f"
+			"authKey": authKey,
 		}).then(response => {
-			console.log("Initialization completed successfully");
-			//You can now call login function.
-			CometChatWidget.login({
-				"uid": "superhero1"
-			}).then(response => {
-				CometChatWidget.launch({
-					"widgetID": "e0f6177f-7236-4982-8b49-d514b681fdff",
-					"target": "#cometchat",
-					"roundedCorners": "true",
-					"height": "600px",
-					"width": "100%",
-					"defaultID": 'superhero1', //default UID (user) or GUID (group) to show,
-					"defaultType": 'user' //user or group
-				});
-			}, error => {
-				console.log("User login failed with error:", error);
-				//Check the reason for error and take appropriate action.
-			});
-		}, error => {
-			console.log("Initialization failed with error:", error);
-			//Check the reason for error and take appropriate action.
-		});
+  /**
+   * Create user once initialization is successful
+   */
+        const user = new CometChatWidget.CometChat.User("web_{{ Auth::user()->id }}");
+        user.setName("{{ Auth::user()->name }}");
+        // user.setAvatar('#');
+        // user.setLink({{ Auth::user()->id }});
+        CometChatWidget.createOrUpdateUser(user).then((user) => {
+            console.log(user);
+       // Proceed with user login
+        CometChatWidget.login({
+        uid: "web_{{ Auth::user()->id }}",
+        }).then((loggedInUser) => {
+
+      // Proceed with launching your Chat Widget
+            CometChatWidget.launch({
+            "widgetID" : "2c7f9f3c-bf64-45df-ba75-649038e001fd",
+			"appID": "2062192784f94713",
+			"appRegion": "eu",
+			"authKey": authKey,
+            "docked": "false",
+            "alignment": "right", //left or right
+            "target": "#cometchat",
+            "roundedCorners": "false",
+            "height": "80vh",
+            "width": "100%",
+            "defaultType": 'user' //user or group
+
+		})
+            });
+        });
+
+
+        });
 	});
 </script>

@@ -14,6 +14,7 @@
         "bavix/laravel-wallet": "^7.3",
         "blade-ui-kit/blade-heroicons": "^1.2",
         "blade-ui-kit/blade-icons": "^1.1",
+        "bolechen/nova-activitylog": "^0.3.0",
         "brunocfalcao/blade-feather-icons": "^2.0",
         "codeat3/blade-grommet-icons": "^1.1",
         "codeat3/blade-line-awesome-icons": "^1.0",
@@ -30,7 +31,9 @@
         "jschaedl/iban-validation": "^1.8",
         "laracasts/flash": "^3.0",
         "laravel-validation-rules/credit-card": "^1.6",
+        "laravel/cashier": "^13.8",
         "laravel/framework": "8.*",
+        "laravel/nova": "^3.31",
         "laravel/passport": "^10.1",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/socialite": "^5.2",
@@ -123,6 +126,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
     ]
 }

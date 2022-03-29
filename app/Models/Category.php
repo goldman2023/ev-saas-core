@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
@@ -204,6 +205,10 @@ class Category extends EVBaseModel
     public function getTranslationModel(): ?string
     {
         return CategoryTranslation::class;
+    }
+
+    public function getFollowers() {
+        return Activity::where('subject_id', $this->id)->where('subject_type', 'App\Models\Category');
     }
 
     public function getDynamicModelUploadProperties(): array
