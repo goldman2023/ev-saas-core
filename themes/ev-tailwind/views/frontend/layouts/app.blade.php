@@ -167,7 +167,7 @@
     @yield('script')
 
     @auth
-        <x-default.chat.main-chat></x-default.chat.main-chat>
+        <x-default.chat.widget-chat></x-default.chat.widget-chat>
     @endauth
     @stack('footer_scripts')
 

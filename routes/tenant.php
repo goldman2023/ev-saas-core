@@ -227,4 +227,5 @@ Route::middleware([
 
     //Custom page
     Route::get('/page/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
+    Route::get('/shop/create', 'PageController@show_custom_page')->name('shop.create');
 });

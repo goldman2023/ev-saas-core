@@ -12,7 +12,7 @@ class EVWishlistController extends Controller
     //
     public $availableWishlistItems = [
         'App\Models\Product' => 'Product',
-        'App\Models\Shop' => 'Shop',
+        // 'App\Models\Shop' => 'Shop',
     ];
     public $wishlists;
 

@@ -70,7 +70,7 @@
                         <div class="row">
                             @foreach ($shops as $key => $shop)
                             <div class="col-4">
-                                <x-company.company-card :company="$shop"></x-company.company-card>
+                                {{-- <x-company.company-card :company="$shop"></x-company.company-card> --}}
 
                             </div>
                         @endforeach

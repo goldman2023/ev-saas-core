@@ -1,11 +1,11 @@
 <?php
 
-namespace App\View\Components\TailwindUi\Sections\Marketing\HeroSections;
+namespace App\View\Components\TailwindUi\Ecommerce\Incentives\HeroSections;
 
 use App\View\Components\TailwindUi\WeComponent;
 use Illuminate\View\Component;
 
-class HeroSection02 extends HeroSection
+class IncentivesSection extends WeComponent
 {
     /**
      * Get the view / contents that represent the component.
@@ -14,6 +14,6 @@ class HeroSection02 extends HeroSection
      */
     public function render()
     {
-        return view('components.tailwind-ui.sections.marketing.hero-sections.hero-section_02');
+        return view('components.tailwind-ui.sections.ecommerce.incentives-sections.incentives-section');
     }
 }

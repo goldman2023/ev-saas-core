@@ -31,13 +31,12 @@
 			"appID": "2062192784f94713",
 			"appRegion": "eu",
 			"authKey": authKey,
-            "docked": "true",
+            "docked": "false",
             "alignment": "right", //left or right
             "target": "#cometchat",
             "roundedCorners": "false",
-            "height": "600px",
-            "width": "400px",
-            "defaultID": 'superhero1', //default UID (user) or GUID (group) to show,
+            "height": "80vh",
+            "width": "100%",
             "defaultType": 'user' //user or group
 
 		})
