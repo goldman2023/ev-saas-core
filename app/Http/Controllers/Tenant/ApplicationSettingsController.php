@@ -21,5 +21,5 @@ class ApplicationSettingsController extends Controller
         tenant()->update($validated);
 
         return redirect()->back()->with('success', 'Configuration updated.');
-    }    
+    }
 }

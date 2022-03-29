@@ -63,7 +63,8 @@
         "stripe/stripe-php": "^7.83.0",
         "symfony/dom-crawler": "^6.0",
         "webpatser/laravel-uuid": "^4.0",
-        "webtopay/libwebtopay": "^1.6"
+        "webtopay/libwebtopay": "^1.6",
+        "laravel/nova": "^3.31"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5",
@@ -123,6 +124,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
-
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
     ]
 }

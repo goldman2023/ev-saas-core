@@ -32,7 +32,7 @@ return [
     |
     */
 
-    'domain' => null,
+    'domain' => env('NOVA_DOMAIN_NAME', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +71,7 @@ return [
     |
     */
 
-    'guard' => 'admin',
+    'guard' => env('NOVA_GUARD', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -98,8 +98,6 @@ return [
     */
 
     'middleware' => [
-        'tenant',
-        'universal',
         'web',
         Authenticate::class,
         DispatchServingNovaEvent::class,
@@ -146,6 +144,6 @@ return [
     |
     */
 
-    'currency' => 'EUR',
+    'currency' => 'USD',
 
 ];
