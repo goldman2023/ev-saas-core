@@ -2,18 +2,18 @@
 
 namespace App\Providers;
 
-use App\Nova\Central\Admin;
 use App\Nova\Central\Domain;
-use App\Nova\Central\SubscriptionCancelation;
 use App\Nova\Central\Tenant as TenantResource;
-use App\Nova\Tenant\Post;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
 use App\Nova\Central\Section;
 use App\Nova\Tenant\Blog;
+use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Product;
 use App\Nova\Tenant\Activity;
+use App\Nova\Tenant\PaymentMethodUniversal;
+use App\Nova\Tenant\ShopSetting;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -105,10 +105,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             return [
+                new \OptimistDigital\MenuBuilder\MenuBuilder,
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
             return [
+                new \OptimistDigital\MenuBuilder\MenuBuilder,
                 // new \Tighten\NovaStripe\NovaStripe,
             ];
         }
@@ -128,11 +130,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             Nova::resources([
+                Shop::class,
                 Blog::class,
                 User::class,
-                // Product::class,
+                Product::class,
                 Activity::class,
                 Wishlist::class,
+                ShopSetting::class,
+                PaymentMethodUniversal::class,
             ]);
         } else {
             Nova::resources([

@@ -47,8 +47,6 @@ class User extends Resource
         return [
             ID::make()->sortable(),
 
-            Gravatar::make()->maxWidth(50),
-
             Text::make('Name')
             ->sortable()
                 ->rules('required', 'max:255'),
@@ -65,6 +63,8 @@ class User extends Resource
                 ->updateRules('nullable', 'string', 'min:8'),
 
             MorphToMany::make('Wishlist', 'followers'),
+
+            // MorphToMany::make(User::class, 'subject')
         ];
     }
 

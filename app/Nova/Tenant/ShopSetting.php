@@ -4,23 +4,21 @@ namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Gravatar;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphToMany;
-use Laravel\Nova\Fields\Password;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\HasOne;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Wishlist extends Resource
+class ShopSetting extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Wishlist::class;
+    public static $model = \App\Models\ShopSetting::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,7 +33,7 @@ class Wishlist extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
     ];
 
     /**
@@ -49,16 +47,10 @@ class Wishlist extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Created At')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            // Text::make('User ID', 'user_id')
-            // ->sortable(),
-
-            BelongsTo::make('User'),
-            MorphTo::make('Subject'),
-
+            Text::make('Setting'),
+            Text::make('Value'),
+            // Text::make('Shop ID'),
+            HasOne::make('Shop', 'shop_id', Shop::class),
         ];
     }
 
