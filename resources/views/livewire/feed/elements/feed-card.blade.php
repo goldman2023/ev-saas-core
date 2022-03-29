@@ -182,6 +182,8 @@
             <div class="mt-6 flex justify-between space-x-8">
                 <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
+
+                        @if($item->description != 'liked' && $item->description != 'User liked a product')
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/thumb-up -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -197,6 +199,7 @@
                         </button>
                         <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item">
                         </livewire:actions.wishlist-button>
+                        @endif
                     </span>
                     <span class="inline-flex items-center text-sm">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">

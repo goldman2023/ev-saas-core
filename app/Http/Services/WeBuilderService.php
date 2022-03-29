@@ -32,7 +32,8 @@ class WeBuilderService
         $this->initAvailableSections();
     }
 
-    protected function initAvailableSections() {
+    protected function initAvailableSections()
+    {
         $sections_flat = [];
 
         $this->themes = [
@@ -91,7 +92,7 @@ class WeBuilderService
                                     'data' => [],
                                     'settings' => []
                                 ],
-                                
+
                             ]
                         ],
                         'header-sections' => [
@@ -163,7 +164,7 @@ class WeBuilderService
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_05' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_05',
                                     'title' => 'CTA Section 05',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.05-simple-stacked-xl.png', 
+                                    'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.05-simple-stacked-xl.png',
                                     // Wrong image
                                     'order' => -1,
                                     'data' => [],
@@ -358,6 +359,20 @@ class WeBuilderService
                                     'settings' => []
                                 ],
                             ]
+                        ],
+                        'incentives-sections' => [
+                            'title' => 'Incentives / Benefits',
+                            'description' => 'A lovely description for incentives sections',
+                            'sections' => [
+                                'tailwind-ui.sections.ecommerce.incentives-sections.incentives-section_07' => [
+                                    'id' => 'tailwind-ui.sections.ecommerce.incentives-sections.incentives-section_07',
+                                    'title' => 'Incentives Section 07',
+                                    'thumbnail' => 'https://tailwindui.com/img/components/pricing.01-four-tiers-with-toggle-xl.png',
+                                    'order' => -1,
+                                    'data' => [],
+                                    'settings' => []
+                                ],
+                            ]
                         ]
                     ],
                     'ecommerce' => [],
@@ -366,21 +381,22 @@ class WeBuilderService
             ],
         ];
 
-        foreach($this->themes as $theme_name => $categories) {
-            foreach($categories['sections'] as $section_group_name => $groups) {
-                foreach($groups as $group_name => $group) {
+        foreach ($this->themes as $theme_name => $categories) {
+            foreach ($categories['sections'] as $section_group_name => $groups) {
+                foreach ($groups as $group_name => $group) {
                     $sections_flat = array_merge($sections_flat, $group['sections']);
                 }
             }
         }
-        
+
         $this->sections_flat = $sections_flat;
     }
 
 
-    public function getAllThemeSections($theme_name, $flat = false) {
-        if($flat) {
-            return array_filter($this->sections_flat, function($v, $k) use($theme_name) {
+    public function getAllThemeSections($theme_name, $flat = false)
+    {
+        if ($flat) {
+            return array_filter($this->sections_flat, function ($v, $k) use ($theme_name) {
                 return str_starts_with($v['id'], $theme_name);
             }, ARRAY_FILTER_USE_BOTH);
         }

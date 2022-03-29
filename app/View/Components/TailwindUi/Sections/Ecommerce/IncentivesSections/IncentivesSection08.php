@@ -1,12 +1,11 @@
 <?php
 
-namespace App\View\Components\TailwindUi\Sections\Ecommerce\IncentiveSections;
+namespace App\View\Components\TailwindUi\Sections\Ecommerce\IncentivesSection;
 
-use App\View\Components\TailwindUi\Ecommerce\Incentives\HeroSections\IncentivesSection;
 use App\View\Components\TailwindUi\WeComponent;
 use Illuminate\View\Component;
 
-class IncentivesSection07 extends IncentivesSection
+class IncentivesSection08 extends WeComponent
 {
 
 

@@ -9,6 +9,7 @@ use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\Post;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
+use App\Nova\Central\Section;
 use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Wishlist;
 use App\Nova\Tenant\Product;
@@ -138,6 +139,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 // Admin::class,
                 TenantResource::class,
                 Domain::class,
+                Section::class,
                 // SubscriptionCancelation::class,
             ]);
         }
