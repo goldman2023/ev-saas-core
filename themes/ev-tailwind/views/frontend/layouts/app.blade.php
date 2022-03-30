@@ -31,8 +31,9 @@
 
     @livewireScripts
     @livewireStyles
+    <script defer src="https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js"></script>
 
-    <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
+    {{-- <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script> --}}
 
     @stack('head_scripts')
 </head>

@@ -24,7 +24,7 @@
                     @endif
                 </a>
 
-                <a href="#" wire:click="loadType('trending')"
+                <button wire:click="loadType('trending')"
                     class="@if($type == 'trending') text-gray-900 @else text-gray-500 hover:text-gray-70 @endif group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
                     <span>{{ translate('Trending') }}</span>
                     @if($type == 'trending')
@@ -32,7 +32,7 @@
                     @else
                         <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
                     @endif
-                </a>
+                </button>
 
                 <a href="#"
                     class="text-gray-500 hover:text-gray-700 rounded-r-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
