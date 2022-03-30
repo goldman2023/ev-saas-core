@@ -5,10 +5,10 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle ">
-    {{ $row->getTranslation('title') }}
+    {{ $row->getTranslation('name') }}
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle ">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->status === App\Enums\StatusEnum::published()->value)
         <span class="badge-success">
           {{ ucfirst($row->status) }}
@@ -28,7 +28,7 @@
     @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="hidden md:table-cell align-middle ">
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
 </x-livewire-tables::table.cell>
 
