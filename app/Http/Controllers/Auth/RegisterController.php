@@ -139,7 +139,7 @@ class RegisterController extends Controller
             return redirect()->route('verification');
         }
         else {
-            return redirect()->route('home');
+            return redirect()->route('onboarding.step1');
         }
     }
 }

@@ -36,7 +36,7 @@
     </x-ev.loaders.spinner>
 
     <div class="w-full" :class="{'opacity-3':processing_variation_change}">
-        
+
         {{-- <div class="col-sm-12 d-flex flex-column">
             <h2 class="h3">{{ $product->getTranslation('name') }}</h2>
 
@@ -111,7 +111,7 @@
                 <div class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
                     {{ svg('heroicon-o-shield-check', ['class' => 'ev-icon__xs text-success mr-2']) }}
 
-                    {{ translate('GunOB Buyers Protection + Escrow') }}
+                    {{ get_site_name() }} {{ translate('Buyers Protection + Escrow') }}
                 </div>
             </div>
         </div>

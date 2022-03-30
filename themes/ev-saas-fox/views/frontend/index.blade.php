@@ -98,11 +98,15 @@
                                     type="text" placeholder="Enter your email address">
                             </label>
                             <a class="mb-4 inline-block py-3 px-7 w-full leading-6 text-blue-50 font-medium text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md"
-                                href="#">Get Started</a>
+                                href="{{ route('user.registration') }}">
+                                {{ translate('Get Started') }}
+                            </a>
 
                             <p class="text-sm text-coolGray-400 font-medium text-center">
-                                <span>Already have an account?</span>
-                                <a class="text-blue-500 hover:text-blue-600" href="#">Sign In</a>
+                                <span>{{ translate('Already have an account?') }}</span>
+                                <button class="text-blue-500 hover:text-blue-600"  @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
+                                   {{ translate('Sign In') }}
+                                </button>
                             </p>
                         </div>
                     </div>

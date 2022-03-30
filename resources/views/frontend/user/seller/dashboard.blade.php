@@ -14,21 +14,21 @@
             </div>
 
             <div>
-            <x-dashboard.elements.card>
-                <x-slot name="cardHeader" class="flow-root mt-6">
-                    <div class="h5 fw-600">{{ translate('Products') }} </div>
-                </x-slot>
-                <x-slot name="cardBody" class="">
-                    {{-- TODO : make this company name dynamic --}}
-                    <p>{{ translate('Manage & organize your inventory and products') }}</p>
+                <x-dashboard.elements.card>
+                    <x-slot name="cardHeader" class="flow-root mt-6">
+                        <div class="h5 fw-600">{{ translate('Products') }} </div>
+                    </x-slot>
+                    <x-slot name="cardBody" class="">
+                        {{-- TODO : make this company name dynamic --}}
+                        <p>{{ translate('Manage & organize your inventory and products') }}</p>
 
-                </x-slot>
-                <x-slot name="cardFooter">
-                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
-                        {{ translate('Manage Products') }}
-                    </a>
-                </x-slot>
-            </x-dashboard.elements.card>
+                    </x-slot>
+                    <x-slot name="cardFooter">
+                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
+                            {{ translate('Manage Products') }}
+                        </a>
+                    </x-slot>
+                </x-dashboard.elements.card>
             </div>
             <div>
 
@@ -40,15 +40,9 @@
     </div>
 </section>
 
-
-
 <section class="stats mb-3">
     <div class="grid grid-cols-2 gap-10">
         <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
     </div>
-</section>
-
-<section>
-
 </section>
 @endsection
