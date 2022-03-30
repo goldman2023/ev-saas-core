@@ -62,10 +62,10 @@
             <a class="js-animation-link small font-weight-bold" href="{{ route('user.registration') }}">
                 {{ translate('Sign Up') }}
             </a>
-            /
-            <a class="js-animation-link small font-weight-bold" href="{{ route('business.register') }}">
+
+            {{-- <a class="js-animation-link small font-weight-bold" href="{{ route('business.register') }}">
                 {{ translate('Business Sign Up') }}
-            </a>
+            </a> --}}
         </div>
     </div>
 </div>

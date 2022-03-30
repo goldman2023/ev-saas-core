@@ -19,7 +19,7 @@
 
                         </div>
                         <div class="d-flex align-items-center pr-3">
-                            {{ svg('heroicon-o-chevron-right', ['class' => 'ev-icon__xs text-black mr-2 mb-0']) }}
+                            {{-- {{ svg('heroicon-o-chevron-right', ['class' => 'ev-icon__xs text-black mr-2 mb-0']) }} --}}
 
                         </div>
                     </div>

@@ -8,7 +8,7 @@
             {{ $available_actions[$action] }}
 
             @else
-            {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-black mr-2']) }}
+            {{-- {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-black mr-2']) }} --}}
             {{ $action }}
 
             @endif

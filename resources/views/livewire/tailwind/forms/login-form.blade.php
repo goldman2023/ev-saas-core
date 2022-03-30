@@ -11,15 +11,15 @@
             <label class="block text-16 font-medium text-gray-700">{{ translate('Email') }}</label>
 
             <div class="mt-1 relative rounded-md shadow-sm">
-                <input type="email" 
+                <input type="email"
                         name="email"
-                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md @error('email') input-invalid @enderror" 
+                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md @error('email') input-invalid @enderror"
                         placeholder="you@example.com"
                         wire:model.defer="email"
                         data-test="we-login-email">
-                
+
                         <x-system.invalid-icon field="email"/>
-                
+
             </div>
 
             <x-system.invalid-msg field="email"/>
@@ -29,12 +29,12 @@
             <label class="block text-16 font-medium text-gray-700">{{ translate('Password') }}</label>
 
             <div class="mt-1 relative rounded-md shadow-sm">
-                <input type="password" 
+                <input type="password"
                         name="password"
-                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md @error('password') input-invalid @enderror" 
+                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md @error('password') input-invalid @enderror"
                         wire:model.defer="password"
                         data-test="we-login-password">
-                
+
                         <x-system.invalid-icon field="password"/>
             </div>
 
@@ -66,17 +66,17 @@
             </button>
         </div>
 
-       
+
 
         <div class="text-center">
             <span class="text-12 w-full text-muted">{{ translate('Do not have an account?') }}</span>
             <a class="text-12 font-semibold" href="{{ route('user.registration') }}">
                 {{ translate('Sign Up') }}
             </a>
-            /
-            <a class="text-12 font-semibold" href="{{ route('business.register') }}">
+
+            {{-- <a class="text-12 font-semibold" href="{{ route('business.register') }}">
                 {{ translate('Business Sign Up') }}
-            </a>
+            </a> --}}
         </div>
     </div>
 </div>
