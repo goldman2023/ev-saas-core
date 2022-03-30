@@ -62,7 +62,7 @@ class PlanForm extends Component
             'selected_categories' => 'required',
             'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'plan.title' => 'required|min:2',
+            'plan.name' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
@@ -93,8 +93,8 @@ class PlanForm extends Component
             'plan.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'plan.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
-            'plan.title.required' => translate('Title is required'),
-            'plan.title.min' => translate('Minimum title length is :min'),
+            'plan.name.required' => translate('Title is required'),
+            'plan.name.min' => translate('Minimum title length is :min'),
 
             'plan.excerpt.required' => translate('Excerpt is required'),
             'plan.excerpt.min' => translate('Minimum excerpt length is :min'),

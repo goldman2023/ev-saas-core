@@ -40,14 +40,14 @@
                             </label>
             
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input type="text" class="form-standard @error('plan.title') is-invalid @enderror"
-                                        name="plan.title"
-                                        id="plan-title"
+                                <input type="text" class="form-standard @error('plan.name') is-invalid @enderror"
+                                        name="plan.name"
+                                        id="plan-name"
                                         placeholder="{{ translate('New post title') }}"
                                         {{-- @input="generateURL($($el).val())" --}}
-                                        wire:model.defer="plan.title" />
+                                        wire:model.defer="plan.name" />
                             
-                                <x-system.invalid-msg field="plan.title"></x-system.invalid-msg>
+                                <x-system.invalid-msg field="plan.name"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Title -->

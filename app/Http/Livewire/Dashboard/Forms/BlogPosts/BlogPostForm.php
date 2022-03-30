@@ -58,7 +58,7 @@ class BlogPostForm extends Component
             // 'blogPost.id' => [],
             'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'blogPost.title' => 'required|min:10',
+            'blogPost.name' => 'required|min:10',
             'blogPost.subscription_only' => [],
             'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'blogPost.excerpt' => 'required|min:10',
@@ -79,8 +79,8 @@ class BlogPostForm extends Component
             'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
-            'blogPost.title.required' => translate('Title is required'),
-            'blogPost.title.min' => translate('Minimum title length is :min'),
+            'blogPost.name.required' => translate('Title is required'),
+            'blogPost.name.min' => translate('Minimum title length is :min'),
 
             'blogPost.excerpt.required' => translate('Excerpt is required'),
             'blogPost.excerpt.min' => translate('Minimum excerpt length is :min'),

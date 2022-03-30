@@ -38,7 +38,7 @@ class BlogPost extends EVBaseModel
     public const ROUTING_SINGULAR_NAME_PREFIX = 'post';
     public const ROUTING_PLURAL_NAME_PREFIX = 'posts';
 
-    protected $fillable = ['shop_id', 'title', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['shop_id', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $casts = [
         'subscription_only' => 'boolean',
@@ -62,7 +62,7 @@ class BlogPost extends EVBaseModel
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 
@@ -73,7 +73,7 @@ class BlogPost extends EVBaseModel
     {
         return $query->where(
             fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
-                ->orWhere('title', 'like', '%'.$term.'%')
+                ->orWhere('name', 'like', '%'.$term.'%')
                 ->orWhere('excerpt', 'like', '%'.$term.'%')
                 ->orWhere('content', 'like', '%'.$term.'%')
         );

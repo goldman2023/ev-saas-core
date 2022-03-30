@@ -62,9 +62,9 @@ class CheckoutSingleForm extends Component
 
     protected function rulesSets() {
         return [
-            'items' => [
-                'items.*' => ''
-            ],
+            // 'items' => [
+            //     'items.*' => ''
+            // ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
                 'order.billing_first_name' => 'required|min:3',
