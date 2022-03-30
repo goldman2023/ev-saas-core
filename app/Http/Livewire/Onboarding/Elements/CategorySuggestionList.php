@@ -15,4 +15,8 @@ class CategorySuggestionList extends Component
     {
         return view('livewire.onboarding.elements.category-suggestion-list');
     }
+
+    public function saveCategories() {
+        return redirect()->route('onboarding.step2');
+    }
 }

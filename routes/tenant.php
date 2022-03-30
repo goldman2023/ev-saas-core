@@ -79,7 +79,8 @@ Route::middleware([
 
 
     // Route to show after creating new tenant:
-    Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('tenant.welcome');
+    Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('onboarding.step1')->middleware(['auth']);
+    Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
 
 
     // Homepage For Multi/Single Vendor mode

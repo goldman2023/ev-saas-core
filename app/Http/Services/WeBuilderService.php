@@ -364,8 +364,8 @@ class WeBuilderService
                             'title' => 'Incentives / Benefits',
                             'description' => 'A lovely description for incentives sections',
                             'sections' => [
-                                'tailwind-ui.sections.ecommerce.incentives-sections.incentives-section_07' => [
-                                    'id' => 'tailwind-ui.sections.ecommerce.incentives-sections.incentives-section_07',
+                                'tailwind-ui.sections.ecommerce.incentives-sections.incentives_07' => [
+                                    'id' => 'tailwind-ui.sections.ecommerce.incentives-sections.incentives_07',
                                     'title' => 'Incentives Section 07',
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.01-four-tiers-with-toggle-xl.png',
                                     'order' => -1,

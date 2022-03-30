@@ -173,10 +173,13 @@ class HomeController extends Controller
             return view('frontend.company.profile', compact('shop'));
         } else {
 
+
             /* Check if feed is disabled for this tenant */
-            if(!get_tenant_setting('feed_disabled')) {
-                if(auth()) {
+            if(!get_tenant_setting('feed_disabled', false)) {
+                if(auth()->user()) {
                     return redirect()->route('feed.index');
+                } else {
+                    return view('frontend.index');
                 }
             } else {
                 $page = Page::where('slug', 'home')->first();

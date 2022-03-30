@@ -43,7 +43,7 @@ class Product extends EVBaseModel
 {
     use HasSlug;
     use SoftDeletes;
-    // use RegeneratesCache;
+    use RegeneratesCache;
 
     use TranslationTrait;
     use PermalinkTrait;
