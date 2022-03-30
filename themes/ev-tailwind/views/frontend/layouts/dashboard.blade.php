@@ -152,8 +152,8 @@
         }
 
         .we-dashboard-sidebar-background {
-              background-color: {{ get_setting('we_dashboard_sidebar_background_color', 'rgb(17, 24, 39)') }} !important;
-          }
+              background-color: @php echo get_setting('we_dashboard_sidebar_background_color', 'rgb(17, 24, 39)') @endphp !important;
+        }
     </style>
 
 

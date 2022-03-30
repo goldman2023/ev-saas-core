@@ -31,9 +31,9 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.account-settings', compact('me'));
     }
 
-    public function design_settings()
+    public function app_settings()
     {
-        return view('frontend.dashboard.settings.design-settings');
+        return view('frontend.dashboard.settings.app-settings');
     }
 
     public function design_settings_store(Request $request)

@@ -19,8 +19,9 @@ use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use TenantSettings;
 
-class MyShopForm extends Component
+class AppSettingsForm extends Component
 {
     use RulesSets;
     use DispatchSupport;
@@ -92,10 +93,9 @@ class MyShopForm extends Component
      */
     public function mount()
     {
-        $this->shop = MyShop::getShop();
-        $this->settings = $this->shop->settings()->get()->keyBy('setting')->map(fn($item) => $item['value'])->toArray();
-        $this->addresses = $this->shop->addresses;
-        $this->domains = $this->shop->domains;
+        $this->settings = TenantSettings::getAll();
+
+        dd($this->settings);
     }
 
     // public function updatingShop(&$shop, $key) {
@@ -111,7 +111,7 @@ class MyShopForm extends Component
 
     public function render()
     {
-        return view('livewire.dashboard.forms.settings.my-shop-form');
+        return view('livewire.dashboard.forms.settings.app-settings-form');
     }
 
     public function saveBasicInformation() {

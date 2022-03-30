@@ -33,7 +33,7 @@ class CartService
     public function getOriginalPrice() {
         return $this->originalPrice;
     }
-    public function getdiscountAmount() {
+    public function getDiscountAmount() {
         return $this->discountAmount;
     }
     public function getSubtotalPrice() {
@@ -110,7 +110,7 @@ class CartService
             // Refresh $items and $subtotal
             $this->refresh();
         }
-
+        
         // return data
         return [
             'id' => $model->id,

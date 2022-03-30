@@ -3,7 +3,8 @@
         id: '{{ $id }}',
      }"
      x-cloak
-     x-init="$(document).on('keyup', function(e) { if (e.key == 'Escape' && show) {show = false} });">
+     x-init="$(document).on('keyup', function(e) { if (e.key == 'Escape' && show) {show = false} });"
+     id="{{ $id }}">
     <section
         class="c-flyout-panel fixed bg-white shadow-lg"
         :class="{ 'show': show }"
