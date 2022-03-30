@@ -15,4 +15,13 @@ class OnboardingController extends Controller
         return view('frontend.onboarding.step2');
 
     }
+
+    public function profile_store() {
+
+        return redirect()->route('onboarding.step3');
+    }
+
+    public function step3() {
+        return view('frontend.onboarding.step3');
+    }
 }

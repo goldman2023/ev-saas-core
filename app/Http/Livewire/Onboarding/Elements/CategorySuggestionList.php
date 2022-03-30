@@ -8,7 +8,8 @@ use Livewire\Component;
 class CategorySuggestionList extends Component
 {
     public $categories;
-    public function mount() {
+    public function mount()
+    {
         $this->categories = Category::whereHas('products')->get();
     }
     public function render()
@@ -16,7 +17,9 @@ class CategorySuggestionList extends Component
         return view('livewire.onboarding.elements.category-suggestion-list');
     }
 
-    public function saveCategories() {
+    public function saveCategories()
+    {
+
         return redirect()->route('onboarding.step2');
     }
 }

@@ -26,6 +26,7 @@ class MyAccountForm extends Component
     public $currentPassword = '';
     public $newPassword = '';
     public $newPassword_confirmation = '';
+    public $onboarding = false;
 
     protected function getRuleSet($set = null) {
         $rulesSets = collect([
@@ -85,8 +86,9 @@ class MyAccountForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($onboarding = false)
     {
+        $this->onboarding = $onboarding;
         $this->me = auth()->user();
 
     }
@@ -109,7 +111,7 @@ class MyAccountForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate($this->getRuleSet('basic'));
         }
-        
+
 
         $this->me->syncUploads();
         $this->me->save();

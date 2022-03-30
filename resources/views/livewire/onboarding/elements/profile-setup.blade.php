@@ -106,7 +106,7 @@
                     <div class="md:col-span-1">
                         <div class="px-4 sm:px-0">
                             <div class="mb-6">
-                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ translate('Shop setup') }}</h3>
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">{{ translate('Profile setup') }}</h3>
                             <p class="mt-1 text-sm text-gray-600">
                                {{ translate(' This information will be displayed publicly so be careful what you share.') }}
                             </p>
