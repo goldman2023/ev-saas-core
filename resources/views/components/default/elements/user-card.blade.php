@@ -7,10 +7,20 @@
             <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->name }}</h3>
             <dl class="mt-1 flex-grow flex flex-col justify-between">
                 <dt class="sr-only">Title</dt>
-                <dd class="text-gray-500 text-sm">{{ get_site_name() }} Customer Support</dd>
+                @if($user->id == 1)
+                    <dd class="text-gray-500 text-sm">{{ get_site_name() }} Customer Support</dd>
+                @endif
                 <dt class="sr-only">Role</dt>
                 <dd class="mt-3">
-                    <span class="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">Responds within 2 minutes</span>
+                    <span class="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
+                    @if($user->id == 1)
+
+                       {{ translate('Responds within 2 minutes') }}
+                    @else
+                        {{ translate('Online') }}
+                    @endif
+                </span>
+
                 </dd>
             </dl>
         </div>

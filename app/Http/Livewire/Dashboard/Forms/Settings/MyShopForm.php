@@ -29,6 +29,7 @@ class MyShopForm extends Component
     public $settings;
     public $addresses;
     public $domains;
+    public $onboarding = false;
 
     protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
@@ -90,8 +91,9 @@ class MyShopForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($onboarding = false)
     {
+        $this->onboarding = $onboarding;
         $this->shop = MyShop::getShop();
         $this->settings = $this->shop->settings()->get()->keyBy('setting')->map(fn($item) => $item['value'])->toArray();
         $this->addresses = $this->shop->addresses;
@@ -123,7 +125,7 @@ class MyShopForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate($rules);
         }
-        
+
         $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TO THE MODEL ATTRIBUTES LIST????
 
         DB::beginTransaction();
@@ -142,6 +144,10 @@ class MyShopForm extends Component
         } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save basic shop information.'), $e->getMessage(), 'fail');
+        }
+
+        if($this->onboarding) {
+            return redirect()->route('onboarding.step4');
         }
     }
 
@@ -187,7 +193,7 @@ class MyShopForm extends Component
             $contact_details = new ShopSetting();
             $contact_details->shop_id = $this->shop->id;
             $contact_details->setting = 'contact_details';
-        } 
+        }
 
         $contact_details->value = json_encode($contacts);
         $contact_details->save();
@@ -242,13 +248,13 @@ class MyShopForm extends Component
 
             if(!empty($setting_key) && $setting_key !== '*') {
                 $setting = $old_settings->get($setting_key);
-                
+
                 // If $setting does not exist in old_settings, create it and save it!!!
                 if(empty($setting)) {
                     $setting = new ShopSetting();
                     $setting->shop_id = $this->shop->id;
                     $setting->setting = $setting_key;
-                } 
+                }
 
                 $setting->value = is_array($this->settings[$setting_key]) || is_object($this->settings[$setting_key]) ? json_encode($this->settings[$setting_key]) : $this->settings[$setting_key];
                 $setting->save();

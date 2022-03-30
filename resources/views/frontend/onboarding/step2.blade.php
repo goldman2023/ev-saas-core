@@ -1,9 +1,12 @@
 @extends('frontend.layouts.' . $globalLayout)
 
 @section('content')
-<div class="col-span-3 bg-gray-100 p-3">
-    <livewire:onboarding.elements.steps step="2">
-    </livewire:onboarding.elements.steps>
+<div class="col-span-3 bg-gray-100 py-3">
+    <div class="container">
+
+        <livewire:onboarding.elements.steps-progress step="2">
+        </livewire:onboarding.elements.steps-progress>
+    </div>
 </div>
 <section class="container py-10">
     <!-- Features Section -->
@@ -15,6 +18,8 @@
         </div>
 
         <div class="col-span-1">
+            {{-- <livewire:onboarding.elements.steps-progress step="2">
+            </livewire:onboarding.elements.steps-progress> --}}
             <x-default.elements.support-card></x-default.elements.support-card>
         </div>
     </div>
