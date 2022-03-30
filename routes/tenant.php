@@ -174,7 +174,7 @@ Route::middleware([
         Route::post('/checkout', [EVCheckoutController::class, 'store'])->name('checkout.post');
         Route::get('/checkout-single', [EVCheckoutController::class, 'single'])->name('checkout.single.page');
 
-        Route::get('/order-received/{id}', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
+        Route::get('/order/{id}/received', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
     });
 
     /* Old active commerce stripe routes */

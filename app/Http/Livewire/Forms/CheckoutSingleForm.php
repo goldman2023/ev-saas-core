@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Forms;
 use DB;
 use EVS;
 use Categories;
+use CartService;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -35,8 +36,9 @@ class CheckoutSingleForm extends Component
     use RulesSets;
     use DispatchSupport;
 
+    public $items;
     public $order;
-    public $item;
+    public $fromCart;
     public $manual_mode_billing = true;
     public $manual_mode_shipping = true;
     public $show_addresses = false;
@@ -60,6 +62,9 @@ class CheckoutSingleForm extends Component
 
     protected function rulesSets() {
         return [
+            'items' => [
+                'items.*' => ''
+            ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
                 'order.billing_first_name' => 'required|min:3',
@@ -128,6 +133,9 @@ class CheckoutSingleForm extends Component
         return [
             'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.'),
             'order.buyers_consent.is_true' => translate('You must agree with terms of service'),
+            'cc_expiration_date.required' => translate('CC expiration date is required'),
+            'cc_cvc.required' => translate('Card CVC is required'),
+            'cc_number.card_invalid' => translate('Card is invalid')
         ];
     }
 
@@ -136,15 +144,17 @@ class CheckoutSingleForm extends Component
      *
      * @return void
      */
-    public function mount($item = null)
+    public function mount($items = [], $fromCart = true)
     {
-        $this->item = $item;
+        $this->fromCart = $fromCart;
+
+        $this->items = $items;
         
         $this->order = new Order();
-        $this->shop_id = $this->item->shop_id;
+        $this->order->shop_id = $this->items->first()->shop_id; // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
-
+        
         $this->cc_number = '';
         $this->cc_name = '';
         $this->cc_expiration_date = '';
@@ -172,7 +182,7 @@ class CheckoutSingleForm extends Component
 
     public function dehydrate()
     {
-        $this->dispatchBrowserEvent('initCheckoutForm');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function render()
@@ -229,6 +239,7 @@ class CheckoutSingleForm extends Component
 
     public function pay()
     {
+        // dd($this->items);
         try {
             $this->validate($this->getSpecificRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -299,7 +310,9 @@ class CheckoutSingleForm extends Component
                 }
             }
 
-            $this->order->shop_id = $this->item->shop_id;
+            // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
+            
+            $this->order->shop_id = $this->items->first()->shop_id;
             $this->order->user_id = auth()->user()->id ?? null;
             $this->order->type = OrderTypeEnum::subscription()->value; // only subscription for now...
 
@@ -345,18 +358,12 @@ class CheckoutSingleForm extends Component
                 }
             }
 
-
-            // $this->order->base_price = $this->item->getBasePrice();
-            // $this->order->discount_amount = $this->item->getBasePrice() - $this->item->getDiscountedPrice();
-            // $this->order->subtotal_price = $this->item->getDiscountedPrice(); // TODO: Fix this!
-            // $this->order->total_price = $this->item->getTotalPrice(); // TODO: This should be totalPrice (with taxes and stuff...but since we don't have Tax system working, let it stay like this for now)
-
             $this->order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $this->order->shipping_cost = 0;
             $this->order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
 
             /*
-             * Invoicing data for SUSCRIPTION orders
+             * Invoicing data for SUBSCRIPTIONS or INCREMENTAL orders
              */
             $this->order->number_of_invoices = -1; // 'unlimited' for subscriptions
             $this->order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
@@ -373,33 +380,37 @@ class CheckoutSingleForm extends Component
             /*
              * Create OrderItem
              */
-            $order_item = new OrderItem();
-            $order_item->order_id = $this->order->id;
-            $order_item->subject_type = $this->item::class;
-            $order_item->subject_id = $this->item->id;
-            $order_item->title = method_exists($this->item, 'hasMain') && $this->item->hasMain() ? $this->item->main->title : $this->item->title; // TODO: Think about changing Product `name` col to `title`, it's more universal!
-            $order_item->excerpt = method_exists($this->item, 'hasMain') && $this->item->hasMain() ? $this->item->main->excerpt : $this->item->excerpt;
-            $order_item->variant = method_exists($this->item, 'hasMain') && $this->item->hasMain() ? $this->item->getVariantName(key_by: 'name') : null;
-            $order_item->quantity = 1; // TODO: $this->item->purchase_quantity
-            
-            // Check if $this->item has stock and reduce it if it does
-            if(method_exists($this->item, 'stock')) {
-                // Reduce the stock quantity of an $this->item
-                $serial_numbers = $this->item->reduceStock();
+            foreach($this->items as $item) {
+                $order_item = new OrderItem();
+                $order_item->order_id = $this->order->id;
+                $order_item->subject_type = $item::class;
+                $order_item->subject_id = $item->id;
+                $order_item->title = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->title : $item->title; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+                $order_item->excerpt = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->excerpt : $item->excerpt;
+                $order_item->variant = method_exists($item, 'hasMain') && $item->hasMain() ? $item->getVariantName(key_by: 'name') : null;
+                $order_item->quantity = !empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
+                
+                // Check if $item has stock and reduce it if it does
+                if(method_exists($item, 'stock')) {
+                    // Reduce the stock quantity of an $item
+                    $serial_numbers = $item->reduceStock();
 
-                // Serial Numbers only work for Simple Products. TODO: Make Product Variations support serial numbers!
-                if($this->item->use_serial) {
-                    $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $this->item uses serials
+                    // Serial Numbers only work for Simple Products. 
+                    // TODO: Make Product Variations support serial numbers!
+                    if($item->use_serial) {
+                        $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
+                    }
                 }
+                
+                $order_item->base_price = $item->base_price;
+                $order_item->discount_amount = ($item->base_price - $item->total_price);
+                $order_item->subtotal_price = $item->total_price; // TODO: This should use subtotal_price instead of total_price
+                $order_item->total_price = $item->total_price;
+                $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
+
+                $order_item->save();
             }
             
-            $order_item->base_price = $this->item->base_price;
-            $order_item->discount_amount = ($this->item->base_price - $this->item->total_price);
-            $order_item->subtotal_price = $this->item->total_price; // TODO: This should use subtotal_price instead of total_price
-            $order_item->total_price = $this->item->total_price;
-            $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
-
-            $order_item->save();
 
             
             /*
@@ -425,10 +436,20 @@ class CheckoutSingleForm extends Component
             $invoice->billing_city = $this->order->billing_city;
             $invoice->billing_zip = $this->order->billing_zip;
 
-            $invoice->base_price = $this->item->getBasePrice();
-            $invoice->discount_amount = $this->item->getBasePrice() - $this->item->getTotalPrice();
-            $invoice->subtotal_price = $this->item->getTotalPrice();
-            $invoice->total_price = $this->item->getTotalPrice();
+            if($this->fromCart) {
+                // Take invoice totals from Cart
+                $invoice->base_price = CartService::getOriginalPrice();
+                $invoice->discount_amount = CartService::getDiscountAmount();
+                $invoice->subtotal_price = CartService::getSubtotalPrice();
+                $invoice->total_price = CartService::getSubtotalPrice(); // should be TotalPrice in future...
+            } else {
+                // Take invoice totals from first element in $items
+                $invoice->base_price = $this->items->first()->getBasePrice();
+                $invoice->discount_amount = $this->items->first()->getBasePrice() - $this->item->getTotalPrice();
+                $invoice->subtotal_price = $this->items->first()->getTotalPrice();
+                $invoice->total_price = $this->items->first()->getTotalPrice();
+            }
+            
 
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
@@ -460,7 +481,7 @@ class CheckoutSingleForm extends Component
     protected function executePayment(mixed $request, $invoice_id) {
         $invoice = Invoice::with('payment_method')->find($invoice_id);
         $invoice->load('payment_method');
-        dd($invoice);
+
         if($invoice->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
         } else if($invoice->payment_method->gateway === 'paysera') {

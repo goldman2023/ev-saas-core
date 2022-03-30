@@ -448,6 +448,12 @@ class EVCheckoutController extends Controller
             $data = json_decode(base64_decode(request()->data ?? null));
             
             $models = collect(app($data->class)->findOrFail($data->id));
+            // TODO: Add purchase_quantity to $model here, based on $qty
+        }
+
+        // If models are empty, redirect to Homepage
+        if($models->isEmpty()) {
+            return redirect()->route('home');
         }
   
         return view('frontend.checkout-single', compact('models', 'from_cart'));
@@ -460,6 +466,8 @@ class EVCheckoutController extends Controller
         } else {
             // Redirect non-logged user to order-received (like Thank you page)
         }
+
+        
 
         return view('frontend.order-received', compact('order'));
     }
