@@ -238,7 +238,7 @@
                 <!-- Logo -->
                 <a class="navbar-brand" href="#">
                     @php
-                        $header_logo = get_setting('header_logo');
+                        $header_logo = get_setting('site_logo');
                     @endphp
                     @if ($header_logo != null)
                         <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}"

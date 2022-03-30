@@ -7,9 +7,9 @@
         <div class="row align-items-md-center text-center">
             <div class="col-md-3 mb-4 mb-md-0">
                 <a href="#" aria-label="{{ get_site_name() }}">
-                    @if (get_setting('header_logo') != null)
-                        <img class="lazyload w-50" src="{{ uploaded_asset(get_setting('header_logo')) }}"
-                            data-src="{{ uploaded_asset(get_setting('header_logo')) }}" alt="{{ get_site_name() }}"
+                    @if (get_setting('site_logo') != null)
+                        <img class="lazyload w-50" src="{{ uploaded_asset(get_tenant_setting('site_logo')) }}"
+                            data-src="{{ uploaded_asset(get_setting('site_logo')) }}" alt="{{ get_site_name() }}"
                             height="30">
                     @else
                         <img class="lazyload w-50" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"

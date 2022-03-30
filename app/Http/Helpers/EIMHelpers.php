@@ -77,7 +77,7 @@ function get_site_logo()
         $company = config('ev-saas.company');
         $logo = uploaded_asset($company->logo);
     } else {
-        $logo = get_setting('header_logo');
+        $logo = get_setting('site_logo');
     }
 
     return $logo;

@@ -8,7 +8,7 @@
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <a href="{{ route('home') }}">
             <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-8 w-auto sm:h-10"
-                :image="get_tenant_setting('header_logo')">
+                :image="get_tenant_setting('site_logo')">
             </x-tenant.system.image>
           </a>
         </div>
@@ -43,7 +43,7 @@
               <button @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'});" type="button" class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                 @svg('heroicon-o-shopping-cart', ['class' => 'h-6 w-6'])
               </button>
-            
+
               <a href="{{ route('dashboard') }}" class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                   {{ translate('Dashboard') }}
               </a>
