@@ -10,7 +10,7 @@ class ActivityLog extends Component
     public $acitivites;
 
     public function mount() {
-        $this->acitivites = Activity::latest()->take(10)->get();
+        $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
 
     }
 
