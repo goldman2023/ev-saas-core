@@ -153,9 +153,9 @@
 
                             <div class="text-sm">
                                 {{-- TODO: Create password resets --}}
-                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                {{-- <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
                                 {{ translate('Forgot your password?') }}
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
 
