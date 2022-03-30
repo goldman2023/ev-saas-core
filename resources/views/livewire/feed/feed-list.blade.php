@@ -18,7 +18,7 @@
                     class="@if($type == 'recent') text-gray-900 @else text-gray-500 hover:text-gray-700 @endif  rounded-l-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
                     <span>Recent</span>
                     @if($type == 'recent')
-                        <span aria-hidden="true" class="bg-rose-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                        <span aria-hidden="true" class="bg-indigo absolute inset-x-0 bottom-0 h-0.5"></span>
                     @else
                         <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
                     @endif
@@ -28,7 +28,7 @@
                     class="@if($type == 'trending') text-gray-900 @else text-gray-500 hover:text-gray-70 @endif group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
                     <span>{{ translate('Trending') }}</span>
                     @if($type == 'trending')
-                        <span aria-hidden="true" class="bg-rose-500 absolute inset-x-0 bottom-0 h-0.5"></span>
+                        <span aria-hidden="true" class="bg-indigo absolute inset-x-0 bottom-0 h-0.5"></span>
                     @else
                         <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
                     @endif
