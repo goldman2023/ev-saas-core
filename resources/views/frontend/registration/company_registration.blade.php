@@ -112,7 +112,6 @@
             <div class="w-100 pt-3 mt-lg-7 mb-7 text-white bg-dark" style="border-radius: 10px;">
                 <!-- Form -->
                 <h2 class="h2 text-white pl-3"> {{ translate('Shop Registration Form') }} </h2>
-                <x-company.company-registration-form> </x-company.company-registration-form>
                 <!-- End Form -->
             </div>
         </div>
