@@ -3,8 +3,7 @@
 @section('content')
 <div class="">
 
-    <section class="relative bg-white overflow-hidden"
-        style="">
+    <section class="relative bg-white overflow-hidden" style="">
         <div class="bg-transparent">
 
 
@@ -104,8 +103,9 @@
 
                             <p class="text-sm text-coolGray-400 font-medium text-center">
                                 <span>{{ translate('Already have an account?') }}</span>
-                                <button class="text-blue-500 hover:text-blue-600"  @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
-                                   {{ translate('Sign In') }}
+                                <button class="text-blue-500 hover:text-blue-600"
+                                    @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
+                                    {{ translate('Sign In') }}
                                 </button>
                             </p>
                         </div>
@@ -115,8 +115,7 @@
         </div>
     </section>
 
-    <section class="py-24 bg-transparent overflow-hidden"
-        style="">
+    <section class="py-24 bg-transparent overflow-hidden" style="">
         <div class="container px-4 mx-auto">
             <div class="md:max-w-4xl mb-16 md:mb-20">
                 <span
@@ -145,7 +144,8 @@
                             <h3 class="mb-4 text-xl md:text-2xl leading-tight text-coolGray-900 font-bold">
                                 Interactive real-time knowledge</h3>
                             <p class="text-coolGray-500 font-medium">
-                                Explore interesting topic in your personal feed and connect with experts and mentors in real time via FoxAsk messages and video calls
+                                Explore interesting topic in your personal feed and connect with experts and mentors in
+                                real time via FoxAsk messages and video calls
                             </p>
                         </div>
                     </div>
@@ -197,7 +197,8 @@
                             src="flex-ui-assets/elements/circle3-violet.svg" alt="">
                         <img class="absolute z-10 -right-7 -bottom-8 w-28 md:w-auto text-blue-500"
                             src="flex-ui-assets/elements/dots3-red.svg" alt="">
-                        <img src="https://www.webhuq.com/templates/collabs_team_collaboration_website_12145/assets/img/feature-img1.png" alt="">
+                        <img src="https://www.webhuq.com/templates/collabs_team_collaboration_website_12145/assets/img/feature-img1.png"
+                            alt="">
                     </div>
                 </div>
             </div>
@@ -224,15 +225,22 @@
                             </li>
                             <li class="flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/cta/checkbox-blue.svg" alt="">
-                                <span class="text-lg md:text-xl font-heading text-coolGray-500">Connect with likeminded
-                                    people about any topic</span>
+                                <span class="text-lg md:text-xl font-heading text-coolGray-500">
+                                    Connect with likeminded people about any topic</span>
                             </li>
                         </ul>
-                        <div class="flex flex-wrap items-center"><a
-                                class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto mb-2 md:mb-0 md:mr-4 md:w-auto text-lg leading-7 text-coolGray-800 bg-white hover:bg-coolGray-100 font-medium focus:ring-2 focus:ring-coolGray-200 focus:ring-opacity-50 border border-coolGray-200 border border-coolGray-100 rounded-md shadow-sm"
-                                href="#">Become a mentor</a><a
-                                class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto text-lg leading-7 text-blue-50 bg-blue-500 hover:bg-blue-600 font-medium focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 border border-transparent rounded-md shadow-sm"
-                                href="#">Join FoxAsk</a></div>
+                        <div class="flex flex-wrap items-center">
+                            <a class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto mb-2 md:mb-0 md:mr-4 md:w-auto text-lg leading-7 text-coolGray-800 bg-white hover:bg-coolGray-100 font-medium focus:ring-2 focus:ring-coolGray-200 focus:ring-opacity-50 border border-coolGray-200 border border-coolGray-100 rounded-md shadow-sm"
+                                href="{{ route('user.registration') }}">
+                                {{ translate('Become a mentor') }}
+                            </a>
+
+                            <a class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto text-lg leading-7 text-blue-50 bg-blue-500 hover:bg-blue-600 font-medium focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 border border-transparent rounded-md shadow-sm"
+                                href="{{ route('user.registration') }}">
+                                {{ translate('Join') }} {{ get_site_name()
+                                }}
+                                </a>
+                        </div>
                     </div>
                 </div>
                 <div class="w-full md:w-1/2 px-4">
