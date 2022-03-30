@@ -72,12 +72,13 @@ function get_site_name()
 /* TODO: Make this tenant aware and also an option for single vendor */
 function get_site_logo()
 {
+    $logo = IMG::get(get_setting('site_logo'));
+
+    // dd($logo);
+
     /* TODO: make this single/multi tenant aware */
     if (get_vendor_mode() === 'single') {
-        $company = config('ev-saas.company');
-        $logo = uploaded_asset($company->logo);
     } else {
-        $logo = get_setting('site_logo');
     }
 
     return $logo;

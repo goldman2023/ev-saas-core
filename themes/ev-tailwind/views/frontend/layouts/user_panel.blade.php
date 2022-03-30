@@ -22,7 +22,7 @@
           From: "opacity-100"
           To: "opacity-0"
       -->
-        <div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
+        <div class="hidden fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden="true"></div>
 
         <!--
         Off-canvas menu, show/hide based on off-canvas menu state.

@@ -8,7 +8,7 @@
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">
                         <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-8 w-auto sm:h-10"
-                            :image="get_tenant_setting('site_logo')">
+                            :image="get_site_logo()">
                         </x-tenant.system.image>
                     </a>
                 </div>
@@ -86,7 +86,7 @@
                                 class="block lg:hidden h-8 w-auto" :image="get_setting('header_logo')">
                             </x-tenant.system.image> --}}
                             <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-8 w-auto"
-                                :image="get_tenant_setting('site_logo')">
+                                :image="get_site_logo()">
                             </x-tenant.system.image>
                         </div>
                         <div class="-mr-2">

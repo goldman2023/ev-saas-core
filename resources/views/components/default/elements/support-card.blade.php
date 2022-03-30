@@ -3,7 +3,7 @@
         <div class="flex-1 flex flex-col p-8">
             <x-tenant.system.image alt="{{ get_site_name() }} logo"
                 class="w-32 flex-shrink-0 mx-auto rounded-full object-scale-down"
-                :image="get_tenant_setting('site_logo')">
+                :image="get_site_logo()">
             </x-tenant.system.image>
             <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->name }}</h3>
             <dl class="mt-1 flex-grow flex flex-col justify-between">

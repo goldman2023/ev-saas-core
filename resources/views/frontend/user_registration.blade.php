@@ -32,7 +32,7 @@
         <div class="mx-auto w-full max-w-sm lg:w-96">
             <div>
                 <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-12 w-auto"
-                    :image="get_tenant_setting('header_logo')">
+                    :image="get_site_logo()">
                 </x-tenant.system.image>
                 <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ translate('Sign up') }}</h2>
                 <p class=" mt-2 text-sm text-gray-600">
@@ -201,7 +201,7 @@
                 <div class="flex items-center mt-8 ng-tns-c281-34">
                     <div class="flex flex-0 items-center -space-x-1.5 ng-tns-c281-34">
                         @for($i = 0; $i < 4; $i++) <img
-                            src="http://angular-material.fusetheme.com/assets/images/avatars/male-09.jpg"
+                            src="/images/male-09.jpeg"
                             class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ng-tns-c281-34">
                             @endfor
                     </div>

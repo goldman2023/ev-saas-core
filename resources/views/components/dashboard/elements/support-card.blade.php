@@ -25,7 +25,7 @@
             <div class="relative w-auto inline-block mb-3">
 
                 <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-10 rounded-full object-cover"
-                    :image="get_tenant_setting('site_logo')">
+                    :image="get_site_logo()">
                 </x-tenant.system.image>
                 <span
                     class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>
