@@ -91,7 +91,7 @@
                                 <div class="flex-1 h-px w-24 bg-coolGray-100"></div>
                             </div>
 
-                            <label class="mb-4 flex flex-col w-full">
+                            <label class="hidden mb-4 flex flex-col w-full">
                                 <span class="mb-1 text-coolGray-800 font-medium">Email</span>
                                 <input
                                     class="py-3 px-3 leading-5 w-full text-coolGray-400 font-normal border border-coolGray-200 outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg shadow-sm"

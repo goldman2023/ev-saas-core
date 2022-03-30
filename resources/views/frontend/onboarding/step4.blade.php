@@ -23,7 +23,7 @@
                             succesfully joined') }} {{ get_site_name() }}
                             <span class="emoji ml-2">🎉</span>
                         </p>
-                        <p class="mt-2 text-base text-gray-500">{{ translate('Your profile sucesfully created') }}</p>
+                        <p class="mt-6 text-base text-gray-500">{{ translate('Your profile sucesfully created') }}</p>
 
 
                     </div>

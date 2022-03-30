@@ -133,11 +133,11 @@
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Email') }}
-                                    <span class="text-danger relative top-[-2px]">*</span>
+                                    {{-- <span class="text-danger relative top-[-2px]">*</span> --}}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="email" class="form-standard @error('me.email') is-invalid @enderror"
+                                    <input disabled type="email" class="opacity-50 form-standard @error('me.email') is-invalid @enderror"
                                         placeholder="{{ translate('My Email') }}" wire:model.defer="me.email" />
 
                                     <x-system.invalid-msg field="me.email"></x-system.invalid-msg>
