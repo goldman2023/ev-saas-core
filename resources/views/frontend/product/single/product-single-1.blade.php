@@ -86,7 +86,7 @@
                 </div>
 
                 <p class="text-gray-500 mt-6">
-                    {!! $product->getTranslation('description') !!}
+                    {!! $product->getTranslation('excerpt') !!}
                 </p>
                 <div>
                     <x-default.products.single.product-checkout-card :product="$product">

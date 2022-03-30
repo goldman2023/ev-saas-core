@@ -28,7 +28,7 @@ class EVCheckoutController extends Controller
         $total_items_count = CartService::getTotalItemsCount();
 
         $originalPrice = CartService::getOriginalPrice();
-        $discountAmount = CartService::getdiscountAmount();
+        $discountAmount = CartService::getDiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
         return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'));
@@ -47,7 +47,7 @@ class EVCheckoutController extends Controller
         }
 
         $originalPrice = CartService::getOriginalPrice();
-        $discountAmount = CartService::getdiscountAmount();
+        $discountAmount = CartService::getDiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
         $same_billing_shipping = !empty($request->input('same_billing_shipping'));
@@ -439,18 +439,18 @@ class EVCheckoutController extends Controller
     }
 
     public function single() {
-        // TODO: Add support for buying multiple items
-        try {
+        $from_cart = false;
+
+        if(empty(request()->data)) {
+            $models = CartService::getItems();
+            $from_cart = true;
+        } else {
             $data = json_decode(base64_decode(request()->data ?? null));
             
-            $model = app($data->class)->findOrFail($data->id);
-        } catch(\Throwable $e) {
-            dd($e);
+            $models = collect(app($data->class)->findOrFail($data->id));
         }
-    
-        session(['style_framework' => 'tailwind']);
-        
-        return view('frontend.checkout-single', compact('model'));
+  
+        return view('frontend.checkout-single', compact('models', 'from_cart'));
     }
 
     public function orderReceived(Request $request, Order $order)

@@ -134,6 +134,12 @@
             .form-radio-standard {
                 @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 cursor-pointer;
             }
+            .tw-input-main {
+                @apply w-full py-[8px] px-[12px] h-[36px] text-14 rounded-[6px] leading-[1.5] bg-white border-none text-gray-900;
+            }
+            .tw-input-checkbox {
+                @apply h-4 w-4 border-gray-300 rounded text-primary focus:ring-primary cursor-pointer;
+            }
             .is-invalid {
                 @apply border-danger;
             }
@@ -166,14 +172,7 @@
 </head>
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
-        <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
-
-        <!-- Page Content -->
-        <main>
-            @yield('content')
-        </main>
-
-        <x-tailwind-ui.footers.footer></x-tailwind-ui.headers.header>
+        @yield('content')
     </div>
 
     <x-default.footers.app-bar>

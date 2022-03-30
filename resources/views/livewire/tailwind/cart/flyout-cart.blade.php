@@ -17,7 +17,7 @@
             <!-- Cart Header -->
             <h3 class="text-20 mb-3 pb-2 border-b flex items-center">
                 <span>{{ translate('Cart') }}</span>
-                <span class="badge bg-orange-300 text-orange-800 flex items-center px-2 py-1 ml-3 text-12 text-warning">
+                <span class="badge-info flex items-center px-2 py-1 ml-3 text-12 text-warning">
                     @svg('heroicon-s-shopping-bag', ['class' => 'w-[14px] h-[14px] mr-2'])
                     {{ str_replace('%x%', $totalItemsCount, translate('You have %x% item(s) in your cart.')) }}
                 </span>
@@ -31,7 +31,7 @@
             </div>
 
             <!-- Cart Items -->
-            <div class="c-flyout-cart__items flex flex-col mb-1 grow">
+            <div class="flex flex-col mb-1 grow">
                 @if($items->isNotEmpty())
                     @foreach($items as $item)
                         @php
@@ -41,7 +41,7 @@
                         @endphp
 
                         <div id="cart-item-{{ $item->id }}-{{ str_replace('\\','-',$item::class) }}"
-                             class="cart-item card p-3 flex items-start mb-3"
+                             class="cart-item border shadow-lg border-gray-200 rounded p-3 flex items-start mb-3"
                              :class="{ 'pointer-events-none': processing }"
                              x-data="{
                                 qty: {{ $item->purchase_quantity }},
@@ -76,32 +76,32 @@
                                     }
                                 });"
                         >
-                            <div class="row full-row">
+                            <div class="w-full grid grid-cols-12">
 
-                                <div class="c-flyout-cart__item-thumb col-3">
-                                    <img src="{{ $item->getThumbnail(['w'=>100,'h'=>100]) }}" class="border rounded-lg fit-cover" />
+                                <div class="c-flyout-cart__item-thumb col-span-3">
+                                    <img src="{{ $item->getThumbnail(['w'=>100,'h'=>100]) }}" class="border w-[100px] h-[100px] rounded-lg fit-cover" />
                                 </div>
 
-                                <div class="flex flex-col col-6 px-0 pr-3 mt-1">
-                                    <strong class="fw-600 text-16 w-full clamp inline-block mb-0" data-clamp-lines="1" style="line-height: 1.2;">{{ $name }}</strong>
+                                <div class="flex flex-col col-span-6 pl-3 pr-3 mt-1">
+                                    <strong class="text-gray-800 text-16 w-full inline-block mb-1 line-clamp-1" style="line-height: 1.2;">{{ $name }}</strong>
 
                                     @if(!$hasVariations)
-                                        <span class="clamp text-12 mb-2" data-clamp-lines="1">{{ $excerpt }}</span>
+                                        <span class="text-gray-500 text-12 line-clamp-2">{{ $excerpt }}</span>
                                     @else
-                                        <ul class="c-flyout-cart__item-variations-name-list d-flex mb-0">
+                                        <ul class="c-flyout-cart__item-variations-name-list flex mb-0">
                                             @foreach($item->getVariantName(as_collection: true) as $name)
-                                                <li>{{ $name }}</li>
+                                                <li class="line-clamp-1">{{ $name }}</li>
                                             @endforeach
                                         </ul>
                                     @endif
 
-                                    <div class="bg-danger mr-auto square-18 rounded d-flex align-items-center justify-content-center pointer mt-auto"
+                                    <div class="bg-danger mr-auto w-[18px] h-[18px] rounded flex items-center justify-center cursor-pointer mt-auto mb-1"
                                          @click="$wire.removeFromCart(model_id, model_type)">
-                                        @svg('heroicon-o-x', ['class' => 'square-12 text-white'])
+                                        @svg('heroicon-o-x', ['class' => 'w-[12px] h-[12px] text-white'])
                                     </div>
                                 </div>
 
-                                <div class="flex flex-col items-center justify-center col-3 pl-0 pr-3 ">
+                                <div class="flex flex-col items-center justify-center col-span-3 pl-0 pr-3 pt-3">
                                     <strong class="font-semibold text-14 text-sky-600 mb-1" >
                                         <span class="spinner-border text-sky-600 text-10 w-[16px] h-[16px] hidden" > </span>
                                         <span >{{ \FX::formatPrice($item->purchase_quantity * $item->total_price) }}</span>
@@ -153,7 +153,7 @@
                         <strong class="text-dark">{{ $subtotalPrice['display'] }}</strong>
                     </div>
 
-                    <a href="{{ route('checkout') }}" class="btn mt-3 bg-sky-600 text-white">
+                    <a href="{{ route('checkout.single.page') }}" class="btn mt-3 bg-sky-600 text-white">
                         {{ translate('Checkout') }}
                     </a>
                 </div>
