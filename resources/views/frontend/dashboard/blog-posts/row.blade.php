@@ -5,7 +5,7 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    {{ $row->getTranslation('title') }}
+    {{ $row->getTranslation('name') }}
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
