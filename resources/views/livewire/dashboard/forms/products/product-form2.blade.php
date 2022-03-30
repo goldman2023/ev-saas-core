@@ -20,7 +20,7 @@
         allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
         discount_type: @js($product->discount_type),
         tax_type: @js($product->tax_type),
-        description: @js($product->description),
+        description: @entangle('product.description').defer,
         attributes: @js($attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
         selected_categories: @js($selected_categories),
@@ -119,11 +119,11 @@
                                     {{ translate('Description') }}
                                 </label>
                 
-                                {{-- <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <x-dashboard.form.froala field="description" id="product-description-wysiwyg"></x-dashboard.form.froala>
                                 
                                     <x-system.invalid-msg class="w-full" field="product.description"></x-system.invalid-msg>
-                                </div> --}}
+                                </div>
                             </div>
                             <!-- END Description -->
                         </div>
