@@ -8,10 +8,10 @@
                 heightMax: 800,
                 events: {
                     'initialized': function () {
-                        this.html.insert(content);
+                        this.html.insert({{ $field }});
                     },
                     'contentChanged': function () {
-                        content = this.html.get(true);
+                        {{ $field }} = this.html.get(true);
                     }
                 }
             });

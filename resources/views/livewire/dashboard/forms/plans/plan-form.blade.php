@@ -8,7 +8,7 @@
     yearly_discount_type: @js($plan->yearly_discount_type),
     tax_type: @js($plan->tax_type),
     features: @js($plan->features),
-    content: @js($plan->content),
+    content: @entangle('plan.content').defer,
     selected_categories: @js($selected_categories)
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
@@ -208,11 +208,11 @@
                                 {{ translate('Content') }}
                             </label>
             
-                            {{-- <div class="mt-1 sm:mt-0 sm:col-span-3">
+                            <div class="mt-1 sm:mt-0 sm:col-span-3">
                                 <x-dashboard.form.froala field="content" id="plan-content-wysiwyg"></x-dashboard.form.froala>
                             
                                 <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
-                            </div> --}}
+                            </div>
                         </div>
                         <!-- END Content -->
                     </div>

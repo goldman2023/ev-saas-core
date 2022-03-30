@@ -62,7 +62,7 @@ class BlogPostForm extends Component
             'blogPost.subscription_only' => [],
             'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'blogPost.excerpt' => 'required|min:10',
-            'blogPost.content' => 'nullable', //'required|min:10',
+            'blogPost.content' => 'required|min:10',
             'blogPost.gallery' => [''],
             'blogPost.meta_title' => [''],
             'blogPost.meta_keywords' => [''],

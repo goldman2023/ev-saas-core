@@ -10,7 +10,7 @@
     yearly_discount_type: @js($blogPost->yearly_discount_type),
     tax_type: @js($blogPost->tax_type),
     features: @js($blogPost->features), --}}
-    content: @js($blogPost->content),
+    content: @entangle('blogPost.content').defer,
     selected_categories: @js($selected_categories),
     onSave() {
         $wire.set('blogPost.thumbnail', this.thumbnail.id, true);
@@ -223,9 +223,9 @@
                             </label>
             
                             <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                {{-- <x-dashboard.form.froala field="content" id="blogPost-content-wysiwyg"></x-dashboard.form.froala>
+                                <x-dashboard.form.froala field="content" id="blogPost-content-wysiwyg"></x-dashboard.form.froala>
                             
-                                <x-system.invalid-msg class="w-full" field="blogPost.content"></x-system.invalid-msg> --}}
+                                <x-system.invalid-msg class="w-full" field="blogPost.content"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Content -->
