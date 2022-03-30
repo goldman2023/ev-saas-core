@@ -7,7 +7,7 @@
 </div>
 <section class="container py-10">
     <!-- Features Section -->
-    <div class="grid grid-cols-3 space-2 gap-20">
+    <div class="grid grid-cols-3 space-2 gap-10">
 
         <div class="col-span-2">
             <livewire:dashboard.forms.settings.my-account-form :onboarding="true">

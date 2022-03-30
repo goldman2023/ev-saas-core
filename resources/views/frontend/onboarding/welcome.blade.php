@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<livewire:onboarding.elements.steps step="1">
+<livewire:onboarding.elements.steps current_step="1">
 </livewire:onboarding.elements.steps>
 <section class="container">
     <!-- Features Section -->

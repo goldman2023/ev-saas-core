@@ -117,6 +117,10 @@ class MyAccountForm extends Component
         $this->me->save();
 
         $this->inform(translate('Basic information successfully updated!'), '', 'success');
+        if($this->onboarding) {
+            return redirect()->route('onboarding.step3');
+
+        }
     }
 
     public function saveEmail() {
