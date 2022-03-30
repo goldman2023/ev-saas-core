@@ -107,7 +107,7 @@
             </div>
             <div class="w-full md:max-w-[400px] ">
                 <h1 class="font-semibold text-20 ">{{ translate('Payment information') }}</h1>
-                <livewire:forms.checkout-single-form :item="$model"></livewire:forms.checkout-single-form>
+                <livewire:forms.checkout-single-form :items="$models" :from-cart="$from_cart"></livewire:forms.checkout-single-form>
             </div>
         </div>
         

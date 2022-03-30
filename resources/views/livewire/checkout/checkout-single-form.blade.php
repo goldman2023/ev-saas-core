@@ -1,4 +1,5 @@
 <div class="mt-4" x-data="{
+    items: @js($items),
     manual_mode_billing: @js($manual_mode_billing),
     manual_mode_shipping: @js($manual_mode_shipping),
     show_addresses: @js($show_addresses),
@@ -7,7 +8,7 @@
     selected_shipping_address_id: Number(@js($selected_shipping_address_id)),
     same_billing_shipping: @js($order->same_billing_shipping ? true : false),
     buyers_consent: @js($order->buyers_consent ? true : false),
-    available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsGateway()),
+    available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsForSelect()),
     selected_payment_method: @js($this->selected_payment_method),
     phoneNumbers: @js($order->phone_numbers),
 
@@ -33,7 +34,7 @@ x-cloak
                 class="form-standard @error('order.email') is-invalid @enderror"       
         />
 
-        <x-system.invalid-msg field="order.email" framework="tailwind"></x-system.invalid-msg>
+        <x-system.invalid-msg field="order.email" ></x-system.invalid-msg>
     </div>
     <!-- END Email -->
 
@@ -63,7 +64,7 @@ x-cloak
                     />
                 </div>
             </div>
-            <x-system.invalid-msg field="account_password" framework="tailwind"></x-system.invalid-msg>
+            <x-system.invalid-msg field="account_password" ></x-system.invalid-msg>
         </div>
     @endguest
 
@@ -81,7 +82,7 @@ x-cloak
                     class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
             />
 
-            <x-system.invalid-msg field="order.billing_first_name" framework="tailwind"></x-system.invalid-msg>
+            <x-system.invalid-msg field="order.billing_first_name" ></x-system.invalid-msg>
         </div>
         <div class="">
             <label for="order.billing_last_name" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
@@ -95,7 +96,7 @@ x-cloak
                     class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
             />
 
-            <x-system.invalid-msg field="order.billing_last_name" framework="tailwind"></x-system.invalid-msg>
+            <x-system.invalid-msg field="order.billing_last_name" ></x-system.invalid-msg>
         </div>
     </div>
     <!-- END First & Last name -->
@@ -113,7 +114,7 @@ x-cloak
                 class="form-standard @error('order.billing_company') is-invalid @enderror"       
         />
 
-        <x-system.invalid-msg field="order.billing_company" framework="tailwind"></x-system.invalid-msg>
+        <x-system.invalid-msg field="order.billing_company" ></x-system.invalid-msg>
     </div>
     <!-- END Company -->
 
@@ -164,7 +165,7 @@ x-cloak
         </template>
 
 
-        <x-system.invalid-msg field="order.phone_numbers" framework="tailwind"></x-system.invalid-msg> --}}
+        <x-system.invalid-msg field="order.phone_numbers" ></x-system.invalid-msg> --}}
     </div>
     <!-- END Phones -->
 
@@ -245,7 +246,7 @@ x-cloak
                             class="form-standard @error('order.billing_address') is-invalid @enderror"       
                     />
 
-                    <x-system.invalid-msg field="order.billing_address" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_address" ></x-system.invalid-msg>
                 </div>
 
                 <div class="">
@@ -260,7 +261,7 @@ x-cloak
                             class="form-standard @error('order.billing_country') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.billing_country" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_country" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -280,7 +281,7 @@ x-cloak
                             class="form-standard @error('order.billing_state') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.billing_state" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_state" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -296,7 +297,7 @@ x-cloak
                             class="form-standard @error('order.billing_city') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.billing_city" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_city" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -312,7 +313,7 @@ x-cloak
                             class="form-standard @error('order.billing_zip') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.billing_zip" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_zip" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -416,7 +417,7 @@ x-cloak
                             class="form-standard @error('order.shipping_address') is-invalid @enderror"       
                     />
 
-                    <x-system.invalid-msg field="order.shipping_address" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_address" ></x-system.invalid-msg>
                 </div>
 
                 <div class="">
@@ -431,7 +432,7 @@ x-cloak
                             class="form-standard @error('order.shipping_country') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.shipping_country" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_country" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -451,7 +452,7 @@ x-cloak
                             class="form-standard @error('order.shipping_state') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.shipping_state" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_state" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -467,7 +468,7 @@ x-cloak
                             class="form-standard @error('order.shipping_city') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.shipping_city" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_city" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
 
@@ -483,7 +484,7 @@ x-cloak
                             class="form-standard @error('order.shipping_zip') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.shipping_zip" framework="tailwind"></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_zip" ></x-system.invalid-msg>
                 </div>
                 <!-- End Col -->
             </div>
@@ -502,18 +503,33 @@ x-cloak
         {{-- <h4 class="text-14 font-semibold" >
             {{ translate('Shipping address') }}
         </h4> --}}
-        <fieldset class="w-full mt-2 grid grid-cols-1 gap-y-6 sm:grid-cols-4 sm:gap-x-4" >
-            <template x-for="payment_method_name in available_payment_methods">
-                <label class="relative flex items-center bg-white rounded-lg border shadow-sm p-3 cursor-pointer focus:outline-none mb-0" 
-                        :class="{'!border-2 !border-indigo-500 ':payment_method_name === selected_payment_method  , 'border-gray-300':payment_method_name !== selected_payment_method}"
-                        @click="clearErrors(); selected_payment_method = payment_method_name; ">
+        <fieldset class="w-full mt-2 grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-2 md:grid-cols-3" >
+            <template x-for="(payment_method_name, payment_method_gateway) in available_payment_methods">
+                <label class="relative flex flex-col items-center bg-white rounded-lg border shadow-sm p-3 cursor-pointer focus:outline-none mb-0" 
+                    :class="{'!border-2 !border-primary ':payment_method_gateway === selected_payment_method  , 'border-gray-300':payment_method_gateway !== selected_payment_method}"
+                    @click="clearErrors(); selected_payment_method = payment_method_gateway; ">
                     
-                    <img class="img-fluid w-[60px]" x-bind:src="'{{ static_assets_root(path:'images', theme: true) }}/'+payment_method_name.replace('_','-')+'-logo-transparent.png'" alt="SVG" >
+                    <template x-if="payment_method_gateway === 'wire_transfer'">
+                        @svg('lineawesome-university-solid', ['class' => 'w-[60px] h-[60px]'])
+                    </template>
+                    <template x-if="payment_method_gateway === 'paypal'">
+                        @svg('lineawesome-cc-paypal', ['class' => 'w-[60px] h-[60px]'])
+                    </template>
+                    <template x-if="payment_method_gateway === 'stripe'">
+                        @svg('lineawesome-cc-stripe', ['class' => 'w-[60px] h-[60px]'])
+                    </template>
+                    <template x-if="payment_method_gateway === 'paysera'">
+                        @svg('lineawesome-money-bill-wave-solid', ['class' => 'w-[60px] h-[60px]'])
+                    </template>
+
+                    {{-- <img class="img-fluid w-[60px]" x-bind:src="'{{ static_assets_root(path:'images', theme: true) }}/'+payment_method_gateway.replace('_','-')+'-logo-transparent.png'" alt="SVG" > --}}
 
                     {{-- @svg('heroicon-s-check-circle', ['class' => 'h-5 w-5 text-indigo-600 absolute top-[7px] right-[7px]', ':class' => '{\'hidden\': payment_method_name !== selected_payment_method}']) --}}
 
+                    <p class="w-full text-center text-12" x-text="payment_method_name"></p>
+
                     <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"
-                        :class="{ 'border border-indigo-500': (payment_method_name === selected_payment_method), 'border-2 border-transparent': (payment_method_name !==selected_payment_method) }">
+                        :class="{ 'border border-primary': (payment_method_gateway === selected_payment_method), 'border-2 border-transparent': (payment_method_gateway !==selected_payment_method) }">
                     </div>
                 </label>
             </template>
@@ -524,7 +540,7 @@ x-cloak
         <template x-if="selected_payment_method != ''">
             <div class="payment-methods-details w-full mt-3">
                 @foreach(\PaymentMethodsUniversal::getPaymentMethods() as $payment_method)
-                <div class="text-12" :class="{'hidden': selected_payment_method !== '{{ $payment_method->gateway }}'}">
+                <div class="border border-gray-200 rounded-lg shadow text-12 p-3" :class="{'hidden': selected_payment_method !== '{{ $payment_method->gateway }}'}">
                     <div class="w-full">
                         {!! $payment_method->description !!}
                     </div>
@@ -543,7 +559,7 @@ x-cloak
                                         class="form-standard @error('cc_name') is-invalid @enderror"       
                                 />
             
-                                <x-system.invalid-msg field="cc_name" framework="tailwind"></x-system.invalid-msg>
+                                <x-system.invalid-msg field="cc_name" ></x-system.invalid-msg>
                             </div>
             
                             <div class="w-full mb-2">
@@ -558,7 +574,7 @@ x-cloak
                                         class="form-standard @error('cc_number') is-invalid @enderror"       
                                 />
             
-                                <x-system.invalid-msg field="cc_number" framework="tailwind"></x-system.invalid-msg>
+                                <x-system.invalid-msg field="cc_number" ></x-system.invalid-msg>
                             </div>
         
                             <div class="w-full grid grid-cols-2 gap-4">
@@ -594,6 +610,7 @@ x-cloak
                                         <span class="text-red-500 ml-1">*</span>
                                     </label>
                                     <input name="cc_expiration_date"
+                                            type="text"
                                             id="cc_expiration_date"
                                             x-model.defer="cc_expiration_date"
                                             placeholder="MM/YY"
@@ -602,7 +619,7 @@ x-cloak
                                             class="form-standard @error('cc_expiration_date') is-invalid @enderror"       
                                     />
             
-                                    <x-system.invalid-msg field="cc_expiration_date" framework="tailwind"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="cc_expiration_date" ></x-system.invalid-msg>
                                 </div>
             
                                 <div class="">
@@ -620,7 +637,7 @@ x-cloak
                                             class="form-standard @error('cc_cvc') is-invalid @enderror"       
                                     />
                     
-                                    <x-system.invalid-msg field="cc_cvc" framework="tailwind"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="cc_cvc" ></x-system.invalid-msg>
                                 </div>
                                 <!-- End Col -->
                             </div>
@@ -673,7 +690,7 @@ x-cloak
                 </div>
             </div>
 
-            <x-system.invalid-msg field="order.buyers_consent" framework="tailwind"></x-system.invalid-msg>
+            <x-system.invalid-msg field="order.buyers_consent" ></x-system.invalid-msg>
         </div>
         <!-- End Checkbox -->
     </div>

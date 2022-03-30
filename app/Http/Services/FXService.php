@@ -44,7 +44,7 @@ class FXService
     protected function setCurrency()
     {
 
-        $code =  Currency::find(get_setting('system_default_currency'));
+        $code =  get_setting('system_default_currency'); // Already converted to Currency in TenantSettings
 
         if ($code) {
             $code = $code->code;

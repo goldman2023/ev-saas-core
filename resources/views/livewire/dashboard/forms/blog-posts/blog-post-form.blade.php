@@ -54,12 +54,12 @@
                             </label>
             
                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                <input type="text" class="form-standard @error('blogPost.title') is-invalid @enderror"
+                                <input type="text" class="form-standard @error('blogPost.name') is-invalid @enderror"
                                         placeholder="{{ translate('') }}"
                                         {{-- @input="generateURL($($el).val())" --}}
-                                        wire:model.defer="blogPost.title" />
+                                        wire:model.defer="blogPost.name" />
                             
-                                <x-system.invalid-msg field="blogPost.title"></x-system.invalid-msg>
+                                <x-system.invalid-msg field="blogPost.name"></x-system.invalid-msg>
                             </div>
                         </div>
                         <!-- END Title -->
@@ -85,7 +85,7 @@
                         {{-- TODO: Fix this multiple select --}}
                         <div class="w-full" x-show="subscription_only" wire:ignore>
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{
-                                    items: @js(\App\Models\Plan::published()->get()->map(fn($item) => ['id' => $item->id, 'title' => $item->title])->toArray()),
+                                    items: @js(\App\Models\Plan::published()->get()->map(fn($item) => ['id' => $item->id, 'title' => $item->name])->toArray()),
                                     selected_items: selected_plans,
                                     show: false,
                                     multiple: true,

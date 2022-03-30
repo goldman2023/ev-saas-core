@@ -7,6 +7,7 @@ use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Models\Shop;
 use App\Models\ShopSetting;
+use App\Models\TenantSetting;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
 use DB;
@@ -33,18 +34,13 @@ class AppSettingsForm extends Component
 
     protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
-            'basic' => [
+            'general' => [
                 // 'shop.*' => [],
                 'settings.*' => [],
-                'shop.thumbnail' => ['sometimes', 'if_id_exists:App\Models\Upload,id,true'],
-                'shop.cover' => ['sometimes', 'if_id_exists:App\Models\Upload,id,true'],
-                'shop.name' => ['required', 'min:3'],
-                'shop.excerpt' => ['required', 'min:30'],
-                'shop.content' => 'nullable', //['required', 'min:50'],
-                'settings.tagline' => ['required'],
-                'settings.phones' => ['required'],
-                'settings.email' => ['required', ], //'email:rfs,dns'
-                'settings.websites' => ['required'],
+                'settings.site_logo.value' => ['required'],
+                'settings.site_name.value' => ['required'],
+                'settings.site_motto.value' => ['required', ], //'email:rfs,dns'
+                'settings.maintenance_mode.value' => ['required'],
             ],
             'company_info' => [
                 'settings.tax_number' => [''],
@@ -95,7 +91,6 @@ class AppSettingsForm extends Component
     {
         $this->settings = TenantSettings::getAll();
 
-        dd($this->settings);
     }
 
     // public function updatingShop(&$shop, $key) {
@@ -112,6 +107,32 @@ class AppSettingsForm extends Component
     public function render()
     {
         return view('livewire.dashboard.forms.settings.app-settings-form');
+    }
+
+    public function saveGeneral() {
+        $rules = $this->getRuleSet('general');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('General settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save general settings.'), $e->getMessage(), 'fail');
+        }
     }
 
     public function saveBasicInformation() {
@@ -235,23 +256,16 @@ class AppSettingsForm extends Component
      */
     protected function saveSettings($rules) {
         // Save data in settings table
-        $old_settings = $this->shop->settings()->get()->keyBy('setting'); // Get ShopSetting models and key them by their name (aka. `setting` column)
+        $old_settings = TenantSettings::getAll(); // Get TenantSettings models and key them by their name (aka. `setting` column)
 
+        // TenantSettings::castOnSave()
         foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
-            $setting_key = explode('.', $key)[1];
+            $setting_key = explode('.', $key)[1]; // get the part after `settings.`
 
             if(!empty($setting_key) && $setting_key !== '*') {
-                $setting = $old_settings->get($setting_key);
+                TenantSetting::where('setting', $setting_key)
+                    ->update(['value' => TenantSettings::castSettingSave($setting_key, $this->settings[$setting_key])]);
                 
-                // If $setting does not exist in old_settings, create it and save it!!!
-                if(empty($setting)) {
-                    $setting = new ShopSetting();
-                    $setting->shop_id = $this->shop->id;
-                    $setting->setting = $setting_key;
-                } 
-
-                $setting->value = is_array($this->settings[$setting_key]) || is_object($this->settings[$setting_key]) ? json_encode($this->settings[$setting_key]) : $this->settings[$setting_key];
-                $setting->save();
             }
         }
     }

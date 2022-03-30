@@ -26,6 +26,10 @@ class PaymentMethodsUniversalService
         return $this->payment_methods;
     }
 
+    public function getPaymentMethodsForSelect() {
+        return $this->payment_methods->keyBy('gateway')->map(fn($item) => $item->name);
+    }
+
     public function getPaymentMethodsName() {
         return $this->payment_methods->map(fn($item) => $item->name);
     }
