@@ -1,8 +1,13 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<livewire:onboarding.elements.steps current_step="1">
-</livewire:onboarding.elements.steps>
+<div class="col-span-3 bg-gray-100 py-3 mb-6">
+    <div class="container">
+
+        <livewire:onboarding.elements.steps-progress step="1">
+        </livewire:onboarding.elements.steps-progress>
+    </div>
+</div>
 <section class="container">
     <!-- Features Section -->
     <div class="grid grid-cols-3 space-2 gap-20">

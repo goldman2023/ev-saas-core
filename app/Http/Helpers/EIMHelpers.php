@@ -271,3 +271,11 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 
     return $stringKey;
 }
+
+function get_public_user_count() {
+    $users = User::count();
+    if($users < 50) {
+        $users = 50;
+    }
+    return ($users);
+}

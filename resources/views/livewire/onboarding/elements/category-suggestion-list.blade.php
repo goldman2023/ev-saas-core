@@ -2,9 +2,9 @@
     <div class="pb-20">
         <!-- This example requires Tailwind CSS v2.0+ -->
         <fieldset class="mb-6">
-            <legend class="block text-base font-medium text-gray-900">{{ translate('Select your interests') }}</legend>
+            <legend class="block text-2xl font-medium mb-6 text-gray-900">{{ translate('Select your interests') }}</legend>
 
-            <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+            <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
                 @foreach($categories as $category)
                 <!--
         Checked: "border-transparent", Not Checked: "border-gray-300"

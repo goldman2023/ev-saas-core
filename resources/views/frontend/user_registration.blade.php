@@ -172,41 +172,42 @@
     </div>
     <div class="hidden lg:block relative w-0 flex-1">
         <div
-            class="relative hidden md:flex flex-auto items-center justify-center h-full p-16 lg:px-20 overflow-hidden bg-gray-800 dark:border-l ng-tns-c281-34">
+            class="relative hidden md:flex flex-auto items-center justify-center h-full p-16 lg:px-20 overflow-hidden bg-gray-800 dark:border-l ">
             <svg viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice"
-                xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 pointer-events-none ng-tns-c281-34">
-                <g fill="none" stroke="currentColor" stroke-width="100" class="text-gray-700 opacity-25 ng-tns-c281-34">
-                    <circle r="234" cx="196" cy="23" class="ng-tns-c281-34"></circle>
-                    <circle r="234" cx="790" cy="491" class="ng-tns-c281-34"></circle>
+                xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 pointer-events-none ">
+                <g fill="none" stroke="currentColor" stroke-width="100" class="text-gray-700 opacity-25 ">
+                    <circle r="234" cx="196" cy="23" class=""></circle>
+                    <circle r="234" cx="790" cy="491" class=""></circle>
                 </g>
             </svg><svg viewBox="0 0 220 192" width="220" height="192" fill="none"
-                class="absolute -top-16 -right-16 text-gray-700 ng-tns-c281-34">
-                <defs class="ng-tns-c281-34">
+                class="absolute -top-16 -right-16 text-gray-700 ">
+                <defs class="">
                     <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
-                        patternUnits="userSpaceOnUse" class="ng-tns-c281-34">
-                        <rect x="0" y="0" width="4" height="4" fill="currentColor" class="ng-tns-c281-34"></rect>
+                        patternUnits="userSpaceOnUse" class="">
+                        <rect x="0" y="0" width="4" height="4" fill="currentColor" class=""></rect>
                     </pattern>
                 </defs>
-                <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" class="ng-tns-c281-34">
+                <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" class="">
                 </rect>
             </svg>
             <div class="z-10 relative w-full max-w-2xl">
-                <div class="text-5xl font-bold leading-none text-gray-100 ng-tns-c281-34">
+                <div class="text-5xl font-bold leading-none text-gray-100 ">
                     <div class="">Welcome to</div>
                     <div class="">our community</div>
                 </div>
-                <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ng-tns-c281-34">
+                <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ">
                     {{ get_tenant_setting('registration_text', 'Join the global community of likeminded people') }}
                 </div>
-                <div class="flex items-center mt-8 ng-tns-c281-34">
-                    <div class="flex flex-0 items-center -space-x-1.5 ng-tns-c281-34">
+                <div class="flex items-center mt-8 ">
+                    <div class="flex flex-0 items-center -space-x-1.5 ">
                         @for($i = 0; $i < 4; $i++) <img
                             src="/images/male-09.jpeg"
-                            class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ng-tns-c281-34">
+                            class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ">
                             @endfor
                     </div>
-                    <div class="ml-4 font-medium tracking-tight text-gray-400 ng-tns-c281-34">More than 17k people
-                        joined us, it's your turn</div>
+                    <div class="ml-4 font-medium tracking-tight text-gray-400 ">
+                        {{ translate('More than') }} {{ get_public_user_count() }}
+                        {{ translate('people joined us, it\'s your turn') }}</div>
                 </div>
             </div>
         </div>
