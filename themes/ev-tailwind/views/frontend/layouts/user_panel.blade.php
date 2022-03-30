@@ -34,7 +34,7 @@
           From: "translate-x-0"
           To: "-translate-x-full"
       -->
-        <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800">
+        <div class="hidden relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800">
             <!--
           Close button, show/hide based on off-canvas menu state.
 
@@ -60,7 +60,7 @@
 
             <div class="flex-shrink-0 flex items-center px-4">
                 <img class="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow">
+                    src="{{ get_site_logo() }}" alt="Workflow">
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
                 <nav class="px-2 space-y-1">
@@ -155,7 +155,7 @@
         <div class="flex items-center flex-shrink-0 px-6">
             <a href="{{ route('dashboard') }} ">
                 <x-tenant.system.image alt="{{ get_site_name() }} logo" class="min-h-8 w-full mx-auto sm:min-h-10"
-                    :image="get_tenant_setting('header_logo')">
+                    :image="get_site_logo()">
                 </x-tenant.system.image>
             </a>
         </div>
