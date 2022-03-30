@@ -54,9 +54,13 @@
                         </div>
                         <div class="mt-2 text-sm text-gray-700">
                             @if( class_basename($item->subject) === 'Product')
+                            @isset($item->subject->name)
                             <a href="{{ $item->subject->getPermalink() }}">{{ $item->subject->name }}</a>
+                            @endisset
                             @else
+                            @isset($item->subject->name)
                             <p>{{ $item->subject->name }}</p>
+                            @endisset
 
                             @endif
                             <p class="mt-0.5 text-sm text-gray-500">{{ $item->created_at->diffForHumans() }} </p>

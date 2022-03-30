@@ -54,11 +54,6 @@
 
                                 <x-categories-sidebar :categoryId="$category_id" type="companies"></x-categories-sidebar>
 
-                                <x-company.company-attributes :items="$attributes" :selected="$filters"></x-company.company-attributes>
-
-                                <div class="mb-3 mt-3">
-                                </div>
-
                             </div>
                         </div>
                     </div>
