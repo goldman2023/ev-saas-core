@@ -95,20 +95,21 @@
 
                     <div class="mt-6">
                         <nav class="grid gap-y-8">
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900">{{ translate('Features') }}</span>
+                            <!-- Active: "bg-gray-100", Not Active: "" -->
+                            <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700"
+                                role="menuitem" tabindex="-1" id="user-menu-item-0">
+                                {{ translate('Dashboard') }}
                             </a>
 
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Pricing') }} </span>
+                            <a href="{{ route('my.account.settings') }}" class="block px-4 py-2 text-sm text-gray-700"
+                                role="menuitem" tabindex="-1" id="user-menu-item-1">
+                                {{ translate('Settings') }}
+
                             </a>
 
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Blog') }} </span>
-                            </a>
-
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                                <span class="text-base font-medium text-gray-900"> {{ translate('Contact') }} </span>
+                            <a href="{{ route('user.logout') }}" class="block px-4 py-2 text-sm text-gray-700"
+                                role="menuitem" tabindex="-1" id="user-menu-item-2">
+                                {{ translate('Sign Out') }}
                             </a>
                         </nav>
                     </div>
@@ -130,13 +131,16 @@
                         <a href="#" class="text-base font-medium text-gray-900 hover:text-gray-700"> Security </a>
                     </div> --}}
                     <div>
-                        <a href="#" @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})"
-                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                        @guest
+                        <button @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})"
+                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo hover:bg-indigo-700">
                             {{ translate('Login') }}
-                        </a>
-                        <p class="mt-6 text-center text-base font-medium text-gray-500">
-                            {{ translate('Wanna try it out for free') }}?
-                            <a href="#" class="text-indigo-600 hover:text-indigo-500"> {{ translate('Get a Trial') }}
+                        </button>
+                        @endguest
+                        <p class="mt-3 text-center text-base font-medium text-gray-500">
+                            <a href="{{ route('dashboard') }}" class="text-indigo-600 hover:text-indigo-500">
+                                {{ translate('Manage your profile and settings') }}
+                                {{ translate('Visit Dashboard') }}
                             </a>
                         </p>
                     </div>
