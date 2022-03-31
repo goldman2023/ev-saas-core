@@ -34,11 +34,14 @@
                     @endif
                 </button>
 
-                <a href="#"
-                    class="text-gray-500 hover:text-gray-700 rounded-r-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
-                    <span>Most Answers</span>
+                <button disabled
+                    class="opacity-50 text-gray-500 hover:text-gray-700 rounded-r-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10">
+                    <span>{{ translate('Most Answers') }}</span>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800"> {{ translate('Coming soon!') }} </span>
+
                     <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
-                </a>
+
+                </button>
             </nav>
         </div>
     </div>
@@ -73,7 +76,9 @@
     </div>
     @endif
 
-
-
-
+    <style>
+        [data-f-id="pbf"] {
+            display: none !important;
+        }
+    </style>
 </div>

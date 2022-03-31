@@ -189,7 +189,8 @@
 
 
                         </button>
-                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item" iconActive="heroicon-s-thumb-up" iconDefault="heroicon-o-thumb-up">
+                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item"
+                            iconActive="heroicon-s-thumb-up" iconDefault="heroicon-o-thumb-up">
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>
