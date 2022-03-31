@@ -33,18 +33,13 @@
                                 <dt class="text-gray-900">{{ translate('Personal Profile Preview') }}</dt>
                             </dl>
                             <div class="border-t border-gray-200">
-                                <x-default.elements.support-card :user="auth()->user()"></x-default.elements.support-card>
+                                <x-default.elements.user-card :user="auth()->user()"></x-default.elements.user-card>
                             </div>
 
                         </div>
 
                         <div class="">
-                            <dl class="mt-12 mb-6 text-sm font-medium  ">
-                                <dt class="text-gray-900">{{ translate('Seller Profile Preview') }}</dt>
-                            </dl>
-                            <div class="border-t border-gray-200">
-                                <x-default.elements.support-card :user="auth()->user()"></x-default.elements.support-card>
-                            </div>
+
 
                         </div>
 
