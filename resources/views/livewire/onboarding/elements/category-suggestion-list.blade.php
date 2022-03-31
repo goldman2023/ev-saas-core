@@ -1,5 +1,6 @@
 <div>
-    <legend class="block text-2xl font-medium mb-6 text-gray-900">{{ translate('Select your interests') }}
+    <legend class="block text-2xl font-medium mb-6 text-gray-900">
+        {{ translate('Select your interests') }}
     </legend>
     <div class="pb-20" style="max-height: 600px; overflow: scroll;">
         <!-- This example requires Tailwind CSS v2.0+ -->

@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="min-h-full bg-gray-200">
+
     <!--
       When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars
 
@@ -15,8 +16,11 @@
             </div>
             <main class="lg:col-span-9 xl:col-span-10">
                 <div class="mt-4">
-                    <h1 class="sr-only">Recent questions</h1>
-                    <div role="list" class="space-y-4 grid grid-cols-4 gap-5">
+                    <h1 class="block text-2xl font-semibold mb-6 text-gray-900">
+                        {{ translate('Discover FoxAsk shops') }}
+                    </h1>
+                    <div role="list" class="grid grid-cols-4 gap-5">
+
                         @foreach ($shops as $shop)
                             <livewire:feed.elements.shop-card :shop="$shop"></livewire:feed.elements.shop-card>
                         @endforeach

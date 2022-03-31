@@ -3,13 +3,7 @@ Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tail
 TODO: you can overide it with data from a database a sa setting --}}
 
 {{-- This is required when overiding this file --}}
-<style type="text/tailwindcss">
-    @layer utilities {
-        [x-cloak] {
-            @apply hidden;
-        }
-    }
-</style>
+
 
 
 
@@ -85,7 +79,8 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 </script>
 
-<style>
+<style type="text/tailwindcss">
+
     @layer utilities {
         [x-cloak] {
             @apply hidden;

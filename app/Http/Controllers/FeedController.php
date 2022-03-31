@@ -16,9 +16,9 @@ class FeedController extends Controller
 
     public function shops() {
         $shops = Shop::all();
-        $users = Shop::orderBy('created_at', 'desc')->all();
+        // $users = Users::all();
 
-        return view('frontend.feed.shops', compact(['shops', 'users']));
+        return view('frontend.feed.shops', compact(['shops']));
     }
 
     public function products() {

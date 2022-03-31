@@ -3,13 +3,7 @@ Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tail
 TODO: you can overide it with data from a database a sa setting --}}
 
 {{-- This is required when overiding this file --}}
-<style type="text/tailwindcss">
-    @layer utilities {
-        [x-cloak] {
-            @apply hidden;
-        }
-    }
-</style>
+
 
 
 
@@ -85,7 +79,8 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 </script>
 
-<style>
+<style type="text/tailwindcss">
+
     @layer utilities {
         [x-cloak] {
             @apply hidden;
@@ -108,7 +103,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .btn-danger {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-danger rounded-md shadow-sm text-sm font-medium text-white bg-white hover: bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-danger hover: bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
         }
 
         .btn-ghost {
@@ -166,5 +161,15 @@ TODO: you can overide it with data from a database a sa setting --}}
         .we-dashboard-sidebar-background {
             /* background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}"; */
         }
+
+        .ev-icon__xs {
+            max-width: 16px;
+        }
     }
 </style>
+
+<style>
+    .ev-icon__xs {
+        max-width: 16px !important;
+    }
+    </style>
