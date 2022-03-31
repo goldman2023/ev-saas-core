@@ -1,6 +1,6 @@
 <div>
     <div class="px-4 sm:px-0">
-        <div class="sm:hidden">
+        <div class="hidden sm:hidden">
             <label for="question-tabs" class="sr-only">Select a tab</label>
             <select id="question-tabs"
                 class="block w-full rounded-md border-gray-300 text-base font-medium text-gray-900 shadow-sm focus:border-rose-500 focus:ring-rose-500">
