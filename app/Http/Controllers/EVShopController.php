@@ -20,13 +20,15 @@ class EVShopController extends Controller
     {
         // TODO: Cleanup old active commerce code!
         $shop = Shop::where('slug', $slug)->first();
-        if (auth()->user()) {
-            activity()
-                ->performedOn($shop)
-                ->causedBy(auth()->user())
-                ->withProperties(['action' => 'viewed'])
-                ->log('User viewed a company page');
-        }
+
+        activity()
+            ->performedOn($shop)
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'action' => 'viewed',
+                'action_title' => 'viewed a shop',
+                ])
+            ->log('viewed');
 
 
 

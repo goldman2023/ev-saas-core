@@ -33,11 +33,7 @@ class MerchantController extends Controller
                 $user = null;
             }
 
-            activity()
-                ->performedOn($shop)
-                ->causedBy($user)
-                ->withProperties(['action' => 'viewed'])
-                ->log('User viewed a company page');
+
 
             // Seo integration with Schema.org
             if (get_setting('enable_seo_company') == "on") {

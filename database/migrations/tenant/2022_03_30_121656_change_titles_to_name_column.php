@@ -14,10 +14,15 @@ class ChangeTitlesToNameColumn extends Migration
     public function up()
     {
         Schema::table('plans', function (Blueprint $table) {
-            $table->renameColumn('title', 'name');
+            if(Schema::hasColumn('plans', 'title')) {
+                $table->renameColumn('title', 'name');
+
+            }
         });
         Schema::table('blog_posts', function (Blueprint $table) {
-            $table->renameColumn('title', 'name');
+            if(Schema::hasColumn('blog_posts', 'title')) {
+                $table->renameColumn('title', 'name');
+            }
         });
     }
 
