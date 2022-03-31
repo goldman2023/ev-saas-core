@@ -77,23 +77,23 @@
         }
 
         .btn-standard {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500  bg-gray-700 outline-none ring-2 ring-offset-2 ring-gray-700;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500  hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
         }
 
         .btn-standard {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500  bg-gray-700 outline-none ring-2 ring-offset-2 ring-gray-700;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500  hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
         }
 
         .btn-primary {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary  bg-primaryDark outline-none ring-2 ring-offset-2 ring-primary;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary  hover:bg-primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
         }
 
         .btn-success {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success  bg-success outline-none ring-2 ring-offset-2 ring-success;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success  hover:bg-success focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success;
         }
 
         .btn-danger {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-danger  bg-danger outline-none ring-2 ring-offset-2 ring-danger;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-danger  hover:bg-danger focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-danger;
         }
 
         .btn-ghost {
@@ -121,15 +121,15 @@
         }
 
         .form-standard {
-            @apply flex-1 block w-full max-w-lg  ring-primary border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
+            @apply flex-1 block w-full max-w-lg focus:ring-primary focus:border-primary min-w-0 rounded-md sm:text-sm border-gray-300 shadow-sm;
         }
 
         .form-checkbox-standard {
-            @apply  ring-primary h-5 w-5 text-primary border-gray-300 rounded cursor-pointer;
+            @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 rounded cursor-pointer;
         }
 
         .form-radio-standard {
-            @apply  ring-primary h-5 w-5 text-primary border-gray-300 cursor-pointer;
+            @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 cursor-pointer;
         }
 
         .is-invalid {

@@ -32,7 +32,7 @@
                         <div class="item-summary w-full flex-col">
                             <div class="pb-1 mb-3 border-b border-gray-200">
                                 <strong class="flex">{{ translate('Checkout summary') }}</strong>
-                                <span class="text-36 tracking-[-0.03rem]">{{ $from_cart ? (CartService::getSubtotalPrice()['display'] ?? '') : $model->getTotalPrice('display') }}</span>
+                                <span class="text-36 tracking-[-0.03rem]">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</span>
                             </div>
 
                             <ul class="flex flex-col list-none space-y-4">
@@ -59,11 +59,11 @@
                             <ul class="flex flex-col list-none border-t border-gray-200 mt-3 pl-[74px]">
                                 <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                                     <span class="text-14">{{ translate('Subtotal') }}</span>
-                                    <strong class="tracking-[-0.03rem] text-14">{{ $from_cart ? (CartService::getSubtotalPrice()['display'] ?? '') : $model->getDiscountedPrice('display') }}</strong>
+                                    <strong class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</strong>
                                 </li>
                                 <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                                     <span class="text-14">{{ translate('Discount') }}</span>
-                                    <strong class="tracking-[-0.03rem] text-14">-{{ $from_cart ? (CartService::getDiscountAmount()['display'] ?? '') : FX::formatPrice($model->total_price - $model->discounted_price) }}</strong>
+                                    <strong class="tracking-[-0.03rem] text-14">-{{ CartService::getDiscountAmount()['display'] ?? '' }}</strong>
                                 </li>
                                 <li class="flex justify-between border-b border-gray-200 pt-[16px] pb-[12px]">
                                     <span class="text-14">{{ translate('Taxation') }}</span>
@@ -74,7 +74,7 @@
                                 </li>
                                 <li class="flex justify-between pt-[16px] pb-[12px]">
                                     <span class="text-14">{{ translate('Total due') }}</span>
-                                    <strong class="tracking-[-0.03rem] text-14">{{ $from_cart ? (CartService::getSubtotalPrice()['display'] ?? '') : $model->getTotalPrice('display') }}</strong>
+                                    <strong class="tracking-[-0.03rem] text-14">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</strong>
                                 </li>
                             </ul>
 
@@ -107,7 +107,7 @@
             </div>
             <div class="w-full md:max-w-[400px] ">
                 <h1 class="font-semibold text-20 ">{{ translate('Payment information') }}</h1>
-                <livewire:forms.checkout-single-form :items="$models" :from-cart="$from_cart"></livewire:forms.checkout-single-form>
+                <livewire:forms.checkout-single-form></livewire:forms.checkout-single-form>
             </div>
         </div>
         

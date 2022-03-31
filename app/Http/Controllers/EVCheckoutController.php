@@ -439,15 +439,13 @@ class EVCheckoutController extends Controller
     }
 
     public function single() {
-        $from_cart = false;
 
         if(empty(request()->data)) {
             $models = CartService::getItems();
-            $from_cart = true;
         } else {
             $data = json_decode(base64_decode(request()->data ?? null));
             
-            $models = collect(app($data->class)->findOrFail($data->id));
+            $models = collect([app($data->class)->findOrFail($data->id)]); // for now only one model can be bouoght using a link approach
             // TODO: Add purchase_quantity to $model here, based on $qty
         }
 
@@ -456,18 +454,18 @@ class EVCheckoutController extends Controller
             return redirect()->route('home');
         }
   
-        return view('frontend.checkout-single', compact('models', 'from_cart'));
+        return view('frontend.checkout-single', compact('models'));
     }
 
-    public function orderReceived(Request $request, Order $order)
+    public function orderReceived(Request $request, $order_id)
     {
+        $order = Order::find($order_id);
+
         if(auth()->user()->id ?? null) {
             // Redirect user to proper Order Details page
         } else {
             // Redirect non-logged user to order-received (like Thank you page)
         }
-
-        
 
         return view('frontend.order-received', compact('order'));
     }

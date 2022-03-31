@@ -36,8 +36,8 @@ class MyAccountForm extends Component
                 'me.name' => ['required', 'min:3'],
 //                'me.email' => ['required', 'email:rfs,dns'],
                 'me.phone' => ['required'],
-                'me.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-                'me.cover' => ['if_id_exists:App\Models\Upload,id']
+                'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
+                'me.cover' => ['if_id_exists:App\Models\Upload,id,true']
             ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],

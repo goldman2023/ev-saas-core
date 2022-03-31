@@ -24,7 +24,7 @@
     >
         <div class="h-full flex flex-col relative p-4" >
             <div class="flex flex-col h-full">
-                <div class="c-flyout-panel__close w-[32px] h-[32px] flex items-center justify-center absolute cursor-pointer" @click="show = false">
+                <div class="c-flyout-panel__close w-[32px] h-[32px] flex items-center justify-center absolute cursor-pointer z-10" @click="show = false">
                     <svg class="w-[16px] h-[16px]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>

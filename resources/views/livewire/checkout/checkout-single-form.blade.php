@@ -11,7 +11,6 @@
     available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsForSelect()),
     selected_payment_method: @js($this->selected_payment_method),
     phoneNumbers: @js($order->phone_numbers),
-
     cc_name: @js($cc_name),
     cc_number: @js($cc_number),
     cc_expiration_date: @js($cc_expiration_date),
@@ -20,7 +19,6 @@
 @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
 x-cloak
 >
-
     <!-- Email -->
     <div class="w-full mb-3">
         <label for="order.email" class="w-full block mb-1 text-12 font-medium text-gray-900 dark:text-gray-300">
@@ -705,7 +703,6 @@ x-cloak
                     $wire.set('cc_name', cc_name, true);
                     $wire.set('cc_expiration_date', cc_expiration_date, true);
                     $wire.set('cc_cvc', cc_cvc, true);
-
                     $wire.set('order.same_billing_shipping', same_billing_shipping, true);
                     $wire.set('order.buyers_consent', buyers_consent, true);
                     $wire.set('selected_billing_address_id', selected_billing_address_id || -1, true);
