@@ -42,12 +42,12 @@ class RegisterTenantController extends Controller
         // dd($owner_permissions);
 
         $tenant = (new CreateTenantAction)([
-            'email' => 'jockovicvukasin@gmail.com',
+            'email' => 'vukasinjockovic123@gmail.com',
             'password' => '1234',
-            'name' => 'Pix-Pro',
-            'company' => 'Pix-pro',
-            'tenancy_db_name' => 'pix-pro'
-        ], 'pix-pro.' . config('tenancy.central_domains.0'));
+            'name' => 'FoxAsk',
+            'company' => 'FoxAsk Ltd.',
+            'tenancy_db_name' => 'foxask'
+        ], 'foxask.' . config('tenancy.central_domains.0'));
 
         return redirect($tenant->impersonationUrl(1));
     }

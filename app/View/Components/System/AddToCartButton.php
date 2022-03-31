@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Default\Global;
+namespace App\View\Components\System;
 
 use App\Models\Product;
 use App\Models\ProductVariation;
@@ -12,8 +12,6 @@ class AddToCartButton extends Component
 {
     public $model;
     public $class;
-    public $btnType;
-    public $btnSize;
     public $icon;
     public $label;
     public $labelNotInStock;
@@ -26,15 +24,13 @@ class AddToCartButton extends Component
      *
      * @return void
      */
-    public function __construct($model = null, $btnType = 'primary', $btnSize = 'sm', $class = '', $icon = '', $label = 'Add to cart', $labelNotInStock = 'Not in stock...')
+    public function __construct($model = null, $class = '', $icon = '', $label = 'Add to cart', $labelNotInStock = 'Not in stock')
     {
         $this->model = $model;
         $this->disabled = !$model->isInStock();
         $this->label = $label;
         $this->labelNotInStock = $labelNotInStock;
         $this->class = $class;
-        $this->btnType = $btnType;
-        $this->btnSize = $btnSize;
         $this->icon = $icon;
         $this->qty = 0;
         $this->processing = false;
@@ -46,6 +42,6 @@ class AddToCartButton extends Component
      * @return \Illuminate\Contracts\View\View|\Closure|string
      */
     public function render() {
-        return view('components.default.global.add-to-cart-button');
+        return view('components.tailwind-ui.system.add-to-cart-button');
     }
 }

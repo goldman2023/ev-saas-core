@@ -134,7 +134,7 @@
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
 
     {{-- Include WeEdit modals --}}
-    <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
+    <x-system.info-modal></x-system.info-modal>
 
 
     {{-- TODO: Include this propertly --}}

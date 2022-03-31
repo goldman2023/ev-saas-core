@@ -2,17 +2,6 @@
 Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
 TODO: you can overide it with data from a database a sa setting --}}
 
-{{-- This is required when overiding this file --}}
-<style type="text/tailwindcss">
-    @layer utilities {
-        [x-cloak] {
-            @apply hidden;
-        }
-    }
-</style>
-
-
-
 <script>
     tailwind.config = {
           theme: {
@@ -64,7 +53,7 @@ TODO: you can overide it with data from a database a sa setting --}}
                 },
                 colors: {
                     /* Indigo is a primary brand color */
-                    indigo: '#8BC53F',
+                    indigo: '#000',
                     primary: '#8BC53F',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
@@ -85,7 +74,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 </script>
 
-<style>
+<style type="text/tailwindcss">
     @layer utilities {
         [x-cloak] {
             @apply hidden;
@@ -161,6 +150,9 @@ TODO: you can overide it with data from a database a sa setting --}}
             margin: 0 auto;
         }
 
+        [data-f-id] {
+            @apply hidden;
+        }
 
 
         .we-dashboard-sidebar-background {

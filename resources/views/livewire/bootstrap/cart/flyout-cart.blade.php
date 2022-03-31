@@ -100,7 +100,7 @@
                                         <span >{{ \FX::formatPrice($item->purchase_quantity * $item->total_price) }}</span>
                                     </strong>
 
-                                    <x-default.forms.quantity-counter :model="$item" :wired="true" :mini="true"></x-default.forms.quantity-counter>
+                                    <x-system.quantity-counter :model="$item" :wired="true" :mini="true"></x-system.quantity-counter>
                                 </div>
                             </div>
 

@@ -11,6 +11,8 @@
     available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsForSelect()),
     selected_payment_method: @js($this->selected_payment_method),
     phoneNumbers: @js($order->phone_numbers),
+    shippingCountry: @js($order->shipping_country),
+    billingCountry: @js($order->billing_country),
     cc_name: @js($cc_name),
     cc_number: @js($cc_number),
     cc_expiration_date: @js($cc_expiration_date),
@@ -28,7 +30,8 @@ x-cloak
         <input name="order.email"
                 id="order.email"
                 type="email"
-                wire:model.defer="order.email" 
+                wire:model.defer="order.email"
+                @auth disabled @endauth
                 class="form-standard @error('order.email') is-invalid @enderror"       
         />
 
@@ -76,7 +79,7 @@ x-cloak
             <input type="text"
                     name="order.billing_first_name" 
                     id="order.billing_first_name"
-                    wire:model.defer="order.billing_first_name" 
+                    wire:model.defer="order.billing_first_name"
                     class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
             />
 
@@ -90,7 +93,7 @@ x-cloak
             <input type="text"
                     name="order.billing_last_name" 
                     id="order.billing_last_name"
-                    wire:model.defer="order.billing_last_name" 
+                    wire:model.defer="order.billing_last_name"
                     class="form-standard @error('order.billing_first_name') is-invalid @enderror"       
             />
 
@@ -166,6 +169,22 @@ x-cloak
         <x-system.invalid-msg field="order.phone_numbers" ></x-system.invalid-msg> --}}
     </div>
     <!-- END Phones -->
+
+    <hr class="mt-2" />
+
+    <div class="flex flex-col mt-4">
+        <!-- Checkbox -->
+        <div class="flex items-center cursor-pointer">
+            <input type="checkbox" class="form-checkbox-standard" id="order-same_billing_shipping" name="order.same_billing_shipping"
+                    x-model="same_billing_shipping" @click="$dispatch('shipping-info-errors-clean')">
+            <div class="ml-2">
+                <label for="order-same_billing_shipping" class="text-12 font-medium text-gray-500 mb-0 cursor-pointer">
+                    {{ translate('My billing and delivery information are the same') }}
+                </label>
+            </div>
+        </div>
+        <!-- End Checkbox -->
+    </div>
 
     <hr class="mt-4" />
 
@@ -252,14 +271,16 @@ x-cloak
                         {{ translate('Country') }}
                         <span class="text-red-500 ml-1">*</span>
                     </label>
-                    <input name="order.billing_country"
+                    <x-dashboard.form.select field="billingCountry" :search="true" error-field="order.billing_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="billingCountry" :nullable="true"></x-dashboard.form.select>
+
+                    {{-- <input name="order.billing_country"
                             id="order.billing_country"
                             type="text"
                             wire:model.defer="order.billing_country" 
                             class="form-standard @error('order.billing_country') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.billing_country" ></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.billing_country" ></x-system.invalid-msg> --}}
                 </div>
                 <!-- End Col -->
             </div>
@@ -323,11 +344,11 @@ x-cloak
 
     <!-- Shipping -->
     <div class="shipping-info-section flex flex-wrap mt-3" :class="{'hidden': same_billing_shipping}" x-data="{
-        clearErrors() {
-            $('.shipping-info-section .error-msg').remove();
-            $('.shipping-info-section .is-invalid').removeClass('is-invalid');
-        }
-    }" @shipping-info-errors-clean.window="clearErrors()">
+            clearErrors() {
+                $('.shipping-info-section .error-msg').remove();
+                $('.shipping-info-section .is-invalid').removeClass('is-invalid');
+            }
+        }" @shipping-info-errors-clean.window="clearErrors()">
         <h4 class="text-14 font-semibold" >
             {{ translate('Shipping address') }}
         </h4>
@@ -423,6 +444,8 @@ x-cloak
                         {{ translate('Country') }}
                         <span class="text-red-500 ml-1">*</span>
                     </label>
+                    <x-dashboard.form.select field="shippingCountry" error-field="order.shipping_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="shippingCountry" :nullable="true"></x-dashboard.form.select>
+{{-- 
                     <input name="order.shipping_country"
                             id="order.shipping_country"
                             type="text"
@@ -430,7 +453,7 @@ x-cloak
                             class="form-standard @error('order.shipping_country') is-invalid @enderror"       
                     />
     
-                    <x-system.invalid-msg field="order.shipping_country" ></x-system.invalid-msg>
+                    <x-system.invalid-msg field="order.shipping_country" ></x-system.invalid-msg> --}}
                 </div>
                 <!-- End Col -->
             </div>
@@ -493,11 +516,11 @@ x-cloak
     <hr class="mt-4" />
 
     <div class="flex flex-wrap mt-3" x-data="{
-        clearErrors() {
-            $('.payment-methods-details .error-msg').remove();
-            $('.payment-methods-details .is-invalid').removeClass('is-invalid');
-        }
-    }">
+            clearErrors() {
+                $('.payment-methods-details .error-msg').remove();
+                $('.payment-methods-details .is-invalid').removeClass('is-invalid');
+            }
+        }">
         {{-- <h4 class="text-14 font-semibold" >
             {{ translate('Shipping address') }}
         </h4> --}}
@@ -651,18 +674,7 @@ x-cloak
     <hr class="mt-4" />
 
     <div class="flex flex-col mt-3">
-        <!-- Checkbox -->
-        <div class="flex items-center cursor-pointer">
-            <input type="checkbox" class="form-checkbox-standard" id="order-same_billing_shipping" name="order.same_billing_shipping"
-                    x-model="same_billing_shipping" @click="$dispatch('shipping-info-errors-clean')">
-            <div class="ml-2">
-                <label for="order-same_billing_shipping" class="text-12 font-medium text-gray-500 mb-0 cursor-pointer">
-                    {{ translate('My billing and delivery information are the same') }}
-                </label>
-            </div>
-        </div>
-        <!-- End Checkbox -->
-
+        {{-- Checkbox --}}
         <div class="flex items-center cursor-pointer">
             <input type="checkbox" class="form-checkbox-standard" id="checkout_newsletter" name="checkout_newsletter"
                    wire:model.defer="checkout_newsletter">
@@ -698,6 +710,8 @@ x-cloak
         <button class="btn-primary text-center justify-center w-full bg-red-500 text-white" 
                 @click="
                     $wire.set('order.phone_numbers', phoneNumbers, true);
+                    $wire.set('order.billing_country', billingCountry, true);
+                    $wire.set('order.shipping_country', shippingCountry, true);
                     $wire.set('selected_payment_method', selected_payment_method, true);
                     $wire.set('cc_number', cc_number, true);
                     $wire.set('cc_name', cc_name, true);

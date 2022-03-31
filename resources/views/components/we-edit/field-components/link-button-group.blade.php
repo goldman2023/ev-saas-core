@@ -22,11 +22,11 @@
 }"
 wire:ignore>
 
-    {{-- <x-tailwind-ui.system.spinner 
+    {{-- <x-system.spinner 
         class="absolute-center z-10 hidden"
         spinnerClass="w-6 h-6"
         wire:target="set('section.data.{{ $slot_name }}.components.{{ $component_name }}.data.button_group')"
-        wire:loading.class.remove="hidden"></x-tailwind-ui.system.spinner> --}}
+        wire:loading.class.remove="hidden"></x-system.spinner> --}}
 
         {{-- wire:loading.class="prevent-pointer-events opacity-40" --}}
     <div class="w-full" >

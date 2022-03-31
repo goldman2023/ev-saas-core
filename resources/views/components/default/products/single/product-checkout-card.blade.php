@@ -1,6 +1,6 @@
 @php($first_variation = $product->variations->first())
 
-<div class="w-full relative" x-data="{
+<div class="w-full relative mt-5" x-data="{
             processing: false,
             processing_variation_change: false,
             qty: 0,
@@ -50,7 +50,7 @@
                 </p>
         </div> --}}
 
-        <div class="w-full mt-2">
+        <div class="w-full flex flex-col pb-5 border-b border-gray-200">
             <livewire:tenant.product.price :model="$product" :with_label="true" :with-discount-label="true"
                 original-price-class="text-body text-16" total-price-class="text-24 fw-700 text-primary">
             </livewire:tenant.product.price>
@@ -62,37 +62,48 @@
                 </livewire:tenant.product.product-variations-selector>
             @endif
 
-            <p class="py-2 mb-0">{{ translate('Stock quantity:') }} <strong
-                    x-text="current_stock+' {{ $product->unit }}'"></strong></p>
+            <p class="py-2 mb-0">
+                <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
+                <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
+                @if($product->isInStock()) 
+                    <span class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('In Stock') }}</span>
+                @else
+                    <span class="badge-danger px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('Not In Stock') }}</span>
+                @endif
+            </p>
 
             {{-- Out of stock / Low stock notifications --}}
-            <template x-if="current_stock <= 0">
+            {{-- <template x-if="current_stock <= 0">
                 <p class="text-14 p-2 px-3 bg-danger text-white rounded mt-1">{{ translate('This item is not
                     currently in stocks...') }}</p>
             </template>
             <template x-if="current_stock > 0 && is_low_stock">
                 <p class="text-14 p-2 px-3 bg-warning text-white rounded mt-1">{{ translate('This item is low in
                     stocks. Hurry up!') }}</p>
-            </template>
+            </template> --}}
 
             {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}}
-            <x-default.forms.quantity-counter :model="$product" id="">
-            </x-default.forms.quantity-counter>
-        </div>
+            <div class="w-full flex mt-3">
+                <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
-
-        <div class="w-full mt-2">
-            <div class="mt-4 flex sm:flex-col1">
-                <x-default.global.add-to-cart-button :model="$product" icon="heroicon-o-shopping-cart"
-                    label="{{ translate('Add to cart') }}" label-not-in-stock="{{ translate('Not in stock') }}"
-                    btn-type="primary"
-                    btn-size="sm">
-                </x-default.global.add-to-cart-button>
-
+                <x-system.add-to-cart-button 
+                    :model="$product"
+                    class=""
+                    {{-- icon="heroicon-o-shopping-cart" --}}
+                    label="{{ translate('Add to cart') }}" 
+                    label-not-in-stock="{{ translate('Not in stock') }}">
+                </x-system.add-to-cart-button>
+            </div>
+            
+            <div class="w-full">
                 <livewire:actions.wishlist-button template="wishlist-button-detailed" :object="$product">
                 </livewire:actions.wishlist-button>
             </div>
+        </div>
 
+        
+        {{-- This is for GunOB --}}
+        {{-- <div class="w-full mt-2">
             @guest
                 <a class="btn btn-sm d-flex mt-3 btn-dark justify-content-center text-center align-items-center">
                     {{ svg('heroicon-o-key', ['class' => 'ev-icon__xs mr-2']) }}
@@ -114,7 +125,7 @@
                     {{ get_site_name() }} {{ translate('Buyers Protection + Escrow') }}
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </div>
 </div>

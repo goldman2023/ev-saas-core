@@ -4,24 +4,24 @@ namespace App\View\Components\System;
 
 use Illuminate\View\Component;
 
-class InvalidMsg extends Component
+class Spinner extends Component
 {
-    public $field;
-    public $message;
     public $class;
-    public $type;
+    public $title;
+    public $style;
+    public $spinnerClass;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($field = '', $message = '', $class = 'mt-2', $type = 'slim')
+    public function __construct($class = '', $style= '', $spinnerClass = '', $title = 'Loading...')
     {
-        $this->field = $field;
-        $this->message = $message;
         $this->class = $class;
-        $this->type = $type;
+        $this->title = $title;
+        $this->style = $style;
+        $this->spinnerClass = $spinnerClass;
     }
 
     /**
@@ -31,6 +31,6 @@ class InvalidMsg extends Component
      */
     public function render()
     {
-        return view('components.tailwind-ui.system.invalid-msg');
+        return view('components.tailwind-ui.system.spinner');
     }
 }
