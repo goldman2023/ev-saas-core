@@ -6,12 +6,12 @@
 
                 <div class="flex items-center">
                     <img class="hidden h-16 w-16 rounded-full sm:block"
-                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2.6&amp;w=256&amp;h=256&amp;q=80"
+                        src="{{ Auth::user()->getThumbnail() }}"
                         alt="">
                     <div>
                         <div class="flex items-center">
                             <img class="h-16 w-16 rounded-full sm:hidden"
-                                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2.6&amp;w=256&amp;h=256&amp;q=80"
+                                src="{{ Auth::user()->getThumbnail() }}"
                                 alt="">
                             <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                                 <span class="emoji">👋</span>
@@ -19,7 +19,8 @@
                             </h1>
                         </div>
                         <dl class="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
-                            <dt class="sr-only">Company</dt>
+                            @if(MyShop::getShop())
+                            <dt class="sr-only">{{ translate('Company') }}</dt>
                             <dd class="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
                                 <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                                     x-description="Heroicon name: solid/office-building"
@@ -29,8 +30,25 @@
                                         d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
                                         clip-rule="evenodd"></path>
                                 </svg>
-                                Duke street studio
+                                <a href="{{ MyShop::getShop()->getPermalink() }}" target="_blank">
+                                    {{ MyShop::getShop()->name }}
+                                </a>
                             </dd>
+                            @else
+                            <dd class="flex items-center text-sm text-gray-500 font-medium capitalize sm:mr-6">
+                                <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                                    x-description="Heroicon name: solid/office-building"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                        d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <a href="{{ route('onboarding.step3') }}" target="_blank">
+                                    {{ translate('Create a seller profile') }}
+                                </a>
+                            </dd>
+                            @endif
                             <dt class="sr-only">Account status</dt>
                             <dd
                                 class="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
@@ -61,7 +79,7 @@
                 @endif
                 <a type="button" href=" {{ route('custom-pages.show_custom_page', ['pricing']) }}"
                     class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
-                    {{ translate('Subscribe') }}
+                    {{ translate('Join') }} {{ get_site_name() }} {{ translate('PRO') }}
                 </a>
             </div>
         </div>

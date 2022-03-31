@@ -23,14 +23,14 @@
 
         </h3>
         <p class="text-sm text-gray-500">
-            Category:
+             {{ translate('Category:') }}
             {{ ($product->categories->pluck('name'))->implode(', ') }}
         </p>
 
         <p class="text-sm text-gray-500">
             {{ $product->getCondition() ?? '' }}
         </p>
-        <div class="flex-1 flex flex-col justify-end">
+        <div class="hidden flex-1 flex flex-col justify-end">
             <p class="text-sm italic text-gray-500">
                 @if($product->brand)
                 <x-tenant.system.image class="ev-brand-image-small" :image='$product->brand->getThumbnail()'>
@@ -48,13 +48,11 @@
             </p>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <div class="btn btn-secondary text-xs">
-                <livewire:actions.wishlist-button :object="$product" />
-                Add To Wishlist
-            </div>
+                <livewire:actions.wishlist-button :object="$product"></livewire:actions.wishlist-button>
+
 
             <a href="{{ $product->getPermalink() }}" type="button" class="btn btn-primary text-xs">
-                {{ translate('Add To Cart') }}
+                {{ translate('View') }}
             </a>
         </div>
     </div>

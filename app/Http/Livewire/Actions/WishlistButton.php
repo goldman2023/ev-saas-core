@@ -21,11 +21,15 @@ class WishlistButton extends Component
         'Follow' => 'Followed',
         'Save' => 'Saved',
     ];
+    public $iconDefault = 'heroicon-o-heart';
+    public $iconActive = 'heroicon-s-heart';
 
     public $action = 'Like';
 
-    public function mount($object, $template = 'default', $action = 'Like')
+    public function mount($object, $template = 'default', $action = 'Like', $iconActive = 'heroicon-s-heart', $iconDefault = 'heroicon-o-heart')
     {
+        $this->iconActive = $iconActive;
+        $this->iconDefault = $iconDefault;
         $this->template = $template;
         $this->model_class = $object::class;
         $this->object = $object;

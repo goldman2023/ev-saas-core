@@ -17,7 +17,7 @@
             <span x-data="{}"
                   class="badge badge-soft-success rounded text-success align-items-center px-2 py-2 ml-2 text-12"
                   :class="{ 'd-inline-flex': base_price !== total_price, 'd-none': base_price === total_price }">
-                @svg('heroicon-s-tag', ['class' => 'square-16 mr-1'])
+                @svg('heroicon-s-tag', ['class' => 'max-w-[16px] mr-1'])
                 <span x-text="'{{ translate('Discount %x%%!') }}'.replace('%x%', 100-(100*total_price/base_price))"></span>
             </span>
         @endif

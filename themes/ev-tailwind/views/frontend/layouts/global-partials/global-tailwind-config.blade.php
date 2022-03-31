@@ -151,15 +151,17 @@ TODO: you can overide it with data from a database a sa setting --}}
             @apply border-danger;
         }
 
+        .card {
+            @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg p-3;
+        }
+
         .container {
             max-width: 100%;
             width: 1140px;
             margin: 0 auto;
         }
 
-        .card {
-            @apply bg-white border-2 border-gray-300 rounded-lg shadow-lg p-3;
-        }
+
 
         .we-dashboard-sidebar-background {
             /* background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}"; */
