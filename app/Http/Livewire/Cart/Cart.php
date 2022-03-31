@@ -49,11 +49,11 @@ class Cart extends Component
 
         // Event to refresh cart items count (all over the page, where needed)
         $this->dispatchBrowserEvent('refresh-cart-items-count', ['count' => $this->totalItemsCount]);
-        
+
     }
 
     public function addToCart($model, $model_type, $qty, $append_qty = true) {
-        
+
         if($this->processing) {
             return;
         }
@@ -75,17 +75,17 @@ class Cart extends Component
             $model = app($model_type)::find($model);
         }
 
-        activity()
+        activity('ecommerce_log')
             ->performedOn($model)
             ->causedBy(auth()->user())
             ->withProperties(['action' => 'add_to_cart'])
-            ->log('User added a product to cart');
+            ->log('add_to_cart');
 
         // Add $model and $qty to cart (do not append qty if $model is already in cart) because:
         // addToCart function in Cart.php is called on quantity change event inside cart, which means that given $qty is always the desired qty!
         // This is not the case for Add to cart button because qty counter is reset once addToButton is clicked!
         // IMPORTANT: $qty is sent by reference!!!
-        
+
         $new_data = \App\Facades\CartService::addToCart($model, $model_type, $qty, $append_qty);
 
         // Refresh Cart Livewire components
