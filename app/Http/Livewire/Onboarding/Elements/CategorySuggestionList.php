@@ -10,7 +10,7 @@ class CategorySuggestionList extends Component
     public $categories;
     public function mount()
     {
-        $this->categories = Category::whereHas('products')->get();
+        $this->categories = Category::all();
     }
     public function render()
     {

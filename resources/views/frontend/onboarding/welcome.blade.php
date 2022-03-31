@@ -10,8 +10,8 @@
 </div>
 <section class="container">
     <!-- Features Section -->
-    <div class="grid grid-cols-3 space-2 gap-20">
-        <div class="col-span-2">
+    <div class="grid grid-cols-1 space-2 gap-20 md:grid-cols-3">
+        <div class="sm:col-span-2">
             @livewire('onboarding.elements.category-suggestion-list')
 
         </div>
