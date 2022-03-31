@@ -2,7 +2,7 @@
 <div {{ $attributes->merge(['class' => 'relative']) }}>
     @if(!get_tenant_setting('support_phone'))
     {{-- Empty state, ask user to fill out the details --}}
-    <div class="absolute bottom-0 right-0 block h-full w-full bg-white/90 z-10">
+    <div class="hidden absolute bottom-0 right-0 block h-full w-full bg-white/90 z-10">
 
         <!-- This example requires Tailwind CSS v2.0+ -->
         <a type="button" href="{{ route('settings.shop_settings') }}"
@@ -13,7 +13,7 @@
             <span class="mt-2 mb-2 block text-sm font-medium text-gray-700">
                 {{ translate("Enter your support contacts and working hours")}} </span>
 
-                <button type="button"
+            <button type="button"
                 class="btn-primary inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 {{ translate('Support settings') }}
             </button>
@@ -37,7 +37,8 @@
             <p class="mt-1 text-sm text-gray-500">{{ translate('Have questions? We are available') }}</p>
             <div class="mt-4 flex">
                 <button type="button"
-                    class="btn-primary inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    x-on:click="CometChatWidget.openOrCloseChat(true); CometChatWidget.chatWithUser('web_1'); "
+                    class="btn-primary inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {{ translate('Talk with us') }} <span class="emoji ml-2">📱</span>
                 </button>
             </div>

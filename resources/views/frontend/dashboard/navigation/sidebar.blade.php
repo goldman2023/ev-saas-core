@@ -6,7 +6,7 @@
                 @if($section['label'] === 'hr')
                     <div class="w-full border-t border-gray-300"></div>
                 @else
-                    <h6 class="text-14 font-semibold text-gray-100">{{ $section['label'] }}</h6>
+                    <h6 class="text-14 font-semibold text-gray-900">{{ $section['label'] }}</h6>
                 @endif
 
                 @if(!empty($section['items']))
@@ -19,10 +19,10 @@
                                     }">
                                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                                     <button type="button"
-                                        class="text-gray-300 hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="text-gray-600 hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                         @click="expanded = !expanded">
                                             @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6'])
-                                        
+
                                             <span class="flex-1">{{ $item['label'] }}</span>
 
                                         <!-- Expanded: "text-gray-400 rotate-90", Collapsed: "text-gray-300" -->
@@ -51,10 +51,10 @@
                                 </div>
                             @else
                             <div class="{{ $key > 0 ? 'space-y-1':'' }} {{ $item['is_active'] }}" >
-                                <a href="{{ $item['route'] }}" class=" text-gray-300 hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
-                                    
+                                <a href="{{ $item['route'] }}" class=" text-gray-600 hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+
                                     @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 '])
-                                    
+
                                     <span class="flex-1">{{ $item['label'] }}</span>
 
                                     @if(($item['badge'] ?? null) && $item['badge']['content'] instanceof \Closure && $count = $item['badge']['content']() ?? null)

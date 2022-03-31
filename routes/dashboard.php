@@ -238,6 +238,8 @@ Route::middleware([
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */
     Route::get('/feed', 'FeedController@index')->name('feed.index')->middleware('auth');
+    Route::get('/feed/shops', 'FeedController@shops')->name('feed.shops');
+    Route::get('/feed/products', 'FeedController@products')->name('feed.products');
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.index');
 

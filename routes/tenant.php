@@ -89,9 +89,6 @@ Route::middleware([
     // Homepage For Multi/Single Vendor mode
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    // Feed Page (Possible new homepage)
-    Route::get('/feed', [FeedController::class, 'index'])->name('feed.home');
-
     Route::post('/category/nav-element-list', [HomeController::class, 'get_category_items'])->name('category.elements');
 
     Route::get('/sitemap.xml', function () {
@@ -115,8 +112,6 @@ Route::middleware([
 
 
     Route::resource('shops', 'ShopController');
-    Route::get('/business/register', 'ShopController@create')->name('business.register');
-
     Route::resource('ev-social-commerce', 'SocialCommerceController');
 
 
