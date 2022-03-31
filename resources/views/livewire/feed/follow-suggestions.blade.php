@@ -13,7 +13,7 @@
                 <li class="flex items-center py-4 space-x-3">
                     <div class="flex-shrink-0">
                         <img class="h-8 w-8 rounded-full"
-                            src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            src="{{ $account->getThumbnail() }}"
                             alt="">
                     </div>
                     <div class="min-w-0 flex-1">
