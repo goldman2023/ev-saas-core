@@ -1,9 +1,10 @@
-<div class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
-    <div class="flex-1 flex flex-col p-8">
+<div class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 relative">
+
+    <div class="flex-1 flex flex-col p-3 pt-0">
         <a href="{{  $product->getPermalink() }}">
-            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="{{ $product->getThumbnail() }}" alt="">
+            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded" src="{{ $product->getThumbnail() }}" alt="">
         </a>
-        <h3 class="mt-6 text-gray-900 text-sm font-medium">
+        <h3 class="mt-6 text-gray-900 text-md font-semibold">
             <a href="{{  $product->getPermalink() }}">
                 {{ $product->name }}
             </a>
@@ -17,6 +18,11 @@
                     {{ translate('Price') }} {{ $product->getBasePrice() }}
                     €
                 </span>
+                @if(!$product->isInStock())
+                <span class="absolute top-3 right-3 px-2 py-1 text-gray-100 text-sm font-medium bg-red-700 rounded-full">
+                    {{ translate('Out of stock') }}
+                </span>
+                @endif
             </dd>
         </dl>
     </div>
