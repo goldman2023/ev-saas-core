@@ -9,9 +9,9 @@
         <dd class="text-gray-500 text-sm"></dd>
         <dt class="sr-only">Role</dt>
         <dd class="mt-3">
-          <span class="px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
-            {{-- {{ $product->getLikesCount() }} --}}
-              {{ translate('likes') }}
+          <span class="px-2 py-1 text-green-800 text-sm font-medium bg-green-100 rounded-full">
+            {{ translate('Price') }} {{ $product->getBasePrice() }}
+              €
           </span>
         </dd>
       </dl>
@@ -33,16 +33,12 @@
         </a>
         </div>
         <div class="-ml-px w-0 flex-1 flex">
-          {{-- <button  x-on:click="CometChatWidget.openOrCloseChat(true); CometChatWidget.chatWithUser('web_{{ $product->users()->first()->id }}'); " class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
-            <!-- Heroicon name: solid/phone -->
-            <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-            <span class="ml-3">
-                {{ translate('Message') }}
-            </span>
-        </button> --}}
+            <div class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                <span class="ml-3">
+                    {{ $product->public_view_count() }} {{ translate('views') }}
+                 </span>
+            </div>
+
         </div>
       </div>
     </div>
