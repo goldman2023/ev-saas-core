@@ -37,8 +37,12 @@ class FeedList extends Component
         $data = $data->paginate($this->perPage);
         $this->loading = false;
 
+        $this->hasMorePages = $data->hasMorePages();
+
+
         return view('livewire.feed.feed-list', [
             'activities' => $data,
+            'hasMorePages' => $this->hasMorePages
         ]);
     }
 

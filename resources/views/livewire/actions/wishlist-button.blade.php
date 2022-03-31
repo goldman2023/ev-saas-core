@@ -1,4 +1,5 @@
 <div>
+
     <div wire:click="addToWishlist()">
 
         <button

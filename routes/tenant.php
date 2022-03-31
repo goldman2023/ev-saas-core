@@ -115,9 +115,10 @@ Route::middleware([
 
 
     Route::resource('shops', 'ShopController');
+    Route::get('/business/register', 'ShopController@create')->name('business.register');
+
     Route::resource('ev-social-commerce', 'SocialCommerceController');
 
-    Route::get('/business/register', 'ShopController@create')->name('business.register');
 
     Auth::routes(['verify' => true]);
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');

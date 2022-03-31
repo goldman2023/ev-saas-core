@@ -186,6 +186,10 @@
                         @if($item->description != 'liked' && $item->description != 'User liked a product')
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/thumb-up -->
+
+
+                        </button>
+                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item">
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
                                 <path
@@ -195,9 +199,6 @@
                                 {{ $likes }}
                             </span>
                             <span class="sr-only">likes</span>
-
-                        </button>
-                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item">
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>

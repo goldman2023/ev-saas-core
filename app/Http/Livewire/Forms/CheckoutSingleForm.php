@@ -75,7 +75,7 @@ class CheckoutSingleForm extends Component
                 'order.buyers_consent' => 'required|boolean|is_true',
 
                 'selected_payment_method' => ['required', Rule::in(PaymentMethodUniversal::$available_gateways)],
-                'checkout_newsletter' => 'nullable',   
+                'checkout_newsletter' => 'nullable',
                 'selected_billing_address_id' => '',
             ],
             'account_creation' => [
@@ -120,7 +120,7 @@ class CheckoutSingleForm extends Component
     protected function rules()
     {
         $rules = [];
-        
+
         foreach($this->rulesSets() as $key => $array) {
             $rules = array_merge($rules, $array);
         }
@@ -149,12 +149,12 @@ class CheckoutSingleForm extends Component
         $this->fromCart = $fromCart;
 
         $this->items = $items;
-        
+
         $this->order = new Order();
         $this->order->shop_id = $this->items->first()->shop_id; // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
-        
+
         $this->cc_number = '';
         $this->cc_name = '';
         $this->cc_expiration_date = '';
@@ -210,7 +210,7 @@ class CheckoutSingleForm extends Component
             // User cretion rules (password)
             if(!Auth::check()) {
                 $new_user = User::where('email', $this->order->email)->first(); // check if user with a given email already exists
-                
+
                 // Check if user with email is not already registered user.
                 if($new_user instanceof User && !empty($new_user->id ?? null)) {
                     // Registered user
@@ -251,7 +251,7 @@ class CheckoutSingleForm extends Component
 
         try {
             $payment_method = PaymentMethodUniversal::where('gateway', $this->selected_payment_method)->first();
-            
+
             $default_grace_period = 5; // 5 days is default grace period
             $default_due_date = Carbon::now()->addDays(7)->toDateTimeString(); // 7 days fom now is default invoice due_date
             $phone_numbers = [];
@@ -311,13 +311,13 @@ class CheckoutSingleForm extends Component
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
-            
+            dd($this->items->all());
             $this->order->shop_id = $this->items->first()->shop_id;
             $this->order->user_id = auth()->user()->id ?? null;
             $this->order->type = OrderTypeEnum::subscription()->value; // only subscription for now...
 
             /*
-            * Billing data (when Address is selected) 
+            * Billing data (when Address is selected)
             * Only if user is logged-in
             */
             // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
@@ -376,7 +376,7 @@ class CheckoutSingleForm extends Component
             // viewed - is 0 by default (if it's not viewed by company stuff, it'll be marked as `New` in company dashboard)
 
             $this->order->save();
-            
+
             /*
              * Create OrderItem
              */
@@ -389,19 +389,19 @@ class CheckoutSingleForm extends Component
                 $order_item->excerpt = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->excerpt : $item->excerpt;
                 $order_item->variant = method_exists($item, 'hasMain') && $item->hasMain() ? $item->getVariantName(key_by: 'name') : null;
                 $order_item->quantity = !empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
-                
+
                 // Check if $item has stock and reduce it if it does
                 if(method_exists($item, 'stock')) {
                     // Reduce the stock quantity of an $item
                     $serial_numbers = $item->reduceStock();
 
-                    // Serial Numbers only work for Simple Products. 
+                    // Serial Numbers only work for Simple Products.
                     // TODO: Make Product Variations support serial numbers!
                     if($item->use_serial) {
                         $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
                     }
                 }
-                
+
                 $order_item->base_price = $item->base_price;
                 $order_item->discount_amount = ($item->base_price - $item->total_price);
                 $order_item->subtotal_price = $item->total_price; // TODO: This should use subtotal_price instead of total_price
@@ -410,14 +410,14 @@ class CheckoutSingleForm extends Component
 
                 $order_item->save();
             }
-            
 
-            
+
+
             /*
              * Create Invoice
              */
             $invoice = new Invoice();
-            
+
             $invoice->order_id = $this->order->id;
             $invoice->shop_id = $this->order->shop_id;
             $invoice->user_id = auth()->user()->id ?? null;
@@ -425,7 +425,7 @@ class CheckoutSingleForm extends Component
             $invoice->payment_method_id = $payment_method->id ?? null;
             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
             $invoice->invoice_number = Invoice::generateInvoiceNumber($this->order->billing_first_name, $this->order->billing_last_name, $this->order->billing_company); // Default: VJ21012022
-            
+
             $invoice->email = $this->order->email;
             $invoice->billing_first_name = $this->order->billing_first_name;
             $invoice->billing_last_name = $this->order->billing_last_name;
@@ -449,7 +449,7 @@ class CheckoutSingleForm extends Component
                 $invoice->subtotal_price = $this->items->first()->getTotalPrice();
                 $invoice->total_price = $this->items->first()->getTotalPrice();
             }
-            
+
 
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
@@ -459,9 +459,9 @@ class CheckoutSingleForm extends Component
             $invoice->start_date = $this->order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
             $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
             $invoice->grace_period = $this->order->invoice_grace_period; // NULL; or 5 days grace_period by default
-            
+
             $invoice->save();
-            
+
             DB::commit();
 
             // Depending on payment method, do actions
@@ -472,7 +472,7 @@ class CheckoutSingleForm extends Component
             return redirect()->route('checkout.order.received', $this->order->id);
         } catch(\Exception $e) {
             DB::rollBack();
-            
+
             $this->dispatchGeneralError(translate('There was an error while processing the order...Please try again.'));
             dd($e);
         }
