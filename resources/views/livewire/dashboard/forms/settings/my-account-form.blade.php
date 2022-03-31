@@ -287,7 +287,7 @@
                     <!-- END Addresses -->
                     @if(!$onboarding)
                     <!-- Social accounts -->
-                    <div id="socialAccountsSection" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5"
+                    <div id="socialAccountsSection" class="hidden p-4 border bg-white border-gray-200 rounded-lg shadow mt-5"
                         x-data="{}">
                         <div class="w-full items-center border-b border-gray-200 pb-3">
                             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Social accounts')
