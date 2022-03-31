@@ -84,7 +84,7 @@
                                     <span>{{ translate('Sign in with Facebook') }}</span>
                                 </div>
                             </a>
-                            <div class="flex items-center mb-4 w-full text-xs text-coolGray-400">
+                            <div class="hidden flex items-center mb-4 w-full text-xs text-coolGray-400">
                                 <div class="flex-1 h-px bg-coolGray-100"></div>
                                 <span class="px-2 font-medium">OR</span>
                                 <div class="flex-1 h-px w-24 bg-coolGray-100"></div>

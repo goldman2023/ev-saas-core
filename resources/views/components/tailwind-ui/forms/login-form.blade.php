@@ -9,7 +9,7 @@
 
 
     @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
-    <ul class="flex flex-col text-center mb-4">
+    <ul class=" hidden flex flex-col text-center mb-4">
 
         @if (get_setting('google_login') == 1)
         <a class="border btn bg-white hover:bg-red-100 hover:text-sky-700 mb-2"
@@ -41,7 +41,7 @@
     </ul>
     @endif
 
-    <div class="text-center mb-3">
+    <div class="hidden text-center mb-3">
         <span class="divider divider-text">{{ translate('OR') }}</span>
     </div>
 
