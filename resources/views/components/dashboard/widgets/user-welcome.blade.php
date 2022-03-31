@@ -4,15 +4,28 @@
             <div class="flex-1 min-w-0">
                 <!-- Profile -->
 
-                <div class="flex items-center">
-                    <img class="hidden h-16 w-16 rounded-full sm:block"
-                        src="{{ Auth::user()->getThumbnail() }}"
-                        alt="">
+                <div class="flex items-center relative">
+                    <a href="{{ route('my.account.settings') }}" class="relative">
+                    <img class="hidden h-16 w-16 rounded-full sm:block" src="{{ Auth::user()->getThumbnail() }}" alt="">
+                    <div class="absolute right-[-6px] bottom-[6px] bg-gray-400 p-1 rounded-full">
+                        <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                            </path>
+                        </svg>
+                    </div>
+                    </a>
                     <div>
-                        <div class="flex items-center">
-                            <img class="h-16 w-16 rounded-full sm:hidden"
-                                src="{{ Auth::user()->getThumbnail() }}"
-                                alt="">
+                        <div class="flex items-center ">
+                            <div class="">
+                                <a href="{{ route('my.account.settings') }}">
+                                    <img class="h-16 w-16 rounded-full sm:hidden"
+                                        src="{{ Auth::user()->getThumbnail() }}" alt="">
+
+                                </a>
+                            </div>
+
                             <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                                 <span class="emoji">👋</span>
                                 {{ translate('Good morning') }}, {{ Auth::user()->name }}
