@@ -25,11 +25,7 @@
 
             @if($product)
             <div class="mb-3 min-w-[240px] mr-6">
-                <x-default.products.cards.product-card
-                class=""
-                :product="$product"
-                    style="{{ ev_dynamic_translate('product-card', true)->value }}">
-                </x-default.products.cards.product-card>
+                <livewire:feed.elements.product-card :product="$product"></livewire:feed.elements.product-card>
             </div>
             @endif
             @endforeach
