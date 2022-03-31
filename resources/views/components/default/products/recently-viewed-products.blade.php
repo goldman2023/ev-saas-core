@@ -2,11 +2,11 @@
 <div {{ $attributes->merge(['class' => 'p-3']) }}>
     <div class="card-header">
         <div class="grid grid-cols-3 py-3">
-            <div class="col-span-2 card-header text-xl font-medium text-gray-900">
+            <div class="col-span-2 card-header text-xl font-semibold text-gray-900">
                 <div class="h3 fw-600">{{ translate('Recently Viewed Products') }} </div>
             </div>
 
-            <a href="#" class="text-right">
+            <a href="#" class=" hidden text-right">
                 {{ translate('View All') }}
             </a>
         </div>
@@ -16,7 +16,7 @@
 
     </div>
     <div class="card-body">
-        <div class="flex flex-nowrap basis-20 we-horizontal-slider__desktop" style="overflow:scroll;">
+        <div class="flex flex-nowrap basis-20 we-horizontal-slider__desktop pt-5" style="overflow:scroll;">
             @foreach($products as $productActivity)
 
             @php

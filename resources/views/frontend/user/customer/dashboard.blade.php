@@ -23,13 +23,9 @@
     </div>
 </section>
 
-<section class="stats mb-3">
-    <div class="grid grid-cols-2 gap-10">
+<section class="recently-viewed-products mb-3">
+    <div class="">
         <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
     </div>
-</section>
-
-<section>
-
 </section>
 @endsection
