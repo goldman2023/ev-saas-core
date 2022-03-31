@@ -46,7 +46,7 @@
                             </div>
                             <div class="pl-4 flex sm:pl-6">
                                 <dt class="font-medium text-gray-900">{{ translate('Price') }}</dt>
-                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price) }}</dd>
+                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price * $item->quantity) }}</dd>
                             </div>
                         </dl>
                     </div>

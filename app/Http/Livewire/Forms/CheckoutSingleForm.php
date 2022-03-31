@@ -38,7 +38,6 @@ class CheckoutSingleForm extends Component
 
     public $items;
     public $order;
-    public $fromCart;
     public $manual_mode_billing = true;
     public $manual_mode_shipping = true;
     public $show_addresses = false;
@@ -62,9 +61,9 @@ class CheckoutSingleForm extends Component
 
     protected function rulesSets() {
         return [
-            // 'items' => [
-            //     'items.*' => ''
-            // ],
+            'items' => [
+                'items.*' => ['']
+            ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
                 'order.billing_first_name' => 'required|min:3',
@@ -144,11 +143,9 @@ class CheckoutSingleForm extends Component
      *
      * @return void
      */
-    public function mount($items = [], $fromCart = true)
+    public function mount()
     {
-        $this->fromCart = $fromCart;
-
-        $this->items = $items;
+        $this->items = CartService::getItems();
 
         $this->order = new Order();
         $this->order->shop_id = $this->items->first()->shop_id; // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
@@ -239,7 +236,8 @@ class CheckoutSingleForm extends Component
 
     public function pay()
     {
-        // dd($this->items);
+        $this->items = CartService::getItems();
+
         try {
             $this->validate($this->getSpecificRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -311,7 +309,6 @@ class CheckoutSingleForm extends Component
             }
 
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
-            dd($this->items->all());
             $this->order->shop_id = $this->items->first()->shop_id;
             $this->order->user_id = auth()->user()->id ?? null;
             $this->order->type = OrderTypeEnum::subscription()->value; // only subscription for now...
@@ -385,7 +382,7 @@ class CheckoutSingleForm extends Component
                 $order_item->order_id = $this->order->id;
                 $order_item->subject_type = $item::class;
                 $order_item->subject_id = $item->id;
-                $order_item->title = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->title : $item->title; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+                $order_item->name = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
                 $order_item->excerpt = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->excerpt : $item->excerpt;
                 $order_item->variant = method_exists($item, 'hasMain') && $item->hasMain() ? $item->getVariantName(key_by: 'name') : null;
                 $order_item->quantity = !empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
@@ -399,6 +396,8 @@ class CheckoutSingleForm extends Component
                     // TODO: Make Product Variations support serial numbers!
                     if($item->use_serial) {
                         $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
+                    } else {
+                        $order_item->serial_numbers = null;
                     }
                 }
 
@@ -410,8 +409,6 @@ class CheckoutSingleForm extends Component
 
                 $order_item->save();
             }
-
-
 
             /*
              * Create Invoice
@@ -436,20 +433,13 @@ class CheckoutSingleForm extends Component
             $invoice->billing_city = $this->order->billing_city;
             $invoice->billing_zip = $this->order->billing_zip;
 
-            if($this->fromCart) {
-                // Take invoice totals from Cart
-                $invoice->base_price = CartService::getOriginalPrice();
-                $invoice->discount_amount = CartService::getDiscountAmount();
-                $invoice->subtotal_price = CartService::getSubtotalPrice();
-                $invoice->total_price = CartService::getSubtotalPrice(); // should be TotalPrice in future...
-            } else {
-                // Take invoice totals from first element in $items
-                $invoice->base_price = $this->items->first()->getBasePrice();
-                $invoice->discount_amount = $this->items->first()->getBasePrice() - $this->item->getTotalPrice();
-                $invoice->subtotal_price = $this->items->first()->getTotalPrice();
-                $invoice->total_price = $this->items->first()->getTotalPrice();
-            }
-
+        
+            // Take invoice totals from Cart
+            $invoice->base_price = CartService::getOriginalPrice()['raw'];
+            $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
+            $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
+            $invoice->total_price = CartService::getSubtotalPrice()['raw']; // should be TotalPrice in future...
+        
 
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
@@ -470,7 +460,7 @@ class CheckoutSingleForm extends Component
             // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
 
             return redirect()->route('checkout.order.received', $this->order->id);
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while processing the order...Please try again.'));
