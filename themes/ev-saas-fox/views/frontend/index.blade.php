@@ -13,7 +13,7 @@
             background-position: bottom center;
             background-size: 90%;
             background-repeat: no-repeat;
-            padding-bottom: 250px;
+            padding-bottom: 350px;
             margin-bottom: -100px;
             z-index: 0;">
                 <div class="flex flex-wrap items-center">

@@ -66,11 +66,11 @@
             {{ translate('My Pages') }}
 
             @foreach (auth()->user()->shop as $shop)
-        <div>
-            <a href="{{ $shop->getPermalink() }}">
-                {{ $shop->name }}
-            </a>
-        </div>
+            <div>
+                <a href="{{ $shop->getPermalink() }}">
+                    {{ $shop->name }}
+                </a>
+            </div>
         @endforeach
 
         </p>
