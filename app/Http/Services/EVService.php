@@ -164,14 +164,14 @@ class EVService
                             }
                         ]
                     ],
-                    [
+                    /* [
                         'label' => translate('Leads'),
                         'icon' => 'heroicon-o-calendar',
                         'route' => route('leads.index'),
                         'is_active' => areActiveRoutes(['leads']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_leads', 'browse_leads']
-                    ],
+                    ], */
                     // [
                     //     'label' => translate('Events'),
                     //     'icon' => 'heroicon-o-ticket',
