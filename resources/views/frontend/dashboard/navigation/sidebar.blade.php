@@ -1,6 +1,6 @@
 <!-- Navigation -->
 <nav class="px-3 mt-6">
-    <div class="space-y-1">
+    <div class="space-y-1 mb-6">
         @if($menu = \EVS::getDashboardMenu())
             @foreach($menu as $section)
                 @if($section['label'] === 'hr')

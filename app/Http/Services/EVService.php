@@ -271,29 +271,29 @@ class EVService
                         'permissions' => []
                     ],
                     [
-                        'label' => translate('Invoices'),
+                        'label' => translate('Downloads'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
-                    [
+                  /*   [
                         'label' => translate('My Wishlist'),
                         'icon' => 'heroicon-o-heart',
                         'route' => route('wishlist'),
                         'is_active' => areActiveRoutes(['wishlist']),
                         'user_types' => User::$user_types,
                         'permissions' => []
-                    ],
-                    [
+                    ], */
+                /*     [
                         'label' => translate('My Viewed Items'),
                         'icon' => 'heroicon-o-eye',
                         'route' => route('wishlist.views'),
                         'is_active' => areActiveRoutes(['wishlist.views']),
                         'user_types' => User::$user_types,
                         'permissions' => []
-                    ]
+                    ] */
                 ]
             ],
             [

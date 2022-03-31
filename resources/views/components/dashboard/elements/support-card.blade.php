@@ -1,5 +1,5 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
-<div {{ $attributes->merge(['class' => 'relative']) }}>
+<div {{ $attributes->merge(['class' => 'relative card p-4']) }}>
     @if(!get_tenant_setting('support_phone'))
     {{-- Empty state, ask user to fill out the details --}}
     <div class="hidden absolute bottom-0 right-0 block h-full w-full bg-white/90 z-10">
