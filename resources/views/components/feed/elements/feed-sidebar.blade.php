@@ -65,13 +65,7 @@
         <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider" id="communities-headline">
             {{ translate('My Pages') }}
 
-            @foreach (auth()->user()->shop as $shop)
-        <div>
-            <a href="{{ $shop->getPermalink() }}">
-                {{ $shop->name }}
-            </a>
-        </div>
-        @endforeach
+
 
         </p>
         <div class="mt-3 space-y-2" aria-labelledby="communities-headline">
