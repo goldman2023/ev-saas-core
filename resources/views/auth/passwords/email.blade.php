@@ -32,7 +32,7 @@
                         <!-- Button -->
                         <div class="row align-items-center mb-5">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <a class="font-size-1 font-weight-bold" href="{{ route('business.login') }}"><i
+                                <a class="font-size-1 font-weight-bold" href="{{ route('user.login') }}"><i
                                         class="fas fa-angle-left fa-sm mr-1"></i>{{ translate('Back to Login') }}</a>
                             </div>
 
