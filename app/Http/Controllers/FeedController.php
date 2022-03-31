@@ -22,7 +22,7 @@ class FeedController extends Controller
     }
 
     public function products() {
-        $products = Product::orderBy('created_at', 'desc')->all();
+        $products = Product::all();
         return view('frontend.feed.products', compact('products'));
     }
 }
