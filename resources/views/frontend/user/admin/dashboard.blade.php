@@ -22,7 +22,7 @@
         </div>
         <div class="grid grid-cols-4 gap-12 mb-12">
 
-            <div class="lg:col-span-2 col-span-2">
+            <div class="lg:col-span-2 col-span-4">
                 <x-dashboard.widgets.top-categories></x-dashboard.widgets.top-categories>
             </div>
 

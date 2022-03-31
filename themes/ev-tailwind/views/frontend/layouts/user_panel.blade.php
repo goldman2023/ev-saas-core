@@ -11,7 +11,7 @@
 -->
 <div>
     <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
-    <div class="fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
+    <div class="hidden fixed inset-0 flex z-40 md:hidden" role="dialog" aria-modal="true">
         <!--
         Off-canvas menu overlay, show/hide based on off-canvas menu state.
 
