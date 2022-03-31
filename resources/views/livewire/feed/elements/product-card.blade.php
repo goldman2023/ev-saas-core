@@ -1,6 +1,6 @@
 <div class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 relative">
 
-    <div class="flex-1 flex flex-col p-3 pt-0">
+    <div class="flex-1 flex flex-col p-3">
         <a href="{{  $product->getPermalink() }}">
             <img class="w-32 h-32 flex-shrink-0 mx-auto rounded" src="{{ $product->getThumbnail() }}" alt="">
         </a>
@@ -19,7 +19,7 @@
                     €
                 </span>
                 @if(!$product->isInStock())
-                <span class="absolute top-3 right-3 px-2 py-1 text-gray-100 text-sm font-medium bg-red-700 rounded-full">
+                <span class="absolute top-[-10px] right-[-10px] px-2 py-1 text-gray-100 text-xs font-medium bg-red-700 rounded-full">
                     {{ translate('Out of stock') }}
                 </span>
                 @endif
