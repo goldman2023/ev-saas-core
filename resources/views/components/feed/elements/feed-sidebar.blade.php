@@ -61,16 +61,16 @@
             <span class="truncate"> Trending </span>
         </a> --}}
     </div>
-    <div class="pt-10">
+    <div class="hidden pt-10">
         <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider" id="communities-headline">
             {{ translate('My Pages') }}
 
             @foreach (auth()->user()->shop as $shop)
-            <div>
-                <a href="{{ $shop->getPermalink() }}">
-                    {{ $shop->name }}
-                </a>
-            </div>
+        <div>
+            <a href="{{ $shop->getPermalink() }}">
+                {{ $shop->name }}
+            </a>
+        </div>
         @endforeach
 
         </p>
