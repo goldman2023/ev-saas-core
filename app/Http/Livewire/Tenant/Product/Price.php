@@ -31,7 +31,7 @@ class Price extends Component {
         $this->withLabel = $withLabel;
         $this->totalPriceClass = $totalPriceClass;
         $this->originalPriceClass = $originalPriceClass;
-        $this->withDiscountLabel = $withDiscountLabel;
+        $this->withDiscountLabel = $withDiscountLabel && $this->model->base_price !== $this->model->total_price;
     }
 
 //    public function changeVariation(ProductVariation $variation) {
