@@ -118,7 +118,7 @@ class MyAccountForm extends Component
 
         $this->inform(translate('Basic information successfully updated!'), '', 'success');
         if($this->onboarding) {
-            return redirect()->route('onboarding.step3');
+            return redirect()->route('onboarding.step4');
 
         }
     }

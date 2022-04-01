@@ -116,9 +116,9 @@
                                             </div>
                                             <div class="min-w-0 flex-1">
                                                 <div class="text-sm font-medium text-gray-900">
-                                                    <a href="{{ route('product.create') }}">
+                                                    <a href="{{ route('settings.shop_settings') }}">
                                                         <span class="absolute inset-0" aria-hidden="true"></span>
-                                                        {{ translate('Add a product') }}
+                                                        {{ translate('Create a Shop') }}
                                                     </a>
                                                 </div>
                                                 <p class="text-sm text-gray-500">

@@ -22,7 +22,7 @@ class OnboardingController extends Controller
     public function profile_store()
     {
 
-        return redirect()->route('onboarding.step3');
+        return redirect()->route('onboarding.step4');
     }
 
     public function step3()
