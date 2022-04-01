@@ -131,7 +131,11 @@
                     </p>
                     @else
                     @if(class_exists($item->subject_type) && $item->subject)
-                    {{ $item->description }} {{ class_basename($item->subject)}} {{ $item->subject->name }}
+                    {{ $item->description }}
+                    {{ class_basename($item->subject)}}
+                    @isset($item->subject->name)
+                        {{ $item->subject->name }}
+                    @endisset
 
 
                     @endif
