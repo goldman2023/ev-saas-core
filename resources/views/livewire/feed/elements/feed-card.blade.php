@@ -119,8 +119,9 @@
                         {{ $item->description }}
                         @endif
                     </a>
-                    @elseif($item->subject_type == 'App\Models\BlogPost')
+                    @elseif($item->subject_type == 'App\Models\BlogPost' && $item->subject)
                     {{ $item->description }} {{ translate('new status update') }}
+
                     <a href="{{ $item->subject->getPermalink() }}" target="_blank">
                         {{ $item->subject->title }}
                     </a>
