@@ -24,6 +24,7 @@
                             <livewire:feed.elements.product-card :product="$product"></livewire:feed.elements.product-card>
                         @endforeach
 
+                        {{ $products->links() }}
 
                         <!-- More questions... -->
                     </div>

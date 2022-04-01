@@ -30,6 +30,9 @@ class FeedCard extends Component
 
         if ($item->subject_type == 'App\Models\Product') {
             $this->product = $item->subject;
+            if($this->product->status == 'draft') {
+                $this->ignore = true;
+            }
         } elseif ($item->subject_type == 'App\Models\Wishlist') {
             $this->ignore = true;
             if (empty($item->subject->subject)) {
