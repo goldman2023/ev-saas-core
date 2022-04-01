@@ -116,7 +116,7 @@
                                             </div>
                                             <div class="min-w-0 flex-1">
                                                 <div class="text-sm font-medium text-gray-900">
-                                                    <a href="{{ route('settings.shop_settings') }}">
+                                                    <a href="{{ route('onboarding.step3') }}">
                                                         <span class="absolute inset-0" aria-hidden="true"></span>
                                                         {{ translate('Create a Shop') }}
                                                     </a>
