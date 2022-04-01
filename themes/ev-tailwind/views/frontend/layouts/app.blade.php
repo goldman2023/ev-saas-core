@@ -11,7 +11,11 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    {{--
+        SITE NAME:
+        To Use Site name globaly, use helper function get_site_name() - it's an alias fo get_setting('site_name')
+    --}}
+    <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
@@ -49,7 +53,7 @@
         </main>
 
         <x-tailwind-ui.footers.footer>
-            </x-tailwind-ui.footers.footer>
+        </x-tailwind-ui.footers.footer>
     </div>
 
     <x-default.footers.app-bar>
