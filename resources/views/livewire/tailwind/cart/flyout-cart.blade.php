@@ -124,7 +124,7 @@
                                 <h3 class="h3">{{ translate('Your cart is currently empty') }}</h3>
                                 <p class="mx-3 mt-3">{{ translate('Before proceed to checkout you must add some products to your shopping cart.') }}</p>
                             </div>
-                            <a class="btn btn-pill bg-sky-600 text-white transition-3d-hover px-5 py-2" href="{{ route('search') }}">
+                            <a class="btn btn-pill bg-sky-600 text-white transition-3d-hover px-5 py-2" href="{{ route('feed.products') }}">
                                 {{ translate('Start Shopping') }}
                             </a>
                         </div>
@@ -170,7 +170,7 @@
         @toggle-cart.window="show = !show"
         @display-cart.window="show = true"
     >
-        
+
     </section>
 
     <div class="c-flyout-cart__overlay"

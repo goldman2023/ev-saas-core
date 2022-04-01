@@ -336,7 +336,7 @@ class EVService
                         'icon' => 'heroicon-s-user-group',
                         'route' => route('settings.staff_settings'),
                         'is_active' => areActiveRoutes(['settings.staff_settings']),
-                        'user_types' => User::$non_customer_user_types,
+                        'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_staff'] // TODO: Add users managing permissions
                     ],
 
