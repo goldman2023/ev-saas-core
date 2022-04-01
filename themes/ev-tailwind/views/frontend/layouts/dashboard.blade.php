@@ -16,7 +16,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
 
 
     <!-- Styles -->
