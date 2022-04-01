@@ -31,6 +31,8 @@ class TenantSetting extends Model
 
     protected $table = 'tenant_settings';
 
+    protected $fillable = ['setting', 'value'];
+
     public function getValueAttribute($value) {
         if(is_array($value)) {
             return $value;

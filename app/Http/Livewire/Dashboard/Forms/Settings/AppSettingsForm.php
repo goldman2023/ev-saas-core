@@ -36,29 +36,25 @@ class AppSettingsForm extends Component
         $rulesSets = collect([
             'general' => [
                 // 'shop.*' => [],
-                'settings.*' => [],
+                // 'settings.*' => [],
                 'settings.site_logo.value' => ['required'],
                 'settings.site_name.value' => ['required'],
-                'settings.site_motto.value' => ['required', ], //'email:rfs,dns'
+                'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
             ],
-            'company_info' => [
-                'settings.tax_number' => [''],
-                'settings.registration_number' => ['']
+            'social' => [
+                'settings.enable_social_logins.value' => ['boolean'],
+                'settings.google_login.value' => ['boolean'],
+                'settings.facebook_login.value' => ['boolean', ],
+                'settings.linkedin_login.value' => ['boolean'],
+                'settings.facebook_app_id.value' => [''],
+                'settings.facebook_app_secret.value' => [''],
+                'settings.google_oauth_client_id.value' => [''],
+                'settings.google_oauth_client_secret.value' => [''],
+                'settings.linkedin_client_id.value' => [''],
+                'settings.linkedin_client_secret.value' => [''],
             ],
-            'settings' => [
-                'settings.*' => [],
-
-            ],
-            'contact_details' => [
-                'settings.contact_details' => ['required'],
-            ],
-            'domains' => [],
-            'seo' => [
-                'shop.meta_title' => ['required', 'min:3'],
-                'shop.meta_description' => ['required', 'min:3'],
-                //'shop.meta_image' => ['if_id_exists:App\Models\Upload,id'],
-            ],
+            
         ]);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
@@ -132,6 +128,32 @@ class AppSettingsForm extends Component
         } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save general settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function saveSocial() {
+        $rules = $this->getRuleSet('social');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Social settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save social settings.'), $e->getMessage(), 'fail');
         }
     }
 
@@ -265,7 +287,6 @@ class AppSettingsForm extends Component
             if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => TenantSettings::castSettingSave($setting_key, $this->settings[$setting_key])]);
-                
             }
         }
     }
