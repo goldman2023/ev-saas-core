@@ -24,7 +24,7 @@ class QuantityCounter extends Component
         $this->model = $model;
         $this->wired = $wired;
         $this->mini = $mini;
-        $this->disabled = !$model->isInStock();
+        $this->disabled = !$model->isInStock() && !$model->allow_out_of_stock_purchases;
         $this->class = $class;
     }
 

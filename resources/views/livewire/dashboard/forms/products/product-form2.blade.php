@@ -446,8 +446,8 @@
                     {{-- Card Shipping --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}">
                         <div>
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Inventory') }}</h3>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Track your product inventory') }}</p>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Shipping') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Set available delivery options for your product') }}</p>
                         </div>
                 
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">

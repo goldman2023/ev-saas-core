@@ -166,7 +166,7 @@ class CheckoutSingleForm extends Component
         $this->manual_mode_billing = !\Auth::check();
         $this->manual_mode_shipping = !\Auth::check();
         $this->show_addresses = \Auth::check() && auth()->user()->addresses->isNotEmpty();
-        $this->addresses = \Auth::check()  ? auth()->user()->addresses->map(function($item) {
+        $this->addresses = \Auth::check() ? auth()->user()->addresses->map(function($item) {
             $item->country = \Countries::get(code: $item->country)->name ?? translate('Unknown');
             return $item;
         }) : [];

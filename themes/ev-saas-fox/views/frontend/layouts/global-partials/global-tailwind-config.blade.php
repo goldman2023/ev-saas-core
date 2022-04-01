@@ -101,7 +101,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .btn-ghost {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary bg-transparent hover: text-primaryDark;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary bg-transparent hover:text-primaryDark;
         }
 
         .badge-info {
@@ -136,6 +136,10 @@ TODO: you can overide it with data from a database a sa setting --}}
             @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 cursor-pointer;
         }
 
+        input[disabled] {
+            @apply opacity-50;
+        }
+        
         .is-invalid {
             @apply border-danger;
         }

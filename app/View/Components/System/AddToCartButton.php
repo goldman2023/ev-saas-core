@@ -27,7 +27,7 @@ class AddToCartButton extends Component
     public function __construct($model = null, $class = '', $icon = '', $label = 'Add to cart', $labelNotInStock = 'Not in stock')
     {
         $this->model = $model;
-        $this->disabled = !$model->isInStock();
+        $this->disabled = !$model->isInStock() && !$model->allow_out_of_stock_purchases;
         $this->label = $label;
         $this->labelNotInStock = $labelNotInStock;
         $this->class = $class;
