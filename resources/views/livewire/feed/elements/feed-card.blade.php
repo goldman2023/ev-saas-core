@@ -130,7 +130,7 @@
                         {{ $item->subject->excerpt}}
                     </p>
                     @else
-                    @if(class_exists($item->subject_type))
+                    @if(class_exists($item->subject_type) && $item->subject)
                     {{ $item->description }} {{ class_basename($item->subject)}} {{ $item->subject->name }}
 
 

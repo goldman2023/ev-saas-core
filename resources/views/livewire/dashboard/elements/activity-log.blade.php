@@ -55,7 +55,9 @@
                         <div class="mt-2 text-sm text-gray-700">
                             @if( class_basename($item->subject) === 'Product')
                             @isset($item->subject->name)
-                            <a href="{{ $item->subject->getPermalink() }}">{{ $item->subject->name }}</a>
+                            <a href="{{ $item->subject->getPermalink() }}">
+                                {{ $item->subject->name }}
+                            </a>
                             @endisset
                             @else
                             @isset($item->subject->name)
