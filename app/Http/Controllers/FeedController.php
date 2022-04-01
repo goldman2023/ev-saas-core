@@ -22,7 +22,7 @@ class FeedController extends Controller
     }
 
     public function products() {
-        $products = Product::paginate(50);
+        $products = Product::where('status', 'published')->paginate(50);
         return view('frontend.feed.products', compact('products'));
     }
 }
