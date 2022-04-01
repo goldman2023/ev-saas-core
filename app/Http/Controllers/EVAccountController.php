@@ -13,6 +13,16 @@ use Cookie;
 
 class EVAccountController extends Controller
 {
+    public function frontend_user_profile(Request $request, $id) {
+        try {
+            $user = User::findOrFail($id);
+
+            return view('frontend.user-profile-single', compact('user'));
+        } catch(\Exception $e) {
+            // Create error handling for not found exception to go to 404 page...
+        }
+    }
+
     public function user_profile(Request $request, $id) {
         try {
             $user = User::findOrFail($id);
