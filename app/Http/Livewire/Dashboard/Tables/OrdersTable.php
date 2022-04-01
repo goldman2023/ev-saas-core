@@ -37,7 +37,7 @@ class OrdersTable extends DataTableComponent
     ];
 
     public array $bulkActions = [
-        'exportSelected' => 'Export',
+        // 'exportSelected' => 'Export',
     ];
 
     protected string $pageName = 'orders';
@@ -106,11 +106,12 @@ class OrdersTable extends DataTableComponent
                 ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
             Column::make('Type', 'type')
+                ->excludeFromSelectable()
                 ->addClass('hidden md:table-cell'),
-            Column::make('Date', 'created_at')
+            Column::make('Customer')
                 ->excludeFromSelectable()
                 ->sortable(),
-            Column::make('Customer')
+            Column::make('Date', 'created_at')
                 ->excludeFromSelectable()
                 ->sortable(),
             Column::make('Payment status', 'payment_status')
