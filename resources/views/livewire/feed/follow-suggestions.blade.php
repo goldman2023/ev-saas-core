@@ -1,7 +1,7 @@
 <div class="bg-white rounded-lg shadow">
     <div class="p-6">
         <h2 id="who-to-follow-heading" class="text-base font-medium text-gray-900">
-            {{ translate('Popular Members') }}
+            {{ translate('Popular Shops') }}
         </h2>
         <div class="mt-6 flow-root">
             <div wire:loading wire:target="loadInit">

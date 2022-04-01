@@ -18,7 +18,6 @@
                 <div class="mb-3">
                     <x-feed.elements.stories-global>
                     </x-feed.elements.stories-global>
-
                 </div>
                 <div class="mt-4">
 

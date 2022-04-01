@@ -5,8 +5,12 @@
 
     <section class="relative bg-white overflow-hidden" style="">
         <div class="bg-transparent">
+            <div class="bg-gray-200 p-3">
 
+            <x-feed.elements.stories-global>
+            </x-feed.elements.stories-global>
 
+            </div>
         </div>
         <div class="relative py-20 xl:pt-16 xl:pb-24">
             <div class="container px-4 mx-auto" style="background-image: url(https://www.webhuq.com/templates/collabs_team_collaboration_website_12145/assets/img/header-bootom-img.png);

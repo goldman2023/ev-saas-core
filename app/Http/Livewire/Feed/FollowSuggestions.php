@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Feed;
 
-use App\Models\User;
+use App\Models\Shop;
 use Livewire\Component;
 
 class FollowSuggestions extends Component
@@ -13,7 +13,8 @@ class FollowSuggestions extends Component
 
     public function mount()
     {
-        $this->accounts = User::where('id', '!=', auth()->user()->id)->take(5)->get();
+        $currently_liked = auth()->user()->following();
+        $this->accounts = Shop::where('id', '!=', auth()->user()->id)->take(5)->get();
     }
 
     public function render()
