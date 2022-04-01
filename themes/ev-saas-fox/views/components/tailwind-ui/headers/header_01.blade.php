@@ -4,7 +4,7 @@
     {{-- Header settings should include Background among other things + Sticky behavior (yes/no) --}}
     <div class="relative bg-transparent z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-5">
-            <div class="flex justify-between items-center py-6 md:justify-start md:space-x-10">
+            <div class="flex justify-between items-center py-4 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">
                         <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-8 w-auto sm:h-10"
