@@ -28,7 +28,7 @@
                 <div class="relative flex items-start space-x-3">
                     <div class="relative">
                         <img class="h-10 w-10 rounded-full bg-gray-400 flex items-center justify-center ring-8 ring-white"
-                            src="{{ $item->causer->getThumbnail() }}"
+                            src="{{ $item->causer?->getThumbnail() ?? '' }}"
                             alt="">
 
                         <span class="absolute -bottom-0.5 -right-1 bg-white rounded-tl px-0.5 py-px">
@@ -45,7 +45,7 @@
                         <div>
                             <div class="text-sm">
                                 <a href="#" class="font-medium text-gray-900">
-                                    {{ $item->causer->name }}
+                                    {{ $item->causer?->name ?? '' }}
                                 </a>
                             </div>
                             <p class="mt-0.5 text-sm text-gray-500">

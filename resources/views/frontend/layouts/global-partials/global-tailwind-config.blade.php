@@ -53,7 +53,6 @@ TODO: you can overide it with data from a database a sa setting --}}
                 },
                 colors: {
                     /* Indigo is a primary brand color */
-                    indigo: '#000',
                     primary: '#8BC53F',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
@@ -164,13 +163,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .ev-icon__xs {
-            max-width: 16px;
+            max-width: 16px !important;
         }
     }
 </style>
-
-<style>
-    .ev-icon__xs {
-        max-width: 16px !important;
-    }
-    </style>
