@@ -16,7 +16,7 @@
                 <div class="min-w-0 flex-1">
                     <p class="text-sm font-medium text-gray-900">
                         @isset( $item->causer->name)
-                        <a href="{{ $item->causer->shop }}" class="hover:underline">
+                        <a href="#" class="hover:underline">
                             {{ $item->causer->name }}
                         </a>
                         @endisset
