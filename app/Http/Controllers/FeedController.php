@@ -15,7 +15,7 @@ class FeedController extends Controller
     }
 
     public function shops() {
-        $shops = Shop::all();
+        $shops = Shop::whereHas('products')->paginate(50);
         // $users = Users::all();
 
         return view('frontend.feed.shops', compact(['shops']));
