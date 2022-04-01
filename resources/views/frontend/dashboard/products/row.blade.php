@@ -67,10 +67,10 @@
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
             @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
@@ -81,7 +81,7 @@
             <li>
                 <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
                     target="_blank">
-                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) 
+                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2'])
                     <span class="ml-2">{{ translate('Preview') }}</span>
                 </a>
             </li>
@@ -90,6 +90,13 @@
                     class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
                     @svg('heroicon-o-link', ['class' => 'w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Copy checkout link') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('product.edit', ['slug' => $row->slug]) }}" target="_blank"
+                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                    @svg('heroicon-o-duplicate', ['class' => 'w-[18px] h-[18px]'])
+                    <span class="ml-2">{{ translate('Duplicate product') }}</span>
                 </a>
             </li>
             <li>
