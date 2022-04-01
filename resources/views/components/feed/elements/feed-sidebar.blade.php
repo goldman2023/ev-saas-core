@@ -73,5 +73,5 @@
         </div>
     </div>
 
-    <x-dashboard.elements.support-card class="mt-3"></x-dashboard.elements.support-card>
+    {{-- <x-dashboard.elements.support-card class="mt-3"></x-dashboard.elements.support-card> --}}
 </nav>

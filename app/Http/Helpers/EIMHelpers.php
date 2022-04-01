@@ -10,24 +10,26 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
-function s($str, $charset = 'UTF-8') {
+function s($str, $charset = 'UTF-8')
+{
     return new Stringy($str, $charset);
 }
 
-function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null) {
-    if(!empty($data)) {
-        if(!$data instanceof \Illuminate\Support\Collection) {
+function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null)
+{
+    if (!empty($data)) {
+        if (!$data instanceof \Illuminate\Support\Collection) {
             $data = collect($data);
         }
 
         $data = $data->map(function ($item, $index) use ($dataType, $casts) {
             settype($item, $dataType);
 
-            if(!empty($casts) && (is_object($item) || is_array($item))) {
-                foreach($casts as $key => $cast) {
-                    if(is_object($item)) {
+            if (!empty($casts) && (is_object($item) || is_array($item))) {
+                foreach ($casts as $key => $cast) {
+                    if (is_object($item)) {
                         settype($item->{$key}, $cast);
-                    } else if(is_array($item)) {
+                    } else if (is_array($item)) {
                         settype($item[$key], $cast);
                     }
                 }
@@ -59,8 +61,8 @@ function get_active_theme()
 {
     return Theme::active();
 }
-function get_system_name() {
-
+function get_system_name()
+{
 }
 function get_site_name()
 {
@@ -82,7 +84,6 @@ function get_site_logo()
     }
 
     return $logo;
-
 }
 
 function get_site_colors()
@@ -272,10 +273,8 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
     return $stringKey;
 }
 
-function get_public_user_count() {
-    $users = User::count();
-    if($users < 50) {
-        $users = 50;
-    }
+function get_public_user_count()
+{
+    $users = 50 + User::count();
     return ($users);
 }
