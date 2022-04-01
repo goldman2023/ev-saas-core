@@ -19,7 +19,7 @@
                     <h1 class="block text-2xl font-semibold mb-6 text-gray-900">
                         {{ translate('Discover products') }}
                     </h1>
-                    <div role="list" class="grid grid-cols-4 gap-5">
+                    <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-4">
                         @foreach ($products as $product)
                             <livewire:feed.elements.product-card :product="$product"></livewire:feed.elements.product-card>
                         @endforeach
