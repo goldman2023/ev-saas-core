@@ -11,6 +11,7 @@ class EVOrderController extends Controller
     public function index() {
 //        $orders = MyShop::getShop()->orders()->orderBy('created_at','desc')->paginate(20);
         // ^^^ $orders will be queried in livewire datatable component ^^^^
+        // $orders = Order::query()->where('shop_id', MyShop::getShopID());
         $orders_count = Order::count(); // Reminder: there is a global scope to add shop_id
 
         return view('frontend.dashboard.orders.index',  compact('orders_count'));

@@ -30,7 +30,7 @@
         @if($order->order_items->isNotEmpty())
             @foreach($order->order_items as $item)
                 <div class="py-10 border-b border-gray-200 flex space-x-6">
-                    <img src="https://tailwindui.com/img/ecommerce-images/confirmation-page-05-product-01.jpg" alt="Glass bottle with black plastic pour top and mesh insert." class="flex-none w-20 h-20 object-center object-cover bg-gray-100 rounded-lg sm:w-40 sm:h-40">
+                    <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt="Glass bottle with black plastic pour top and mesh insert." class="flex-none w-20 h-20 object-center object-contain bg-gray-100 rounded-lg sm:w-40 sm:h-40">
                     <div class="flex-auto flex flex-col">
                     <div>
                         <h4 class="font-semibold text-gray-900">
@@ -64,12 +64,22 @@
             <div>
               <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
               <dd class="mt-2 text-gray-700">
-                <address class="not-italic">
-                  <span class="block">{{ $order->shipping_first_name.' '.$order->shipping_last_name }}</span>
-                  <span class="block">{{ $order->shipping_address }}</span>
-                  <span class="block">{{ $order->shipping_city }}, {{ $order->shipping_zip }}</span>
-                  <span class="block">{{ $order->shipping_state == (\Countries::get(code: $order->shipping_country)->name ?? '') ? \Countries::get(code: $order->shipping_country)->name : $order->shipping_state.', '.\Countries::get(code: $order->shipping_country)->name }}</span>
-                </address>
+                @if($order->same_billing_shipping)
+                  <address class="not-italic">
+                    <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
+                    <span class="block">{{ $order->billing_address }}</span>
+                    <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
+                    <span class="block">{{ $order->billing_state == (\Countries::get(code: $order->billing_country)->name ?? '') ? \Countries::get(code: $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code: $order->billing_country)->name }}</span>
+                  </address>
+                @else
+                  <address class="not-italic">
+                    <span class="block">{{ $order->shipping_first_name.' '.$order->shipping_last_name }}</span>
+                    <span class="block">{{ $order->shipping_address }}</span>
+                    <span class="block">{{ $order->shipping_city }}, {{ $order->shipping_zip }}</span>
+                    <span class="block">{{ $order->shipping_state == (\Countries::get(code: $order->shipping_country)->name ?? '') ? \Countries::get(code: $order->shipping_country)->name : $order->shipping_state.', '.\Countries::get(code: $order->shipping_country)->name }}</span>
+                  </address>
+                @endif
+                
               </dd>
             </div>
             <div>
@@ -109,14 +119,14 @@
           <dl class="space-y-6 border-t border-gray-200 text-sm pt-10">
             <div class="flex justify-between">
               <dt class="font-medium text-gray-900">{{ translate('Subtotal') }}</dt>
-              <dd class="text-gray-700">{{ CartService::getOriginalPrice()['display'] ?? '' }}</dd>
+              <dd class="text-gray-700">{{ \FX::formatPrice($order->base_price) }}</dd>
             </div>
             <div class="flex justify-between">
               <dt class="flex font-medium text-gray-900">
                 {{ translate('Discount') }}
                 {{-- <span class="rounded-full bg-gray-200 text-xs text-gray-600 py-0.5 px-2 ml-2">STUDENT50</span> --}}
               </dt>
-              <dd class="text-gray-700">-{{ CartService::getDiscountAmount()['display'] ?? '' }}</dd>
+              <dd class="text-gray-700">-{{ \FX::formatPrice($order->discount_amount) }}</dd>
             </div>
             <div class="flex justify-between">
               <dt class="font-medium text-gray-900">{{ translate('Shipping') }}</dt>
@@ -124,7 +134,7 @@
             </div>
             <div class="flex justify-between">
               <dt class="font-semibold text-gray-900">{{ translate('Total') }}</dt>
-              <dd class="font-semibold text-gray-900">{{ CartService::getSubtotalPrice()['display'] ?? '' }}</dd>
+              <dd class="font-semibold text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
             </div>
           </dl>
         </div>

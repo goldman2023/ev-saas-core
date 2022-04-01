@@ -7,28 +7,44 @@
 @endpush
 
 @section('panel_content')
-    <!-- Card -->
-    <div class="card">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">{{ translate('All Orders') }}</h5>
-            <a href="{{ route('order.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
+    <x-dashboard.section-headers.section-header title="{{ translate('All orders') }}" text="">
+        <x-slot name="content">
+            <a href="{{ route('order.create') }}" class="btn-primary">
+                @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('Add new') }}</span>
+            </a>
+        </x-slot>
+    </x-dashboard.section-headers.section-header>
 
-        </div>
-        <!-- End Header -->
-
-        <div class="card-body">
+    <div class="w-full">
+        @if($orders_count > 0)
             <livewire:dashboard.tables.orders-table for="shop"></livewire:dashboard.tables.orders-table>
+        @else
+            <x-dashboard.empty-states.no-items-in-collection 
+                icon="heroicon-o-document" 
+                title="{{ translate('No orders yet') }}"
+                text="{{ translate('Engage your customers so you can get a new order!') }}"
+                link-href-route="order.create"
+                link-text="{{ translate('Add new Order') }}">
+
+            </x-dashboard.empty-states.no-items-in-collection>
+        @endif
+        
+        {{-- <div class="col-6">
+            <x-default.dashboard.widgets.create-card></x-default.dashboard.widgets.create-card>
         </div>
+    
+        <div class="col-6">
+            <x-default.dashboard.widgets.create-card title="Create a subscription product" description="Create a recurring digital product"></x-default.dashboard.widgets.create-card>
+        </div> --}}
     </div>
 
-
-    <div class="row mt-5">
-        <div class="col-12 col-md-6 col-lg-4 d-flex">
-            <div class="card w-100 mb-3">
-                <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">
+    <div class="w-full grid grid-cols-12 gap-4 mt-5">
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 flex">
+            <div class="shadow rounded border border-gray-200 bg-white p-4 w-full mb-3">
+                <a href="{{ route('order.create') }}" class="flex flex-col">
                     <div class="pb-2">
-                        @svg('lineawesome-file-invoice-solid', ['class' => 'square-32'])
+                        @svg('lineawesome-file-invoice-solid', ['class' => 'w-[32px] h-[32px]'])
                     </div>
                     <h5 class="text-20">
                         {{ translate('Create Order') }}
@@ -36,18 +52,18 @@
                     <p class="text-dark text-14 mb-4">
                         {{ translate('Create full order manually.') }}
                     </p>
-                    <span class="text-link d-flex align-items-center mt-auto">
+                    <span class="text-link flex items-center mt-auto">
                         {{ translate('Get Started') }}
-                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])
+                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'w-[16px] h-[16px] ml-2'])
                     </span>
                 </a>
             </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4 d-flex">
-            <div class="card w-100 mb-3">
-                <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">
+        <div class="col-span-12 md:col-span-6 lg:col-span-4 flex">
+            <div class="shadow rounded border border-gray-200 bg-white p-4 w-full mb-3">
+                <a href="#" class="flex flex-col">
                     <div class="pb-2">
-                        @svg('lineawesome-question-solid', ['class' => 'square-32'])
+                        @svg('lineawesome-question-solid', ['class' => 'w-[32px] h-[32px]'])
                     </div>
                     <h5 class="text-20">
                         {{ translate('Create Proposal') }}
@@ -55,32 +71,13 @@
                     <p class="text-dark text-14 mb-4">
                         {{ translate('Create order as a proposal for possible future payments.') }}
                     </p>
-                    <span class="text-link d-flex align-items-center mt-auto">
+                    <span class="text-link flex items-center mt-auto">
                         {{ translate('Get Started') }}
-                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])
+                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'w-[16px] h-[16px] ml-2'])
                     </span>
                 </a>
             </div>
         </div>
-{{--        <div class="col-12 col-md-6 col-lg-4 d-flex">--}}
-{{--            <div class="card w-100 mb-3">--}}
-{{--                <a href="{{ route('dashboard') }}" class="card-body d-flex flex-column">--}}
-{{--                    <div class="pb-2">--}}
-{{--                        @svg('lineawesome-file-invoice-dollar-solid', ['class' => 'square-32'])--}}
-{{--                    </div>--}}
-{{--                    <h5 class="text-20">--}}
-{{--                        {{ translate('Create Invoice') }}--}}
-{{--                    </h5>--}}
-{{--                    <p class="text-dark text-14 mb-4">--}}
-{{--                        {{ translate('Create single invoice for specific products/services manually.') }}--}}
-{{--                    </p>--}}
-{{--                    <span class="text-link d-flex align-items-center mt-auto">--}}
-{{--                        {{ translate('Get Started') }}--}}
-{{--                        @svg('heroicon-o-arrow-narrow-right', ['class' => 'square-16 ml-2'])--}}
-{{--                    </span>--}}
-{{--                </a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
     </div>
 
 @endsection
