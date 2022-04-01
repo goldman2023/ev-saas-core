@@ -19,6 +19,7 @@
         "codeat3/blade-grommet-icons": "^1.1",
         "codeat3/blade-line-awesome-icons": "^1.0",
         "codexshaper/laravel-woocommerce": "^3.0",
+        "comodolab/nova-help": "^0.5.0",
         "davidhsianturi/blade-bootstrap-icons": "^1.1",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "doctrine/dbal": "^3.1.4",

@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Comodolab\Nova\Fields\Help\Help;
 
 class Category extends Resource
 {
@@ -51,6 +53,10 @@ class Category extends Resource
             // Textarea::make('Content'),
 
             HasOne::make('Parent', 'parent', Category::class),
+
+            Number::make('Commision Rate'),
+            Help::make('Commision rate title', 'What % of the order amount is commisioned for platform for specific category'),
+
         ];
     }
 

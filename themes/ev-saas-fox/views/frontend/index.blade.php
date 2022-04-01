@@ -72,7 +72,7 @@
                                     <span>{{ translate('Sign in with Google') }}</span>
                                 </div>
                             </a>
-                            <a class="hidden mb-4 w-full text-coolGray-500 hover:text-coolGray-600 font-medium text-center border border-coolGray-200 hover:border-coolGray-300 rounded-md shadow-sm"
+                            <a class="mb-4 w-full text-coolGray-500 hover:text-coolGray-600 font-medium text-center border border-coolGray-200 hover:border-coolGray-300 rounded-md shadow-sm"
                                 href="{{ route('social.login', ['provider' => 'facebook']) }}">
                                 <div class="flex items-center justify-center py-3 px-3 leading-5">
                                     <svg class="mr-3" width="24" height="24" viewbox="0 0 24 24" fill="none"
