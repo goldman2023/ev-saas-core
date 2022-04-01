@@ -16,6 +16,7 @@
                 <div class="mt-6 sm:mt-0">
                     {{-- <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('Company')
                         }}</h3> --}}
+
                     <ul role="list" class="mt-4 space-y-4">
 
                     </ul>
@@ -24,33 +25,18 @@
                 <div class="mt-6 sm:mt-0">
                     {{-- <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('Support')
                         }}</h3> --}}
-                    <ul role="list" class="mt-4 space-y-4">
 
-                    </ul>
                 </div>
             </div>
-            <div class="hidden col-span-1 lg:col-span-2 xl:mt-0">
-                <h3 class="text-sm font-semibold text-white tracking-wider uppercase">STAY UP TO DATE WITH {{
-                    get_site_name() }}</h3>
-                <p class="mt-4 text-base text-gray-300">We promise, we will not use your contact information to send
-                    spam or share it with the third parties.</p>
-                <form class="mt-4 sm:flex sm:max-w-md">
-                    <label for="email-address" class="sr-only">Email address</label>
-                    <input type="email" name="email-address" id="email-address" autocomplete="email" required
-                        class="appearance-none min-w-0 w-full bg-white border border-transparent rounded-md py-2 px-4 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white focus:border-white focus:placeholder-gray-400"
-                        placeholder="Enter your email">
-                    <div class="mt-3 rounded-md sm:mt-0 sm:ml-3 sm:flex-shrink-0">
-                        <button type="submit"
-                            class="w-full bg-indigo-900 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500">
-                            {{ translate('Subscribe') }}
-                        </button>
-                    </div>
-                </form>
+            <div class="col-span-1 lg:col-span-2 xl:mt-0 text-right">
+                <x-tenant.system.image alt="{{ get_site_name() }} logo" class="ml-auto h-20 w-auto sm:h-20"
+                image="https://ev-saas.fra1.digitaloceanspaces.com/uploads/5469dff5-3707-417d-b152-d9950de45daf/1648806310_512_ae4e1a3771304b463cf4d72c68e44722.jpeg">
+            </x-tenant.system.image>
             </div>
         </div>
         <div class="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
             <div class="flex space-x-6 md:order-2">
-                <a href="#" class="text-gray-400 hover:text-gray-300">
+                <a href="https://www.facebook.com/foxaskcom" target="_blank" class="text-gray-400 hover:text-gray-300">
                     <span class="sr-only">Facebook</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
@@ -59,7 +45,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 hover:text-gray-300">
+                <a href="#" class="hidden text-gray-400 hover:text-gray-300">
                     <span class="sr-only">Instagram</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
@@ -68,7 +54,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 hover:text-gray-300">
+                <a href="#" class="hidden text-gray-400 hover:text-gray-300">
                     <span class="sr-only">Twitter</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path
@@ -76,7 +62,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 hover:text-gray-300">
+                <a href="#" class="hidden text-gray-400 hover:text-gray-300">
                     <span class="sr-only">GitHub</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
@@ -85,7 +71,7 @@
                     </svg>
                 </a>
 
-                <a href="#" class="text-gray-400 hover:text-gray-300">
+                <a href="#" class="hidden text-gray-400 hover:text-gray-300">
                     <span class="sr-only">Youtube</span>
                     <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill-rule="evenodd"
