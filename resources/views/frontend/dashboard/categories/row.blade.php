@@ -8,7 +8,7 @@
     {{ $row->getTranslation('name') }}
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle ">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->featured)
         <span class="badge-success">
             {{ translate('Featured') }}
@@ -25,7 +25,7 @@
 </x-livewire-tables::table.cell>
 
 
-<x-livewire-tables::table.cell class="align-middle ">
+<x-livewire-tables::table.cell class="align-middle text-center">
     <span class="d-block text-14 mb-0">{{ $row->created_at?->format('d.m.Y') ?? '' }}</span>
 </x-livewire-tables::table.cell>
 
@@ -40,7 +40,7 @@
             @keydown.escape="isOpen = false" 
             class="flex items-center btn" 
         >
-            @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
+            @svg('heroicon-o-cshevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
         <ul x-show="isOpen"
             @click.away="isOpen = false"

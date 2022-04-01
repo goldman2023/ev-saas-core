@@ -71,7 +71,7 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        {{-- <button 
+        <button 
             @click="isOpen = !isOpen" 
             @keydown.escape="isOpen = false" 
             class="flex items-center btn" 
@@ -90,18 +90,11 @@
                 </a>
             </li>
             <li>
-                <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank"
-                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
-                    @svg('heroicon-o-link', ['class' => 'w-[18px] h-[18px]'])
-                    <span class="ml-2">{{ translate('Copy checkout link') }}</span>
+                <a href="#" class="flex items-center px-3 py-3 pr-4 text-danger text-14 border-t">
+                    @svg('heroicon-o-trash', ['class' => 'text-danger w-[18px] h-[18px]'])
+                    <span class="ml-2">{{ translate('Remove order') }}</span>
                 </a>
             </li>
-            <li>
-                <a href="#" class="flex items-center px-3 py-3 pr-4 text-red-500 text-14 border-t">
-                    @svg('heroicon-o-trash', ['class' => 'text-red-500 w-[18px] h-[18px]'])
-                    <span class="ml-2">{{ translate('Remove product') }}</span>
-                </a>
-            </li>
-        </ul> --}}
+        </ul>
     </div>
 </x-livewire-tables::table.cell>

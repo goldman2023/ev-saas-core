@@ -6,6 +6,7 @@ use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\PermalinkTrait;
 
 /**
  * App\Models\Order
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends EVBaseModel
 {
     use SoftDeletes;
+    use PermalinkTrait;
 
     protected $table = 'orders';
 
@@ -33,6 +35,26 @@ class Order extends EVBaseModel
     public mixed $total_price;
 
     protected $with = ['order_items', 'invoices'];
+
+    /**
+     * Get the route name for the model.
+     *
+     * @return string
+     */
+    public static function getRouteName()
+    {
+        return 'checkout.order.received';
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'id';
+    }
 
     public function user()
     {

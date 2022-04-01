@@ -66,7 +66,7 @@ TODO: you can overide it with data from a database a sa setting --}}
                     successLight: '#E9FBF6',
                     warning: '#FFA114',
                     warningLight: '#FFF7EB',
-                    danger: '#8BC53F',
+                    danger: '#FF4E3E',
                     dangerLight: '#FFEDEC',
                 }
             }

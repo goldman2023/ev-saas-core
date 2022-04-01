@@ -30,7 +30,7 @@
         @if($order->order_items->isNotEmpty())
             @foreach($order->order_items as $item)
                 <div class="py-10 border-b border-gray-200 flex space-x-6">
-                    <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt="Glass bottle with black plastic pour top and mesh insert." class="flex-none w-20 h-20 object-center object-contain bg-gray-100 rounded-lg sm:w-40 sm:h-40">
+                    <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt="" class="flex-none w-20 h-20 object-center object-contain bg-gray-100 rounded-lg sm:w-40 sm:h-40">
                     <div class="flex-auto flex flex-col">
                     <div>
                         <h4 class="font-semibold text-gray-900">

@@ -1,5 +1,5 @@
 <div class="w-full" x-data="{
-        current_tab: 'general',
+        current_tab: 'social',
         settings: @js($settings),
     }"
     x-init=""
@@ -76,9 +76,9 @@
                         </div>
 
                         {{-- General --}}
-                        <div class="w-full px-5">
+                        <div class="w-full px-5" x-show="current_tab === 'general'">
                             {{-- Site logo --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-2" x-data="{}">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Site logo') }}
                                 </label>
@@ -128,7 +128,7 @@
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900">{{ translate('Maintenance mode') }}</span>
-                                    <p class="text-gray-500 text-sm">{{ translate('If you want enable maintenance mode and stop users from interacting with site') }}</p>
+                                    <p class="text-gray-500 text-sm">{{ translate('If you want to enable maintenance mode and stop users from interacting with site') }}</p>
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
@@ -156,6 +156,223 @@
                             {{-- END Save general information --}}
                         </div>
                         {{-- END General --}}
+
+
+                        {{-- Social --}}
+                        <div class="w-full px-5" x-show="current_tab === 'social'">
+                            {{-- Enable social logins --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-1" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Enable social logins') }}</span>
+                                    <p class="text-gray-500 text-sm">{{ translate('If you want enable social logins on your website') }}</p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <button type="button" @click="settings.enable_social_logins.value = !settings.enable_social_logins.value"
+                                                :class="{'bg-primary':settings.enable_social_logins.value , 'bg-gray-200':!settings.enable_social_logins.value}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':settings.enable_social_logins.value, 'translate-x-0':!settings.enable_social_logins.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Enable social logins --}}
+
+                            {{-- Facebook settings --}}
+                            <div class="w-full " x-show="settings.enable_social_logins.value">
+                                {{-- Google login --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Google login') }}</span>
+                                        {{-- <p class="text-gray-500 text-sm">{{ translate('If you want enable social logins on your website') }}</p> --}}
+                                    </div>
+    
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <button type="button" @click="settings.google_login.value = !settings.google_login.value"
+                                                    :class="{'bg-primary':settings.google_login.value , 'bg-gray-200':!settings.google_login.value}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':settings.google_login.value, 'translate-x-0':!settings.google_login.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                {{-- END Google login --}}
+
+                                {{-- Facebook login --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Facebook login') }}</span>
+                                        {{-- <p class="text-gray-500 text-sm">{{ translate('If you want enable social logins on your website') }}</p> --}}
+                                    </div>
+    
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <button type="button" @click="settings.facebook_login.value = !settings.facebook_login.value"
+                                                    :class="{'bg-primary':settings.facebook_login.value , 'bg-gray-200':!settings.facebook_login.value}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':settings.facebook_login.value, 'translate-x-0':!settings.facebook_login.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                {{-- END Facebook login --}}
+
+                                {{-- Linkedin login --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('LinkedIn login') }}</span>
+                                        {{-- <p class="text-gray-500 text-sm">{{ translate('If you want enable social logins on your website') }}</p> --}}
+                                    </div>
+    
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <button type="button" @click="settings.linkedin_login.value = !settings.linkedin_login.value"
+                                                    :class="{'bg-primary':settings.linkedin_login.value , 'bg-gray-200':!settings.linkedin_login.value}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':settings.linkedin_login.value, 'translate-x-0':!settings.linkedin_login.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                {{-- END Linkedin login --}}
+                            </div>
+
+                            {{-- Facebook settings --}}
+                            <div class="w-full mt-5">
+                                <h4 class="">{{ translate('Facebook settings') }}</h4>
+                                <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
+                                    <!-- Facebook APP ID -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Facebook APP ID') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.facebook_app_id') is-invalid @enderror"
+                                                    placeholder="{{ translate('APP ID') }}"
+                                                    wire:model.defer="settings.facebook_app_id.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.facebook_app_id.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Facebook APP ID -->
+
+                                    <!-- Facebook APP Secret -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Facebook APP Secret') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.facebook_app_secret') is-invalid @enderror"
+                                                    placeholder="{{ translate('APP Secret') }}"
+                                                    wire:model.defer="settings.facebook_app_secret.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.facebook_app_secret.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Facebook APP Secret -->
+                                </div>
+                            </div>
+                            {{-- END Facebook settings --}}
+                            
+                            {{-- Google OAuth settings --}}
+                            <div class="w-full mt-5">
+                                <h4 class="">{{ translate('Google OAuth Client settings') }}</h4>
+                                <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
+                                    <!-- Google OAuth Client ID -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Google OAuth Client ID') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.google_oauth_client_id') is-invalid @enderror"
+                                                    placeholder="{{ translate('Client ID') }}"
+                                                    wire:model.defer="settings.google_oauth_client_id.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.google_oauth_client_id.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Google OAuth Client ID -->
+
+                                    <!-- Google OAuth Client Secret -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Google OAuth Client Secret') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.google_oauth_client_secret') is-invalid @enderror"
+                                                    placeholder="{{ translate('Client Secret') }}"
+                                                    wire:model.defer="settings.google_oauth_client_secret.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.google_oauth_client_secret.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Google OAuth Client Secret -->
+                                </div>
+                            </div>
+                            {{-- END Google OAuth settings --}}
+
+                            {{-- LinkedIn settings --}}
+                            <div class="w-full mt-5">
+                                <h4 class="">{{ translate('LinkedIn Client settings') }}</h4>
+                                <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
+                                    <!-- LinkedIn Client ID -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('LinkedIn Client ID') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.linkedin_client_id') is-invalid @enderror"
+                                                    placeholder="{{ translate('Client ID') }}"
+                                                    wire:model.defer="settings.linkedin_client_id.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.linkedin_client_id.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END LinkedIn Client ID -->
+
+                                    <!-- LinkedIn Client Secret -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('LinkedIn Client Secret') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.linkedin_client_secret') is-invalid @enderror"
+                                                    placeholder="{{ translate('Client Secret') }}"
+                                                    wire:model.defer="settings.linkedin_client_secret.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.linkedin_client_secret.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END LinkedIn Client Secret -->
+                                </div>
+                            </div>
+                            {{-- END LinkedIn settings --}}
+
+
+                            {{-- Save general information --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                    @click="
+                                        $wire.set('settings.enable_social_logins.value', settings.enable_social_logins.value, true);
+                                        $wire.set('settings.google_login.value', settings.google_login.value, true);
+                                        $wire.set('settings.facebook_login.value', settings.facebook_login.value, true);
+                                        $wire.set('settings.linkedin_login.value', settings.linkedin_login.value, true);
+                                        {{-- $wire.set('settings.facebook_app_id.value', settings.facebook_app_id.value, true);
+                                        $wire.set('settings.facebook_app_secret.value', settings.facebook_app_secret.value, true);
+                                        $wire.set('settings.google_oauth_client_id.value', settings.google_oauth_client_id.value, true);
+                                        $wire.set('settings.google_oauth_client_secret.value', settings.google_oauth_client_secret.value, true);
+                                        $wire.set('settings.linkedin_client_id.value', settings.linkedin_client_id.value, true);
+                                        $wire.set('settings.linkedin_client_secret.value', settings.linkedin_client_secret.value, true); --}}
+                                    "
+                                    wire:click="saveSocial()">
+                                {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save general information --}}
+                        </div>
+                        {{-- END Social --}}
+
+
                     </div>
                     {{-- END Tabs --}}
 

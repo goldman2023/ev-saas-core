@@ -45,26 +45,30 @@ class TenantSettingsService
     protected function createMissingSettings() {
         $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
         $data_types = $this->settingsDataTypes();
-
+        
         $missing = array_diff_key($data_types, $settings);
         if(!empty($missing)) {
+            $this->clearCache();
+
             foreach($missing as $key => $type) {
-                $setting = new TenantSetting();
-                $setting->setting = $key;
-                $setting->value = null;
-                $setting->save();
+                TenantSetting::updateOrCreate(
+                    ['setting' => $key],
+                    ['value' => $type === 'boolean' ? false : null]
+                );
             }
         }
     }
 
     protected function setAll() {
+        $this->createMissingSettings(); // it'll clear the cache and add missing settings if there are missing settings
+
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
         $settings = Cache::get($cache_key, null); // TODO: Remove 'asd'
         $default = [];
         $data_types = $this->settingsDataTypes();
 
+
         if (empty($settings)) {
-            $this->createMissingSettings($settings);
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
             
             // Set data types for settings
@@ -101,35 +105,8 @@ class TenantSettingsService
                 Cache::put($cache_key, $settings);
             }
         }
-
+        
         $this->settings = !empty($settings) ? $settings : $default;
-    }
-
-    protected function settingsDataTypes() {
-        return [
-            'site_logo' => Upload::class,
-            'site_icon' => Upload::class,
-            'site_name' => 'string',
-            'site_motto' => 'string',
-            'maintenance_mode' => 'boolean',
-            'contact_details' => 'array',
-            'colors' => 'array',
-            'header' => 'array',
-            'footer' => 'array',
-            'show_currency_switcher' => 'boolean',
-            'system_default_currency' => Currency::class,
-            'show_language_switcher' => 'boolean',
-            'currency_format' => 'int',
-            'symbol_format' => 'int',
-            'no_of_decimals' => 'int',
-            'decimal_separator' => 'string',
-            'google_login' => 'boolean',
-            'facebook_login' => 'boolean',
-            'twitter_login' => 'boolean',
-            'linkedin_login' => 'boolean',
-            'github_login' => 'boolean',
-            'guest_checkout_active' => 'boolean',
-        ];
     }
 
     public function castSettingSave($key, $setting) {
@@ -154,5 +131,39 @@ class TenantSettingsService
     public function clearCache() {
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
         Cache::forget($cache_key);
+    }
+
+    protected function settingsDataTypes() {
+        return [
+            'site_logo' => Upload::class,
+            'site_icon' => Upload::class,
+            'site_name' => 'string',
+            'site_motto' => 'string',
+            'maintenance_mode' => 'boolean',
+            'contact_details' => 'array',
+            'colors' => 'array',
+            'header' => 'array',
+            'footer' => 'array',
+            'show_currency_switcher' => 'boolean',
+            'system_default_currency' => Currency::class,
+            'show_language_switcher' => 'boolean',
+            'currency_format' => 'int',
+            'symbol_format' => 'int',
+            'no_of_decimals' => 'int',
+            'decimal_separator' => 'string',
+            'enable_social_logins' => 'boolean',
+            'facebook_app_id' => 'string',
+            'facebook_app_secret' => 'string',
+            'google_oauth_client_id' => 'string',
+            'google_oauth_client_secret' => 'string',
+            'linkedin_client_id' => 'string',
+            'linkedin_client_secret' => 'string',
+            'google_login' => 'boolean',
+            'facebook_login' => 'boolean',
+            'twitter_login' => 'boolean',
+            'linkedin_login' => 'boolean',
+            'github_login' => 'boolean',
+            'guest_checkout_active' => 'boolean',
+        ];
     }
 }
