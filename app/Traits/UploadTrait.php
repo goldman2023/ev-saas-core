@@ -32,7 +32,7 @@ trait UploadTrait
             if(!$model->relationLoaded('uploads')) {
                 $model->load('uploads');
             }
-
+            
             // Initiate dynamic properties values
             $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
                 if($property['multiple'] ?? false) {

@@ -210,6 +210,7 @@ class Shop extends EVBaseModel
             return false;
         }
     }
+    
 
     /* Function to return integer value for company public rating
     TODO: How this is calculated we will implement when we have reviewable trait

@@ -188,4 +188,9 @@ class EVBaseModel extends Model
     {
         return parent::fireModelEvent($event, $halt);
     }
+
+
+    public function scopeNoEagerLoads($query) {
+        return $query->setEagerLoads([]);
+    }
 }

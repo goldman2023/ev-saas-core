@@ -466,7 +466,7 @@ class EVService
         return [
             'youtube' => 'Youtube',
             'vimeo' => 'Vimeo',
-            'dailymotion' => 'Dailymotion',
+            'custom' => 'Custom html',
         ];
     }
 

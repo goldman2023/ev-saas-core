@@ -25,11 +25,11 @@ class Upload extends EVBaseModel
 
     protected static function booted()
     {
-        // static::addGlobalScope('uploads_from_my_shop', function ($builder) {
-        //     if(request()->is_dashboard) { // get uploads from my shop if user is in dashboard
-        //         $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
-        //     }
-        // });
+        static::addGlobalScope('uploads_from_my_shop', function ($builder) {
+            // if(request()->is_dashboard) { // get uploads from my shop if user is in dashboard
+            //     $builder->where('shop_id', '=', auth()->user()->shop()->noEagerLoads()->first()->id ?? -1);
+            // }
+        });
     }
 
     /*

@@ -59,6 +59,44 @@
                 </div>
 
                 <div class="w-full flex flex-col mt-4">
+
+                    {{-- Card Sold By --}}
+                    {{-- <div class="col-span-1 bg-white border border-gray-200 rounded-lg shadow divide-y divide-gray-200">
+                        <div class="w-full flex items-center justify-between p-6 space-x-6">
+                          <div class="flex-1 truncate">
+                            <div class="flex items-center space-x-3">
+                              <h3 class="text-gray-900 text-sm font-medium truncate">{{ $product->shop->name }}</h3>
+                              <span class="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full">Admin</span>
+                            </div>
+                            <p class="mt-1 text-gray-500 text-sm truncate">{{ $product->shop->email }}</p>
+                          </div>
+                          <img class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0" src="{{ $product->shop->getThumbnail(['w' => '100']) }}" alt="">
+                        </div>
+                        <div>
+                          <div class="-mt-px flex divide-x divide-gray-200">
+                            <div class="w-0 flex-1 flex">
+                              <a href="mailto:janecooper@example.com" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                <!-- Heroicon name: solid/mail -->
+                                <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                </svg>
+                                <span class="ml-3">Email</span>
+                              </a>
+                            </div>
+                            <div class="-ml-px w-0 flex-1 flex">
+                              <a href="tel:+1-202-555-0170" class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+                                <!-- Heroicon name: solid/phone -->
+                                @svg('heroicon-s-phone', ['class' => 'w-5 h-5 text-gray-400'])
+                                <span class="ml-3">
+                                    {{ translate('Message seller') }}
+                                </span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                    </div> --}}
+
                     <div class="flex items-center">
                         <div class="grow flex items-center">
                             <span class="mr-2 text-gray-900 font-semibold">{{ translate('Sold by') }}:</span>
@@ -75,10 +113,11 @@
                         </div>
                     </div>
         
-                    <div class="flex items-center mt-2">
+                    <div class="flex items-center mt-4">
                         <div class="grow flex items-center">
                             <span class="mr-2 text-gray-900 font-semibold">{{ translate('Share') }}:</span>
                             
+                            {{-- Social share --}}
                             <div class="mr-2">
                                 <a href="#"
                                     class="flex items-center justify-center w-6 h-6 text-gray-400 hover:text-gray-500">
@@ -111,66 +150,15 @@
                                     </svg>
                                 </a>
                             </div>
+                            {{-- END Social share --}}
+
         
                         </div>
                     </div>
-                </div>
-
-                {{-- <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                    <button type="button"
-                        class="w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">Pay
-                        $220</button>
-                    <button type="button"
-                        class="w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">Preview</button>
-                   
-                </div> --}}
-
-                {{-- <div class="hidden border-t border-gray-200 mt-10 pt-10">
-                    <h3 class="text-sm font-medium text-gray-900">Highlights</h3>
-                    <div class="mt-4 prose prose-sm text-gray-500">
-                        <ul role="list">
-                            <li>200+ SVG icons in 3 unique styles</li>
-                            <li>Compatible with Figma, Sketch, and Adobe XD</li>
-                            <li>Drawn on 24 x 24 pixel grid</li>
-                        </ul>
-                    </div>
-                </div> --}}
-
-                {{-- <div class="hiddenborder-t border-gray-200 mt-10 pt-10">
-                    <h3 class="text-sm font-medium text-gray-900">{{ translate('Sold by:') }}</h3>
-                    <livewire:feed.elements.shop-card :shop="$product->shop"></livewire:feed.elements.shop-card>
-                </div> --}}
-
-    
+                </div>    
             </div>
 
             <div class="w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
-                {{-- <x-tailwind-ui.sections.ecommerce.incentives-sections.incentives-section08>
-                </x-tailwind-ui.sections.ecommerce.incentives-sections.incentives-section08> --}}
-                {{-- <div>
-                    <div class="border-b border-gray-200">
-                        <div class="-mb-px flex space-x-8" aria-orientation="horizontal" role="tablist">
-                            <!-- Selected: "border-indigo-600 text-indigo-600", Not Selected: "border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300" -->
-                            <button id="tab-reviews"
-                                class="border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300 whitespace-nowrap py-6 border-b-2 font-medium text-sm"
-                                aria-controls="tab-panel-reviews" role="tab" type="button">
-                                {{ translate('Product Description') }} </button>
-
-                        </div>
-                    </div>
-
-                    <!-- 'Customer Reviews' panel, show/hide based on tab state -->
-                    <div id="tab-panel-reviews" class="-mb-10" aria-labelledby="tab-reviews" role="tabpanel"
-                        tabindex="0">
-
-                        {!! $product->description !!}
-
-                        <x-default.products.single.product-specification-table :product="$product">
-                        </x-default.products.single.product-specification-table>
-                    </div>
-                    <!-- 'FAQ' panel, show/hide based on tab state -->
-                </div> --}}
-
                 <div x-data="{
                         current: 'description'
                     }">

@@ -41,6 +41,5 @@ class VendorMode
         View::share('globalLayout', $globalLayout);
 
         return $next($request);
-
     }
 }

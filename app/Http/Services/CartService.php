@@ -78,7 +78,7 @@ class CartService
             }
 
 
-            if($model->current_stock < $qty) {
+            if($model->current_stock < $qty && !$model->allow_out_of_stock_purchases) {
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
