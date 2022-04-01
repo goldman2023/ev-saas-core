@@ -7,7 +7,7 @@
 
       Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: ""
     -->
-    <div class="py-10">
+    <div class="py-10 pt-3">
         <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
             <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
                 <x-feed.elements.feed-sidebar>
@@ -16,14 +16,9 @@
             <main class="lg:col-span-6 xl:col-span-7">
 
                 <div class="mb-3">
-                    <script custom-element="storyly-web" src="https://web-story.storyly.io/v2/storyly-web.js"></script>
-                    <storyly-web></storyly-web>
-                    <script>
-                        const storylyWeb = document.querySelector('storyly-web');
-                        storylyWeb.init({
-                          token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NfaWQiOjUzODEsImFwcF9pZCI6MTA2MTksImluc19pZCI6MTEyNjl9.06V1vyC92pZx2ssjQxQcnzxfVDBkf31XUhWXARrzmmw",
-                        });
-                    </script>
+                    <x-feed.elements.stories-global>
+                    </x-feed.elements.stories-global>
+
                 </div>
                 <div class="mt-4">
 
