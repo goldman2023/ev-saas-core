@@ -153,6 +153,8 @@ Route::middleware([
     Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
     Route::get('/products/brand/{brand_slug}', [HomeController::class, 'listingByBrand'])->name('products.brand');
 
+    // Users/Shops single page
+    Route::get('/users/{id}', [EVAccountController::class, 'frontend_user_profile'])->name('user.profile.single');
 
     // Blog Posts
     Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
