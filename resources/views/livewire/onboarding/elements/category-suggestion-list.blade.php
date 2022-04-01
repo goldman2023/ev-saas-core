@@ -1,4 +1,4 @@
-<div>
+<div class="p-3">
     <legend class="block text-2xl font-medium mb-6 text-gray-900">
         {{ translate('Select your interests') }}
     </legend>
@@ -7,7 +7,7 @@
         <fieldset class="">
 
 
-            <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+            <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4 ">
                 @foreach($categories as $category)
                 <!--
         Checked: "border-transparent", Not Checked: "border-gray-300"
@@ -24,9 +24,8 @@
                             <span id="project-type-0-label" class="block text-sm font-medium text-gray-900"> {{
                                 $category->name }} </span>
                             <span id="project-type-0-description-0"
-                                class="mt-1 flex items-center text-sm text-gray-500"> {{
-                                $category->getFollowers()->count()}} {{ translate('users') }} / {{
-                                $category->products->count()}} {{ translate('products') }} </span>
+                                class="mt-1 flex items-center text-sm text-gray-500">
+                            {{  $category->products->count()}} {{ translate('products') }} </span>
                             <span id="project-type-0-description-1" class="mt-6 text-sm font-medium text-gray-900">
                             </span>
                             <span id="project-type-0-description-2" class="mt-6 text-sm font-medium text-gray-900">

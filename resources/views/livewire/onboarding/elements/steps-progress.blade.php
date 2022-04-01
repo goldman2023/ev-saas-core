@@ -1,6 +1,6 @@
 <div>
     <!-- This example requires Tailwind CSS v2.0+ -->
-    <div>
+    <div class="p-3 md:p-0">
         <h4 class="sr-only">Status</h4>
         <p class="text-sm font-medium text-gray-900">{{ translate('Setup your profile') }}...</p>
         <div class="mt-3" aria-hidden="true">
