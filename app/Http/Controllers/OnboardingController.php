@@ -63,4 +63,9 @@ class OnboardingController extends Controller
     {
         return view('frontend.onboarding.step4');
     }
+
+    public function verification() {
+        return view('frontend.onboarding.verification');
+
+    }
 }

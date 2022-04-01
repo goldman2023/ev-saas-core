@@ -84,6 +84,7 @@ Route::middleware([
     Route::post('/welcome/profile/store', [OnboardingController::class, 'profile_store'])->name('onboarding.profile.store')->middleware(['auth']);
     Route::get('/welcome/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3')->middleware(['auth']);
     Route::get('/welcome/step4', [OnboardingController::class, 'step4'])->name('onboarding.step4')->middleware(['auth']);
+    Route::get('/welcome/verification', [OnboardingController::class, 'verification'])->name('onboarding.verification')->middleware(['auth']);
 
 
     // Homepage For Multi/Single Vendor mode
