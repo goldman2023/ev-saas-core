@@ -16,6 +16,7 @@ use App\Nova\Tenant\Category;
 use App\Nova\Tenant\PaymentMethodUniversal;
 use App\Nova\Tenant\Plan;
 use App\Nova\Tenant\ShopSetting;
+use App\Nova\Tenant\Translation;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -64,9 +65,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      * @return void
      */
     protected function gate()
-    {   
+    {
         Gate::define('viewNova', function ($user) {
-            
+
             if ($user instanceof \App\Models\User) {
                 // return $user->isOwner();
             }
@@ -144,6 +145,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Shop::class,
                 Category::class,
                 Plan::class,
+                Translation::class,
             ]);
         } else {
             Nova::resources([
