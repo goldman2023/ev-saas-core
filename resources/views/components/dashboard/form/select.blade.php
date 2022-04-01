@@ -1,9 +1,24 @@
 <div x-data="{
     open_dropdown: false,
     items: @js($items),
+    displayed_items: @js($items),
     placeholder: '{{ $placeholder }}',
     nullable: @js($nullable),
-}" wire:ignore>
+    search: @js($search),
+    search_query: '',
+}" x-init="$watch('search_query', (value) => {
+  let newItems = [];
+  Object.entries(items).filter(entry => {
+    if (entry[1].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+      newItems[entry[0]] = entry[1];
+      return true;
+    }
+  });
+
+  displayed_items = newItems;
+  console.log(displayed_items); 
+  {{-- TODO: Zasto ne radi??? --}}
+})" wire:ignore>
     <div class="relative">
       <button type="button" @click="open_dropdown = !open_dropdown" 
               class="bg-white relative w-full max-w-lg border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary sm:text-sm @error($field) is-invalid @enderror">
@@ -23,19 +38,25 @@
             x-transition:leave-end="opacity-0"
             @click.outside="open_dropdown = false">
 
+            <template x-if="search">
+              <div class="w-full border-b border-gray-200 py-2 mb-2 px-2">
+                <input type="text" class="form-standard w-full focus:ring-0 " placeholder="{{ translate('Search...') }}" x-model.debounce.500ms="search_query" />
+              </div>
+            </template>
+
             <template x-if="nullable">
               <li @click="{{ $selected }} = null; open_dropdown = false;" class="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9">
                 <span class="font-normal block truncate">{{ translate('Not selected') }}</span>
               </li>
             </template>
 
-            <template x-for="(item, key) in items">
+            <template x-for="(item, key) in displayed_items">
                 <li @click="{{ $selected }} = key; open_dropdown = false;" class="text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9" role="option">
                     <span class="font-normal block truncate" :class="{'font-semibold': key == {{ $selected }}}" x-text="item"></span>
                     <span class="text-primary absolute inset-y-0 right-0 flex items-center pr-4" x-show="key == {{ $selected }}">
                       @svg('heroicon-o-check', ['class' => 'h-5 w-5'])
                     </span>
-                  </li>
+                </li>
             </template>
       </ul>
     </div>

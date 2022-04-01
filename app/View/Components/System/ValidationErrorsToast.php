@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\TailwindUi\System;
+namespace App\View\Components\System;
 
 use Illuminate\View\Component;
 

@@ -35,7 +35,6 @@ class CategoryForm extends Component
     protected function rules()
     {
         return [
-            'category.*' => [],
             'category.id' => [],
             'category.featured' => [],
             'category.meta_title' => [],
@@ -97,6 +96,9 @@ class CategoryForm extends Component
                 $this->category->parent_id = null;
             }
             $this->category->level = \Categories::getCategoryLevel($this->category);
+            if(empty($this->category->featured)) {
+                $this->category->featured = false;
+            }
             $this->category->save();
             $this->category->syncUploads();
 
@@ -111,7 +113,7 @@ class CategoryForm extends Component
             }
         } catch(\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             if($is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a category...Please try again.'));
                 $this->inform('There was an error while updating a category...Please try again.', '', 'fail');

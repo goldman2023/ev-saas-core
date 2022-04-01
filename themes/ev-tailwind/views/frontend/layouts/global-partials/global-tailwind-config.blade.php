@@ -132,6 +132,10 @@
             @apply focus:ring-primary h-5 w-5 text-primary border-gray-300 cursor-pointer;
         }
 
+        input[disabled] {
+            @apply opacity-50;
+        }
+
         .is-invalid {
             @apply border-danger;
         }

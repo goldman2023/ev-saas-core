@@ -24,7 +24,7 @@ class Price extends Component {
      *
      * @return void
      */
-    public function mount($model = null, $wrapperClass = '', $withDiscountLabel = false, $totalPriceClass = 'h2 fw-700 text-primary', $originalPriceClass = 'h3 fw-600 opacity-50 mr-1', $withLabel = false)
+    public function mount($model = null, $wrapperClass = '', $withDiscountLabel = false, $totalPriceClass = '', $originalPriceClass = '', $withLabel = false)
     {
         $this->model = $model;
         $this->wrapperClass = $wrapperClass;

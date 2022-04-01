@@ -69,8 +69,8 @@
         <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
-    <x-tailwind-ui.system.info-modal></x-tailwind-ui.system.info-modal>
-    <x-tailwind-ui.system.validation-errors-toast timeout="5000" ></x-tailwind-ui.system.info-modal>
+    <x-system.info-modal></x-system.info-modal>
+    <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
 
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>

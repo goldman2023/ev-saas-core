@@ -152,6 +152,12 @@ class CheckoutSingleForm extends Component
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
+        if(auth()->user()->id) {
+            $this->order->email = auth()->user()->email;
+            $this->order->billing_first_name = auth()->user()->name;
+            $this->order->billing_last_name = auth()->user()?->name;
+        }
+
         $this->cc_number = '';
         $this->cc_name = '';
         $this->cc_expiration_date = '';
@@ -458,6 +464,9 @@ class CheckoutSingleForm extends Component
             //$this->executePayment(request(), $invoice->id);
 
             // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
+
+            // Full cart reset
+            CartService::fullCartReset();
 
             return redirect()->route('checkout.order.received', $this->order->id);
         } catch(\Throwable $e) {
