@@ -11,6 +11,7 @@ class CoreMeta extends Model
 
     protected $table = 'core_meta';
 
+    protected $fillable = ['subject_id', 'subject_type', 'key', 'value'];
 
     public function subject() {
         return $this->morphTo("subject");
