@@ -90,7 +90,7 @@
                             </div>
 
                             <div class="w-full flex flex-col">
-                                <strong class="block text-gray-700">{{ $me->name }}</strong>
+                                <strong class="block text-gray-700">{{ $me->first_name.' '.$me->last_name }}</strong>
                                 <span class="text-gray-500">{{ $me->email }}</span>
                             </div>
                         </div>
@@ -109,23 +109,42 @@
                         </div>
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-                            <!-- Full name -->
+                            <!-- First name -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                 x-data="{}">
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Full name') }}
+                                    {{ translate('First name') }}
                                     <span class="text-danger relative top-[-2px]">*</span>
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('me.name') is-invalid @enderror"
-                                        placeholder="{{ translate('My full name') }}" wire:model.defer="me.name" />
+                                    <input type="text" class="form-standard @error('me.first_name') is-invalid @enderror"
+                                        placeholder="{{ translate('My first name') }}" wire:model.defer="me.first_name" />
 
-                                    <x-system.invalid-msg field="me.name"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="me.first_name"></x-system.invalid-msg>
                                 </div>
                             </div>
-                            <!-- END Full name -->
+                            <!-- END First name -->
+
+                            <!-- Last name -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Last name') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('me.last_name') is-invalid @enderror"
+                                        placeholder="{{ translate('My last name') }}" wire:model.defer="me.last_name" />
+
+                                    <x-system.invalid-msg field="me.last_name"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Last name -->
+
+                            
 
                             <!-- Email -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"

@@ -19,7 +19,7 @@
          @click="show = !show">
 
         @svg('heroicon-o-chevron-right', ['class' => 'square-16 mr-2', ':style' => "show && {transform: 'rotate(90deg)'}"])
-        <h4 class="h5 mb-0">{{ $user->name }} ({{ $user->email }})</h4>
+        <h4 class="h5 mb-0">{{ $user->first_name.' '.$user->last_name }} ({{ $user->email }})</h4>
 
         <span class="badge badge-soft-danger align-items-center px-2 py-1 ml-3 text-12 text-danger"
               :class="{'d-flex':user.banned}"

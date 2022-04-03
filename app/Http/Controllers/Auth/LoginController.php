@@ -71,7 +71,7 @@ class LoginController extends Controller
         } else {
             // create a new user
             $newUser                  = new User;
-            $newUser->name            = $user->name;
+            $newUser->first_name = $user->name; // TODO: FIX THIS to use both first and last name!!!!
             $newUser->email           = $user->email;
             $newUser->email_verified_at = date('Y-m-d H:m:s');
             $newUser->provider_id     = $user->id;

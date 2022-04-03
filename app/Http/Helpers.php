@@ -5,6 +5,7 @@ use App\Models\Currency;
 use App\Models\TenantSetting;
 use App\Models\Product;
 use App\Models\SubSubCategory;
+use App\Models\Category;
 use App\Models\FlashDealProduct;
 use App\Models\FlashDeal;
 use App\Models\OtpConfiguration;
@@ -26,6 +27,75 @@ use Illuminate\Support\Facades\Route;
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 
 include('Helpers/EIMHelpers.php');
+
+if (!function_exists('castValueForSave')) {
+    function castValueForSave($key, $setting, $data_types) {
+        $data_type = $data_types[$key] ?? null;
+        $value = $setting['value'] ?? null;
+        
+        if($data_type === Upload::class || $data_type === Currency::class || $data_type === Category::class) {
+            $value = ctype_digit($value) ? $value : null;
+        }  else if($data_type === 'int') {
+            $value = ctype_digit($value) ? ((int) $value) : $value;
+        } else if($data_type === 'boolean') {
+            $value = $value ? 1 : 0;
+        } else if($data_type === 'array' && $data_type === 'uploads') {
+            $value = json_encode($value);
+        }
+    
+        return $value;
+    }
+}
+
+if (!function_exists('castValuesForGet')) {
+    function castValuesForGet(&$settings, $data_types) {
+        if(!empty($settings)) {
+            foreach($settings as $key => $setting) {
+                $data_type = $data_types[$key] ?? null;
+                $value = $settings[$key]['value'] ?? null;
+    
+                if(empty($value)) {
+                    $settings[$key]['value'] = ($data_type === 'boolean') ? false : null;
+                    continue;
+                }
+                
+                if(isset($settings[$key]) && !empty($value)) {
+                    if($data_type === Upload::class) {
+                        $settings[$key]['value'] = Upload::find($value);
+                    } else if($data_type === Currency::class) {
+                        $settings[$key]['value'] = Currency::find($value);
+                    } else if($data_type === Category::class) {
+                        $settings[$key]['value'] = Category::find($value);
+                    } else if($data_type === 'uploads') {
+                        $uploads = [];
+                        if(is_array($value) && !empty($value)) {
+                            foreach($value as $upload_id) {
+                                $uploads[] = Upload::find($value);
+                            }
+                        }
+                        $settings[$key]['value'] = collect($uploads);
+                    } else if($data_type === 'string') {
+                        $settings[$key]['value'] = $value;
+                    } else if($data_type === 'int') {
+                        $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
+                    } else if($data_type === 'boolean') {
+                        $settings[$key]['value'] = ($value == 0 || $value == "0") ? false : true;
+                    } else if($data_type === 'array') {
+                        $settings[$key]['value'] = json_decode($value, true);
+                    } else if($data_type === 'date') {
+                        $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
+                    } else if($data_type === 'datetime') {
+                        $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
+                    } 
+                }
+                
+            }
+        }
+        return [];
+    }
+}
+
+
 
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {

@@ -24,7 +24,7 @@
               <small class="d-block text-dark">1 article in this collection</small>
               <small class="d-block text-dark">
                 <span class="text-muted">Written by</span>
-                {{ $user->name }}
+                {{-- {{ $user->name }} --}}
                 <span class="text-muted">and</span>
                 Neil Galavan
               </small>

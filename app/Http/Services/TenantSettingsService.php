@@ -109,24 +109,7 @@ class TenantSettingsService
         $this->settings = !empty($settings) ? $settings : $default;
     }
 
-    public function castSettingSave($key, $setting) {
-        $data_types = $this->settingsDataTypes();
-        
-        $data_type = $data_types[$key] ?? null;
-        $value = $setting['value'] ?? null;
-        
-        if($data_type === Upload::class && $data_type === Currency::class) {
-            $value = ctype_digit($value) ? $value : null;
-        }  else if($data_type === 'int') {
-            $value = ctype_digit($value) ? ((int) $value) : $value;
-        } else if($data_type === 'boolean') {
-            $value = $value ? 1 : 0;
-        } else if($data_type === 'array') {
-            $value = json_encode($value);
-        } 
-
-        return $value;
-    }
+    
 
     public function clearCache() {
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
@@ -166,6 +149,7 @@ class TenantSettingsService
             'guest_checkout_active' => 'boolean',
 
             // Payments
+            'stripe_enabled' => 'boolean',
             'stripe_pk_test_key' => 'string',
             'stripe_sk_test_key' => 'string',
             'stripe_pk_live_key' => 'string',

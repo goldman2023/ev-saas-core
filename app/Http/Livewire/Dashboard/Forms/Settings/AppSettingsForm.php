@@ -317,7 +317,7 @@ class AppSettingsForm extends Component
 
             if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
-                    ->update(['value' => TenantSettings::castSettingSave($setting_key, $this->settings[$setting_key])]);
+                    ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);
             }
         }
     }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Settings;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
+use App\Models\UserMeta;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
 use DB;
@@ -23,6 +24,7 @@ class MyAccountForm extends Component
     use DispatchSupport;
 
     public $me;
+    public $meta;
     public $currentPassword = '';
     public $newPassword = '';
     public $newPassword_confirmation = '';
@@ -33,7 +35,8 @@ class MyAccountForm extends Component
             // Basic information rules
             'basic' => [
                 //'me' => [],
-                'me.name' => ['required', 'min:3'],
+                'me.first_name' => ['required', 'min:2'],
+                'me.last_name' => ['required', 'min:2'],
 //                'me.email' => ['required', 'email:rfs,dns'],
                 'me.phone' => ['required'],
                 'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
@@ -91,6 +94,8 @@ class MyAccountForm extends Component
         $this->onboarding = $onboarding;
         $this->me = auth()->user();
 
+        $my_meta = $this->me->user_meta;
+        $this->meta = castValuesForGet($my_meta, UserMeta::metaDataTypes());
     }
 
     public function dehydrate()
