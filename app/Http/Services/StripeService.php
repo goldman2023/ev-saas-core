@@ -45,6 +45,13 @@ class StripeService
     {
         // Reminder: Stripe pricemust be in cents!!!
         $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
+        $description = $model->excerpt;
+        if(empty($description)) {
+            $description = $model->description;
+            if(empty($description)) {
+                $description = $model->name;
+            }
+        }
 
         // Create Stripe Product and Price
         $stripe_product = $this->stripe->products->create([
@@ -52,7 +59,7 @@ class StripeService
             'name' => $model->name,
             'active' => true,
             // 'livemode' => false, // TODO: Make it true in Production
-            'description' => $model->excerpt,
+            'description' => $description,
             'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
             'shippable' => $model->is_digital ? false : true,
             // 'tax_code' => '',
@@ -88,7 +95,7 @@ class StripeService
     public function createCheckoutLink($product)
     {
         $checkout_link['url'] = "#";
-        try {
+        if ($product->core_meta->where('key', '=', 'stripe_price_id')->first()) {
             $checkout_link = $this->stripe->checkout->sessions->create(
                 [
                     'line_items' => [[
@@ -106,11 +113,11 @@ class StripeService
                     ],
                 ]
             );
-        } catch (\Stripe\Exception\CardException $e) {
-                dd($e->getError()->code);
-                $this->createStripeProduct($product);
-                $checkout_link = $this->createCheckoutLink($product);
+        } else {
+            $this->createStripeProduct($product);
+            $checkout_link = $this->createCheckoutLink($product);
         }
+
 
 
         return ($checkout_link['url']);
