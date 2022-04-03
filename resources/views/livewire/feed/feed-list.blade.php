@@ -75,7 +75,7 @@
         </div>
         @else
         <div class="mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg w-full">
-            {{ translate('You\'ve reache the end. Fancy Sharing something?') }}
+            {{ translate('You\'ve reached the end. Fancy Sharing something?') }}
         </div>
         <livewire:feed.elements.add-post></livewire:feed.elements.add-post>
 
