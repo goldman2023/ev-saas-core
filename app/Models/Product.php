@@ -33,6 +33,7 @@ use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
+use App\Traits\LikesTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
@@ -62,6 +63,7 @@ class Product extends EVBaseModel
     use VariationTrait;
 
     use LogsActivity;
+    use LikesTrait;
 
 
     public const ROUTING_SINGULAR_NAME_PREFIX = 'product';

@@ -1,7 +1,7 @@
 <div class="bg-gray-50 px-4 py-6 sm:px-6 rounded-lg">
     <div class="flex space-x-3">
-        <div class="flex-shrink-0">
-            <img class="h-20 w-20 rounded-full"
+        <div class="flex-shrink-0 ">
+            <img class="object-contain h-20 w-20 rounded-full bg-white we-feed-avatar ring-gray-900 ring-2"
                 src="{{ auth()->user()->getThumbnail() }}"
                 alt="">
         </div>

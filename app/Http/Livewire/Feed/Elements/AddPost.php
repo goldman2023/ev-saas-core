@@ -29,8 +29,15 @@ class AddPost extends Component
         $post->shop_id = MyShop::getShopID();
         $post->save();
 
+        $this->resetForm();
         $this->toastify(translate('Shared sucesfully!'), 'success');
 
         $this->emit('newPostAdded');
+
+
+    }
+
+    public function resetForm() {
+        $this->content = '';
     }
 }

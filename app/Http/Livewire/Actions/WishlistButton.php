@@ -23,7 +23,7 @@ class WishlistButton extends Component
             'action_success' => 'Liked',
             'icon' => 'heroicon-o-thumb-up',
             'icon_success' => 'heroicon-s-thumb-up',
-            'view' => 'livewire.actions.wishlist-button'
+            'view' => 'livewire.actions.wishlist-buttons.like-button'
         ],
         'Wishlist' =>
         [
@@ -60,16 +60,18 @@ class WishlistButton extends Component
     public $iconActive = 'heroicon-s-heart';
 
     public $action = 'Like';
+    public $default_template = 'default';
 
-    public function mount($object, $template = 'default', $action = 'Like', $iconActive = 'heroicon-s-heart', $iconDefault = 'heroicon-o-heart')
+    public $count = 0;
+    public function mount($object, $action = 'Like',)
     {
-        $this->iconActive = $iconActive;
-        $this->iconDefault = $iconDefault;
-        $this->template = $template;
         $this->model_class = $object::class;
         $this->object = $object;
         $this->added = $this->checkIfProductExistsInWishlist();
         $this->action = $this->available_actions[$action];
+        if($action == 'Like') {
+            $this->count = $this->object->likes()->count();
+        }
         // if ($action = 'notify') {
             // $this->notification = true;
             // $this->action2 = translate('Notification enabled');
@@ -78,7 +80,7 @@ class WishlistButton extends Component
 
     public function render()
     {
-        if ($this->template == 'default') {
+        if ($this->default_template == 'default') {
             return view($this->action['view']);
         } else {
             return view('livewire.actions.wishlist-buttons.' . $this->template);
@@ -127,7 +129,7 @@ class WishlistButton extends Component
                 ->log('liked');
 
             $this->toastify(translate('Item added to wishlist'), 'success');
-
+            $this->count++;
             $this->emit('addedToWishlist');
         }
 

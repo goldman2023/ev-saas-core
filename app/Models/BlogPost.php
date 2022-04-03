@@ -6,6 +6,7 @@ use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
+use App\Traits\LikesTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
@@ -31,6 +32,7 @@ class BlogPost extends EVBaseModel
 //    use ReactionsTrait;
 //    use CommentsTrait;
    use PermalinkTrait;
+   use LikesTrait;
 
 
     protected $table = 'blog_posts';

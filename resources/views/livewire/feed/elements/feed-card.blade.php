@@ -9,7 +9,7 @@
                         <div class="inline-block relative">
                             {{-- TODO: Implement quick view for person and for product click --}}
                             <x-tenant.system.image alt="{{ get_site_name() }} logo"
-                                class="h-10 w-10 rounded-full border-3" :image="$item->causer->getAvatar()">
+                                class="h-12 w-12 rounded-full bg-white ring-2 ring-indigo-600" fit="contain" :image="$item->causer->getAvatar()">
                             </x-tenant.system.image>
                             <span
                                 class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>
@@ -120,13 +120,15 @@
                         @endif
                     </a>
                     @elseif($item->subject_type == 'App\Models\BlogPost' && $item->subject)
-                    {{ $item->description }} {{ translate('new status update') }}
+                    <span class="text-xs font-gray-500 mt-3 font-normal">
+                    {{-- {{ $item->description }} {{ translate('new status update') }} --}}
+                    </span>
 
                     <a href="{{ $item->subject->getPermalink() }}" target="_blank">
                         {{ $item->subject->title }}
                     </a>
 
-                    <p class="text-xs font-gray-500 mt-3 font-normal">
+                    <p class="text-md font-gray-600 mt-3 font-normal">
                         {{ $item->subject->excerpt}}
                     </p>
                     @else
@@ -194,8 +196,9 @@
 
 
                         </button>
-                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item"
-                            iconActive="heroicon-s-thumb-up" iconDefault="heroicon-o-thumb-up">
+                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}"
+                        :object="$item->subject"
+                        >
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>
