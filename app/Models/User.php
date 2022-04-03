@@ -65,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     * @var array
     */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
+        'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
     ];
 
     /**

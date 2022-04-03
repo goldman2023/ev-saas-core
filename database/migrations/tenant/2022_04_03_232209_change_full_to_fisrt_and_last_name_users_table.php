@@ -14,9 +14,7 @@ class ChangeFullToFisrtAndLastNameUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('name');
-            $table->string('first_name', 200)->after('user_type');
-            $table->string('last_name', 200)->after('first_name');
+            $table->string('surname', 200)->after('name');
         });
     }
 
@@ -28,9 +26,7 @@ class ChangeFullToFisrtAndLastNameUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('first_name');
-            $table->dropColumn('last_name');
-            $table->string('name', 200)->after('user_type');
+            $table->dropColumn('surname');
         });
     }
 }

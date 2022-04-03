@@ -4,7 +4,7 @@
             <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full"
                 src="{{ $user->getThumbnail() }}"
                 alt="">
-            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->first_name.' '.$user->last_name }}</h3>
+            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->name .' '.$user->surname }}</h3>
             <dl class="mt-1 flex-grow flex flex-col justify-between">
                 <dt class="sr-only">Title</dt>
                 @if($user->id == 1)
