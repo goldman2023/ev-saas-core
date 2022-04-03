@@ -28,7 +28,9 @@
                         {{ translate('Post will be visible publicly') }}
                     </span>
                 </a>
-                <button x-on:click="isModalOpen = true">Open Modal</button>
+                <button class="text-xs text-gray-500" x-on:click="isModalOpen = true">
+                   {{ translate('Advanced editor') }}
+                </button>
 
                 <button wire:click="addFeedPost" type="submit"
                     class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">

@@ -35,12 +35,12 @@
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 
-        <button 
-            @click="isOpen = !isOpen" 
-            @keydown.escape="isOpen = false" 
-            class="flex items-center btn" 
+        <button
+            @click="isOpen = !isOpen"
+            @keydown.escape="isOpen = false"
+            class="flex items-center btn"
         >
-            @svg('heroicon-o-cshevron-down', ['class' => 'w-[18px] h-[18px]'])
+            @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
         </button>
         <ul x-show="isOpen"
             @click.away="isOpen = false"

@@ -1,4 +1,4 @@
-<div class="mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+<div @attributes class="mb-3 bg-white sm:rounded-lg w-full {{ $dynamic_class }}">
     <div class="animate-pulse flex space-x-4">
         <div class="rounded-full bg-slate-700 h-10 w-10"></div>
         <div class="flex-1 space-y-6 py-1">

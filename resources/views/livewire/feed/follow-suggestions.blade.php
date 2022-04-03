@@ -4,17 +4,29 @@
             {{ translate('Popular Shops') }}
         </h2>
         <div class="mt-6 flow-root">
-            <div wire:loading wire:target="loadInit">
-                {{ translate('Loading...') }}
+            @if(!$readyToLoad)
+
+            <div class="w-full">
+                <livewire:feed.elements.feed-card-empty-state variation="small">
+                </livewire:feed.elements.feed-card-empty-state>
+                <livewire:feed.elements.feed-card-empty-state>
+                </livewire:feed.elements.feed-card-empty-state>
+                <livewire:feed.elements.feed-card-empty-state>
+                </livewire:feed.elements.feed-card-empty-state>
             </div>
-            <ul role="list" class="-my-4 divide-y divide-gray-200"  wire:init="loadInit">
+
+            @endif
+
+            <div wire:loading wire:target="loadInit">
+
+
+            </div>
+            <ul role="list" class="-my-4 divide-y divide-gray-200" wire:init="loadInit">
                 @if($readyToLoad)
                 @foreach($accounts as $account)
                 <li class="flex items-center py-4 space-x-3">
                     <div class="flex-shrink-0">
-                        <img class="h-8 w-8 rounded-full"
-                            src="{{ $account->getThumbnail() }}"
-                            alt="">
+                        <img class="h-8 w-8 rounded-full" src="{{ $account->getThumbnail() }}" alt="">
                     </div>
                     <div class="min-w-0 flex-1">
                         <p class="text-sm font-medium text-gray-900">
@@ -27,7 +39,7 @@
                         </p>
                     </div>
                     <div class="flex-shrink-0">
-                       {{--  <button type="button"
+                        {{-- <button type="button"
                             class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
                             <!-- Heroicon name: solid/plus-sm -->
                             <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg"
