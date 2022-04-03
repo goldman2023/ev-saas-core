@@ -15,7 +15,7 @@
   ```
 -->
 <div x-show="isModalOpen" x-on:click.away="isModalOpen = false" x-cloak x-transition
-    class="fixed z-10 inset-0 overflow-y-auto" role="dialog" aria-modal="true">
+    class="fixed z-[100] inset-0 overflow-y-auto" role="dialog" aria-modal="true">
     <div class="flex min-h-screen text-center md:block md:px-2 lg:px-4" style="font-size: 0">
         <!--
         Background overlay, show/hide based on modal state.
@@ -74,8 +74,19 @@
                         <section aria-labelledby="information-heading" class="mt-3">
                             <h3 id="information-heading" class="sr-only">Product information</h3>
 
-                            <x-feed.elements.card-header-user-info :item="$item">
-                            </x-feed.elements.card-header-user-info>
+                            <div class="grid grid-cols-3 content-center">
+                                <div class="col-span-2">
+                                    <x-feed.elements.card-header-user-info :item="$item">
+                                    </x-feed.elements.card-header-user-info>
+                                </div>
+                                <div>
+                                    @livewire('actions.wishlist-button', [
+                                        'object' => $item->causer,
+                                        'action' => 'Follow'
+                                        ])
+                                </div>
+                            </div>
+
 
 
                             <div class="mt-6">
@@ -88,7 +99,7 @@
                         </section>
 
                         <section aria-labelledby="options-heading" class="mt-6">
-                            <h3 id="options-heading" class="sr-only">Product options</h3>
+                            {{-- <h3 id="options-heading" class="sr-only">Product options</h3> --}}
 
                             <div class="mt-6">
 
@@ -99,9 +110,11 @@
                                 </livewire:actions.wishlist-button>
                                 </button>
                             </div>
-                            <p class="absolute top-4 left-4 text-center sm:static sm:mt-6">
-                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">View full
-                                    details</a>
+                            <p class="text-center sm:static sm:mt-6 mb-3">
+                                <a href="{{ $item->subject->getPermalink() }}"
+                                    class="font-medium text-indigo-600 hover:text-indigo-500">
+                                    {{ translate('View full details') }}
+                                </a>
                             </p>
 
 
@@ -109,7 +122,8 @@
 
                         </section>
 
-                        <livewire:feed.elements.quick-views.elements.comments></livewire:feed.elements.quick-views.elements.comments>
+                        <livewire:feed.elements.quick-views.elements.comments>
+                        </livewire:feed.elements.quick-views.elements.comments>
                     </div>
                 </div>
             </div>

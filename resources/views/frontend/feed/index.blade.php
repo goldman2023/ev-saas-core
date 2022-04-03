@@ -27,7 +27,7 @@
 
                     <h1 class="sr-only">Recent questions</h1>
                     <div role="list" class="space-y-4">
-                       <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel>
+                       {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
 
                        <livewire:feed.elements.add-post></livewire:feed.elements.add-post>
                         <livewire:feed.feed-list> </livewire:feed.feed-list>
