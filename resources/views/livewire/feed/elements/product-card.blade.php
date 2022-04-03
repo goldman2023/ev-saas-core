@@ -15,8 +15,7 @@
             <dt class="sr-only">Role</dt>
             <dd class="mt-3">
                 <span class="px-2 py-1 text-green-800 text-sm font-medium bg-green-100 rounded-full">
-                    {{ translate('Price') }} {{ $product->getBasePrice() }}
-                    €
+                    {{ translate('Price') }} {{ $product->getTotalPrice(true) }}
                 </span>
                 @if(!$product->isInStock())
                 <span class="absolute top-[-10px] right-[-10px] px-2 py-1 text-gray-100 text-xs font-medium bg-red-700 rounded-full">
