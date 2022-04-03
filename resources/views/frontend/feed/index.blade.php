@@ -16,7 +16,7 @@
                 <x-feed.elements.user-onboarding-flow>
                 </x-feed.elements.user-onboarding-flow>
             </div>
-            <main class="lg:col-span-6 xl:col-span-7">
+            <main class="lg:col-span-6 xl:col-span-6">
 
                 <div class="mb-3">
                     <x-feed.elements.stories-global>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </main>
-            <aside class="xl:block col-span-4 xl:col-span-3">
+            <aside class="xl:block col-span-4 xl:col-span-4">
                 <div class="sticky top-4 space-y-4">
                     <x-feed.elements.follow-suggestions>
                     </x-feed.elements.follow-suggestions>

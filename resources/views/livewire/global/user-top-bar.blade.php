@@ -33,9 +33,10 @@
     }">
         <div>
             <button type="button" @click="show = !show"
-                class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 relative"
                 id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                <img class="h-8 w-8 rounded-full" src="{{ auth()->user()->getThumbnail() }}" alt="">
+                <img class="h-10 w-10 rounded-full object-contain ring-2 ring-indigo-400" src="{{ auth()->user()->getThumbnail() }}" alt="">
+                <span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>
             </button>
         </div>
 

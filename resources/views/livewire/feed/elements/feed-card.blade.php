@@ -1,7 +1,7 @@
-<div>
+<div x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
     @if(!$ignore)
     <div>
-        <article class='mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'>
+        <article class='mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'  x-on:click="isModalOpen = true">
             {{-- x-intersect:visible="$wire.track_impression({{ $item->id }})" --}}
             <div>
                 <div class="flex space-x-3">
@@ -246,6 +246,9 @@
             </div>
         </article>
     </div>
+    <button>Open Modal</button>
+    <livewire:feed.elements.quick-views.main :item="$item">
+    </livewire:feed.elements.quick-views.main>
 
     @endif
 

@@ -95,8 +95,8 @@
                             {{ translate('Add a post') }}
                         </h3>
                         <div class="mt-2">
-                            <livewire:dashboard.forms.blog-posts.blog-post-form>
-                            </livewire:dashboard.forms.blog-posts.blog-post-form>
+                          {{--   <livewire:dashboard.forms.blog-posts.blog-post-form>
+                            </livewire:dashboard.forms.blog-posts.blog-post-form> --}}
 
                         </div>
                     </div>

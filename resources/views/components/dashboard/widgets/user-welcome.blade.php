@@ -6,7 +6,7 @@
 
                 <div class="flex items-center relative">
                     <a href="{{ route('my.account.settings') }}" class="relative">
-                    <img class="hidden h-16 w-16 rounded-full sm:block" src="{{ Auth::user()->getThumbnail() }}" alt="">
+                    <img class="hidden h-16 w-16 rounded-full sm:block ring-2 ring-indigo-400 object-contain" src="{{ Auth::user()->getThumbnail() }}" alt="">
                     <div class="absolute right-[-6px] bottom-[6px] bg-gray-400 p-1 rounded-full">
                         <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

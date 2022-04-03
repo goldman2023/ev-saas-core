@@ -47,10 +47,15 @@
             </nav>
         </div>
     </div>
+    @if(!$readyToLoad)
+    <livewire:feed.elements.feed-card-empty-state>
+    </livewire:feed.elements.feed-card-empty-state>
+    @endif
     <div wire:loading wire:target="loadInit" class="w-full">
-        <div class="mb-3 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg w-full">
-            {{ translate('Loading Your Knowledge Feed...') }}
-        </div>
+
+        <livewire:feed.elements.feed-card-empty-state>
+        </livewire:feed.elements.feed-card-empty-state>
+
     </div>
     <div wire:init="loadInit">
         @if($readyToLoad)
