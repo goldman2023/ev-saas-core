@@ -65,7 +65,7 @@
             <p class="py-2 mb-0">
                 <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
                 <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
-                @if($product->isInStock()) 
+                @if($product->isInStock())
                     <span class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('In Stock') }}</span>
                 @else
                     <span class="badge-danger px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('Not In Stock') }}</span>
@@ -86,22 +86,24 @@
             <div class="w-full flex mt-3">
                 <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
-                <x-system.add-to-cart-button 
+                <x-system.add-to-cart-button
                     :model="$product"
                     class=""
                     {{-- icon="heroicon-o-shopping-cart" --}}
-                    label="{{ translate('Add to cart') }}" 
+                    label="{{ translate('Add to cart') }}"
                     label-not-in-stock="{{ translate('Not in stock') }}">
                 </x-system.add-to-cart-button>
             </div>
-            
+
             <div class="w-full">
-                <livewire:actions.wishlist-button template="wishlist-button-detailed" :object="$product">
+                <livewire:actions.wishlist-button
+                action="Wishlist"
+                template="wishlist-button-detailed" :object="$product">
                 </livewire:actions.wishlist-button>
             </div>
         </div>
 
-        
+
         {{-- This is for GunOB --}}
         {{-- <div class="w-full mt-2">
             @guest

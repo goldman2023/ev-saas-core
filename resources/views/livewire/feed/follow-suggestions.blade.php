@@ -42,6 +42,7 @@
                         <div>
                             @livewire('actions.wishlist-button', [
                             'object' => $account,
+                            'action' => 'Follow'
                             ])
                         </div>
                     </div>

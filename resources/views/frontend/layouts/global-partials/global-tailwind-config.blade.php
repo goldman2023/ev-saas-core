@@ -19,7 +19,7 @@ TODO: you can overide it with data from a database a sa setting --}}
             },
             extend: {
                 fontFamily: {
-                    sans: ['Arial', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
+                    sans: ['Inter', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
                     roboto: ['Times New Roman'],
                 },
                 fontSize: {
@@ -138,7 +138,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         input[disabled] {
             @apply opacity-50;
         }
-        
+
         .is-invalid {
             @apply border-danger;
         }

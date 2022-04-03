@@ -207,10 +207,10 @@ class Shop extends EVBaseModel
         if ($verification_status === true) {
             return true;
         } else {
-            return false;
+            return true;
         }
     }
-    
+
 
     /* Function to return integer value for company public rating
     TODO: How this is calculated we will implement when we have reviewable trait
