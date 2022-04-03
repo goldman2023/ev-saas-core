@@ -18,9 +18,13 @@ class UserOnboardingFlow extends Component
         $step = [
             'completed' => false,
             'action' => 'Explore',
-            'route' => route('onboarding.verification'),
+            'route' => route('feed.shops'),
             'title' => translate('Follow 5 users'),
         ];
+        if(auth()->user()->following()->count() > 5) {
+            $step['completed'] = true;
+        }
+
         $this->steps[] = $step;
 
         $step = [
@@ -29,6 +33,11 @@ class UserOnboardingFlow extends Component
             'route' => route('onboarding.verification'),
             'title' => translate('Add your first post'),
         ];
+
+        if(auth()->user()->blog_posts()->count() > 1) {
+            $step['completed'] = true;
+        }
+
         $this->steps[] = $step;
 
         $step = [
@@ -37,6 +46,10 @@ class UserOnboardingFlow extends Component
             'route' => route('onboarding.step4'),
             'title' => translate('Create a shop'),
         ];
+        if(auth()->user()->shop()->count() > 1) {
+            $step['completed'] = true;
+        }
+
         $this->steps[] = $step;
 
         $step = [
@@ -50,7 +63,7 @@ class UserOnboardingFlow extends Component
         $step = [
             'completed' => false,
             'action' => 'Start selling',
-            'route' => route('onboarding.verification'),
+            'route' => route('product.create'),
             'title' => translate('Add your first product'),
         ];
         $this->steps[] = $step;

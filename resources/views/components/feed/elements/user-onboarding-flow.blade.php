@@ -13,7 +13,7 @@
             <div class="-ml-px absolute mt-0.5 top-4 left-4 w-0.5 h-full bg-indigo-600" aria-hidden="true"></div>
             @endif
             <!-- Complete Step -->
-            <a href="#" class="relative flex items-start group">
+            <a href="{{ $step['route'] }}" class="relative flex items-start group">
                 <span class="h-9 flex items-center">
                     @if($step['completed'])
                     <span

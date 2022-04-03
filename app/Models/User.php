@@ -220,7 +220,9 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     }
 
     public function following() {
-        return $this->morphedByMany(User::class, 'subject', 'wishlists');
+        // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
+
+        return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
     }
 
 
