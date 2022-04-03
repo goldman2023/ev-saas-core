@@ -35,13 +35,13 @@ class MyAccountForm extends Component
             // Basic information rules
             'basic' => [
                 //'me' => [],
-                'me.first_name' => ['required', 'min:2'],
-                'me.last_name' => ['required', 'min:2'],
+                'me.name' => ['required', 'min:2'],
+                'me.surname' => ['required', 'min:2'],
 //                'me.email' => ['required', 'email:rfs,dns'],
                 'me.phone' => ['required'],
                 'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
                 'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-                
+
             ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],
