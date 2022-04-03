@@ -98,6 +98,13 @@
                     @svg('heroicon-o-duplicate', ['class' => 'w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Duplicate product') }}</span>
                 </a>
+
+            </li>
+            <li>
+                <div class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14 cursor-pointer" wire:click="importToStripe({{ $row->id }})">
+                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2'])
+                    <span class="ml-2">{{ translate('Import to Stripe') }}</span>
+                </div>
             </li>
             <li>
                 <a href="#" class="flex items-center px-3 py-3 pr-4 text-red-500 text-14 border-t">

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24598983776c87b1bff392dee72d0834",
+    "content-hash": "7a4f53a8d98c8927fc09efabcce1b145",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -1078,59 +1078,6 @@
                 "source": "https://github.com/Codexshaper/laravel-woocommerce/tree/v3.0.1"
             },
             "time": "2020-11-12T10:19:30+00:00"
-        },
-        {
-            "name": "comodolab/nova-help",
-            "version": "0.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Comodolab/nova-help.git",
-                "reference": "3b4f1ce6efb562087fd08d90d7ece302aa99d95d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Comodolab/nova-help/zipball/3b4f1ce6efb562087fd08d90d7ece302aa99d95d",
-                "reference": "3b4f1ce6efb562087fd08d90d7ece302aa99d95d",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^5.0|^6.0|^7.0|^8.0|^9.0",
-                "php": ">=7.2.5"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Comodolab\\Nova\\Fields\\Help\\FieldServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Comodolab\\Nova\\Fields\\Help\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Alessandro Benoit",
-                    "email": "alessandro@comodolab.it"
-                }
-            ],
-            "description": "A Laravel Nova help field.",
-            "keywords": [
-                "help",
-                "laravel",
-                "nova"
-            ],
-            "support": {
-                "issues": "https://github.com/Comodolab/nova-help/issues",
-                "source": "https://github.com/Comodolab/nova-help/tree/0.5.0"
-            },
-            "time": "2022-02-14T14:00:04+00:00"
         },
         {
             "name": "davidhsianturi/blade-bootstrap-icons",
@@ -10036,16 +9983,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.119.0",
+            "version": "v7.121.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "a454dde82f5698cc4bcc5016c5328f533f516690"
+                "reference": "e36e7afb71ae5511aae23b52dca712a0ef06d981"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a454dde82f5698cc4bcc5016c5328f533f516690",
-                "reference": "a454dde82f5698cc4bcc5016c5328f533f516690",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e36e7afb71ae5511aae23b52dca712a0ef06d981",
+                "reference": "e36e7afb71ae5511aae23b52dca712a0ef06d981",
                 "shasum": ""
             },
             "require": {
@@ -10090,9 +10037,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v7.119.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v7.121.0"
             },
-            "time": "2022-03-25T20:09:27+00:00"
+            "time": "2022-03-30T15:51:23+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -16013,5 +15960,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }

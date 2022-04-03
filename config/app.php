@@ -290,6 +290,7 @@ return [
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,
         'UUID' => Webpatser\Uuid\Uuid::class,
+        'StripeService' => App\Facades\StripeService::class,
     ],
 
 ];

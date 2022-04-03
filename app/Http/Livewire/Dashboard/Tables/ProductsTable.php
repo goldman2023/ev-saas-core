@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
+use StripeService;
 
 class ProductsTable extends DataTableComponent
 {
@@ -91,5 +92,19 @@ class ProductsTable extends DataTableComponent
     public function rowView(): string
     {
         return 'frontend.dashboard.products.row';
+    }
+
+    public function importToStripe($id) {
+        try {
+            $model = Product::findOrFail($id);
+
+            if(StripeService::saveStripeProduct($model)) {
+                $this->inform(translate('Successfully imported to Stripe!'), '', 'fail');
+            }
+
+        } catch(\Exception $e) {
+            $this->inform(translate('Could not import to Stripe account'), $e->getMessage(), 'fail');
+        }
+        
     }
 }

@@ -67,6 +67,11 @@
                                         <span>{{ translate('Social') }}</span>
                                     </a>
 
+                                    <a href="#" @click="current_tab = 'payments'" :class="{'border-primary text-primary':current_tab === 'payments', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'payments'}" class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
+                                        @svg('heroicon-o-currency-euro', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
+                                        <span>{{ translate('Payments') }}</span>
+                                    </a>
+
                                     <a href="#" @click="current_tab = 'checkout'" :class="{'border-primary text-primary':current_tab === 'checkout', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'checkout'}" class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
                                         @svg('heroicon-o-credit-card', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
                                         <span>{{ translate('Checkout') }}</span>
@@ -177,7 +182,7 @@
                             </div>
                             {{-- END Enable social logins --}}
 
-                            {{-- Facebook settings --}}
+                            {{-- Login settings --}}
                             <div class="w-full " x-show="settings.enable_social_logins.value">
                                 {{-- Google login --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
@@ -230,6 +235,7 @@
                                 </div>
                                 {{-- END Linkedin login --}}
                             </div>
+                            {{-- END Login settings --}}
 
                             {{-- Facebook settings --}}
                             <div class="w-full mt-5">
@@ -349,7 +355,7 @@
                             {{-- END LinkedIn settings --}}
 
 
-                            {{-- Save general information --}}
+                            {{-- Save Social --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
@@ -357,22 +363,101 @@
                                         $wire.set('settings.google_login.value', settings.google_login.value, true);
                                         $wire.set('settings.facebook_login.value', settings.facebook_login.value, true);
                                         $wire.set('settings.linkedin_login.value', settings.linkedin_login.value, true);
-                                        {{-- $wire.set('settings.facebook_app_id.value', settings.facebook_app_id.value, true);
-                                        $wire.set('settings.facebook_app_secret.value', settings.facebook_app_secret.value, true);
-                                        $wire.set('settings.google_oauth_client_id.value', settings.google_oauth_client_id.value, true);
-                                        $wire.set('settings.google_oauth_client_secret.value', settings.google_oauth_client_secret.value, true);
-                                        $wire.set('settings.linkedin_client_id.value', settings.linkedin_client_id.value, true);
-                                        $wire.set('settings.linkedin_client_secret.value', settings.linkedin_client_secret.value, true); --}}
                                     "
                                     wire:click="saveSocial()">
                                 {{ translate('Save') }}
                                 </button>
                             </div>
-                            {{-- END Save general information --}}
+                            {{-- END Save Social --}}
                         </div>
                         {{-- END Social --}}
 
 
+                        {{-- Payments --}}
+                        <div class="w-full px-5" x-show="current_tab === 'payments'">
+                            {{-- Stripe Test & Live api keys --}}
+                            <div class="w-full mt-1">
+                                <h4 class="">{{ translate('Stripe API settings') }}</h4>
+
+                                <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
+                                    <!-- Stripe Publishable Test Key  -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Stripe Publishable Test Key') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.stripe_pk_test_key') is-invalid @enderror"
+                                                    placeholder="{{ translate('PK Test') }}"
+                                                    wire:model.defer="settings.stripe_pk_test_key.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.stripe_pk_test_key.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Stripe Publishable Test Key -->
+
+                                    <!-- Stripe Secret Test Key -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Stripe Secret Test Key') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.stripe_sk_test_key') is-invalid @enderror"
+                                                    placeholder="{{ translate('SK Test') }}"
+                                                    wire:model.defer="settings.stripe_sk_test_key.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.stripe_sk_test_key.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Stripe Secrets Test Key -->
+
+                                    <!-- Stripe Publishable Live Key  -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Stripe Publishable Live Key') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.stripe_pk_live_key') is-invalid @enderror"
+                                                    placeholder="{{ translate('PK Live') }}"
+                                                    wire:model.defer="settings.stripe_pk_live_key.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.stripe_pk_live_key.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Stripe Publishable Live Key -->
+
+                                    <!-- Stripe Secrets Live Key  -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                            {{ translate('Stripe Secrets Live Key') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('settings.stripe_sk_live_key') is-invalid @enderror"
+                                                    placeholder="{{ translate('SK Live') }}"
+                                                    wire:model.defer="settings.stripe_sk_live_key.value" />
+                                        
+                                            <x-system.invalid-msg field="settings.stripe_sk_live_key.value"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Stripe Secrets Live Key -->
+                                </div>
+                            </div>
+                            {{-- END Stripe Test & Live api keys --}}
+
+                            {{-- Save Payments --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                    @click=""
+                                    wire:click="savePayments()">
+                                {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save Payments --}}
+                        </div>
+                        {{-- END Payments --}}
                     </div>
                     {{-- END Tabs --}}
 

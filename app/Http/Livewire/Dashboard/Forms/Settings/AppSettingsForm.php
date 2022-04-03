@@ -54,7 +54,12 @@ class AppSettingsForm extends Component
                 'settings.linkedin_client_id.value' => [''],
                 'settings.linkedin_client_secret.value' => [''],
             ],
-            
+            'payments' => [
+                'settings.stripe_pk_test_key.value' => [],
+                'settings.stripe_sk_test_key.value' => [],
+                'settings.stripe_pk_live_key.value' => [],
+                'settings.stripe_sk_live_key.value' => [],
+            ],
         ]);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
@@ -128,6 +133,32 @@ class AppSettingsForm extends Component
         } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save general settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function savePayments() {
+        $rules = $this->getRuleSet('payments');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Payments settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save payments settings.'), $e->getMessage(), 'fail');
         }
     }
 

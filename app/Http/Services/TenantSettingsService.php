@@ -164,6 +164,13 @@ class TenantSettingsService
             'linkedin_login' => 'boolean',
             'github_login' => 'boolean',
             'guest_checkout_active' => 'boolean',
+
+            // Payments
+            'stripe_pk_test_key' => 'string',
+            'stripe_sk_test_key' => 'string',
+            'stripe_pk_live_key' => 'string',
+            'stripe_sk_live_key' => 'string',
+
         ];
     }
 }

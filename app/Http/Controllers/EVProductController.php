@@ -10,13 +10,13 @@ use Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
+use Stripe;
 
 class EVProductController extends Controller
 {
     //
     public function index(Request $request) {
         $products = Auth::user()->products()->orderBy('created_at','desc')->paginate(20);
-
         return view('frontend.dashboard.products.index')->with('products', $products);
     }
 
