@@ -61,7 +61,7 @@ class StripeService
             'currency' => strtolower($model->base_currency),
             'product' => $stripe_product->id,
         ]);
-        
+
         // Create CoreMeta with stripe Product ID and Price ID
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
@@ -81,6 +81,6 @@ class StripeService
     }
 
     protected function updateStripeProduct($model, $stripe_id) {
-        
-    }    
+
+    }
 }

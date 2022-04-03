@@ -1,12 +1,12 @@
 <div x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
     @if(!$ignore)
     <div>
-        <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'  x-on:click="isModalOpen = true">
+        <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg' x-on:click="isModalOpen = true">
             {{-- x-intersect:visible="$wire.track_impression({{ $item->id }})" --}}
             <div>
                 <x-feed.elements.card-header-user-info :item="$item">
                 </x-feed.elements.card-header-user-info>
-                <h2  class="mt-4 text-base font-medium text-gray-900">
+                <h2 class="mt-4 text-base font-medium text-gray-900">
 
                     @if($item->subject_type == 'App\Models\Wishlist')
 
@@ -26,7 +26,7 @@
                     </a>
                     @elseif($item->subject_type == 'App\Models\BlogPost' && $item->subject)
                     <span class="text-xs font-gray-500 mt-3 font-normal">
-                    {{-- {{ $item->description }} {{ translate('new status update') }} --}}
+                        {{-- {{ $item->description }} {{ translate('new status update') }} --}}
                     </span>
 
                     <a href="{{ $item->subject->getPermalink() }}" target="_blank">
@@ -41,7 +41,7 @@
                     {{ $item->description }}
                     {{ class_basename($item->subject)}}
                     @isset($item->subject->name)
-                        {{ $item->subject->name }}
+                    {{ $item->subject->name }}
                     @endisset
 
 
@@ -54,18 +54,16 @@
                 <div class="grid grid-cols-3  border-2 border-gray-300 border-dashed rounded-lg p-3 gap-10">
                     <div class="flex items-center">
                         {{-- TODO: Implement quick view --}}
-                        <a href="{{ $product->getPermalink() }}" class="text-lg font-bold">
-                            <x-tenant.system.image alt="{{ get_site_name() }} logo"
-                                class="min-h-8 w-full mx-auto sm:min-h-10" :image="$product->getThumbnail()">
-                            </x-tenant.system.image>
-                        </a>
+                        <x-tenant.system.image alt="{{ get_site_name() }} logo"
+                            class="min-h-8 w-full mx-auto sm:min-h-10" :image="$product->getThumbnail()">
+                        </x-tenant.system.image>
                     </div>
                     <div class="col-span-2 truncate">
                         <span class="text-dark font-weight-bold">
                             <div>
-                                <a href="{{ $product->getPermalink() }}" class="text-lg font-bold">
+                                <span class="text-lg font-bold">
                                     {{ $product->name }}
-                                </a>
+                                </span>
                             </div>
 
                             @if ($product->getBasePrice() != $product->getTotalPrice())
@@ -83,9 +81,9 @@
                                 template="wishlist-button-detailed" :object="$product">
                             </livewire:actions.wishlist-button> --}}
                         </div>
-                        <a href="{{ $product->getPermalink() }}" class="btn btn-primary mt-4">
+                        <span class="btn btn-primary mt-4">
                             {{ translate('View product') }}
-                        </a>
+                        </span>
                     </div>
                 </div>
                 @endif
@@ -101,9 +99,7 @@
 
 
                         </button>
-                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}"
-                        :object="$item->subject"
-                        >
+                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item->subject">
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>

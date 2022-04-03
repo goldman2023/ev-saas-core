@@ -58,14 +58,19 @@
                     </svg>
                 </button>
 
+
                 <div class="w-full grid grid-cols-1 gap-y-8 gap-x-6 items-start sm:grid-cols-12 lg:gap-x-8">
+                    @if($type == 'product')
+
                     <div class="sm:col-span-4 lg:col-span-5">
                         <div class="aspect-w-1 aspect-h-1 rounded-lg bg-gray-100 overflow-hidden">
-                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-03-product-04.jpg"
-                                alt="Back angled view with bag open and handles to the side."
-                                class="object-center object-cover">
+                            <x-galleries.main-gallery class="object-center object-cover" template="product-gallery"
+                                :model="$item->subject" class="">
+                            </x-galleries.main-gallery>
+
                         </div>
                     </div>
+                    @endif
                     <div class="sm:col-span-8 lg:col-span-7">
                         <h2 class="text-2xl font-extrabold text-gray-900 sm:pr-12">
                             {{ $item->subject->name }}
@@ -81,9 +86,9 @@
                                 </div>
                                 <div>
                                     @livewire('actions.wishlist-button', [
-                                        'object' => $item->causer,
-                                        'action' => 'Follow'
-                                        ])
+                                    'object' => $item->causer,
+                                    'action' => 'Follow'
+                                    ])
                                 </div>
                             </div>
 

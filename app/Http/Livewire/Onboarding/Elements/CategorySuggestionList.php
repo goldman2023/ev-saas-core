@@ -10,7 +10,7 @@ class CategorySuggestionList extends Component
     public $categories;
     public function mount()
     {
-        $this->categories = Category::all();
+        $this->categories = Category::take(50)->get();
     }
     public function render()
     {

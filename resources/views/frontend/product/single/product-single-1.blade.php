@@ -11,7 +11,8 @@
         <div class="lg:grid lg:grid-rows-1 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-3 xl:gap-x-16">
             <!-- Product Gallery -->
             <div class="lg:row-end-1 lg:col-span-4">
-                <x-galleries.main-gallery template="product-gallery" :model="$product" class=""></x-galleries.main-gallery>
+                <x-galleries.main-gallery template="product-gallery" :model="$product" class="">
+                </x-galleries.main-gallery>
             </div>
 
             <!-- Product details -->
@@ -19,9 +20,9 @@
                 <div class="flex flex-col">
                     <div class="w-full flex space-x-3">
                         @foreach($product->categories as $category)
-                            @if(empty($category->parent_id))
-                                <div class="badge-info !text-14 !py-1">{{ $category->name }}</div>
-                            @endif
+                        @if(empty($category->parent_id))
+                        <div class="badge-info !text-14 !py-1">{{ $category->name }}</div>
+                        @endif
                         @endforeach
                     </div>
                     <div class="w-full mt-3">
@@ -38,14 +39,14 @@
                     <div class="w-full mt-3">
                         <div class="flex items-center">
                             {{-- TODO: FIX THIS TO USE REAL RATING --}}
-                            @for($i = 0; $i < 4; $i++) 
-                                @svg('heroicon-s-star', ['class' => 'text-warning h-5 w-5 flex-shrink-0'])
-                            @endfor
+                            @for($i = 0; $i < 4; $i++) @svg('heroicon-s-star', ['class'=> 'text-warning h-5 w-5
+                                flex-shrink-0'])
+                                @endfor
 
-                            @svg('heroicon-s-star', ['class' => 'text-gray-300 h-5 w-5 flex-shrink-0'])
+                                @svg('heroicon-s-star', ['class' => 'text-gray-300 h-5 w-5 flex-shrink-0'])
 
-                            <span class="ml-2 text-gray-500">{{ $product->rating }}</span>
-                            <span class="ml-3 text-gray-500">{{ '(67 reviews)' }}</span>
+                                <span class="ml-2 text-gray-500">{{ $product->rating }}</span>
+                                <span class="ml-3 text-gray-500">{{ '(67 reviews)' }}</span>
                         </div>
                     </div>
                 </div>
@@ -63,9 +64,13 @@
                         <div class="grow flex items-center">
                             <span class="mr-2 text-gray-900 font-semibold">{{ translate('Sold by') }}:</span>
                             <span class="mr-1">
-                                <img src="{{ $product->shop->getThumbnail(['w' => '100']) }}" class="w-7 h-7 rounded" />
+                                <a href="{{ $product->shop->getPermalink() }}">
+                                    <img src="{{ $product->shop->getThumbnail(['w' => '100']) }}"
+                                        class="w-7 h-7 rounded" />
+                                </a>
                             </span>
-                            <span class="text-gray-800">{{ $product->shop->name }}</span>
+                            <a href="{{ $product->shop->getPermalink() }}" class="text-gray-800">{{ $product->shop->name
+                                }}</a>
                         </div>
                         <div class="shrink-0">
                             <button type="button" class="btn-primary">
@@ -74,7 +79,7 @@
                             </button>
                         </div>
                     </div>
-        
+
                     <div class="flex items-center mt-2">
                         <div class="grow flex items-center" x-data="{
                             shareFB(){
@@ -88,7 +93,7 @@
                             }
                         }">
                             <span class="mr-2 text-gray-900 font-semibold">{{ translate('Share') }}:</span>
-                            
+
                             {{-- Social share --}}
                             <div class="mr-2">
                                 <div @click="shareFB()"
@@ -111,7 +116,7 @@
                                 </div>
                             </div>
                             {{-- END Social share --}}
-        
+
                         </div>
                     </div>
                 </div>
@@ -122,7 +127,7 @@
                         $220</button>
                     <button type="button"
                         class="w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500">Preview</button>
-                   
+
                 </div> --}}
 
                 {{-- <div class="hidden border-t border-gray-200 mt-10 pt-10">
@@ -141,7 +146,7 @@
                     <livewire:feed.elements.shop-card :shop="$product->shop"></livewire:feed.elements.shop-card>
                 </div> --}}
 
-    
+
             </div>
 
             <div class="w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
@@ -176,7 +181,8 @@
                     }">
                     <div class="sm:hidden">
                         <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                        <select id="tabs" name="tabs" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <select id="tabs" name="tabs"
+                            class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                             <option>My Account</option>
                             <option>Company</option>
                             <option>Team Members</option>
@@ -186,10 +192,22 @@
                     <div class="hidden sm:block">
                         <div class="border-b border-gray-200">
                             <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                                <div @click="current = 'description';" :class="{'text-primary border-primary ': current == 'description'}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"> {{ translate('Description') }} </div>
-                                <div @click="current = 'specification';" :class="{'text-primary border-primary ': current == 'specification'}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"> {{ translate('Specification') }} </div>
-                                <div @click="current = 'shipping';" :class="{'text-primary border-primary ': current == 'shipping'}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer" aria-current="page"> {{ translate('Shipping') }} </div>
-                                <div @click="current = 'returns';" :class="{'text-primary border-primary ': current == 'returns'}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"> {{ translate('Returns and buyers protections') }} </div>
+                                <div @click="current = 'description';"
+                                    :class="{'text-primary border-primary ': current == 'description'}"
+                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
+                                    {{ translate('Description') }} </div>
+                                <div @click="current = 'specification';"
+                                    :class="{'text-primary border-primary ': current == 'specification'}"
+                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
+                                    {{ translate('Specification') }} </div>
+                                <div @click="current = 'shipping';"
+                                    :class="{'text-primary border-primary ': current == 'shipping'}"
+                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"
+                                    aria-current="page"> {{ translate('Shipping') }} </div>
+                                <div @click="current = 'returns';"
+                                    :class="{'text-primary border-primary ': current == 'returns'}"
+                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
+                                    {{ translate('Returns and buyers protections') }} </div>
                             </nav>
                         </div>
                     </div>
@@ -205,7 +223,7 @@
                         </div>
                     </div>
                 </div>
-  
+
             </div>
         </div>
     </div>

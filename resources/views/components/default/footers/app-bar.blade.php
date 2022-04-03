@@ -18,8 +18,8 @@
 
     .nav-bottom .nav-link {
         text-align: center;
-        display: inline-block;
-        padding: 7px
+        display: flex;
+        padding: 7px;
     }
 
     .nav-bottom .nav-link .icon {
@@ -63,7 +63,7 @@
 <nav class="nav-bottom text-dark" id="ev-app-bar">
     <a href="{{ route('dashboard') }}" class="nav-link active">
         @svg('heroicon-s-home', ['style' => 'width: 24px;'])
-        <span class="text">{{ translate('Home') }}</span>
+        <span class="d-block text flex">{{ translate('Home') }}</span>
     </a>
 
     <span x-data="" @click="$dispatch('display-flyout-panel', {'id' : 'cart-panel'})" class="nav-link text-dark we-primary-mobile-button">

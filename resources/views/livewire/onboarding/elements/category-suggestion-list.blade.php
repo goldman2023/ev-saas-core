@@ -9,10 +9,7 @@
 
             <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4 ">
                 @foreach($categories as $category)
-                <!--
-        Checked: "border-transparent", Not Checked: "border-gray-300"
-        Active: "border-indigo-500 ring-2 ring-indigo-500"
-      -->
+
                 <label x-data="{ user_selected: false }" @click="user_selected = true"
                     :class="{ 'border-indigo-500 ring-2 ring-indigo-500': user_selected }"
                     class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none border-gray-300">
@@ -25,30 +22,21 @@
                                 $category->name }} </span>
                             <span id="project-type-0-description-0"
                                 class="mt-1 flex items-center text-sm text-gray-500">
-                            {{  $category->products->count()}} {{ translate('products') }} </span>
+                                {{ $category->products->count()}} {{ translate('products') }} </span>
                             <span id="project-type-0-description-1" class="mt-6 text-sm font-medium text-gray-900">
                             </span>
                             <span id="project-type-0-description-2" class="mt-6 text-sm font-medium text-gray-900">
                             </span>
                         </div>
                     </div>
-                    <!--
-          Not Checked: "invisible"
 
-          Heroicon name: solid/check-circle
-        -->
-                    <svg
-                    :class="{ 'invisible': !user_selected }"
-                    class="h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                        fill="currentColor" aria-hidden="true">
+                    <svg :class="{ 'invisible': !user_selected }" class="h-5 w-5 text-indigo-600"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                             clip-rule="evenodd" />
                     </svg>
-                    <!--
-          Active: "border", Not Active: "border-2"
-          Checked: "border-indigo-500", Not Checked: "border-transparent"
-        -->
+
                     <div class="absolute -inset-px rounded-lg border-2 pointer-events-none" aria-hidden="true"></div>
                 </label>
                 @endforeach

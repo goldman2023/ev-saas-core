@@ -37,7 +37,7 @@ class EVShopController extends Controller
             - verification_status column on $seller does not exists,
             what is replacement?
             */
-        return view('frontend.company.profile', compact('shop'));
+        return view('frontend.shop.single', compact('shop'));
 
 
 

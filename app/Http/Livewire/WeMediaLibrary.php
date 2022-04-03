@@ -160,6 +160,7 @@ class WeMediaLibrary extends Component
             ->when($this->sort_by === 'smallest', fn($query, $value) => $query->smallest())
             ->when($this->sort_by === 'largest', fn($query, $value) => $query->largest())
             ->when(!empty($this->search_query), fn($query, $value) => $query->search($this->search_query))
+            ->where('user_id' , auth()->user()->id)
             ->paginate(perPage: $this->per_page, page: $this->page);
     }
 

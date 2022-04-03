@@ -15,9 +15,11 @@
             <!-- Complete Step -->
             <a href="#" class="relative flex items-start group">
                 <span class="h-9 flex items-center">
+                    @if($step['completed'])
                     <span
                         class="relative z-10 w-8 h-8 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800">
                         <!-- Heroicon name: solid/check -->
+
                         <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                             fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
@@ -25,10 +27,25 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </span>
+                    @else
+                    <span
+                        class="relative z-10 w-8 h-8 flex items-center justify-center bg-gray-600 rounded-full group-hover:bg-indigo-800">
+                        <!-- Heroicon name: solid/check -->
+
+                        <svg class="h-5 w-5 text-white" x-description="Heroicon name: solid/user" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                          </svg>
+                    </span>
+                    @endif
+
                 </span>
                 <span class="ml-4 min-w-0 flex flex-col">
-                    <span class="text-xs font-semibold tracking-wide uppercase">Create account</span>
-                    <span class="text-sm text-gray-500">Vitae sed mi luctus laoreet.</span>
+                    <span class="text-xs font-semibold tracking-wide uppercase">
+                        {{ $step['title'] }}
+                    </span>
+                    <span class="text-sm text-gray-500">
+                       {{ $step['action']}}
+                    </span>
                 </span>
             </a>
         </li>

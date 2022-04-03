@@ -74,7 +74,8 @@
                                     {{ translate('Product is out of stock.') }}
                                 </h3>
                                 <div class="mt-2 text-sm text-yellow-700">
-                                    <p>{{ translate('Product is currently unavailable. Get notified when this product stock is added.') }}</p>
+                                    <p>{{ translate('Product is currently unavailable. Get notified when this product
+                                        stock is added.') }}</p>
                                     <livewire:actions.wishlist-button action="Notify"
                                         template="wishlist-button-detailed" :object="$product">
                                     </livewire:actions.wishlist-button>
@@ -145,9 +146,16 @@
                         <div class="grow flex items-center">
                             <span class="mr-2 text-gray-900 font-semibold">{{ translate('Sold by') }}:</span>
                             <span class="mr-1">
-                                <img src="{{ $product->shop->getThumbnail(['w' => '100']) }}" class="w-7 h-7 rounded" />
+                                <a href="{{ $product->shop->getPermalink() }}">
+                                    <img src="{{ $product->shop->getThumbnail(['w' => '100']) }}"
+                                        class="w-7 h-7 rounded" />
+                                </a>
                             </span>
-                            <span class="text-gray-800">{{ $product->shop->name }}</span>
+                            <span class="text-gray-800">
+                                <a href="{{ $product->shop->getPermalink() }}">
+                                    {{ $product->shop->name }}
+                                </a>
+                            </span>
                         </div>
                         <div class="shrink-0">
                             <button type="button" class="btn-primary">
