@@ -90,7 +90,7 @@
                             </div>
 
                             <div class="w-full flex flex-col">
-                                <strong class="block text-gray-700">{{ $user->name .' '.$user->surname }}</strong>
+                                <strong class="block text-gray-700">{{ $me->name .' '.$me->surname }}</strong>
                                 <span class="text-gray-500">{{ $me->email }}</span>
                             </div>
                         </div>
