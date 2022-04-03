@@ -77,7 +77,7 @@
                         <h3 class="text-22 mb-3">{{ translate('Your wishlist is currently empty') }}</h3>
                         <p class="text-16 text-gray-600 px-4">{{ translate('Visit the shop and add some items to your wishlist you like') }}</p>
                     </div>
-                    <a class="btn btn-pill bg-sky-500 text-white text-16 !px-6 !py-2" href="{{ route('search') }}">
+                    <a class="btn btn-pill bg-sky-500 text-white text-16 !px-6 !py-2" href="{{ route('feed.products') }}">
                         {{ translate('Explore Products') }}
                     </a>
                 </div>

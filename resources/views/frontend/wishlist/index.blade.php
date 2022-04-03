@@ -61,7 +61,8 @@
                             <p>{{ translate('Before you can see your liked items you must add some products to your
                                 wishlist.') }}</p>
                         </div>
-                        <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('search') }}">
+                        <a class="btn btn-primary btn-pill transition-3d-hover px-5"
+                            href="{{ route('feed.products') }}">
                             {{ translate('Explore Products') }}
                         </a>
                     </div>
@@ -69,9 +70,6 @@
             </div>
             @endif
             @endforeach
-
-
-
         </div>
     </div>
 
