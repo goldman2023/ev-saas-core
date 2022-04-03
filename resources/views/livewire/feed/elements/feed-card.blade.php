@@ -103,7 +103,7 @@
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>
-                    <span class="hidden inline-flex items-center text-sm">
+                    <span class="inline-flex items-center text-sm">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/chat-alt -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -144,6 +144,7 @@
                         </button>
                     </span>
                 </div>
+
             </div>
         </article>
     </div>

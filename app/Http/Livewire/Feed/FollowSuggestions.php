@@ -13,8 +13,9 @@ class FollowSuggestions extends Component
 
     public function mount()
     {
-        $currently_liked = auth()->user()->following();
-        $this->accounts = Shop::where('id', '!=', auth()->user()->id)->take(5)->get();
+
+        $currently_liked = auth()->user()->following()->pluck('subject_id')->toArray();
+        $this->accounts = Shop::whereNotIn('id', $currently_liked)->where('id', '!=', auth()->user()->id)->take(5)->get();
     }
 
     public function render()

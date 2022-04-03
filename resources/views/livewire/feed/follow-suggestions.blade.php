@@ -25,16 +25,28 @@
                 @if($readyToLoad)
                 @foreach($accounts as $account)
                 <li class="flex items-center py-4 space-x-3">
-                    <div class="flex-shrink-0">
-                        <img class="h-8 w-8 rounded-full" src="{{ $account->getThumbnail() }}" alt="">
+                    <div class="flex-shrink-0 mr-1">
+                        <img class="h-12 w-12 rounded-full" src="{{ $account->getThumbnail() }}" alt="">
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
+                        <p class="text-md mb-1 font-medium text-gray-900">
                             <a href="{{ $account->getPermalink() }}">{{ $account->name }}</a>
                         </p>
                         <p class="text-sm text-gray-500">
-
+                            @if($account->followers()->count() == 0)
+                            <!-- This example requires Tailwind CSS v2.0+ -->
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                <svg class="-ml-0.5 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor"
+                                    viewBox="0 0 8 8">
+                                    <circle cx="4" cy="4" r="3" />
+                                </svg>
+                                {{ translate('New member!') }}
+                            </span>
+                            @else
                             {{ $account->followers()->count() }} {{ translate('followers') }}
+
+                            @endif
                             {{-- <a href="#">@ {{ $account->name }}</a> --}}
                         </p>
                     </div>
