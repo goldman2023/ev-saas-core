@@ -39,7 +39,7 @@ class StripeService
 
     protected function createStripeProduct($model) {
         // Reminder: Stripe pricemust be in cents!!!
-        $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
+        // $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
 
         // Create Stripe Product and Price
         $stripe_product = $this->stripe->products->create([
@@ -57,7 +57,7 @@ class StripeService
         ]);
 
         $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * (  pow(10, $no_of_decimals) ), // TODO: Is it Total, Base, or Subtotal, Original etc.???
+            'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'currency' => strtolower($model->base_currency),
             'product' => $stripe_product->id,
         ]);

@@ -11,7 +11,7 @@
                         <img src="{{ $user->getThumbnail(['w' => 400]) }}" alt="User avatar" class="w-32 h-32 rounded-full ring-4 ring-white">
                     </div>
                     <div class="flex flex-col items-center lg:items-start mt-4 lg:mt-0 lg:ml-8">
-                        <div class="text-lg font-bold leading-none">{{ $user->name }}</div>
+                        <div class="text-lg font-bold leading-none">{{ $user->first_name. ' '. $user->last_name }}</div>
                         <div class="text-gray-500">{{ $user->email }}</div>
                     </div>
                     <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>

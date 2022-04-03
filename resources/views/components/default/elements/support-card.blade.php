@@ -5,7 +5,7 @@
                 class="w-32 flex-shrink-0 mx-auto rounded-full object-scale-down"
                 :image="get_site_logo()">
             </x-tenant.system.image>
-            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->name }}</h3>
+            <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ $user->first_name .' '.$user->last_name }}</h3>
             <dl class="mt-1 flex-grow flex flex-col justify-between">
                 <dt class="sr-only">Title</dt>
                 <dd class="text-gray-500 text-sm">{{ get_site_name() }} Customer Support</dd>
