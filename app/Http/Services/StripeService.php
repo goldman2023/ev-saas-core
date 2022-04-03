@@ -107,7 +107,7 @@ class StripeService
                     'customer_email' => auth()->user()->email,
                     /* TODO: Create dynamic order on the fly when generating checkout link  */
                     'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/order/16/received',
-                    'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/order/16/canceled',
+                    'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/order/canceled',
                     'automatic_tax' => [
                         'enabled' => false,
                     ],
