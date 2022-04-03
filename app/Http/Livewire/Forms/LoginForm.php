@@ -69,10 +69,6 @@ class LoginForm extends Component
 
     public function render()
     {
-        if(session('style_framework') === 'tailwind') {
-            return view('livewire.tailwind.forms.login-form');
-        }
-
         return view('livewire.forms.login-form');
     }
 

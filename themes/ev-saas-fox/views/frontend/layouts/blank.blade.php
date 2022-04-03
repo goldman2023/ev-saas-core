@@ -21,8 +21,7 @@
     <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
-    @include('frontend.layouts.global-partials.global-tailwind-config')
-
+    @include('frontend.layouts.global-partials.all')
 
     {{ seo()->render() }}
 
