@@ -1,7 +1,7 @@
 <div class="bg-white rounded-lg shadow">
     <div class="p-6">
         <h2 id="who-to-follow-heading" class="text-base font-medium text-gray-900">
-            {{ translate('Popular Shops') }}
+            {{ translate('Recommended members') }}
         </h2>
         <div class="mt-6 flow-root">
             @if(!$readyToLoad)
@@ -26,7 +26,9 @@
                 @foreach($accounts as $account)
                 <li class="flex items-center py-4 space-x-3">
                     <div class="flex-shrink-0 mr-1">
-                        <img class="h-12 w-12 rounded-full" src="{{ $account->getThumbnail() }}" alt="">
+                        <a href="{{ $account->getPermalink() }}">
+                            <img class="h-12 w-12 rounded-full object-fit" src="{{ $account->getThumbnail() }}" alt="">
+                        </a>
                     </div>
                     <div class="min-w-0 flex-1">
                         <p class="text-md mb-1 font-medium text-gray-900">
