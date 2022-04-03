@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\StripeService;
 use EVS;
 use App\Models\Product;
 use App\Models\Shop;
@@ -31,7 +32,7 @@ class EVProductController extends Controller
     /* TODO: Add middleware for owner */
     public function edit(Request $request, $slug) {
         $product = Product::where('slug', $slug)->first();
- 
+
         if($product) {
             // $product->convertUploadModelsToIDs(); // DEPRECATED, since we use livewire and alpinejs combo instead of shitty Front JS
         }
@@ -131,6 +132,12 @@ class EVProductController extends Controller
 
         $template = 'product-single-1';
         return view('frontend.product.single.' . $template, compact('product'));
+    }
+
+    public function createProductCheckoutRedirect($id, $qty = 1) {
+        $product = Product::find($id);
+        $link = StripeService::createCheckoutLink($product, $qty);
+        return redirect($link);
     }
 
 }

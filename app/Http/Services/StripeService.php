@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Facades\CartService;
 use App\Models\Shop;
 use App\Models\ShopSetting;
 use App\Models\TenantSetting;
@@ -84,15 +85,11 @@ class StripeService
         return true;
     }
 
-    protected function updateStripeProduct($model, $stripe_id)
-    {
-    }
-
     public function createCheckoutLink($product)
     {
         $checkout_link['url'] = "#";
         try {
-            $checkout_link =   $this->stripe->checkout->sessions->create(
+            $checkout_link = $this->stripe->checkout->sessions->create(
                 [
                     'line_items' => [[
                         # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
@@ -101,8 +98,9 @@ class StripeService
                     ]],
                     'mode' => 'payment',
                     'customer_email' => auth()->user()->email,
-                    'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/success.html',
-                    'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/cancel.html',
+                    /* TODO: Create dynamic order on the fly when generating checkout link  */
+                    'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/order/16/received',
+                    'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/order/16/canceled',
                     'automatic_tax' => [
                         'enabled' => false,
                     ],

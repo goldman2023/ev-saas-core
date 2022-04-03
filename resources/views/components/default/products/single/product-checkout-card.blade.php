@@ -55,9 +55,7 @@
                 original-price-class="text-body text-16" total-price-class="text-24 fw-700 text-primary">
             </livewire:tenant.product.price>
 
-            <a href="{{ StripeService::createCheckoutLink($product) }}" class="btn btn-primary">
-                Stripe Checkout
-            </a>
+
 
 
             {{-- Variations Selector --}}
@@ -90,13 +88,19 @@
             <div class="w-full flex mt-3">
                 <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
-                <x-system.add-to-cart-button
-                    :model="$product"
-                    class=""
-                    {{-- icon="heroicon-o-shopping-cart" --}}
-                    label="{{ translate('Add to cart') }}"
-                    label-not-in-stock="{{ translate('Not in stock') }}">
-                </x-system.add-to-cart-button>
+                @if(get_setting('stripe_pk_test_key'))
+                <a href="{{ route('product.generate_checkout_link', [$product->id, $product->quantity]) }}" target="_blank" class="w-full btn btn-primary">
+                    {{ translate('Buy now') }}
+                </a>
+                @else
+                    <x-system.add-to-cart-button
+                        :model="$product"
+                        class=""
+                        {{-- icon="heroicon-o-shopping-cart" --}}
+                        label="{{ translate('Add to cart') }}"
+                        label-not-in-stock="{{ translate('Not in stock') }}">
+                    </x-system.add-to-cart-button>
+                @endif
             </div>
 
             <div class="w-full">
