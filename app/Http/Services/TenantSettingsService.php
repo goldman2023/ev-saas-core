@@ -71,33 +71,8 @@ class TenantSettingsService
         if (empty($settings)) {
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
             
-            // Set data types for settings
-            foreach($settings as $key => $setting) {
-                $data_type = $data_types[$key] ?? null;
-                $value = $settings[$key]['value'] ?? null;
+            castValuesForGet($settings, $data_types);
 
-                if(empty($value)) {
-                    $settings[$key]['value'] = ($data_type === 'boolean') ? false : null;
-                    continue;
-                }
-                
-                if(isset($settings[$key]) && !empty($value)) {
-                    if($data_type === Upload::class) {
-                        $settings[$key]['value'] = Upload::find($value);
-                    } else if($data_type === Currency::class) {
-                        $settings[$key]['value'] = Currency::find($value);
-                    } else if($data_type === 'string') {
-                        $settings[$key]['value'] = $value;
-                    } else if($data_type === 'int') {
-                        $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
-                    } else if($data_type === 'boolean') {
-                        $settings[$key]['value'] = ($value == 0 || $value == "0") ? false : true;
-                    } else if($data_type === 'array') {
-                        $settings[$key]['value'] = json_decode($value, true);
-                    } 
-                }
-                
-            }
             // dd($settings);
             // Cache the settings if they are found in DB
             if (!empty($settings)) {
@@ -116,7 +91,7 @@ class TenantSettingsService
         Cache::forget($cache_key);
     }
 
-    protected function settingsDataTypes() {
+    public function settingsDataTypes() {
         return [
             'site_logo' => Upload::class,
             'site_icon' => Upload::class,
@@ -127,9 +102,9 @@ class TenantSettingsService
             'colors' => 'array',
             'header' => 'array',
             'footer' => 'array',
+            'show_language_switcher' => 'boolean',
             'show_currency_switcher' => 'boolean',
             'system_default_currency' => Currency::class,
-            'show_language_switcher' => 'boolean',
             'currency_format' => 'int',
             'symbol_format' => 'int',
             'no_of_decimals' => 'int',

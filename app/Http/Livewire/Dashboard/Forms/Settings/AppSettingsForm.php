@@ -54,6 +54,14 @@ class AppSettingsForm extends Component
                 'settings.linkedin_client_id.value' => [''],
                 'settings.linkedin_client_secret.value' => [''],
             ],
+            'currency' => [
+                'settings.show_currency_switcher.value' => ['boolean'],
+                'settings.system_default_currency.value' => ['required'], // TODO: Put Rule:in(All enabled currencies codes)
+                'settings.no_of_decimals.value' => ['numeric', 'min:0', 'max:3'],
+                'settings.decimal_separator.value' => ['required', Rule::in([1,2])],
+                'settings.currency_format.value' => ['required', Rule::in([1,2])],
+                'settings.symbol_format.value' => ['required', Rule::in([1,2])],
+            ],
             'payments' => [
                 'settings.stripe_pk_test_key.value' => [],
                 'settings.stripe_sk_test_key.value' => [],
@@ -133,6 +141,32 @@ class AppSettingsForm extends Component
         } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save general settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function saveCurrency() {
+        $rules = $this->getRuleSet('currency');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Currency settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save currency settings.'), $e->getMessage(), 'fail');
         }
     }
 
@@ -310,11 +344,11 @@ class AppSettingsForm extends Component
     protected function saveSettings($rules) {
         // Save data in settings table
         $old_settings = TenantSettings::getAll(); // Get TenantSettings models and key them by their name (aka. `setting` column)
-
+        
         // TenantSettings::castOnSave()
         foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
-
+            
             if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);
