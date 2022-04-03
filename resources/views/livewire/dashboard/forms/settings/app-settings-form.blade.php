@@ -1,5 +1,5 @@
 <div class="w-full" x-data="{
-        current_tab: 'social',
+        current_tab: 'currency',
         settings: @js($settings),
     }"
     x-init=""
@@ -162,6 +162,111 @@
                         </div>
                         {{-- END General --}}
 
+                        {{-- Currency --}}
+                        <div class="w-full px-5" x-show="current_tab === 'currency'">
+                            {{-- Enable Currency switcher --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-1" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Enable currency switcher') }}</span>
+                                    <p class="text-gray-500 text-sm">{{ translate('If you want enable social currency switcher on your website') }}</p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <button type="button" @click="settings.show_currency_switcher.value = !settings.show_currency_switcher.value"
+                                                :class="{'bg-primary':settings.show_currency_switcher.value , 'bg-gray-200':!settings.show_currency_switcher.value}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':settings.show_currency_switcher.value, 'translate-x-0':!settings.show_currency_switcher.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Enable Currency switcher --}}
+
+                            <!-- System Default currency -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Default currency') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select field="settings.system_default_currency.value" :items="\FX::getAllCurrencies(true, true)" selected="settings.system_default_currency.value.code" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.system_default_currency.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- System Default currency -->
+
+                            <!-- Number of decimals -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Number of decimals') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="number" min="0" max="3" class="form-standard @error('settings.no_of_decimals') is-invalid @enderror"
+                                            placeholder="{{ translate('Decimal numbers') }}"
+                                            wire:model.defer="settings.no_of_decimals.value" />
+                                
+                                    <x-system.invalid-msg field="settings.no_of_decimals.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Number of decimals -->
+
+                            <!-- Decimal separator -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Decimal separator') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select field="settings.decimal_separator.value" :items="['1' => 'Comma', '2' => 'Dot']" selected="settings.decimal_separator.value" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.decimal_separator.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Decimal separator -->
+
+                            <!-- Currency format -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Currency format') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select field="settings.currency_format.value" :items="['1' => translate('Symbol'), '2' => translate('Code')]" selected="settings.currency_format.value" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.currency_format.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Currency format -->
+
+                            <!-- Symbol format -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Symbol format') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select field="settings.symbol_format.value" :items="['1' => translate('Symbol before price'), '2' => translate('Symbol after price')]" selected="settings.symbol_format.value" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.symbol_format.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Symbol format -->
+
+                            {{-- Save Currency --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                    @click="
+                                        $wire.set('settings.symbol_format.value', settings.symbol_format.value, true);
+                                        $wire.set('settings.currency_format.value', settings.currency_format.value, true);
+                                        $wire.set('settings.decimal_separator.value', settings.decimal_separator.value, true);
+                                        $wire.set('settings.system_default_currency.value', settings.system_default_currency.value.code, true);
+                                        $wire.set('settings.show_currency_switcher.value', settings.show_currency_switcher.value, true);
+                                    "
+                                    wire:click="saveCurrency()">
+                                {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save Currency --}}
+                        </div>
+                        {{-- END Currency --}}
+
 
                         {{-- Social --}}
                         <div class="w-full px-5" x-show="current_tab === 'social'">
@@ -169,7 +274,7 @@
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-1" x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900">{{ translate('Enable social logins') }}</span>
-                                    <p class="text-gray-500 text-sm">{{ translate('If you want enable social logins on your website') }}</p>
+                                    <p class="text-gray-500 text-sm">{{ translate('If you want to enable social logins on your website') }}</p>
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">

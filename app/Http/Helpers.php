@@ -33,9 +33,13 @@ if (!function_exists('castValueForSave')) {
         $data_type = $data_types[$key] ?? null;
         $value = $setting['value'] ?? null;
         
-        if($data_type === Upload::class || $data_type === Currency::class || $data_type === Category::class) {
+        if($data_type === Upload::class || $data_type === Category::class) {
             $value = ctype_digit($value) ? $value : null;
-        }  else if($data_type === 'int') {
+        } else if($data_type === Currency::class) {
+            if(!Currency::where('code', $value)->exists()) {
+                $value = 'EUR'; // If currency with $value code does not exist in database, make EUR default
+            }
+        } else if($data_type === 'int') {
             $value = ctype_digit($value) ? ((int) $value) : $value;
         } else if($data_type === 'boolean') {
             $value = $value ? 1 : 0;
@@ -63,7 +67,7 @@ if (!function_exists('castValuesForGet')) {
                     if($data_type === Upload::class) {
                         $settings[$key]['value'] = Upload::find($value);
                     } else if($data_type === Currency::class) {
-                        $settings[$key]['value'] = Currency::find($value);
+                        $settings[$key]['value'] = Currency::where('code', $value)?->first() ?? Currency::where('code', 'EUR')?->first();
                     } else if($data_type === Category::class) {
                         $settings[$key]['value'] = Category::find($value);
                     } else if($data_type === 'uploads') {

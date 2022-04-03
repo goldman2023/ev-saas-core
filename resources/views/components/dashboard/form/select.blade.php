@@ -6,7 +6,7 @@
     nullable: @js($nullable),
     search: @js($search),
     search_query: '',
-}" x-init="$watch('search_query', (value) => {
+}" x-init="console.log({{ $selected }}); $watch('search_query', (value) => {
   let newItems = [];
   Object.entries(items).filter(entry => {
     if (entry[1].toLowerCase().indexOf(value.toLowerCase()) !== -1) {

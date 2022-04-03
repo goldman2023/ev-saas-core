@@ -90,7 +90,7 @@
                             </div>
 
                             <div class="w-full flex flex-col">
-                                <strong class="block text-gray-700">{{ $user->name .' '.$user->surname }}</strong>
+                                <strong class="block text-gray-700">{{ $me->name .' '.$me->surname }}</strong>
                                 <span class="text-gray-500">{{ $me->email }}</span>
                             </div>
                         </div>
@@ -119,10 +119,10 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('me.first_name') is-invalid @enderror"
-                                        placeholder="{{ translate('My first name') }}" wire:model.defer="me.first_name" />
+                                    <input type="text" class="form-standard @error('me.name') is-invalid @enderror"
+                                        placeholder="{{ translate('My first name') }}" wire:model.defer="me.name" />
 
-                                    <x-system.invalid-msg field="me.first_name"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="me.name"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END First name -->
@@ -136,10 +136,10 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('me.last_name') is-invalid @enderror"
-                                        placeholder="{{ translate('My last name') }}" wire:model.defer="me.last_name" />
+                                    <input type="text" class="form-standard @error('me.surname') is-invalid @enderror"
+                                        placeholder="{{ translate('My last name') }}" wire:model.defer="me.surname" />
 
-                                    <x-system.invalid-msg field="me.last_name"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="me.surname"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Last name -->
