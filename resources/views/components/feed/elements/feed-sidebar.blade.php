@@ -74,4 +74,8 @@
     </div>
 
     {{-- <x-dashboard.elements.support-card class="mt-3"></x-dashboard.elements.support-card> --}}
+    <div class="pt-6">
+        <x-feed.elements.user-onboarding-flow>
+        </x-feed.elements.user-onboarding-flow>
+    </div>
 </nav>

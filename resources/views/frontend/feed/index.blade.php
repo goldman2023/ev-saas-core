@@ -13,8 +13,7 @@
                 <x-feed.elements.feed-sidebar>
                 </x-feed.elements.feed-sidebar>
 
-                <x-feed.elements.user-onboarding-flow>
-                </x-feed.elements.user-onboarding-flow>
+
             </div>
             <main class="lg:col-span-6 xl:col-span-6">
 
