@@ -64,7 +64,7 @@ class StripeService
             'shippable' => $model->is_digital ? false : true,
             // 'tax_code' => '',
             'url' => $model->getPermalink(),
-            'unit_label' => $model->unit,
+            'unit_label' => substr($model->unit,0, 12),
             // 'metadata' => []
         ]);
 
