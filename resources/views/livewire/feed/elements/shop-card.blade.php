@@ -1,8 +1,12 @@
 <div class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
     <div class="flex-1 flex flex-col p-8">
-        <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full" src="{{ $shop->getThumbnail() }}" alt="">
+        <a href="{{ $shop->getPermalink() }}">
+            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full object-contain" src="{{ $shop->getThumbnail() }}" alt="">
+        </a>
         <h3 class="mt-6 text-gray-900 text-sm font-medium">
-            {{ $shop->name }}
+            <a href="{{ $shop->getPermalink() }}">
+                {{ $shop->name }}
+            </a>
         </h3>
         <dl class="mt-1 flex-grow flex flex-col justify-between">
             <dt class="sr-only">Title</dt>
@@ -28,9 +32,9 @@
         <div class="-mt-px flex divide-x divide-gray-200">
             <div class="w-0 flex-1 flex">
                 @livewire('actions.wishlist-button', [
-                    'object' => $shop,
-                    'action' => 'Follow',
-                    ])
+                'object' => $shop,
+                'action' => 'Follow',
+                ])
             </div>
             <div class="-ml-px w-0 flex-1 flex">
                 <button
