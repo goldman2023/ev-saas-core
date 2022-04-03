@@ -55,6 +55,10 @@
                 original-price-class="text-body text-16" total-price-class="text-24 fw-700 text-primary">
             </livewire:tenant.product.price>
 
+            <a href="{{ StripeService::createCheckoutLink($product) }}" class="btn btn-primary">
+                Stripe Checkout
+            </a>
+
 
             {{-- Variations Selector --}}
             @if($product->hasVariations())

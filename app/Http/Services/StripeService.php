@@ -13,22 +13,25 @@ use EVS;
 use FX;
 use Stripe;
 use App\Models\CoreMeta;
+use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 class StripeService
 {
     public $stripe = null;
 
-    public function __construct($app) {
+    public function __construct($app)
+    {
         $this->stripe = new \Stripe\StripeClient(
             get_setting('stripe_sk_test_key') // TODO: Should use Live key on production!!!!
         );
     }
 
-    public function saveStripeProduct($model) {
+    public function saveStripeProduct($model)
+    {
         // Find model's stripe ID in CoreMeta and based on it decide wheter to create OR update Stripe Product
         $stripe_id = $model->core_meta->where('key', '=', 'stripe_product_id')->first();
 
-        if(empty($stripe_id)) {
+        if (empty($stripe_id)) {
             //Insert Stripe product
             $this->createStripeProduct($model);
         } else {
@@ -37,7 +40,8 @@ class StripeService
         }
     }
 
-    protected function createStripeProduct($model) {
+    protected function createStripeProduct($model)
+    {
         // Reminder: Stripe pricemust be in cents!!!
         $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
 
@@ -57,7 +61,7 @@ class StripeService
         ]);
 
         $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * (  pow(10, $no_of_decimals) ), // TODO: Is it Total, Base, or Subtotal, Original etc.???
+            'unit_amount' => $model->getTotalPrice() * (pow(10, $no_of_decimals)), // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'currency' => strtolower($model->base_currency),
             'product' => $stripe_product->id,
         ]);
@@ -80,7 +84,37 @@ class StripeService
         return true;
     }
 
-    protected function updateStripeProduct($model, $stripe_id) {
+    protected function updateStripeProduct($model, $stripe_id)
+    {
+    }
 
+    public function createCheckoutLink($product)
+    {
+        $checkout_link['url'] = "#";
+        try {
+            $checkout_link =   $this->stripe->checkout->sessions->create(
+                [
+                    'line_items' => [[
+                        # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+                        'price' => $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
+                        'quantity' => 1,
+                    ]],
+                    'mode' => 'payment',
+                    'customer_email' => auth()->user()->email,
+                    'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/success.html',
+                    'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/cancel.html',
+                    'automatic_tax' => [
+                        'enabled' => false,
+                    ],
+                ]
+            );
+        } catch (\Stripe\Exception\CardException $e) {
+                dd($e->getError()->code);
+                $this->createStripeProduct($product);
+                $checkout_link = $this->createCheckoutLink($product);
+        }
+
+
+        return ($checkout_link['url']);
     }
 }

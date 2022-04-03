@@ -92,6 +92,14 @@ class Product extends EVBaseModel
         'tags' => 'array'
     ];
 
+    public function getBaseCurrencyAttribute($value) {
+        if(empty($value)) {
+            $value =  get_setting('system_default_currency')->code;
+        }
+
+        return $value;
+    }
+
     /**
      * Replace Eloquent/Builder with ProductsBuilder (an extension of Eloquent/Builder with more features)
      *
