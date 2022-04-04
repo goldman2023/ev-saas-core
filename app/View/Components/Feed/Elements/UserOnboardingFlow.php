@@ -58,6 +58,11 @@ class UserOnboardingFlow extends Component
             'route' => route('onboarding.verification'),
             'title' => translate('Verify your profile'),
         ];
+
+        if(auth()->user()->verified) {
+            $step['completed'] = true;
+        }
+
         $this->steps[] = $step;
 
         $step = [
@@ -66,6 +71,11 @@ class UserOnboardingFlow extends Component
             'route' => route('product.create'),
             'title' => translate('Add your first product'),
         ];
+
+        if(auth()->user()->products()->count() > 1) {
+            $step['completed'] = true;
+        }
+
         $this->steps[] = $step;
 
 

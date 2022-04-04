@@ -232,6 +232,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         // return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
     }
 
+    public function getVerifiedAttribute() {
+        return true;
+    }
+
 
     /**
      * Get the route name for the model.
