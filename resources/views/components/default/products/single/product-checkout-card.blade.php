@@ -3,7 +3,7 @@
 <div class="w-full relative mt-5" x-data="{
             processing: false,
             processing_variation_change: false,
-            qty: 0,
+            qty: 1,
             current_stock: {{ ($product->hasVariations()) ? $first_variation->current_stock : $product->current_stock }},
             is_low_stock: {{ ($product->hasVariations()) ? ($first_variation->isLowStock() ? 'true':'false') : ($product->isLowStock() ? 'true':'false') }},
             model_id: {{ ($product->hasVariations()) ? $first_variation->id : $product->id }},
@@ -14,7 +14,7 @@
             base_price_display: '{{ ($product->hasVariations()) ? $first_variation->getBasePrice(true) : $product->getBasePrice(true) }}',
         }" @cart-processing-ending.window="
             if(Number($event.detail.id) === Number(model_id) && model_type == $event.detail.model_type) {
-                qty = 0;
+                qty = 1;
                 processing = false;
                 $dispatch('display-flyout-panel', {'id': 'cart-panel'});
             }

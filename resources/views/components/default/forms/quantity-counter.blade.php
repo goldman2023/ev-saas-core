@@ -8,7 +8,7 @@
         >
             <input class="form-standard py-0 px-1 text-center"
                    type="number"
-                   min="0"
+                   min="1"
                    x-ref="quantity-counter-input-{{ $model->id }}"
                    x-model.lazy="qty">
         </div>
