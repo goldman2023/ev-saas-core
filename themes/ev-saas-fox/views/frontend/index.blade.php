@@ -3,27 +3,21 @@
 @section('content')
 <div class="">
 
-    <section class="relative bg-white overflow-hidden" style="">
-        <div class="bg-transparent">
+    <section class="relative bg-white overflow-hidden bg-gray-100" style="">
 
-
-        </div>
-        <div class="relative py-20 xl:pt-16 xl:pb-24">
-            <div class="container px-4 mx-auto" style="background-image: url(https://www.webhuq.com/templates/collabs_team_collaboration_website_12145/assets/img/header-bootom-img.png);
-            background-position: bottom center;
+        <div class="relative py-20 pt-4 xl:pt-16 xl:pb-24">
+            <div class="container px-4 mx-auto sm:pb-[40px] pb-0 bg-center-top sm:bg-center-bottom pt-32 sm:pt-0" style="background-image: url(https://www.webhuq.com/templates/collabs_team_collaboration_website_12145/assets/img/header-bootom-img.png);
             background-size: 90%;
             background-repeat: no-repeat;
-            padding-bottom: 350px;
-            margin-bottom: -100px;
             z-index: 0;">
                 <div class="flex flex-wrap items-center">
-                    <div class="w-full lg:w-1/2 mb-20 lg:mb-0 pr-10">
+                    <div class="w-full lg:w-1/2 mb-20 sm:mt-20 lg:mb-0 sm:pr-10">
                         <span
                             class="inline-block mb-4 text-xs leading-4 text-white bg-blue-500 font-medium uppercase rounded-3xl p-4">
                             {{ translate('FoxAsk Community') }}
                         </span>
                         <h1
-                            class="mb-6 text-2xl md:text-4xl lg:text-5xl leading-tight text-coolGray-900 font-bold tracking-tight">
+                            class="mb-6 text-4xl md:text-4xl lg:text-5xl leading-tight text-coolGray-900 font-bold tracking-tight">
                             Unlock your potential
                         </h1>
                         <p class="mb-8 text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
@@ -47,16 +41,16 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="w-full lg:w-1/2">
+                    <div class="w-full lg:w-1/2 sm:mt-52">
                         <div
                             class="flex flex-col items-center p-10 xl:px-24 xl:pb-12 bg-white lg:max-w-xl lg:ml-auto rounded-4xl shadow-2xl">
-                            <img class="relative -top-2 -mt-16 mb-6 h-16"
-                                src="images/1638973485-Screenshot-2021-10-18-at-14-37-53-3.webp" alt="">
+                            <img class="relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
+                                src="{{ get_site_logo() }}" alt="">
                             <h2 class="mb-4 text-xl md:text-3xl text-coolGray-900 font-bold text-center">Join our
                                 community</h2>
 
                             <x-tailwind-ui.forms.login-form> </x-tailwind-ui.forms.login-form>
-{{-- 
+{{--
                             <a class="mb-4 inline-block py-3 px-7 w-full leading-6 text-blue-50 font-medium text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md"
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Get Started') }}
