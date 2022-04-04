@@ -342,13 +342,9 @@ class AppSettingsForm extends Component
      * Saves all settings provided in $rules variable.
      */
     protected function saveSettings($rules) {
-        // Save data in settings table
-        $old_settings = TenantSettings::getAll(); // Get TenantSettings models and key them by their name (aka. `setting` column)
-        
-        // TenantSettings::castOnSave()
         foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
-            
+
             if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);

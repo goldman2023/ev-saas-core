@@ -101,7 +101,8 @@ if (!function_exists('castValuesForGet')) {
                 
             }
         }
-        return [];
+        
+        return $settings;
     }
 }
 
