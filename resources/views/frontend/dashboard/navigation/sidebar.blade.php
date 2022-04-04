@@ -19,7 +19,7 @@
                                     }">
                                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                                     <button type="button"
-                                        class="text-gray-600 hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="we-sidebar-menu-item hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                         @click="expanded = !expanded">
                                             @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6'])
 
@@ -51,7 +51,7 @@
                                 </div>
                             @else
                             <div class="{{ $key > 0 ? 'space-y-1':'' }} {{ $item['is_active'] }}" >
-                                <a href="{{ $item['route'] }}" class=" text-gray-600 hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+                                <a href="{{ $item['route'] }}" class="we-sidebar-menu-item hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
 
                                     @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 '])
 
