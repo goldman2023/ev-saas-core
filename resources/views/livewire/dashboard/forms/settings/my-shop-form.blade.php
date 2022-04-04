@@ -227,12 +227,12 @@
                                     {{ translate('Content') }}
                                 </label>
 
-                                {{-- <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <x-dashboard.form.froala field="content" id="shop-content-wysiwyg">
                                     </x-dashboard.form.froala>
 
                                     <x-system.invalid-msg class="w-full" field="shop.content"></x-system.invalid-msg>
-                                </div> --}}
+                                </div>
                             </div>
                             <!-- END Content -->
 
@@ -243,7 +243,7 @@
                                     $wire.set('shop.cover', cover.id, true);
                                     $wire.set('settings.websites', settings.websites, true);
                                     $wire.set('settings.phones', settings.phones, true);
-                                    {{-- $wire.set('shop.content', content, true); --}}
+                                    $wire.set('shop.content', content, true);
                                 " wire:click="saveBasicInformation()">
                                     {{ translate('Save') }}
                                 </button>
