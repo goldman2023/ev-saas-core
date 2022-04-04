@@ -5,7 +5,7 @@
         <p class="text-sm font-medium text-gray-900">{{ translate('Setup your profile') }}...</p>
         <div class="mt-3" aria-hidden="true">
             <div class="bg-gray-200 rounded-full overflow-hidden">
-                <div class="h-2 bg-indigo rounded-full" style="width: {{ $progress_percentage }}%"></div>
+                <div class="h-2 bg-indigo-400 rounded-full" style="width: {{ $progress_percentage }}%"></div>
             </div>
             <div class="hidden sm:grid grid-cols-3 text-sm font-medium text-gray-600 mt-3">
                 <div class="text-indigo">

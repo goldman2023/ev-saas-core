@@ -141,7 +141,7 @@
                     <div>
                         @guest
                         <button @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})"
-                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo hover:bg-indigo-700">
+                            class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-700 hover:bg-indigo-700">
                             {{ translate('Login') }}
                         </button>
                         @endguest

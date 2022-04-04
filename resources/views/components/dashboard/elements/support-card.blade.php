@@ -38,7 +38,7 @@
             <div class="mt-4 flex">
                 <button type="button"
                     x-on:click="CometChatWidget.openOrCloseChat(true); CometChatWidget.chatWithUser('web_1'); "
-                    class="btn-primary inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="btn-primary inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-400 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     {{ translate('Talk with us') }} <span class="emoji ml-2">📱</span>
                 </button>
             </div>

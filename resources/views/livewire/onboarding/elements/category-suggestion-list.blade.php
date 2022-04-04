@@ -49,7 +49,7 @@
     </div>
     <div class="mt-6 mb-6">
         <button type="submit" wire:click="saveCategories"
-            class="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-medium rounded-md text-white bg-indigo hover:bg-success focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            class="group relative w-full flex justify-center py-4 px-6 border border-transparent text-lg font-medium rounded-md text-white bg-indigo-400 hover:bg-success focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                 <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
                     x-description="Heroicon name: solid/lock-closed" xmlns="http://www.w3.org/2000/svg"
