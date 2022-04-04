@@ -59,7 +59,7 @@ class HomeController extends Controller
         if (Auth::check()) {
             return redirect()->route('home');
         }
-        return view('frontend.users_login');
+        return view('auth.login');
     }
 
     public function business_login(LoginRequest $request)
