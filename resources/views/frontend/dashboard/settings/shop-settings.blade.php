@@ -1,11 +1,6 @@
 @extends('frontend.layouts.user_panel')
 @section('meta_title', translate('My Shop Settings'))
 
-@push('head_scripts')
-    <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
-@endpush
-
 @section('panel_content')
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('Shop settings') }}" text="">
