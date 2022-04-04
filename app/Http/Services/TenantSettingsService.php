@@ -133,7 +133,6 @@ class TenantSettingsService
             // Features
             'feed_enabled' => 'boolean',
 
-
         ];
     }
 }
