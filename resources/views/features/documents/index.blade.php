@@ -56,9 +56,15 @@
                 </div>
             </div>
         </div>
-        <div class="mt-5 md:mt-0 md:col-span-3">
+        <div class="mt-5 md:mt-0 md:col-span-3 mb-6">
             <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 100vh" title="testPdf"
-                height="100%" width="100%" />
+                height="100%" width="100%"></iframe>
+
+            <a target="_blank" href="https://app.dokobit.com/signing/9af5f35d8a1cef1353330c75ff1bae030099a751"
+                type="submit"
+                class="mt-6 mb-6 text-center mb-2 block justify-center py-6 px-8 border border-transparent shadow-sm text-md font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                {{ translate('Sign with eSignature') }}
+            </a>
         </div>
     </div>
 </div>
