@@ -152,26 +152,6 @@
                             </div>
                             {{-- END Maintenance mode --}}
 
-                             {{-- Feed Feature Settings --}}
-                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
-                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                    <span class="text-sm font-medium text-gray-900">{{ translate('Feed Enable') }}</span>
-                                    <p class="text-gray-500 text-sm">
-                                        {{ translate('If you want to enable social feed page as a homepage') }}
-                                    </p>
-                                </div>
-
-                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-
-                                    <button type="button" @click="settings.feed_enabled.value = !settings.feed_enabled.value"
-                                                :class="{'bg-primary':settings.feed_enabled.value , 'bg-gray-200':!settings.feed_enabled.value}"
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.feed_enabled.value, 'translate-x-0':!settings.feed_enabled.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            {{-- END Feed Feature Settings --}}
-
                             {{-- Save general information --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
