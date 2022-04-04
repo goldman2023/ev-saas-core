@@ -1,12 +1,12 @@
 <div x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
     @if(!$ignore)
     <div>
-        <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg' x-on:click="isModalOpen = true">
+        <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'>
             {{-- x-intersect:visible="$wire.track_impression({{ $item->id }})" --}}
             <div>
                 <x-feed.elements.card-header-user-info :item="$item">
                 </x-feed.elements.card-header-user-info>
-                <h2 class="mt-4 text-base font-medium text-gray-900">
+                <h2 class="mt-4 text-base font-medium text-gray-900" x-on:click="isModalOpen = true">
 
                     @if($item->subject_type == 'App\Models\Wishlist')
 
@@ -49,7 +49,7 @@
                     @endif
                 </h2>
             </div>
-            <div class="mt-2 text-sm text-gray-700 space-y-4">
+            <div class="mt-2 text-sm text-gray-700 space-y-4 cursor-pointer" x-on:click="isModalOpen = true">
                 @if($product)
                 <div class="grid grid-cols-3  border-2 border-gray-300 border-dashed rounded-lg p-3 gap-10">
                     <div class="flex items-center">
@@ -103,7 +103,7 @@
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>
-                    <span class="inline-flex items-center text-sm">
+                    <span class="inline-flex items-center text-sm cursor-pointer" x-on:click="isModalOpen = true">
                         <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/chat-alt -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
