@@ -31,6 +31,7 @@ use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\HasCategories;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\CanDelete;
 use Str;
 
 class ProductForm2 extends Component
@@ -38,6 +39,7 @@ class ProductForm2 extends Component
     use DispatchSupport;
     use RulesSets;
     use HasCategories;
+    use CanDelete;
 
     public $product;
     public $is_update;
@@ -45,8 +47,7 @@ class ProductForm2 extends Component
     public $selected_predefined_attribute_values;
 
     protected $listeners = [
-        // TODO Do we need this?
-        // 'variationsUpdated' => 'updateAttributeValuesForVariations'
+        
     ];
 
     protected function getRuleSet($set = null) {
