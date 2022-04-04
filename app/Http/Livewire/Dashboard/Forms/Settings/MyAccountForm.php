@@ -41,7 +41,7 @@ class MyAccountForm extends Component
                 'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
                 'meta.birthday.value' => [''],
                 'meta.gender.value' => [''],
-                'meta.industry.value' => ['required'],
+                'meta.industry.value' => [''],
                 'meta.headline.value' => ['required'],
                 'meta.bio.value' => ['required'],
             ],
