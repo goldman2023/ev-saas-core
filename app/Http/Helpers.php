@@ -59,7 +59,13 @@ if (!function_exists('castValuesForGet')) {
                 $value = $settings[$key]['value'] ?? null;
     
                 if(empty($value)) {
-                    $settings[$key]['value'] = ($data_type === 'boolean') ? false : null;
+                    
+                    if($data_type === 'boolean') {
+                        $settings[$key]['value'] = false;
+                    } else if($data_type === Currency::class) {
+                        $settings[$key]['value'] = Currency::where('code', 'EUR')?->first();
+                    }
+
                     continue;
                 }
                 

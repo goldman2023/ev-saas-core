@@ -2,6 +2,7 @@
         current: 'basicInformation',
         thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
         cover: @js(['id' => $me->cover->id ?? null, 'file_name' => $me->cover->file_name ?? '']),
+        meta: @js($meta),
     }" x-init="$watch('current', function(value) {
         $([document.documentElement, document.body]).animate({
             scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
@@ -143,8 +144,6 @@
                                 </div>
                             </div>
                             <!-- END Last name -->
-
-                            
 
                             <!-- Email -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
