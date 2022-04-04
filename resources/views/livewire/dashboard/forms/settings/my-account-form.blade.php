@@ -1,3 +1,12 @@
+@push('head_scripts')
+<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
+
 <div class="w-full" x-data="{
         current: 'basicInformation',
         thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
@@ -283,7 +292,7 @@
                                     $wire.set('me.thumbnail', thumbnail.id, true);
                                     $wire.set('me.cover', cover.id, true);
                                     $wire.set('meta.bio.value', meta.bio.value, true);
-                                    $wire.set('meta.industry.value', meta.industry.value.id, true);
+                                    {{-- $wire.set('meta.industry.value', meta.industry.value.id, true); --}}
                                     $wire.set('meta.birthday.value', meta.birthday.value, true);
                                 " wire:click="saveBasicInformation()">
                                     {{ translate('Save') }}

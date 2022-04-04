@@ -62,7 +62,7 @@ class SocialController extends Controller
             // Create a new user
             $newUser = new User;
             $newUser->user_type = User::$customer_type;
-            $newUser->first_name = $user->name; // TODO: FIX THIS to use both first and last name!!!!
+            $newUser->name = $user->name; // TODO: FIX THIS to use both first and last name!!!!
             $newUser->email = $user->email;
             $newUser->email_verified_at = date('Y-m-d H:m:s');
             $newUser->provider_id = $user->id; // TODO: We should add provider_ids to CoreMeta, because one user can login with multiple social accounts to the same account - if social account have the same email)
