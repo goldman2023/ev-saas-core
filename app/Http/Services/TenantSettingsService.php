@@ -131,9 +131,9 @@ class TenantSettingsService
             'stripe_sk_live_key' => 'string',
 
             // Features
+            /* TODO: @vukasin - set default values */
+            // 'feed_enabled' => ['boolean', false],
             'feed_enabled' => 'boolean',
-
-
         ];
     }
 }
