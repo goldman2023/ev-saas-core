@@ -10,6 +10,11 @@ use App\Models\PageTranslation;
 class PageController extends Controller
 {
 
+    public function privacy_policy_page() {
+        return view('frontend.pages.privacy');
+
+    }
+
 
     public function show_custom_page($slug)
     {
