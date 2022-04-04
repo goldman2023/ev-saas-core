@@ -42,6 +42,10 @@ class AppSettingsForm extends Component
                 'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
             ],
+            'features' => [
+                /* Example field for creating new TenantSetting */
+                'settings.feed_enabled.value' => ['boolean'],
+            ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
                 'settings.google_login.value' => ['boolean'],
@@ -231,7 +235,7 @@ class AppSettingsForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate($rules);
         }
-        
+
         $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TO THE MODEL ATTRIBUTES LIST????
 
         DB::beginTransaction();
@@ -295,7 +299,7 @@ class AppSettingsForm extends Component
             $contact_details = new ShopSetting();
             $contact_details->shop_id = $this->shop->id;
             $contact_details->setting = 'contact_details';
-        } 
+        }
 
         $contact_details->value = json_encode($contacts);
         $contact_details->save();
