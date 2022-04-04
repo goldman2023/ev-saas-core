@@ -52,7 +52,7 @@
                     </div>
 
                     <a href="{{ route('user.registration') }}"
-                        class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                        class="bg-indigo-700 text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
                         {{ translate('Register') }}
                     </a>
                     @else
