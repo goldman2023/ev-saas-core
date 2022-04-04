@@ -34,13 +34,13 @@ if (!function_exists('castValueForSave')) {
         $value = $setting['value'] ?? null;
         
         if($data_type === Upload::class || $data_type === Category::class) {
-            $value = ctype_digit($value) ? $value : null;
+            $value = ctype_digit($value)|| is_numeric($value) ? $value : null;
         } else if($data_type === Currency::class) {
             if(!Currency::where('code', $value)->exists()) {
                 $value = 'EUR'; // If currency with $value code does not exist in database, make EUR default
             }
         } else if($data_type === 'int') {
-            $value = ctype_digit($value) ? ((int) $value) : $value;
+            $value = ctype_digit($value) || is_numeric($value) ? ((int) $value) : $value;
         } else if($data_type === 'boolean') {
             $value = $value ? 1 : 0;
         } else if($data_type === 'array' && $data_type === 'uploads') {

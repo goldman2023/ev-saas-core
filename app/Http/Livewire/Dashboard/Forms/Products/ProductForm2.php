@@ -90,7 +90,7 @@ class ProductForm2 extends Component
                 'product.tax_type' => 'nullable|in:amount,percent',
             ],
             'inventory' => [
-                'product.unit' => 'required',
+                'product.unit' => 'nullable',
                 'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
                 'product.barcode' => ['nullable'],
                 'product.min_qty' => 'required|numeric|min:1',
@@ -255,15 +255,11 @@ class ProductForm2 extends Component
         
         if(!$this->is_update) {
             // Insert
-            $new_product = Product::create([
-                'shop_id' => MyShop::getShopID(),
-                'user_id' => auth()->user()->id,
-                'name' => $this->product->name,
-                'unit_price' => $this->product->unit_price
-            ]);
-
-            $new_product->fill($this->product->attributesToArray()); // forceFill new product with $this->product attributes (without core properties of course)!
-            $this->product = $new_product; // Swap $this->product with $new_product cuz $new_product is linked to the DB 
+            $this->product->shop_id = MyShop::getShopID();
+            $this->product->user_id = auth()->user()->id;
+            $this->product->name = $this->product->name;
+            $this->product->unit_price = $this->product->unit_price;
+            $this->product->save();
 
             $this->is_update = true; // Change is_update flag to true! From now on, product is being only updated!
         } else {
@@ -294,7 +290,7 @@ class ProductForm2 extends Component
 
     public function saveProduct() {
         $this->validateData('all');
-
+        
         DB::beginTransaction();
 
         try {
@@ -312,7 +308,7 @@ class ProductForm2 extends Component
 
             // Set Attributes
             $this->setAttributes();
-
+            
             DB::commit();
 
             // Refresh Attributes
