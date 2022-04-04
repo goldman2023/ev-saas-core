@@ -126,9 +126,10 @@
 
 
                         </section>
-
+                        <div class="hidden">
                         <livewire:feed.elements.quick-views.elements.comments>
                         </livewire:feed.elements.quick-views.elements.comments>
+                        </div>
                     </div>
                 </div>
             </div>
