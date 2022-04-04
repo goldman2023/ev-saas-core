@@ -28,7 +28,7 @@
                     @foreach (\App\Models\Brand::all() as $brand)
                         <div class="col text-center">
                             <a href="{{ route('products.brand', $brand->slug) }}" class="d-block p-3 mb-3 border border-light rounded hov-shadow-md">
-                                <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100" alt="{{ $brand->getTranslation('name') }}">
+                                <img src="{{ uploaded_asset($brand->logo) }}" class="lazyload mx-auto h-70px mw-100" alt="{{ $brand->name }}">
                             </a>
                         </div>
                     @endforeach

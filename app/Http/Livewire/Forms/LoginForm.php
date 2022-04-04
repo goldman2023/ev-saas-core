@@ -38,7 +38,7 @@ class LoginForm extends Component
     public $password;
     public $remember;
 
-    
+
     protected function rules()
     {
         return [
@@ -82,8 +82,8 @@ class LoginForm extends Component
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             request()->session()->regenerate();
-  
-            return redirect()->route('dashboard');
+
+            return redirect()->route('home');
         }
 
         return redirect()->route('home');

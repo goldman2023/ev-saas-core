@@ -1,0 +1,3 @@
+<x-we-edit.layouts.one>
+  Templates. Coming soon...
+</x-we-edit.layouts.one>

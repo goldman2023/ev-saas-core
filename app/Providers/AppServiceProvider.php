@@ -16,51 +16,56 @@ use Qirolab\Theme\Theme;
 
 class AppServiceProvider extends ServiceProvider
 {
-  /**
-   * Bootstrap any application services.
-   *
-   * @return void
-   */
-  public function boot()
-  {
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
 
-    Schema::defaultStringLength(191);
-    Paginator::useBootstrap();
+        Schema::defaultStringLength(191);
+        Paginator::useBootstrap();
 
+        if ($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
 
-    $this->registerCustomValidaionRules();
+        $this->registerCustomValidaionRules();
+    }
 
-  }
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        if (config('app.debug_bar')) {
+            \Debugbar::enable();
+        } else {
+            \Debugbar::disable();
+        }
+    }
 
-  /**
-   * Register any application services.
-   *
-   * @return void
-   */
-  public function register()
-  {
-      if(config('app.debug')){
-          \Debugbar::enable();
-      }else{
-          \Debugbar::disable();
-      }
-  }
-
-  public function registerCustomValidaionRules() {
+    public function registerCustomValidaionRules()
+    {
         Validator::extend('is_true', function ($attribute, $value, $parameters, $validator) {
             return $value === true;
         });
 
-      Validator::extend('match_password', function ($attribute, $value, $parameters, $validator) {
-          return (new MatchPassword($parameters, $validator))->passes($attribute, $value);
-      });
+        Validator::extend('match_password', function ($attribute, $value, $parameters, $validator) {
+            return (new MatchPassword($parameters, $validator))->passes($attribute, $value);
+        });
 
-      Validator::extend('if_id_exists', function ($attribute, $value, $parameters, $validator) {
-          return (new IfIDExists($parameters, $validator))->passes($attribute, $value);
-      });
+        Validator::extend('if_id_exists', function ($attribute, $value, $parameters, $validator) {
+            return (new IfIDExists($parameters, $validator))->passes($attribute, $value);
+        });
 
-      Validator::extend('check_array', function ($attribute, $value, $parameters, $validator) {
-          return count(array_filter($value, function($var) use ($parameters) { return ( $var && $var >= $parameters[0] && strlen($var) >= $parameters[1]); }));
-      });
-  }
+        Validator::extend('check_array', function ($attribute, $value, $parameters, $validator) {
+            return count(array_filter($value, function ($var) use ($parameters) {
+                return ($var && $var >= $parameters[0] && strlen($var) >= $parameters[1]);
+            }));
+        });
+    }
 }

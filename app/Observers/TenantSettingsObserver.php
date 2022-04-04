@@ -24,15 +24,6 @@ class TenantSettingsObserver
      */
     public function saved(TenantSetting $setting)
     {
-        // When Business Settings model is saved, remove tenant business settings cached object and set it again
-        $cache_key = tenant('id') . '_tenant_settings';
-        $settings = Cache::get($cache_key, null);
-
-        if(!empty($settings)) {
-            Cache::forget($cache_key);
-            Cache::put($cache_key, $settings);
-        }
-
-        TenantSettings::setAll(); // Set cache again in TenantSettingsService singleton
+        TenantSettings::clearCache(); // Clear cache
     }
 }

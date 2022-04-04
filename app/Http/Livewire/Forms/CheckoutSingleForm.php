@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Forms;
 use DB;
 use EVS;
 use Categories;
+use CartService;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -35,8 +36,8 @@ class CheckoutSingleForm extends Component
     use RulesSets;
     use DispatchSupport;
 
+    public $items;
     public $order;
-    public $item;
     public $manual_mode_billing = true;
     public $manual_mode_shipping = true;
     public $show_addresses = false;
@@ -60,6 +61,9 @@ class CheckoutSingleForm extends Component
 
     protected function rulesSets() {
         return [
+            'items' => [
+                'items.*' => ['']
+            ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
                 'order.billing_first_name' => 'required|min:3',
@@ -70,7 +74,7 @@ class CheckoutSingleForm extends Component
                 'order.buyers_consent' => 'required|boolean|is_true',
 
                 'selected_payment_method' => ['required', Rule::in(PaymentMethodUniversal::$available_gateways)],
-                'checkout_newsletter' => 'nullable',   
+                'checkout_newsletter' => 'nullable',
                 'selected_billing_address_id' => '',
             ],
             'account_creation' => [
@@ -115,7 +119,7 @@ class CheckoutSingleForm extends Component
     protected function rules()
     {
         $rules = [];
-        
+
         foreach($this->rulesSets() as $key => $array) {
             $rules = array_merge($rules, $array);
         }
@@ -128,6 +132,9 @@ class CheckoutSingleForm extends Component
         return [
             'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.'),
             'order.buyers_consent.is_true' => translate('You must agree with terms of service'),
+            'cc_expiration_date.required' => translate('CC expiration date is required'),
+            'cc_cvc.required' => translate('Card CVC is required'),
+            'cc_number.card_invalid' => translate('Card is invalid')
         ];
     }
 
@@ -136,14 +143,20 @@ class CheckoutSingleForm extends Component
      *
      * @return void
      */
-    public function mount($item = null)
+    public function mount()
     {
-        $this->item = $item;
-        
+        $this->items = CartService::getItems();
+
         $this->order = new Order();
-        $this->shop_id = $this->item->shop_id;
+        $this->order->shop_id = $this->items->first()->shop_id; // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
+
+        if(auth()->user()->id) {
+            $this->order->email = auth()->user()->email;
+            $this->order->billing_first_name = auth()->user()->name;
+            $this->order->billing_last_name = auth()->user()?->name;
+        }
 
         $this->cc_number = '';
         $this->cc_name = '';
@@ -153,7 +166,7 @@ class CheckoutSingleForm extends Component
         $this->manual_mode_billing = !\Auth::check();
         $this->manual_mode_shipping = !\Auth::check();
         $this->show_addresses = \Auth::check() && auth()->user()->addresses->isNotEmpty();
-        $this->addresses = \Auth::check()  ? auth()->user()->addresses->map(function($item) {
+        $this->addresses = \Auth::check() ? auth()->user()->addresses->map(function($item) {
             $item->country = \Countries::get(code: $item->country)->name ?? translate('Unknown');
             return $item;
         }) : [];
@@ -172,7 +185,7 @@ class CheckoutSingleForm extends Component
 
     public function dehydrate()
     {
-        $this->dispatchBrowserEvent('initCheckoutForm');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function render()
@@ -200,7 +213,7 @@ class CheckoutSingleForm extends Component
             // User cretion rules (password)
             if(!Auth::check()) {
                 $new_user = User::where('email', $this->order->email)->first(); // check if user with a given email already exists
-                
+
                 // Check if user with email is not already registered user.
                 if($new_user instanceof User && !empty($new_user->id ?? null)) {
                     // Registered user
@@ -229,6 +242,8 @@ class CheckoutSingleForm extends Component
 
     public function pay()
     {
+        $this->items = CartService::getItems();
+
         try {
             $this->validate($this->getSpecificRules());
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -240,7 +255,7 @@ class CheckoutSingleForm extends Component
 
         try {
             $payment_method = PaymentMethodUniversal::where('gateway', $this->selected_payment_method)->first();
-            
+
             $default_grace_period = 5; // 5 days is default grace period
             $default_due_date = Carbon::now()->addDays(7)->toDateTimeString(); // 7 days fom now is default invoice due_date
             $phone_numbers = [];
@@ -299,12 +314,13 @@ class CheckoutSingleForm extends Component
                 }
             }
 
-            $this->order->shop_id = $this->item->shop_id;
+            // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
+            $this->order->shop_id = $this->items->first()->shop_id;
             $this->order->user_id = auth()->user()->id ?? null;
             $this->order->type = OrderTypeEnum::subscription()->value; // only subscription for now...
 
             /*
-            * Billing data (when Address is selected) 
+            * Billing data (when Address is selected)
             * Only if user is logged-in
             */
             // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
@@ -345,18 +361,12 @@ class CheckoutSingleForm extends Component
                 }
             }
 
-
-            // $this->order->base_price = $this->item->getBasePrice();
-            // $this->order->discount_amount = $this->item->getBasePrice() - $this->item->getDiscountedPrice();
-            // $this->order->subtotal_price = $this->item->getDiscountedPrice(); // TODO: Fix this!
-            // $this->order->total_price = $this->item->getTotalPrice(); // TODO: This should be totalPrice (with taxes and stuff...but since we don't have Tax system working, let it stay like this for now)
-
             $this->order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $this->order->shipping_cost = 0;
             $this->order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
 
             /*
-             * Invoicing data for SUSCRIPTION orders
+             * Invoicing data for SUBSCRIPTIONS or INCREMENTAL orders
              */
             $this->order->number_of_invoices = -1; // 'unlimited' for subscriptions
             $this->order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
@@ -369,44 +379,48 @@ class CheckoutSingleForm extends Component
             // viewed - is 0 by default (if it's not viewed by company stuff, it'll be marked as `New` in company dashboard)
 
             $this->order->save();
-            
+
             /*
              * Create OrderItem
              */
-            $order_item = new OrderItem();
-            $order_item->order_id = $this->order->id;
-            $order_item->subject_type = $this->item::class;
-            $order_item->subject_id = $this->item->id;
-            $order_item->title = method_exists($this->item, 'hasMain') && $this->item->hasMain() ? $this->item->main->title : $this->item->title; // TODO: Think about changing Product `name` col to `title`, it's more universal!
-            $order_item->excerpt = method_exists($this->item, 'hasMain') && $this->item->hasMain() ? $this->item->main->excerpt : $this->item->excerpt;
-            $order_item->variant = method_exists($this->item, 'hasMain') && $this->item->hasMain() ? $this->item->getVariantName(key_by: 'name') : null;
-            $order_item->quantity = 1; // TODO: $this->item->purchase_quantity
-            
-            // Check if $this->item has stock and reduce it if it does
-            if(method_exists($this->item, 'stock')) {
-                // Reduce the stock quantity of an $this->item
-                $serial_numbers = $this->item->reduceStock();
+            foreach($this->items as $item) {
+                $order_item = new OrderItem();
+                $order_item->order_id = $this->order->id;
+                $order_item->subject_type = $item::class;
+                $order_item->subject_id = $item->id;
+                $order_item->name = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
+                $order_item->excerpt = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->excerpt : $item->excerpt;
+                $order_item->variant = method_exists($item, 'hasMain') && $item->hasMain() ? $item->getVariantName(key_by: 'name') : null;
+                $order_item->quantity = !empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
 
-                // Serial Numbers only work for Simple Products. TODO: Make Product Variations support serial numbers!
-                if($this->item->use_serial) {
-                    $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $this->item uses serials
+                // Check if $item has stock and reduce it if it does
+                if(method_exists($item, 'stock')) {
+                    // Reduce the stock quantity of an $item
+                    $serial_numbers = $item->reduceStock();
+
+                    // Serial Numbers only work for Simple Products.
+                    // TODO: Make Product Variations support serial numbers!
+                    if($item->use_serial) {
+                        $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
+                    } else {
+                        $order_item->serial_numbers = null;
+                    }
                 }
+
+                $order_item->base_price = $item->base_price;
+                $order_item->discount_amount = ($item->base_price - $item->total_price);
+                $order_item->subtotal_price = $item->total_price; // TODO: This should use subtotal_price instead of total_price
+                $order_item->total_price = $item->total_price;
+                $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
+
+                $order_item->save();
             }
-            
-            $order_item->base_price = $this->item->base_price;
-            $order_item->discount_amount = ($this->item->base_price - $this->item->total_price);
-            $order_item->subtotal_price = $this->item->total_price; // TODO: This should use subtotal_price instead of total_price
-            $order_item->total_price = $this->item->total_price;
-            $order_item->tax = 0; // TODO: Think about what to do with this one (But first create Tax BE Logic)!!!
 
-            $order_item->save();
-
-            
             /*
              * Create Invoice
              */
             $invoice = new Invoice();
-            
+
             $invoice->order_id = $this->order->id;
             $invoice->shop_id = $this->order->shop_id;
             $invoice->user_id = auth()->user()->id ?? null;
@@ -414,7 +428,7 @@ class CheckoutSingleForm extends Component
             $invoice->payment_method_id = $payment_method->id ?? null;
             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
             $invoice->invoice_number = Invoice::generateInvoiceNumber($this->order->billing_first_name, $this->order->billing_last_name, $this->order->billing_company); // Default: VJ21012022
-            
+
             $invoice->email = $this->order->email;
             $invoice->billing_first_name = $this->order->billing_first_name;
             $invoice->billing_last_name = $this->order->billing_last_name;
@@ -425,10 +439,13 @@ class CheckoutSingleForm extends Component
             $invoice->billing_city = $this->order->billing_city;
             $invoice->billing_zip = $this->order->billing_zip;
 
-            $invoice->base_price = $this->item->getBasePrice();
-            $invoice->discount_amount = $this->item->getBasePrice() - $this->item->getTotalPrice();
-            $invoice->subtotal_price = $this->item->getTotalPrice();
-            $invoice->total_price = $this->item->getTotalPrice();
+        
+            // Take invoice totals from Cart
+            $invoice->base_price = CartService::getOriginalPrice()['raw'];
+            $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
+            $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
+            $invoice->total_price = CartService::getSubtotalPrice()['raw']; // should be TotalPrice in future...
+        
 
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
@@ -438,9 +455,9 @@ class CheckoutSingleForm extends Component
             $invoice->start_date = $this->order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
             $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
             $invoice->grace_period = $this->order->invoice_grace_period; // NULL; or 5 days grace_period by default
-            
+
             $invoice->save();
-            
+
             DB::commit();
 
             // Depending on payment method, do actions
@@ -448,10 +465,13 @@ class CheckoutSingleForm extends Component
 
             // TODO: Go to Order page in user dashboard! Also, when payment gateway processes payment, callback url should navigate to Order single page in user dashboard (if user is logged in, of course)
 
+            // Full cart reset
+            CartService::fullCartReset();
+
             return redirect()->route('checkout.order.received', $this->order->id);
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             DB::rollBack();
-            
+
             $this->dispatchGeneralError(translate('There was an error while processing the order...Please try again.'));
             dd($e);
         }
@@ -460,7 +480,7 @@ class CheckoutSingleForm extends Component
     protected function executePayment(mixed $request, $invoice_id) {
         $invoice = Invoice::with('payment_method')->find($invoice_id);
         $invoice->load('payment_method');
-        dd($invoice);
+
         if($invoice->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
         } else if($invoice->payment_method->gateway === 'paysera') {

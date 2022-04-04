@@ -28,7 +28,7 @@ class EVCheckoutController extends Controller
         $total_items_count = CartService::getTotalItemsCount();
 
         $originalPrice = CartService::getOriginalPrice();
-        $discountAmount = CartService::getdiscountAmount();
+        $discountAmount = CartService::getDiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
         return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'));
@@ -47,7 +47,7 @@ class EVCheckoutController extends Controller
         }
 
         $originalPrice = CartService::getOriginalPrice();
-        $discountAmount = CartService::getdiscountAmount();
+        $discountAmount = CartService::getDiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
         $same_billing_shipping = !empty($request->input('same_billing_shipping'));
@@ -439,20 +439,28 @@ class EVCheckoutController extends Controller
     }
 
     public function single() {
-        // TODO: Add support for buying multiple items
-        try {
+
+        if(empty(request()->data)) {
+            $models = CartService::getItems();
+        } else {
             $data = json_decode(base64_decode(request()->data ?? null));
             
-            $model = app($data->class)->findOrFail($data->id);
-        } catch(\Throwable $e) {
-            dd($e);
+            $models = collect([app($data->class)->findOrFail($data->id)]); // for now only one model can be bouoght using a link approach
+            // TODO: Add purchase_quantity to $model here, based on $qty
         }
-    
-        return view('frontend.checkout-single', compact('model'));
+
+        // If models are empty, redirect to Homepage
+        if($models->isEmpty()) {
+            return redirect()->route('home');
+        }
+  
+        return view('frontend.checkout-single', compact('models'));
     }
 
-    public function orderReceived(Request $request, Order $order)
+    public function orderReceived(Request $request, $order_id)
     {
+        $order = Order::find($order_id);
+
         if(auth()->user()->id ?? null) {
             // Redirect user to proper Order Details page
         } else {

@@ -22,6 +22,7 @@ class ShopAddress extends Model
     ];
 
     protected $casts = [
+        'phones' => 'array',
         'location' => 'array',
         'features' => 'array',
         'is_primary' => 'boolean',

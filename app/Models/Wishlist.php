@@ -6,7 +6,6 @@ use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Wishlist
@@ -29,7 +28,6 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Wishlist extends EVBaseModel
 {
-    use LogsActivity;
 
     protected $guarded = [];
 

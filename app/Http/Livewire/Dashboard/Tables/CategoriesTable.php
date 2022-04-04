@@ -1,80 +1,86 @@
 <?php
-
 namespace App\Http\Livewire\Dashboard\Tables;
 
-use App\Facades\MyShop;
-use App\Models\ShopAddress;
-use App\Traits\Livewire\RulesSets;
-use Categories;
+use App\Enums\StatusEnum;
 use App\Models\Category;
-use App\Models\Order;
-use App\Models\Orders;
+use App\Facades\MyShop;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
-use Livewire\Component;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\Collection;
 
-class CategoriesTable extends Component
+class CategoriesTable extends DataTableComponent
 {
-    use RulesSets;
     use DispatchSupport;
 
-    public $all_categories;
-    public $search_query = '';
-    protected $queryString = [
-        'search_query' => ['except' => ''],
+    public ?int $searchFilterDebounce = 800;
+    public string $defaultSortColumn = 'created_at';
+    public string $defaultSortDirection = 'desc';
+    public bool $columnSelect = true;
+    public int $perPage = 25;
+    public array $perPageAccepted = [10, 25, 50, 100];
+
+    public array $filterNames = [
+        'featured' => 'Featured',
     ];
 
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function mount()
-    {
-        if(!empty($this->search_query)) {
-            $this->searchByQuery();
-        } else {
-            $this->all_categories = Categories::getAll(true);
+    public array $bulkActions = [
 
-        }
+    ];
 
+    protected string $pageName = 'categories';
+    protected string $tableName = 'categories';
+
+    public function mount() {
+        parent::mount();
     }
 
-    protected function rules()
+    public function filters(): array
     {
         return [
-            'categories.*' => [],
-            'categories.*.*' => [],
-            'search_query' => []
+            'featured' => Filter::make('Featured')
+                ->select([
+                    '' => translate('All'),
+                    1 => translate('Yes'),
+                    0 => translate('No'),
+                ]),
+            'date_created' => Filter::make('Date created')
+                ->date([
+                    'max' => now()->format('Y-m-d')
+                ]),
         ];
     }
 
-    protected function messages()
+    public function columns(): array
     {
-        return [];
+        return [
+            Column::make('ID')
+                ->sortable()
+                ->excludeFromSelectable(),
+            Column::make('Name')
+                ->sortable()
+                ->excludeFromSelectable(),
+            Column::make('Featured', 'featured')
+                ->excludeFromSelectable(),
+            Column::make('Children', 'descendants_count')
+                ->sortable(),
+            Column::make('Created', 'created_at'),
+            Column::make('Actions')
+                ->excludeFromSelectable(),
+        ];
     }
 
-    public function searchByQuery()
+    public function query(): Builder
     {
-        // TODO: Does not work for some reason...even though it returns correctly formatted categories data -_-
-        if(!empty($this->search_query)) {
-            $this->all_categories = collect(Categories::getAll(true))
-                ->filter(fn($item) => stripos($item?->getTranslation('name') ?? $item->name, $this->search_query) !== false)
-                ->recursiveApply('children', ['fn' => 'keyBy', 'params' => ['slug']]);
-        } else {
-            $this->all_categories = Categories::getAll(true);
-        }
+        return Category::query()->withCount(['products', 'shops', 'descendants'])
+            ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
+            ->when($this->getFilter('featured'), fn ($query, $featured) => $query->where('featured', $featured))
+            ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
+      }
 
-        $this->dispatchBrowserEvent('update-categories-count', ['count' => $this->all_categories->count()]);
-    }
-
-    public function render()
+    public function rowView(): string
     {
-        return view('livewire.dashboard.forms.categories.table');
+        return 'frontend.dashboard.categories.row';
     }
-
 }

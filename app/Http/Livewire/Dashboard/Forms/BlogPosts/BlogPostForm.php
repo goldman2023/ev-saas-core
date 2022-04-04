@@ -9,6 +9,7 @@ use App\Models\BlogPost;
 use App\Models\Category;
 use App\Models\ShopAddress;
 use App\Models\User;
+use App\Models\Plan;
 use App\Traits\Livewire\DispatchSupport;
 use DB;
 use EVS;
@@ -28,6 +29,8 @@ class BlogPostForm extends Component
     use HasCategories;
 
     public $blogPost;
+    public $selectedPlans;
+    public $is_update;
 
     /**
      * Create a new component instance.
@@ -37,8 +40,15 @@ class BlogPostForm extends Component
     public function mount($blogPost = null)
     {
         $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
+        $this->is_update = isset($this->blogPost->id) && !empty($this->blogPost->id);
+
+        if(!$this->is_update) {
+            $this->blogPost->status = StatusEnum::draft()->value;
+        }
         
         $this->initCategories($this->blogPost);
+
+        $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn($item) => $item->title);
     }
 
     protected function rules()
@@ -48,7 +58,7 @@ class BlogPostForm extends Component
             // 'blogPost.id' => [],
             'blogPost.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'blogPost.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'blogPost.title' => 'required|min:10',
+            'blogPost.name' => 'required|min:10',
             'blogPost.subscription_only' => [],
             'blogPost.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'blogPost.excerpt' => 'required|min:10',
@@ -69,8 +79,8 @@ class BlogPostForm extends Component
             'blogPost.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'blogPost.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
-            'blogPost.title.required' => translate('Title is required'),
-            'blogPost.title.min' => translate('Minimum title length is :min'),
+            'blogPost.name.required' => translate('Title is required'),
+            'blogPost.name.min' => translate('Minimum title length is :min'),
 
             'blogPost.excerpt.required' => translate('Excerpt is required'),
             'blogPost.excerpt.min' => translate('Minimum excerpt length is :min'),
@@ -86,7 +96,7 @@ class BlogPostForm extends Component
     public function dehydrate()
     {
         $this->dispatchBrowserEvent('initSlugGeneration');
-        $this->dispatchBrowserEvent('initBlogPostForm');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     // public function hydrate() {
@@ -95,7 +105,6 @@ class BlogPostForm extends Component
 
     public function saveBlogPost() {
         $msg = '';
-        $is_update = isset($this->blogPost->id) && !empty($this->blogPost->id);
         
         try {
             $this->validate();
@@ -120,6 +129,8 @@ class BlogPostForm extends Component
             $this->blogPost->save();
             $this->blogPost->syncUploads();
 
+            // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
+
             // Set Categories
             $this->setCategories($this->blogPost);
 
@@ -127,18 +138,20 @@ class BlogPostForm extends Component
 //
             DB::commit();
 
-            if($is_update) {
-                $this->toastify(translate('Blog post successfully updated!').' '.$msg, 'success');
+            if($this->is_update) {
+                $this->inform(translate('Blog post successfully updated!'), $msg, 'success');
             } else {
-                $this->toastify(translate('Blog post successfully created!').' '.$msg, 'success');
+                $this->inform(translate('Blog post successfully created!'), $msg, 'success');
             }
         } catch(\Exception $e) {
             DB::rollBack();
 
-            if($is_update) {
+            if($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a blog post...Please try again.'));
+                $this->inform(translate('There was an error while updating a blog post...Please try again.'), '', 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a blog post...Please try again.'));
+                $this->inform(translate('There was an error while creating a blog post...Please try again.'), '', 'fail');
             }
 
         }

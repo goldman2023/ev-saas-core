@@ -74,7 +74,7 @@ class AttributeForm extends Component
                 $this->attribute_values = new \Illuminate\Database\Eloquent\Collection([$blank_att_value]);
             }
         }
-        
+
         $this->content_type_label = collect(\App\Enums\ContentTypeEnum::labels())->get(collect(\App\Enums\ContentTypeEnum::values())->search($this->content_type));
 
         // $this->initCategories($this->plan);
@@ -94,6 +94,8 @@ class AttributeForm extends Component
             'attribute.schema_value' => 'nullable',
             'attribute.custom_properties' => '',
             'attribute.custom_properties.*' => '',
+            'attribute_values.*.id' => '',
+            'attribute_values.*.attribute_id' => '',
             'attribute_values.*.values' => ''
         ];
     }
@@ -128,6 +130,8 @@ class AttributeForm extends Component
             $except = ['multiple'];
         } else if($this->attribute->type === 'date') {
             $except = ['with_time', 'range'];
+        } else if($this->attribute->type === 'text_list') {
+            $except = ['min_rows', 'max_rows'];
         }
         
         foreach($custom_properties as $key => $value) {
@@ -179,9 +183,9 @@ class AttributeForm extends Component
             DB::commit();
 
             if($this->is_update) {
-                $this->toastify(translate('Attribute successfully updated!').' '.$msg, 'success');
+                $this->inform(translate('Attribute successfully updated!'), $msg, 'success');
             } else {
-                $this->toastify(translate('Attribute successfully created!').' '.$msg, 'success');
+                $this->inform(translate('Attribute successfully created!'), $msg, 'success');
 
                 // Redirect to update page
                 return redirect()->route('attributes.edit', $this->attribute->id);
@@ -191,10 +195,10 @@ class AttributeForm extends Component
 
             if($this->is_update) {
                 $this->dispatchGeneralError(!empty($msg) ? $msg : translate('There was an error while updating an attribute...Please try again.'));
-                $this->toastify(!empty($msg) ? $msg : translate('There was an error while updating an attribute...Please try again.'), 'danger');
+                $this->inform(!empty($msg) ? $msg : translate('There was an error while updating an attribute...Please try again.'), '', 'danger');
             } else {
                 $this->dispatchGeneralError(!empty($msg) ? $msg : translate('There was an error while creating an attribute...Please try again.'));
-                $this->toastify(!empty($msg) ? $msg : translate('There was an error while creating an attribute...Please try again.'), 'danger');
+                $this->inform(!empty($msg) ? $msg : translate('There was an error while creating an attribute...Please try again.'), '', 'danger');
             }
         }
     }
@@ -219,14 +223,14 @@ class AttributeForm extends Component
 
                 DB::commit();
 
-                $this->toastify(translate('Attribute values successfully updated!'), 'success');
+                $this->inform(translate('Attribute values successfully updated!'), '','success');
 
                 $this->attribute_values = $this->attribute->attribute_values()->get(); // query attribute values again - reset!
             } catch(\Exception $e) {
                 DB::rollBack();
 
                 $this->dispatchGeneralError(translate('There was an error while updating an attribute values...Please try again.'));
-                $this->toastify(translate('There was an error while updating an attribute values...Please try again. ').$e->getMessage(), 'danger');
+                $this->inform(translate('There was an error while updating an attribute values...Please try again. '), $e->getMessage(), 'danger');
             }
             
         }

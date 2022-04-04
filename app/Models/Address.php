@@ -12,7 +12,7 @@ class Address extends Model
     protected $fillable = ['id', 'user_id', 'address','country','city', 'zip_code','phones','is_primary', 'is_billing','state','address_2'];
 
     protected $casts = [
-//        'phones' => 'array',
+        'phones' => 'array',
         'is_primary' => 'boolean',
         'is_billing' => 'boolean'
     ];

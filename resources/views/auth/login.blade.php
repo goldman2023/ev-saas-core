@@ -66,40 +66,17 @@
                                        }'>
                                 {{ translate('Sign Up') }}
                             </a>
-                            /
-                            <a class="js-animation-link small font-weight-bold"
+
+                            {{-- <a class="js-animation-link small font-weight-bold"
                                 href="{{ route('business.register') }}">
                                 {{ translate('Business Sign Up') }}
-                            </a>
+                            </a> --}}
                         </div>
-                        @if (env("DEMO_MODE") == "On")
-                            <div class="mt-4">
-                                <table class="table table-bordered">
-                                    <tbody>
-                                        <tr>
-                                            <td>admin@example.com</td>
-                                            <td>123456</td>
-                                            <td><button class="btn btn-info btn-xs" onclick="autoFill()">{{ translate('Copy') }}</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endif
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-@endsection
-
-@section('script')
-    <script type="text/javascript">
-        function autoFill(){
-            $('#email').val('admin@example.com');
-            $('#password').val('123456');
-        }
-    </script>
 @endsection

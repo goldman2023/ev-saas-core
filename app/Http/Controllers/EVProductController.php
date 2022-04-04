@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\StripeService;
 use EVS;
 use App\Models\Product;
 use App\Models\Shop;
@@ -10,13 +11,13 @@ use Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
+use Stripe;
 
 class EVProductController extends Controller
 {
     //
     public function index(Request $request) {
         $products = Auth::user()->products()->orderBy('created_at','desc')->paginate(20);
-
         return view('frontend.dashboard.products.index')->with('products', $products);
     }
 
@@ -33,7 +34,7 @@ class EVProductController extends Controller
         $product = Product::where('slug', $slug)->first();
 
         if($product) {
-            $product->convertUploadModelsToIDs();
+            // $product->convertUploadModelsToIDs(); // DEPRECATED, since we use livewire and alpinejs combo instead of shitty Front JS
         }
 
         return view('frontend.dashboard.products.edit')->with('product', $product);
@@ -109,7 +110,8 @@ class EVProductController extends Controller
             $product->shop = Shop::first();
         }
 
-        if (!empty($product) && $product->published) {
+        /* TODO: add this eventually: && $product->published */
+        if (!empty($product) ) {
 
             if (auth()->check()) {
                 $user = auth()->user();
@@ -120,13 +122,22 @@ class EVProductController extends Controller
             activity()
                 ->performedOn($product)
                 ->causedBy($user)
-                ->withProperties(['action' => 'viewed'])
-                ->log('User viewed a product');
+                ->withProperties([
+                    'action' => 'viewed',
+                    'action_title' => 'Viewed a product',
+                    ] )
+                ->log('viewed');
         }
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
 
         $template = 'product-single-1';
         return view('frontend.product.single.' . $template, compact('product'));
+    }
+
+    public function createProductCheckoutRedirect($id, $qty = 1) {
+        $product = Product::find($id);
+        $link = StripeService::createCheckoutLink($product, $qty);
+        return redirect($link);
     }
 
 }

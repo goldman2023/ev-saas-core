@@ -40,6 +40,7 @@ return [
     */
 
     'debug' => env('APP_DEBUG', true),
+    'debug_bar' => env('DEBUGBAR_ENABLED', true),
 
     'debug_blacklist' => [
         '_ENV' => [
@@ -184,17 +185,11 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         App\Providers\SocialiteServiceProvider::class,
-        // Laracon21\Timezones\TimezonesServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
-        // MehediIitdu\CoreComponentRepository\CoreComponentRepositoryServiceProvider::class,
-        // Laracon21\Combinations\CombinationsServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Anand\LaravelPaytmWallet\PaytmWalletServiceProvider::class,
         \Laravel\Passport\PassportServiceProvider::class,
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
-        // KingFlamez\Rave\RaveServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-
         /*
          * Package Service Providers...
          */
@@ -209,6 +204,7 @@ return [
         App\Providers\EventServiceProvider::class,
         // App\Providers\SparkServiceProvider::class,
        // App\Providers\NovaServiceProvider::class,
+       App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
@@ -272,17 +268,14 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PaytmWallet' => Anand\LaravelPaytmWallet\Facades\PaytmWallet::class,
         'Str' => Illuminate\Support\Str::class,
         'Stringy' => App\Support\Stringy::class,
         'Arr' => Illuminate\Support\Arr::class,
-        'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'WeBuilder' => App\Facades\WeBuilder::class,
         'Permissions' => App\Facades\Permissions::class,
         'MyShop' => App\Facades\MyShop::class,
         'Vendor' => App\Facades\Vendor::class,
@@ -298,6 +291,8 @@ return [
         'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
         'Carbon' => Illuminate\Support\Carbon::class,
+        'UUID' => Webpatser\Uuid\Uuid::class,
+        'StripeService' => App\Facades\StripeService::class,
     ],
 
 ];

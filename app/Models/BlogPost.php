@@ -6,6 +6,7 @@ use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
+use App\Traits\LikesTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
@@ -31,6 +32,7 @@ class BlogPost extends EVBaseModel
 //    use ReactionsTrait;
 //    use CommentsTrait;
    use PermalinkTrait;
+   use LikesTrait;
 
 
     protected $table = 'blog_posts';
@@ -38,7 +40,7 @@ class BlogPost extends EVBaseModel
     public const ROUTING_SINGULAR_NAME_PREFIX = 'post';
     public const ROUTING_PLURAL_NAME_PREFIX = 'posts';
 
-    protected $fillable = ['shop_id', 'title', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['shop_id', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $casts = [
         'subscription_only' => 'boolean',
@@ -48,17 +50,21 @@ class BlogPost extends EVBaseModel
 
     protected static function booted()
     {
-        // TODO: Fix to show all blog posts in Frontend and only my posts in Backend
+
+        if(request()->is_dashboard) {
+   // TODO: Fix to show all blog posts in Frontend and only my posts in Backend
         // Show only MyShop Blog Posts
         static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
             $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1); // restrict to current user's shop blog posts
         });
+        }
+
     }
 
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 
@@ -69,7 +75,7 @@ class BlogPost extends EVBaseModel
     {
         return $query->where(
             fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
-                ->orWhere('title', 'like', '%'.$term.'%')
+                ->orWhere('name', 'like', '%'.$term.'%')
                 ->orWhere('excerpt', 'like', '%'.$term.'%')
                 ->orWhere('content', 'like', '%'.$term.'%')
         );
@@ -88,10 +94,10 @@ class BlogPost extends EVBaseModel
 //        return $this->morphedByMany(Category::class, 'subject', 'blog_post_relationships');
 //    }
 
-//    public function subscriptions()
-//    {
-//        return $this->morphedByMany(Subscription::class, 'subject', 'blog_post_relationships');
-//    }
+   public function plans()
+   {
+       return $this->morphedByMany(Plan::class, 'subject', 'blog_post_relationships');
+   }
 
 
     public function getDynamicModelUploadProperties(): array

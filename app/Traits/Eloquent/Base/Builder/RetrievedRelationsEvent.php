@@ -15,14 +15,19 @@ trait RetrievedRelationsEvent
      */
     public function eagerLoadRelations(array $models)
     {
-        $models = parent::eagerLoadRelations($models);
+        if(tenant()) {
+            $models = parent::eagerLoadRelations($models);
 
-        // Fire a custom event when all relations are retrieved
-        foreach ($models as $model) {
-            if ($model instanceof Model) {
-                $model->fireModelEvent('relationsRetrieved');
+            // Fire a custom event when all relations are retrieved
+            foreach ($models as $model) {
+                if ($model instanceof Model) {
+                    $model->fireModelEvent('relationsRetrieved');
+                }
             }
+        } else {
+            $models = [];
         }
+
 
 //        ItemsQueried::dispatch(new Collection($models));
 

@@ -11,7 +11,10 @@ class ThemeSelectForm extends Component
         'ev-boostrap-gun',
         'ev-saas-fox',
         'ev-saas-demo',
-        'we-saas-boostrap-software'
+        'we-saas-boostrap-software',
+        'ev-tailwind',
+        'we-tailwind-industrial',
+        'we-commerce-boostrap'
     ];
     public $currentTheme;
     public $domain;

@@ -1,14 +1,18 @@
-<div wire:click="addToWishlist()">
-    <button class="btn btn-secondary @if($added) btn-danger @endif align-items-center d-flex justify-content-center align-items-center">
-        @if($added)
-        {{ svg('heroicon-s-heart', ['class'=> 'ev-icon__xs text-white mr-2']) }}
-        {{ $available_actions[$action] }}
+<div>
+    <div wire:click="addToWishlist()">
+        <button class="w-full mt-4 flex items-center">
+            @if($added)
+                {{ svg($action['icon_success'], ['class'=> 'text-danger w-5 h-5']) }}
+                <span class="ml-3 leading-none block mt-1">
+                    {{ $action['action_success'] }}
+                </span>
+            @else
+                {{ svg($action['icon'], ['class'=> 'w-5 h-5']) }}
+                <span class="ml-3 leading-none block mt-1 font-semibold">
+                    {{ $action['action'] }}
+                </span>
+            @endif
 
-        @else
-        {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-black mr-2']) }}
-        {{ $action }}
-
-        @endif
-    </button>
-    {{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
+        </button>
+    </div>
 </div>

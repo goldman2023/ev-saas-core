@@ -1,7 +1,72 @@
+<div class="w-full" x-data="{
+    {{-- use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
+    allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
+    stock_visibility_state: @js($product->stock_visibility_state ?? 'quantity'), --}}
+}">
+
+    <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                            wire:target="updateMainStock"
+                            wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
+
+        <div class="w-full"
+            wire:loading.class="opacity-30 pointer-events-none"
+            wire:target="updateMainStock"
+        >
+
+            <div class="grid grid-cols-12 gap-8 mb-10">
+
+                {{-- Left panel --}}
+                <div class="col-span-12 xl:col-span-8">
+                    @foreach($variations as $index => $row)
+                        @php $index = Str::slug($index); @endphp
+
+                        <div class="bg-white shadow rounded-lg divide-y divide-gray-200 mb-4" x-data="">
+                            <div class="flex items-center px-4 py-5 sm:px-6">
+                                <img class="inline-block h-12 w-12 rounded-full mr-3" src="{{ $row->getThumbnail(['w'=>70]) }}" alt="">
+
+                                @if($this->attributes->isNotEmpty())
+                                    @php $display_variation_atts = []; @endphp
+                                    @foreach($this->attributes as $key => $att) 
+                                        @php
+                                            $selected_key = array_search($att->id, array_column($row->variant, 'attribute_id'));
+                                            $selected = $row->variant[$selected_key] ?? null;
+
+                                            if(empty($selected))
+                                                continue;
+
+                                            $display_variation_atts[$att->name] = $att->attribute_values->firstWhere('id', $selected['attribute_value_id'])->values ?? '';
+                                        @endphp
+                                        <span class="inline-flex items-center justify-center px-2.5 py-1 min-w-[50px]  rounded-md text-14 font-14 bg-gray-100 text-gray-800 mr-3">
+                                            {{ $att->attribute_values->firstWhere('id', $selected['attribute_value_id'])->values }}
+                                        </span>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <div class="px-4 py-5 sm:p-6">
+
+                            </div>
+                            <div class="px-4 py-4 sm:px-6">
+
+                            </div>
+                        </div>
+  
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- TODO: Create an empty state that will lead to Product Attributes section inside product edit page. --}}
+</div>
+
+
+
+
 <div class="lw-form table-responsive datatable-custom ev-product-variations-component" x-data="{
-    current: null
-}"
-@display-current-variation.window="current = $event.detail.current; ">
+        current: null
+    }"
+    @display-current-variation.window="current = $event.detail.current; ">
 
     <div class="d-flex flex-column" id="productVariationsAccordion">
         @foreach($variations as $index => $row)

@@ -18,10 +18,6 @@ class AttributeValue extends EVBaseModel
 
     protected $fillable = ['attribute_id', 'values', 'selected'];
 
-    public static function boot() {
-        parent::boot();
-    }
-
     public function attribute()
     {
         return $this->belongsTo(Attribute::class);

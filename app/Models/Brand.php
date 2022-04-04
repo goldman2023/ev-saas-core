@@ -33,7 +33,6 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 class Brand extends EVBaseModel
 {
     use Cachable;
-    use TranslationTrait;
     use GalleryTrait;
 
 

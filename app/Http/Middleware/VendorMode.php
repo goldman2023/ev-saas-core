@@ -27,10 +27,19 @@ class VendorMode
             $globalLayout = 'app';
         }
 
+        // If request is for dashboard, always use dashboard layout!
+        if($request->is_dashboard) {
+            $globalLayout = 'dashboard';
+        }
+
+        if($request->is('wishlist') || $request->is('chat')) {
+            $globalLayout = 'dashboard';
+
+        }
+
         View::share('globalShop', $globalShop);
         View::share('globalLayout', $globalLayout);
 
         return $next($request);
-
     }
 }

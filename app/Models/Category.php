@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
@@ -179,7 +180,7 @@ class Category extends EVBaseModel
         return $this->selected ?? false;
     }
 
-    public function getTitlePathAttribute() {
+    public function getTitlePathAttribute($value) {
         $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
 
         if(count($title_path) > 1) {
@@ -191,6 +192,11 @@ class Category extends EVBaseModel
         return implode(' '.self::PATH_SEPARATOR.' ', $title_path);
     }
 
+    public function setTitlePathAttribute($value)
+    {
+        $this->title_path= $value;
+    }
+
     public function getPermalink($content_type = null)
     {
         return Categories::getRoute($this, $content_type);
@@ -199,6 +205,10 @@ class Category extends EVBaseModel
     public function getTranslationModel(): ?string
     {
         return CategoryTranslation::class;
+    }
+
+    public function getFollowers() {
+        return Activity::where('subject_id', $this->id)->where('subject_type', 'App\Models\Category');
     }
 
     public function getDynamicModelUploadProperties(): array

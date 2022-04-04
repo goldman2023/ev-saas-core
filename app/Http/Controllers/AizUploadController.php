@@ -102,6 +102,7 @@ class AizUploadController extends Controller
 
             if(isset($type[$extension])){
                 $upload->file_original_name = null;
+                
                 $arr = explode('.', $request->file('aiz_file')->getClientOriginalName());
                 for($i=0; $i < count($arr)-1; $i++){
                     if($i == 0){

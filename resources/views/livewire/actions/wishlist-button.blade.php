@@ -1,15 +1,19 @@
-<div wire:click="addToWishlist()">
-    <button type="button"
-            class="btn btn-xs p-1 btn-icon rounded-circle {{ $added ? 'btn-primary':'btn-dark' }}"
-            title="{{ translate('Add To Wishlist') }}"
-            wire:loading.class="opacity-6 prevent-pointer-events"
-            wire:target="addToWishlist">
+<div class="relative w-0 flex-1 inline-flex items-center justify-center text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
 
-        @if($added)
-            {{ svg('heroicon-s-heart', ['class'=> 'ev-icon__xs text-white']) }}
-        @else
-            {{ svg('heroicon-o-heart', ['class'=> 'ev-icon__xs text-black']) }}
-        @endif
+    <div wire:click="addToWishlist()">
 
-    </button>
+        <button
+            class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+            @if($added)
+            {{ svg($action['icon_success'], ['class'=> 'w-5 h-5']) }}
+            {{ $action['action_success']  }}
+
+            @else
+            {{ svg($action['icon'], ['class'=> 'max-w-[16px] text-gray-900 mr-2']) }}
+            {{ $action['action'] }}
+
+            @endif
+        </button>
+    </div>
+
 </div>

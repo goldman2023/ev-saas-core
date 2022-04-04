@@ -11,7 +11,7 @@ use App\Models\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
 use App\Notifications\EmailVerificationNotification;
-use Spark\Billable;
+use App\Traits\PermalinkTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -25,12 +25,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use HasRoles;
     use HasApiTokens;
     use Notifiable;
-    use Billable;
     use LogsActivity;
     use UploadTrait;
     use GalleryTrait;
     use SocialAccounts;
     use HasWalletFloat;
+    use PermalinkTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -65,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     * @var array
     */
     protected $fillable = [
-        'name', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
+        'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
     ];
 
     /**
@@ -93,6 +93,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->user_type === 'customer';
     }
 
+    public function user_meta()
+    {
+        return $this->hasMany(UserMeta::class, 'user_id');
+    }
+
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
@@ -101,11 +106,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function social_accounts()
     {
         return $this->hasMany(SocialAccount::class);
-    }
-
-    public function customer()
-    {
-    return $this->hasOne(Customer::class);
     }
 
     public function seller()
@@ -140,47 +140,17 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function staff()
     {
-    return $this->hasOne(Staff::class);
+        return $this->hasOne(Staff::class);
     }
 
     public function orders()
     {
-    return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class);
     }
 
     public function wallets()
     {
-    return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
-    }
-
-    public function club_point()
-    {
-    return $this->hasOne(ClubPoint::class);
-    }
-
-    public function customer_package()
-    {
-        return $this->belongsTo(CustomerPackage::class);
-    }
-
-    public function customer_package_payments()
-    {
-        return $this->hasMany(CustomerPackagePayment::class);
-    }
-
-    public function customer_products()
-    {
-        return $this->hasMany(CustomerProduct::class);
-    }
-
-    public function seller_package_payments()
-    {
-        return $this->hasMany(SellerPackagePayment::class);
-    }
-
-    public function carts()
-    {
-        return $this->hasMany(Cart::class);
+        return $this->hasMany(Wallet::class)->orderBy('created_at', 'desc');
     }
 
     public function reviews()
@@ -223,11 +193,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->toArray();
     }
 
+
+    // OLD
     public function recently_viewed_products() {
         $data = Activity::where('subject_type', 'App\Models\Product')
+        ->where('description', 'viewed')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')
-        ->take(10)
+        ->take(5)
         ->get();
 
         return $data;
@@ -241,4 +214,37 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
         return $data;
     }
+
+    public function getFollowersCount() {
+
+    }
+
+    public function followers() {
+        return $this->morphToMany(User::class, 'subject', 'wishlists');
+        // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
+    }
+
+    public function following() {
+        return Wishlist::where('user_id', auth()->user()->id)
+                ->where('subject_type', "App\Models\Shop");
+
+
+        // return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
+    }
+
+    public function getVerifiedAttribute() {
+        return true;
+    }
+
+
+    /**
+     * Get the route name for the model.
+     *
+     * @return string
+     */
+    public static function getRouteName() {
+        return 'user.profile.single';
+    }
+
+
 }

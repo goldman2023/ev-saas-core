@@ -11,57 +11,82 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
-
+    {{--
+        SITE NAME:
+        To Use Site name globaly, use helper function get_site_name() - it's an alias fo get_setting('site_name')
+    --}}
+    <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
+    <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
+    <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
+    <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
-
+    @include('frontend.layouts.global-partials.all')
+    
     {{ seo()->render() }}
 
-    <!-- Favicon -->
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
-    @php
-    echo get_setting('header_script');
-    @endphp
-
+    @livewireScripts
     @livewireStyles
+    <script defer src="https://unpkg.com/@alpinejs/intersect@3.9.3/dist/cdn.min.js"></script>
 
+    <script defer src="https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js"></script>
+
+    {{-- <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script> --}}
+
+    @stack('head_scripts')
 </head>
 
-<body class="font-sans antialiased" x-data="{}" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
-
-
+<body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}"
+    @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
-        <header>
-            @include('frontend.layouts.navigation')
-        </header>
+        <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
+
         <!-- Page Content -->
         <main>
             @yield('content')
         </main>
 
-        <footer>
-            <x-tenant.footer.four-column-with-company-mission></x-tenant.footer.four-column-with-company-mission>
-        </footer>
-
-        @if($cart_adhoc_template = get_setting('cart_adhoc_template'))
-        @php $name = 'adhoc.'.$cart_adhoc_template; @endphp
-        <livewire:cart :template="$name" />
-        @endif
-
-        <livewire:cart template="main" />
-        @livewire('notification')
-
-
+        <x-tailwind-ui.footers.footer>
+        </x-tailwind-ui.footers.footer>
     </div>
+
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
+
+
+    <!-- Carts -->
+    <livewire:cart.cart template="flyout-cart" />
+    <!-- Wishlist -->
+    {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
+    <x-panels.flyout-wishlist></x-panels.flyout-wishlist>
+    <x-panels.flyout-categories></x-panels.flyout-categories>
+
+    @guest
+    <x-panels.flyout-auth></x-panels.flyout-auth>
+    @endguest
+
+    @auth
+    <x-panels.flyout-profile></x-panels.flyout-profile>
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    <livewire:we-media-library />
+
+    @endauth
+
+    <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3" :is_x="true"
+        :timeout="4000">
+    </x-ev.toast>
+
     @yield('script')
 
-    @livewireScripts
+    @stack('footer_scripts')
+
+
 </body>
 
 </html>

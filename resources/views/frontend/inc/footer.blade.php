@@ -45,8 +45,6 @@
                         {{ translate('Email:') }}{{ get_setting('contact_email') }}
                     </li>
                 </ul>
-
-                <x-></x-b2b-newsletter-form-footer>
             </div>
             <div class="col-lg-3 col-md-3 pt-4">
                 <div class="text-center text-md-left">

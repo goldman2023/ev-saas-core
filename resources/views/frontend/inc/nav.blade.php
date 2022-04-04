@@ -143,9 +143,9 @@
                     </a>
                 </div>
 
-                <!-- B2B Search -->
-                {{-- <x-b2-b-search></x-b2-b-search> --}}
-                <!-- END B2B Search -->
+                <!-- panels. Search -->
+                <x-b2-b-search></x-b2-b-search>
+                <!-- END panels. Search -->
 
                 <div class="d-none d-lg-none ml-3 mr-0">
                     <div class="nav-search-box">
@@ -202,7 +202,7 @@
         @endif
     </div>
     @if (get_setting('header_menu_labels') != null)
-        <div class="bg-white border-top border-gray-200 py-1" id="b2b-main-menu">
+        <div class="bg-white border-top border-gray-200 py-1" id="panels.-main-menu">
             <div class="container">
                 <ul class="list-inline mb-0 pl-0 mobile-hor-swipe text-center">
                     @foreach (get_setting('header_menu_labels') as $key => $value)
@@ -224,6 +224,6 @@
     @endif
 
     @if (isset($blog))
-        <div id="b2b-progress-bar"></div>
+        <div id="panels.-progress-bar"></div>
     @endif
 </header>

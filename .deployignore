@@ -4,3 +4,4 @@ node_modules/
 docker/
 cypress/
 .git/
+themes/ev-tailwind/svg/

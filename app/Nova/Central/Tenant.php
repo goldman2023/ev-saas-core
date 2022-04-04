@@ -21,14 +21,14 @@ class Tenant extends Resource
      *
      * @var string
      */
-    public static $model = \App\Tenant::class;
+    public static $model = \App\Models\Tenant::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'email';
 
     /**
      * The columns that should be searched.
@@ -73,7 +73,7 @@ class Tenant extends Resource
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
-            
+
             DateTime::make('Trial until', 'trial_ends_at')->rules('required')
                 ->default(Carbon::now()->addDays(config('saas.trial_days'))),
 

@@ -70,7 +70,7 @@
                             <small class="mr-2 opacity-50">{{ translate('Manufacturer:') }} </small>
                             <a href="{{ route('products.brand', $product->brand->slug) }}">
                                 <img class="" src="{{ uploaded_asset($product->brand->logo ?? '') }}"
-                                    alt="{{ $product->brand->getTranslation('name') }}" height="60">
+                                    alt="{{ $product->brand->name }}" height="60">
                             </a>
                         </div>
                     @endif

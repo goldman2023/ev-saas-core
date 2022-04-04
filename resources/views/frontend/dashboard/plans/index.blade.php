@@ -7,21 +7,32 @@
 @endpush
 
 @section('panel_content')
-    <!-- Card -->
-    <div class="card">
-        <!-- Header -->
-        <div class="card-header">
-            <h5 class="card-header-title">
-                {{ translate('All Plans') }}
-            </h5>
-            <a href="{{ route('plan.create') }}" class="btn btn-primary btn-xs">{{ translate('Add new') }}</a>
-        </div>
-        <!-- End Header -->
+    <section>
+        <x-dashboard.section-headers.section-header title="{{ translate('All Plans') }}" text="Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.">
+            <x-slot name="content">
+                <a href="{{ route('plan.create') }}" class="btn-primary">
+                    @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('Add new Plan') }}</span>
+                </a>
+            </x-slot>
+        </x-dashboard.section-headers.section-header>
+  
+        <div class="w-full">
+            @if($plans->isNotEmpty())
+                <livewire:dashboard.tables.plans-table></livewire:dashboard.tables.plans-table>
+            @else
+                <x-dashboard.empty-states.no-items-in-collection 
+                    icon="heroicon-o-document" 
+                    title="{{ translate('No plans yet') }}" 
+                    text="{{ translate('Get your business going by creating a subscription plan!') }}"
+                    link-href-route="plan.create"
+                    link-text="{{ translate('Add new Plan') }}">
 
-        <div class="card-body">
-            <livewire:dashboard.tables.plans-table></livewire:dashboard.tables.plans-table>
+                </x-dashboard.empty-states.no-items-in-collection>
+            @endif
+            
         </div>
-    </div>
+    </section>
 @endsection
 
 @push('footer_scripts')

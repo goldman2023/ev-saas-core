@@ -18,14 +18,32 @@ use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SetDashboard;
 
+use App\Http\Controllers\Central\RegisterTenantController;
+
 Route::middleware([
     'web',
     'universal',
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
-    VendorMode::class,
     SetDashboard::class,
+    VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
+
+        Route::group([
+                'middleware' => ['auth'],
+                'prefix' => 'tenant'
+            ], function () {
+                Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
+
+            });
+
+        Route::group([
+                'middleware' => ['auth'],
+                'prefix' => 'previews'
+            ], function () {
+                Route::get('/show', 'EVPreviewController@show')->name('show');
+
+            });
 
     /* TODO: Admin only */
     Route::group([
@@ -73,7 +91,7 @@ Route::middleware([
         Route::get('/products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
         Route::get('/products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
 
-        
+
 
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');
@@ -110,12 +128,12 @@ Route::middleware([
         Route::get('/profile/{id}', [EVAccountController::class, 'user_profile'])->name('user.profile');
 
         /* Settings pages*/
-        Route::get('/ev-design-settings', [EVAccountController::class, 'design_settings'])->name('settings.design');
         Route::post('/ev-design-settings', [EVAccountController::class, 'design_settings_store'])->name('settings.design.store');
         Route::get('/ev-payment-methods-settings', [EVAccountController::class, 'payment_methods_settings'])->name('settings.payment_methods');
         Route::get('/domain-settings', [EVAccountController::class, 'domain_settings'])->name('settings.domains');
         Route::get('/staff-settings', [EVAccountController::class, 'staff_settings'])->name('settings.staff_settings');
         Route::get('/shop-settings', [EVAccountController::class, 'shop_settings'])->name('settings.shop_settings');
+        Route::get('/app-settings', [EVAccountController::class, 'app_settings'])->name('settings.app_settings');
 
 
         // Payment Methods callback routes
@@ -150,14 +168,6 @@ Route::middleware([
         Route::post('/withdraw_request/payment_modal', 'SellerWithdrawRequestController@payment_modal')->name('withdraw_request.payment_modal');
         Route::post('/withdraw_request/message_modal', 'SellerWithdrawRequestController@message_modal')->name('withdraw_request.message_modal');
 
-        Route::resource('conversations', 'ConversationController')->parameters([
-            'conversations' => 'id',
-        ]);
-//    Route::get('/conversations/destroy/{id}', 'ConversationController@destroy')->name('conversations.destroy');
-        Route::post('conversations/refresh', 'ConversationController@refresh')->name('conversations.refresh');
-        Route::post('conversations/save', 'ConversationController@saveConversation')->name('conversations.save');
-
-        Route::resource('messages', 'MessageController');
 
 //Product Bulk Upload
         Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');
@@ -221,7 +231,16 @@ Route::middleware([
     Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');
 
     Route::get('/integrations/facebook-business-export', 'Integrations\FacebookBusinessController@export')->name('integrations.facebook-business.export');
+    Route::get('/integrations/woocommerce', 'Integrations\WooCommerceController@index')->name('integrations.woocommerce');
+    Route::get('/integrations/woocommerce/import/{type}', 'Integrations\WooCommerceController@import')->name('integrations.woocommerce.import');
+    Route::get('/integrations/woocommerce/import-results/{type}', 'Integrations\WooCommerceController@import_results')->name('integrations.woocommerce.import-results');
 
-
+    /* FEED Routes */
+    /* TODO: Add this to separate feed.php routes file */
+    Route::get('/feed', 'FeedController@index')->name('feed.index')->middleware('auth');
+    Route::get('/feed/shops', 'FeedController@shops')->name('feed.shops');
+    Route::get('/feed/products', 'FeedController@products')->name('feed.products');
+    /* This is general route to catch all requests to /* */
+    // Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.index');
 
 });

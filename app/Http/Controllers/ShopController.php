@@ -73,7 +73,7 @@ class ShopController extends Controller
             }
             if ($request->password == $request->password_confirmation) {
                 $user = new User;
-                $user->name = $request->name;
+                $user->name = $request->name; // TODO: Add first and last name!!!
                 $user->email = $request->email;
                 $user->user_type = "seller";
                 $user->phone = $request->phone_number;

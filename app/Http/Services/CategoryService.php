@@ -129,7 +129,12 @@ class CategoryService
         array_unshift($slugs, $category->slug);
 
         if (!is_null($category->parent_id)) {
-            $slugs = $this->determineCategorySlugs($categories[$category->parent_id], $categories, $slugs);
+            try {
+                $slugs = $this->determineCategorySlugs($categories[$category->parent_id], $categories, $slugs);
+
+            } catch(\Exception $e) {
+
+            }
         }
 
         return $slugs;
@@ -151,8 +156,30 @@ class CategoryService
      * In order to properly use categories in JS WE NEED children items to be keyed by their slug so we can access them in JS by using dot notation, like:
      * `Airsoft-a0I2y.children.Airsoft-accessories-BaX7G.children.Airsoft-grenades-59hlx` -> This is not possible if children keys are numeric (o,1,2,3 etc.)
      * This actually worked properly before but for some weird reason, it doesn't work anymore ---___---
-     */
-    public function getAllFormatted() {
+     *
+     * If $for_js is set to true, it means that data should be used in JS and alpineJS and should be reduced in size, so we need to apply mapping too.
+     * When $for_js is set to true, two functions are applied to collection: keyBy() and map(). Former to map indexes to slugs and latter to reduce size of category array.
+     **/
+    public function getAllFormatted($for_js = false) {
+        if($for_js) {
+            return Collection::recursiveApplyStatic($this->categories->toArray(), 'children',
+            ['fn' => 'keyBy', 'params' => ['slug']],
+            ['fn' => 'map', 'params' => [
+                function($item) {
+                    return [
+                        'id' => $item['id'],
+                        'parent_id' => $item['parent_id'],
+                        'name' => $item['name'],
+                        'slug' => $item['slug'],
+                        'slug_path' => $item['slug_path'],
+                        'path' => $item['path'],
+                        'children' => $item['children'],
+                        'descendants_count' => $item['descendants_count']
+                    ];
+                }
+            ]]);
+        }
+
         return Collection::recursiveApplyStatic($this->categories->toArray(), 'children', ['fn' => 'keyBy', 'params' => ['slug']]);
     }
 

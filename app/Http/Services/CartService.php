@@ -33,7 +33,7 @@ class CartService
     public function getOriginalPrice() {
         return $this->originalPrice;
     }
-    public function getdiscountAmount() {
+    public function getDiscountAmount() {
         return $this->discountAmount;
     }
     public function getSubtotalPrice() {
@@ -78,7 +78,7 @@ class CartService
             }
 
 
-            if($model->current_stock < $qty) {
+            if($model->current_stock < $qty && !$model->allow_out_of_stock_purchases) {
                 // Desired qty is bigger than stock qty, add only available amount to cart
 
                 // Add a warning that there was not enough items in stock to fulfill desired QTY
@@ -110,7 +110,7 @@ class CartService
             // Refresh $items and $subtotal
             $this->refresh();
         }
-
+        
         // return data
         return [
             'id' => $model->id,

@@ -1,6 +1,6 @@
 @if($products->count() > 0)
-
-<div class="row">
+dadsadsa
+<div class="flex flex-nowrap">
     @foreach($products as $productActivity)
 
     @php
@@ -8,7 +8,7 @@
     @endphp
 
     @if($product)
-    <div class="col-10 col-sm-{{ $columns }} mb-3">
+    <div class="col-span-2 mb-3">
         <x-default.products.cards.product-card :product="$product" style="list">
         </x-default.products.cards.product-card>
     </div>

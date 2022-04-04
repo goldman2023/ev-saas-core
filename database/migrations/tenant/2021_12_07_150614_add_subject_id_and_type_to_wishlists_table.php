@@ -15,7 +15,9 @@ class AddSubjectIdAndTypeToWishlistsTable extends Migration
     {
         Schema::table('wishlists', function (Blueprint $table) {
             //
-            $table->renameColumn('product_id', 'subject_id');
+            if (Schema::hasColumn('wishlists', 'product_id')) {
+                $table->renameColumn('product_id', 'subject_id');
+            }
         });
     }
 

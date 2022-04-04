@@ -38,14 +38,18 @@ class PlanForm extends Component
      * @return void
      */
     public function mount($plan = null)
-    {
+    { 
+        
+        // dd(Categories::getAllFormatted());
         $this->plan = empty($plan) ? new Plan() : $plan;
         $this->is_update = isset($this->plan->id) && !empty($this->plan->id);
         
         if(!$this->is_update) {
             // If insert
+            $this->plan->status = StatusEnum::draft()->value;
             $this->plan->base_currency = FX::getCurrency()->code;
             $this->plan->discount_type = AmountPercentTypeEnum::amount()->value;
+            $this->plan->yearly_discount_type = AmountPercentTypeEnum::amount()->value;
             $this->plan->tax_type = AmountPercentTypeEnum::amount()->value;
         }
 
@@ -58,10 +62,10 @@ class PlanForm extends Component
             'selected_categories' => 'required',
             'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-            'plan.title' => 'required|min:2',
+            'plan.name' => 'required|min:2',
             'plan.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'plan.excerpt' => 'required|min:10',
-            // 'plan.content' => 'required|min:10',
+            'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
             'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
             'plan.price' => 'required|numeric',
@@ -89,8 +93,8 @@ class PlanForm extends Component
             'plan.cover.if_id_exists' => translate('Selected cover does not exist in Media Library. Please select again.'),
             'plan.meta_img.if_id_exists' => translate('Selected meta image does not exist in Media Library. Please select again.'),
 
-            'plan.title.required' => translate('Title is required'),
-            'plan.title.min' => translate('Minimum title length is :min'),
+            'plan.name.required' => translate('Title is required'),
+            'plan.name.min' => translate('Minimum title length is :min'),
 
             'plan.excerpt.required' => translate('Excerpt is required'),
             'plan.excerpt.min' => translate('Minimum excerpt length is :min'),
@@ -113,7 +117,7 @@ class PlanForm extends Component
     public function dehydrate()
     {
         //$this->dispatchBrowserEvent('initSlugGeneration');
-        $this->dispatchBrowserEvent('initPlanForm');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function savePlan() {
@@ -123,6 +127,7 @@ class PlanForm extends Component
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
+            $this->plan->status = StatusEnum::draft()->value;
             $this->validate();
         }
 
@@ -134,7 +139,7 @@ class PlanForm extends Component
 
             // If user has no permissions to publish the post, change the status to Pending (all plans with pending will be visible to users who can publish the plan)
             if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_plan'], false)) {
-                $this->plan->status = StatusEnum::pending();
+                $this->plan->status = StatusEnum::pending()->value;
                 $msg = translate('Plan status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
             
@@ -149,17 +154,19 @@ class PlanForm extends Component
             DB::commit();
 
             if($this->is_update) {
-                $this->toastify(translate('Subscription plan successfully updated!').' '.$msg, 'success');
+                $this->inform(translate('Subscription plan successfully updated!').' '.$msg, '', 'success');
             } else {
-                $this->toastify(translate('Subscription plan successfully created!').' '.$msg, 'success');
+                $this->inform(translate('Subscription plan successfully created!').' '.$msg, '', 'success');
             }
         } catch(\Exception $e) {
             DB::rollBack();
             
             if($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a subscription plan...Please try again.'));
+                $this->inform(translate('There was an error while updating a subscription plan...Please try again.'), '', 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a subscription plan...Please try again.'));
+                $this->inform(translate('There was an error while creating a subscription plan...Please try again.'), '', 'fail');
             }
         }
     }

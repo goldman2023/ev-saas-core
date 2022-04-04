@@ -70,9 +70,9 @@ class PermissionsService
                     $this->getStaffPermissions(),
                     $this->getReviewsPermissions(),
                     [
-                    'view_shop_data' => 'View shop data',
-                    'view_shop_settings' => 'View shop settings',
-                    'browse_shop_domains' => 'Browse shop domains',
+                        'view_shop_data' => 'View shop data',
+                        'view_shop_settings' => 'View shop settings',
+                        'browse_shop_domains' => 'Browse shop domains',
                     ]
                 ),
                 // More roles should be added later, like: Marketer, Manager of XZY, {whatever} etc.

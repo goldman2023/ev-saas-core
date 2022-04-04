@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VendorMode;
 use Laravel\Nova\Actions\ActionResource;
 use Laravel\Nova\Http\Middleware\Authenticate;
 use Laravel\Nova\Http\Middleware\Authorize;
@@ -32,7 +33,7 @@ return [
     |
     */
 
-    'domain' => null,
+    'domain' => env('NOVA_DOMAIN_NAME', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +72,7 @@ return [
     |
     */
 
-    'guard' => 'admin',
+    'guard' => env('NOVA_GUARD', 'web'),
 
     /*
     |--------------------------------------------------------------------------
@@ -101,6 +102,7 @@ return [
         'tenant',
         'universal',
         'web',
+        VendorMode::class,
         Authenticate::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
@@ -146,6 +148,6 @@ return [
     |
     */
 
-    'currency' => 'EUR',
+    'currency' => 'USD',
 
 ];

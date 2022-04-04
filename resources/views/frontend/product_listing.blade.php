@@ -128,8 +128,7 @@ $meta_description = get_setting('site_motto');
                             </div>
 
                             @if($content != null)
-                            <x-company.company-attributes :items="$attributes" :selected="$filters">
-                            </x-company.company-attributes>
+
                             @endif
                         </div>
                     </div>

@@ -41,6 +41,10 @@ class IMGProxyService
             ],
             'meta_img' => [
                 'w' => 1200
+            ],
+            'original' => [
+                'w' => 0,
+                'h' => 0
             ]
         ];
     }

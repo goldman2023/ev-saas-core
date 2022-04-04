@@ -3,26 +3,25 @@
 @section('meta_title', translate('My Account Settings'))
 
 @section('panel_content')
-    <div class="card card-header mb-3">
-        <h4 class="mb-0 h4">{{ translate('Account settings')}}</h4>
-        <a class="btn btn-primary" href="#">
-            @svg('heroicon-o-user', ['class' => 'mr-2 square-16']) {{ translate('My profile') }}
-        </a>
-    </div>
+    <section>
+        <x-dashboard.section-headers.section-header title="{{ translate('Account settings') }}" text="">
+            <x-slot name="content">
+                <a href="{{ $me->getPermalink() }}"
+                    target="_blank"
+                    class="btn-primary">
+                    @svg('heroicon-o-user', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('My profile') }}</span>
+                </a>
+            </x-slot>
+        </x-dashboard.section-headers.section-header>
 
-    <livewire:dashboard.forms.settings.my-account-form></livewire:dashboard.forms.settings.my-account-form>
-
-    <x-ev.toast id="my-account-updated-toast"
-                position="bottom-center"
-                class="bg-success border-success text-white h3"
-                :is_x="true"
-                :timeout="4000"
-    ></x-ev.toast>
+        <livewire:dashboard.forms.settings.my-account-form></livewire:dashboard.forms.settings.my-account-form>
+    </section>
 @endsection
 
 
 @push('footer_scripts')
-    <script src="{{ static_asset('js/aiz-core.js', false, true) }}"></script>
+    {{-- <script src="{{ static_asset('js/aiz-core.js', false, true) }}"></script>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <script src="{{ static_asset('vendor/pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/hs-step-form/dist/hs-step-form.min.js', false, true) }}"></script>
@@ -41,5 +40,5 @@
     <script src="{{ static_asset('vendor/hs.datatables.js', false, true) }}"></script>
     <script src="{{ static_asset('vendor/ev.toast-ui-editor.js', false, true) }}"></script>
 
-    <script src="{{ static_asset('js/crud/account-settings-form.js', false, true, true) }}"></script>
+    <script src="{{ static_asset('js/crud/account-settings-form.js', false, true, true) }}"></script> --}}
 @endpush

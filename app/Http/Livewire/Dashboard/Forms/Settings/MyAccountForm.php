@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Dashboard\Forms\Settings;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
+use App\Models\UserMeta;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
 use DB;
@@ -23,20 +24,24 @@ class MyAccountForm extends Component
     use DispatchSupport;
 
     public $me;
+    public $meta;
     public $currentPassword = '';
     public $newPassword = '';
     public $newPassword_confirmation = '';
+    public $onboarding = false;
 
     protected function getRuleSet($set = null) {
         $rulesSets = collect([
             // Basic information rules
             'basic' => [
                 //'me' => [],
-                'me.name' => ['required', 'min:3'],
+                'me.name' => ['required', 'min:2'],
+                'me.surname' => ['required', 'min:2'],
 //                'me.email' => ['required', 'email:rfs,dns'],
                 'me.phone' => ['required'],
-                'me.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
-                'me.cover' => ['if_id_exists:App\Models\Upload,id']
+                'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
+                'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+                'meta.birthday.value' => ['required'],
             ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],
@@ -85,15 +90,18 @@ class MyAccountForm extends Component
      *
      * @return void
      */
-    public function mount()
+    public function mount($onboarding = false)
     {
+        $this->onboarding = $onboarding;
         $this->me = auth()->user();
 
+        $my_meta = $this->me->user_meta;
+        $this->meta = castValuesForGet($my_meta, UserMeta::metaDataTypes());
     }
 
     public function dehydrate()
     {
-        $this->dispatchBrowserEvent('initAccountSettingsFormInit');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function render()
@@ -103,12 +111,22 @@ class MyAccountForm extends Component
 
 
     public function saveBasicInformation() {
-        $this->validate($this->getRuleSet('basic'));
+        try {
+            $this->validate($this->getRuleSet('basic'));
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($this->getRuleSet('basic'));
+        }
+
 
         $this->me->syncUploads();
         $this->me->save();
 
-        $this->toastify(translate('Basic information successfully updated!'), 'success');
+        $this->inform(translate('Basic information successfully updated!'), '', 'success');
+        if($this->onboarding) {
+            return redirect()->route('onboarding.step4');
+
+        }
     }
 
     public function saveEmail() {
@@ -118,7 +136,7 @@ class MyAccountForm extends Component
         $this->me->save();
 
         // TODO: Implement Email verification before email is really swapped with new email in the DB!
-        $this->toastify(translate('Please go to your email to verify email change!'), 'info');
+        $this->inform(translate('Please go to your email to verify email change!'), '', 'success');
     }
 
     public function updatePassword() {
@@ -129,7 +147,8 @@ class MyAccountForm extends Component
         $this->me->save();
 
         // TODO: Logout the User
+        // TODO: Send an email to user that password is changed
 
-        $this->toastify(translate('Your password is successfully updated. You will be logged out.'), 'success');
+        $this->inform(translate('Your password is successfully updated. You will be logged out.'), '', 'success');
     }
 }

@@ -44,14 +44,16 @@ class Cart extends Component
         $this->totalItemsCount = CartService::getTotalItemsCount();
 
         $this->originalPrice = CartService::getOriginalPrice();
-        $this->discountAmount = CartService::getdiscountAmount();
+        $this->discountAmount = CartService::getDiscountAmount();
         $this->subtotalPrice = CartService::getSubtotalPrice();
 
         // Event to refresh cart items count (all over the page, where needed)
         $this->dispatchBrowserEvent('refresh-cart-items-count', ['count' => $this->totalItemsCount]);
+
     }
 
     public function addToCart($model, $model_type, $qty, $append_qty = true) {
+
         if($this->processing) {
             return;
         }
@@ -73,11 +75,11 @@ class Cart extends Component
             $model = app($model_type)::find($model);
         }
 
-        activity()
+        activity('ecommerce_log')
             ->performedOn($model)
             ->causedBy(auth()->user())
             ->withProperties(['action' => 'add_to_cart'])
-            ->log('User added a product to cart');
+            ->log('add_to_cart');
 
         // Add $model and $qty to cart (do not append qty if $model is already in cart) because:
         // addToCart function in Cart.php is called on quantity change event inside cart, which means that given $qty is always the desired qty!
@@ -110,6 +112,10 @@ class Cart extends Component
 
     public function render()
     {
-        return view('livewire.cart.'.$this->template);
+        if(session('style_framework') === 'tailwind') {
+            return view('livewire.tailwind.cart.'.$this->template);
+        }
+
+        return view('livewire.bootstrap.cart.'.$this->template);
     }
 }

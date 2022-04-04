@@ -30,11 +30,6 @@
         </div>
 
         <ul class="list-inline list-separator font-size-1 text-body">
-            @if(visits($item)->count() != null || visits($item,'auth')->count() != null)
-                <li class="list-inline-item">
-                    <i class="las la-eye text-muted mr-1"></i>
-                </li>
-            @endif
             <li class="list-inline-item">
                 <i class="las la-comment text-muted mr-1"></i> 2 {{translate('Comments')}}
             </li>

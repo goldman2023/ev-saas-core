@@ -8,7 +8,7 @@
       <h2>The better way to shop with Front top-products</h2>
     </div>
     <!-- End Title -->
-  
+
     <div class="row mb-2">
       <div class="col-md-4 mb-3">
         <!-- Card -->
@@ -32,7 +32,7 @@
         </div>
         <!-- End Card -->
       </div>
-  
+
       <div class="col-md-4 mb-3">
         <!-- Card -->
         <div class="card card-bordered shadow-none d-block">
@@ -55,7 +55,7 @@
         </div>
         <!-- End Card -->
       </div>
-  
+
       <div class="col-md-4 mb-3">
         <!-- Card -->
         <div class="card card-bordered shadow-none d-block">
@@ -79,7 +79,7 @@
         <!-- End Card -->
       </div>
     </div>
-  
+
     <div class="text-center">
       <p class="small">Limited time only, while stocks last.</p>
     </div>

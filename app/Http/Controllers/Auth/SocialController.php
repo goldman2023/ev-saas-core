@@ -11,6 +11,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use MehediIitdu\CoreComponentRepository\CoreComponentRepository;
 use Illuminate\Support\Str;
+use \App\Support\WeSocialite;
 
 class SocialController extends Controller
 {
@@ -24,7 +25,7 @@ class SocialController extends Controller
      */
     public function redirectLoginToProvider(Request $request, $provider)
     {
-        return Socialite::setConnectionType('login')->driver($provider)->redirect();
+        return WeSocialite::configDriver($request, $provider)->redirect();
     }
 
     public function redirectConnectToProvider(Request $request, $provider)
@@ -38,45 +39,43 @@ class SocialController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function handleProviderLoginCallback(Request $request, $provider)
-    {
+    { 
         try {
             if($provider === 'twitter') {
-//                Stateless authentication is not available for the Twitter driver, which uses OAuth 1.0 for authentication.
+                // Stateless authentication is not available for the Twitter driver, which uses OAuth 1.0 for authentication.
                 $user = Socialite::driver('twitter')->user();
-            }
-            else{
-                $user = Socialite::driver($provider)->stateless()->user();
+            } else{
+                $user = WeSocialite::configDriver($request, $provider)->stateless()->user();
             }
         } catch (\Exception $e) {
             flash("Something Went wrong. Please try again.")->error();
-            return redirect()->route('business.login');
+            return redirect()->route('home');
         }
 
-        // check if they're an existing user
-        $existingUser = User::where('provider_id', $user->id)->orWhere('email', $user->email)->first();
-        dd($existingUser);
+        // Check if they're an existing user
+        $existingUser = User::where('email', $user->email)->first();
+        
         if($existingUser){
-            // log them in
+            // Log them in
             auth()->login($existingUser, true);
         } else {
-            // create a new user
-            $newUser                  = new User;
-            $newUser->name            = $user->name;
-            $newUser->email           = $user->email;
+            // Create a new user
+            $newUser = new User;
+            $newUser->user_type = User::$customer_type;
+            $newUser->first_name = $user->name; // TODO: FIX THIS to use both first and last name!!!!
+            $newUser->email = $user->email;
             $newUser->email_verified_at = date('Y-m-d H:m:s');
-            $newUser->provider_id     = $user->id;
+            $newUser->provider_id = $user->id; // TODO: We should add provider_ids to CoreMeta, because one user can login with multiple social accounts to the same account - if social account have the same email)
             $newUser->save();
 
-            $customer = new Customer;
-            $customer->user_id = $newUser->id;
-            $customer->save();
-
+            // TODO: Add avatar to uploads -> uplaod it to Cloud and link user to it
+            
             auth()->login($newUser, true);
         }
+
         if(session('link') != null){
             return redirect(session('link'));
-        }
-        else{
+        } else {
             return redirect()->route('dashboard');
         }
     }

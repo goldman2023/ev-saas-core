@@ -5,6 +5,7 @@ use App\Models\Currency;
 use App\Models\TenantSetting;
 use App\Models\Product;
 use App\Models\SubSubCategory;
+use App\Models\Category;
 use App\Models\FlashDealProduct;
 use App\Models\FlashDeal;
 use App\Models\OtpConfiguration;
@@ -26,6 +27,85 @@ use Illuminate\Support\Facades\Route;
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 
 include('Helpers/EIMHelpers.php');
+
+if (!function_exists('castValueForSave')) {
+    function castValueForSave($key, $setting, $data_types) {
+        $data_type = $data_types[$key] ?? null;
+        $value = $setting['value'] ?? null;
+        
+        if($data_type === Upload::class || $data_type === Category::class) {
+            $value = ctype_digit($value) ? $value : null;
+        } else if($data_type === Currency::class) {
+            if(!Currency::where('code', $value)->exists()) {
+                $value = 'EUR'; // If currency with $value code does not exist in database, make EUR default
+            }
+        } else if($data_type === 'int') {
+            $value = ctype_digit($value) ? ((int) $value) : $value;
+        } else if($data_type === 'boolean') {
+            $value = $value ? 1 : 0;
+        } else if($data_type === 'array' && $data_type === 'uploads') {
+            $value = json_encode($value);
+        }
+    
+        return $value;
+    }
+}
+
+if (!function_exists('castValuesForGet')) {
+    function castValuesForGet(&$settings, $data_types) {
+        if(!empty($settings)) {
+            foreach($settings as $key => $setting) {
+                $data_type = $data_types[$key] ?? null;
+                $value = $settings[$key]['value'] ?? null;
+    
+                if(empty($value)) {
+                    
+                    if($data_type === 'boolean') {
+                        $settings[$key]['value'] = false;
+                    } else if($data_type === Currency::class) {
+                        $settings[$key]['value'] = Currency::where('code', 'EUR')?->first();
+                    }
+
+                    continue;
+                }
+                
+                if(isset($settings[$key]) && !empty($value)) {
+                    if($data_type === Upload::class) {
+                        $settings[$key]['value'] = Upload::find($value);
+                    } else if($data_type === Currency::class) {
+                        $settings[$key]['value'] = Currency::where('code', $value)?->first() ?? Currency::where('code', 'EUR')?->first();
+                    } else if($data_type === Category::class) {
+                        $settings[$key]['value'] = Category::find($value);
+                    } else if($data_type === 'uploads') {
+                        $uploads = [];
+                        if(is_array($value) && !empty($value)) {
+                            foreach($value as $upload_id) {
+                                $uploads[] = Upload::find($value);
+                            }
+                        }
+                        $settings[$key]['value'] = collect($uploads);
+                    } else if($data_type === 'string') {
+                        $settings[$key]['value'] = $value;
+                    } else if($data_type === 'int') {
+                        $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
+                    } else if($data_type === 'boolean') {
+                        $settings[$key]['value'] = ($value == 0 || $value == "0") ? false : true;
+                    } else if($data_type === 'array') {
+                        $settings[$key]['value'] = json_decode($value, true);
+                    } else if($data_type === 'date') {
+                        $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
+                    } else if($data_type === 'datetime') {
+                        $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
+                    } 
+                }
+                
+            }
+        }
+        return [];
+    }
+}
+
+
 
 //highlights the selected navigation on admin panel
 if (!function_exists('sendSMS')) {
@@ -914,7 +994,7 @@ if (!function_exists('static_asset')) {
             }
         } catch (\Exception $e) {
         }
-        if($theme) {
+        if ($theme) {
             if (config('app.force_https')) {
                 return app('url')->asset('themes/' . Theme::parent() . '/' . $path, true) . ($cache_bust ? '?v=' . $filemtime : '');
             } else {
@@ -1009,7 +1089,13 @@ if (!function_exists('isUnique')) {
 }
 
 if (!function_exists('get_setting')) {
+    /* Het setting deprecated use  get_tenant_setting() instead */
     function get_setting($key, $default = null)
+    {
+        return TenantSettings::get($key, $default);
+    }
+
+    function  get_tenant_setting($key, $default = null)
     {
         return TenantSettings::get($key, $default);
     }
@@ -1151,52 +1237,9 @@ if (!function_exists('checkout_done')) {
         $order->payment_details = $payment;
         $order->save();
 
-        if (\App\Models\Addon::where('unique_identifier', 'affiliate_system')->first() != null && \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first()->activated) {
-            $affiliateController = new AffiliateController;
-            $affiliateController->processAffiliatePoints($order);
-        }
 
-        if (\App\Models\Addon::where('unique_identifier', 'club_point')->first() != null && \App\Models\Addon::where('unique_identifier', 'club_point')->first()->activated) {
-            if (Auth::check()) {
-                $clubpointController = new ClubPointController;
-                $clubpointController->processClubPoints($order);
-            }
-        }
-        if (\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first() == null || !\App\Models\Addon::where('unique_identifier', 'seller_subscription')->first()->activated) {
-            if (get_setting('category_wise_commission') != 1) {
-                $commission_percentage = get_setting('vendor_commission');
-                foreach ($order->orderDetails as $key => $orderDetail) {
-                    $orderDetail->payment_status = 'paid';
-                    $orderDetail->save();
-                    if ($orderDetail->product->user->user_type == 'seller') {
-                        $seller = $orderDetail->product->user->seller;
-                        $seller->admin_to_pay = $seller->admin_to_pay + ($orderDetail->price * (100 - $commission_percentage)) / 100 + $orderDetail->tax + $orderDetail->shipping_cost;
-                        $seller->save();
-                    }
-                }
-            } else {
-                foreach ($order->orderDetails as $key => $orderDetail) {
-                    $orderDetail->payment_status = 'paid';
-                    $orderDetail->save();
-                    if ($orderDetail->product->user->user_type == 'seller') {
-                        $commission_percentage = $orderDetail->product->category->commision_rate;
-                        $seller = $orderDetail->product->user->seller;
-                        $seller->admin_to_pay = $seller->admin_to_pay + ($orderDetail->price * (100 - $commission_percentage)) / 100 + $orderDetail->tax + $orderDetail->shipping_cost;
-                        $seller->save();
-                    }
-                }
-            }
-        } else {
-            foreach ($order->orderDetails as $key => $orderDetail) {
-                $orderDetail->payment_status = 'paid';
-                $orderDetail->save();
-                if ($orderDetail->product->user->user_type == 'seller') {
-                    $seller = $orderDetail->product->user->seller;
-                    $seller->admin_to_pay = $seller->admin_to_pay + $orderDetail->price + $orderDetail->tax + $orderDetail->shipping_cost;
-                    $seller->save();
-                }
-            }
-        }
+
+
 
         $order->commission_calculated = 1;
         $order->save();

@@ -94,17 +94,12 @@ class Shop extends EVBaseModel
         return 'slug';
     }
 
-    public function seller()
-    {
-        $seller = Seller::where('user_id', $this->morphToMany(User::class, 'subject', 'user_relationships')->get()->first(fn($value, $key) => $value->user_type === 'seller')->id ?? null)->first();
-
-        return !empty($seller->id ?? null) ? $seller : null;
-    }
-
     public function users()
     {
         return $this->morphToMany(User::class, 'subject', 'user_relationships');
     }
+
+
 
     public function categories()
     {
@@ -169,28 +164,6 @@ class Shop extends EVBaseModel
         return is_array($value) ? $value : json_decode($value, true);
     }
 
-    public static function companies_count_rounded()
-    {
-        $total = 0;
-
-        $companies = Shop::all()->count();
-
-        /* Round to closest 100 */
-        $total = ceil($companies / 100) * 100;
-
-        return $total;
-    }
-
-    public function get_company_website_url()
-    {
-        $website = [];
-        $website_attribute = $this->user->seller->get_attribute_value_by_id(40);
-
-        $website['href'] = $website_attribute;
-
-        return $website;
-    }
-
 
     public function get_company_logo()
     {
@@ -225,63 +198,6 @@ class Shop extends EVBaseModel
         return false;
     }
 
-    public function company_size_calculated()
-    {
-        /* Size goes 1/5 */
-        $size = 1;
-
-        $turnover = $this->user->seller->get_attribute_value_by_id(35);
-        /* Micro company Size */
-        if ($turnover < 2000000) {
-            $size = 1;
-        } else if ($turnover < 12000000) {
-            $size = 2;
-        } else if ($turnover < 60000000) {
-            $size = 3;
-        } else if ($turnover < 1000000000) {
-            $size = 4;
-        } else {
-            $size = 5;
-        }
-
-        return $size;
-    }
-
-
-
-    public function company_has_description()
-    {
-        if ($this->meta_description) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    public function company_has_required_attributes()
-    {
-        $attributeCount = $this->user->seller->custom_attributes()
-            ->count();
-
-        if ($attributeCount > 5) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function company_has_category()
-    {
-        $categories = $this->categories()->count();
-
-        if ($categories > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function isVerified()
     {
 
@@ -291,30 +207,10 @@ class Shop extends EVBaseModel
         if ($verification_status === true) {
             return true;
         } else {
-            return false;
+            return true;
         }
     }
 
-    public function profile_completeness()
-    {
-        $total = 0;
-        if ($this->company_has_description()) {
-            $total += 25;
-        }
-
-        if ($this->company_has_logo()) {
-            $total += 25;
-        }
-
-        if ($this->company_has_required_attributes()) {
-            $total += 25;
-        }
-
-        if ($this->company_has_category()) {
-            $total += 25;
-        }
-        return $total;
-    }
 
     /* Function to return integer value for company public rating
     TODO: How this is calculated we will implement when we have reviewable trait
@@ -331,5 +227,10 @@ class Shop extends EVBaseModel
         return [
 
         ];
+    }
+
+    public function followers() {
+        return $this->morphToMany(User::class, 'subject', 'wishlists');
+        // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
     }
 }

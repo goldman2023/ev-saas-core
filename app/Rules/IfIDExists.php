@@ -29,13 +29,24 @@ class IfIDExists implements Rule, ValidatorAwareRule, DataAwareRule
     {
         $model_type = $this->parameters[0] ?? null;
         $model_identificator = $this->parameters[1];
-        $pass_if_empty = $this->parameters[2] ?? false;
-
-        if($pass_if_empty && empty($value)) {
+        $pass_if_empty = ($this->parameters[2] ?? null) === 'true';
+        
+        // If pass_if_empty is TRUE, check if 'id' of the $value is empty, and if it is let it pass
+        if($pass_if_empty && empty($value['id'] ?? null)) {
             return true;
         }
-
-        $value = $value instanceof Model ? $value->id : $value;
+        
+        if($value instanceof Model) {
+            $value = $value->id;
+        } else if(is_array($value)) {
+            $value = $value['id'];
+        } else if(is_object($value)) {
+            $value = $value->id;
+        } else if(is_numeric($value)) {
+            $value = (int) $value;
+        } else {
+            return false;
+        }
 
         if(!empty($model_type)) {
             // Check if user with email is not already registered.

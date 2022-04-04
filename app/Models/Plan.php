@@ -12,6 +12,7 @@ use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
+use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -33,7 +34,7 @@ class Plan extends EVBaseModel
 
     protected $table = 'plans';
 
-    protected $fillable = ['title', 'excerpt', 'content', 'status', 'features', 'price', 'discount', 'discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['name', 'excerpt', 'content', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $casts = [
         'features' => 'array',
@@ -56,7 +57,7 @@ class Plan extends EVBaseModel
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 
@@ -87,7 +88,7 @@ class Plan extends EVBaseModel
     {
         return $query->where(
             fn ($query) =>  $query->where('id', 'like', '%'.$term.'%')
-                ->orWhere('title', 'like', '%'.$term.'%')
+                ->orWhere('name', 'like', '%'.$term.'%')
                 ->orWhere('excerpt', 'like', '%'.$term.'%')
                 ->orWhere('content', 'like', '%'.$term.'%')
         );
@@ -104,6 +105,11 @@ class Plan extends EVBaseModel
         }
 
         return is_array($value) ? $value : json_decode($value, true);
+    }
+
+    public function scopePublished($query)
+    {
+        $query->where('status', StatusEnum::published()->value);
     }
 
     public function main()

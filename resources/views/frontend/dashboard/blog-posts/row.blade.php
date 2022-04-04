@@ -5,37 +5,37 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    {{ $row->getTranslation('title') }}
+    {{ $row->getTranslation('name') }}
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->status === App\Enums\StatusEnum::published()->value)
-        <span class="badge badge-soft-success">
-          <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($row->status) }}
+        <span class="badge-success">
+          {{ ucfirst($row->status) }}
         </span>
     @elseif($row->status === App\Enums\StatusEnum::draft()->value)
-        <span class="badge badge-soft-warning">
-          <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($row->status) }}
+        <span class="badge-warning">
+          {{ ucfirst($row->status) }}
         </span>
     @elseif($row->status === App\Enums\StatusEnum::pending()->value)
-        <span class="badge badge-soft-info">
-          <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($row->status) }}
+        <span class="badge-info">
+          {{ ucfirst($row->status) }}
         </span>
     @elseif($row->status === App\Enums\StatusEnum::private()->value)
-        <span class="badge badge-soft-dark">
-          <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($row->status) }}
+        <span class="badge-dark">
+          {{ ucfirst($row->status) }}
         </span>
     @endif
 </x-livewire-tables::table.cell>
 
-<x-livewire-tables::table.cell class="align-middle">
+<x-livewire-tables::table.cell class="align-middle text-center">
     @if($row->subscription_only)
-        <span class="badge badge-soft-warning">
-          <span class="legend-indicator bg-warning mr-1"></span> {{ translate('Subscription') }}
+        <span class="badge-warning">
+            {{ translate('Subscription') }}
         </span>
     @else
-        <span class="badge badge-soft-dark">
-          <span class="legend-indicator bg-dark mr-1"></span> {{ translate('Free') }}
+        <span class="badge-dark">
+            {{ translate('Free') }}
         </span>
     @endif
 </x-livewire-tables::table.cell>
@@ -50,9 +50,34 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle">
-    <div class="btn-group" role="group">
-        <a class="btn btn-sm btn-white d-flex align-items-center" href="{{ route('blog.post.edit', ['id' => $row->id]) }}">
-            @svg('heroicon-o-pencil', ['class' => 'square-18 mr-2']) {{ translate('Edit') }}
+    <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
+        <a class="btn btn-white flex items-center mr-2" href="{{ route('blog.post.edit', ['id' => $row->id]) }}">
+            @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
+
+        <button 
+            @click="isOpen = !isOpen" 
+            @keydown.escape="isOpen = false" 
+            class="flex items-center btn" 
+        >
+            @svg('heroicon-o-chevron-down', ['class' => 'w-[18px] h-[18px]'])
+        </button>
+        <ul x-show="isOpen"
+            @click.away="isOpen = false"
+            class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
+        >
+            <li>
+                <a href="#" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px]'])
+                    <span class="ml-2">{{ translate('Preview') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t">
+                    @svg('heroicon-o-trash', ['class' => 'text-danger w-[18px] h-[18px]'])
+                    <span class="ml-2">{{ translate('Remove post') }}</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </x-livewire-tables::table.cell>

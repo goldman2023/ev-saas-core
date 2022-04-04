@@ -1,861 +1,1263 @@
+@push('head_scripts')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
+
 <div x-data="{
+        thumbnail: @js(['id' => $product->thumbnail->id ?? null, 'file_name' => $product->thumbnail->file_name ?? '']),
+        cover: @js(['id' => $product->cover->id ?? null, 'file_name' => $product->cover->file_name ?? '']),
+        meta_img: @js(['id' => $product->meta_img->id ?? null, 'file_name' => $product->meta_img->file_name ?? '']),
+        pdf: @js(['id' => $product->pdf->id ?? null, 'file_name' => $product->pdf->file_name ?? '']),
+        gallery: @js(collect($product->gallery)?->map(fn($item) => ['id' => $item->id ?? null, 'file_name' => $item->file_name ?? '']) ?? []),
+        video_provider: @js($product->video_provider),
+        base_currency: @js($product->base_currency),
+        brand_id: @js($product->brand_id),
+        tags: @js($product->tags),
         status: @js($product->status ?? App\Enums\StatusEnum::draft()->value),
         is_digital: {{ $product->digital === true ? 'true' : 'false' }},
-        use_serial: {{ $product->use_serial === 1 ? 'true' : 'false' }},
-        base_currency: @js($product->base_currency),
+        use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
+        allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
         discount_type: @js($product->discount_type),
         tax_type: @js($product->tax_type),
+        description: @entangle('product.description').defer,
         attributes: @js($attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
+        selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
-        getSelectorID(attribute) { return 'attributes_'+attribute.id+'_attribute_values'; } ,
-        hasCustomProperty(attribute, name) {
-            return attribute.custom_properties !== null &&
-                    attribute.custom_properties !== undefined &&
-                    attribute.custom_properties.hasOwnProperty(name);
-        },
-        isMultiple(attribute) { return this.hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple; },
-        getDateOptions(attribute) {
-            let options = {
-                mode: 'single',
-                enableTime: false,
-            };
 
-            if(this.hasCustomProperty(attribute, 'with_time') && attribute.custom_properties.with_time) {
-                options.enableTime = true;
-                options.dateFormat = 'd.m.Y H:i';
-            }
-
-            if(this.hasCustomProperty(attribute, 'range') && attribute.custom_properties.range) {
-                options.mode = 'range';
-            }
-
-            return JSON.stringify(options);
-        },
-        getMinValue(attribute) { return hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : 0; },
-        getMaxValue(attribute) { return hasCustomProperty(attribute, 'max_value') ? attribute.custom_properties.max_value : 999; },
-        getListCount(attribute) {
-            if(attribute.attribute_values === undefined || attribute.attribute_values === null) {
-                attribute.attribute_values = [{values: ''}];
-            }
-
-            return attribute.attribute_values.length;
-        },
-        hasID(attribute, index) {
-            return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
-        },
-        addToList(attribute) {
-            attribute.attribute_values.push({values:''});
-        },
-        removeFromList(attribute, index) {
-            console.log(this.hasID(attribute, index));
-            if(this.hasID(attribute, index)) {
-                $wire.removeAttributeValue(attribute.attribute_values[index]['id']);
-            }
-            attribute.attribute_values.splice(index, 1);
-        },
         onSave() {
-            $wire.set('product.description', $('[name=\'product.description\']').val(), true);
-            $wire.set('product.thumbnail', $('[name=\'product.thumbnail\']').val(), true);
-            $wire.set('product.gallery', $('[name=\'product.gallery\']').val(), true);
-            $wire.set('product.pdf', $('[name=\'product.pdf\']').val(), true);
-            $wire.set('product.video_provider', getSafe(fn => $('[name=\'product.video_provider\']').select2('data')[0].id, null), true);
-            $wire.set('product.base_currency', getSafe(fn => $('[name=\'product.base_currency\']').select2('data')[0].id, null), true);
-            $wire.set('product.discount_type', getSafe(fn => $('[name=\'product.discount_type\']').select2('data')[0].id, null), true);
-            $wire.set('product.tax_type', getSafe(fn => $('[name=\'product.tax_type\']').select2('data')[0].id, null), true);
+            $wire.set('product.description', this.description, true);
+            $wire.set('product.thumbnail', this.thumbnail.id, true);
+            $wire.set('product.cover', this.cover.id, true);
+            $wire.set('product.gallery', [], true);
+            $wire.set('product.pdf', this.pdf.id, true);
+            $wire.set('product.video_provider', this.video_provider, true);
+            $wire.set('product.base_currency', this.base_currency, true);
+            $wire.set('product.discount_type', this.discount_type, true);
+            $wire.set('product.tax_type', this.tax_type, true);
             $wire.set('product.use_serial', this.use_serial, true);
+            $wire.set('product.allow_out_of_stock_purchases', this.allow_out_of_stock_purchases, true);
             $wire.set('product.digital', this.is_digital, true);
             $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
             $wire.set('attributes', this.attributes, true);
-            $wire.set('product.meta_img', $('[name=\'product.meta_img\']').val(), true);
+            $wire.set('product.meta_img', this.meta_img.id, true);
             $wire.set('product.status', this.status, true);
-            $wire.set('product.tags', $('[name=\'product.tags\']').select2('data').map(x => x.id), true);
-            let $selected_categories = [];
-            $('[name=\'selected_categories\']').each(function(index, item) {
-                $selected_categories = [...$selected_categories, ...$(item).select2('data').map(x => x.id)];
-            });
-            $wire.set('selected_categories', $selected_categories, true);
-            $wire.set('product.brand_id', getSafe(fn => $('[name=\'product.brand_id\']').select2('data')[0].id, null), true);
+            $wire.set('product.tags', this.tags, true);
+            $wire.set('selected_categories', this.selected_categories, true);
+            $wire.set('product.brand_id', this.brand_id, true);
         }
     }"
      class="lw-form container-fluid"
-     @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
+     @init-product-form.window=""
+     @validation-errors.window="console.log($event.detail.errors);"
      x-cloak>
 
-    <div class="position-relative">
-        <x-ev.loaders.spinner class="absolute-center z-10 d-none"
+
+     <div class="w-full relative">
+        <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                               wire:target="saveProduct"
-                              wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+                              wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-        {{-- FIXME: The opacity issue --}}
-        <div class="row w-100"
-            wire:loading.class="opacity-6 prevent-pointer-events"
-            wire:target="saveProduct">
+        <div class="w-full"
+             wire:loading.class="opacity-30 pointer-events-none"
+             wire:target="saveProduct"
+        >
 
-            {{-- Left column --}}
-            <div class="col-12 col-md-8">
-                {{-- Card Basic --}}
-                <div class="card mb-3 mb-lg-5">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Basic info') }}</h5>
+            <div class="grid grid-cols-12 gap-8 mb-10">
+                {{-- Left side --}}
+                <div class="col-span-8  ">
 
-                        <div class="w-100">
-                            <x-ev.form.input name="product.name" class="form-control-sm" type="text" label="{{ translate('Title') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
-
-                            <x-ev.form.textarea name="product.excerpt" label="{{ translate('Excerpt (short description)') }}" >
-                                <small class="text-muted">{{ translate('If you leave excerpt empty, first 320 chars of description will be used as an excerpt.') }}</small>
-                            </x-ev.form.textarea>
-
-                            {{-- TODO: Add a function to check height of the content - if it's bigger then height of the editor, make editor bigger! Same as Shopify! --}}
-                            <x-ev.form.wysiwyg name="product.description" options='{"height":"300px","minHeight":"300px"}' label="{{ translate('Product Description') }}" placeholder=""></x-ev.form.wysiwyg>
+                    {{-- Card Basic --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Basic info') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('This is basic and required info about the product') }}</p>
                         </div>
-                    </div>
-                </div>
-                {{-- END Card Basic --}}
-
-
-                {{-- Card Media --}}
-                <div class="card mb-3 mb-lg-5" x-data="{
-                        show_video: {{ !empty($product->video_link) ? 'true':'false' }},
-                        show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
-                    }">
-                    <div class="card-body position-relative pb-2">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Media') }}</h5>
-
-                        <div class="w-100">
-                            <!-- Images -->
-                            <x-ev.form.file-selector name="product.thumbnail" class="form-control-sm" label="{{ translate('Thumbnail') }}" data_type="image" placeholder="{{ translate('Choose file...') }}" :required="true"></x-ev.form.file-selector>
-                            <x-ev.form.file-selector name="product.gallery" class="form-control-sm" label="{{ translate('Gallery') }}" :multiple="true" data_type="image" placeholder="{{ translate('Choose file...') }}"
-                                                    :sortable="true"
-                                                    :sortable-options='["animation" => 150, "group" => "photosPreviewGroup"]'
-                            ></x-ev.form.file-selector>
-
-                            <div class="w-100 d-flex mb-4">
-                                <label class="toggle-switch mr-3">
-                                    <input type="checkbox" x-model="show_video" class="js-toggle-switch toggle-switch-input">
-                                    <span class="toggle-switch-label">
-                                        <span class="toggle-switch-indicator"></span>
-                                    </span>
-
-                                    <span class="ml-3">{{ translate('Has video') }}</span>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Title -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Name') }}
                                 </label>
-
-                                <label class="toggle-switch mx-2">
-                                    <input type="checkbox" x-model="show_pdf" class="js-toggle-switch toggle-switch-input">
-                                    <span class="toggle-switch-label">
-                                        <span class="toggle-switch-indicator"></span>
-                                    </span>
-
-                                    <span class="ml-3">{{ translate('Has specification document') }}</span>
-                                </label>
-                            </div>
-
-                            <div class="w-100" :class="{'d-none': !show_video}">
-                                <!-- Video -->
-                                <x-ev.form.select name="product.video_provider" :items="EVS::getMappedVideoProviders()" label="{{ translate('Video provider') }}"  placeholder="{{ translate('Select the provider...') }}" />
-                                <x-ev.form.input name="product.video_link" class="form-control-sm" type="text" label="{{ translate('Video link') }}" placeholder="{{ translate('Link to the video...') }}" >
-                                    <small class="text-muted">{{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}</small>
-                                </x-ev.form.input>
-                            </div>
-
-                            <div class="w-100" :class="{'d-none': !show_pdf}">
-                                <!-- PDF Specification -->
-                                <x-ev.form.file-selector name="product.pdf" class="form-control-sm" label="{{ translate('PDF Specification (optional)') }}" datatype="document" placeholder="{{ translate('Choose file...') }}"></x-ev.form.file-selector>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- END Card Media --}}
-
-                {{-- Card Pricing --}}
-                <div class="card mb-3 mb-lg-5" x-data="{
-                        show_tax: {{ !empty($product->tax) ? 'true':'false' }},
-                    }">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Pricing') }}</h5>
-
-                        <div class="w-100">
-                            <!-- Price -->
-                            <div class="row form-group">
-                                <div class="col-12 col-sm-7">
-                                    <label class="w-100">{{ translate('Price') }}</label>
-
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number"
-                                                step="0.01"
-                                                min="0"
-                                                class="form-control form-control-sm @error('product.unit_price') is-invalid @enderror"
-                                                placeholder="{{ translate('0.00') }}"
-                                                wire:model.defer="product.unit_price" />
-                                    </div>
-
-                                    <x-default.system.invalid-msg field="product.unit_price" type="slim"></x-default.system.invalid-msg>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('product.name') is-invalid @enderror"
+                                            placeholder="{{ translate('New post title') }}"
+                                            {{-- @input="generateURL($($el).val())" --}}
+                                            wire:model.defer="product.name" />
+                                
+                                    <x-system.invalid-msg field="product.name"></x-system.invalid-msg>
                                 </div>
+                            </div>
+                            <!-- END Title -->
 
-                                <div class="col-12 col-sm-5"  x-init="
-                                    $('#product-base_currency').on('select2:select', (event) => {
-                                        base_currency = event.target.value;
-                                    });
-                                    $watch('base_currency', (value) => {
-                                        $('#product-base_currency').val(value).trigger('change');
-                                    });
-                                ">
-                                    <label class="w-100">{{ translate('Base currency') }}</label>
+                            <!-- Excerpt -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Excerpt') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <textarea type="text" class="form-standard h-[80px] @error('product.excerpt') is-invalid @enderror"
+                                                placeholder="{{ translate('Write a short promo description for this product') }}"
+                                                wire:model.defer="product.excerpt">
+                                    </textarea>
+                                
+                                    <x-system.invalid-msg class="w-full" field="product.excerpt"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Excerpt -->
 
-                                    <select class="form-control custom-select custom-select-sm"
-                                            name="product.base_currency"
-                                            id="product-base_currency"
-                                            x-model="base_currency"
-                                            data-hs-select2-options='{
-                                                "minimumResultsForSearch": "Infinity",
-                                                "selectionCssClass": "custom-select-sm"
-                                            }'>
-                                        @foreach(\FX::getAllCurrencies() as $currency)
-                                            <option value="{{ $currency->code }}" >
-                                                {{ $currency->code }} ({{ $currency->symbol }})
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            <!-- Description -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
+                
+                                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Description') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <x-dashboard.form.froala field="description" id="product-description-wysiwyg"></x-dashboard.form.froala>
+                                
+                                    <x-system.invalid-msg class="w-full" field="product.description"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Description -->
+                        </div>
+                    </div>
+                    {{-- END Card Basic --}}
+
+                    
+                    {{-- Card Pricing --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{
+                            show_tax: {{ !empty($product->tax) ? 'true':'false' }},
+                        }">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Pricing') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Product pricing details') }}</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Price -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Price') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    class="form-standard @error('product.unit_price') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.unit_price" />
+                                        </div>
+
+                                        <div class="col-span-4" x-data="{}"> 
+                                            <x-dashboard.form.select :items="\FX::getAllCurrencies(formatted: true)" selected="base_currency" :nullable="false"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.unit_price"></x-system.invalid-msg>
+                                    </div>
                                 </div>
                             </div>
                             <!-- END Price -->
 
                             <!-- Discount and Discount type -->
-                            <div class="row form-group mt-3">
-
-                                <div class="col-12 col-sm-7">
-                                    <label class="w-100">{{ translate('Discount') }}</label>
-
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number" step="0.01" class="form-control form-control-sm @error('product.discount') is-invalid @enderror"
-                                                name="product.discount"
-                                                id="product-discount"
-                                                min="0"
-                                                placeholder="{{ translate('Product discount (fixed or percentage)') }}"
-                                                wire:model.defer="product.discount" />
-                                    </div>
-
-                                    <x-default.system.invalid-msg field="product.discount" type="slim"></x-default.system.invalid-msg>
-                                </div>
-
-                                <div class="col-12 col-sm-5" x-data="{}" x-init="
-                                    $('#product-discount_type').on('select2:select', (event) => {
-                                        discount_type = event.target.value;
-                                    });
-                                    $watch('discount_type', (value) => {
-                                        $('#product-discount_type').val(value).trigger('change');
-                                    });
-                                ">
-                                    <label class="w-100">{{ translate('Discount type') }}</label>
-
-                                    <select class="form-control custom-select custom-select-sm"
-                                            name="product.discount_type"
-                                            id="product-discount_type"
-                                            x-model="discount_type"
-                                            data-hs-select2-options='{
-                                                "minimumResultsForSearch": "Infinity",
-                                                "selectionCssClass": "custom-select-sm"
-                                        }'>
-                                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                                            <option value="{{ $type }}" >
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <!-- END Discount and discount type -->
-
-                            <!-- Has additional fee -->
-                            <div class="w-100 d-flex">
-                                <label class="toggle-switch mr-3">
-                                    <input type="checkbox" x-model="show_tax" class="js-toggle-switch toggle-switch-input">
-                                    <span class="toggle-switch-label">
-                                        <span class="toggle-switch-indicator"></span>
-                                    </span>
-
-                                    <span class="ml-3">{{ translate('Additional fee') }}</span>
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Discount') }}
                                 </label>
-                            </div>
 
-                            <!-- Tax and Tax type -->
-                            <div class="row form-group mt-3" :class="{'d-none': !show_tax}">
-                                <div class="col-12 col-sm-7">
-                                    <label class="w-100 ">{{ translate('Additional Fee') }}</label>
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    min="0"
+                                                    class="form-standard @error('product.discount') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.discount" />
+                                        </div>
 
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number" step="0.01" class="form-control @error('product.tax') is-invalid @enderror"
-                                                name="product.tax"
-                                                id="product-tax"
-                                                min="0"
-                                                placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
-                                                wire:model.defer="product.tax" />
+                                        <div class="col-span-4" x-data="{}"> 
+                                            <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="discount_type" :nullable="false"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.discount"></x-system.invalid-msg>
                                     </div>
-
-                                    <x-default.system.invalid-msg field="product.tax" type="slim"></x-default.system.invalid-msg>
-                                </div>
-
-                                <div class="col-12 col-sm-5" x-data="{}" x-init="
-                                    $('#product-tax_type').on('select2:select', (event) => {
-                                        tax_type = event.target.value;
-                                    });
-                                    $watch('tax_type', (value) => {
-                                        $('#product-tax_type').val(value).trigger('change');
-                                    });
-                                ">
-                                    <label class="w-100">{{ translate('Fee type') }}</label>
-
-                                    <select class="form-control custom-select custom-select-sm"
-                                            name="product.tax_type"
-                                            id="product-tax_type"
-                                            x-model="tax_type"
-                                            data-hs-select2-options='{
-                                                "minimumResultsForSearch": "Infinity"
-                                        }'>
-                                        @foreach(\App\Enums\AmountPercentTypeEnum::toArray() as $type => $label)
-                                            <option value="{{ $type }}" >
-                                                {{ $label }}
-                                            </option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
-                            <!-- END Tax and Tax type -->
+                            <!-- END Discount and Discount type -->
 
-                            <hr class="my-2 mt-3" />
+                            {{-- Additional fee/tax --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Has additional fee?') }}</span>
+                                </div>
 
-                            <div class="row form-group mt-0 mb-0">
-                                <div class="col-12">
-                                    <label class="w-100 col-form-label input-label pt-1">{{ translate('Cost per item') }}</label>
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <div class="input-group input-group-sm-down-break">
-                                        <input type="number"
-                                                step="0.01"
-                                                min="0"
-                                                class="form-control form-control-sm @error('product.purchase_price') is-invalid @enderror"
-                                                placeholder="{{ translate('0.00') }}"
-                                                wire:model.defer="product.purchase_price" />
+                                    <button type="button" @click="show_tax = !show_tax" 
+                                                :class="{'bg-primary':show_tax, 'bg-gray-200':!show_tax}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':show_tax, 'translate-x-0':!show_tax}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
 
-                                        <small class="w-100 mt-2">
+                            <div class="w-full mt-4" x-show="show_tax">
+                                <!-- Tax and Tax type -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Additional Fee') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        min="0"
+                                                        class="form-standard @error('product.tax') is-invalid @enderror"
+                                                        placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
+                                                        wire:model.defer="product.tax" />
+                                            </div>
+
+                                            <div class="col-span-4" x-data="{}"> 
+                                                <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type" :nullable="false"></x-dashboard.form.select>
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.tax"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Tax and Tax type -->
+                            </div>
+                            {{-- Additional fee/tax --}}
+
+                            <!-- Cost per item -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Cost per item') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01" 
+                                                    class="form-standard @error('product.purchase_price') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.purchase_price" />
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.purchase_price"></x-system.invalid-msg>
+
+                                        <small class="col-span-10 w-100">
                                             {{ translate('Customers won\'t see this. For your reference and reports only.') }}
                                         </small>
                                     </div>
-
-                                    <x-default.system.invalid-msg field="product.purchase_price" type="slim"></x-default.system.invalid-msg>
                                 </div>
                             </div>
+                            <!-- END Cost per item -->
                         </div>
                     </div>
-                </div>
-                {{-- END Card Pricing --}}
+                    {{-- END Card Pricing --}}
+                    
 
-
-                {{-- Card Inventory --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Inventory') }}</h5>
-
-                        <div class="w-100">
-                            <div class="row form-group mt-0 mb-0">
-                                <div class="col-12 col-sm-6">
-                                    <x-ev.form.input name="product.sku" class="form-control-sm" groupclass="mb-0" type="text" label="{{ translate('SKU (Stock keeping unit)') }}" placeholder="{{ translate('SKU of the main product (not variations).') }}" >
-                                        <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
-                                    </x-ev.form.input>
-                                </div>
-
-                                <div class="col-12 col-sm-6">
-                                    <x-ev.form.input name="product.barcode" class="form-control-sm" groupclass="mb-0" type="text" label="{{ translate('Barcode (ISBN, UPC, GTIN, etc.)') }}" placeholder="{{ translate('Barcode of the main product (not variations).') }}" >
-                                        <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
-                                    </x-ev.form.input>
-                                </div>
-                            </div>
+                    {{-- Card Inventory --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Inventory') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Track your product inventory') }}</p>
                         </div>
-
-                        <!-- Uses Serial -->
-                        <div class="w-100 pt-3 d-flex">
-                            <label class="toggle-switch mr-3">
-                                <input type="checkbox" x-model="use_serial" class="js-toggle-switch toggle-switch-input">
-                                <span class="toggle-switch-label">
-                                    <span class="toggle-switch-indicator"></span>
-                                </span>
-
-                                <span class="ml-3">{{ translate('Uses serial numbers?') }}</span>
-                            </label>
-                        </div>
-                        <!-- END Uses Serial -->
-
-                        <!-- Allow out of stock purchases -->
-                        <div class="w-100 pt-2 d-flex">
-                            <label class="toggle-switch mr-3">
-                                <input type="checkbox" wire:model.defer="product.allow_out_of_stock_purchases" class="js-toggle-switch toggle-switch-input">
-                                <span class="toggle-switch-label">
-                                    <span class="toggle-switch-indicator"></span>
-                                </span>
-
-                                <span class="ml-3">{{ translate('Allow selling even when out of stock?') }}</span>
-                            </label>
-                        </div>
-                        <!-- END Allow out of stock purchases -->
-
-                        <!-- Standard Inventory tracking -->
-                        <div class="w-100 pt-3" :class="{'d-none': use_serial}">
-                            <x-ev.form.input name="product.min_qty" class="form-control-sm"  type="number" label="{{ translate('Minimum quantity user can purchase') }}" :required="true" min="1" step="1">
-                                <small class="text-muted">{{ translate('This is the minimum quantity user can purchase.') }}</small>
-                            </x-ev.form.input>
-
-                            <x-ev.form.input name="product.current_stock" class="form-control-sm" groupclass="mb-0" type="number" label="{{ translate('Stock quantity') }}" :required="true"  min="0" step="1">
-                                <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
-                            </x-ev.form.input>
-                        </div>
-                        <!-- END Standard Inventory tracking -->
-
-                        <!-- Low stock quantity warning threshold -->
-                        <div class="w-100 pt-3">
-                            <x-ev.form.input name="product.unit" class="form-control-sm" type="text" label="{{ translate('Unit') }}" placeholder="{{ translate('pc/kg/m/per meter/gram etc.') }}">
-                            </x-ev.form.input>
-
-                            <x-ev.form.input name="product.low_stock_qty" class="form-control-sm" groupclass="mb-0" type="number" label="{{ translate('Low stock quantity warning threshold') }}"  min="0" step="1">
-                            </x-ev.form.input>
-                        </div>
-                        <!-- END ow stock quantity warning threshold -->
-                    </div>
-                </div>
-                {{-- END Card Inventory --}}
-
-
-                {{-- Card Shipping --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Shipping') }}</h5>
-
-                        <div class="w-100">
-                            <!-- Is digital product? -->
-                            <div class="w-100 d-flex">
-                                <label class="toggle-switch mr-3">
-                                    <input type="checkbox" x-model="is_digital" class="js-toggle-switch toggle-switch-input">
-                                    <span class="toggle-switch-label">
-                                        <span class="toggle-switch-indicator"></span>
-                                    </span>
-
-                                    <span class="ml-3">{{ translate('Is this a digital product?') }}</span>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            {{-- SKU --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                        
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('SKU') }}
                                 </label>
-                            </div>
-                        </div>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('product.sku') is-invalid @enderror"
+                                            placeholder="{{ translate('Product SKU') }}"
+                                            wire:model.defer="product.sku" />
 
-                        <div class="w-100" :class="{'d-none': is_digital}">
-                        {{-- TODO: Add Shipping methods first and then edit this part --}}
+                                    <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
+                                
+                                    <x-system.invalid-msg field="product.sku"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END SKU --}}
+
+                            {{-- Barcode --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                        
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Barcode') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('product.barcode') is-invalid @enderror"
+                                            placeholder="{{ translate('Product barcode') }}"
+                                            wire:model.defer="product.barcode" />
+                                
+                                    <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
+
+                                    <x-system.invalid-msg field="product.barcode"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Barcode --}}
+
+                            {{-- Use serial numbers --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Uses serial numbers?') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="use_serial = !use_serial" 
+                                                :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':use_serial, 'translate-x-0':!use_serial}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Use serial numbers --}}
+
+                            {{-- Allow out of stock purchases --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Allow selling even when out of stock?') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
+                                                :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':allow_out_of_stock_purchases, 'translate-x-0':!allow_out_of_stock_purchases}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Allow out of stock purchases --}}
+
+                            <div class="w-full" x-show="!use_serial">
+                                <!-- Minimum quantity user can purchase -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Minimum quantity user can purchase') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        class="form-standard @error('product.min_qty') is-invalid @enderror"
+                                                        placeholder="{{ translate('0.00') }}"
+                                                        wire:model.defer="product.min_qty" />
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.min_qty"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Minimum quantity user can purchase -->
+
+                                <!-- Stock quantity -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Stock quantity') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="number" 
+                                                        step="0.01" 
+                                                        class="form-standard @error('product.current_stock') is-invalid @enderror"
+                                                        placeholder="{{ translate('0.00') }}"
+                                                        wire:model.defer="product.current_stock" />
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.current_stock"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Stock quantity -->
+                            </div>
+
+                            {{-- Unit --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                        
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Unit') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="text" class="form-standard @error('product.unit') is-invalid @enderror"
+                                            placeholder="{{ translate('Product unit') }}"
+                                            wire:model.defer="product.unit" />
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10"  field="product.unit"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Unit --}}
+
+                            <!-- Low stock quantity -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Low stock quantity') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-6">
+                                            <input type="number" 
+                                                    step="0.01"
+                                                    min="0"
+                                                    class="form-standard @error('product.low_stock_qty') is-invalid @enderror"
+                                                    placeholder="{{ translate('0.00') }}"
+                                                    wire:model.defer="product.low_stock_qty" />
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.low_stock_qty"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Low stock quantity -->
                         </div>
                     </div>
-                </div>
-                {{-- END Card Shipping --}}
+                    {{-- END Card Inventory --}}
 
 
-                {{-- Card Attributes --}}
-                <div class="card mb-3 mb-lg-5" >
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Attributes') }}</h5>
+                    {{-- Card Shipping --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Shipping') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Set available delivery options for your product') }}</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <!-- Is digital product? -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Is this a digital product?') }}</span>
+                                </div>
 
-                        <template x-for="attribute in attributes" >
-                            <div class="w-100 mb-3" x-data="{}" x-init="
-                                    $nextTick(() => {
-                                        if(predefined_types.indexOf(attribute.type) !== -1) {
-                                            $('#'+getSelectorID(attribute)).on('select2:select select2:unselect select2:clear', (event) => {
-                                                selected_attribute_values['attribute.'+attribute.id] = $('#'+getSelectorID(attribute)).select2('data').map(x => x.id);
-                                            });
-                                            $watch('selected_attribute_values', (value, oldValue) => {
-                                                if(value['attribute.'+attribute.id] !== oldValue['attribute.'+attribute.id]) {
-                                                    $('#'+getSelectorID(attribute)).val(value).trigger('change');
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="is_digital = !is_digital" 
+                                                :class="{'bg-primary':is_digital, 'bg-gray-200':!is_digital}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':is_digital, 'translate-x-0':!is_digital}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                            <div class="w-full" x-show="is_digital">
+                                {{-- TODO: Add Shipping methods first and then edit this part --}}
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END Card Shipping --}}
+
+
+                    {{-- Card Attributes --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}" wire:ignore>
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Attributes') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Enrich your products with additional data') }}</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <template x-for="attribute in attributes">
+                                <div class="w-full mb-3" x-data="{
+                                        getSelectorID() { 
+                                            return 'attributes_'+this.attribute.id+'_attribute_values'; 
+                                        },
+                                        hasCustomProperty(name) {
+                                            return this.attribute.custom_properties !== null &&
+                                                    this.attribute.custom_properties !== undefined &&
+                                                    this.attribute.custom_properties.hasOwnProperty(name);
+                                        },
+                                        getMinValue() {
+                                            return this.hasCustomProperty('min_value') ? this.attribute.custom_properties.min_value : 0; 
+                                        },
+                                        getMaxValue() {
+                                            return this.hasCustomProperty('max_value') ? this.attribute.custom_properties.max_value : 999; 
+                                        },
+                                        getMinRows() {
+                                            return this.hasCustomProperty('min_rows') ? this.attribute.custom_properties.min_rows : 0; 
+                                        },
+                                        getMaxRows() {
+                                            return this.hasCustomProperty('max_rows') ? this.attribute.custom_properties.max_rows : 999; 
+                                        },
+                                    }" x-cloak>
+
+                                    {{-- Dropdown --}}
+                                    <template x-if="attribute.type === 'dropdown'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{
+                                                items: attribute.attribute_values,
+                                                selected_items: selected_attribute_values['attribute.'+attribute.id],
+                                                show: false,
+                                                multiple: hasCustomProperty('multiple') && attribute.custom_properties.multiple,
+                                                tag: false,
+                                                countSelected() {
+                                                    if(this.selected_items === undefined || this.selected_items === null) {
+                                                        this.selected_items = [];
+                                                    }
+
+                                                    return this.selected_items.length;
+                                                },
+                                                getPlaceholder() {
+                                                    if(this.countSelected() === 1) {
+                                                        return this.items.find(x => {
+                                                            return x.id == this.selected_items[0];
+                                                        }).values || '';
+                                                    } else if(this.countSelected() > 1) {
+                                                        return '';
+                                                    } else {
+                                                        return '{{ translate('Choose option(s)') }}';
+                                                    }
+                                                },
+                                                isSelected(key) {
+                                                    return this.selected_items.indexOf(key) !== -1 ? true : false;
+                                                },
+                                                select(key, label) {
+                                                    if(this.isSelected(key)) {
+                                                        this.selected_items.splice(this.selected_items.indexOf(key), 1);
+                                                    } else {
+                                                        if(!this.multiple) {
+                                                            this.selected_items = [key];
+                                                        } else {
+                                                            this.selected_items.push(Number(key));
+                                                        }
+                                                    }
+                
+                                                    if(!this.multiple) {
+                                                        this.show = false;
+                                                        this.placeholder = label;
+                                                    }
+            
+                                                    selected_attribute_values['attribute.'+attribute.id] = this.selected_items;
                                                 }
-                                            });
-                                        }
-                                    });
-                                " x-cloak >
-
-                                {{-- Dropdown --}}
-                                <template x-if="attribute.type === 'dropdown'">
-                                    <div class="w-100" x-data="{}" >
-                                            <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                            <select class="form-control custom-select custom-select-sm"
-                                                    :id="'attributes_'+attribute.id+'_attribute_values'"
-                                                    x-bind:multiple="isMultiple(attribute)"
-                                                    x-model="selected_attribute_values['attribute.'+attribute.id]"
-                                                    data-hs-select2-options='{
-                                                        "minimumResultsForSearch": "Infinity",
-                                                        "selectionCssClass": "custom-select-sm",
-                                                        "placeholder": "{{ translate('Select value') }}"
-                                                }'>
-                                                    <option></option>
-                                                    <template x-for="attribute_value in attribute.attribute_values">
-                                                        <option :value="attribute_value.id" x-text="attribute_value.values">
-                                                        </option>
-                                                    </template>
-                                            </select>
-
-                                            <template x-if="hasCustomProperty(attribute, 'multiple') && attribute.custom_properties.multiple">
-                                                <div class="w-100 d-flex mt-2 mb-2">
-                                                    <label class="toggle-switch mr-3">
-                                                        <input type="checkbox" x-model="attribute.for_variations" class="js-toggle-switch toggle-switch-input">
-                                                        <span class="toggle-switch-label">
-                                                            <span class="toggle-switch-indicator"></span>
-                                                        </span>
-
-                                                        <span class="ml-3">{{ translate('Used for variations') }}</span>
-                                                    </label>
-                                                </div>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </template>
-                                {{-- END Dropdown --}}
-
-                                {{-- Plain Text --}}
-                                <template x-if="attribute.type === 'plain_text'">
-                                    <div class="w-100" x-data="{}" x-init="">
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                        <input type="text"
-                                            class="form-control form-control-sm"
-                                            :id="'attributes_'+attribute.id+'_attribute_values'"
-                                            x-model="attribute.attribute_values[0].values" />
-                                    </div>
-                                </template>
-                                {{-- END Plain Text --}}
-
-                                {{-- Number --}}
-                                <template x-if="attribute.type === 'number'">
-                                    <div class="w-100" x-data="{}" x-init="">
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                        <div class="input-group" :class="{'input-group-merge': !hasCustomProperty(attribute, 'unit')}">
-
-                                            <input type="number"
-                                            class="form-control form-control-sm"
-                                            :id="'attributes_'+attribute.id+'_attribute_values'"
-                                            x-bind:min="hasCustomProperty(attribute, 'min_value') ? attribute.custom_properties.min_value : ''"
-                                            x-bind:max="hasCustomProperty(attribute, 'max_value') ? attribute.custom_properties.max_value : ''"
-                                            x-model="attribute.attribute_values[0].values" />
-
-                                            <template x-if="hasCustomProperty(attribute, 'unit')">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text input-group-text-sm" x-text="attribute.custom_properties.unit"></span>
-                                                </div>
-                                            </template>
-                                        </div>
-
-                                    </div>
-                                </template>
-                                {{-- END Number --}}
-
-
-                                {{-- Date --}}
-                                <template x-if="attribute.type === 'date'">
-                                    <div class="w-100" x-data="{}" x-init="">
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                        <input x-model="attribute.attribute_values[0].values"
-                                                    type="text"
-                                                    class="js-flatpickr form-control form-control-sm flatpickr-custom"
-                                                    placeholder="{{ translate('Pick date') }}"
-                                                    :data-hs-flatpickr-options='getDateOptions(attribute)'
-                                                    data-input />
-
-                                    </div>
-                                </template>
-                                {{-- END Date --}}
-
-
-                                {{-- Checkbox --}}
-                                <template x-if="attribute.type === 'checkbox'">
-                                    <div class="w-100" x-data="{}" >
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                        <template x-for="attribute_value in attribute.attribute_values">
-                                            <div class="form-control form-control-sm mb-2">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input x-model="selected_attribute_values['attribute.'+attribute.id]"
-                                                        type="checkbox"
-                                                        :value="attribute_value.id"
-                                                        :id="'attribute_'+attribute_value.id"
-                                                        class="custom-control-input">
-
-                                                    <label class="custom-control-label" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id">
-                                                    </label>
-                                                </div>
+                                            }">
+                                            <div class="justify-center h-full col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                                <span class="text-sm font-medium text-gray-900" x-text="attribute.name"></span>
                                             </div>
-                                        </template>
-                                    </div>
-                                </template>
-                                {{-- END Checkbox --}}
+            
+                                            <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full">
+            
+                                                <div class="we-select relative w-full" x-data="{}" @click.outside="show = false">
+                                                    <div class="we-select__selector select-none w-full flex flex-wrap border pl-3 pt-2 pb-1 pr-6 relative cursor-pointer" 
+                                                        @click="show = !show">
+                                                        @svg('heroicon-o-chevron-down', ['class' => 'we-select__selector-arrow absolute w-[16px] h-[16px] vertical-center', ':class' => "{'rotate-180': show}"])
+                                    
+                                                        <template x-if="!multiple">
+                                                            <span class="block pb-1" x-text="getPlaceholder()"></span>
+                                                        </template>
 
-                                {{-- Radio --}}
-                                <template x-if="attribute.type === 'radio'">
-                                    <div class="w-100" x-data="{}">
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                        <template x-for="attribute_value in attribute.attribute_values">
-                                            <div class="form-control form-control-sm mb-2">
-                                                <div class="custom-control custom-radio">
-                                                    <input x-model="selected_attribute_values['attribute.'+attribute.id]"
-                                                        type="radio"
-                                                        :value="attribute_value.id"
-                                                        :id="'attribute_'+attribute_value.id"
-                                                        class="custom-control-input">
-
-                                                    <label class="custom-control-label" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                </template>
-                                {{-- END Radio --}}
-
-
-                                {{-- Text List --}}
-                                <template x-if="attribute.type === 'text_list'">
-                                    <div class="w-100" x-data="{}" x-init="">
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-                                        {{-- FIX: There's an 'cannot acces X of undefined' error when removing item, but it doesn't fuck up the logic  --}}
-                                        <div class="row form-group" x-data="{}"
-                                        >
-                                        <div class="col-12 col-sm-9">
-                                            <template x-if="getListCount(attribute) <= 1">
-                                                <div class="d-flex">
-                                                    <input type="text"
-                                                            class="form-control"
-                                                            placeholder="{{ translate('Value 1') }}"
-                                                            x-model="attribute.attribute_values[0]['values']" />
-                                                </div>
-                                            </template>
-                                            <template x-if="getListCount(attribute) > 1">
-                                                <template x-for="[key, value] of Object.entries(attribute.attribute_values)">
-                                                    <div class="d-flex" :class="{'mt-2': key > 0}">
-                                                        <input type="text"
-                                                            class="form-control"
-                                                            x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
-                                                            x-model="attribute.attribute_values[key]['values']" />
-                                                        <template x-if="key > 0">
-                                                            <span class="ml-2 d-flex align-items-center pointer" @click="removeFromList(attribute, key)">
-                                                                @svg('heroicon-o-trash', ['class' => 'square-22 text-danger'])
-                                                            </span>
+                                                        <template x-if="multiple">
+                                                            <div class="w-full flex flex-wrap">
+                                                                <template x-if="countSelected() > 0">
+                                                                    <template x-for="item in items.filter(x => {
+                                                                        return selected_items.indexOf(x.id) !== -1;
+                                                                    })">
+                                                                        <div class="we-select__selector-selected-item rounded mr-2 mb-1 relative">
+                                                                            <span class="we-select__selector-selected-item-label pl-1 mr-1" x-text="item.values"></span>
+                                                                            <button type="button" class="we-select__selector-selected-item-remove px-2" 
+                                                                                    @click="event.stopPropagation(); select(item.id, item.values)">
+                                                                                <span>×</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </template>
+                                                                </template>
+                                                                <template x-if="countSelected() <= 0">
+                                                                    <span class="block pb-1" x-text="getPlaceholder()"></span>
+                                                                </template>
+                                                            </div>
                                                         </template>
                                                     </div>
+                    
+                                                    <div class="we-select__dropdown  absolute bg-white shadow border rounded mt-1  w-full" x-show="show">
+                                                        <ul class="we-select__dropdown-list select-none w-full">
+                                                            <template x-for="item in items">
+                                                                <li class="we-select__dropdown-list-item py-2 px-3 cursor-pointer" 
+                                                                    x-text="item.values"
+                                                                    :class="{'selected': isSelected(item.id) }"
+                                                                    @click="select(item.id, item.values)"></li>
+                                                            </template>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <template x-if="hasCustomProperty('multiple') && attribute.custom_properties.multiple">
+                                                    <!-- Used for variations? -->
+                                                    <div class="flex items-center pt-3 " x-data="{}">
+                                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                                            <span class="text-sm font-medium text-gray-900">{{ translate('Used for variations') }}</span>
+                                                        </div>
+
+                                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                                            <button type="button" @click="attribute.for_variations = !attribute.for_variations" 
+                                                                        :class="{'bg-primary':attribute.for_variations, 'bg-gray-200':!attribute.for_variations}" 
+                                                                        class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                                    <span :class="{'translate-x-5':attribute.for_variations, 'translate-x-0':!attribute.for_variations}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- END Used for variations? -->
                                                 </template>
-                                            </template>
-
-                                            <a href="javascript:;"
-                                                class="js-create-field form-link btn btn-xs btn-no-focus btn-ghost-primary" @click="addToList(attribute)">
-                                                <i class="tio-add"></i> {{ translate('Add value') }}
-                                            </a>
-                                        </div>
-                                    </div>
-                                </template>
-                                {{-- END Text List --}}
-
-                                {{-- TODO: Add wysiwyg, image, gallery, country type attribute --}}
-
-                                {{-- Image --}}
-                                {{-- <template x-if="attribute.type === 'image'">
-                                    <div class="w-100" x-data="{}" x-init="
-                                        $nextTick(() => {
-                                            console.log($('#attribute_'+attribute.id));
-                                            $('#attribute_'+attribute.id).on('change', function() {
-                                                console.log('asdasd');
-                                            });
-                                        });
-
-                                    ">
-                                        <label class="w-100 input-label" x-text="attribute.name"></label>
-
-                                        <div class="input-group" data-toggle="aizuploader"
-                                            data-type="image"
-                                            data-is-sortable="false"
-                                            data-template="input">
-
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text input-group-text-sm bg-soft-secondary font-weight-medium">{{ translate('Browse') }}</div>
                                             </div>
-                                            <div class="form-control form-control-sm file-amount">{{ translate('Choose image') }}</div>
-
-                                            <input type="hidden" :id="'attribute_'+attribute.id" class="selected-files" x-model="attribute.attribute_values[0].values">
                                         </div>
-                                    </div>
-                                </template> --}}
-                                {{-- END Image --}}
-                            </div>
-                        </template>
-                    </div>
-                </div>
-                {{-- END Card Attributes --}}
+                                    </template>
+                                    {{-- END Dropdown --}}
 
-                {{-- Card SEO --}}
-                <div class="card mb-3 mb-lg-5" x-data="{
-                        collapse: true,
-                    }">
-                    <div class="card-body position-relative pt-0 pb-0">
-                        <h5 class="mb-0 pt-4 d-flex justify-content-between pointer" :class="{'pb-4': collapse, 'pb-3': !collapse}" @click="collapse = !collapse">
-                            {{ translate('SEO') }}
 
-                            @svg('heroicon-o-chevron-down', ['class' => 'square-20', ':class' => "{'rotate-180': !collapse}"])
-                        </h5>
+                                    {{-- Plain Text --}}
+                                    <template x-if="attribute.type === 'plain_text'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                <input type="text" 
+                                                        class="form-standard"
+                                                        :id="'attributes_'+attribute.id+'_attribute_values'"
+                                                        x-model="attribute.attribute_values[0].values" />                                            
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Plain Text --}}
 
-                        <div class="w-100 pt-3 border-top" :class="{'d-none': collapse}">
-                            <!-- SEO Meta Title -->
-                            <x-ev.form.input name="product.meta_title" class="form-control-sm" type="text" label="{{ translate('Meta Title') }}" placeholder="{{ translate('Meta title is used for Meta, OpenGraph, Twitter...') }}" >
-                                <small class="text-muted">{{ translate('This title will be used for SEO and Social. Real product title will be used as fallback if this is empty.') }}</small>
-                            </x-ev.form.input>
+                                    {{-- Number --}}
+                                    <template x-if="attribute.type === 'number'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2 flex rounded-md shadow-sm">
+                                                <input type="number"
+                                                        :id="'attributes_'+attribute.id+'_attribute_values'"
+                                                        x-bind:min="getMinValue()"
+                                                        x-bind:max="getMaxValue()"
+                                                        x-model="attribute.attribute_values[0].values"
+                                                        class="form-standard !rounded-r-none">
 
-                            <!-- SEO Meta Description -->
-                            <x-ev.form.textarea name="product.meta_description" rows="4" label="{{ translate('Meta Description') }}" placeholder="{{ translate('Meta description is used for Meta, OpenGraph, Twitter...') }}">
-                                <small class="text-muted">{{ translate('Have in mind that description should be between 70 and max 200 characters. Facebook up to 200 chars, Twitter up to 150 chars max.') }}</small>
-                            </x-ev.form.textarea>
+                                                <template x-if="hasCustomProperty('unit')">
+                                                    <span x-text="attribute.custom_properties.unit" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"></span>
+                                                </template>                                           
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Number --}}
 
-                            <!-- SEO Meta Image -->
-                            <x-ev.form.file-selector name="product.meta_img" label="{{ translate('Meta image') }}" data_type="image" placeholder="Choose file..."></x-ev.form.file-selector>
-                        </div>
-                    </div>
-                </div>
-                {{-- END Card SEO --}}
-            </div>
-            {{-- END Left column --}}
 
-            {{-- Right column --}}
-            <div class="col-12 col-md-4">
-                {{-- Card Actions --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative ">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Actions') }}</h5>
+                                    {{-- Date --}}
+                                    <template x-if="attribute.type === 'date'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{
+                                                getDateOptions() {
+                                                    let options = {
+                                                        mode: 'single',
+                                                        enableTime: false,
+                                                    };
+                                        
+                                                    if(this.hasCustomProperty('with_time') && this.attribute.custom_properties.with_time) {
+                                                        options.enableTime = true;
+                                                        options.dateFormat = 'd.m.Y. H:i';
+                                                    } else {
+                                                        options.dateFormat = 'd.m.Y.';
+                                                    }
+                                        
+                                                    if(this.hasCustomProperty('range') && this.attribute.custom_properties.range) {
+                                                        options.mode = 'range';
+                                                    }
 
-                        <div class="w-100 d-flex justify-content-between">
-                            {{-- <div type="button" class="btn btn-danger btn-sm pointer"
-                                wire:click="">
-                                {{ translate('Delete') }}
-                            </div> --}}
+                                                    return options;
+                                                },
+                                            }" x-init="$nextTick(() => { flatpickr('.js-flatpickr', getDateOptions()); });">
+                
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2 flex rounded-md shadow-sm">
+                                                <input x-model="attribute.attribute_values[0].values"
+                                                        type="text"
+                                                        class="js-flatpickr flatpickr-custom form-standard"
+                                                        placeholder="{{ translate('Pick a date(s)') }}"
+                                                        data-input />                                       
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Date --}}
 
-                            <div type="button"
-                            data-test="we-product-submit"
-                            class="btn btn-primary btn-sm pointer ml-auto"
-                                    @click="onSave()"
-                                    wire:click="saveProduct()">
-                                {{ translate('Save') }}
-                            </div>
-                        </div>
 
-                    </div>
-                </div>
-                {{-- Card Actions --}}
+                                    {{-- Checkbox --}}
+                                    <template x-if="attribute.type === 'checkbox'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col rounded-md shadow-sm space-y-4">
+                                                <template x-for="(attribute_value, index) in attribute.attribute_values">
+                                                    <div class="relative flex items-center " :class="{'!mt-0': index === 0}">
+                                                        <div class="flex items-center h-6">
+                                                          <input
+                                                                type="checkbox"
+                                                                x-model="selected_attribute_values['attribute.'+attribute.id]"
+                                                                :value="attribute_value.id"
+                                                                :id="'attribute_'+attribute_value.id"
+                                                                class="form-checkbox-standard">
+                                                        </div>
+                                                        <div class="ml-3 text-sm">
+                                                          <label class="font-medium text-gray-700 cursor-pointer" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id"></label>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Checkbox --}}
 
-                {{-- Card Status --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Status') }}</h5>
+                                    {{-- Radio --}}
+                                    <template x-if="attribute.type === 'radio'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col rounded-md shadow-sm space-y-4">
+                                                <template x-for="(attribute_value, index) in attribute.attribute_values">
+                                                    <div class="relative flex items-center " :class="{'!mt-0': index === 0}">
+                                                        <div class="flex items-center h-6">
+                                                          <input
+                                                                type="radio"
+                                                                x-model="selected_attribute_values['attribute.'+attribute.id]"
+                                                                :value="attribute_value.id"
+                                                                :id="'attribute_'+attribute_value.id"
+                                                                class="form-radio-standard">
+                                                        </div>
+                                                        <div class="ml-3 text-sm">
+                                                          <label class="font-medium text-gray-700 cursor-pointer" x-text="attribute_value.values" :for="'attribute_'+attribute_value.id"></label>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Radio --}}
 
-                        <div class="w-100">
-                            <div class="w-100"
-                                x-init="
-                                    $($refs.status_selector).on('select2:select', (event) => {
-                                        status = event.target.value;
-                                    });
 
-                                    $watch('status', (value) => {
-                                        $($refs.status_selector).val(value).trigger('change');
-                                    });
-                                ">
-                                <select
-                                    wire:model.defer="product.status"
-                                    name="product.status"
-                                    x-ref="status_selector"
-                                    id="status_selector"
-                                    class="js-select2-custom custom-select select2-hidden-accessible"
-                                    data-hs-select2-options='
-                                        {"minimumResultsForSearch":"Infinity"}
-                                    '
-                                >
-                                    @foreach(\App\Enums\StatusEnum::toArray() as $key => $status)
-                                        <option value="{{ $key }}">
-                                            {{ $status }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                    {{-- Text List --}}
+                                    <template x-if="attribute.type === 'text_list'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{
+                                                items: attribute.attribute_values.map(x => x.values),
+                                                hasID(index) {
+                                                    return attribute.attribute_values[index].hasOwnProperty('id') && !isNaN(attribute.attribute_values[index].id) ? true : false;
+                                                },
+                                                count() {
+                                                    if(this.attribute.attribute_values === undefined || this.attribute.attribute_values === null) {
+                                                        this.attribute.attribute_values = [{
+                                                            values: ''
+                                                        }];
+                                                    }
+                                        
+                                                    return this.attribute.attribute_values.length;
+                                                },
+                                                add() {
+                                                    if(this.count() < getMaxRows()) {
+                                                        this.attribute.attribute_values.push({
+                                                            values: ''
+                                                        });
+                                                    }
+                                                },
+                                                remove(index) {
+                                                    if(this.hasID(index)) {
+                                                        $wire.removeAttributeValue(attribute.attribute_values[index].id);
+                                                    }
 
-                                <div class="d-flex align-items-center mt-2 pl-1">
-                                    <span class="mr-2 text-14">{{ translate('Current status:') }}</span>
+                                                    attribute.attribute_values.splice(index, 1);
+                                                },
+                                            }" x-init="
+                                                if(getMinRows() > 1) {
+                                                    for(let i=1; i < getMinRows(); i++) {
+                                                        add();
+                                                    }
+                                                }
+                                            ">
+                                                {{-- $watch('items', items => {
+                                                    items.forEach((item, index) => {
+                                                        if(attribute.attribute_values[index] === undefined || attribute.attribute_values[index] === null) {
+                                                            attribute.attribute_values[index] = { 
+                                                                values: item
+                                                            };
+                                                        } else {
+                                                            attribute.attribute_values[index].values = item;
+                                                        }
+                                                    });
 
-                                    @if($product->status === App\Enums\StatusEnum::published()->value)
-                                        <span class="badge badge-soft-success">
-                                            <span class="legend-indicator bg-success mr-1"></span> {{ ucfirst($product->status) }}
-                                        </span>
-                                    @elseif($product->status === App\Enums\StatusEnum::draft()->value)
-                                        <span class="badge badge-soft-warning">
-                                            <span class="legend-indicator bg-warning mr-1"></span> {{ ucfirst($product->status) }}
-                                        </span>
-                                    @elseif($product->status === App\Enums\StatusEnum::pending()->value)
-                                        <span class="badge badge-soft-info">
-                                            <span class="legend-indicator bg-info mr-1"></span> {{ ucfirst($product->status) }}
-                                        </span>
-                                    @elseif($product->status === App\Enums\StatusEnum::archived()->value)
-                                        <span class="badge badge-soft-danger">
-                                            <span class="legend-indicator bg-danger mr-1"></span> {{ ucfirst($product->status) }}
-                                        </span>
-                                    @elseif($product->status === App\Enums\StatusEnum::private()->value)
-                                        <span class="badge badge-soft-dark">
-                                            <span class="legend-indicator bg-dark mr-1"></span> {{ ucfirst($product->status) }}
-                                        </span>
-                                    @endif
+                                                    let diff = attribute.attribute_values.length - items.length;
+
+                                                    if(diff > 0) {
+                                                        Remove difference between attribute.attribute_values and mapped items.
+                                                        attribute.attribute_values = attribute.attribute_values.slice(0, -(diff));
+                                                    }
+                                                }); --}}
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                <template x-if="count() <= 1">
+                                                    <div class="flex w-full">
+                                                        <input type="text"
+                                                                class="form-standard "
+                                                                placeholder="{{ translate('Value 1') }}"
+                                                                x-model="items[0]" />
+                                                    </div>
+                                                </template>
+                                                <template x-if="count() > 1">
+                                                    <template x-for="(attribute_value, key) in attribute.attribute_values">
+                                                        <div class="flex" :class="{'mt-2': key > 0}">
+                                                            <input type="text"
+                                                                class="form-standard"
+                                                                :id="'attribute-'+attribute.id+'-text-list-input-'+key"
+                                                                x-bind:placeholder="'{{ translate('Value') }} '+(Number(key)+1)"
+                                                                x-model="attribute_value.values" />
+                                                            <template x-if="(key+1) > getMinRows()">
+                                                                <span class="ml-2 flex items-center cursor-pointer" @click="remove(key)">
+                                                                    @svg('heroicon-o-trash', ['class' => 'w-[22px] h-[22px] text-danger'])
+                                                                </span>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </template>
+
+                                                <div href="javascript:;" class="btn-ghost !pl-0 !text-14 mt-1" @click="add()" x-show="count() < getMaxRows()">
+                                                    @svg('heroicon-o-plus', ['class' => 'h-3 w-3 mr-2'])
+                                                    {{ translate('Add new') }}
+                                                </div>                                 
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Text List --}}
+
+                                    {{-- Image --}}
+                                    <template x-if="attribute.type === 'image'">
+                                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                            <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
+                            
+                                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                <div class="w-full" x-data="{
+                                                    id: 'attributes_'+attribute.id+'_attribute_values',
+                                                    file_name: '',
+                                                }"
+                                                @we-media-selected-event.window="
+                                                    if($event.detail.for_id === id) {
+                                                        attribute.attribute_values[0].values = $event.detail.selected[0]['id'] || '';
+                                                        file_name = $event.detail.selected[0]['file_name'] || '';
+                                                    }
+                                                ">
+                                                    <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
+                                                            :class="{'px-6 pt-5 pb-6': attribute.attribute_values[0].values !== undefined && attribute.attribute_values[0].values !== null && attribute.attribute_values[0].values > 0 }"
+                                                            @click="$wire.emit('showMediaLibrary', id, 'image', [{id:attribute.attribute_values[0].values, file_name:file_name}])">
+                                                
+                                                        <template x-if="attribute.attribute_values[0].values !== undefined && attribute.attribute_values[0].values !== null && attribute.attribute_values[0].values > 0">
+                                                            <div class="h-[200px] w-full rounded cursor-pointer">
+                                                                <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(file_name)" />
+                                                            </div>
+                                                        </template>
+                                                
+                                                        <template x-if="!(attribute.attribute_values[0].values !== undefined && attribute.attribute_values[0].values !== null && attribute.attribute_values[0].values > 0)">
+                                                            <div class="space-y-1 text-center py-7">
+                                                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
+                                                                </svg>
+                                                                <div class="flex text-sm text-gray-600">
+                                                                    <label class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                                        <span>{{ translate('Select a file') }}</span>
+                                                                    </label>
+                                                                    <p class="pl-1">{{ translate('or drag and drop') }}</p>
+                                                                </div>
+                                                                <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </div>                                
+                                            </div>
+                                        </div>
+                                    </template>
+                                    {{-- END Image --}}
+                                    
+                                    {{-- TODO: Add wysiwyg, gallery, country type attribute --}}
                                 </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                {{-- END Left side --}}
 
-                                <x-default.system.invalid-msg field="product.status" type="slim"></x-default.system.invalid-msg>
+
+                {{-- Right side --}}
+                <div class="col-span-4">
+                    {{-- Actions --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                        <!-- Status -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                            <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <span class="mr-2">{{ translate('Status') }}</span>
+
+                                @if($product->status === App\Enums\StatusEnum::published()->value)
+                                    <span class="badge-success">{{ ucfirst($product->status) }}</span>
+                                @elseif($product->status === App\Enums\StatusEnum::draft()->value)
+                                    <span class="badge-warning">{{ ucfirst($product->status) }}</span>
+                                @elseif($product->status === App\Enums\StatusEnum::pending()->value)
+                                    <span class="badge-info">{{ ucfirst($product->status) }}</span>
+                                @elseif($product->status === App\Enums\StatusEnum::private()->value)
+                                    <span class="badge-dark">{{ ucfirst($product->status) }}</span>
+                                @endif
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.select :items="\App\Enums\StatusEnum::toArray('archived')" selected="status" :nullable="false"></x-dashboard.form.select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                {{-- END Card Status --}}
+                        <!-- END Status -->
 
-                {{-- Card Categories and Tags --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Categories and Tags') }}</h5>
+                        <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                            @if($is_update)
+                                <button type="button" class="btn btn-danger btn-sm cursor-pointer">
+                                    {{ translate('Delete') }}
+                                </button>
+                            @endif
 
-                        <div class="w-100">
-                            <x-ev.form.categories-selector class="mb-3" error-bag-name="selected_categories" :items="$this->categories" :selected-categories="$this->levelSelectedCategories()" label="{{ translate('Categories') }}" :multiple="true" :required="true" :search="true" />
-
-                            <x-ev.form.select name="product.tags" class="mb-0" :tags="true" label="{{ translate('Tags') }}" :multiple="true" placeholder="{{ translate('Type and hit enter to add a tag...') }}">
-                                <small class="text-muted">{{ translate('This is used for search. Input relevant words by which customer can find this product.') }}</small>
-                            </x-ev.form.select>
-                        </div>
-                    </div>
-                </div>
-                {{-- END Card Categories and Tags --}}
-
-                {{-- Card Brand --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative">
-                        <h5 class="pb-2 mb-3 border-bottom">{{ translate('Brand') }}</h5>
-
-                        <div class="w-100">
-                            <x-ev.form.select name="product.brand_id" :items="EVS::getMappedBrands()" class="mb-1" :search="true" placeholder="{{ translate('Select Brand...') }}" />
-                        </div>
-                    </div>
-                </div>
-                {{-- END Card Brand --}}
-
-
-                {{-- Card Actions --}}
-                <div class="card mb-3 mb-lg-5" x-data="{}">
-                    <div class="card-body position-relative d-flex">
-                        <div type="button" class="btn btn-primary btn-sm pointer ml-auto"
+                            <button type="button" class="btn btn-primary ml-auto btn-sm"
                                 @click="onSave()"
                                 wire:click="saveProduct()">
                             {{ translate('Save') }}
+                            </button>
                         </div>
                     </div>
+                    {{-- END Actions --}}
+
+                    {{-- Card Media --}}
+                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">
+                        <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
+                        </div>
+                
+                        <div class="w-full" x-data="{
+                            show_video: {{ !empty($product->video_link) ? 'true':'false' }},
+                            show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
+                        }">
+                            {{-- Thumbnail --}}
+                            <div class="sm:items-start">
+                                <div class="flex flex-col " x-data="{}">
+                                            
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Thumbnail image') }}
+                                    </label>
+    
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector field="thumbnail" error-field="product.thumbnail" id="product-thumbnail-image" :selected-image="$product->thumbnail"></x-dashboard.form.image-selector>
+                                        
+                                        <x-system.invalid-msg field="product.thumbnail"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Thumbnail --}}
+
+                            {{-- Cover --}}
+                            <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
+                                <div class="flex flex-col " x-data="{}">
+                                            
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Cover image') }}
+                                    </label>
+    
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector field="cover" error-field="product.cover" id="product-cover-image" :selected-image="$product->cover"></x-dashboard.form.image-selector>
+    
+                                        <x-system.invalid-msg field="product.cover"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Cover --}}
+
+                            {{-- Video & Document --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Has Video') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="show_video = !show_video" 
+                                                :class="{'bg-primary':show_video, 'bg-gray-200':!show_video}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':show_video, 'translate-x-0':!show_video}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="w-100 mt-4" x-show="show_video">
+                                <!-- Video Provider -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                    <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        <span class="mr-2">{{ translate('Video provider') }}</span>
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.select :items="EVS::getMappedVideoProviders()" selected="video_provider"></x-dashboard.form.select>
+                                    </div>
+                                </div>
+                                <!-- END Video Provider -->
+
+                                <!-- Video Link -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                                    
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Video link') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <input type="text" class="form-standard @error('product.video_link') is-invalid @enderror"
+                                                placeholder="{{ translate('Link to the video...') }}"
+                                                wire:model.defer="product.video_link" />
+                                    
+                                        <x-system.invalid-msg field="product.video_link"></x-system.invalid-msg>
+
+                                        <div class="w-full">
+                                            <small class="text-warning">
+                                                {{ translate('Use proper link without extra parameter. Don\'t use short share link/embeded iframe code.') }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END Video Link -->
+                            </div>
+
+                            {{-- Specificaion document --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900" id="availability-label">{{ translate('Has specification document') }}</span>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                    <button type="button" @click="show_pdf = !show_pdf" 
+                                                :class="{'bg-primary':show_pdf, 'bg-gray-200':!show_pdf}" 
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':show_pdf, 'translate-x-0':!show_pdf}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="w-100 mt-4" x-show="show_pdf">
+                                <div class="sm:items-start">
+                                    <div class="flex flex-col " x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            {{ translate('PDF Specification (optional)') }}
+                                        </label>
+        
+                                        <div class="mt-1 sm:mt-0">
+                                            <x-dashboard.form.image-selector field="pdf" id="product-document-pdf" :selected-image="$product->pdf"></x-dashboard.form.image-selector>
+                                            
+                                            <x-system.invalid-msg field="product.pdf"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Specificaion document --}}
+
+                        </div>
+                    </div>
+                    {{-- END Card Media --}}
+
+                    {{-- Category Selector --}}
+                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                            open: true,
+                        }" :class="{'p-4': open}">
+                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 @error('selected_categories') !text-danger @enderror">{{ translate('Categories') }}</h3>
+                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                        </div>
+                
+                        <div class="w-full" x-show="open">
+                            <x-dashboard.form.category-selector> </x-dashboard.form.category-selector>
+                        </div>
+                    </div>
+                    {{-- END Category Selector --}}
+                    
+
+                    {{-- Tags --}}
+                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                            open: tags !== null && tags.length > 0,
+                            add(value) {
+                                if(tags === undefined || tags === null || tags.length === 0) {
+                                    tags = [];
+                                }
+
+                                tags.push(value);
+
+                                $($refs['product_tags_input']).val('');
+                            },
+                            remove(index) {
+                                this.tags.splice(index, 1);
+                            }
+                        }" :class="{'p-4': open}">
+                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Tags') }}</h3>
+                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                        </div>
+                
+                        <div class="w-full" x-show="open">
+                            <!-- Tags -->
+                            <div class="flex sm:items-start">
+                                <div class="w-full grid grid-cols-10 gap-3">
+                                    <div class="col-span-10">
+                                        <input type="text" class="form-standard @error('product.tags') is-invalid @enderror"
+                                                placeholder="{{ translate('Write desired tag and press "comma", "space" or "enter" to insert it') }}"
+                                                x-ref="product_tags_input"
+                                                @keyup.enter="add($($el).val())" 
+                                                @keyup.space="add($($el).val())"  
+                                                @keyup="if(event.keyCode == 188) { add($($el).val().replaceAll(',','')) };" />
+                                    </div>
+
+                                    
+                                    <div class="col-span-10 flex flex-row flex-wrap " x-show="tags !== null && tags.length > 0">
+                                        <template x-for="(tag, index) in tags">
+                                            <span :class="{'!ml-0':index === 0}" class="mr-2 inline-flex rounded-full items-center py-0.5 pl-2.5 pr-1 mb-2 text-sm font-medium bg-primary text-white">
+                                                <span x-text="tag"></span>
+                                                <button @click="remove(index)" type="button" class="flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center  focus:outline-none ">
+                                                  @svg('heroicon-o-x', ['class' => 'h-3 w-3'])
+                                                </button>
+                                              </span>
+                                        </template>
+                                    </div>
+
+                                    <x-system.invalid-msg class="col-span-10" field="product.tags"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Tags -->
+                        </div>
+                    </div>
+                    {{-- END Tags --}}
+
+                    {{-- Brand --}}
+                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                            open: false,
+                        }" :class="{'p-4': open}">
+                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Brand') }}</h3>
+                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                        </div>
+                
+                        <div class="w-full" x-show="open">
+                            <!-- Brand -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-startsm:pt-5">
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Brand') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <div class="grid grid-cols-10 gap-3">
+                                        <div class="col-span-10">
+                                            <x-dashboard.form.select :items="EVS::getMappedBrands()" selected="brand_id"></x-dashboard.form.select>
+                                        </div>
+
+                                        <x-system.invalid-msg class="col-span-10" field="product.brand_id"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END Brand -->
+                        </div>
+                    </div>
+                    {{-- END Brand --}}
+
+
+                    {{-- SEO --}}
+                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                            open: false,
+                        }" :class="{'p-4': open}">
+                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('SEO') }}</h3>
+                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                        </div>
+                
+                        <div class="w-full" x-show="open">
+                            <!-- Meta Title -->
+                            <div class="flex flex-col " x-data="{}">
+                                        
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Meta title') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0">
+                                    <input type="text" 
+                                            class="form-standard @error('product.meta_title') is-invalid @enderror"
+                                            {{-- placeholder="{{ translate('Write meta title...') }}" --}}
+                                            wire:model.defer="product.meta_title" />
+                                
+                                    <x-system.invalid-msg field="product.meta_title"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Meta Title -->
+
+                            <!-- Meta Description -->
+                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
+                
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ translate('Meta Description') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0">
+                                    <textarea type="text" class="form-standard h-[80px] @error('product.meta_description') is-invalid @enderror"
+                                                {{-- placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}" --}}
+                                                wire:model.defer="product.meta_description">
+                                    </textarea>
+                                
+                                    <x-system.invalid-msg class="w-full" field="product.meta_description"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Meta Description -->
+
+                            {{-- Meta Image --}}
+                            <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
+                                <div class=s"flex flex-col " x-data="{}">
+                                            
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        {{ translate('Meta image') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0">
+                                        <x-dashboard.form.image-selector field="meta_img" id="product-meta-image" :selected-image="$product->meta_img"></x-dashboard.form.image-selector>
+                                        
+                                        <x-system.invalid-msg field="product.meta_img"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- END Meta Image --}}
+                            
+                        </div>
+                    </div>
+                    {{-- END SEO --}}
+
                 </div>
-                {{-- Card Actions --}}
+                {{-- END Right side --}}
             </div>
-            {{-- END Right column --}}
         </div>
-
-
-    </div>
+     </div>
 </div>
