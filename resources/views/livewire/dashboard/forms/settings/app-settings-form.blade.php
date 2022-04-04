@@ -1,5 +1,5 @@
 <div class="w-full" x-data="{
-        current_tab: 'currency',
+        current_tab: 'general',
         settings: @js($settings),
     }"
     x-init=""

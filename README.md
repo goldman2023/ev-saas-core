@@ -118,10 +118,7 @@ https://we-saas.gitbook.io/we-saas-internal-dev-docs/dynamic-components-for-labe
 
 
 # Data tables
-This project uses Livewire DataTables package: https://github.com/mediconesystems/livewire-datatables
-
-Example Component usage:
-`<livewire:datatable model="App\Models\Product" :exclude="['video_link', 'description', 'user_id']"/>`
+rappasoft/livewire-datatables
 
 # Components
 
