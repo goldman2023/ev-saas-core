@@ -58,45 +58,55 @@ if (!function_exists('castValuesForGet')) {
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
     
-                if(empty($value)) {
+                try {
+                    if(empty($value)) {
+                        if($data_type === 'boolean') {
+                            $settings[$key]['value'] = false;
+                        } else if($data_type === Currency::class) {
+                            $settings[$key]['value'] = Currency::where('code', 'EUR')?->first();
+                        }
+                        continue;
+                    }
                     
+                    if(isset($settings[$key]) && !empty($value)) {
+                        if($data_type === Upload::class) {
+                            $settings[$key]['value'] = Upload::find($value);
+                        } else if($data_type === Currency::class) {
+                            $settings[$key]['value'] = Currency::where('code', $value)?->first() ?? Currency::where('code', 'EUR')?->first();
+                        } else if($data_type === Category::class) {
+                            $settings[$key]['value'] = Category::find($value);
+                        } else if($data_type === 'uploads') {
+                            $uploads = [];
+                            if(is_array($value) && !empty($value)) {
+                                foreach($value as $upload_id) {
+                                    $uploads[] = Upload::find($value);
+                                }
+                            }
+                            $settings[$key]['value'] = collect($uploads);
+                        } else if($data_type === 'string') {
+                            $settings[$key]['value'] = $value;
+                        } else if($data_type === 'int') {
+                            $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
+                        } else if($data_type === 'boolean') {
+                            $settings[$key]['value'] = ($value == 0 || $value == "0") ? false : true;
+                        } else if($data_type === 'array') {
+                            $settings[$key]['value'] = json_decode($value, true);
+                        } else if($data_type === 'date') {
+                            
+                            $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
+                        } else if($data_type === 'datetime') {
+                            $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
+                        } 
+                    }       
+                } catch(\Throwable $e) {
+                    // Set default value is value cannot be parsed due to wrong data type in DB!!!
                     if($data_type === 'boolean') {
                         $settings[$key]['value'] = false;
                     } else if($data_type === Currency::class) {
                         $settings[$key]['value'] = Currency::where('code', 'EUR')?->first();
+                    } else {
+                        $settings[$key]['value'] = null;
                     }
-
-                    continue;
-                }
-                
-                if(isset($settings[$key]) && !empty($value)) {
-                    if($data_type === Upload::class) {
-                        $settings[$key]['value'] = Upload::find($value);
-                    } else if($data_type === Currency::class) {
-                        $settings[$key]['value'] = Currency::where('code', $value)?->first() ?? Currency::where('code', 'EUR')?->first();
-                    } else if($data_type === Category::class) {
-                        $settings[$key]['value'] = Category::find($value);
-                    } else if($data_type === 'uploads') {
-                        $uploads = [];
-                        if(is_array($value) && !empty($value)) {
-                            foreach($value as $upload_id) {
-                                $uploads[] = Upload::find($value);
-                            }
-                        }
-                        $settings[$key]['value'] = collect($uploads);
-                    } else if($data_type === 'string') {
-                        $settings[$key]['value'] = $value;
-                    } else if($data_type === 'int') {
-                        $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
-                    } else if($data_type === 'boolean') {
-                        $settings[$key]['value'] = ($value == 0 || $value == "0") ? false : true;
-                    } else if($data_type === 'array') {
-                        $settings[$key]['value'] = json_decode($value, true);
-                    } else if($data_type === 'date') {
-                        $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
-                    } else if($data_type === 'datetime') {
-                        $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
-                    } 
                 }
                 
             }

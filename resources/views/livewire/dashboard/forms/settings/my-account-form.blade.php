@@ -218,7 +218,7 @@
                                             dateFormat: 'd.m.Y.',
                                         };
                                     },
-                                }" x-init="$nextTick(() => { flatpickr('.js-flatpickr', getDateOptions()); });">
+                                }" x-init="$nextTick(() => { flatpickr('#user-meta-birthday-input', getDateOptions()); });">
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Birthday') }}
@@ -227,7 +227,8 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input x-model="meta.birthday.value"
                                                         type="text"
-                                                        class="js-flsatpickr flatpickr-custom form-standard @error('meta.birthday') is-invalid @enderror"
+                                                        id="user-meta-birthday-input"
+                                                        class="js-flatpickr flatpickr-custom form-standard @error('meta.birthday') is-invalid @enderror"
                                                         placeholder="{{ translate('Pick a date(s)') }}"
                                                         data-input />
                                     <x-system.invalid-msg field="meta.birthday.value"></x-system.invalid-msg>
