@@ -73,7 +73,7 @@
                             <span class="fw-700 text-black">{{ $product->getTotalPrice(true) }}</span>
                         </span>
 
-                        <div class="max-h-[200px] overflow-hidden">
+                        <div class="max-h-[100px] overflow-hidden">
                             {!! $product->description !!}
                         </div>
                         <div>
