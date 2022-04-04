@@ -239,7 +239,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      * @return string
      */
     public static function getRouteName() {
-        return 'user.show';
+        return 'user.profile.single';
     }
 
 

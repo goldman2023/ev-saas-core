@@ -1,4 +1,4 @@
-<div class="bg-gray-50 px-4 py-6 sm:px-6" x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
+<div class="bg-gray-50 px-4 py-6 sm:px-6 rounded-md shadow" x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
     <div class="flex space-x-3">
         <div class="flex-shrink-0">
             <div class="flex-shrink-0 ">

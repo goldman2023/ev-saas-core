@@ -157,6 +157,14 @@ TODO: you can overide it with data from a database a sa setting --}}
             @apply hidden;
         }
 
+        .tooltip {
+            @apply invisible absolute;
+        }
+
+        .has-tooltip:hover .tooltip {
+            @apply visible z-50;
+        }
+
 
         .we-dashboard-sidebar-background {
             /* background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}"; */
@@ -165,5 +173,6 @@ TODO: you can overide it with data from a database a sa setting --}}
         .ev-icon__xs {
             max-width: 16px !important;
         }
+
     }
 </style>

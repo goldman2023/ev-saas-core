@@ -46,9 +46,9 @@ class StripeService
         // Reminder: Stripe pricemust be in cents!!!
         $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
         $description = $model->excerpt;
-        if(empty($description)) {
+        if (empty($description)) {
             $description = $model->description;
-            if(empty($description)) {
+            if (empty($description)) {
                 $description = $model->name;
             }
         }
@@ -65,7 +65,7 @@ class StripeService
             'shippable' => $model->is_digital ? false : true,
             // 'tax_code' => '',
             'url' => $model->getPermalink(),
-            'unit_label' => substr($model->unit,0, 12),
+            'unit_label' => substr($model->unit, 0, 12),
             // 'metadata' => []
         ]);
 
@@ -97,23 +97,36 @@ class StripeService
     public function createCheckoutLink($product)
     {
         $checkout_link['url'] = "#";
+
+
+        $stripe_args = [
+            'line_items' => [[
+                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
+                'price' => $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
+                'quantity' => 1,
+            ]],
+            'mode' => 'payment',
+            /* TODO: Create dynamic order on the fly when generating checkout link  */
+            'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/order/16/received',
+            'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/order/canceled',
+            'automatic_tax' => [
+                'enabled' => false,
+            ],
+        ];
+
+        /* Guest Checkout, do not add email for guests */
+        if (auth()->user()) {
+            $email =  auth()->user()->email;
+            $stripe_args['customer_email'] = $email;
+
+        } else {
+            $email = '';
+        }
+
+
         if ($product->core_meta->where('key', '=', 'stripe_price_id')->first()) {
             $checkout_link = $this->stripe->checkout->sessions->create(
-                [
-                    'line_items' => [[
-                        # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                        'price' => $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
-                        'quantity' => 1,
-                    ]],
-                    'mode' => 'payment',
-                    'customer_email' => auth()->user()->email,
-                    /* TODO: Create dynamic order on the fly when generating checkout link  */
-                    'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/order/16/received',
-                    'cancel_url' => 'https://' . DomainTenantResolver::$currentDomain->domain  . '/order/canceled',
-                    'automatic_tax' => [
-                        'enabled' => false,
-                    ],
-                ]
+                $stripe_args
             );
         } else {
             $this->createStripeProduct($product);

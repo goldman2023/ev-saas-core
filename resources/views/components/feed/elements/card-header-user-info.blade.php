@@ -1,8 +1,15 @@
 <div class="flex space-x-3">
     <div class="flex-shrink-0">
-        <div class="inline-block relative">
+        <div class="has-tooltip inline-block relative">
+            <span class='tooltip min-w-[200px] rounded shadow-lg p-1 bg-gray-100 text-red-500 -mt-8'>
+
             {{-- TODO: Implement quick view for person and for product click --}}
             <a href="{{ $user->getPermalink() }}">
+
+                   {{ $user->followers()->count()}} {{ translate('followers') }}
+
+                </span>
+
                 <x-tenant.system.image alt="{{ get_site_name() }} logo"
                     class="h-10 w-10 rounded-full border-3 ring-2 ring-indigo-400" fit="contain"
                     :image="$user->getAvatar()">

@@ -10,26 +10,32 @@ use Illuminate\Http\Request;
 use Permissions;
 use Session;
 use Cookie;
+use Spatie\Activitylog\Models\Activity;
 
 class EVAccountController extends Controller
 {
-    public function frontend_user_profile(Request $request, $id) {
+    public function frontend_user_profile(Request $request, $id)
+    {
         try {
             $user = User::findOrFail($id);
+            $data = Activity::whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked', 'add_to_cart'])
+                ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User'])
+                ->get();
 
-            return view('frontend.user-profile-single', compact('user'));
-        } catch(\Exception $e) {
+            return view('frontend.user.profile', compact(['user', 'data']));
+        } catch (\Exception $e) {
             // Create error handling for not found exception to go to 404 page...
         }
     }
 
-    public function user_profile(Request $request, $id) {
+    public function user_profile(Request $request, $id)
+    {
         try {
             $user = User::findOrFail($id);
 
 
             return view('frontend.dashboard.users.account-settings', compact('user'));
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             // Create error handling for not found exception to go to 404 page...
         }
     }
@@ -63,7 +69,7 @@ class EVAccountController extends Controller
 
     public function payment_methods_settings()
     {
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->isAdmin()) {
             $universal_payment_methods = PaymentMethodUniversal::all();
         } else {
             $universal_payment_methods = PaymentMethodUniversal::where('enabled', 1)->get();
@@ -76,7 +82,8 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.payment-methods-settings', compact('universal_payment_methods', 'my_universal_payment_methods', 'custom_payment_methods'));
     }
 
-    public function staff_settings(Request $request) {
+    public function staff_settings(Request $request)
+    {
         // Allow access to this page only if current user is Admin or Seller (admin of the current shop).
         // Basically, if user has permissions to change other users permissions
 
@@ -86,7 +93,8 @@ class EVAccountController extends Controller
         return view('frontend.dashboard.settings.staff-settings', compact('users', 'all_roles'));
     }
 
-    public function shop_settings(Request $request) {
+    public function shop_settings(Request $request)
+    {
         Permissions::canAccess(User::$non_customer_user_types, ['view_shop_data', 'view_shop_settings']);
 
         $shop = MyShop::getShop();
