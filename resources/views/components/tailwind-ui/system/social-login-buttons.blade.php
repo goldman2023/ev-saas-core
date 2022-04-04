@@ -13,7 +13,7 @@
         @endif
 
         @if($google_enabled)
-            <a href="{{ route('social.login', ['provider' => 'google']) }}" @click="loading = true" class="w-full bg-[#DB4437] flex items-center justify-center rounded-lg shadow border border-[#DB4437] text-white py-2 cursor-pointer">
+            <a href="{{ route('social.login', ['provider' => 'google']) }}" @click="loading = true" class="hidden w-full bg-[#DB4437] flex items-center justify-center rounded-lg shadow border border-[#DB4437] text-white py-2 cursor-pointer">
                 @svg('lineawesome-google', ['class' => 'w-5 h-5 mr-2'])
                 <span>{{ translate('Sign in with Google') }}</span>
             </a>
