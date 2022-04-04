@@ -53,9 +53,10 @@ TODO: you can overide it with data from a database a sa setting --}}
                 },
                 colors: {
                     /* Indigo is a primary brand color */
-                    primary: '#8BC53F',
+                    primary: '#f40000',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
+                    sidebarBg: '#000000',
                     secondary: '#FF8E3B',
                     secondaryLight: '#FFD53F',
                     secondaryDark: '',
@@ -167,7 +168,12 @@ TODO: you can overide it with data from a database a sa setting --}}
 
 
         .we-dashboard-sidebar-background {
+            @apply bg-gray-900 !important;
             /* background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}"; */
+        }
+
+        .we-sidebar-menu-item {
+            @apply text-gray-100 !important;
         }
 
         .ev-icon__xs {
