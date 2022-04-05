@@ -520,6 +520,14 @@
 
                         {{-- Payments --}}
                         <div class="w-full px-5" x-show="current_tab === 'payments'">
+                            @if($universal_payment_methods->isNotEmpty())
+                                @foreach($universal_payment_methods as $key => $payment_method)
+                                    <livewire:dashboard.forms.payment-methods.payment-method-card
+                                        :payment-method="$payment_method" type="universal" class="mb-2">
+                                    </livewire:dashboard.forms.payment-methods.payment-method-card>
+                                @endforeach
+                            @endif
+
                             {{-- Stripe Test & Live api keys --}}
                             <div class="w-full mt-1">
                                 <h4 class="">{{ translate('Stripe API settings') }}</h4>
