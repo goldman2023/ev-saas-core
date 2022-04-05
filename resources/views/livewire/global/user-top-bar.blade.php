@@ -35,8 +35,10 @@
             <button type="button" @click="show = !show"
                 class="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 relative"
                 id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                <img class="h-10 w-10 rounded-full object-contain ring-2 ring-indigo-400" src="{{ auth()->user()->getThumbnail() }}" alt="">
-                <span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>
+                <img class="h-10 w-10 rounded-full object-contain ring-2 ring-indigo-400"
+                    src="{{ auth()->user()->getThumbnail() }}" alt="">
+                <span
+                    class="absolute bottom-0 right-0 block h-4 w-4 rounded-full ring-2 ring-white bg-green-400"></span>
             </button>
         </div>
 
@@ -51,12 +53,43 @@
           To: "transform opacity-0 scale-95"
       -->
         <div x-cloak x-show="show"
-            class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            class=" divide-gray-100 origin-top-right absolute right-0 mt-2 w-[320px] rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+
+            {{-- User Info Part --}}
+            <div
+                class="relative px-3 py-2 flex items-center space-x-3 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500">
+                <div class="flex-shrink-0">
+                    <img class="h-10 w-10 rounded-full"
+                        src="{{ auth()->user()->getThumbnail() }}"
+                        alt="User photo">
+                </div>
+                <div class="flex-1 min-w-0">
+                    <a href="{{ route('dashboard') }}" class="focus:outline-none">
+                        <!-- Extend touch target to entire panel -->
+                        <span class="absolute inset-0" aria-hidden="true"></span>
+                        <p class="text-sm font-medium text-gray-900">
+                            {{ auth()->user()->name }}
+                        </p>
+                        <p class="text-sm text-gray-500 truncate">
+                            {{ auth()->user()->email }}
+                        </p>
+                    </a>
+                </div>
+            </div>
+            {{-- End Info Part --}}
+
+            {{-- User Dropdown Menu Part --}}
+
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                 tabindex="-1" id="user-menu-item-0">
                 {{ translate('Dashboard') }}
+            </a>
+
+            <a href="{{-- {{ route('my.account.shops') }} --}}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                tabindex="-1" id="user-menu-item-1">
+                {{ translate('My Shops') }}
             </a>
 
             <a href="{{ route('my.account.settings') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
@@ -69,6 +102,9 @@
                 tabindex="-1" id="user-menu-item-2">
                 {{ translate('Sign Out') }}
             </a>
+
+            {{-- User Dropdown Menu Part --}}
+
         </div>
     </div>
 </div>

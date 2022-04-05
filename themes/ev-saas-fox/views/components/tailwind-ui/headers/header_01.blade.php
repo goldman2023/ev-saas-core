@@ -103,6 +103,8 @@
 
                     <div class="mt-6">
                         <nav class="grid gap-y-8">
+
+
                             <!-- Active: "bg-gray-100", Not Active: "" -->
                             <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700"
                                 role="menuitem" tabindex="-1" id="user-menu-item-0">
