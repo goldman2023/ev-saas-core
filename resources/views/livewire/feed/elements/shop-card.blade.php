@@ -3,17 +3,19 @@
         <a href="{{ $shop->getPermalink() }}">
             <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full object-contain" src="{{ $shop->getThumbnail() }}" alt="">
         </a>
-        <h3 class="mt-6 text-gray-900 text-sm font-medium">
+        <h3 class="mt-6 text-gray-900 text-sm font-medium mb-3">
             <a href="{{ $shop->getPermalink() }}">
                 {{ $shop->name }}
             </a>
         </h3>
+        <div>
+            @livewire('actions.wishlist-button', [
+                'object' => $shop,
+                'action' => 'Follow',
+                ])
+        </div>
         <dl class="mt-1 flex-grow flex flex-col justify-between">
-            <dt class="sr-only">Title</dt>
-            <dd class="text-gray-500 text-sm"></dd>
-            <dt class="sr-only">Role</dt>
-            <dd class="mt-3">
-
+            <dd class="mt-2">
                 <div class="mb-3 px-2 py-1 text-green-800 text-xs font-medium bg-green-100 rounded-full">
                     {{ $shop->products()->count() }}
                     {{ translate('products') }}
@@ -31,10 +33,7 @@
     <div>
         <div class="-mt-px flex divide-x divide-gray-200">
             <div class="w-0 flex-1 flex">
-                @livewire('actions.wishlist-button', [
-                'object' => $shop,
-                'action' => 'Follow',
-                ])
+
             </div>
             <div class="-ml-px w-0 flex-1 flex">
                 <button
