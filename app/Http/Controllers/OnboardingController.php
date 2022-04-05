@@ -28,12 +28,20 @@ class OnboardingController extends Controller
     public function step3()
     {
         $user = auth()->user();
+        if ($user->user_type == 'customer') {
+            $user->user_type = 'seller';
+            $user->save();
+        }
 
-        $user->user_type = 'seller';
-        $user->save();
+        if ($user->shop()->count() > 0) {
+            $shop = $user->shop()->first();
+        } else {
+            $shop = new Shop();
+            $shop->name = 'Your Shop';
+        }
 
-        $shop = new Shop();
-        $shop->name = 'Your Shop';
+
+
         /* @vukasin TODO: Replace this with new way of adding address */
         // $shop->address = $request->address;
         $shop->save();
@@ -64,8 +72,8 @@ class OnboardingController extends Controller
         return view('frontend.onboarding.step4');
     }
 
-    public function verification() {
+    public function verification()
+    {
         return view('frontend.onboarding.verification');
-
     }
 }
