@@ -16,9 +16,19 @@
             </div>
             <main class="lg:col-span-9 xl:col-span-10">
                 <div class="mt-4">
-                    <h1 class="block text-2xl font-semibold mb-6 text-gray-900">
-                        {{ translate('Discover products') }}
-                    </h1>
+                    <div class="mb-5">
+                        <x-feed.elements.shop.shop-archive-filters>
+                            <x-slot name="title">
+                                {{ translate('Products, courses, consulting') }}
+                            </x-slot>
+
+                            <x-slot name="description">
+                                {{ translate('Browse all products, courses, and services from our members') }}
+                            </x-slot>
+
+
+                        </x-feed.elements.shop.shop-archive-filters>
+                    </div>
                     <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-4">
                         @foreach ($products as $product)
                             <livewire:feed.elements.product-card :product="$product"></livewire:feed.elements.product-card>

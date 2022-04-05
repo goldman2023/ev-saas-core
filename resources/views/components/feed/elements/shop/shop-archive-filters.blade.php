@@ -216,10 +216,20 @@
 
         <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">
+                {{-- Ussage for overiding --}}
+                @isset($title)
+                {{ $title }}
+                @else
                 {{ translate('Discover') }} {{ get_site_name() }} {{ translate('shops') }}
+                @endisset
+
             </h1>
             <p class="mt-4 max-w-xl text-sm text-gray-700">
-                {{ translate('Exploe the community of verified')}} {{ get_site_name() }} {{ translate('Members') }}
+                @isset($description)
+                {{ $description }}
+                @else
+                {{ translate('Explore the community of verified')}} {{ get_site_name() }} {{ translate('Members') }}
+                @endisset
             </p>
         </div>
 
