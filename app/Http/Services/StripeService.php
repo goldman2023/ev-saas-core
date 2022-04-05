@@ -41,6 +41,19 @@ class StripeService
         }
     }
 
+    protected function getStripeModePrefix()
+    {
+        $stripe_key_prefix = 'test_';
+        if (get_setting('stripe_mode') == 'live') {
+            $stripe_key_prefix = 'live_';
+        }
+
+
+        return $stripe_key_prefix;
+    }
+
+
+
     protected function createStripeProduct($model)
     {
         // Reminder: Stripe pricemust be in cents!!!
@@ -76,18 +89,27 @@ class StripeService
             'product' => $stripe_product->id,
         ]);
 
+
+
+
         // Create CoreMeta with stripe Product ID and Price ID
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
             'subject_type' => $model::class,
-            'key' => 'stripe_product_id',
+            'key' => $this->getStripeModePrefix() . 'stripe_product_id',
             'value' => $stripe_product->id
         ]);
+
+
+
+
+
+
 
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
             'subject_type' => $model::class,
-            'key' => 'stripe_price_id',
+            'key' => $this->getStripeModePrefix() .'stripe_price_id',
             'value' => $stripe_product_price->id
         ]);
 
@@ -98,11 +120,23 @@ class StripeService
     {
         $checkout_link['url'] = "#";
 
+        if ($product->core_meta->where('key', '=', 'stripe_price_id')->first()) {
+            try {
+                $this->createStripeProduct($product);
+            } catch (\Exception $e) {
 
+            }
+        }
+
+        if (isset($product->core_meta->where('key', '=', 'stripe_price_id')->first()->value)) {
+            $price_id = $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value;
+        } else {
+            $price_id = $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value;
+        }
         $stripe_args = [
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
+                'price' => $price_id,
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
@@ -118,7 +152,6 @@ class StripeService
         if (auth()->user()) {
             $email =  auth()->user()->email;
             $stripe_args['customer_email'] = $email;
-
         } else {
             $email = '';
         }
