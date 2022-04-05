@@ -1,10 +1,19 @@
-<div class="col-span-1 flex flex-col text-center bg-white hover:bg-gray-100 rounded-lg shadow divide-y divide-gray-200">
-    <div class="flex-1 flex flex-col p-8">
+<div class="relative col-span-1 flex flex-col text-center bg-white hover:bg-gray-100 rounded-lg shadow divide-y divide-gray-200">
+
+    {{-- Cover --}}
+    <a class="absolute w-full left-0 top-0 z-1" href="{{ $shop->getPermalink() }}">
+        <img class="w-full h-28 flex-shrink-0 mx-auto object-cover bg-center-center"
+            src="{{ $shop->getCover() }}"
+            alt="">
+    </a>
+    {{-- Cover END --}}
+    <div class="flex-1 flex flex-col p-4 relative z-2">
         <a href="{{ $shop->getPermalink() }}">
-            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full object-contain" src="{{ $shop->getThumbnail() }}"
+            <img class="w-20 h-20 flex-shrink-0  rounded-full object-contain mt-[50px] ring-2 ring-indigo-600 p-1"
+                src="{{ $shop->getThumbnail() }}"
                 alt="">
         </a>
-        <h3 class="mt-6 text-gray-900 text-sm font-medium mb-3">
+        <h3 class="mt-3 text-gray-900 text-[18px] font-medium mb-3">
             <a href="{{ $shop->getPermalink() }}">
                 {{ $shop->name }}
             </a>
@@ -53,8 +62,8 @@
                 <a href="{{ $shop->getPermalink() }}"
                     class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
                     {{ translate('Visit shop') }}
-                    <svg class="ml-2 w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
+                    <svg class="ml-2 w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
