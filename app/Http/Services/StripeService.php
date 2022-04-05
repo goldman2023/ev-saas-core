@@ -68,19 +68,25 @@ class StripeService
         // $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
 
         // Create Stripe Product and Price
-        $stripe_product = $this->stripe->products->create([
-            'id' => $model->id,
-            'name' => $model->name,
-            'active' => true,
-            // 'livemode' => false, // TODO: Make it true in Production
-            'description' => $description,
-            'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
-            'shippable' => $model->is_digital ? false : true,
-            // 'tax_code' => '',
-            'url' => $model->getPermalink(),
-            'unit_label' => substr($model->unit, 0, 12),
-            // 'metadata' => []
-        ]);
+
+        try {
+
+        } catch(\Exception $e) {
+            $stripe_product = $this->stripe->products->create([
+                'id' => $model->id,
+                'name' => $model->name,
+                'active' => true,
+                // 'livemode' => false, // TODO: Make it true in Production
+                'description' => $description,
+                'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
+                'shippable' => $model->is_digital ? false : true,
+                // 'tax_code' => '',
+                'url' => $model->getPermalink(),
+                'unit_label' => substr($model->unit, 0, 12),
+                // 'metadata' => []
+            ]);
+        }
+
 
         $stripe_product_price = $this->stripe->prices->create([
             'unit_amount' => $model->getTotalPrice() * (pow(10, $no_of_decimals)), // TODO: Is it Total, Base, or Subtotal, Original etc.???
@@ -128,11 +134,16 @@ class StripeService
             }
         }
 
-        if (isset($product->core_meta->where('key', '=', 'stripe_price_id')->first()->value)) {
-            $price_id = $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value;
+        if (isset($product->core_meta->where('key', '=',  $this->getStripeModePrefix() . 'stripe_price_id')->first()->value)) {
+            $price_id = $product->core_meta->where('key', '=', $this->getStripeModePrefix() . 'stripe_price_id')->first()->value;
         } else {
-            $price_id = $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value;
+            $this->createStripeProduct($product);
         }
+
+        $price_id = $product->core_meta->where('key', '=', $this->getStripeModePrefix() . 'stripe_price_id')->first()->value;
+
+
+
         $stripe_args = [
             'line_items' => [[
                 # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
@@ -157,7 +168,7 @@ class StripeService
         }
 
 
-        if ($product->core_meta->where('key', '=', 'stripe_price_id')->first()) {
+        if ($product->core_meta->where('key', '=', $this->getStripeModePrefix() . 'stripe_price_id')->first()) {
             $checkout_link = $this->stripe->checkout->sessions->create(
                 $stripe_args
             );
