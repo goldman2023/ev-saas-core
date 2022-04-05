@@ -5,6 +5,7 @@ namespace App\View\Components\TailwindUi;
 use Illuminate\View\Component;
 use App\Enums\UserVisibilityEnum;
 use App\Enums\ResponsiveVisibilityEnum;
+use App\Facades\IMG;
 
 class WeComponent extends Component
 {

@@ -42,6 +42,10 @@ class AppSettingsForm extends Component
                 'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
             ],
+            'features' => [
+                /* Example field for creating new TenantSetting */
+                'settings.feed_enabled.value' => ['boolean'],
+            ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
                 'settings.google_login.value' => ['boolean'],
@@ -196,6 +200,32 @@ class AppSettingsForm extends Component
         }
     }
 
+    public function saveFeatures() {
+        $rules = $this->getRuleSet('features');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Features settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save features settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
     public function saveSocial() {
         $rules = $this->getRuleSet('social');
 
@@ -231,7 +261,7 @@ class AppSettingsForm extends Component
             $this->dispatchValidationErrors($e);
             $this->validate($rules);
         }
-        
+
         $this->shop->offsetUnset('pivot'); // WHY THE FUCK IS PIVOT attribute ADDED TO THE MODEL ATTRIBUTES LIST????
 
         DB::beginTransaction();
@@ -295,7 +325,7 @@ class AppSettingsForm extends Component
             $contact_details = new ShopSetting();
             $contact_details->shop_id = $this->shop->id;
             $contact_details->setting = 'contact_details';
-        } 
+        }
 
         $contact_details->value = json_encode($contacts);
         $contact_details->save();
@@ -342,10 +372,6 @@ class AppSettingsForm extends Component
      * Saves all settings provided in $rules variable.
      */
     protected function saveSettings($rules) {
-        // Save data in settings table
-        $old_settings = TenantSettings::getAll(); // Get TenantSettings models and key them by their name (aka. `setting` column)
-        
-        // TenantSettings::castOnSave()
         foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
             

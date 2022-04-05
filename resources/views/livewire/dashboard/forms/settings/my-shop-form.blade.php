@@ -1,3 +1,11 @@
+@push('head_scripts')
+<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
 <div class="w-full" x-data="{
         current: 'basicInformation',
         thumbnail: @js(['id' => $shop->thumbnail->id ?? null, 'file_name' => $shop->thumbnail->file_name ?? '']),
@@ -219,12 +227,12 @@
                                     {{ translate('Content') }}
                                 </label>
 
-                                {{-- <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <x-dashboard.form.froala field="content" id="shop-content-wysiwyg">
                                     </x-dashboard.form.froala>
 
                                     <x-system.invalid-msg class="w-full" field="shop.content"></x-system.invalid-msg>
-                                </div> --}}
+                                </div>
                             </div>
                             <!-- END Content -->
 
@@ -235,7 +243,7 @@
                                     $wire.set('shop.cover', cover.id, true);
                                     $wire.set('settings.websites', settings.websites, true);
                                     $wire.set('settings.phones', settings.phones, true);
-                                    {{-- $wire.set('shop.content', content, true); --}}
+                                    $wire.set('shop.content', content, true);
                                 " wire:click="saveBasicInformation()">
                                     {{ translate('Save') }}
                                 </button>

@@ -107,10 +107,10 @@
                 </div>
             </li>
             <li>
-                <a href="#" class="flex items-center px-3 py-3 pr-4 text-red-500 text-14 border-t">
+                <div @click="$dispatch('invoke-delete', {'model_id': {{ $row->id }}, 'model_class': '{{ base64_encode($row::class) }}'})" class="cursor-pointer flex items-center px-3 py-3 pr-4 text-red-500 text-14 border-t">
                     @svg('heroicon-o-trash', ['class' => 'text-red-500 w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Remove product') }}</span>
-                </a>
+                </div>
             </li>
         </ul>
     </div>

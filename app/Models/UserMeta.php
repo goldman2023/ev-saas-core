@@ -44,4 +44,28 @@ class UserMeta extends EVBaseModel
             ],
         ];
     }
+
+    public static function createMissingMeta($user_id) {
+        if($user_id instanceof User) {
+            $user = $user_id;
+        } else {
+            $user = User::find($user_id);
+        }
+        
+
+        if(!empty($user)) {
+            $meta  = $user->user_meta()->select('id','key','value')->get()->keyBy('key')->toArray();
+            $data_types = self::metaDataTypes();
+            
+            $missing = array_diff_key($data_types, $meta);
+            if(!empty($missing)) {
+                foreach($missing as $key => $type) {
+                    UserMeta::updateOrCreate(
+                        ['user_id' => $user_id, 'key' => $key],
+                        ['value' => $type === 'boolean' ? false : null]
+                    );
+                }
+            }
+        }
+    }
 }

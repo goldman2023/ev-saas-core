@@ -19,7 +19,7 @@
                                     }">
                                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                                     <button type="button"
-                                        class="text-gray-600 hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="we-sidebar-menu-item hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                         @click="expanded = !expanded">
                                             @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6'])
 
@@ -34,24 +34,24 @@
                                     <!-- Expandable link section, show/hide based on state. -->
                                     <div class="space-y-1" x-show="expanded">
                                         @foreach($item['children'] as $child)
-                                        <a href="{{ $child['route'] }}"
-                                            class="group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-gray-400">
-                                            @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 '])
-                                            <span class="flex-1">{{ $child['label'] }}</span>
+                                            <a href="{{ $child['route'] }}"
+                                                class="group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-gray-400">
+                                                @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 '])
+                                                <span class="flex-1">{{ $child['label'] }}</span>
 
-                                            @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count =
-                                            $child['badge']['content']() ?? null)
-                                            <span class="badge-danger {{ $child['badge']['class'] }} text-12 ml-2 rounded">
-                                                {{ $count }}
-                                            </span>
-                                            @endif
-                                        </a>
+                                                @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count =
+                                                $child['badge']['content']() ?? null)
+                                                <span class="badge-danger {{ $child['badge']['class'] }} text-12 ml-2 rounded">
+                                                    {{ $count }}
+                                                </span>
+                                                @endif
+                                            </a>
                                         @endforeach
                                     </div>
                                 </div>
                             @else
                             <div class="{{ $key > 0 ? 'space-y-1':'' }} {{ $item['is_active'] }}" >
-                                <a href="{{ $item['route'] }}" class=" text-gray-600 hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+                                <a href="{{ $item['route'] }}" class="we-sidebar-menu-item hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
 
                                     @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 '])
 

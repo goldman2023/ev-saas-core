@@ -228,7 +228,6 @@
         </div>
 
         <div class="col-span-1">
-
             <x-default.elements.support-card></x-default.elements.support-card>
         </div>
     </div>

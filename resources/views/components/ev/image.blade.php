@@ -1,5 +1,5 @@
 @if (!empty($src))
-    
+
     @if(!empty($href))
         <a href="{{ $href }}" target="{{ $target }}" class="">
     @endif

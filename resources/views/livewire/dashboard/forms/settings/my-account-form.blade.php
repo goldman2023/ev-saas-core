@@ -1,3 +1,12 @@
+@push('head_scripts')
+<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
+
 <div class="w-full" x-data="{
         current: 'basicInformation',
         thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
@@ -145,6 +154,24 @@
                             </div>
                             <!-- END Last name -->
 
+                            <!-- Headline -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Headline') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input type="text" class="form-standard @error('meta.headline') is-invalid @enderror"
+                                        placeholder="{{ translate('My unique headline') }}" wire:model.defer="meta.headline.value" />
+
+                                    <x-system.invalid-msg field="meta.headline.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Headline -->
+
                             <!-- Email -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                 x-data="{}">
@@ -180,11 +207,94 @@
                             </div>
                             <!-- END Phone -->
 
+                            @if(!$onboarding)
+                            <!-- Birthday -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{
+                                    getDateOptions() {
+                                        return {
+                                            mode: 'single',
+                                            enableTime: false,
+                                            dateFormat: 'd.m.Y.',
+                                        };
+                                    },
+                                }" x-init="$nextTick(() => { flatpickr('#user-meta-birthday-input', getDateOptions()); });">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Birthday') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <input x-model="meta.birthday.value"
+                                                        type="text"
+                                                        id="user-meta-birthday-input"
+                                                        class="js-flatpickr flatpickr-custom form-standard @error('meta.birthday') is-invalid @enderror"
+                                                        placeholder="{{ translate('Pick a date(s)') }}"
+                                                        data-input />
+                                    <x-system.invalid-msg field="meta.birthday.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Birthday -->
+
+                            <!-- Gender -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Gender') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="['male' => 'Male', 'female' => 'Female', 'other' => 'Other']" selected="meta.gender.value" :nullable="false"></x-dashboard.form.select>
+
+                                    <x-system.invalid-msg field="meta.gender.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Gender -->
+                            @endif
+                            
+
+                            {{-- <!-- Industry -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Industry') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="\Categories::getAll(true)->keyBy('id')->map(fn($item) => $item->name)->toArray()" selected="meta.industry.value.id"></x-dashboard.form.select>
+
+                                    <x-system.invalid-msg field="meta.industry.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Industry --> --}}
+
+                            <!-- Bio -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
+
+                                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Bio') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <x-dashboard.form.froala field="meta.bio.value" id="user-bio-wysiwyg"></x-dashboard.form.froala>
+                                    <x-system.invalid-msg class="w-full" field="meta.bio.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Bio -->
+
                             {{-- Save basic information --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
                                     $wire.set('me.thumbnail', thumbnail.id, true);
                                     $wire.set('me.cover', cover.id, true);
+                                    $wire.set('meta.bio.value', meta.bio.value, true);
+                                    {{-- $wire.set('meta.industry.value', meta.industry.value.id, true); --}}
+                                    $wire.set('meta.birthday.value', meta.birthday.value, true);
                                 " wire:click="saveBasicInformation()">
                                     {{ translate('Save') }}
                                 </button>
@@ -296,13 +406,15 @@
                     @endif
                     {{-- END Change password --}}
 
-                    @if(!$onboarding)
+                    {{-- @if(!$onboarding) --}}
                     <!-- Addresses -->
                     <livewire:dashboard.forms.addresses.addresses-form component-id="addressesSection"
                         :addresses="$this->me->addresses" type="address">
                     </livewire:dashboard.forms.addresses.addresses-form>
-                    @endif
+                    {{-- @endif --}}
                     <!-- END Addresses -->
+                    
+
                     @if(!$onboarding)
                     <!-- Social accounts -->
                     <div id="socialAccountsSection" class="hidden p-4 border bg-white border-gray-200 rounded-lg shadow mt-5"

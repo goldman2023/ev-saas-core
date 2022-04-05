@@ -71,6 +71,7 @@
     @endguest
 
     <x-system.info-modal></x-system.info-modal>
+    <livewire:modals.delete-modal />
     <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
 
 

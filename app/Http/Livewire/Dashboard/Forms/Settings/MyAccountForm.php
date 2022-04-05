@@ -2,9 +2,7 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
-use App\Models\Product;
-use App\Models\ProductStock;
-use App\Models\SerialNumber;
+use App\Models\User;
 use App\Models\UserMeta;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
@@ -41,7 +39,11 @@ class MyAccountForm extends Component
                 'me.phone' => ['required'],
                 'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
                 'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-                'meta.birthday.value' => ['required'],
+                'meta.birthday.value' => [''],
+                'meta.gender.value' => [''],
+                'meta.industry.value' => [''],
+                'meta.headline.value' => ['required'],
+                'meta.bio.value' => ['required'],
             ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],
@@ -95,8 +97,12 @@ class MyAccountForm extends Component
         $this->onboarding = $onboarding;
         $this->me = auth()->user();
 
-        $my_meta = $this->me->user_meta;
-        $this->meta = castValuesForGet($my_meta, UserMeta::metaDataTypes());
+        // User Meta
+        UserMeta::createMissingMeta($this->me->id);
+        $user_meta = $this->me->user_meta()->select('id','key','value')->get()->keyBy('key')->toArray();
+        castValuesForGet($user_meta, UserMeta::metaDataTypes());
+        
+        $this->meta = $user_meta;
     }
 
     public function dehydrate()
@@ -111,18 +117,31 @@ class MyAccountForm extends Component
 
 
     public function saveBasicInformation() {
+        $rules = $this->getRuleSet('basic');
+
         try {
-            $this->validate($this->getRuleSet('basic'));
+            $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
             $this->dispatchValidationErrors($e);
-            $this->validate($this->getRuleSet('basic'));
+            $this->validate($rules);
         }
 
+        DB::beginTransaction();
 
-        $this->me->syncUploads();
-        $this->me->save();
+        try {
+            $this->me->syncUploads();
+            $this->me->save();
+            $this->saveMeta($rules);
 
-        $this->inform(translate('Basic information successfully updated!'), '', 'success');
+            DB::commit();
+
+            $this->inform(translate('Basic information successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save basic information settings.'), $e->getMessage(), 'fail');
+        }
+
+        
         if($this->onboarding) {
             return redirect()->route('onboarding.step4');
 
@@ -150,5 +169,21 @@ class MyAccountForm extends Component
         // TODO: Send an email to user that password is changed
 
         $this->inform(translate('Your password is successfully updated. You will be logged out.'), '', 'success');
+    }
+
+    /*
+     * Saves all UserMeta provided in $rules variable.
+     */
+    protected function saveMeta($rules) {
+        foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'meta')) as $key => $value) {
+            $meta_key = explode('.', $key)[1]; // get the part after `settings.`
+            
+            if(!empty($meta_key) && $meta_key !== '*') {
+                UserMeta::where([
+                    ['key', $meta_key],
+                    ['user_id', $this->me->id]
+                ])->update(['value' => castValueForSave($meta_key, $this->meta[$meta_key], UserMeta::metaDataTypes())]);
+            }
+        }
     }
 }

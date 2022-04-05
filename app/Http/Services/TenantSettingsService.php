@@ -45,7 +45,7 @@ class TenantSettingsService
     protected function createMissingSettings() {
         $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
         $data_types = $this->settingsDataTypes();
-        
+
         $missing = array_diff_key($data_types, $settings);
         if(!empty($missing)) {
             $this->clearCache();
@@ -70,7 +70,7 @@ class TenantSettingsService
 
         if (empty($settings)) {
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
-            
+
             castValuesForGet($settings, $data_types);
 
             // dd($settings);
@@ -80,11 +80,11 @@ class TenantSettingsService
                 Cache::put($cache_key, $settings);
             }
         }
-        
+
         $this->settings = !empty($settings) ? $settings : $default;
     }
 
-    
+
 
     public function clearCache() {
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
@@ -129,6 +129,9 @@ class TenantSettingsService
             'stripe_sk_test_key' => 'string',
             'stripe_pk_live_key' => 'string',
             'stripe_sk_live_key' => 'string',
+
+            // Features
+            'feed_enabled' => 'boolean',
 
         ];
     }

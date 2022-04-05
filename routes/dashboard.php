@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SetDashboard;
 
 use App\Http\Controllers\Central\RegisterTenantController;
+use App\Http\Controllers\DocumentController;
 
 Route::middleware([
     'web',
@@ -29,21 +30,19 @@ Route::middleware([
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
-        Route::group([
-                'middleware' => ['auth'],
-                'prefix' => 'tenant'
-            ], function () {
-                Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
+    Route::group([
+        'middleware' => ['auth'],
+        'prefix' => 'tenant'
+    ], function () {
+        Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
+    });
 
-            });
-
-        Route::group([
-                'middleware' => ['auth'],
-                'prefix' => 'previews'
-            ], function () {
-                Route::get('/show', 'EVPreviewController@show')->name('show');
-
-            });
+    Route::group([
+        'middleware' => ['auth'],
+        'prefix' => 'previews'
+    ], function () {
+        Route::get('/show', 'EVPreviewController@show')->name('show');
+    });
 
     /* TODO: Admin only */
     Route::group([
@@ -56,9 +55,9 @@ Route::middleware([
         Route::get('/categories/edit/{id}', [EVCategoryController::class, 'edit'])->name('category.edit');
 
         // Tenant blog posts
-//        Route::get('/tenant/blog/posts', [EVProductController::class, 'index'])->name('blog-posts.index');
-//        Route::get('/tenant/blog/posts/create', [EVProductController::class, 'create'])->name('blog-posts.create');
-//        Route::get('/tenant/blog/posts/edit/{slug}', [EVProductController::class, 'edit'])->name('blog-posts.edit');
+        //        Route::get('/tenant/blog/posts', [EVProductController::class, 'index'])->name('blog-posts.index');
+        //        Route::get('/tenant/blog/posts/create', [EVProductController::class, 'create'])->name('blog-posts.create');
+        //        Route::get('/tenant/blog/posts/edit/{slug}', [EVProductController::class, 'edit'])->name('blog-posts.edit');
     });
 
     /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
@@ -112,13 +111,13 @@ Route::middleware([
         Route::get('/orders', [EVOrderController::class, 'index'])->name('orders.index');
         Route::get('/order/create', [EVOrderController::class, 'create'])->name('order.create');
         Route::get('/order/view/{id}', [EVOrderController::class, 'details'])->name('order.details');
-//        Route::resource('orders', 'EVOrderController')->parameters([
-//            'orders' => 'id',
-//        ])->except(['destroy']);
-       Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
-       Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
-       Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
-       Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
+        //        Route::resource('orders', 'EVOrderController')->parameters([
+        //            'orders' => 'id',
+        //        ])->except(['destroy']);
+        Route::get('/orders/destroy/{id}', 'OrderController@destroy')->name('orders.destroy');
+        Route::post('/orders/details', 'OrderController@order_details')->name('orders.details');
+        Route::post('/orders/update_delivery_status', 'OrderController@update_delivery_status')->name('orders.update_delivery_status');
+        Route::post('/orders/update_payment_status', 'OrderController@update_payment_status')->name('orders.update_payment_status');
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
@@ -142,7 +141,7 @@ Route::middleware([
         Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
 
         Route::post('/checkout/execute/payment/{invoice_id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
-// ---------------------------------------------------- //
+        // ---------------------------------------------------- //
 
         Route::post('/products/store/', 'ProductController@store')->name('products.store');
         Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');
@@ -169,7 +168,7 @@ Route::middleware([
         Route::post('/withdraw_request/message_modal', 'SellerWithdrawRequestController@message_modal')->name('withdraw_request.message_modal');
 
 
-//Product Bulk Upload
+        //Product Bulk Upload
         Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');
         Route::post('/bulk-product-upload', 'ProductBulkUploadController@bulk_upload')->name('bulk_product_upload');
         Route::get('/product-csv-download/{type}', 'ProductBulkUploadController@import_product')->name('product_csv.download');
@@ -180,52 +179,34 @@ Route::middleware([
             Route::get('/seller', 'ProductBulkUploadController@pdf_download_seller')->name('pdf.download_seller');
         });
 
-//Product Export
+        //Product Export
         Route::get('/product-bulk-export', 'ProductBulkUploadController@export')->name('product_bulk_export.index');
 
         Route::resource('digitalproducts', 'DigitalProductController')->parameters([
             'digitalproducts' => 'id',
         ])->except(['destroy']);
-//    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproduct.edit');
+        //    Route::get('/digitalproducts/edit/{id}', 'DigitalProductController@edit')->name('digitalproduct.edit');
         Route::get('/digitalproducts/destroy/{id}', 'DigitalProductController@destroy')->name('digitalproducts.destroy');
         Route::get('/digitalproducts/download/{id}', 'DigitalProductController@download')->name('digitalproducts.download');
 
-//Reports
+        //Reports
         Route::get('/commission-log', 'ReportController@commission_history')->name('commission-log.index');
 
-//Document and Gallery
+        //Document and Gallery
         Route::resource('documentgallery', 'DocumentGalleryController')->parameters([
             'documentgallery' => 'id',
         ])->except(['destroy']);
-//    Route::get('/documentgallery/edit/{id}', 'DocumentGalleryController@edit')->name('documentgallery.edit');
-//    Route::post('/documentgallery/update/{id}', 'DocumentGalleryController@update')->name('documentgallery.update');
+        //    Route::get('/documentgallery/edit/{id}', 'DocumentGalleryController@edit')->name('documentgallery.edit');
+        //    Route::post('/documentgallery/update/{id}', 'DocumentGalleryController@update')->name('documentgallery.update');
         Route::get('/documentgallery/destroy/{id}', 'DocumentGalleryController@destroy')->name('documentgallery.destroy');
 
-//Notifications
+        //Notifications
         Route::resource('notifications', 'NotificationController');
         Route::post('/notifications/mark-all-as-read', 'NotificationController@markAllAsRead')->name('notifications.mark_all_as_read');
 
-
-//Events
-        Route::resource('events', 'EventController')->parameters([
-            'events' => 'id',
-        ])->except(['show', 'index', 'destroy']);
-        Route::get('/events', 'EventController@all_events')->name('events');
-        Route::get('/events/{slug}', 'EventController@show')->name('event.show');
-        Route::get('/events/category/{category_slug}', 'EventController@listingByCategory')->name('events.category');
-//    Route::post('/events/update/{id}', 'EventController@update')->name('event.update');
-        Route::get('/events/destroy/{id}', 'EventController@destroy')->name('event.destroy');
-
-
-// Jobs
-        Route::resource('jobs', 'JobController')->parameters([
-            'jobs' => 'id',
-        ])->except(['destroy']);
-//    Route::post('/jobs/store', 'JobController@store')->name('jobs.store');
-//    Route::post('/jobs/update/{id}', 'JobController@update')->name('jobs.update');
-        Route::get('/jobs/destroy/{id}', 'JobController@destroy')->name('jobs.destroy');
+        /* Document (eSignatures and SmartID)  Roiutes */
+        Route::get('/documents',  'DocumentsController@index')->name('documents.index');
     });
-
 
     // Integrations
     Route::get('/integrations', 'Integrations\IntegrationsController@index')->name('integrations.index');

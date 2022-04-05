@@ -225,7 +225,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     }
 
     public function following() {
-        return Wishlist::where('user_id', auth()->user()->id)
+        return Wishlist::where('user_id', $this->id)
                 ->where('subject_type', "App\Models\Shop");
 
 

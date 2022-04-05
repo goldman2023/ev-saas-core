@@ -13,10 +13,12 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
 use StripeService;
+use App\Traits\Livewire\CanDelete;
 
 class ProductsTable extends DataTableComponent
 {
     use DispatchSupport;
+    use CanDelete;
 
     public $for = 'me';
     public ?int $searchFilterDebounce = 800;

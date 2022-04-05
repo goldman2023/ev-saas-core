@@ -53,9 +53,10 @@ TODO: you can overide it with data from a database a sa setting --}}
                 },
                 colors: {
                     /* Indigo is a primary brand color */
-                    primary: '#8BC53F',
+                    primary: '#f40000',
                     primaryLight: '#EBF8DC',
                     primaryDark: '#657934',
+                    sidebarBg: '#000000',
                     secondary: '#FF8E3B',
                     secondaryLight: '#FFD53F',
                     secondaryDark: '',
@@ -82,13 +83,15 @@ TODO: you can overide it with data from a database a sa setting --}}
         .btn-standard {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
         }
-
-        .btn-standard {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
+        .btn-standard-outline {
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-gray-400 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400;
         }
 
         .btn-primary {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+        }
+        .btn-primary-outline {
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-primary rounded-md shadow-sm text-sm font-medium text-primary bg-white hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
         }
 
         .btn-success {
@@ -167,7 +170,12 @@ TODO: you can overide it with data from a database a sa setting --}}
 
 
         .we-dashboard-sidebar-background {
+            @apply bg-gray-900 !important;
             /* background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}"; */
+        }
+
+        .we-sidebar-menu-item {
+            @apply text-gray-100 !important;
         }
 
         .ev-icon__xs {
