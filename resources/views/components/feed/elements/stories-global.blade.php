@@ -1,4 +1,4 @@
-<div>
+<div class="h-[100px]">
     <script custom-element="storyly-web" src="https://web-story.storyly.io/v2/storyly-web.js"></script>
     <storyly-web></storyly-web>
     <script>
