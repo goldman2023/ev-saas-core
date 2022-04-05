@@ -8,7 +8,7 @@
     selected_shipping_address_id: Number(@js($selected_shipping_address_id)),
     same_billing_shipping: @js($order->same_billing_shipping ? true : false),
     buyers_consent: @js($order->buyers_consent ? true : false),
-    available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsForSelect()),
+    available_payment_methods: @js(\Payments::getPaymentMethodsForSelect()),
     selected_payment_method: @js($this->selected_payment_method),
     phoneNumbers: @js($order->phone_numbers),
     shippingCountry: @js($order->shipping_country),
@@ -560,7 +560,7 @@ x-cloak
 
         <template x-if="selected_payment_method != ''">
             <div class="payment-methods-details w-full mt-3">
-                @foreach(\PaymentMethodsUniversal::getPaymentMethods() as $payment_method)
+                @foreach(\Payments::getPaymentMethods() as $payment_method)
                 <div class="border border-gray-200 rounded-lg shadow text-12 p-3" :class="{'hidden': selected_payment_method !== '{{ $payment_method->gateway }}'}">
                     <div class="w-full">
                         {!! $payment_method->description !!}

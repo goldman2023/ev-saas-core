@@ -96,7 +96,7 @@ class PermissionsService
             $this->getReviewsPermissions(),
             $this->getBlogPostsPermissions(),
             $this->getCustomersPermissions(),
-            $this->getPaymentMethodsUniversalPermissions(),
+            $this->getPaymentsPermissions(),
             $this->getDesignsPermissions(),
             $this->getLeadsPermissions()
         ));
@@ -114,7 +114,7 @@ class PermissionsService
             translate('Reviews') => 'getReviewsPermissions',
             translate('Leads') => 'getLeadsPermissions',
             translate('Payment Methods Universal') => [
-                'fname' => 'getPaymentMethodsUniversalPermissions',
+                'fname' => 'getPaymentsPermissions',
                 'user_types' => User::$tenant_user_types
             ],
             translate('Design') => 'getDesignsPermissions'
@@ -219,7 +219,7 @@ class PermissionsService
         ];
     }
 
-    public function getPaymentMethodsUniversalPermissions() {
+    public function getPaymentsPermissions() {
         return [
             'browse_uni_payment_methods' => 'Browse uni. payment methods',
             'view_uni_payment_methods' => 'View uni. payment method',

@@ -21,7 +21,7 @@ use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
 use TenantSettings;
-use PaymentMethodsUniversal;
+use Payments;
 
 class AppSettingsForm extends Component
 {
@@ -105,7 +105,7 @@ class AppSettingsForm extends Component
     public function mount()
     {
         $this->settings = TenantSettings::getAll();
-        $this->universal_payment_methods = PaymentMethodsUniversal::getPaymentMethodsAll();
+        $this->universal_payment_methods = Payments::getPaymentMethodsAll();
     }
 
     // public function updatingShop(&$shop, $key) {

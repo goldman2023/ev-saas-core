@@ -217,7 +217,7 @@ return [
         App\Providers\EVServiceProvider::class,
         App\Providers\MacrosServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
-        App\Providers\PaymentMethodsProvider::class,
+        App\Providers\PaymentsProvider::class,
     ],
 
     /*
@@ -282,7 +282,7 @@ return [
         'EVS' => App\Facades\EVS::class,
         'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,
-        'PaymentMethodsUniversal' => App\Facades\PaymentMethodsUniversal::class,
+        'Payments' => App\Facades\Payments::class,
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,
         'Countries' => App\Facades\Countries::class,
