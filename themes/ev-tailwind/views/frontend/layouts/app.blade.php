@@ -68,19 +68,19 @@
     <x-panels.flyout-categories></x-panels.flyout-categories>
 
     @guest
-    <x-panels.flyout-auth></x-panels.flyout-auth>
+        <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
     @auth
-    <x-panels.flyout-profile></x-panels.flyout-profile>
-    <x-default.chat.widget-chat></x-default.chat.widget-chat>
-    <livewire:we-media-library />
-
+        <x-panels.flyout-profile></x-panels.flyout-profile>
+        <x-default.chat.widget-chat></x-default.chat.widget-chat>
+        <livewire:we-media-library />
     @endauth
 
-    <x-ev.toast id="global-toast" position="bottom-center" class="bg-success border-success text-white h3" :is_x="true"
-        :timeout="4000">
-    </x-ev.toast>
+    <x-system.info-modal></x-system.info-modal>
+    <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
+
+    <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
     @yield('script')
 
