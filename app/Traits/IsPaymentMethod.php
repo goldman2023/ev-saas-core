@@ -215,19 +215,51 @@ trait IsPaymentMethod
         } else if($this->gateway === 'stripe') {
             return [
                 [
-                    'property_name' => 'stripe_publishable_key',
-                    'value' => $this->data->stripe_publishable_key ?? '',
-                    'rules' => ['required'],
+                    'property_name' => 'stripe_mode',
+                    'value' => $this->data->stripe_mode ?? '',
+                    'rules' => ['required', 'in:live,test'],
                     'messages' => [
-                        'required' => translate('Stripe publishable key is required in order to use Stripe gateway'),
+                        'required' => translate('Stripe mode must be either test or live'),
                     ]
                 ],
                 [
-                    'property_name' => 'stripe_secret_key',
-                    'value' => $this->data->stripe_secret_key ?? '',
+                    'property_name' => 'stripe_checkout_enabled',
+                    'value' => $this->data->stripe_checkout_enabled ?? '',
+                    'rules' => ['boolean'],
+                    'messages' => [
+                        'boolean' => translate('Stripe checkout should either be enabled or disabled'),
+                    ]
+                ],
+                [
+                    'property_name' => 'stripe_pk_test_key',
+                    'value' => $this->data->stripe_pk_test_key ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Stripe secret key is required in order to use Stripe gateway'),
+                        'required' => translate('Stripe test publishable key is required in order to use Stripe gateway'),
+                    ]
+                ],
+                [
+                    'property_name' => 'stripe_sk_test_key',
+                    'value' => $this->data->stripe_sk_test_key ?? '',
+                    'rules' => ['required'],
+                    'messages' => [
+                        'required' => translate('Stripe test secret key is required in order to use Stripe gateway'),
+                    ]
+                ],
+                [
+                    'property_name' => 'stripe_pk_live_key',
+                    'value' => $this->data->stripe_pk_live_key ?? '',
+                    'rules' => ['required'],
+                    'messages' => [
+                        'required' => translate('Stripe live publishable key is required in order to use Stripe gateway'),
+                    ]
+                ],
+                [
+                    'property_name' => 'stripe_sk_live_key',
+                    'value' => $this->data->stripe_sk_live_key ?? '',
+                    'rules' => ['required'],
+                    'messages' => [
+                        'required' => translate('Stripe live secret key is required in order to use Stripe gateway'),
                     ]
                 ],
                 [
@@ -238,7 +270,6 @@ trait IsPaymentMethod
 
                     ]
                 ],
-
                 [
                     'property_name' => 'stripe_inline_credit_card_form',
                     'value' => $this->data->stripe_inline_credit_card_form ?? '',

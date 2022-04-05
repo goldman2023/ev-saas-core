@@ -86,7 +86,7 @@ class PaymentMethodCard extends Component
 
         $this->paymentMethod->save();
 
-        $this->toastify($this->paymentMethod->name.' '.translate(' method updated successfully!'));
+        $this->inform($this->paymentMethod->name.' '.translate(' method updated successfully!'), '', 'success');
     }
 
     public function toggle($enabled) {

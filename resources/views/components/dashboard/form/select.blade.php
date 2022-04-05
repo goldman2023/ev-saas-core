@@ -61,6 +61,7 @@
       </ul>
     </div>
 
+    {{-- TODO: this does not work cuz of wire:ignore!, move it one step above --}}
     @if(!empty($field))
         <x-system.invalid-msg field="{{ $field }}"></x-system.invalid-msg>
     @endif

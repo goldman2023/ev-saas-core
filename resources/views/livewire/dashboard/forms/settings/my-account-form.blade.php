@@ -164,7 +164,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('meta.headline') is-invalid @enderror"
+                                    <input type="text" class="form-standard @error('meta.headline.value') is-invalid @enderror"
                                         placeholder="{{ translate('My unique headline') }}" wire:model.defer="meta.headline.value" />
 
                                     <x-system.invalid-msg field="meta.headline.value"></x-system.invalid-msg>
