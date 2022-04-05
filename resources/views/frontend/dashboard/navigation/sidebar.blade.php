@@ -34,18 +34,18 @@
                                     <!-- Expandable link section, show/hide based on state. -->
                                     <div class="space-y-1" x-show="expanded">
                                         @foreach($item['children'] as $child)
-                                        <a href="{{ $child['route'] }}"
-                                            class="group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-gray-400">
-                                            @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 '])
-                                            <span class="flex-1">{{ $child['label'] }}</span>
+                                            <a href="{{ $child['route'] }}"
+                                                class="group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-gray-400">
+                                                @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 '])
+                                                <span class="flex-1">{{ $child['label'] }}</span>
 
-                                            @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count =
-                                            $child['badge']['content']() ?? null)
-                                            <span class="badge-danger {{ $child['badge']['class'] }} text-12 ml-2 rounded">
-                                                {{ $count }}
-                                            </span>
-                                            @endif
-                                        </a>
+                                                @if(($child['badge'] ?? null) && $child['badge']['content'] instanceof \Closure && $count =
+                                                $child['badge']['content']() ?? null)
+                                                <span class="badge-danger {{ $child['badge']['class'] }} text-12 ml-2 rounded">
+                                                    {{ $count }}
+                                                </span>
+                                                @endif
+                                            </a>
                                         @endforeach
                                     </div>
                                 </div>
