@@ -1,5 +1,5 @@
 <div class="w-full" x-data="{
-        current_tab: 'general',
+        current_tab: 'payments',
         settings: @js($settings),
     }"
     x-init=""
@@ -529,7 +529,7 @@
                             @endif
 
                             {{-- Stripe Test & Live api keys --}}
-                            <div class="w-full mt-1">
+                            {{-- <div class="w-full mt-1">
                                 <h4 class="">{{ translate('Stripe API settings') }}</h4>
 
                                 <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
@@ -597,17 +597,17 @@
                                     </div>
                                     <!-- END Stripe Secrets Live Key -->
                                 </div>
-                            </div>
+                            </div> --}}
                             {{-- END Stripe Test & Live api keys --}}
 
                             {{-- Save Payments --}}
-                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                            {{-- <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click=""
                                     wire:click="savePayments()">
                                 {{ translate('Save') }}
                                 </button>
-                            </div>
+                            </div> --}}
                             {{-- END Save Payments --}}
                         </div>
                         {{-- END Payments --}}

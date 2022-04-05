@@ -1,4 +1,4 @@
-<div class="fixed rounded-md  p-4  top-12 left-1/2 translate-x-[-50%] " x-data="{
+<div class="fixed z-[101] rounded-md  p-4  top-12 left-1/2 translate-x-[-50%] " x-data="{
         show: false,
         id: 'validation-error-toast',
         errors: {},

@@ -16,10 +16,13 @@ use FX;
 class PaymentMethodsUniversalService
 {
     protected $payment_methods = null;
+    protected $payment_methods_all = null;
+
 
     public function __construct($app)
     {
         $this->payment_methods = PaymentMethodUniversal::where('enabled', 1)->get();
+        $this->payment_methods_all = PaymentMethodUniversal::all();
     }
 
     public function getPaymentMethods() {
@@ -36,5 +39,9 @@ class PaymentMethodsUniversalService
 
     public function getPaymentMethodsGateway() {
         return $this->payment_methods->map(fn($item) => $item->gateway);
+    }
+
+    public function getPaymentMethodsAll() {
+        return $this->payment_methods_all;
     }
 }

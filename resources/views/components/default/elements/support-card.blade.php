@@ -1,5 +1,5 @@
 <div>
-    <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+    <li class="col-span-1 flex flex-col text-center bg-white rounded-lg border border-gray-200 shadow divide-y divide-gray-200">
         <div class="flex-1 flex flex-col p-8">
             <x-tenant.system.image alt="{{ get_site_name() }} logo"
                 class="w-32 flex-shrink-0 mx-auto rounded-full object-scale-down"
