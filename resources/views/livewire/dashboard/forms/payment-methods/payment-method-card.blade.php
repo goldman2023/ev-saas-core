@@ -1,4 +1,4 @@
-<div class="lw-form card rounded {{ $class }} position-relative"
+<div class="shadow rounded border border-gray-200 p-5 {{ $class }} relative"
      wire:key="payment-method-{{ $paymentMethod->gateway }}"
      key="payment-method-{{ $paymentMethod->gateway }}"
      x-cloak
@@ -8,37 +8,42 @@
      }"
     x-init="console.log(paymentMethod.enabled);">
 
-    <x-ev.loaders.spinner class="absolute-center z-10 d-none"
-                          wire:loading.class.remove="d-none"></x-ev.loaders.spinner>
+    <x-ev.loaders.spinner class="absolute-center z-10 hidden"
+                          wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-    <div class="card-header d-flex align-items-center justify-content-start pointer"  wire:loading.class="opacity-3 prevent-pointer-events" @click="show = !show">
-        @svg('heroicon-o-chevron-right', ['class' => 'square-16 mr-2', ':style' => "show && {transform: 'rotate(90deg)'}"])
+    <div class="flex items-center justify-start cursor-pointer"  wire:loading.class="opacity-30 pointer-events-none" @click="show = !show">
+        @svg('heroicon-o-chevron-right', ['class' => 'w-[16px] h[16px] mr-2', ':style' => "show && {transform: 'rotate(90deg)'}"])
         <h4 class="h5 mb-0">{{ $paymentMethod->name }}</h4>
 
-        <span class="badge badge-soft-success d-flex align-items-center px-2 py-1 ml-3 text-12 text-success"
+        <span class="badge-success flex align-center px-2 py-1 ml-3 text-12 text-success"
               :class="{'d-flex':paymentMethod.enabled}"
               x-show="paymentMethod.enabled">
               {{ translate('active') }}
         </span>
 
-        <span class="badge badge-soft-danger align-items-center px-2 py-1 ml-3 text-12 text-danger"
+        <span class="badge-danger items-center px-2 py-1 ml-3 text-12 text-danger"
               :class="{'d-flex':!paymentMethod.enabled}"
               x-show="!paymentMethod.enabled">
               {{ translate('inactive') }}
         </span>
 
-        <label class="toggle-switch ml-auto" for="payment-method-{{ $paymentMethod->gateway }}-enabled" @click="event.stopPropagation();">
+        <button type="button" @click="$wire.toggle(!paymentMethod.enabled); show = true;"
+                    :class="{'bg-primary':paymentMethod.enabled , 'bg-gray-200':!paymentMethod.enabled}"
+                    class="relative inline-flex flex-shrink-0 h-6 w-11 ml-auto border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                <span :class="{'translate-x-5':paymentMethod.enabled, 'translate-x-0':!paymentMethod.enabled}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+        </button>
+
+        {{-- <label class="toggle-switch ml-auto" for="payment-method-{{ $paymentMethod->gateway }}-enabled" @click="event.stopPropagation();">
             <input type="checkbox"
                    class="js-toggle-switch toggle-switch-input"
                    id="payment-method-{{ $paymentMethod->gateway }}-enabled"
                    @click="$wire.toggle(!paymentMethod.enabled); show = true;"
                    wire:model.defer="paymentMethod.enabled"
-                   {{-- wire:model="paymentMethod.enabled" --}}
             >
             <span class="toggle-switch-label">
               <span class="toggle-switch-indicator"></span>
             </span>
-        </label>
+        </label> --}}
 
     </div>
 
