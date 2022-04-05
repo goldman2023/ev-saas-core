@@ -18,7 +18,9 @@
             </div>
 
             <div class="mt-3">
-                <div class="w-full ">
+                <livewire:forms.register-form />
+
+                {{-- <div class="w-full ">
                     <x-system.social-login-buttons class="mb-5">
                         <div class="w-full relative mb-3">
                             <div class="absolute inset-0 flex items-center" aria-hidden="true">
@@ -89,10 +91,10 @@
                             </div>
 
                             <div class="text-sm">
-                                {{-- TODO: Create password resets --}}
-                                {{-- <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                TODO: Create password resets
+                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
                                 {{ translate('Forgot your password?') }}
-                                </a> --}}
+                                </a>
                             </div>
                         </div>
 
@@ -103,7 +105,7 @@
                             </button>
                         </div>
                     </form>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
