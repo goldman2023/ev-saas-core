@@ -88,15 +88,17 @@
             <div class="w-full flex mt-3">
                 <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
-                @if(get_setting('stripe_pk_test_key'))
-                <a href="{{ route('product.generate_checkout_link', [$product->id, $product->quantity]) }}" target="_blank" class="w-full btn btn-primary">
-                    {{ translate('Buy now') }}
-                </a>
+                @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
+                    <x-system.buy-now-button
+                        :model="$product"
+                        class=""
+                        label="{{ translate('Buy now') }}"
+                        label-not-in-stock="{{ translate('Not in stock') }}">
+                    </x-system.buy-now-button>
                 @else
                     <x-system.add-to-cart-button
                         :model="$product"
                         class=""
-                        {{-- icon="heroicon-o-shopping-cart" --}}
                         label="{{ translate('Add to cart') }}"
                         label-not-in-stock="{{ translate('Not in stock') }}">
                     </x-system.add-to-cart-button>

@@ -13,18 +13,29 @@ use Session;
 use EVS;
 use FX;
 use Stripe;
+use Payments;
 use App\Models\CoreMeta;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 class StripeService
 {
     public $stripe = null;
+    public $stripe_prefix = null;
 
     public function __construct($app)
     {
-        $this->stripe = new \Stripe\StripeClient(
-            get_setting('stripe_sk_test_key') // TODO: Should use Live key on production!!!!
-        );
+        // Depending on Stripe Mode for current tenant, use live or test key!
+        // Stripe mode can be changed in App Settings!
+        if(Payments::isStripeLiveMode()) {
+            $this->stripe = new \Stripe\StripeClient(
+                Payments::stripe()->stripe_sk_live_key
+            );
+            $this->stripe_prefix = 'live_';
+        } else {
+            $this->stripe = new \Stripe\StripeClient(
+                Payments::stripe()->stripe_sk_test_key
+            );
+        }
     }
 
     public function saveStripeProduct($model)
@@ -94,17 +105,22 @@ class StripeService
         return true;
     }
 
-    public function createCheckoutLink($product)
+    protected function updateStripeProduct($model, $stripe_id) {
+        return null;
+    }
+
+    public function createCheckoutLink($model, $qty)
     {
         $checkout_link['url'] = "#";
 
-
         $stripe_args = [
-            'line_items' => [[
-                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => $product->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
-                'quantity' => 1,
-            ]],
+            'line_items' => [
+                [
+                    # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
+                    'price' => $model->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
+                    'quantity' => $qty,
+                ]
+            ],
             'mode' => 'payment',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
             'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/order/16/received',
@@ -118,22 +134,36 @@ class StripeService
         if (auth()->user()) {
             $email =  auth()->user()->email;
             $stripe_args['customer_email'] = $email;
-
         } else {
             $email = '';
         }
 
+        // Check if Stripe Product actually exists
+        $stripe_product_id = $model->core_meta->where('key', '=', 'stripe_product_id')->first();
 
-        if ($product->core_meta->where('key', '=', 'stripe_price_id')->first()) {
-            $checkout_link = $this->stripe->checkout->sessions->create(
-                $stripe_args
-            );
-        } else {
-            $this->createStripeProduct($product);
+        try {
+            $stripe_product = $this->stripe->products->retrieve($stripe_product_id->value, []);
+
+            // 
+        } catch(\Exception $e) {
+            // What if there is no product in stripe under given ID?
+            
+            // 1. Create a product 
+            $this->createStripeProduct($model);
             $checkout_link = $this->createCheckoutLink($product);
         }
+        
 
+        dd($stripe_product);
 
+        // if ($model->core_meta->where('key', '=', 'stripe_price_id')->first()) {
+        //     $checkout_link = $this->stripe->checkout->sessions->create(
+        //         $stripe_args
+        //     );
+        // } else {
+        //     $this->createStripeProduct($product);
+        //     $checkout_link = $this->createCheckoutLink($product);
+        // }
 
         return ($checkout_link['url']);
     }
