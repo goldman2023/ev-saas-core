@@ -20,7 +20,7 @@ use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 class StripeService
 {
     public $stripe = null;
-    public $stripe_prefix = null;
+    public $mode_prefix = null;
 
     public function __construct($app)
     {
@@ -30,11 +30,12 @@ class StripeService
             $this->stripe = new \Stripe\StripeClient(
                 Payments::stripe()->stripe_sk_live_key
             );
-            $this->stripe_prefix = 'live_';
+            $this->mode_prefix = 'live_';
         } else {
             $this->stripe = new \Stripe\StripeClient(
                 Payments::stripe()->stripe_sk_test_key
             );
+            $this->mode_prefix = 'test_';
         }
     }
 
@@ -55,7 +56,6 @@ class StripeService
     protected function createStripeProduct($model)
     {
         // Reminder: Stripe pricemust be in cents!!!
-        $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
         $description = $model->excerpt;
         if (empty($description)) {
             $description = $model->description;
@@ -63,7 +63,6 @@ class StripeService
                 $description = $model->name;
             }
         }
-        // $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
 
         // Create Stripe Product and Price
         $stripe_product = $this->stripe->products->create([
@@ -81,7 +80,6 @@ class StripeService
         ]);
 
         $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * (pow(10, $no_of_decimals)), // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'currency' => strtolower($model->base_currency),
             'product' => $stripe_product->id,
@@ -91,14 +89,14 @@ class StripeService
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
             'subject_type' => $model::class,
-            'key' => 'stripe_product_id',
+            'key' => $this->mode_prefix . 'stripe_product_id',
             'value' => $stripe_product->id
         ]);
 
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
             'subject_type' => $model::class,
-            'key' => 'stripe_price_id',
+            'key' => $this->mode_prefix .'stripe_price_id',
             'value' => $stripe_product_price->id
         ]);
 
@@ -117,7 +115,7 @@ class StripeService
             'line_items' => [
                 [
                     # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
-                    'price' => $model->core_meta->where('key', '=', 'stripe_price_id')->first()->value,
+                    'price' => $model->core_meta->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()->value,
                     'quantity' => $qty,
                 ]
             ],

@@ -1,7 +1,7 @@
 {{-- <!-- Toast -->
 <div @if($id) id="{{ $id }}" @endif class="toast {{ $position }} {{ $class }} " role="alert"
     @if($isX)
-        
+
     @endif
     {{ $attributes }}
 >
@@ -28,7 +28,7 @@
 <!-- End Toast --> --}}
 
 
-<div class="fixed rounded-md  p-4  top-24 left-1/2 translate-x-[-50%] {{ $position }} {{ $class }}" 
+<div class="fixed rounded-md  p-4  top-24 left-1/2 translate-x-[-50%] {{ $position }} {{ $class }} z-[101]"
         x-data="{
             show: false,
             content: '{{ $content }}',
@@ -52,8 +52,8 @@
         </template>
       </div>
       <div class="ml-3">
-        <h3 class="text-sm font-medium text-green-800" 
-                :class="{'text-green-800': type === 'success', 'text-red-800': type === 'danger' }" 
+        <h3 class="text-sm font-medium text-green-800"
+                :class="{'text-green-800': type === 'success', 'text-red-800': type === 'danger' }"
                 x-text="content"></h3>
         {{-- <div class="mt-2 text-sm text-green-700">
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum similique veniam.</p>
@@ -67,4 +67,3 @@
       </div>
     </div>
   </div>
-  

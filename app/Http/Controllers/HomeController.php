@@ -175,7 +175,9 @@ class HomeController extends Controller
 
 
             /* Check if feed is disabled for this tenant */
-            if(!get_tenant_setting('feed_disabled', false)) {
+
+            /* Example usage of TenantSetting for feature detection */
+            if(get_tenant_setting('feed_enabled', true)) {
                 if(auth()->user()) {
                     return redirect()->route('feed.index');
                 } else {

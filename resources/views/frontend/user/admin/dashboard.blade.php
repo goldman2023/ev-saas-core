@@ -20,9 +20,9 @@
         <div class="grid">
             <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
         </div>
-        <div class="grid grid-cols-4 gap-12 mb-12">
+        <div class="sm:grid sm:grid-cols-4 gap-5 mb-12">
 
-            <div class="lg:col-span-2 col-span-4">
+            <div class="">
                 <x-dashboard.widgets.top-categories></x-dashboard.widgets.top-categories>
             </div>
 
@@ -47,6 +47,10 @@
 
                 <x-dashboard.elements.support-card class="card mb-3">
                 </x-dashboard.elements.support-card>
+
+            </div>
+
+            <div>
                 <x-dashboard.elements.card>
                     <x-slot name="cardHeader" class="flow-root mt-6">
                         <div class="h5 fw-600">{{ translate('Quick Actions') }} </div>
@@ -85,7 +89,7 @@
 
 
 <section class="stats mb-3">
-    <div class="grid grid-cols-2 gap-10">
+    <div class="sm:grid sm:grid-cols-2 gap-5">
         <x-default.dashboard.widgets.integrations-widget>
 
         </x-default.dashboard.widgets.integrations-widget>

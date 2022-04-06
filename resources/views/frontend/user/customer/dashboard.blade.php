@@ -6,7 +6,7 @@
         <div class="grid">
             <x-dashboard.widgets.user-welcome></x-dashboard.widgets.user-welcome>
         </div>
-        <div class="grid grid-cols-4 gap-12 mb-12">
+        <div class="sm:grid sm:grid-cols-4 gap-12 mb-12">
 
             <div class="lg:col-span-2 col-span-4">
                 <x-dashboard.elements.support-card class="card bg-white p-4 mb-3">
@@ -14,9 +14,7 @@
             </div>
 
             <div>
-
-
-
+                {{-- TODO: Add something to this column based on child theme --}}
             </div>
 
         </div>
