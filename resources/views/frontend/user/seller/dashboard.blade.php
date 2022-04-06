@@ -98,7 +98,7 @@
 
         <div class="">
             <div class="">
-                @livewire('dashboard.elements.activity-log')
+                @livewire('dashboard.elements.activity-log', ['scope' => 'seller'])
             </div>
         </div>
     </div>

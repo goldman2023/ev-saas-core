@@ -31,12 +31,15 @@
                             </li>
                             <li class="mb-6 flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
-                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">Get mentoring and
-                                    consulting from FoxAsk Mentors</p>
+                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
+                                    Get mentoring and
+                                    consulting from FoxAsk Mentors
+                                </p>
                             </li>
                             <li class="flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
-                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">Take part in
+                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
+                                    Take part in
                                     online events and courses</p>
                             </li>
                         </ul>
@@ -44,13 +47,13 @@
                     <div class="w-full lg:w-1/2 sm:mt-52">
                         <div
                             class="flex flex-col items-center p-10 xl:px-24 xl:pb-12 bg-white lg:max-w-xl lg:ml-auto rounded-4xl shadow-2xl">
-                            <img class="relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
-                                src="{{ get_site_logo() }}" alt="">
+                            <img class="bg-white-300 p-4 relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
+                                src="{{ get_site_logo('dark') }}" alt="">
                             <h2 class="mb-4 text-xl md:text-3xl text-coolGray-900 font-bold text-center">Join our
                                 community</h2>
 
                             <x-tailwind-ui.forms.login-form> </x-tailwind-ui.forms.login-form>
-{{--
+                            {{--
                             <a class="mb-4 inline-block py-3 px-7 w-full leading-6 text-blue-50 font-medium text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md"
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Get Started') }}
@@ -194,7 +197,7 @@
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Join') }} {{ get_site_name()
                                 }}
-                                </a>
+                            </a>
                         </div>
                     </div>
                 </div>
