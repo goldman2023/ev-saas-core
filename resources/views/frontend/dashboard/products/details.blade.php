@@ -194,7 +194,7 @@
 
 
                                     </h3>
-                                    {{-- Live data bade --}}
+                                    {{-- Live data badge --}}
                                     <div class="absolute right-6 top-6">
 
                                         <span
@@ -205,6 +205,7 @@
                                             {{ translate('Live') }}
                                         </span>
                                     </div>
+                                    {{-- Live data badge end --}}
 
                                     <livewire:product-activity :product="$product" />
                                 </div>
