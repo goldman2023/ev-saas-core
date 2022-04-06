@@ -24,6 +24,9 @@ class StripeService
 
     public function __construct($app)
     {
+        if(empty( Payments::stripe()->stripe_sk )) {
+            return redirect()->route('settings.payment_methods');
+        }
         // Depending on Stripe Mode for current tenant, use live or test key!
         // Stripe mode can be changed in App Settings!
         if(Payments::isStripeLiveMode()) {
@@ -83,6 +86,9 @@ class StripeService
             // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
 
             // 1. Get Stripe Product
+            if(empty($this->stripe->products)) {
+                return false;
+            }
             $stripe_product = $this->stripe->products->retrieve($model->id, []);
         }
 
@@ -93,11 +99,11 @@ class StripeService
                 'subject_type' => $model::class,
                 'key' => $this->mode_prefix . 'stripe_product_id',
             ],
-            [    
+            [
                 'value' => $stripe_product->id
             ]
         );
-        
+
         // Create Stripe Price
         $stripe_product_price = $this->stripe->prices->create([
             'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
@@ -112,7 +118,7 @@ class StripeService
                 'subject_type' => $model::class,
                 'key' => $this->mode_prefix .'stripe_price_id',
             ],
-            [    
+            [
                 'value' => $stripe_product_price->id
             ]
         );
@@ -128,8 +134,8 @@ class StripeService
         // Get stripe product iD
         if(empty($stripe_product_id))
             $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
-        
-        
+
+
         // Create a new price and attach it to stripe product ID
         $stripe_product_price = $this->stripe->prices->create([
             'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
@@ -143,29 +149,36 @@ class StripeService
                 'subject_type' => $model::class,
                 'key' => $this->mode_prefix .'stripe_price_id',
             ],
-            [    
+            [
                 'value' => $stripe_product_price->id
             ]
         );
 
         return $stripe_product_price;
     }
-        
 
-    public function createCheckoutLink($model, $qty)
+
+    public function createCheckoutLink($model, $qty = 1)
     {
         // Check if Stripe Product actually exists
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
-        
-        try {
-            $stripe_product = $this->stripe->products->retrieve($stripe_product_id, []);
-        } catch(\Exception $e) {
-            // What if there is no product in stripe under given ID?
-            
-            // 1. Create a product and price if product is missing in Stripe
-            $stripe_product = $this->createStripeProduct($model);
-            // return $this->createCheckoutLink($model, $qty); // try again after product and price are created
+        if(!empty( $stripe_product_id)) {
+            try {
+
+                $stripe_product = $this->stripe->products->retrieve($stripe_product_id, []);
+            } catch(\Exception $e) {
+                // What if there is no product in stripe under given ID?
+
+                // 1. Create a product and price if product is missing in Stripe
+                $stripe_product = $this->createStripeProduct($model);
+                // return $this->createCheckoutLink($model, $qty); // try again after product and price are created
+            }
+        } else {
+            return "#";
         }
+
+        return "#";
+
 
 
         // Check latest price existance
@@ -178,7 +191,7 @@ class StripeService
             // 1. Create a new stripe price if price is missing in Stripe
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
-        
+
 
         // Compare current model price and Last Stripe Price and if it does not match, create a new price
         if((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
@@ -187,7 +200,7 @@ class StripeService
             // Create new Stripe Price
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
-        
+
         $checkout_link['url'] = "#";
 
         $stripe_args = [
@@ -222,6 +235,6 @@ class StripeService
     }
 
     public function stripeWebhooks() {
-        
+
     }
 }
