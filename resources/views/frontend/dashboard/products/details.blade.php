@@ -224,21 +224,36 @@
                                                         <!-- Extend touch target to entire panel -->
                                                         <span class="absolute inset-0" aria-hidden="true"></span>
                                                         @if(!$product->isStripeProduct())
-                                                        <span class="mt-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                                                            <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
-                                                              <circle cx="4" cy="4" r="3" />
+                                                        <span
+                                                            class="mt-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                                                            <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400"
+                                                                fill="currentColor" viewBox="0 0 8 8">
+                                                                <circle cx="4" cy="4" r="3" />
                                                             </svg>
                                                             {{ translate('Status live') }}
-                                                          </span>
+                                                        </span>
                                                         @endif
                                                         <div class="hidden">
                                                             Stripe
                                                         </div>
                                                     </a>
                                                 </h3>
-                                                <p class="mt-1 text-sm text-gray-600 line-clamp-2">
-                                                    {{ translate('Use stripe checkout for all your product invoicing and checkout needs. Create QR codes and payment links') }}
+                                                <p class="mt-1 text-sm text-gray-600 line-clamp-2 mb-2">
+                                                    {{ translate('Use stripe checkout for all your product invoicing and
+                                                    checkout needs. Create QR codes and payment links') }}
                                                 </p>
+
+                                                <!-- This example requires Tailwind CSS v2.0+ -->
+                                                <a type="button"
+                                                target="_blank"
+                                                href="{{ \StripeService::createCheckoutLink($product) }}"
+                                                    class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                    {{ translate('Peview checkout') }}
+                                                    <!-- Heroicon name: solid/mail -->
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                                      </svg>
+                                                </a>
                                             </div>
                                         </li>
                                         <li class="py-5">
