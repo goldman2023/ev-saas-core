@@ -20,7 +20,10 @@ class ActivityLog extends Component
 
         } else {
             $this->scope = 'customer';
+        $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
+
         }
+
 
     }
 

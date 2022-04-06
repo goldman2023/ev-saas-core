@@ -28,23 +28,50 @@
                                             <p class="text-xl font-bold text-gray-900 sm:text-2xl mb-3">
                                                 {{ $product->name }}
                                             </p>
-                                            <p class="text-sm font-medium text-gray-600">
-                                                @foreach($product->categories()->get() as $category)
-                                                <a
-                                                target="_blank"
-                                                href="{{ $category->getPermalink() }}"
-                                                    class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                                                    {{ $category->name }}
-                                            </a>
-                                                @endforeach
-                                            </p>
+                                            <div class="text-sm font-medium text-gray-600">
+                                                {{-- TODO: Add expandable view all +some categories total --}}
+                                                <div class="text-clip overflow-hidden max-h-[30px]">
+                                                    @foreach($product->categories()->get() as $category)
+                                                    <a target="_blank" href="{{ $category->getPermalink() }}"
+                                                        class="inline-flex items-center px-3 mb-2 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                                                        {{ $category->name }}
+                                                    </a>
+                                                    @endforeach
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="mt-5 flex justify-center sm:mt-0">
-                                        <a href="{{ $product->getPermalink() }}" target="_blank"
-                                            class="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                            {{ translate('View') }} {{ translate('product') }}
-                                        </a>
+                                        <div class="text-center">
+                                            <a href="{{ $product->getPermalink() }}" target="_blank"
+                                                class="min-w-[200px] flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-200 bg-indigo-600 hover:bg-gray-50">
+
+                                                {{ translate('View') }} {{ translate('product') }}
+                                                <svg class="gray-600 flex-shrink-0 h-6 w-6 ml-2"
+                                                    xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                            </a>
+
+                                            <div>
+                                                <span
+                                                    class="mt-3 mx-auto text-center inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                                                    <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400"
+                                                        fill="currentColor" viewBox="0 0 8 8">
+                                                        <circle cx="4" cy="4" r="3" />
+                                                    </svg>
+                                                    {{ $product->status }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -175,15 +202,43 @@
                                             <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
                                                 <h3 class="text-sm font-semibold text-gray-800">
                                                     <a href="#" class="hover:underline focus:outline-none">
+                                                        {{-- Stripe icon --}}
+                                                        {{-- TODO: Create global components for icons like this custom
+                                                        brand images mostly --}}
+                                                        <svg class="w-10" viewBox="0 0 452 188"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                            <title>Logo</title>
+                                                            <defs>
+                                                                <path id="a" d="M.06.667h451.623V188H.06V.667z" />
+                                                            </defs>
+                                                            <g fill="none" fill-rule="evenodd">
+                                                                <mask id="b" fill="#fff">
+                                                                    <use xlink:href="#a" />
+                                                                </mask>
+                                                                <path
+                                                                    d="M47.2 84.934c-9.733-3.6-15.067-6.4-15.067-10.8 0-3.734 3.067-5.867 8.534-5.867 10 0 20.266 3.867 27.333 7.333l4-24.666c-5.6-2.667-17.067-7.067-32.933-7.067-11.2 0-20.534 2.933-27.2 8.4-6.934 5.733-10.534 14-10.534 24 0 18.133 11.067 25.867 29.067 32.4 11.6 4.133 15.467 7.067 15.467 11.6 0 4.4-3.734 6.933-10.534 6.933-8.4 0-22.266-4.133-31.333-9.466l-4 24.933c7.733 4.4 22.133 8.933 37.067 8.933 11.866 0 21.733-2.8 28.4-8.133C72.933 137.6 76.8 128.934 76.8 117.734c0-18.534-11.333-26.267-29.6-32.8zM141.917 70.4l4-24.533H124.8V16.085l-28.392 4.672-4.1 25.11-9.986 1.62L78.584 70.4h13.683v48.134c0 12.533 3.2 21.2 9.733 26.533 5.467 4.4 13.333 6.533 24.4 6.533 8.533 0 13.733-1.466 17.333-2.4v-26c-2 .534-6.533 1.467-9.6 1.467-6.533 0-9.333-3.333-9.333-10.933V70.4h17.117zm63.416-25.966c-9.333 0-16.8 4.9-19.733 13.7l-2-12.267h-28.933V149.6h33.066V82.267c4.134-5.067 10-6.899 18-6.899 1.734 0 3.6 0 5.867.4V45.234c-2.267-.533-4.267-.8-6.267-.8zm30.934-8.834c9.6 0 17.333-7.866 17.333-17.466C253.6 8.4 245.867.667 236.267.667 226.533.667 218.8 8.4 218.8 18.134c0 9.6 7.733 17.466 17.467 17.466zM219.6 45.867h33.2V149.6h-33.2V45.867zM346.883 55.2c-5.867-7.6-14-11.333-24.4-11.333-9.6 0-18 4-25.867 12.4l-1.733-10.4h-29.067V188l33.067-5.466V149.2c5.066 1.6 10.266 2.4 14.933 2.4 8.267 0 20.267-2.133 29.6-12.266 8.933-9.734 13.467-24.8 13.467-44.667 0-17.6-3.334-30.933-10-39.467zm-27.467 64c-2.667 5.067-6.8 7.734-11.6 7.734-3.333 0-6.267-.667-8.933-2V75.6c5.6-5.866 10.666-6.533 12.533-6.533 8.4 0 12.533 9.067 12.533 26.8 0 10.133-1.466 18-4.533 23.333zm132.267-22.4c0-16.533-3.6-29.6-10.667-38.8-7.2-9.333-18-14.133-31.733-14.133-28.134 0-45.6 20.8-45.6 54.133 0 18.667 4.666 32.667 13.866 41.6 8.267 8 20.134 12 35.467 12 14.133 0 27.2-3.333 35.467-8.8l-3.6-22.666c-8.134 4.4-17.6 6.8-28.267 6.8-6.4 0-10.8-1.334-14-4.134-3.467-2.933-5.467-7.733-6.133-14.533h54.8c.133-1.6.4-9.067.4-11.467zM396.216 88c.933-14.8 4.933-21.733 12.533-21.733 7.467 0 11.334 7.067 11.867 21.733h-24.4z"
+                                                                    fill="#1A1918" mask="url(#b)" />
+                                                            </g>
+                                                        </svg>
                                                         <!-- Extend touch target to entire panel -->
                                                         <span class="absolute inset-0" aria-hidden="true"></span>
-                                                        Stripe
+                                                        @if(!$product->isStripeProduct())
+                                                        <span class="mt-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+                                                            <svg class="-ml-1 mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
+                                                              <circle cx="4" cy="4" r="3" />
+                                                            </svg>
+                                                            {{ translate('Status live') }}
+                                                          </span>
+                                                        @endif
+                                                        <div class="hidden">
+                                                            Stripe
+                                                        </div>
                                                     </a>
                                                 </h3>
-                                                <p class="mt-1 text-sm text-gray-600 line-clamp-2">Cum qui rem deleniti.
-                                                    Suscipit in dolor veritatis sequi aut. Vero ut earum quis deleniti.
-                                                    Ut a sunt eum cum ut repudiandae possimus. Nihil ex tempora neque
-                                                    cum consectetur dolores.</p>
+                                                <p class="mt-1 text-sm text-gray-600 line-clamp-2">
+                                                    {{ translate('Use stripe checkout for all your product invoicing and checkout needs. Create QR codes and payment links') }}
+                                                </p>
                                             </div>
                                         </li>
                                         <li class="py-5">
