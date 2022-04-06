@@ -64,58 +64,137 @@ class StripeService
             }
         }
 
-        // Create Stripe Product and Price
-        $stripe_product = $this->stripe->products->create([
-            'id' => $model->id,
-            'name' => $model->name,
-            'active' => true,
-            // 'livemode' => false, // TODO: Make it true in Production
-            'description' => $description,
-            'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
-            'shippable' => $model->is_digital ? false : true,
-            // 'tax_code' => '',
-            'url' => $model->getPermalink(),
-            'unit_label' => substr($model->unit, 0, 12),
-            // 'metadata' => []
-        ]);
+        try {
+            // Create Stripe Product
+            $stripe_product = $this->stripe->products->create([
+                'id' => $model->id,
+                'name' => $model->name,
+                'active' => true,
+                // 'livemode' => false, // TODO: Make it true in Production
+                'description' => $description,
+                'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
+                'shippable' => $model->is_digital ? false : true,
+                // 'tax_code' => '',
+                'url' => $model->getPermalink(),
+                'unit_label' => substr($model->unit, 0, 12),
+                // 'metadata' => []
+            ]);
+        } catch (\Exception $e) {
+            // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
 
+            // 1. Get Stripe Product
+            $stripe_product = $this->stripe->products->retrieve($model->id, []);
+        }
+
+        // Create CoreMeta with stripe Product ID
+        CoreMeta::updateOrCreate(
+            [
+                'subject_id' => $model->id,
+                'subject_type' => $model::class,
+                'key' => $this->mode_prefix . 'stripe_product_id',
+            ],
+            [    
+                'value' => $stripe_product->id
+            ]
+        );
+        
+        // Create Stripe Price
         $stripe_product_price = $this->stripe->prices->create([
             'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'currency' => strtolower($model->base_currency),
             'product' => $stripe_product->id,
         ]);
 
-        // Create CoreMeta with stripe Product ID and Price ID
-        CoreMeta::updateOrCreate([
-            'subject_id' => $model->id,
-            'subject_type' => $model::class,
-            'key' => $this->mode_prefix . 'stripe_product_id',
-            'value' => $stripe_product->id
-        ]);
+        // Create CoreMeta with stripe Price ID
+        CoreMeta::updateOrCreate(
+            [
+                'subject_id' => $model->id,
+                'subject_type' => $model::class,
+                'key' => $this->mode_prefix .'stripe_price_id',
+            ],
+            [    
+                'value' => $stripe_product_price->id
+            ]
+        );
 
-        CoreMeta::updateOrCreate([
-            'subject_id' => $model->id,
-            'subject_type' => $model::class,
-            'key' => $this->mode_prefix .'stripe_price_id',
-            'value' => $stripe_product_price->id
-        ]);
-
-        return true;
+        return $stripe_product;
     }
 
     protected function updateStripeProduct($model, $stripe_id) {
         return null;
     }
 
+    protected function createStripePrice($model, $stripe_product_id = null) {
+        // Get stripe product iD
+        if(empty($stripe_product_id))
+            $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
+        
+        
+        // Create a new price and attach it to stripe product ID
+        $stripe_product_price = $this->stripe->prices->create([
+            'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
+            'currency' => strtolower($model->base_currency),
+            'product' => $stripe_product_id,
+        ]);
+
+        CoreMeta::updateOrCreate(
+            [
+                'subject_id' => $model->id,
+                'subject_type' => $model::class,
+                'key' => $this->mode_prefix .'stripe_price_id',
+            ],
+            [    
+                'value' => $stripe_product_price->id
+            ]
+        );
+
+        return $stripe_product_price;
+    }
+        
+
     public function createCheckoutLink($model, $qty)
     {
+        // Check if Stripe Product actually exists
+        $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
+        
+        try {
+            $stripe_product = $this->stripe->products->retrieve($stripe_product_id, []);
+        } catch(\Exception $e) {
+            // What if there is no product in stripe under given ID?
+            
+            // 1. Create a product and price if product is missing in Stripe
+            $stripe_product = $this->createStripeProduct($model);
+            // return $this->createCheckoutLink($model, $qty); // try again after product and price are created
+        }
+
+
+        // Check latest price existance
+        $stripe_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()?->value ?? null;
+
+        try {
+            $stripe_price = $this->stripe->prices->retrieve($stripe_price_id, []);
+        } catch(\Exception $e) {
+            // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+            // 1. Create a new stripe price if price is missing in Stripe
+            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+        }
+        
+
+        // Compare current model price and Last Stripe Price and if it does not match, create a new price
+        if((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
+            // There is a difference between stripe price and our local price of the product
+
+            // Create new Stripe Price
+            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+        }
+        
         $checkout_link['url'] = "#";
 
         $stripe_args = [
             'line_items' => [
                 [
                     # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
-                    'price' => $model->core_meta->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()->value,
+                    'price' => $stripe_price->id,
                     'quantity' => $qty,
                 ]
             ],
@@ -136,33 +215,13 @@ class StripeService
             $email = '';
         }
 
-        // Check if Stripe Product actually exists
-        $stripe_product_id = $model->core_meta->where('key', '=', 'stripe_product_id')->first();
+        // Create a Stripe Checkout Link
+        $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
 
-        try {
-            $stripe_product = $this->stripe->products->retrieve($stripe_product_id->value, []);
+        return $checkout_link['url'] ?? null;
+    }
 
-            // 
-        } catch(\Exception $e) {
-            // What if there is no product in stripe under given ID?
-            
-            // 1. Create a product 
-            $this->createStripeProduct($model);
-            $checkout_link = $this->createCheckoutLink($product);
-        }
+    public function stripeWebhooks() {
         
-
-        dd($stripe_product);
-
-        // if ($model->core_meta->where('key', '=', 'stripe_price_id')->first()) {
-        //     $checkout_link = $this->stripe->checkout->sessions->create(
-        //         $stripe_args
-        //     );
-        // } else {
-        //     $this->createStripeProduct($product);
-        //     $checkout_link = $this->createCheckoutLink($product);
-        // }
-
-        return ($checkout_link['url']);
     }
 }
