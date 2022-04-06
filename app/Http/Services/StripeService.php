@@ -13,18 +13,30 @@ use Session;
 use EVS;
 use FX;
 use Stripe;
+use Payments;
 use App\Models\CoreMeta;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 class StripeService
 {
     public $stripe = null;
+    public $mode_prefix = null;
 
     public function __construct($app)
     {
-        $this->stripe = new \Stripe\StripeClient(
-            get_setting('stripe_sk_test_key') // TODO: Should use Live key on production!!!!
-        );
+        // Depending on Stripe Mode for current tenant, use live or test key!
+        // Stripe mode can be changed in App Settings!
+        if(Payments::isStripeLiveMode()) {
+            $this->stripe = new \Stripe\StripeClient(
+                Payments::stripe()->stripe_sk_live_key
+            );
+            $this->mode_prefix = 'live_';
+        } else {
+            $this->stripe = new \Stripe\StripeClient(
+                Payments::stripe()->stripe_sk_test_key
+            );
+            $this->mode_prefix = 'test_';
+        }
     }
 
     public function saveStripeProduct($model)
@@ -41,23 +53,9 @@ class StripeService
         }
     }
 
-    protected function getStripeModePrefix()
-    {
-        $stripe_key_prefix = 'test_';
-        if (get_setting('stripe_mode') == 'live') {
-            $stripe_key_prefix = 'live_';
-        }
-
-
-        return $stripe_key_prefix;
-    }
-
-
-
     protected function createStripeProduct($model)
     {
         // Reminder: Stripe pricemust be in cents!!!
-        $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
         $description = $model->excerpt;
         if (empty($description)) {
             $description = $model->description;
@@ -65,10 +63,8 @@ class StripeService
                 $description = $model->name;
             }
         }
-        // $no_of_decimals = strlen(substr(strrchr((string) $model->getTotalPrice(), "."), 1));
 
         // Create Stripe Product and Price
-
         $stripe_product = $this->stripe->products->create([
             'id' => $model->id,
             'name' => $model->name,
@@ -84,67 +80,45 @@ class StripeService
         ]);
 
         $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * (pow(10, $no_of_decimals)), // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
             'currency' => strtolower($model->base_currency),
             'product' => $stripe_product->id,
         ]);
 
-
-
-
         // Create CoreMeta with stripe Product ID and Price ID
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
             'subject_type' => $model::class,
-            'key' => $this->getStripeModePrefix() . 'stripe_product_id',
+            'key' => $this->mode_prefix . 'stripe_product_id',
             'value' => $stripe_product->id
         ]);
-
-
-
-
-
-
 
         CoreMeta::updateOrCreate([
             'subject_id' => $model->id,
             'subject_type' => $model::class,
-            'key' => $this->getStripeModePrefix() .'stripe_price_id',
+            'key' => $this->mode_prefix .'stripe_price_id',
             'value' => $stripe_product_price->id
         ]);
 
         return true;
     }
 
-    public function createCheckoutLink($product)
+    protected function updateStripeProduct($model, $stripe_id) {
+        return null;
+    }
+
+    public function createCheckoutLink($model, $qty)
     {
         $checkout_link['url'] = "#";
 
-        if ($product->core_meta->where('key', '=', 'stripe_price_id')->first()) {
-            try {
-                $this->createStripeProduct($product);
-            } catch (\Exception $e) {
-
-            }
-        }
-
-        if (isset($product->core_meta->where('key', '=',  $this->getStripeModePrefix() . 'stripe_price_id')->first()->value)) {
-            $price_id = $product->core_meta->where('key', '=', $this->getStripeModePrefix() . 'stripe_price_id')->first()->value;
-        } else {
-            $this->createStripeProduct($product);
-        }
-
-        $price_id = $product->core_meta->where('key', '=', $this->getStripeModePrefix() . 'stripe_price_id')->first()->value;
-
-
-
         $stripe_args = [
-            'line_items' => [[
-                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
-                'price' => $price_id,
-                'quantity' => 1,
-            ]],
+            'line_items' => [
+                [
+                    # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
+                    'price' => $model->core_meta->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()->value,
+                    'quantity' => $qty,
+                ]
+            ],
             'mode' => 'payment',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
             'success_url' => 'https://' . DomainTenantResolver::$currentDomain->domain . '/order/16/received',
@@ -162,17 +136,32 @@ class StripeService
             $email = '';
         }
 
+        // Check if Stripe Product actually exists
+        $stripe_product_id = $model->core_meta->where('key', '=', 'stripe_product_id')->first();
 
-        if ($product->core_meta->where('key', '=', $this->getStripeModePrefix() . 'stripe_price_id')->first()) {
-            $checkout_link = $this->stripe->checkout->sessions->create(
-                $stripe_args
-            );
-        } else {
-            $this->createStripeProduct($product);
+        try {
+            $stripe_product = $this->stripe->products->retrieve($stripe_product_id->value, []);
+
+            // 
+        } catch(\Exception $e) {
+            // What if there is no product in stripe under given ID?
+            
+            // 1. Create a product 
+            $this->createStripeProduct($model);
             $checkout_link = $this->createCheckoutLink($product);
         }
+        
 
+        dd($stripe_product);
 
+        // if ($model->core_meta->where('key', '=', 'stripe_price_id')->first()) {
+        //     $checkout_link = $this->stripe->checkout->sessions->create(
+        //         $stripe_args
+        //     );
+        // } else {
+        //     $this->createStripeProduct($product);
+        //     $checkout_link = $this->createCheckoutLink($product);
+        // }
 
         return ($checkout_link['url']);
     }
