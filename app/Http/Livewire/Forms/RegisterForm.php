@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Forms;
 
+use App\Mail\WelcomeEmail;
 use DB;
 use EVS;
 use Categories;
@@ -21,6 +22,7 @@ use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Auth\Events\Registered;
 
 use Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterForm extends Component
 {
@@ -68,7 +70,6 @@ class RegisterForm extends Component
      */
     public function mount()
     {
-
     }
 
     public function render()
@@ -76,7 +77,8 @@ class RegisterForm extends Component
         return view('livewire.forms.register-form');
     }
 
-    public function register() {
+    public function register()
+    {
         $this->validate();
 
         DB::beginTransaction();
@@ -101,25 +103,34 @@ class RegisterForm extends Component
             } else {
                 throw new \Exception('There was an error while signing in to newly created account.');
             }
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             DB::rollback();
             $this->inform(translate('Error: Could not create a new account!'), $e->getMessage(), 'fail');
         }
+
+        try {
+            Mail::to($this->user->email)
+                ->cc('eim@we-saas.com')
+                ->send(new WelcomeEmail($this->user));
+        } catch (\Throwable $e) {
+
+        }
     }
 
-    protected function createUser() {
+    protected function createUser()
+    {
         $this->user = User::create([
             'name' => $this->name,
             'surname' => $this->surname,
             'email' => $this->email,
-            'user_type' => User::$customer_type, 
+            'user_type' => User::$customer_type,
             'password' => Hash::make($this->password),
         ]);
 
-        if(Cookie::has('referral_code')){
+        if (Cookie::has('referral_code')) {
             $referral_code = Cookie::get('referral_code');
             $referred_by_user = User::where('referral_code', $referral_code)->first();
-            if($referred_by_user != null){
+            if ($referred_by_user != null) {
                 $this->user->referred_by = $referred_by_user->id;
                 $this->user->save();
             }
