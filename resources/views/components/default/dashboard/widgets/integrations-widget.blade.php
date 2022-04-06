@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card hidden">
     <div class="card-header">
         <h5>{{ translate('Social Commerce Channels') }} </h5>
         <p>
