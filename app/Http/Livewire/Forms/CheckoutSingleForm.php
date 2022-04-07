@@ -317,8 +317,26 @@ class CheckoutSingleForm extends Component
             // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
             $this->order->shop_id = $this->items->first()->shop_id;
             $this->order->user_id = auth()->user()->id ?? null;
-            $this->order->type = OrderTypeEnum::subscription()->value; // only subscription for now...
 
+            // TODO: THIS IS ALSO VERY IMPORTANT - Separate $items based on type - is it a subscription or a standard product...or installment?
+            
+            if($this->items->first() instanceof Plan) {
+                /*
+                * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
+                */
+                $this->order->type = OrderTypeEnum::subscription()->value;
+                $this->order->number_of_invoices = -1; // 'unlimited' for subscriptions
+                $this->order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
+                $this->order->invoice_grace_period = 0;
+                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+            } else {
+                $this->order->type = OrderTypeEnum::standard()->value;
+                $this->order->number_of_invoices = 1; // 'unlimited' for subscriptions
+                $this->order->invoicing_period = null; // TODO: Add monthly/annual switch
+                $this->order->invoice_grace_period = $default_grace_period;
+                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+            }
+         
             /*
             * Billing data (when Address is selected)
             * Only if user is logged-in
@@ -364,15 +382,7 @@ class CheckoutSingleForm extends Component
             $this->order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $this->order->shipping_cost = 0;
             $this->order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
-
-            /*
-             * Invoicing data for SUBSCRIPTIONS or INCREMENTAL orders
-             */
-            $this->order->number_of_invoices = -1; // 'unlimited' for subscriptions
-            $this->order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
-            $this->order->invoice_grace_period = $default_grace_period;
-            $this->order->invoicing_start_date = Carbon::now()->timestamp; // start invoicing this moment (for non-trial subscriptions)
-
+            
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
             // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)

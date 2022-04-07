@@ -75,7 +75,8 @@ Route::middleware([
         Route::get('/we-edit/flow/menu', 'WeEditController@menuFlow')->name('we-edit.flow.menu');
     });
 
-
+    // Webhooks
+    Route::post('/webhooks/stripe', [StripePaymentController::class, 'webhooks'])->name('webhooks.stripe');
 
 
     // Route to show after creating new tenant:
@@ -179,6 +180,7 @@ Route::middleware([
         Route::get('/checkout-single', [EVCheckoutController::class, 'single'])->name('checkout.single.page');
 
         Route::get('/order/{id}/received', [EVCheckoutController::class, 'orderReceived'])->name('checkout.order.received');
+        Route::get('/order/{id}/canceled', [EVCheckoutController::class, 'orderCanceled'])->name('checkout.order.canceled');
     });
 
     /* Old active commerce stripe routes */

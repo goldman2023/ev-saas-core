@@ -85,7 +85,7 @@ class Order extends EVBaseModel
     {
         // Show only MyShop Orders
         static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
-            $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1)->orWhere('user_id', '=', auth()->user()->id);
+            $builder->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
         });
 
         // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties - THEY ARE NOT SET DURING THE ORDER CREATION!!!
