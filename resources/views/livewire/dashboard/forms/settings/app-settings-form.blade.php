@@ -1,5 +1,5 @@
 <div class="w-full" x-data="{
-        current_tab: 'payments',
+        current_tab: 'general',
         settings: @js($settings),
     }"
     x-init=""
@@ -101,6 +101,20 @@
                             </div>
                             {{-- END Site logo --}}
 
+                            {{-- Site logo Dark --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-2" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Site logo (Dark)') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.image-selector field="settings.site_logo_dark.value" id="site-logo-dark" :selected-image="$settings['site_logo_dark']['value']"></x-dashboard.form.image-selector>
+
+                                    <x-system.invalid-msg field="settings.site_logo_dark.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Site logo Dark--}}
+
                             <!-- Site Name -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
@@ -157,6 +171,7 @@
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
                                         $wire.set('settings.site_logo.value', settings.site_logo.value?.id, true);
+                                        $wire.set('settings.site_logo_dark.value', settings.site_logo_dark.value?.id, true);
                                         $wire.set('settings.maintenance_mode.value', settings.maintenance_mode.value, true);
                                     "
                                     wire:click="saveGeneral()">
@@ -519,7 +534,7 @@
 
 
                         {{-- Payments --}}
-                        <div class="w-full px-5" x-show="current_tab === 'payments'">
+                        <div class="w-full px-5" x-show="current_tab === 'payments'" wire:ignore>
                             @if($universal_payment_methods->isNotEmpty())
                                 @foreach($universal_payment_methods as $key => $payment_method)
                                     <livewire:dashboard.forms.payment-methods.payment-method-card

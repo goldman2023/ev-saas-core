@@ -40,6 +40,7 @@ class AppSettingsForm extends Component
                 // 'shop.*' => [],
                 // 'settings.*' => [],
                 'settings.site_logo.value' => ['required'],
+                'settings.site_logo_dark.value' => ['nullable'],
                 'settings.site_name.value' => ['required'],
                 'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
