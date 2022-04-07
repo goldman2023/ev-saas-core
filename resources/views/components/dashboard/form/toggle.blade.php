@@ -1,6 +1,6 @@
 <div x-data="{
   label: @js($label),
-}" class="w-full">
+}" class="w-full {{ $class }}">
 
   <button type="button" @click="{{ $field }} = !{{ $field }}"
           :class="{'bg-primary':{{ $field }} , 'bg-gray-200':!{{ $field }}}"

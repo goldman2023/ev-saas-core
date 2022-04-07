@@ -1,9 +1,10 @@
-<div class="shadow rounded border border-gray-200 p-5 {{ $class }} relative"
+<div class="shadow rounded border border-gray-200 {{ $class }} relative"
      wire:key="payment-method-{{ $paymentMethod->gateway }}"
      key="payment-method-{{ $paymentMethod->gateway }}"
      x-cloak
      x-data="{
         show: false,
+        enabled: @entangle('paymentMethod.enabled').defer,
         paymentMethod: @js($paymentMethod),
      }"
     >
@@ -11,26 +12,27 @@
     <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                           wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-    <div class="flex items-center justify-start cursor-pointer"  wire:loading.class="opacity-30 pointer-events-none" @click="show = !show">
+    <div class="flex items-center justify-start cursor-pointer p-5"  wire:loading.class="opacity-30 pointer-events-none" @click="show = !show">
         @svg('heroicon-o-chevron-right', ['class' => 'w-[16px] h[16px] mr-2', ':style' => "show && {transform: 'rotate(90deg)'}"])
         <h4 class="h5 mb-0">{{ $paymentMethod->name }}</h4>
 
+        
         <span class="badge-success flex align-center px-2 py-1 ml-3 text-12 text-success"
-              :class="{'flex':paymentMethod.enabled}"
-              x-show="paymentMethod.enabled">
+              :class="{'flex':enabled}"
+              x-show="enabled">
               {{ translate('active') }}
         </span>
 
         <span class="badge-danger items-center px-2 py-1 ml-3 text-12 text-danger"
-              :class="{'flex':!paymentMethod.enabled}"
-              x-show="!paymentMethod.enabled">
+              :class="{'flex':!enabled}"
+              x-show="!enabled">
               {{ translate('inactive') }}
         </span>
-        {{-- TODO: FIX THIS error - it happens because we use @js() instead of @entangle! --}}
-        <button type="button" @click="$wire.toggle(!paymentMethod.enabled); show = true;"
-                    :class="{'bg-primary':paymentMethod.enabled , 'bg-gray-200':!paymentMethod.enabled}"
+
+        <button type="button" @click="$wire.toggle(!enabled); show = true;"
+                    :class="{'bg-primary':enabled , 'bg-gray-200':!enabled}"
                     class="relative inline-flex flex-shrink-0 h-6 w-11 ml-auto border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                <span :class="{'translate-x-5':paymentMethod.enabled, 'translate-x-0':!paymentMethod.enabled}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                <span :class="{'translate-x-5':enabled, 'translate-x-0':!enabled}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
         </button>
 
         {{-- <label class="toggle-switch ml-auto" for="payment-method-{{ $paymentMethod->gateway }}-enabled" @click="event.stopPropagation();">
@@ -47,9 +49,9 @@
 
     </div>
 
-    <div class="w-full" x-show="show" wire:loading.class="opacity-30 pointer-events-none">
+    <div class="w-full pt-0 p-5 " x-show="show" wire:loading.class="opacity-30 pointer-events-none">
         <!-- Name -->
-        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
             <label class="block text-sm font-medium text-gray-900 ">
                 {{ translate('Title') }}
             </label>
@@ -123,7 +125,7 @@
                         <div class="w-full border-t border-gray-300"></div>
                       </div>
                       <div class="relative flex justify-start">
-                        <span class="pr-3 bg-white text-lg font-medium text-gray-900"> {{ translate('Account details:') }} </span>
+                        <span class="pr-3 bg-white text-lg font-medium text-gray-900 border rounded-lg border-gray-400 px-3"> {{ translate('Account details:') }} </span>
                     </div>
                 </div>
                 
@@ -203,13 +205,7 @@
                     {{-- Save Wire Transfer --}}
                     <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
-                            @click="
-                                {{-- $wire.set('settings.symbol_format.value', settings.symbol_format.value, true);
-                                $wire.set('settings.currency_format.value', settings.currency_format.value, true);
-                                $wire.set('settings.decimal_separator.value', settings.decimal_separator.value, true);
-                                $wire.set('settings.system_default_currency.value', settings.system_default_currency.value.code, true);
-                                $wire.set('settings.show_currency_switcher.value', settings.show_currency_switcher.value, true); --}}
-                            "
+                            @click=""
                             wire:click="save()">
                         {{ translate('Save') }}
                         </button>

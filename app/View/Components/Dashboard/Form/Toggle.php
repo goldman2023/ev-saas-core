@@ -8,16 +8,18 @@ class Toggle extends Component
 {
     public $field;
     public $label;
+    public $class;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($field = '', $label = '')
+    public function __construct($field = '', $label = '', $class = '')
     {
         $this->field = $field;
         $this->label = $label;
+        $this->class = $class;
     }
 
     /**
