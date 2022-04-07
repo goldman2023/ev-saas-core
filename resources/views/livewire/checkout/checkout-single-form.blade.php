@@ -271,7 +271,7 @@ x-cloak
                         {{ translate('Country') }}
                         <span class="text-red-500 ml-1">*</span>
                     </label>
-                    <x-dashboard.form.select field="billingCountry" :search="true" error-field="order.billing_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="billingCountry" :nullable="true"></x-dashboard.form.select>
+                    <x-dashboard.form.select field="billingCountry" :search="true" error-field="order.billing_country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="billingCountry" :nullable="false"></x-dashboard.form.select>
 
                     {{-- <input name="order.billing_country"
                             id="order.billing_country"

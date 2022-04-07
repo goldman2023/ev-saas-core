@@ -470,6 +470,13 @@ class EVCheckoutController extends Controller
         return view('frontend.order-received', compact('order'));
     }
 
+    public function orderCanceled(Request $request, $order_id)
+    {
+        $order = Order::find($order_id);
+
+        return view('frontend.order-canceled', compact('order'));
+    }
+
     public function executePayment(Request $request, $invoice_id) {
         $invoice = Invoice::with('payment_method')->find($invoice_id);
 

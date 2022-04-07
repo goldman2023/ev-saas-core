@@ -33,7 +33,7 @@ class Invoice extends EVBaseModel
     {
         // Restrict to MyShop and My invoices
         static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
-            $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1)->orWhere('user_id', '=', auth()->user()->id);
+            $builder->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
         });
     }
 
