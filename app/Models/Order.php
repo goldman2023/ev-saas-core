@@ -102,7 +102,7 @@ class Order extends EVBaseModel
 
             foreach($sums_properties as $property) {
                 foreach($order->order_items as $item) {
-                    $order->{$property} += $item->{$property};
+                    $order->{$property} += $item->{$property} * $item->quantity;
                 }
             }
         });
