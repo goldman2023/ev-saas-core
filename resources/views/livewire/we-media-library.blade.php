@@ -278,7 +278,7 @@ x-cloak>
             {{-- END Pagination --}}
 
             <div class="sm:flex sm:flex-row-reverse pt-2">
-              <button type="button" @click="saveSelection(); displayModal = false;" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm">
+              <button type="button" @click="saveSelection(); displayModal = false;" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm">
                 {{ translate('Save') }}
               </button>
               <button type="button" @click="displayModal = false" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:primary sm:mt-0 sm:w-auto sm:text-sm">

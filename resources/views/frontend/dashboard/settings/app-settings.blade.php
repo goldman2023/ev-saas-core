@@ -1,6 +1,11 @@
 @extends('frontend.layouts.user_panel')
 @section('page_title', translate('App Settings'))
 
+@push('head_scripts')
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+@endpush
+
+
 @section('panel_content')
   <section>
     <x-dashboard.section-headers.section-header title="{{ translate('App settings') }}" text="">

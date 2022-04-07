@@ -75,6 +75,9 @@ class AppSettingsForm extends Component
                 'settings.stripe_pk_live_key.value' => [],
                 'settings.stripe_sk_live_key.value' => [],
             ],
+            'design' => [
+                'settings.colors.value' => ['']
+            ]
         ]);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
@@ -148,6 +151,32 @@ class AppSettingsForm extends Component
         } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save general settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function saveDesign() {
+        $rules = $this->getRuleSet('design');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Design settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save design settings.'), $e->getMessage(), 'fail');
         }
     }
 

@@ -63,7 +63,7 @@ class TenantSettingsService
         $this->createMissingSettings(); // it'll clear the cache and add missing settings if there are missing settings
 
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
-        $settings = Cache::get($cache_key, null); // TODO: Remove 'asd'
+        $settings = Cache::get($cache_key.'asdasd', null); // TODO: Remove 'asd'
         $default = [];
         $data_types = $this->settingsDataTypes();
 
@@ -100,7 +100,27 @@ class TenantSettingsService
             'site_motto' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
-            'colors' => 'array',
+
+            'colors' => [
+                'primary' => 'string',
+                'primary-hover' => 'string',
+                'primary-light' => 'string',
+                'primary-dark' => 'string',
+                'secondary' => 'string',
+                'secondary-hover' => 'string',
+                'secondary-light' => 'string',
+                'secondary-dark' => 'string',
+                'info' => 'string',
+                'info-light' => 'string',
+                'success' => 'string',
+                'success-light' => 'string',
+                'warning' => 'string',
+                'warning-light' => 'string',
+                'danger' => 'string',
+                'danger-light' => 'string',
+                'sidebar-bg' => 'string',
+            ],
+
             'header' => 'array',
             'footer' => 'array',
             'show_language_switcher' => 'boolean',

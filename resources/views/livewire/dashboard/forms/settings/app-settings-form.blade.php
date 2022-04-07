@@ -182,6 +182,38 @@
                         </div>
                         {{-- END General --}}
 
+                        {{-- Design --}}
+                        <div class="w-full px-5" x-show="current_tab === 'design'">
+                            {{-- Colors --}}
+                            @php $i = 0; @endphp
+                            @foreach(TenantSettings::settingsDataTypes()['colors'] as $color_key => $data_type)
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start {{ $i === 0 ? '':'sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5' }}" x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ $color_key }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.colors.value.{{ $color_key }}" />
+                                    </div>
+                                </div>
+                                @php $i++; @endphp
+                            @endforeach
+                            {{-- END Colors --}}
+                            
+                            {{-- <x-dashboard.form.color-picker field="settings.colors.value.primary"></x-dashboard.form.color-picker> --}}
+
+                            {{-- Save design --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                    @click=""
+                                    wire:click="saveDesign()">
+                                {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save design --}}
+                        </div>
+                        {{-- END Design --}}
+
                         {{-- Features --}}
                         <div class="w-full px-5" x-show="current_tab === 'features'">
                              {{-- Feed Feature --}}
