@@ -94,6 +94,7 @@ class TenantSettingsService
     public function settingsDataTypes() {
         return [
             'site_logo' => Upload::class,
+            'site_logo_dark' => Upload::class,
             'site_icon' => Upload::class,
             'site_name' => 'string',
             'site_motto' => 'string',
