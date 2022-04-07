@@ -1,6 +1,9 @@
 {{-- This is a separate file, you can overide global config in a child theme
 Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
 TODO: you can overide it with data from a database a sa setting --}}
+@php 
+    $colors = TenantSettings::get('colors');
+@endphp
 
 <script>
     tailwind.config = {
@@ -53,21 +56,23 @@ TODO: you can overide it with data from a database a sa setting --}}
                 },
                 colors: {
                     /* Indigo is a primary brand color */
-                    primary: '#f40000',
-                    primaryLight: '#EBF8DC',
-                    primaryDark: '#657934',
-                    sidebarBg: '#000000',
-                    secondary: '#FF8E3B',
-                    secondaryLight: '#FFD53F',
-                    secondaryDark: '',
-                    info: '#219FFF',
-                    infoLight: '#E9F6FF',
-                    success: '#17BD8D',
-                    successLight: '#E9FBF6',
-                    warning: '#FFA114',
-                    warningLight: '#FFF7EB',
-                    danger: '#FF4E3E',
-                    dangerLight: '#FFEDEC',
+                    'primary': '{{ $colors['primary'] ?: '#f40000' }}',
+                    'primary-hover': '{{ $colors['primary-hover'] ?: '#000' }}',
+                    'primary-light': '{{ $colors['primary-light'] ?: '#EBF8DC' }}',
+                    'primary-dark': '{{ $colors['primary-dark'] ?: '#657934' }}',
+                    'secondary': '{{ $colors['secondary'] ?: '#FF8E3B' }}',
+                    'secondary-hover': '{{ $colors['secondary-hover'] ?: '#000' }}',
+                    'secondary-light': '{{ $colors['secondary-light'] ?: '#FFD53F' }}',
+                    'secondary-dark': '{{ $colors['secondary-dark'] ?: '#657934' }}',
+                    'info': '{{ $colors['info'] ?: '#219FFF' }}',
+                    'info-light': '{{ $colors['info-light'] ?: '#E9F6FF' }}',
+                    'success': '{{ $colors['success'] ?: '#657917BD8D34' }}',
+                    'success-light': '{{ $colors['success-light'] ?: '#E9FBF6' }}',
+                    'warning': '{{ $colors['warning'] ?: '#FFA114' }}',
+                    'warning-light': '{{ $colors['warning-light'] ?: '#FFF7EB' }}',
+                    'danger': '{{ $colors['danger'] ?: '#FF4E3E' }}',
+                    'danger-light': '{{ $colors['danger-light'] ?: '#FFEDEC' }}',
+                    'sidebar-bg': '{{ $colors['sidebar-bg'] ?: '#000000' }}',
                 }
             }
           }
@@ -88,7 +93,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .btn-primary {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primaryDark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
         }
         .btn-primary-outline {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-primary rounded-md shadow-sm text-sm font-medium text-primary bg-white hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
@@ -103,23 +108,23 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .btn-ghost {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary bg-transparent hover:text-primaryDark;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
         }
 
         .badge-info {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-infoLight text-info;
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-light text-info;
         }
 
         .badge-success {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-successLight text-success;
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success-light text-success;
         }
 
         .badge-warning {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warningLight text-warning;
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning-light text-warning;
         }
 
         .badge-danger {
-            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dangerLight text-danger;
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger-light text-danger;
         }
 
         .badge-dark {

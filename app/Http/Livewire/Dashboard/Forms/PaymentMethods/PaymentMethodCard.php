@@ -27,6 +27,8 @@ class PaymentMethodCard extends Component
     public $class;
     protected $type;
 
+    protected $listeners = [];
+
     protected function rules()
     {
         $rules = [
@@ -86,7 +88,7 @@ class PaymentMethodCard extends Component
 
         $this->paymentMethod->save();
 
-        $this->toastify($this->paymentMethod->name.' '.translate(' method updated successfully!'));
+        $this->inform($this->paymentMethod->name.' '.translate(' method updated successfully!'), '', 'success');
     }
 
     public function toggle($enabled) {
@@ -97,7 +99,8 @@ class PaymentMethodCard extends Component
         $this->paymentMethod->enabled = $enabled;
         $this->paymentMethod->save();
 
-        $this->toastify($this->paymentMethod->name.' '.translate(' payment method ').($enabled ? translate('enabled'):translate('disabled')));
+        $this->inform($this->paymentMethod->name.' '.translate(' payment method ').($enabled ? translate('enabled'):translate('disabled')), '', 'success');
+
         // $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $this->paymentMethod->name.' '.translate(' method updated successfully!'), 'type' => 'success' ]);
     }
 

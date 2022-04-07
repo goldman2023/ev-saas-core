@@ -1,5 +1,5 @@
 <div>
-    <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200">
+    <li class="col-span-1 flex flex-col text-center bg-white rounded-lg border border-gray-200 shadow divide-y divide-gray-200">
         <div class="flex-1 flex flex-col p-8">
             <img class="w-32 h-32 flex-shrink-0 mx-auto rounded-full"
                 src="{{ $user->getThumbnail() }}"
@@ -40,14 +40,12 @@
                     </button>
                 </div>
                 <div class="-ml-px w-0 flex-1 flex">
-                    <div class="flex-1">
+                    <div class="flex-1 flex items-center justify-center">
                         @livewire('actions.wishlist-button', [
                             'object' => $user,
                             'action' => 'Follow',
                             ])
                     </div>
-
-
                 </div>
             </div>
         </div>

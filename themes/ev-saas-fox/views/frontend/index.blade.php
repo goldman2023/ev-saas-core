@@ -18,39 +18,44 @@
                         </span>
                         <h1
                             class="mb-6 text-4xl md:text-4xl lg:text-5xl leading-tight text-coolGray-900 font-bold tracking-tight">
-                            Unlock your potential
+                            {{ translate('Unlock your potential') }}
                         </h1>
                         <p class="mb-8 text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
-                            With our platform,
-                            you can quantify your skills, grow in your role and stay relevant on critical topics.</p>
+                        {{ translate(' With our platform, you can quantify your skills, grow in your role and stay relevant on critical topics.') }}
+                        </p>
                         <ul>
                             <li class="mb-6 flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
-                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">Find and share
-                                    best resources for knowledge</p>
+                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
+
+                                  {{ translate('Find and share best resources for knowledge') }}
+                                </p>
                             </li>
                             <li class="mb-6 flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
-                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">Get mentoring and
-                                    consulting from FoxAsk Mentors</p>
+                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
+                                 {{ translate('Get mentoring and consulting from FoxAsk Mentors') }}
+                                </p>
                             </li>
                             <li class="flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
-                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">Take part in
-                                    online events and courses</p>
+                                <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
+                                    {{ translate('Take part in online events and courses') }}
+                                </p>
                             </li>
                         </ul>
                     </div>
                     <div class="w-full lg:w-1/2 sm:mt-52">
                         <div
                             class="flex flex-col items-center p-10 xl:px-24 xl:pb-12 bg-white lg:max-w-xl lg:ml-auto rounded-4xl shadow-2xl">
-                            <img class="relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
-                                src="{{ get_site_logo() }}" alt="">
-                            <h2 class="mb-4 text-xl md:text-3xl text-coolGray-900 font-bold text-center">Join our
-                                community</h2>
+                            <img class="bg-white p-4 relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
+                                src="{{ get_site_logo('dark') }}" alt="">
+                            <h2 class="mb-4 text-xl md:text-3xl text-coolGray-900 font-bold text-center">
+                              {{ translate('Join our community') }}
+                            </h2>
 
                             <x-tailwind-ui.forms.login-form> </x-tailwind-ui.forms.login-form>
-{{--
+                            {{--
                             <a class="mb-4 inline-block py-3 px-7 w-full leading-6 text-blue-50 font-medium text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md"
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Get Started') }}
@@ -75,10 +80,13 @@
             <div class="md:max-w-4xl mb-16 md:mb-20">
                 <span
                     class="inline-block py-px px-2 mb-4 text-xs leading-5 text-blue-500 bg-blue-100 font-medium uppercase rounded-full shadow-sm">Features</span>
-                <h1 class="mb-4 text-3xl md:text-4xl leading-tight font-bold tracking-tighter">Why you should join
-                    FoxAsk social network?</h1>
-                <p class="text-lg md:text-xl text-coolGray-500 font-medium">With FoxAsk you can become smarter and
-                    unlock your potential in any topic with best educational material from our community members</p>
+                <h1 class="mb-4 text-3xl md:text-4xl leading-tight font-bold tracking-tighter">
+                    {{  translate('Why you should join') }} {{ get_site_name() }} {{ translate('platform?') }}
+
+                </h1>
+                <p class="text-lg md:text-xl text-coolGray-500 font-medium">
+                   {{ translate(' You can become smarter and unlock your potential in any topic with best educational material from our community members') }}
+                </p>
             </div>
             <div class="flex flex-wrap lg:items-center -mx-4">
                 <div class="w-full md:w-1/2 px-4 mb-8 md:mb-0">
@@ -97,7 +105,8 @@
                         </div>
                         <div class="w-full md:flex-1 md:pt-3">
                             <h3 class="mb-4 text-xl md:text-2xl leading-tight text-coolGray-900 font-bold">
-                                Interactive real-time knowledge</h3>
+                              {{ translate('Interactive real-time knowledge') }}
+                            </h3>
                             <p class="text-coolGray-500 font-medium">
                                 Explore interesting topic in your personal feed and connect with experts and mentors in
                                 real time via FoxAsk messages and video calls
@@ -194,7 +203,7 @@
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Join') }} {{ get_site_name()
                                 }}
-                                </a>
+                            </a>
                         </div>
                     </div>
                 </div>

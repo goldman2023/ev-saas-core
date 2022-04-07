@@ -101,6 +101,20 @@
                             </div>
                             {{-- END Site logo --}}
 
+                            {{-- Site logo Dark --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-2" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Site logo (Dark)') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.image-selector field="settings.site_logo_dark.value" id="site-logo-dark" :selected-image="$settings['site_logo_dark']['value']"></x-dashboard.form.image-selector>
+
+                                    <x-system.invalid-msg field="settings.site_logo_dark.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            {{-- END Site logo Dark--}}
+
                             <!-- Site Name -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
@@ -157,6 +171,7 @@
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
                                         $wire.set('settings.site_logo.value', settings.site_logo.value?.id, true);
+                                        $wire.set('settings.site_logo_dark.value', settings.site_logo_dark.value?.id, true);
                                         $wire.set('settings.maintenance_mode.value', settings.maintenance_mode.value, true);
                                     "
                                     wire:click="saveGeneral()">
@@ -166,6 +181,38 @@
                             {{-- END Save general information --}}
                         </div>
                         {{-- END General --}}
+
+                        {{-- Design --}}
+                        <div class="w-full px-5" x-show="current_tab === 'design'">
+                            {{-- Colors --}}
+                            @php $i = 0; @endphp
+                            @foreach(TenantSettings::settingsDataTypes()['colors'] as $color_key => $data_type)
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start {{ $i === 0 ? '':'sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5' }}" x-data="{}">
+                                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                        {{ $color_key }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.input field="settings.colors.value.{{ $color_key }}" />
+                                    </div>
+                                </div>
+                                @php $i++; @endphp
+                            @endforeach
+                            {{-- END Colors --}}
+                            
+                            {{-- <x-dashboard.form.color-picker field="settings.colors.value.primary"></x-dashboard.form.color-picker> --}}
+
+                            {{-- Save design --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm"
+                                    @click=""
+                                    wire:click="saveDesign()">
+                                {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save design --}}
+                        </div>
+                        {{-- END Design --}}
 
                         {{-- Features --}}
                         <div class="w-full px-5" x-show="current_tab === 'features'">
@@ -519,7 +566,7 @@
 
 
                         {{-- Payments --}}
-                        <div class="w-full px-5" x-show="current_tab === 'payments'">
+                        <div class="w-full px-5" x-show="current_tab === 'payments'" wire:ignore>
                             @if($universal_payment_methods->isNotEmpty())
                                 @foreach($universal_payment_methods as $key => $payment_method)
                                     <livewire:dashboard.forms.payment-methods.payment-method-card
@@ -529,7 +576,7 @@
                             @endif
 
                             {{-- Stripe Test & Live api keys --}}
-                            <div class="w-full mt-1">
+                            {{-- <div class="w-full mt-1">
                                 <h4 class="">{{ translate('Stripe API settings') }}</h4>
 
                                 <div class="w-full sm:border-t sm:border-gray-400 sm:pt-4 sm:mt-2">
@@ -597,17 +644,17 @@
                                     </div>
                                     <!-- END Stripe Secrets Live Key -->
                                 </div>
-                            </div>
+                            </div> --}}
                             {{-- END Stripe Test & Live api keys --}}
 
                             {{-- Save Payments --}}
-                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                            {{-- <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click=""
                                     wire:click="savePayments()">
                                 {{ translate('Save') }}
                                 </button>
-                            </div>
+                            </div> --}}
                             {{-- END Save Payments --}}
                         </div>
                         {{-- END Payments --}}

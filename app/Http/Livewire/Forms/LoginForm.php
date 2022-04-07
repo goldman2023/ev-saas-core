@@ -9,7 +9,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
-use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use Str;
@@ -21,13 +20,6 @@ use App\Models\Order;
 use App\Models\Address;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\DispatchSupport;
-use App\Models\PaymentMethodUniversal;
-use LVR\CreditCard\CardCvc;
-use LVR\CreditCard\CardNumber;
-use LVR\CreditCard\CardExpirationDate;
-use App\Enums\OrderTypeEnum;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\ShippingStatusTypeEnum;
 use Carbon;
 
 class LoginForm extends Component

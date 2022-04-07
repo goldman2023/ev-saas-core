@@ -19,105 +19,9 @@
                 </div>
 
                 <div class="mt-3">
-                    <div class="w-full ">
-                        <x-system.social-login-buttons class="mb-5">
-                            <div class="w-full relative mb-3">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-gray-300"></div>
-                                </div>
-                                <div class="relative flex justify-center">
-                                    <span class="px-2 bg-white text-sm text-gray-500"> {{ translate('OR') }} </span>
-                                </div>
-                            </div>
-                        </x-system.social-login-buttons>
-                    </div>
-
-                    <div class="mt-">
-                        <form id="reg-form" class="space-y-6" role="form" action="{{ route('register') }}"
-                            method="POST">
-                            @csrf
-                            <div class="grid grid-cols-2 gap-5">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700">
-                                        {{ translate('First Name') }}
-                                    </label>
-                                    <div class="mt-1">
-                                        <input id="name" name="name" type="text" required class="form-standard">
-
-                                        <x-system.invalid-msg class="w-full" field="name"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700">
-                                        {{ translate('Last Name') }}
-                                    </label>
-                                    <div class="mt-1">
-                                        <input id="surname" name="surname" type="text" required class="form-standard">
-
-                                        <x-system.invalid-msg class="w-full" field="surname"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                            </div>
+                    <livewire:forms.register-form />
 
 
-
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700"> {{ translate('Email
-                                    address') }} </label>
-                                <div class="mt-1">
-                                    <input id="email" name="email" type="email" autocomplete="email" required
-                                        class="form-standard">
-                                    <x-system.invalid-msg class="w-full" field="email"></x-system.invalid-msg>
-                                </div>
-                            </div>
-
-                            <div class="space-y-1">
-                                <label for="password" class="block text-sm font-medium text-gray-700"> {{
-                                    translate('Password') }} </label>
-                                <div class="mt-1">
-                                    <input id="password" name="password" type="password" autocomplete="current-password"
-                                        required class="form-standard">
-                                    <x-system.invalid-msg class="w-full" field="password"></x-system.invalid-msg>
-                                </div>
-                            </div>
-
-                            <div class="space-y-1">
-                                <label for="password" class="block text-sm font-medium text-gray-700"> {{
-                                    translate('Confirm your password') }} </label>
-                                <div class="mt-1">
-                                    <input id="password_confirmation" name="password_confirmation" type="password"
-                                        autocomplete="current-password" required class="form-standard">
-                                    <x-system.invalid-msg class="w-full" field="password_confirmation">
-                                    </x-system.invalid-msg>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <input id="remember-me" name="remember-me" type="checkbox"
-                                        class="form-checkbox-standard">
-                                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                                        {{ translate('By Registering I agree to ') }} {{ get_site_name() }} {{
-                                        translate('Terms of Service') }}
-                                    </label>
-                                </div>
-
-                                <div class="text-sm">
-                                    {{-- TODO: Create password resets --}}
-                                    {{-- <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-                                        {{ translate('Forgot your password?') }}
-                                    </a> --}}
-                                </div>
-                            </div>
-
-                            <div>
-                                <button type="submit"
-                                    class="btn-primary w-full justify-center items-center bg-indigo-600">
-                                    {{ translate('Register') }}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
@@ -161,9 +65,6 @@
                     </div>
                 </div>
             </div>
-            {{-- <img class="absolute inset-0 h-full w-full object-cover"
-                src="https://images.unsplash.com/photo-1505904267569-f02eaeb45a4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
-                alt=""> --}}
         </div>
     </div>
 </div>
@@ -197,53 +98,5 @@
         });
         @endif
 
-        var isPhoneShown = true,
-            countryData = window.intlTelInputGlobals.getCountryData(),
-            input = document.querySelector("#phone-code");
-
-        for (var i = 0; i < countryData.length; i++) {
-            var country = countryData[i];
-            if(country.iso2 == 'bd'){
-                country.dialCode = '88';
-            }
-        }
-
-        var iti = intlTelInput(input, {
-            separateDialCode: true,
-            utilsScript: "{{ static_asset('assets/js/intlTelutils.js') }}?1590403638580",
-            onlyCountries: @php echo json_encode(\App\Models\Country::where('status', 1)->pluck('code')->toArray()) @endphp,
-            customPlaceholder: function(selectedCountryPlaceholder, selectedCountryData) {
-                if(selectedCountryData.iso2 == 'bd'){
-                    return "01xxxxxxxxx";
-                }
-                return selectedCountryPlaceholder;
-            }
-        });
-
-        var country = iti.getSelectedCountryData();
-        $('input[name=country_code]').val(country.dialCode);
-
-        input.addEventListener("countrychange", function(e) {
-            // var currentMask = e.currentTarget.placeholder;
-
-            var country = iti.getSelectedCountryData();
-            $('input[name=country_code]').val(country.dialCode);
-
-        });
-
-        function toggleEmailPhone(el){
-            if(isPhoneShown){
-                $('.phone-form-group').addClass('d-none');
-                $('.email-form-group').removeClass('d-none');
-                isPhoneShown = false;
-                $(el).html('{{ translate('Use Phone Instead') }}');
-            }
-            else{
-                $('.phone-form-group').removeClass('d-none');
-                $('.email-form-group').addClass('d-none');
-                isPhoneShown = true;
-                $(el).html('{{ translate('Use Email Instead') }}');
-            }
-        }
 </script>
 @endsection

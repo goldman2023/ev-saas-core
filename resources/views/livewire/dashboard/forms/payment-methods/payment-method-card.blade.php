@@ -1,36 +1,38 @@
-<div class="shadow rounded border border-gray-200 p-5 {{ $class }} relative"
+<div class="shadow rounded border border-gray-200 {{ $class }} relative"
      wire:key="payment-method-{{ $paymentMethod->gateway }}"
      key="payment-method-{{ $paymentMethod->gateway }}"
      x-cloak
      x-data="{
         show: false,
-        paymentMethod: @entangle('paymentMethod').defer
+        enabled: @entangle('paymentMethod.enabled').defer,
+        paymentMethod: @js($paymentMethod),
      }"
-    x-init="console.log(paymentMethod.enabled);">
+    >
 
     <x-ev.loaders.spinner class="absolute-center z-10 hidden"
                           wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
-    <div class="flex items-center justify-start cursor-pointer"  wire:loading.class="opacity-30 pointer-events-none" @click="show = !show">
+    <div class="flex items-center justify-start cursor-pointer p-5"  wire:loading.class="opacity-30 pointer-events-none" @click="show = !show">
         @svg('heroicon-o-chevron-right', ['class' => 'w-[16px] h[16px] mr-2', ':style' => "show && {transform: 'rotate(90deg)'}"])
         <h4 class="h5 mb-0">{{ $paymentMethod->name }}</h4>
 
+        
         <span class="badge-success flex align-center px-2 py-1 ml-3 text-12 text-success"
-              :class="{'d-flex':paymentMethod.enabled}"
-              x-show="paymentMethod.enabled">
+              :class="{'flex':enabled}"
+              x-show="enabled">
               {{ translate('active') }}
         </span>
 
         <span class="badge-danger items-center px-2 py-1 ml-3 text-12 text-danger"
-              :class="{'d-flex':!paymentMethod.enabled}"
-              x-show="!paymentMethod.enabled">
+              :class="{'flex':!enabled}"
+              x-show="!enabled">
               {{ translate('inactive') }}
         </span>
 
-        <button type="button" @click="$wire.toggle(!paymentMethod.enabled); show = true;"
-                    :class="{'bg-primary':paymentMethod.enabled , 'bg-gray-200':!paymentMethod.enabled}"
+        <button type="button" @click="$wire.toggle(!enabled); show = true;"
+                    :class="{'bg-primary':enabled , 'bg-gray-200':!enabled}"
                     class="relative inline-flex flex-shrink-0 h-6 w-11 ml-auto border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                <span :class="{'translate-x-5':paymentMethod.enabled, 'translate-x-0':!paymentMethod.enabled}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                <span :class="{'translate-x-5':enabled, 'translate-x-0':!enabled}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
         </button>
 
         {{-- <label class="toggle-switch ml-auto" for="payment-method-{{ $paymentMethod->gateway }}-enabled" @click="event.stopPropagation();">
@@ -47,10 +49,62 @@
 
     </div>
 
-    <div class="card-body container-fluid" x-show="show" wire:loading.class="opacity-3 prevent-pointer-events">
-        <div class="row">
+    <div class="w-full pt-0 p-5 " x-show="show" wire:loading.class="opacity-30 pointer-events-none">
+        <!-- Name -->
+        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+            <label class="block text-sm font-medium text-gray-900 ">
+                {{ translate('Title') }}
+            </label>
+
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <input type="text" class="form-standard @error('paymentMethod.name') is-invalid @enderror"
+                        placeholder="{{ translate('Title') }}"
+                        wire:model.defer="paymentMethod.name" />
+
+                <x-system.invalid-msg field="paymentMethod.name"></x-system.invalid-msg>
+            </div>
+        </div>
+        <!-- END Name -->
+
+        <!-- Description -->
+        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+            <label class="block text-sm font-medium text-gray-900 ">
+                {{ translate('Description') }}
+            </label>
+
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <textarea class="form-standard @error('paymentMethod.description') is-invalid @enderror" 
+                            placeholder="{{ translate('Description') }}"
+                            wire:model.defer="paymentMethod.description"
+                            rows="3">
+                </textarea>
+                
+                <x-system.invalid-msg field="paymentMethod.description"></x-system.invalid-msg>
+            </div>
+        </div>
+        <!-- END Description -->
+
+        <!-- Instructions -->
+        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+            <label class="block text-sm font-medium text-gray-900 ">
+                {{ translate('Instructions') }}
+            </label>
+
+            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <textarea class="form-standard @error('paymentMethod.instructions') is-invalid @enderror" 
+                            placeholder="{{ translate('Instructions') }}"
+                            wire:model.defer="paymentMethod.instructions"
+                            rows="3">
+                </textarea>
+                
+                <x-system.invalid-msg field="paymentMethod.instructions"></x-system.invalid-msg>
+            </div>
+        </div>
+        <!-- END Instructions -->
+
+        {{-- <div class="w-full ">
             <div class="col-12">
-                <x-ev.form.input name="paymentMethod.name" type="text" label="{{ translate('Title') }}" :required="true" placeholder="{{ translate('Payment method name') }}" />
+                
             </div>
             <div class="col-12">
                 <x-ev.form.textarea name="paymentMethod.description" label="{{ translate('Description') }}" >
@@ -62,40 +116,120 @@
                     <small class="text-muted">{{ translate('Instructions that will be added to the thank you page and emails.') }}</small>
                 </x-ev.form.textarea>
             </div>
-        </div>
+        </div> --}}
 
         @if($paymentMethod->gateway === 'wire_transfer')
-            <span class="divider divider-text pt-3 pb-5">{{ translate('Account details:') }}</span>
+            <div class="w-full mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-300"></div>
+                      </div>
+                      <div class="relative flex justify-start">
+                        <span class="pr-3 bg-white text-lg font-medium text-gray-900 border rounded-lg border-gray-400 px-3"> {{ translate('Account details:') }} </span>
+                    </div>
+                </div>
+                
+                <div class="w-full mt-3 ">
+                    <!-- Bank Name -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:pt-1" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Bank name') }}
+                        </label>
 
-            <div class="row">
-                <div class="col-6">
-                    <x-ev.form.input name="paymentMethod.bank_name" type="text" label="{{ translate('Bank name') }}" :required="true" placeholder="{{ translate('Name of your bank') }}" />
-                </div>
-                <div class="col-6">
-                    <x-ev.form.input name="paymentMethod.bank_account_name" type="text" label="{{ translate('Bank account name') }}" :required="true" placeholder="{{ translate('Think of some catchy name...') }}" />
-                </div>
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.bank_account_number" type="text" label="{{ translate('Bank account number') }}" :required="true" placeholder="{{ translate('Your bank account number') }}" />
-                </div>
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.iban" type="text" label="{{ translate('IBAN') }}" :required="true" placeholder="{{ translate('Your international bank account number (IBAN)') }}" />
-                </div>
-                <div class="col-6">
-                    <x-ev.form.input name="paymentMethod.bank_sort_code" type="text" label="{{ translate('Sort code') }}" :required="false" placeholder="{{ translate('Bank sort code') }}" />
-                </div>
-                <div class="col-6">
-                    <x-ev.form.input name="paymentMethod.bank_swift" type="text" label="{{ translate('Swift/BIC') }}" :required="true" placeholder="{{ translate('Your bank SWIFT/BIC code') }}" />
-                </div>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.bank_name" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Bank Name -->
 
-                <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto" wire:click="save()">
+                    <!-- Bank Account Name -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Bank account name') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.bank_account_name" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Bank Account Name -->
+
+                    <!-- Bank Account Number -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Bank account number') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.bank_account_number" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Bank Account Number -->
+
+                    <!-- IBAN -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('IBAN') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.iban" :required="true" />
+                        </div>
+                    </div>
+                    <!-- END IBAN -->
+
+                    <!-- SWIFT/BIC -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('SWIFT/BIC') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.bank_swift" :required="true" />
+                        </div>
+                    </div>
+                    <!-- END SWIFT/BIC -->
+
+                    <!-- Sort code -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Sort code') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.bank_sort_code" />
+                        </div>
+                    </div>
+                    <!-- END Sort code -->
+
+                    {{-- Save Wire Transfer --}}
+                    <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <button type="button" class="btn btn-primary ml-auto btn-sm"
+                            @click=""
+                            wire:click="save()">
                         {{ translate('Save') }}
-                    </button>
+                        </button>
+                    </div>
+                    {{-- END Save Wire Transfer --}}
                 </div>
             </div>
-
+       
         @elseif($paymentMethod->gateway === 'paypal')
             {{-- PAYPAL --}}
+            {{-- <div class="w-full mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-300"></div>
+                      </div>
+                      <div class="relative flex justify-start">
+                        <span class="pr-3 bg-white text-lg font-medium text-gray-900">{{ translate('Paypal details') }}</span>
+                    </div>
+                </div>
+                
+                <div class="w-full mt-3">
+                   
+                </div>
+            </div>
 
             <span class="divider divider-text pt-3 pb-5">{{ translate('Paypal details:') }}</span>
 
@@ -176,67 +310,191 @@
                         {{ translate('Save') }}
                     </button>
                 </div>
-            </div>
+            </div> --}}
             {{-- END PAYPAL --}}
         @elseif($paymentMethod->gateway === 'stripe')
             {{-- STRIPE --}}
+            <div class="w-full mt-6">        
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-400"></div>
+                      </div>
+                      <div class="relative flex justify-start">
+                        <span class="pr-3 bg-white text-lg font-medium text-gray-900 border rounded-lg border-gray-400 px-3"> {{ translate('Stripe API settings') }}: </span>
+                    </div>
+                </div>
+                
+                <div class="w-full mt-6 ">
+                    <!-- Stripe Mode -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center " x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Stripe mode') }}
+                        </label>
 
-            <span class="divider divider-text pt-3 pb-5">{{ translate('Stripe details:') }}</span>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.select field="paymentMethod.stripe_mode" :items="['live' => translate('Live'), 'test' => translate('Test')]" selected="paymentMethod.stripe_mode" :nullable="false"></x-dashboard.form.select>
+                            <x-system.invalid-msg field="paymentMethod.stripe_mode"></x-system.invalid-msg>
 
-            <div class="row">
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.stripe_publishable_key" :required="true" type="text" label="{{ translate('Stripe Publishable Key') }}" >
-                        <small class="text-muted">{{ translate('Get you Publishable key from your Stripe account') }}</small>
-                    </x-ev.form.input>
-                </div>
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.stripe_secret_key" :required="true" type="text" label="{{ translate('Stripe Secret Key') }}" >
-                        <small class="text-muted">{{ translate('Get you Secret key from your Stripe account') }}</small>
-                    </x-ev.form.input>
-                </div>
-                <div class="col-12">
-                    <x-ev.form.input name="paymentMethod.stripe_statement_descriptor" type="text" label="{{ translate('Statement Descriptor') }}" >
-                        <small class="text-muted">{{ translate('*NEEDS NOTE*') }}</small>
-                    </x-ev.form.input>
+                        </div>
+                    </div>
+                    <!-- END Stripe Mode -->
+
+                    <!-- Stripe Publishable Test Key  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Stripe Publishable Test Key') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.stripe_pk_test_key" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Stripe Publishable Test Key -->
+
+                    <!-- Stripe Secret Test Key -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Stripe Secret Test Key') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.stripe_sk_test_key" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Stripe Secrets Test Key -->
+
+                    <!-- Stripe Publishable Live Key  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Stripe Publishable Live Key') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.stripe_pk_live_key"/>
+                        </div>
+                    </div>
+                    <!-- END Stripe Publishable Live Key -->
+
+                    <!-- Stripe Secrets Live Key  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Stripe Secrets Live Key') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.stripe_sk_live_key" />
+                        </div>
+                    </div>
+                    <!-- END Stripe Secrets Live Key -->
                 </div>
 
-
-                <div class="col-6">
-                    <x-ev.form.checkbox name="paymentMethod.stripe_inline_credit_card_form" :items="['stripe_inline_credit_card_form' => translate('Enable')]" label="{{ translate('Use inline credit card form') }}">
-                        <small class="text-muted">{{ translate('*NEEDS NOTE*') }}</small>
-                    </x-ev.form.checkbox>
-                </div>
-                <div class="col-6">
-                    <x-ev.form.checkbox name="paymentMethod.stripe_capture_charge" :items="['stripe_capture_charge' => translate('Enable')]" label="{{ translate('Capture charge immediately') }}">
-                        <small class="text-muted">{{ translate('*NEEDS NOTE*') }}</small>
-                    </x-ev.form.checkbox>
-                </div>
-                <div class="col-6">
-                    <x-ev.form.checkbox name="paymentMethod.stripe_saved_cards_payment" :items="['stripe_saved_cards_payment' => translate('Enable')]" label="{{ translate('Payment via saved cards') }}">
-                        <small class="text-muted">{{ translate('*NEEDS NOTE*') }}</small>
-                    </x-ev.form.checkbox>
-                </div>
-                <div class="col-6">
-                    <x-ev.form.checkbox name="paymentMethod.stripe_payment_request_buttons" :items="['stripe_payment_request_buttons' => translate('Enable')]" label="{{ translate('Payment request buttons') }}">
-                        <small class="text-muted">{{ translate('This feature enables Payment request buttons (Apple Pay/Chrome payment etc.). By using Apple Pay, you agree to Stripe and Apple\'s terms of service.') }}</small>
-                    </x-ev.form.checkbox>
+                {{-- Other Stripe settings --}}
+                <div class="relative mt-6 ">
+                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div class="w-full border-t border-gray-400"></div>
+                      </div>
+                      <div class="relative flex justify-start">
+                        <span class="pr-3 bg-white text-lg font-medium text-gray-900 border rounded-lg border-gray-400 px-3"> {{ translate('Stripe other settings') }}: </span>
+                    </div>
                 </div>
 
-                <div class="col-12 d-flex">
-                    <button type="button" class="btn btn-primary ml-auto"
-                            @click="
-                                $wire.save()
-                            ">
-                        {{ translate('Save') }}
+                <div class="w-full mt-6 ">
+                    <!-- Stripe Statement Descriptor  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center " x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Statement Descriptor') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.stripe_statement_descriptor" :required="true"/>
+                        </div>
+                    </div>
+                    <!-- END Stripe Statement Descriptor -->
+
+                    <!-- Stripe Enable Stripe Checkout -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Enable Stripe Checkout') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="paymentMethod.stripe_checkout_enabled" />
+                        </div>
+                    </div>
+                    <!-- END Enable Stripe Checkout  -->
+
+                    <!-- Stripe Inline Credit Card Mode -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Inline Credit Card Mode') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="paymentMethod.stripe_inline_credit_card_form" />
+                        </div>
+                    </div>
+                    <!-- END Inline Credit Card Mode -->
+
+                    <!-- Stripe Capture charge -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Capture charge') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="paymentMethod.stripe_capture_charge" />
+                        </div>
+                    </div>
+                    <!-- END Capture charge -->
+
+                    <!-- Saved Cards Payment -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Saved cards payment') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="paymentMethod.stripe_saved_cards_payment" />
+                        </div>
+                    </div>
+                    <!-- END Saved Cards Payment-->
+                    
+                    <!-- Stripe Payment request buttons -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Payment request buttons') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="paymentMethod.stripe_payment_request_buttons" />
+                        </div>
+                    </div>
+                    <!-- END Payment request buttons -->
+                </div>
+
+                {{-- Save Stripe --}}
+                <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                    <button type="button" class="btn btn-primary ml-auto btn-sm"
+                        @click="
+                            $wire.set('paymentMethod.stripe_mode', paymentMethod.stripe_mode, true);
+                            $wire.set('paymentMethod.stripe_checkout_enabled', paymentMethod.stripe_checkout_enabled, true);
+                            $wire.set('paymentMethod.stripe_inline_credit_card_form', paymentMethod.stripe_inline_credit_card_form, true);
+                            $wire.set('paymentMethod.stripe_capture_charge', paymentMethod.stripe_capture_charge, true);
+                            $wire.set('paymentMethod.stripe_saved_cards_payment', paymentMethod.stripe_saved_cards_payment, true);
+                            $wire.set('paymentMethod.stripe_payment_request_buttons', paymentMethod.stripe_payment_request_buttons, true);
+                        "
+                        wire:click="save()">
+                    {{ translate('Save') }}
                     </button>
                 </div>
+                {{-- END Save Stripe --}}
             </div>
             {{-- END STRIPE --}}
 
         @elseif($paymentMethod->gateway === 'paysera')
             {{-- PAYSERA --}}
 
-            <span class="divider divider-text pt-3 pb-5">{{ translate('Paysera details:') }}</span>
+            {{-- <span class="divider divider-text pt-3 pb-5">{{ translate('Paysera details:') }}</span>
 
             <div class="row">
                 <div class="col-12">
@@ -256,7 +514,7 @@
                         {{ translate('Save') }}
                     </button>
                 </div>
-            </div>
+            </div> --}}
 
             {{-- END PAYSERA --}}
         @endif

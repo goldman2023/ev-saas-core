@@ -3,12 +3,12 @@ namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class PaymentMethodsUniversal extends Facade
+class Payments extends Facade
 {
     /**
      * Get the registered name of the component.
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'universal_payment_methods'; }
+    protected static function getFacadeAccessor() { return 'payments'; }
 }

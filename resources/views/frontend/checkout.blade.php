@@ -15,7 +15,7 @@
             same_billing_shipping: {{ ((request()->old('same_billing_shipping') ?? 'on') === 'off') ? 'false' : 'true' }},
             create_account: {{ ((request()->old('create_account') ?? 'off') === 'off') ? 'false' : 'true' }},
             newsletter: {{ ((request()->old('newsletter') ?? 'off') === 'off') ? 'false' : 'true' }},
-            available_payment_methods: @js(\PaymentMethodsUniversal::getPaymentMethodsGateway()),
+            available_payment_methods: @js(\Payments::getPaymentMethodsGateway()),
             selected_payment_method: '{{ request()->old('payment_method') }}'
         }"
     >
@@ -695,7 +695,7 @@
 
                                         <template x-if="selected_payment_method != ''">
                                             <div class="payment-methods-details w-full mt-3">
-                                                @foreach(\PaymentMethodsUniversal::getPaymentMethods() as $payment_method)
+                                                @foreach(\Payments::getPaymentMethods() as $payment_method)
                                                 <div class="text-12" :class="{'d-none': selected_payment_method !== '{{ $payment_method->gateway }}'}">
                                                     <div class="w-100">
                                                         {!! $payment_method->description !!}

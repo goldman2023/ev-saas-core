@@ -19,7 +19,25 @@
   }
   ```
 -->
-<div class="flow-root card">
+<div class="rounded-lg bg-white overflow-hidden shadow">
+    <div class="p-6 relative">
+        <h3 class="text-base font-medium text-gray-900 relative mb-3">
+            {{ translate('Real-Time') }} {{ get_site_name() }} {{ translate('Activity') }}
+
+
+        </h3>
+        {{-- Live data badge --}}
+        <div class="absolute right-6 top-6">
+
+            <span
+                class="relative inline-flex font-bold items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-500">
+                <span
+                    class="animate-ping inline-flex h-1.5 w-1.5 mr-3 rounded-full bg-red-900 opacity-100"></span>
+
+                {{ translate('Live') }}
+            </span>
+        </div>
+        {{-- Live data badge end --}}
     <ul role="list" class="-mb-8">
         @foreach($acitivites as $item)
         <li>

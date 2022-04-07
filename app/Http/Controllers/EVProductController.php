@@ -134,9 +134,12 @@ class EVProductController extends Controller
         return view('frontend.product.single.' . $template, compact('product'));
     }
 
-    public function createProductCheckoutRedirect($id, $qty = 1) {
+    public function createProductCheckoutRedirect($id) {
         $product = Product::find($id);
+        $qty = !empty(request()->qty ?? null) ? (int) request()->qty : 1;
+
         $link = StripeService::createCheckoutLink($product, $qty);
+
         return redirect($link);
     }
 

@@ -43,7 +43,7 @@ if (!function_exists('castValueForSave')) {
             $value = ctype_digit($value) || is_numeric($value) ? ((int) $value) : $value;
         } else if($data_type === 'boolean') {
             $value = $value ? 1 : 0;
-        } else if($data_type === 'array' && $data_type === 'uploads') {
+        } else if($data_type === 'array' && $data_type === 'uploads' && is_array($data_type)) {
             $value = json_encode($value);
         }
     
@@ -57,8 +57,26 @@ if (!function_exists('castValuesForGet')) {
             foreach($settings as $key => $setting) {
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
-    
+                
                 try {
+                    // This means that there are more sub items inside
+                    if(is_array($data_type)) {
+                        // Check if there are missing sub fields and create them
+                        $missing_sub_fields = array_diff_key($data_type, !empty($settings[$key]['value']) ? $settings[$key]['value'] : []);
+                        if(!empty($missing_sub_fields)) {
+                            foreach($missing_sub_fields as $subkey => $subvalue) {
+                                $missing_sub_fields[$subkey] = ''; // reset values to ''
+                            }
+                        }
+                        
+                        // Merge missing sub fields and existing sub fields
+                        $settings[$key]['value'] = array_merge(!empty($settings[$key]['value']) ? $settings[$key]['value'] : [], $missing_sub_fields);
+                        
+                        // convert Sub Fields values to proper data type
+                        castValuesForGet($settings[$key]['value'], $data_type);
+                        continue;
+                    }
+
                     if(empty($value)) {
                         if($data_type === 'boolean') {
                             $settings[$key]['value'] = false;
@@ -67,7 +85,7 @@ if (!function_exists('castValuesForGet')) {
                         }
                         continue;
                     }
-                    
+
                     if(isset($settings[$key]) && !empty($value)) {
                         if($data_type === Upload::class) {
                             $settings[$key]['value'] = Upload::find($value);
@@ -92,11 +110,10 @@ if (!function_exists('castValuesForGet')) {
                         } else if($data_type === 'array') {
                             $settings[$key]['value'] = json_decode($value, true);
                         } else if($data_type === 'date') {
-                            
                             $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
                         } else if($data_type === 'datetime') {
                             $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
-                        } 
+                        }
                     }       
                 } catch(\Throwable $e) {
                     // Set default value is value cannot be parsed due to wrong data type in DB!!!
@@ -107,9 +124,13 @@ if (!function_exists('castValuesForGet')) {
                     } else {
                         $settings[$key]['value'] = null;
                     }
+
+                    dd($e);
                 }
                 
             }
+
+            
         }
         
         return $settings;

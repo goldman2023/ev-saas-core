@@ -24,7 +24,7 @@
             <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View invoice<span aria-hidden="true"> &rarr;</span></a>
             </div>
             <p class="text-sm text-gray-600">Order placed 
-                <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y') }}</time>
+                <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y H:i') }}</time>
             </p>
             <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:hidden">View invoice<span aria-hidden="true"> &rarr;</span></a>
         </div>
@@ -111,74 +111,86 @@
                     @foreach($order_items as $item)
                         <div class="bg-white border-t border-b border-gray-200 shadow-sm sm:border sm:rounded-lg">
                             <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
-                            <div class="sm:flex lg:col-span-7">
-                                <div class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
-                                    <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt="" class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                                <div class="sm:flex lg:col-span-7">
+                                    <div class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
+                                        <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt="" class="w-full h-full object-center object-cover sm:w-full sm:h-full">
+                                    </div>
+                        
+                                    <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
+                                        <h3 class="text-base font-medium text-gray-900">
+                                            <a href="#">{{ $item->name }}</a>
+                                        </h3>
+                                        
+                                        <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
+
+                                        <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
+                                            <div class="flex">
+                                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
+                                                <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
+                                            </div>
+                                            <div class="pl-4 flex sm:pl-6">
+                                                <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
+                                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price * $item->quantity) }}</dd>
+                                            </div>
+                                        </dl>
+                                    </div>
                                 </div>
                     
-                                <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
-                                    <h3 class="text-base font-medium text-gray-900">
-                                        <a href="#">{{ $item->name }}</a>
-                                    </h3>
-                                    
-                                    <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
-
-                                    <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
-                                        <div class="flex">
-                                            <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
-                                            <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
-                                        </div>
-                                        <div class="pl-4 flex sm:pl-6">
-                                            <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
-                                            <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price * $item->quantity) }}</dd>
-                                        </div>
+                                {{-- <div class="mt-6 lg:mt-0 lg:col-span-5">
+                                    <dl class="grid grid-cols-2 gap-x-6 text-sm">
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Delivery address</dt>
+                                        <dd class="mt-3 text-gray-500">
+                                        <span class="block">Floyd Miles</span>
+                                        <span class="block">7363 Cynthia Pass</span>
+                                        <span class="block">Toronto, ON N3Y 4H8</span>
+                                        </dd>
+                                    </div>
+                                    <div>
+                                        <dt class="font-medium text-gray-900">Shipping updates</dt>
+                                        <dd class="mt-3 text-gray-500 space-y-3">
+                                        <p>f•••@example.com</p>
+                                        <p>1•••••••••40</p>
+                                        <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
+                                        </dd>
+                                    </div>
                                     </dl>
-                                </div>
-                            </div>
-                
-                            <div class="mt-6 lg:mt-0 lg:col-span-5">
-                                <dl class="grid grid-cols-2 gap-x-6 text-sm">
-                                <div>
-                                    <dt class="font-medium text-gray-900">Delivery address</dt>
-                                    <dd class="mt-3 text-gray-500">
-                                    <span class="block">Floyd Miles</span>
-                                    <span class="block">7363 Cynthia Pass</span>
-                                    <span class="block">Toronto, ON N3Y 4H8</span>
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt class="font-medium text-gray-900">Shipping updates</dt>
-                                    <dd class="mt-3 text-gray-500 space-y-3">
-                                    <p>f•••@example.com</p>
-                                    <p>1•••••••••40</p>
-                                    <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
-                                    </dd>
-                                </div>
-                                </dl>
-                            </div>
-                            </div>
-                
-                            <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
-                            <h4 class="sr-only">Status</h4>
-                            <p class="text-sm font-medium text-gray-900">Preparing to ship on <time datetime="2021-03-24">March 24, 2021</time></p>
-                            <div class="mt-6" aria-hidden="true">
-                                <div class="bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-2 bg-indigo-600 rounded-full" style="width: calc((1 * 2 + 1) / 8 * 100%)"></div>
-                                </div>
-                                <div class="hidden sm:grid grid-cols-4 text-sm font-medium text-gray-600 mt-6">
-                                <div class="text-indigo-600">Order placed</div>
-                                <div class="text-center text-indigo-600">Processing</div>
-                                <div class="text-center">Shipped</div>
-                                <div class="text-right">Delivered</div>
-                                </div>
-                            </div>
+                                </div> --}}
                             </div>
                         </div>
                     @endforeach
                 @endif
                 
-        
-                <!-- More products... -->
+                {{-- TODO: for digital products skip shipping --}}
+                <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
+                    @php 
+                        $progress_i = 0;
+
+                        if($order->payment_status === \App\Enums\PaymentStatusEnum::paid()->value) {
+                            $progress_i += 1;
+                        }
+
+                        if($order->shipping_status === \App\Enums\ShippingStatusEnum::sent()->value) {
+                            $progress_i += 3;
+                        }
+                        if($order->shipping_status === \App\Enums\ShippingStatusEnum::delivered()->value) {
+                            $progress_i += 5;
+                        }
+                    @endphp
+                    <p class="text-sm font-medium text-gray-900">{{ translate('Order timeline') }}</p>
+                    <div class="mt-6" aria-hidden="true">
+                        <div class="bg-gray-200 rounded-full overflow-hidden">
+                            <div class="h-2 bg-primary rounded-full" style="width: calc((1 * 2 + {{ $progress_i }}) / 8 * 100%)"></div>
+                        </div>
+                        <div class="hidden sm:grid grid-cols-4 text-sm font-medium text-gray-600 mt-6">
+                            <div class="text-primary">{{ translate('Order placed') }}</div>
+                            <div class="text-center text-primary">{{ translate('Processing') }}</div>
+                            <div class="text-center {{ ($progress_i == 3) ? 'text-primary' : '' }}">{{ translate('Shipped') }}</div>
+                            <div class="text-right {{ ($progress_i == 5) ? 'text-primary' : '' }}">{{ translate('Delivered') }}</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     
@@ -189,11 +201,12 @@
             <div class="bg-gray-100 py-6 px-4 sm:px-6 sm:rounded-lg lg:px-8 lg:py-8 lg:grid lg:grid-cols-12 lg:gap-x-8">
             <dl class="grid grid-cols-2 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-7">
                 <div>
-                <dt class="font-medium text-gray-900">Billing address</dt>
+                <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
                 <dd class="mt-3 text-gray-500">
-                    <span class="block">Floyd Miles</span>
-                    <span class="block">7363 Cynthia Pass</span>
-                    <span class="block">Toronto, ON N3Y 4H8</span>
+                    <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
+                    <span class="block">{{ $order->billing_address }}</span>
+                    <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
+                    <span class="block">{{ $order->billing_state == (\Countries::get(code: $order->billing_country)->name ?? '') ? \Countries::get(code: $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code: $order->billing_country)->name }}</span>
                 </dd>
                 </div>
                 <div>
@@ -218,20 +231,20 @@
     
             <dl class="mt-8 divide-y divide-gray-200 text-sm lg:mt-0 lg:col-span-5">
                 <div class="pb-4 flex items-center justify-between">
-                <dt class="text-gray-600">Subtotal</dt>
-                <dd class="font-medium text-gray-900">$72</dd>
+                <dt class="text-gray-600">{{ translate('Subtotal') }}</dt>
+                <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
                 </div>
                 <div class="py-4 flex items-center justify-between">
-                <dt class="text-gray-600">Shipping</dt>
-                <dd class="font-medium text-gray-900">$5</dd>
+                <dt class="text-gray-600">{{ translate('Shipping') }}</dt>
+                <dd class="font-medium text-gray-900">$0</dd>
                 </div>
                 <div class="py-4 flex items-center justify-between">
-                <dt class="text-gray-600">Tax</dt>
-                <dd class="font-medium text-gray-900">$6.16</dd>
+                <dt class="text-gray-600">{{ translate('Tax') }}</dt>
+                <dd class="font-medium text-gray-900">$0</dd>
                 </div>
                 <div class="pt-4 flex items-center justify-between">
-                <dt class="font-medium text-gray-900">Order total</dt>
-                <dd class="font-medium text-indigo-600">$83.16</dd>
+                <dt class="font-medium text-gray-900">{{ translate('Order total') }}</dt>
+                <dd class="font-medium text-indigo-600">{{ \FX::formatPrice($order->total_price) }}</dd>
                 </div>
             </dl>
             </div>

@@ -16,10 +16,14 @@
             </div>
             <main class="lg:col-span-9 xl:col-span-10">
                 <div class="mt-4">
-                    <h1 class="block text-2xl font-semibold mb-6 text-gray-900">
-                        {{ translate('Discover FoxAsk shops') }}
-                    </h1>
-                    <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-4">
+
+
+                    <div class="mb-5">
+                        <x-feed.elements.shop.shop-archive-filters>
+                        </x-feed.elements.shop.shop-archive-filters>
+                    </div>
+
+                    <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-3">
 
                         @foreach ($shops as $shop)
                             <livewire:feed.elements.shop-card :shop="$shop"></livewire:feed.elements.shop-card>
