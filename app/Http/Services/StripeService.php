@@ -477,7 +477,26 @@ class StripeService
                
                 break;
             case 'checkout.session.expired':
-                $session = $event->data->object;
+                // Checkout Session Expired webhook
+                DB::beginTransaction();
+
+                try {
+                     // Remove Temp order when stripe checkout session expires, BUT only if order is made by guest user (user_id == null)
+                    $session = $event->data->object;
+                    $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
+                    
+                    if(empty($order->user_id)) {
+                        // Temp order is not linked to a user, so remove it fully!
+                        $order->forceDelete();
+                    }
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    http_response_code(400);
+                    die($e->getMessage());
+                }
+
                 break;
             case 'payment_intent.created':
                 $paymentIntent = $event->data->object;
