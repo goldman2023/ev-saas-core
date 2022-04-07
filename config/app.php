@@ -194,6 +194,7 @@ return [
          * Package Service Providers...
          */
         \App\Providers\GoogleDriveServiceProvider::class,
+        Bkwld\Cloner\ServiceProvider::class,
 
         /*
          * Application Service Providers...

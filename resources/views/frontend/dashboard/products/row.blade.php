@@ -93,16 +93,15 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('product.edit', ['slug' => $row->slug]) }}" target="_blank"
-                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                <div wire:click="duplicateProduct({{ $row->id }})"
+                    class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14 cursor-pointer">
                     @svg('heroicon-o-duplicate', ['class' => 'w-[18px] h-[18px]'])
                     <span class="ml-2">{{ translate('Duplicate product') }}</span>
-                </a>
-
+                </div>
             </li>
             <li>
                 <div class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14 cursor-pointer" wire:click="importToStripe({{ $row->id }})">
-                    @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2'])
+                    @svg('lineawesome-stripe', ['class' => 'w-[18px] h-[18px] mr-2'])
                     <span class="ml-2">{{ translate('Import to Stripe') }}</span>
                 </div>
             </li>
