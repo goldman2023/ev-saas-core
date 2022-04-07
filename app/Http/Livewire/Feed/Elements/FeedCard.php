@@ -18,6 +18,11 @@ class FeedCard extends Component
 
         $this->ignore = false;
 
+        if(!$item->has('subject')) {
+            $this->ignore = true;
+            return false;
+        }
+
         $this->item = $item;
         $this->likes = Activity::where('subject_type', 'Spatie\Activitylog\Models\Activity')
             ->where('description', 'liked')
@@ -31,7 +36,7 @@ class FeedCard extends Component
         if ($item->subject_type == 'App\Models\Product') {
             $this->product = $item->subject;
             if($this->product->status == 'draft') {
-                $this->ignore = true;
+                // $this->ignore = true;
             }
         } elseif ($item->subject_type == 'App\Models\Wishlist') {
             $this->ignore = true;

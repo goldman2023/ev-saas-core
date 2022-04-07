@@ -94,8 +94,9 @@ class Product extends EVBaseModel
         'tags' => 'array'
     ];
 
-    public function getBaseCurrencyAttribute($value) {
-        if(empty($value)) {
+    public function getBaseCurrencyAttribute($value)
+    {
+        if (empty($value)) {
             $value =  get_setting('system_default_currency')->code;
         }
 
@@ -273,5 +274,19 @@ class Product extends EVBaseModel
     public function core_meta()
     {
         return $this->morphMany(CoreMeta::class, 'subject');
+    }
+
+    public function isStripeProduct()
+    {
+
+        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
+            return true;
+        }
+
+        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
+            return true;
+        }
+
+        return false;
     }
 }
