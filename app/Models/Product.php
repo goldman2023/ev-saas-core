@@ -42,6 +42,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Product extends EVBaseModel
 {
+    use \Bkwld\Cloner\Cloneable;
     use HasSlug;
     use SoftDeletes;
     use RegeneratesCache;
@@ -78,6 +79,7 @@ class Product extends EVBaseModel
      * @var array
      */
     protected $with = ['variations'];
+    protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals', 'core_meta'];
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = [

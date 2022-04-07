@@ -12,6 +12,7 @@
         "ext-gd": "*",
         "barryvdh/laravel-snappy": "^0.4.8",
         "bavix/laravel-wallet": "^7.3",
+        "bkwld/cloner": "^3.10",
         "blade-ui-kit/blade-heroicons": "^1.2",
         "blade-ui-kit/blade-icons": "^1.1",
         "bolechen/nova-activitylog": "^0.3.0",

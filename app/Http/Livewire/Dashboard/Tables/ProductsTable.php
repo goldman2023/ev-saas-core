@@ -13,6 +13,7 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
 use StripeService;
+use DB;
 use App\Traits\Livewire\CanDelete;
 
 class ProductsTable extends DataTableComponent
@@ -108,5 +109,23 @@ class ProductsTable extends DataTableComponent
             $this->inform(translate('Could not import to Stripe account'), $e->getMessage(), 'fail');
         }
         
+    }
+
+    public function duplicateProduct($id) {
+        $product = Product::find($id);
+
+        DB::beginTransaction();
+
+        try {
+            $clone = $product->duplicate();
+
+            DB::commit();
+        } catch(\Exception $e) {
+            DB::rollBack();
+            $this->inform(translate('Could not duplicate item...'), $e->getMessage(), 'fail');
+            dd($e);
+        }
+        
+        $this->emit('refreshDatatable');
     }
 }
