@@ -29,15 +29,8 @@
 
                         </x-feed.elements.shop.shop-archive-filters>
                     </div>
-                    <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-4">
-                        @foreach ($products as $product)
-                            <livewire:feed.elements.product-card :product="$product"></livewire:feed.elements.product-card>
-                        @endforeach
 
-                        {{ $products->links() }}
-
-                        <!-- More questions... -->
-                    </div>
+                    <livewire:feed.archive :model_class="\App\Models\Product::class" ></livewire:feed.archive>
                 </div>
             </main>
             <aside class="xl:block col-span-4 xl:col-span-3">

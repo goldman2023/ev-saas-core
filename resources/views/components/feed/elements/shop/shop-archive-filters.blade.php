@@ -1,4 +1,4 @@
-<div class="bg-white">
+{{-- <div class="bg-white">
 
     <div x-data="{ open: false }" @keydown.window.escape="open = false" class="bg-white">
         <!-- Mobile filter dialog -->
@@ -549,4 +549,4 @@
         </section>
     </div>
 
-</div>
+</div> --}}
