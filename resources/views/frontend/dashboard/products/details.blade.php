@@ -229,7 +229,7 @@
                                         <li class="py-5">
                                             <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
                                                 <h3 class="text-sm font-semibold text-gray-800">
-                                                    <a href="#" class="hover:underline focus:outline-none">
+                                                    <a href="{{ $product->getStripeCheckoutPermalink() }}" class="hover:underline focus:outline-none">
                                                         {{-- Stripe icon --}}
                                                         {{-- TODO: Create global components for icons like this custom
                                                         brand images mostly --}}
@@ -250,7 +250,6 @@
                                                             </g>
                                                         </svg>
                                                         <!-- Extend touch target to entire panel -->
-                                                        <span class="absolute inset-0" aria-hidden="true"></span>
                                                         @if(!$product->isStripeProduct())
                                                         <span
                                                             class="mt-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
@@ -272,8 +271,8 @@
                                                 </p>
 
                                                 <!-- This example requires Tailwind CSS v2.0+ -->
-                                                <a type="button" target="_blank"
-                                                    href="{{ \StripeService::createCheckoutLink($product, 1) }}"
+                                                <a target="_blank"
+                                                    href="{{ $product->getStripeCheckoutPermalink() }}"
                                                     class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {{ translate('Peview checkout') }}
                                                     <!-- Heroicon name: solid/mail -->

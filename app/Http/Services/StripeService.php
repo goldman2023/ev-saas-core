@@ -19,6 +19,7 @@ use FX;
 use DB;
 use Stripe;
 use Payments;
+use Carbon;
 use App\Models\CoreMeta;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
@@ -291,21 +292,21 @@ class StripeService
             $order->email = '';
 
             // TODO: Should be handled differently
-            if($this->items->first() instanceof Plan) {
+            if($model instanceof Plan) {
                 /*
                 * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
                 */
-                $this->order->type = OrderTypeEnum::subscription()->value;
-                $this->order->number_of_invoices = -1; // 'unlimited' for subscriptions
-                $this->order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
-                $this->order->invoice_grace_period = 0;
-                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+                $order->type = OrderTypeEnum::subscription()->value;
+                $order->number_of_invoices = -1; // 'unlimited' for subscriptions
+                $order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
+                $order->invoice_grace_period = 0;
+                $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
             } else {
-                $this->order->type = OrderTypeEnum::standard()->value;
-                $this->order->number_of_invoices = 1; // 'unlimited' for subscriptions
-                $this->order->invoicing_period = null; // TODO: Add monthly/annual switch
-                $this->order->invoice_grace_period = $default_grace_period;
-                $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+                $order->type = OrderTypeEnum::standard()->value;
+                $order->number_of_invoices = 1; // 'unlimited' for subscriptions
+                $order->invoicing_period = null; // TODO: Add monthly/annual switch
+                $order->invoice_grace_period = $default_grace_period;
+                $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
             }
             
             // If user is logged in
