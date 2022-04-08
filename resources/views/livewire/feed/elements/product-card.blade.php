@@ -2,7 +2,7 @@
 
     <div class="flex-1 flex flex-col p-3">
         <a href="{{  $product->getPermalink() }}">
-            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded" src="{{ $product->getThumbnail() }}" alt="">
+            <img class="w-32 h-32 flex-shrink-0 mx-auto rounded object-contain" src="{{ $product->getThumbnail() }}" alt="">
         </a>
         <h3 class="mt-6 text-gray-900 text-md font-semibold">
             <a href="{{  $product->getPermalink() }}">
