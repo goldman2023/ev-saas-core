@@ -163,7 +163,7 @@ class StripeService
     }
         
 
-    public function createCheckoutLink($model, $qty)
+    public function createCheckoutLink($model, $qty, $preview)
     {
         // Check if Stripe Product actually exists
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
@@ -199,9 +199,12 @@ class StripeService
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
         
-        // Create an Order
-        $order = $this->createTempOrder($model, $qty);
-
+        // If Preview, then don't crete temp order
+        if($preview) {
+            // Create an Order
+            $order = $this->createTempOrder($model, $qty);
+        }
+        
         $checkout_link['url'] = "#";
 
         $stripe_args = [

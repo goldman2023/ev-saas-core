@@ -31,7 +31,7 @@ class StripePaymentController extends Controller
 
         $model = app($data['class'])->find($data['id']);
 
-        $link = \StripeService::createCheckoutLink($model, $data['qty']);
+        $link = \StripeService::createCheckoutLink($model, $data['qty'], $data['preview'] ?? false);
 
         // Redirect to Stripe session checkout
         return redirect($link);
