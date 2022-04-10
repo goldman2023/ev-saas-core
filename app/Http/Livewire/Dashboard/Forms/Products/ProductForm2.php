@@ -102,7 +102,8 @@ class ProductForm2 extends Component
                 'product.current_stock' => 'required|numeric|min:0',
                 'product.low_stock_qty' => 'required|numeric|min:0',
                 'product.use_serial' => 'required|boolean',
-                'product.allow_out_of_stock_purchases' => 'required|boolean'
+                'product.allow_out_of_stock_purchases' => 'required|boolean',
+                'product.track_inventory' => 'required|boolean',
             ],
             'shipping' => [
                 'product.digital' => 'required|boolean',
@@ -127,7 +128,9 @@ class ProductForm2 extends Component
                 'core_meta.location_address.value' => 'nullable',
                 'core_meta.location_address_coordinates.value' => 'nullable',
                 'core_meta.location_link.value' => 'nullable',
-                'core_meta.unlockables.value' => 'nullable'
+                'core_meta.unlockables.value' => 'nullable',
+                'core_meta.calendly_link.value' => 'nullable' // should be required if product type is bookable_service or bookable_subscription_service
+
             ]
         ]);
 
@@ -181,7 +184,6 @@ class ProductForm2 extends Component
      */
     public function mount(&$product = null)
     {   
-        
         // Set default params
         if($product) {
             // Update
@@ -196,6 +198,7 @@ class ProductForm2 extends Component
             $this->product->slug = '';
             $this->product->status = StatusEnum::draft()->value;
             $this->product->type = ProductTypeEnum::standard()->value;
+            $this->product->track_inventory = false;
             $this->product->user_id = auth()->user()->id;
             $this->product->shop_id = MyShop::getShop()->id;
             $this->product->is_quantity_multiplied = 1;
@@ -297,6 +300,7 @@ class ProductForm2 extends Component
     /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
+        $product_stock->track_inventory = ($this->product->track_inventory ?? false) === true;
         $product_stock->sku = empty($this->product->sku) ? \UUID::generate(4)->string : $this->product->sku;
         $product_stock->barcode = empty($this->product->barcode) ? null : $this->product->barcode ;
         $product_stock->qty = empty($this->product->current_stock) ? 0 : $this->product->current_stock;

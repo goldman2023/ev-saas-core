@@ -18,7 +18,7 @@
             <!-- Product details -->
             <div class="w-full mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-4">
                 <div class="flex flex-col">
-                    <div class="w-full flex space-x-3 overflow-scroll">
+                    <div class="w-full flex space-x-3 ">
                         @foreach($product->categories as $category)
                         @if(empty($category->parent_id))
                         <div class="badge-info !text-14 !py-1">{{ $category->name }}</div>
