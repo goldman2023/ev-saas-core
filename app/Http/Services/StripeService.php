@@ -291,7 +291,7 @@ class StripeService
             $order->shop_id = $model->shop_id;
             $order->same_billing_shipping = false;
             $order->buyers_consent = true;
-            $order->is_temp = 1;
+            $order->is_temp = true;
             $order->email = '';
 
             // TODO: Should be handled differently
@@ -391,7 +391,7 @@ class StripeService
                     $session = $event->data->object;
                     $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
                     $order->payment_status = PaymentStatusEnum::paid()->value;
-                    $order->is_temp = 0;
+                    $order->is_temp = false;
                     $order->email = empty($order->email) ? $session->customer_details->email : $order->email;
                     $order->billing_first_name = explode(' ', $session->customer_details->name)[0] ?? '';
                     $order->billing_last_name = explode(' ', $session->customer_details->name)[1] ?? '';

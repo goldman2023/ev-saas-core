@@ -306,4 +306,16 @@ class Product extends EVBaseModel
 
         return false;
     }
+
+    public function isBookableService() {
+        return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
+    }
+
+    public function getBookingLink() {
+        return $this->core_meta?->where('key', 'calendly_link')->first()?->value ?? null;
+    }
+
+    public function isEvent() {
+        return $this->type === \App\Enums\ProductTypeEnum::event()->value;
+    }
 }

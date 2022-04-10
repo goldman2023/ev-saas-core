@@ -27,6 +27,7 @@
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         core_meta: @js($core_meta),
+        track_inventory: @js($product->track_inventory),
 
         onSave() {
             $wire.set('product.description', this.description, true);
@@ -38,6 +39,7 @@
             $wire.set('product.base_currency', this.base_currency, true);
             $wire.set('product.discount_type', this.discount_type, true);
             $wire.set('product.tax_type', this.tax_type, true);
+            $wire.set('product.track_inventory', this.track_inventory, true);
             $wire.set('product.use_serial', this.use_serial, true);
             $wire.set('product.allow_out_of_stock_purchases', this.allow_out_of_stock_purchases, true);
             $wire.set('product.digital', this.is_digital, true);
@@ -143,6 +145,75 @@
                         </div>
                     </div>
                     {{-- END Card Basic --}}
+
+                    {{-- Card Unlockables --}}
+                    {{-- <div class="p-4 border bg-white border-gray-200 rounded-lg shadow">
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Locked Content') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('User will be able to access this content once product is purchased') }}</p>
+                        </div>
+                
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <template x-if="core_meta.unlocakbles.value != null && core_meta.unlocakbles.value.length > 0">
+                                <template x-for="item in core_meta.unlocakbles.value">
+                                    <!-- Title -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                        
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ translate('Name') }}
+                                        </label>
+                        
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <input type="text" class="form-standard @error('product.name') is-invalid @enderror"
+                                                    placeholder="{{ translate('New post title') }}"
+                                                    wire:model.defer="product.name" />
+                                        
+                                            <x-system.invalid-msg field="product.name"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                    <!-- END Title -->
+                                </template>
+                            </template>
+                        </div>
+                        
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+
+
+                            <!-- Excerpt -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Excerpt') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <textarea type="text" class="form-standard h-[80px] @error('product.excerpt') is-invalid @enderror"
+                                                placeholder="{{ translate('Write a short promo description for this product') }}"
+                                                wire:model.defer="product.excerpt">
+                                    </textarea>
+                                
+                                    <x-system.invalid-msg class="w-full" field="product.excerpt"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Excerpt -->
+
+                            <!-- Description -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
+                
+                                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Description') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <x-dashboard.form.froala field="description" id="product-description-wysiwyg"></x-dashboard.form.froala>
+                                
+                                    <x-system.invalid-msg class="w-full" field="product.description"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Description -->
+                        </div>
+                    </div> --}}
+                    {{-- END Card Unlockables --}}
 
                     
                     {{-- Card Pricing --}}
@@ -292,166 +363,185 @@
                         </div>
                 
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
-                            {{-- SKU --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                        
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('SKU') }}
-                                </label>
-                
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('product.sku') is-invalid @enderror"
-                                            placeholder="{{ translate('Product SKU') }}"
-                                            wire:model.defer="product.sku" />
 
-                                    <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
-                                
-                                    <x-system.invalid-msg field="product.sku"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                            {{-- END SKU --}}
-
-                            {{-- Barcode --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                        
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Barcode') }}
-                                </label>
-                
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('product.barcode') is-invalid @enderror"
-                                            placeholder="{{ translate('Product barcode') }}"
-                                            wire:model.defer="product.barcode" />
-                                
-                                    <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
-
-                                    <x-system.invalid-msg field="product.barcode"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                            {{-- END Barcode --}}
-
-                            {{-- Use serial numbers --}}
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                    <span class="text-sm font-medium text-gray-900">{{ translate('Uses serial numbers?') }}</span>
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Track inventory?') }}</span>
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-
-                                    <button type="button" @click="use_serial = !use_serial" 
-                                                :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}" 
+                                    <button type="button" @click="track_inventory = !track_inventory" 
+                                                :class="{'bg-primary':track_inventory, 'bg-gray-200':!track_inventory}" 
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':use_serial, 'translate-x-0':!use_serial}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                            <span :class="{'translate-x-5':track_inventory, 'translate-x-0':!track_inventory}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
                                 </div>
                             </div>
-                            {{-- END Use serial numbers --}}
 
-                            {{-- Allow out of stock purchases --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
-                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                    <span class="text-sm font-medium text-gray-900">{{ translate('Allow selling even when out of stock?') }}</span>
+                            
+                            <div class="w-full space-y-6 sm:space-y-5" x-show="track_inventory">
+                                {{-- SKU --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('SKU') }}
+                                    </label>
+                    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <input type="text" class="form-standard @error('product.sku') is-invalid @enderror"
+                                                placeholder="{{ translate('Product SKU') }}"
+                                                wire:model.defer="product.sku" />
+
+                                        <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
+                                    
+                                        <x-system.invalid-msg field="product.sku"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                                {{-- END SKU --}}
+
+                                {{-- Barcode --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Barcode') }}
+                                    </label>
+                    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <input type="text" class="form-standard @error('product.barcode') is-invalid @enderror"
+                                                placeholder="{{ translate('Product barcode') }}"
+                                                wire:model.defer="product.barcode" />
+                                    
+                                        <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
+
+                                        <x-system.invalid-msg field="product.barcode"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                                {{-- END Barcode --}}
+
+                                {{-- Use serial numbers --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Uses serial numbers?') }}</span>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+
+                                        <button type="button" @click="use_serial = !use_serial" 
+                                                    :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':use_serial, 'translate-x-0':!use_serial}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                {{-- END Use serial numbers --}}
+
+                                {{-- Allow out of stock purchases --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Allow selling even when out of stock?') }}</span>
+                                    </div>
+
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
+                                                    :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
+                                                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                <span :class="{'translate-x-5':allow_out_of_stock_purchases, 'translate-x-0':!allow_out_of_stock_purchases}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                {{-- END Allow out of stock purchases --}}
+
+                                <div class="w-full" x-show="!use_serial">
+                                    <!-- Minimum quantity user can purchase -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ translate('Minimum quantity user can purchase') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <div class="grid grid-cols-10 gap-3">
+                                                <div class="col-span-6">
+                                                    <input type="number" 
+                                                            step="0.01" 
+                                                            class="form-standard @error('product.min_qty') is-invalid @enderror"
+                                                            placeholder="{{ translate('0.00') }}"
+                                                            wire:model.defer="product.min_qty" />
+                                                </div>
+
+                                                <x-system.invalid-msg class="col-span-10" field="product.min_qty"></x-system.invalid-msg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END Minimum quantity user can purchase -->
+
+                                    <!-- Stock quantity -->
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4">
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ translate('Stock quantity') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <div class="grid grid-cols-10 gap-3">
+                                                <div class="col-span-6">
+                                                    <input type="number" 
+                                                            step="0.01" 
+                                                            class="form-standard @error('product.current_stock') is-invalid @enderror"
+                                                            placeholder="{{ translate('0.00') }}"
+                                                            wire:model.defer="product.current_stock" />
+                                                </div>
+
+                                                <x-system.invalid-msg class="col-span-10" field="product.current_stock"></x-system.invalid-msg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END Stock quantity -->
                                 </div>
 
-                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
-                                                :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':allow_out_of_stock_purchases, 'translate-x-0':!allow_out_of_stock_purchases}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            {{-- END Allow out of stock purchases --}}
+                                {{-- Unit --}}
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                            
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Unit') }}
+                                    </label>
+                    
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-6">
+                                                <input type="text" class="form-standard @error('product.unit') is-invalid @enderror"
+                                                placeholder="{{ translate('Product unit') }}"
+                                                wire:model.defer="product.unit" />
+                                            </div>
 
-                            <div class="w-full" x-show="!use_serial">
-                                <!-- Minimum quantity user can purchase -->
+                                            <x-system.invalid-msg class="col-span-10"  field="product.unit"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- END Unit --}}
+
+                                <!-- Low stock quantity -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Minimum quantity user can purchase') }}
+                                        {{ translate('Low stock quantity') }}
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <div class="grid grid-cols-10 gap-3">
                                             <div class="col-span-6">
                                                 <input type="number" 
-                                                        step="0.01" 
-                                                        class="form-standard @error('product.min_qty') is-invalid @enderror"
+                                                        step="0.01"
+                                                        min="0"
+                                                        class="form-standard @error('product.low_stock_qty') is-invalid @enderror"
                                                         placeholder="{{ translate('0.00') }}"
-                                                        wire:model.defer="product.min_qty" />
+                                                        wire:model.defer="product.low_stock_qty" />
                                             </div>
 
-                                            <x-system.invalid-msg class="col-span-10" field="product.min_qty"></x-system.invalid-msg>
+                                            <x-system.invalid-msg class="col-span-10" field="product.low_stock_qty"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- END Minimum quantity user can purchase -->
-
-                                <!-- Stock quantity -->
-                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4">
-                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                        {{ translate('Stock quantity') }}
-                                    </label>
-
-                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <div class="grid grid-cols-10 gap-3">
-                                            <div class="col-span-6">
-                                                <input type="number" 
-                                                        step="0.01" 
-                                                        class="form-standard @error('product.current_stock') is-invalid @enderror"
-                                                        placeholder="{{ translate('0.00') }}"
-                                                        wire:model.defer="product.current_stock" />
-                                            </div>
-
-                                            <x-system.invalid-msg class="col-span-10" field="product.current_stock"></x-system.invalid-msg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- END Stock quantity -->
+                                <!-- END Low stock quantity -->
                             </div>
-
-                            {{-- Unit --}}
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                        
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Unit') }}
-                                </label>
-                
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <div class="grid grid-cols-10 gap-3">
-                                        <div class="col-span-6">
-                                            <input type="text" class="form-standard @error('product.unit') is-invalid @enderror"
-                                            placeholder="{{ translate('Product unit') }}"
-                                            wire:model.defer="product.unit" />
-                                        </div>
-
-                                        <x-system.invalid-msg class="col-span-10"  field="product.unit"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- END Unit --}}
-
-                            <!-- Low stock quantity -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Low stock quantity') }}
-                                </label>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <div class="grid grid-cols-10 gap-3">
-                                        <div class="col-span-6">
-                                            <input type="number" 
-                                                    step="0.01"
-                                                    min="0"
-                                                    class="form-standard @error('product.low_stock_qty') is-invalid @enderror"
-                                                    placeholder="{{ translate('0.00') }}"
-                                                    wire:model.defer="product.low_stock_qty" />
-                                        </div>
-
-                                        <x-system.invalid-msg class="col-span-10" field="product.low_stock_qty"></x-system.invalid-msg>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END Low stock quantity -->
+                            
                         </div>
                     </div>
                     {{-- END Card Inventory --}}
@@ -979,9 +1069,9 @@
                     </div>
                     {{-- END Actions --}}
 
-                    {{-- Meta --}}
-                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">
-                        <div class="w-100 mt-2" x-show="type === 'event'">
+                    {{-- Event Meta --}}
+                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow" x-show="type === 'event'">
+                        <div class="w-100 mt-2" >
                             <!-- Location Type-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
@@ -1063,7 +1153,25 @@
                             <!-- END Date End -->
                         </div>
                     </div>
-                    {{-- END Meta --}}
+                    {{-- END Event Meta --}}
+
+                    {{-- Bookable Service Meta --}}
+                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow" x-show="type === 'bookable_service'">
+                        <div class="w-100 mt-2" >
+                            <!-- Calendly link-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Calendly link') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="core_meta.calendly_link.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END Calendly link -->
+                        </div>
+                    </div>
+                    {{-- Bookable Service Meta --}}
 
                     {{-- Card Media --}}
                     <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">

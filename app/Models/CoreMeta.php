@@ -27,6 +27,7 @@ class CoreMeta extends Model
             'location_address_coordinates' => 'array',
             'location_link' => 'string',
             'unlockables' => 'array',
+            'calendly_link' => 'string',
         ];
     }
 

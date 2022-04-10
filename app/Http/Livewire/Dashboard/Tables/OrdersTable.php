@@ -130,7 +130,7 @@ class OrdersTable extends DataTableComponent
 
     public function query(): Builder
     {
-        return Order::query()
+        return Order::query()->where('is_temp', 0)
             ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
             ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))

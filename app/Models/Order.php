@@ -25,6 +25,7 @@ class Order extends EVBaseModel
         'same_billing_shipping' => 'boolean',
         'viewed' => 'boolean',
         'meta' => 'array',
+        'is_temp' => 'boolean',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
