@@ -124,8 +124,6 @@ if (!function_exists('castValuesForGet')) {
                     } else {
                         $settings[$key]['value'] = null;
                     }
-
-                    dd($e);
                 }
                 
             }

@@ -15,6 +15,7 @@
         brand_id: @js($product->brand_id),
         tags: @js($product->tags),
         status: @js($product->status ?? App\Enums\StatusEnum::draft()->value),
+        type: @js($product->type ?? App\Enums\ProductTypeEnum::standard()->value),
         is_digital: {{ $product->digital === true ? 'true' : 'false' }},
         use_serial: {{ $product->use_serial === true ? 'true' : 'false' }},
         allow_out_of_stock_purchases: {{ $product->allow_out_of_stock_purchases === true ? 'true' : 'false' }},
@@ -25,6 +26,7 @@
         selected_attribute_values: @js($selected_predefined_attribute_values),
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
+        core_meta: @js($core_meta),
 
         onSave() {
             $wire.set('product.description', this.description, true);
@@ -43,9 +45,21 @@
             $wire.set('attributes', this.attributes, true);
             $wire.set('product.meta_img', this.meta_img.id, true);
             $wire.set('product.status', this.status, true);
+            $wire.set('product.type', this.type, true);
             $wire.set('product.tags', this.tags, true);
             $wire.set('selected_categories', this.selected_categories, true);
             $wire.set('product.brand_id', this.brand_id, true);
+
+            // CoreMeta
+            $wire.set('core_meta.date_type.value', this.core_meta.date_type.value, true);
+            $wire.set('core_meta.start_date.value', this.core_meta.start_date.value, true);
+            $wire.set('core_meta.end_date.value', this.core_meta.end_date.value, true);
+            $wire.set('core_meta.location_type.value', this.core_meta.location_type.value, true);
+            $wire.set('core_meta.location_address.value', this.core_meta.location_address.value, true);
+            $wire.set('core_meta.location_address_coordinates.value', this.core_meta.location_address_coordinates.value, true);
+            $wire.set('core_meta.location_link.value', this.core_meta.location_link.value, true);
+            $wire.set('core_meta.unlockables.value', this.core_meta.unlockables.value, true);
+
         }
     }"
      class="lw-form container-fluid"
@@ -444,7 +458,7 @@
 
 
                     {{-- Card Shipping --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}">
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}" x-show="type != 'digital' && type != 'event'">
                         <div>
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Shipping') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Set available delivery options for your product') }}</p>
@@ -936,6 +950,19 @@
                         </div>
                         <!-- END Status -->
 
+
+                        <!-- Product Type -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                            <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <span class="mr-2">{{ translate('Product Type') }}</span>
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.select :items="\App\Enums\ProductTypeEnum::toArray()" selected="type" :nullable="false"></x-dashboard.form.select>
+                            </div>
+                        </div>
+                        <!-- END Product Type -->
+
                         <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                             @if($is_update)
                                 <button type="button" class="btn btn-danger btn-sm cursor-pointer">
@@ -951,6 +978,92 @@
                         </div>
                     </div>
                     {{-- END Actions --}}
+
+                    {{-- Meta --}}
+                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">
+                        <div class="w-100 mt-2" x-show="type === 'event'">
+                            <!-- Location Type-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Location Type') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="['remote' => 'Remote', 'offline' => 'Offline']" selected="core_meta.location_type.value"></x-dashboard.form.select>
+
+                                    <x-system.invalid-msg field="core_meta.location_type.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Location Type -->
+
+                            <!-- Location Address-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
+                                x-show="core_meta.location_type.value === 'offline'">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Location Address') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="core_meta.location_address.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END Location Address -->
+
+                            <!-- Location Link-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
+                                x-show="core_meta.location_type.value === 'remote'">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Meet Link') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="core_meta.location_link.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END Location Link -->
+
+
+                            <!-- Date Type-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Date Type') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="core_meta.date_type.value"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="core_meta.date_type.value"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Date Type -->
+
+                            <!-- Date Start-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Start') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.date field="core_meta.start_date.value"></x-dashboard.form.date>
+                                </div>
+                            </div>
+                            <!-- END Date Start -->
+
+                            <!-- Date End-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
+                                x-show="core_meta.date_type.value === 'range'">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('End') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.date field="core_meta.end_date.value"></x-dashboard.form.date>
+                                    {{-- <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="core_meta.date_type.value"></x-dashboard.form.select> --}}
+                                </div>
+                            </div>
+                            <!-- END Date End -->
+                        </div>
+                    </div>
+                    {{-- END Meta --}}
 
                     {{-- Card Media --}}
                     <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">

@@ -13,9 +13,11 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\ProductTranslation;
 use App\Models\Upload;
+use App\Models\CoreMeta;
 use App\Rules\AttributeValuesSelected;
 use App\Rules\EVModelsExist;
 use App\Enums\StatusEnum;
+use App\Enums\ProductTypeEnum;
 use App\Enums\AmountPercentTypeEnum;
 use DB;
 use EVS;
@@ -42,6 +44,7 @@ class ProductForm2 extends Component
     use CanDelete;
 
     public $product;
+    public $core_meta;
     public $is_update;
     public $attributes;
     public $selected_predefined_attribute_values;
@@ -61,7 +64,8 @@ class ProductForm2 extends Component
                 'product.name' => 'required|min:6',
                 'product.description' => 'required|min:20',
                 'product.excerpt' => 'nullable',
-                'product.status' => [Rule::in(StatusEnum::toValues())],
+                // 'product.status' => [Rule::in(StatusEnum::toValues())],
+                'product.type' => [Rule::in(ProductTypeEnum::toValues())],
             ],
             'status' => [
                 'product.status' => [Rule::in(StatusEnum::toValues())],
@@ -92,9 +96,9 @@ class ProductForm2 extends Component
             ],
             'inventory' => [
                 'product.unit' => 'nullable',
-                'product.sku' => ['required', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
+                'product.sku' => ['nullable', Rule::unique('product_stocks', 'sku')->ignore($this->product->stock->id ?? null)],
                 'product.barcode' => ['nullable'],
-                'product.min_qty' => 'required|numeric|min:1',
+                'product.min_qty' => 'nullable|numeric|min:1',
                 'product.current_stock' => 'required|numeric|min:0',
                 'product.low_stock_qty' => 'required|numeric|min:0',
                 'product.use_serial' => 'required|boolean',
@@ -113,6 +117,17 @@ class ProductForm2 extends Component
                 'product.meta_title' => 'nullable',
                 'product.meta_description' => 'nullable',
                 'product.meta_img' => 'nullable',
+            ],
+            'meta' => [
+                // TODO: Add proper conditional validation!
+                'core_meta.date_type.value' => [Rule::in(['range', 'specific'])], // range, specific
+                'core_meta.start_date.value' => 'required|date', 
+                'core_meta.end_date.value' => 'nullable|date',
+                'core_meta.location_type.value' => [Rule::in(['remote', 'offline'])], // remote, location
+                'core_meta.location_address.value' => 'nullable',
+                'core_meta.location_address_coordinates.value' => 'nullable',
+                'core_meta.location_link.value' => 'nullable',
+                'core_meta.unlockables.value' => 'nullable'
             ]
         ]);
 
@@ -166,6 +181,7 @@ class ProductForm2 extends Component
      */
     public function mount(&$product = null)
     {   
+        
         // Set default params
         if($product) {
             // Update
@@ -179,6 +195,7 @@ class ProductForm2 extends Component
 
             $this->product->slug = '';
             $this->product->status = StatusEnum::draft()->value;
+            $this->product->type = ProductTypeEnum::standard()->value;
             $this->product->user_id = auth()->user()->id;
             $this->product->shop_id = MyShop::getShop()->id;
             $this->product->is_quantity_multiplied = 1;
@@ -201,7 +218,7 @@ class ProductForm2 extends Component
 
         $this->initCategories($this->product);
 
-        
+        $this->core_meta = CoreMeta::getMeta($product->core_meta);
     }
 
     public function dehydrate()
@@ -280,7 +297,7 @@ class ProductForm2 extends Component
     /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductStocks() {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
-        $product_stock->sku = empty($this->product->sku) ? Str::slug($this->product->name) : $this->product->sku ;
+        $product_stock->sku = empty($this->product->sku) ? \UUID::generate(4)->string : $this->product->sku;
         $product_stock->barcode = empty($this->product->barcode) ? null : $this->product->barcode ;
         $product_stock->qty = empty($this->product->current_stock) ? 0 : $this->product->current_stock;
         $product_stock->low_stock_qty = empty($this->product->low_stock_qty) ? 0 : $this->product->low_stock_qty;
@@ -309,6 +326,9 @@ class ProductForm2 extends Component
 
             // Set Attributes
             $this->setAttributes();
+
+            // Save CoreMeta
+            $this->saveCoreMeta();
             
             DB::commit();
 
@@ -320,7 +340,7 @@ class ProductForm2 extends Component
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch(\Exception $e) {
             DB::rollBack();
-            dd($e);
+
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }
@@ -469,6 +489,21 @@ class ProductForm2 extends Component
                     //     ]);
                     // }
                 }
+            }
+        }
+    }
+
+    protected function saveCoreMeta() {
+        foreach(collect($this->getRuleSet('meta'))->filter(fn($item, $key) => str_starts_with($key, 'core_meta')) as $key => $value) {
+            $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
+            
+            if(!empty($core_meta_key) && $core_meta_key !== '*') {
+                $new_value = castValueForSave($core_meta_key, $this->core_meta[$core_meta_key], CoreMeta::metaDataTypes());
+
+                CoreMeta::updateOrCreate(
+                    ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
+                    ['value' => $new_value]
+                );
             }
         }
     }

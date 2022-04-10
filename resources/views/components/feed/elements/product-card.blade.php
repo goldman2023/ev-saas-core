@@ -18,7 +18,7 @@
                     {{ translate('Price') }} {{ $product->getTotalPrice(true) }}
                 </span>
                 @if(!$product->isInStock())
-                <span class="absolute top-[-10px] right-[-10px] px-2 py-1 text-gray-100 text-xs font-medium bg-red-700 rounded-full">
+                <span class="absolute top-[10px] right-[10px] px-2 py-1 text-gray-100 text-xs font-medium bg-danger rounded-full">
                     {{ translate('Out of stock') }}
                 </span>
                 @endif
