@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeUserMetaValueNullableUserMetaTable extends Migration
+class AddNullableToCore2MetaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class ChangeUserMetaValueNullableUserMetaTable extends Migration
      */
     public function up()
     {
-        Schema::table('user_meta', function (Blueprint $table) {
-            
+        Schema::table('core_meta', function (Blueprint $table) {
             $table->string('value', 2500)->nullable()->change();
+            $table->unique(['subject_id', 'subject_type', 'key']);
+            $table->index(['subject_id', 'subject_type']);
         });
     }
 
@@ -26,8 +27,8 @@ class ChangeUserMetaValueNullableUserMetaTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_meta', function (Blueprint $table) {
-            $table->string('value', 2500)->nullable(false)->change();
+        Schema::table('core_meta', function (Blueprint $table) {
+            $table->string('value', 191)->nullable(false)->change();
         });
     }
 }

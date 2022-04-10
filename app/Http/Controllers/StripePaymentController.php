@@ -25,4 +25,15 @@ class StripePaymentController extends Controller
     public function webhooks(Request $request) {
         return StripeService::processWebhooks($request);
     }
+
+    public function generateCheckoutSessionLink() {
+        $data = json_decode(base64_decode(request()->data), true);
+
+        $model = app($data['class'])->find($data['id']);
+
+        $link = \StripeService::createCheckoutLink($model, $data['qty'], $data['preview'] ?? false);
+
+        // Redirect to Stripe session checkout
+        return redirect($link);
+    }
 }
