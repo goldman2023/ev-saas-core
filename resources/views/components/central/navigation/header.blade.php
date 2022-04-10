@@ -74,7 +74,7 @@
                             Log in
                         </a>
 
-                        <a href="https://demo.ev-saas.com" target="_blank"
+                        <a href="https://demo.we-saas.com" target="_blank"
                             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white ml-3 bg-green-700 hover:bg-primary-700">
                             View Demo
                         </a>

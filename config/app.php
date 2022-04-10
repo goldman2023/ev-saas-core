@@ -75,7 +75,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://ev-saas.com'),
+    'url' => env('APP_URL', 'https://we-saas.com'),
 
     /*
     |--------------------------------------------------------------------------
