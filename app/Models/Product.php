@@ -157,6 +157,23 @@ class Product extends EVBaseModel
         );
     }
 
+    public function scopeNewest($query)
+    {
+        $query->orderBy('created_at', 'DESC');
+    }
+    public function scopePriceAsc($query)
+    {
+        $query->orderBy('unit_price', 'ASC');
+    }
+    public function scopeDiscountDesc($query)
+    {
+        $query->orderBy('discount', 'DESC');
+    }
+    public function scopeMostPopular($query)
+    {
+        return $query; // TODO: Ask Eim about views
+    }
+
     /**
      * Stream: Add extra activity data - task name, and user's display name:
      */

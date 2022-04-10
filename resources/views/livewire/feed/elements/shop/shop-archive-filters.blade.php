@@ -1,19 +1,3 @@
-<!--
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
--->
 <div class="bg-white">
     <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ translate('Products, courses, consulting') }}</h1>
@@ -37,13 +21,13 @@
             </button>
           </div>
           <div class="pl-6">
-            <button type="button" class="text-gray-500">Clear all</button>
+            <button type="button" class="text-gray-500">{{ translate('Clear all') }}</button>
           </div>
         </div>
       </div>
       <div class="border-t border-gray-200 py-10" id="disclosure-1" x-show="open" x-cloak>
         <div class="max-w-7xl mx-auto grid grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
-          <div class="grid grid-cols-1 gap-y-10 auto-rows-min md:grid-cols-2 md:gap-x-6">
+          {{-- <div class="grid grid-cols-1 gap-y-10 auto-rows-min md:grid-cols-2 md:gap-x-6">
             <fieldset>
               <legend class="block font-medium">Price</legend>
               <div class="pt-6 space-y-6 sm:pt-4 sm:space-y-4">
@@ -167,7 +151,7 @@
                 </div>
               </div>
             </fieldset>
-          </div>
+          </div> --}}
         </div>
       </div>
       <div class="col-start-1 row-start-1 py-4">
@@ -176,7 +160,6 @@
             active: 'newest',
         }" x-init="
             $watch('active', () => {
-                
                 $wire.emit('sortArchive', active);
             });
         " @click.outside="open = false">

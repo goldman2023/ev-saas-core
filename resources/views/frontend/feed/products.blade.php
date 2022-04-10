@@ -17,20 +17,10 @@
             <main class="lg:col-span-9 xl:col-span-10">
                 <div class="mt-4">
                     <div class="mb-5">
-                        <x-feed.elements.shop.shop-archive-filters>
-                            <x-slot name="title">
-                                {{ translate('Products, courses, consulting') }}
-                            </x-slot>
+                        <livewire:feed.elements.shop.shop-archive-filters></livewire:feed.elements.shop.shop-archive-filters>
+                    </div>                    
 
-                            <x-slot name="description">
-                                {{ translate('Browse all products, courses, and services from our members') }}
-                            </x-slot>
-
-
-                        </x-feed.elements.shop.shop-archive-filters>
-                    </div>
-
-                    <livewire:feed.archive :model_class="\App\Models\Product::class" ></livewire:feed.archive>
+                    <livewire:feed.archive :model_class="\App\Models\Product::class" :show-filters="true"></livewire:feed.archive>
                 </div>
             </main>
             <aside class="xl:block col-span-4 xl:col-span-3">
