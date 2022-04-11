@@ -19,7 +19,7 @@ class EVShopController extends Controller
     public function single(Request $request, $slug)
     {
         // TODO: Cleanup old active commerce code!
-        $shop = Shop::where('slug', $slug)->first();
+        $shop = Shop::where('slug', $slug)->findOrFail();
 
         activity()
             ->performedOn($shop)
