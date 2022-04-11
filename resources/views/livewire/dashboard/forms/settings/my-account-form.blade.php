@@ -11,12 +11,14 @@
         current: 'basicInformation',
         thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
         cover: @js(['id' => $me->cover->id ?? null, 'file_name' => $me->cover->file_name ?? '']),
-        meta: @js($meta),
+        meta: @entangle('meta').defer,
     }" x-init="$watch('current', function(value) {
         $([document.documentElement, document.body]).animate({
             scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
         }, 500);
-    })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
+    })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
+        @submit-form.window="$wire.saveBasicInformation()"
+        x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden">
         </x-ev.loaders.spinner>
