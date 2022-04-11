@@ -32,7 +32,17 @@ class CoreMeta extends Model
     }
 
     public static function getMeta($core_meta) {
-        $core_meta = $core_meta->keyBy('key')->toArray();
+
+        if(is_array($core_meta)) {
+            if(empty($core_meta)) {
+                $core_meta = [];
+            } else {
+                $core_meta = collect($core_meta)->keyBy('key')->toArray();
+            }
+        } else {
+            $core_meta = $core_meta->keyBy('key')->toArray();
+        }
+        
         $data_types = self::metaDataTypes();
 
         castValuesForGet($core_meta, $data_types);

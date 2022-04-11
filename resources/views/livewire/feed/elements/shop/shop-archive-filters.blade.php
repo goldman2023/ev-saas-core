@@ -12,6 +12,15 @@
         x-data="{
         open: false,
         active_filters_count: 0,
+        selected_categories: [],
+        toggleCategory(id) {
+            let index = this.selected_categories.indexOf(id);
+            if(index !== -1) {
+                this.selected_categories.splice(index, 1);
+            } else {
+                this.selected_categories.push(id);
+            }
+        },
     }">
         <h2 id="filter-heading" class="sr-only">{{ translate('Categories Selected') }}</h2>
         <div class="relative col-start-1 row-start-1 py-4">
@@ -37,12 +46,12 @@
                 @foreach(Category::getAll() as $category)
                 <div class="-m-1 flex flex-wrap items-center">
                     <span
-                    {{-- :wire:click="add_filter_category($category->id)" --}}
-                        class="whitespace-nowrap min-w-[50px] nowrap m-1 inline-flex rounded-full border border-gray-200 items-center py-1.5 pl-3 pr-2 text-sm font-medium bg-white text-gray-900">
+                        @click="$wire.emit('filterByCategories', {{ $category->id }}); toggleCategory({{ $category->id }})"
+                        class="cursor-pointer whitespace-nowrap min-w-[50px] nowrap m-1 inline-flex rounded-full border border-gray-200 items-center py-1.5 pl-3 pr-2 text-sm font-medium "
+                        :class="{'bg-info text-white':selected_categories.indexOf({{ $category->id }}) !== -1, 'bg-white text-gray-900':selected_categories.indexOf({{ $category->id }}) === -1}">
                         <span>{{ $category->name }}</span>
                         <button type="button"
                             class="flex-shrink-0 ml-1 h-4 w-4 p-1 rounded-full inline-flex text-gray-400 hover:bg-gray-200 hover:text-gray-500">
-                            <span class="sr-only">Remove filter for Objects</span>
                             <svg class="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
                                 <path stroke-linecap="round" stroke-width="1.5" d="M1 1l6 6m0-6L1 7"></path>
                             </svg>
