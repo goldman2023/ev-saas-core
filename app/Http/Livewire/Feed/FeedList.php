@@ -25,8 +25,10 @@ class FeedList extends Component
 
     public function render()
     {
-        $data = Activity::whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked', 'add_to_cart', 'checkout'])
-            ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User'])->whereHas('subject');
+        $data = Activity::whereHas('subject')
+            ->whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked', 'add_to_cart', 'checkout'])
+            ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User']);
+
         if ($this->type == "recent") {
             $data = $data->orderBy('id', 'desc');
         } elseif ($this->type == 'trending') {
