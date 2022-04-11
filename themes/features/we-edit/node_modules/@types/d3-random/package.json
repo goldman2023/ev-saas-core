@@ -1,0 +1,40 @@
+{
+    "name": "@types/d3-random",
+    "version": "2.2.1",
+    "description": "TypeScript definitions for D3JS d3-random module",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-random",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Tom Wanzek",
+            "url": "https://github.com/tomwanzek",
+            "githubUsername": "tomwanzek"
+        },
+        {
+            "name": "Alex Ford",
+            "url": "https://github.com/gustavderdrache",
+            "githubUsername": "gustavderdrache"
+        },
+        {
+            "name": "Boris Yankov",
+            "url": "https://github.com/borisyankov",
+            "githubUsername": "borisyankov"
+        },
+        {
+            "name": "Nathan Bierema",
+            "url": "https://github.com/Methuselah96",
+            "githubUsername": "Methuselah96"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/d3-random"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "f32229df508bdb562efc2461914e4ff73534839717235d7b1b87a120bda929e0",
+    "typeScriptVersion": "3.6"
+}
