@@ -120,15 +120,15 @@ class ProductForm2 extends Component
             ],
             'meta' => [
                 // TODO: Add proper conditional validation!
-                'core_meta.date_type.value' => [Rule::in(['range', 'specific'])], // range, specific
-                'core_meta.start_date.value' => 'required_if:product.type,event|date',
+                'core_meta.date_type.value' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
+                'core_meta.start_date.value' => ['exclude_unless:product.type,event', 'required_if:product.type,event', 'date'], //'required_if:product.type,event|date',
                 'core_meta.end_date.value' => 'nullable|date',
-                'core_meta.location_type.value' => [Rule::in(['remote', 'offline'])], // remote, location
+                'core_meta.location_type.value' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
                 'core_meta.location_address.value' => 'nullable',
                 'core_meta.location_address_coordinates.value' => 'nullable',
                 'core_meta.location_link.value' => 'nullable',
                 'core_meta.unlockables.value' => 'nullable',
-                'core_meta.calendly_link.value' => 'nullable' // should be required if product type is bookable_service or bookable_subscription_service
+                'core_meta.calendly_link.value' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'] // should be required if product type is bookable_service or bookable_subscription_service
 
             ]
         ]);
