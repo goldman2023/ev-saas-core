@@ -121,7 +121,7 @@ class ProductForm2 extends Component
             'meta' => [
                 // TODO: Add proper conditional validation!
                 'core_meta.date_type.value' => [Rule::in(['range', 'specific'])], // range, specific
-                'core_meta.start_date.value' => 'required|date',
+                'core_meta.start_date.value' => 'required_if:product.type,event|date',
                 'core_meta.end_date.value' => 'nullable|date',
                 'core_meta.location_type.value' => [Rule::in(['remote', 'offline'])], // remote, location
                 'core_meta.location_address.value' => 'nullable',

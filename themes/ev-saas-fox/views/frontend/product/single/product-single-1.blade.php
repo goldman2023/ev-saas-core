@@ -58,7 +58,7 @@
 
                     @if(!$product->isInStock())
                     <!-- This example requires Tailwind CSS v2.0+ -->
-                    <div class="rounded-md bg-yellow-50 p-4">
+                    <div class="rounded-md bg-yellow-50 p-4 mb-6 mt-6">
                         <div class="flex">
                             <div class="flex-shrink-0">
                                 <!-- Heroicon name: solid/exclamation -->
@@ -77,7 +77,7 @@
                                     <p>{{ translate('Product is currently unavailable. Get notified when this product
                                         stock is added.') }}</p>
                                     <livewire:actions.wishlist-button action="Notify"
-                                        template="wishlist-button-detailed" :object="$product">
+                                     :object="$product">
                                     </livewire:actions.wishlist-button>
                                 </div>
                             </div>
