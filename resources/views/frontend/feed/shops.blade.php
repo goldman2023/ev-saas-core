@@ -19,7 +19,7 @@
 
 
                     <div class="mb-5">
-                        <x-feed.elements.shop.shop-archive-filters>
+                        <x-feed.elements.shop.shop-archive-filters :hide="true">
                         </x-feed.elements.shop.shop-archive-filters>
                     </div>
 

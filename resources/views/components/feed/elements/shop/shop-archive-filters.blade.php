@@ -1,8 +1,8 @@
 <!--
-  This example requires Tailwind CSS v2.0+ 
-  
+  This example requires Tailwind CSS v2.0+
+
   This example requires some changes to your config:
-  
+
   ```
   // tailwind.config.js
   module.exports = {
@@ -21,8 +21,9 @@
             {{ translate('Browse all products, courses, and services from our members') }}
         </p>
     </div>
-  
+
     <!-- Filters -->
+    @if(!$hide_filters)
     <section aria-labelledby="filter-heading" class="relative z-10 border-t border-b border-gray-200 grid items-center" x-data="{
         open: false,
         active_filters_count: 0,
@@ -51,17 +52,17 @@
                   <input id="price-0" name="price[]" value="0" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="price-0" class="ml-3 min-w-0 flex-1 text-gray-600"> $0 - $25 </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="price-1" name="price[]" value="25" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="price-1" class="ml-3 min-w-0 flex-1 text-gray-600"> $25 - $50 </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="price-2" name="price[]" value="50" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="price-2" class="ml-3 min-w-0 flex-1 text-gray-600"> $50 - $75 </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="price-3" name="price[]" value="75" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="price-3" class="ml-3 min-w-0 flex-1 text-gray-600"> $75+ </label>
@@ -75,27 +76,27 @@
                   <input id="color-0" name="color[]" value="white" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="color-0" class="ml-3 min-w-0 flex-1 text-gray-600"> White </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="color-1" name="color[]" value="beige" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="color-1" class="ml-3 min-w-0 flex-1 text-gray-600"> Beige </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="color-2" name="color[]" value="blue" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500" checked>
                   <label for="color-2" class="ml-3 min-w-0 flex-1 text-gray-600"> Blue </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="color-3" name="color[]" value="brown" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="color-3" class="ml-3 min-w-0 flex-1 text-gray-600"> Brown </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="color-4" name="color[]" value="green" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="color-4" class="ml-3 min-w-0 flex-1 text-gray-600"> Green </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="color-5" name="color[]" value="purple" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="color-5" class="ml-3 min-w-0 flex-1 text-gray-600"> Purple </label>
@@ -111,27 +112,27 @@
                   <input id="size-0" name="size[]" value="xs" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="size-0" class="ml-3 min-w-0 flex-1 text-gray-600"> XS </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="size-1" name="size[]" value="s" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500" checked>
                   <label for="size-1" class="ml-3 min-w-0 flex-1 text-gray-600"> S </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="size-2" name="size[]" value="m" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="size-2" class="ml-3 min-w-0 flex-1 text-gray-600"> M </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="size-3" name="size[]" value="l" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="size-3" class="ml-3 min-w-0 flex-1 text-gray-600"> L </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="size-4" name="size[]" value="xl" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="size-4" class="ml-3 min-w-0 flex-1 text-gray-600"> XL </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="size-5" name="size[]" value="2xl" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="size-5" class="ml-3 min-w-0 flex-1 text-gray-600"> 2XL </label>
@@ -145,22 +146,22 @@
                   <input id="category-0" name="category[]" value="all-new-arrivals" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="category-0" class="ml-3 min-w-0 flex-1 text-gray-600"> All New Arrivals </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="category-1" name="category[]" value="tees" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="category-1" class="ml-3 min-w-0 flex-1 text-gray-600"> Tees </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="category-2" name="category[]" value="objects" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="category-2" class="ml-3 min-w-0 flex-1 text-gray-600"> Objects </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="category-3" name="category[]" value="sweatshirts" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="category-3" class="ml-3 min-w-0 flex-1 text-gray-600"> Sweatshirts </label>
                 </div>
-  
+
                 <div class="flex items-center text-base sm:text-sm">
                   <input id="category-4" name="category[]" value="pants-and-shorts" type="checkbox" class="flex-shrink-0 h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500">
                   <label for="category-4" class="ml-3 min-w-0 flex-1 text-gray-600"> Pants &amp; Shorts </label>
@@ -176,7 +177,7 @@
             active: 'newest',
         }" x-init="
             $watch('active', () => {
-                
+
                 $wire.emit('sortArchive', active);
             });
         " @click.outside="open = false">
@@ -187,7 +188,7 @@
                 @svg('heroicon-s-chevron-down', ['class' => 'flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500'])
               </button>
             </div>
-  
+
             <div class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     x-show="open"
                     x-cloak
@@ -209,5 +210,5 @@
         </div>
       </div>
     </section>
+    @endif
   </div>
-  
