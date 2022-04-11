@@ -19,7 +19,13 @@ class EVProductController extends Controller
     //
     public function index(Request $request)
     {
-        $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
+        if(Auth::user()->user_type == 'admin') {
+            $products =Product::orderBy('created_at', 'desc')->paginate(20);
+
+        } else {
+            $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
+
+        }
         return view('frontend.dashboard.products.index')->with('products', $products);
     }
 
