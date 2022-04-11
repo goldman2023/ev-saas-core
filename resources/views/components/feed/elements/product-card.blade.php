@@ -29,7 +29,7 @@
 
                 <div class="we-badges-left absolute top-[-10px] left-[-10px]">
                     {{-- New Badge --}}
-                    @if($product->created_at->diffInDays() < 10) <div
+                    @if($product->created_at->diffInDays() < 3) <div
                         class="mb-2 px-2 py-2 text-gray-100 text-sm font-semibold bg-indigo-700 rounded-full">
                         {{ translate('New!') }} 🔖
                 </div>
