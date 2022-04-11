@@ -15,7 +15,7 @@
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('Edit Product') }}" text="">
             <x-slot name="content">
-                <a href="{{ route('products.index') }}" class="btn-standard mr-2 relative">
+                <a href="{{ route('product.details', [$product->slug]) }}" class="btn-standard mr-2 relative">
                     <div class="absolute top-[-15px] left-[-20px] mb-2 px-2 py-1 text-gray-100 text-xs font-semibold bg-indigo-700 rounded-full">
                         {{ translate('New!') }} 🔖
                     </div>
