@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\MyShop;
 use App\Facades\StripeService;
 use EVS;
 use App\Models\Product;
@@ -16,34 +17,44 @@ use Stripe;
 class EVProductController extends Controller
 {
     //
-    public function index(Request $request) {
-        $products = Auth::user()->products()->orderBy('created_at','desc')->paginate(20);
+    public function index(Request $request)
+    {
+        $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
         return view('frontend.dashboard.products.index')->with('products', $products);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         return view('frontend.dashboard.products.create');
     }
 
-    public function create2(Request $request) {
+    public function create2(Request $request)
+    {
+        /* Check if user has shop */
+        if (!MyShop::getShop()) {
+            /* If not, redirect to shop creation */
+            return redirect()->route('onboarding.step3');
+        }
         return view('frontend.dashboard.products.create2');
     }
 
     /* TODO: Add middleware for owner */
-    public function edit(Request $request, $slug) {
+    public function edit(Request $request, $slug)
+    {
         $product = Product::where('slug', $slug)->first();
 
-        if($product) {
+        if ($product) {
             // $product->convertUploadModelsToIDs(); // DEPRECATED, since we use livewire and alpinejs combo instead of shitty Front JS
         }
 
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
-    public function edit_stocks(Request $request, $slug) {
+    public function edit_stocks(Request $request, $slug)
+    {
         $product = Product::where('slug', $slug)->first();
 
-        if($product) {
+        if ($product) {
             $product->convertUploadModelsToIDs();
         }
 
@@ -52,25 +63,28 @@ class EVProductController extends Controller
             ->with('variations_attributes', $product->variant_attributes());
     }
 
-    public function edit_variations(Request $request, $slug) {
+    public function edit_variations(Request $request, $slug)
+    {
         $product = Product::where('slug', $slug)->first();
 
-        if($product) {
+        if ($product) {
             $product->convertUploadModelsToIDs();
         }
 
         return view('frontend.dashboard.products.variations')
-        ->with('product', $product)
-        ->with('variations_attributes', $product->variant_attributes());
+            ->with('product', $product)
+            ->with('variations_attributes', $product->variant_attributes());
     }
 
-    public function product_details(Request $request, $slug) {
+    public function product_details(Request $request, $slug)
+    {
         $product = Product::where('slug', $slug)->first();
 
         return view('frontend.dashboard.products.details')->with('product', $product);
     }
 
-    public function product_activity(Request $request, $slug) {
+    public function product_activity(Request $request, $slug)
+    {
         $product = Product::where('slug', $slug)->first();
 
         $activity = Activity::all();
@@ -80,7 +94,8 @@ class EVProductController extends Controller
     }
 
     // Frontend
-    public function productsByCategory(Request $request, $slug) {
+    public function productsByCategory(Request $request, $slug)
+    {
         $selected_category = Categories::getAll(true)->get(Categories::getCategorySlugFromRoute($slug));
         $products = $selected_category->products()->orderBy('created_at', 'DESC')->paginate(10);
         $shops = $selected_category->shops()->orderBy('created_at', 'DESC')->paginate(10);
@@ -89,13 +104,13 @@ class EVProductController extends Controller
 
         // TODO: return view
 
-//        $selected_categories = Category::where('slug', $category_slug)->with('children')->get();
-//        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
-//            return $this->search($request, $selected_categories);
-//        }
-//
-//        abort(404); // TODO: Maybe a redirect to All Categories?
-//        return null;
+        //        $selected_categories = Category::where('slug', $category_slug)->with('children')->get();
+        //        if (!empty($selected_categories) && $selected_categories->isNotEmpty()) {
+        //            return $this->search($request, $selected_categories);
+        //        }
+        //
+        //        abort(404); // TODO: Maybe a redirect to All Categories?
+        //        return null;
         return view('frontend.products.archive', compact('products', 'shops', 'selected_category'));
     }
 
@@ -103,20 +118,20 @@ class EVProductController extends Controller
     public function show(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        if(Product::where('slug', $slug)->first()) {
+        if (Product::where('slug', $slug)->first()) {
             $product  = Product::where('slug', $slug)->first()->load(['shop']);
         } else {
             return abort(404);
         }
 
-//        dd($product->custom_attributes);
+        //        dd($product->custom_attributes);
         if (empty($product->shop)) {
             /* TODO: Default value for products with no shops falls back to shop_id 1 */
             $product->shop = Shop::first();
         }
 
         /* TODO: add this eventually: && $product->published */
-        if (!empty($product) ) {
+        if (!empty($product)) {
 
             if (auth()->check()) {
                 $user = auth()->user();
@@ -130,7 +145,7 @@ class EVProductController extends Controller
                 ->withProperties([
                     'action' => 'viewed',
                     'action_title' => 'Viewed a product',
-                    ] )
+                ])
                 ->log('viewed');
         }
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
@@ -139,7 +154,8 @@ class EVProductController extends Controller
         return view('frontend.product.single.' . $template, compact('product'));
     }
 
-    public function createProductCheckoutRedirect($id) {
+    public function createProductCheckoutRedirect($id)
+    {
         $product = Product::find($id);
         $qty = !empty(request()->qty ?? null) ? (int) request()->qty : 1;
 
@@ -147,5 +163,4 @@ class EVProductController extends Controller
 
         return redirect($link);
     }
-
 }

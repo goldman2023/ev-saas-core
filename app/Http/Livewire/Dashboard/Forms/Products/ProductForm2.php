@@ -194,6 +194,11 @@ class ProductForm2 extends Component
             // Insert
             $this->is_update = false;
 
+            /* Check if user has shop */
+            if (!MyShop::getShop()) {
+                return redirect()->route('onboarding.step4');
+            }
+
             $this->product = new Product();
 
             $this->product->slug = '';

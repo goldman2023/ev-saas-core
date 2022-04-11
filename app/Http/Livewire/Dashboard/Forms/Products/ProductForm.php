@@ -113,6 +113,10 @@ class ProductForm extends Component
         $this->page = $page;
         $this->categories = Categories::getAll();
 
+        /* Check if user has shop */
+        if(!MyShop::getShop()) {
+            return redirect()->route('onboarding.step4');
+        }
         // Set default params
         if($product) {
             $this->product = $product;
