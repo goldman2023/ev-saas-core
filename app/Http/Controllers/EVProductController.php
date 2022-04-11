@@ -20,8 +20,7 @@ class EVProductController extends Controller
     public function index(Request $request)
     {
         if(Auth::user()->user_type == 'admin') {
-            $products =Product::orderBy('created_at', 'desc')->paginate(20);
-
+            $products = Product::orderBy('created_at', 'desc')->paginate(20);
         } else {
             $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
 
