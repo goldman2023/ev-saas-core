@@ -14,12 +14,16 @@
 
         <div class="col-span-2">
             <livewire:dashboard.forms.settings.my-shop-form :onboarding="true"></livewire:dashboard.forms.settings.my-shop-form>
-
         </div>
 
         <div class="col-span-1">
-
             <x-default.elements.support-card></x-default.elements.support-card>
+
+            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$dispatch('submit-form')">
+                    {{ translate('Save') }}
+                </button>
+            </div>
         </div>
     </div>
 </section>
