@@ -22,7 +22,7 @@
 
     @if($selectedAction == 'Notify' && $added)
     @auth
-    <div class="w-full text-sm font-normal block">
+    <div class="w-full text-sm font-normal flex">
         {{ svg('heroicon-s-check', ['class'=> 'w-4 text-green-400 mr-2']) }} {{ translate('You will get an email notification once product is back in stock!') }}
     </div>
     @else
