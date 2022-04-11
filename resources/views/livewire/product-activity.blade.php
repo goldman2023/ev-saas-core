@@ -39,7 +39,7 @@
                     </div>
                     <div class="mt-2 text-sm text-gray-700">
 
-                        @if($item->subject_type == 'App\Models\Product')
+                        @if($item->subject_type == 'App\Models\Product' && $item->subject)
 
                         <div
                             class="text-left">
