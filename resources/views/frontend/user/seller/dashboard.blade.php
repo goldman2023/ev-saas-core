@@ -98,7 +98,8 @@
 
         <div class="">
             <div class="">
-                @livewire('dashboard.elements.activity-log', ['scope' => 'seller'])
+                {{-- TODO: Implement propper scope for seller activity viewing --}}
+                {{-- @livewire('dashboard.elements.activity-log', ['scope' => 'seller']) --}}
             </div>
         </div>
     </div>
