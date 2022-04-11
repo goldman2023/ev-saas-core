@@ -12,7 +12,7 @@
 
                     {{ translate('Liked a product') }} <span class="emoji ml-2">❤️</span>
 
-                    @elseif($item->subject_type == 'App\Models\Product')
+                    @elseif($item->subject_type == 'App\Models\Product' && $item->subject)
                     <a href="{{ $product->getPermalink() }}">
                         @if($item->description == 'created')
                         {{ translate('Added new product') }}
