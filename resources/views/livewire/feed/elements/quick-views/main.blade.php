@@ -115,12 +115,14 @@
                                 </livewire:actions.wishlist-button>
                                 </button>
                             </div>
-                            <p class="text-center sm:static sm:mt-6 mb-3">
-                                <a href="{{ $item->subject->getPermalink() }}"
-                                    class="font-medium text-indigo-600 hover:text-indigo-500">
-                                    {{ translate('View full details') }}
-                                </a>
-                            </p>
+                            @if($item->subject->getPermalink())
+                                <p class="text-center sm:static sm:mt-6 mb-3">
+                                    <a href="{{ $item->subject->getPermalink() }}"
+                                        class="font-medium text-indigo-600 hover:text-indigo-500">
+                                        {{ translate('View full details') }}
+                                    </a>
+                                </p>
+                            @endif
 
 
 

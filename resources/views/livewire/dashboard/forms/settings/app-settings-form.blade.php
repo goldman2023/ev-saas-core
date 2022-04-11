@@ -184,9 +184,18 @@
 
                         {{-- Design --}}
                         <div class="w-full px-5" x-show="current_tab === 'design'">
+                            <div class="grid grid-cols-12 mb-6">
+                                <div class="col-span-6 font-medium text-md">
+                                    {{ translate('For generating color variants we recommend using this tool: ') }}
+                                    <a href="https://tailwind.simeongriggs.dev/" class="text-indigo-600" target="_blank">Palette Generator </a>
+                                </div>
+                            </div>
                             {{-- Colors --}}
                             @php $i = 0; @endphp
                             @foreach(TenantSettings::settingsDataTypes()['colors'] as $color_key => $data_type)
+                            @if($loop->first)
+                            <div class="bg-indigo-400 p-6 rounded">
+                            @endif
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start {{ $i === 0 ? '':'sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5' }}" x-data="{}">
                                     <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                         {{ $color_key }}
@@ -197,9 +206,12 @@
                                     </div>
                                 </div>
                                 @php $i++; @endphp
+                                @if($loop->first)
+                                    </div>
+                                @endif
                             @endforeach
                             {{-- END Colors --}}
-                            
+
                             {{-- <x-dashboard.form.color-picker field="settings.colors.value.primary"></x-dashboard.form.color-picker> --}}
 
                             {{-- Save design --}}

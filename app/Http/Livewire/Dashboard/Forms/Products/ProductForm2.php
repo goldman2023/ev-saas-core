@@ -49,11 +49,10 @@ class ProductForm2 extends Component
     public $attributes;
     public $selected_predefined_attribute_values;
 
-    protected $listeners = [
-        
-    ];
+    protected $listeners = [];
 
-    protected function getRuleSet($set = null) {
+    protected function getRuleSet($set = null)
+    {
         $rulesSets = collect([
             'minimum_required' => [
                 'product.name' => 'required|min:6',
@@ -87,7 +86,7 @@ class ProductForm2 extends Component
             ],
             'pricing' => [
                 'product.unit_price' => 'required|numeric',
-                'product.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
+                'product.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn ($item) => $item->code)->toArray())],
                 'product.purchase_price' => 'nullable|numeric',
                 'product.discount' => 'nullable|numeric',
                 'product.discount_type' => 'nullable|in:amount,percent',
@@ -122,7 +121,7 @@ class ProductForm2 extends Component
             'meta' => [
                 // TODO: Add proper conditional validation!
                 'core_meta.date_type.value' => [Rule::in(['range', 'specific'])], // range, specific
-                'core_meta.start_date.value' => 'required|date', 
+                'core_meta.start_date.value' => 'required|date',
                 'core_meta.end_date.value' => 'nullable|date',
                 'core_meta.location_type.value' => [Rule::in(['remote', 'offline'])], // remote, location
                 'core_meta.location_address.value' => 'nullable',
@@ -140,14 +139,15 @@ class ProductForm2 extends Component
     protected function rules()
     {
         $rules = [];
-        foreach($this->getRuleSet('all') as $key => $items) {
+        foreach ($this->getRuleSet('all') as $key => $items) {
             $rules = array_merge($rules, $items);
         }
 
         return $rules;
     }
 
-    protected function messages() {
+    protected function messages()
+    {
         return [
             'product.thumbnail.if_id_exists' => translate('Please select a valid thumbnail image from the media library'),
             'product.cover.if_id_exists' => translate('Please select a valid cover image from the media library'),
@@ -156,22 +156,23 @@ class ProductForm2 extends Component
         ];
     }
 
-    protected function setPredefinedAttributeValues($model) {
+    protected function setPredefinedAttributeValues($model)
+    {
         // Set predefined attribute values AND select specific values if it's necessary
-        foreach($this->attributes as $attribute) {
-            if($attribute->is_predefined) {
-                if(isset($model->id) && !empty($model->id)) {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->is_predefined) {
+                if (isset($model->id) && !empty($model->id)) {
                     // edit product
                     $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
 
-                    if($product_attribute instanceof \App\Models\Attribute) {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id');
+                    if ($product_attribute instanceof \App\Models\Attribute) {
+                        $this->selected_predefined_attribute_values['attribute.' . $attribute->id] = $product_attribute->attribute_values->pluck('id');
                     } else {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
+                        $this->selected_predefined_attribute_values['attribute.' . $attribute->id] = [];
                     }
                 } else {
                     // insert product
-                    $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
+                    $this->selected_predefined_attribute_values['attribute.' . $attribute->id] = [];
                 }
             }
         }
@@ -183,9 +184,9 @@ class ProductForm2 extends Component
      * @return void
      */
     public function mount(&$product = null)
-    {   
+    {
         // Set default params
-        if($product) {
+        if ($product) {
             // Update
             $this->product = $product;
             $this->is_update = true;
@@ -221,7 +222,12 @@ class ProductForm2 extends Component
 
         $this->initCategories($this->product);
 
-        $this->core_meta = CoreMeta::getMeta($product->core_meta);
+        /* Check if product object exits, if doesn't exit do not try to fetch meta */
+        if (!empty($product)) {
+            $this->core_meta = CoreMeta::getMeta($product->core_meta);
+        } else {
+            $this->core_meta = null;
+        }
     }
 
     public function dehydrate()
@@ -234,13 +240,15 @@ class ProductForm2 extends Component
         return view('livewire.dashboard.forms.products.product-form2');
     }
 
-    public function refreshVariationsDatatable() {
+    public function refreshVariationsDatatable()
+    {
         // TODO: Refresh variations datatable
         // $this->emit('refreshDatatable');
         //$this->emit('updatedAttributeValues', $this->variations_attributes);
     }
 
-    public function removeAttributeValue($id) {
+    public function removeAttributeValue($id)
+    {
         DB::beginTransaction();
 
         try {
@@ -250,16 +258,16 @@ class ProductForm2 extends Component
             DB::commit();
 
             $this->toastify(translate('Attribute value successfully removed!'), 'success');
-
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while removing an attribute value...Please try again.'));
-            $this->toastify(translate('There was an error while removing an attribute value...Please try again. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while removing an attribute value...Please try again. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function validateData($set = 'minimum_required') {
+    public function validateData($set = 'minimum_required')
+    {
         try {
             $this->validate($set === 'all' ? $this->rules() : $this->getRuleSet($set));
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -271,10 +279,11 @@ class ProductForm2 extends Component
         }
     }
 
-    public function saveMinimumRequired() {
+    public function saveMinimumRequired()
+    {
         // TODO: Check if editor is trying to change status to published if not enough data is present
-        
-        if(!$this->is_update) {
+
+        if (!$this->is_update) {
             // Insert
             $this->product->shop_id = MyShop::getShopID();
             $this->product->user_id = auth()->user()->id;
@@ -284,7 +293,7 @@ class ProductForm2 extends Component
 
             $this->is_update = true; // Change is_update flag to true! From now on, product is being only updated!
         } else {
-            // Update 
+            // Update
             $this->product->update([
                 'shop_id' => MyShop::getShopID(),
                 'user_id' => auth()->user()->id,
@@ -292,17 +301,18 @@ class ProductForm2 extends Component
                 'unit_price' => $this->product->unit_price
             ]); // update only minimum required fields
         }
-        
+
         // Set Product Stock
         $this->setProductStocks();
     }
 
     /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
-    protected function setProductStocks() {
+    protected function setProductStocks()
+    {
         $product_stock = ProductStock::firstOrNew(['subject_id' => $this->product->id, 'subject_type' => Product::class]);
         $product_stock->track_inventory = ($this->product->track_inventory ?? false) === true;
         $product_stock->sku = empty($this->product->sku) ? \UUID::generate(4)->string : $this->product->sku;
-        $product_stock->barcode = empty($this->product->barcode) ? null : $this->product->barcode ;
+        $product_stock->barcode = empty($this->product->barcode) ? null : $this->product->barcode;
         $product_stock->qty = empty($this->product->current_stock) ? 0 : $this->product->current_stock;
         $product_stock->low_stock_qty = empty($this->product->low_stock_qty) ? 0 : $this->product->low_stock_qty;
         $product_stock->use_serial = ($this->product->use_serial ?? false) === true;
@@ -310,9 +320,10 @@ class ProductForm2 extends Component
         $product_stock->save();
     }
 
-    public function saveProduct() {
+    public function saveProduct()
+    {
         $this->validateData('all');
-        
+
         DB::beginTransaction();
 
         try {
@@ -333,7 +344,7 @@ class ProductForm2 extends Component
 
             // Save CoreMeta
             $this->saveCoreMeta();
-            
+
             DB::commit();
 
             // Refresh Attributes
@@ -342,7 +353,7 @@ class ProductForm2 extends Component
             $this->inform(translate('Product successfully saved!'), '', 'success');
 
             // $this->dispatchBrowserEvent('init-product-form', []);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
@@ -350,17 +361,18 @@ class ProductForm2 extends Component
         }
     }
 
-    public function refreshAttributes() {
+    public function refreshAttributes()
+    {
         $this->attributes = $this->product->getMappedAttributes();
 
         // Set default attributes
-        foreach($this->attributes as $key => $attribute) {
-            if($attribute->is_predefined) {
+        foreach ($this->attributes as $key => $attribute) {
+            if ($attribute->is_predefined) {
                 $attribute->selcted_values = '';
             }
 
-            if(empty($this->attributes[$key]->attribute_values)) {
-                if(!$attribute->is_predefined) {
+            if (empty($this->attributes[$key]->attribute_values)) {
+                if (!$attribute->is_predefined) {
                     $this->attributes[$key]->attribute_values[] = [
                         "id" => null,
                         "attribute_id" => $attribute->id,
@@ -379,27 +391,28 @@ class ProductForm2 extends Component
     /**
      * @throws \Exception
      */
-    protected function setAttributes() {
-        $selected_attributes = collect($this->attributes)->filter(function($att, $key) {
+    protected function setAttributes()
+    {
+        $selected_attributes = collect($this->attributes)->filter(function ($att, $key) {
             $att = (object) $att;
             return $att->selected === true;
         });
- 
-        if($selected_attributes) {
-            foreach($selected_attributes as $att) {
+
+        if ($selected_attributes) {
+            foreach ($selected_attributes as $att) {
                 $attribute = new Attribute();
-                
+
                 $att = (object) $att;
                 $att_values = $att->attribute_values;
 
-                if(!empty($att_values)) {
+                if (!empty($att_values)) {
 
                     // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
                     // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
-                    if(!$att->is_predefined) {
-                        
-                        foreach($att_values as $key => $att_value) {
-                            if(empty($att_value['values'] ?? null)) {
+                    if (!$att->is_predefined) {
+
+                        foreach ($att_values as $key => $att_value) {
+                            if (empty($att_value['values'] ?? null)) {
                                 // If value is empty, unset it and later on reset array_values
                                 unset($att_values[$key]);
                                 continue;
@@ -420,17 +433,15 @@ class ProductForm2 extends Component
 
                             $att_values[$key] = $attribute_value_row;
                         }
-
-                        
                     } else {
-                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
-                        
-                        foreach($att_values as $key => $att_value) {
+                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.' . $att->id] ?? [];
+
+                        foreach ($att_values as $key => $att_value) {
                             $attribute_value_row = AttributeValue::find($att_value['id']);
 
-                            if(is_array($selected_attribute_values) && in_array($attribute_value_row->id, $selected_attribute_values)) {
+                            if (is_array($selected_attribute_values) && in_array($attribute_value_row->id, $selected_attribute_values)) {
                                 $attribute_value_row->selected = true;
-                            } else if(is_numeric($selected_attribute_values) && ((int) $selected_attribute_values) == $att_value['id']) {
+                            } else if (is_numeric($selected_attribute_values) && ((int) $selected_attribute_values) == $att_value['id']) {
                                 $attribute_value_row->selected = true;
                             } else {
                                 $attribute_value_row->selected = false;
@@ -442,13 +453,13 @@ class ProductForm2 extends Component
 
                     $att_values = array_values($att_values);
 
-                    if($att->id === 27) {
+                    if ($att->id === 27) {
                         // dd($att_values);
                     }
-                    
-                    foreach($att_values as $key => $att_value) {
-                        if($att_value->id ?? null) {
-                            if($att_value->selected ?? null) {
+
+                    foreach ($att_values as $key => $att_value) {
+                        if ($att_value->id ?? null) {
+                            if ($att_value->selected ?? null) {
                                 // Create or find product-attribute relationship, but don't yet persist anything to DB
                                 $att_rel = AttributeRelationship::firstOrNew([
                                     'subject_type' => Product::class,
@@ -458,7 +469,7 @@ class ProductForm2 extends Component
                                 ]);
                                 $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
 
-                                if($att->type === 'text_list') {
+                                if ($att->type === 'text_list') {
                                     $att_rel->order = $key; // respect order for the text_list
                                 }
 
@@ -483,13 +494,13 @@ class ProductForm2 extends Component
                     //             dd($att_value);
                     //         }
                     //     }
-                        
-                    //     // remove missing attribute relationships and values 
+
+                    //     // remove missing attribute relationships and values
                     //     $rels = AttributeRelationship::where([
                     //         'subject_type' => Product::class,
                     //         'subject_id' => $this->product->id,
                     //         'attribute_id' => $att->id,
-                    //         '' 
+                    //         ''
                     //     ]);
                     // }
                 }
@@ -497,11 +508,12 @@ class ProductForm2 extends Component
         }
     }
 
-    protected function saveCoreMeta() {
-        foreach(collect($this->getRuleSet('meta'))->filter(fn($item, $key) => str_starts_with($key, 'core_meta')) as $key => $value) {
+    protected function saveCoreMeta()
+    {
+        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'core_meta')) as $key => $value) {
             $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
-            
-            if(!empty($core_meta_key) && $core_meta_key !== '*') {
+
+            if (!empty($core_meta_key) && $core_meta_key !== '*') {
                 $new_value = castValueForSave($core_meta_key, $this->core_meta[$core_meta_key], CoreMeta::metaDataTypes());
 
                 CoreMeta::updateOrCreate(
@@ -515,7 +527,8 @@ class ProductForm2 extends Component
     // END
 
     // DEPRECATED!!!
-    public function saveBasic() {
+    public function saveBasic()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -530,19 +543,20 @@ class ProductForm2 extends Component
                 'description' => $this->product->description,
                 'status' => $this->product->status
             ]);
-            
+
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function saveMedia() {
+    public function saveMedia()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -560,19 +574,20 @@ class ProductForm2 extends Component
                 'video_provider' => $this->product->video_provider,
                 'video_link' => $this->product->video_link
             ]);
-            
+
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function savePricing() {
+    public function savePricing()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -589,20 +604,21 @@ class ProductForm2 extends Component
                 'tax' => $this->product->tax,
                 'purchase_price' => $this->product->purchase_price,
             ]);
-            
+
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
 
-    public function saveInventory() {
+    public function saveInventory()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -617,19 +633,20 @@ class ProductForm2 extends Component
             $this->product->update([
                 'unit' => $this->product->unit,
             ]);
-            
+
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function saveShipping() {
+    public function saveShipping()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -646,19 +663,20 @@ class ProductForm2 extends Component
             $this->product->update([
                 'digital' => $this->product->digital,
             ]);
-            
+
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function saveSEO() {
+    public function saveSEO()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -677,19 +695,20 @@ class ProductForm2 extends Component
                 'meta_title' => $this->product->meta_title,
                 'meta_description' => $this->product->meta_description
             ]);
-            
+
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function saveCategoriesAndTags() {
+    public function saveCategoriesAndTags()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -704,22 +723,23 @@ class ProductForm2 extends Component
             $this->product->update([
                 'product.tags' => $this->product->tags
             ]);
-            
+
             // Save Categories
             $this->setCategories($this->product);
 
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function saveBrand() {
+    public function saveBrand()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -738,15 +758,16 @@ class ProductForm2 extends Component
             DB::commit();
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function updateStatus() {
+    public function updateStatus()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -764,16 +785,17 @@ class ProductForm2 extends Component
 
             DB::commit();
 
-            $this->toastify(translate('Status successfully updated to').': '.$this->product->status, 'success');
-        } catch(\Exception $e) {
+            $this->toastify(translate('Status successfully updated to') . ': ' . $this->product->status, 'success');
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while updating the status.'));
-            $this->toastify(translate('There was an error while updating the status. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while updating the status. ') . $e->getMessage(), 'danger');
         }
     }
 
-    public function saveAttributes() {
+    public function saveAttributes()
+    {
         // Validate minimum required fields and insert/update row
         $this->validateData('minimum_required');
 
@@ -786,11 +808,11 @@ class ProductForm2 extends Component
 
 
             $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
+            $this->toastify(translate('There was an error while saving a product. ') . $e->getMessage(), 'danger');
         }
     }
 

@@ -18,9 +18,13 @@ class PageController extends Controller
 
     public function show_custom_page($slug)
     {
-        $page = Page::where('slug', '=', $slug)->firstOrFail();
-        $sections = $page->content;
-
+        if(view('frontend.custom-pages.' . $slug)) {
+            return view('frontend.custom-pages.' . $slug);
+        }
+        else {
+            $page = Page::where('slug', '=', $slug)->firstOrFail();
+            $sections = $page->content;
+        }
 
         if ($page != null) {
             return view('frontend.custom_page', [
