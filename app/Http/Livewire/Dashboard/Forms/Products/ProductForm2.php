@@ -128,7 +128,7 @@ class ProductForm2 extends Component
                 'core_meta.location_address_coordinates.value' => 'nullable',
                 'core_meta.location_link.value' => 'nullable',
                 'core_meta.unlockables.value' => 'nullable',
-                'core_meta.calendly_link.value' => 'nullable' // should be required if product type is bookable_service or bookable_subscription_service
+                'core_meta.calendly_link.value' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'] // should be required if product type is bookable_service or bookable_subscription_service
 
             ]
         ]);
