@@ -228,7 +228,7 @@ class ProductForm2 extends Component
         $this->initCategories($this->product);
 
         /* Check if product object exits, if doesn't exit do not try to fetch meta */
-            $this->core_meta = CoreMeta::getMeta($product->core_meta);
+        $this->core_meta = CoreMeta::getMeta($product?->core_meta ?? []);
     }
 
     public function dehydrate()

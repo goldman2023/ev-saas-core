@@ -29,7 +29,7 @@ class Archive extends Component
     protected $listeners = [
         'refreshArchive' => '$refresh',
         'sortArchive' => 'sortArchive',
-        'updateArchiveFilterBy' => 'fetchArchive',
+        'filterByCategories' => 'filterByCategories',
     ];
 
     public function mount($model_class, $showFilters = false)
@@ -76,8 +76,15 @@ class Archive extends Component
         ]);
     }
 
-    public function add_filter_category($id) {
-        $this->filter_categories[] = $id;
+    public function filterByCategories($id) {
+        
+        if (($key = array_search($id, $this->filter_categories)) !== false) {
+            unset($this->filter_categories[$key]);
+            $this->filter_categories = array_values($this->filter_categories);
+        } else {
+            $this->filter_categories[] = $id;
+        }
+
         $this->fetchArchive();
     }
 
