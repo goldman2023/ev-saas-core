@@ -103,7 +103,12 @@ class EVProductController extends Controller
     public function show(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
-        $product  = Product::where('slug', $slug)->first()->load(['shop']);
+        if(Product::where('slug', $slug)->first()) {
+            $product  = Product::where('slug', $slug)->first()->load(['shop']);
+        } else {
+            return abort(404);
+        }
+
 //        dd($product->custom_attributes);
         if (empty($product->shop)) {
             /* TODO: Default value for products with no shops falls back to shop_id 1 */
