@@ -472,7 +472,7 @@ class TenantSettingsTableSeeder extends Seeder
                     array(
                         'id' => 72,
                         'setting' => 'contact_email',
-                        'value' => 'support@ev-saas.com',
+                        'value' => 'support@we-saas.com',
                         'created_at' => '2020-11-16 09:26:36',
                         'updated_at' => '2021-04-08 13:33:52',
                     ),

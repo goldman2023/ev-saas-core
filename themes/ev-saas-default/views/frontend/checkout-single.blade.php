@@ -1,4 +1,4 @@
-@extends('frontend.layouts.blank') 
+@extends('frontend.layouts.blank')
 
 @section('meta_title'){{ translate('Checkout page').' '.\TenantSettings::get('site_name').' | '.\TenantSettings::get('site_motto') }}@stop
 
@@ -15,12 +15,12 @@
 @section('content')
     <div class="flex justify-center after:content-[''] after:fixed after:w-1/2 after:right-0 after:bg-white after:z-[1] after:h-full after:shadow-xl
                 before:content-[''] before:fixed before:w-1/2 before:left-0 before:bg-white before:z-0 before:h-full">
-        
+
             {{-- <div class="w-1/2 flex flex-col justify-center items-end pl-3 md:pl-0 bg-white">
-                
+
             </div>
             <div class="w-1/2 shadow flex flex-col justify-center items-start pr-3 md:pr-0 bg-white">
-                
+
             </div> --}}
 
         <div class="relative w-full md:max-w-[920px] flex flex-wrap justify-between items-start self-center z-10 py-[60px]">
@@ -75,7 +75,7 @@
                             <span class="text-12 mr-1 pt-1">{{ translate('Powered by') }}</span>
 
                             <a style="max-width: 120px !important;" class="navbar-brand p-0 mw-100" href="https://we-saas.com/" aria-label="Gunob">
-                                <img src="https://images.ev-saas.com/insecure/fill/0/0/ce/0/plain/https://we-saas.com/wp-content/uploads/2021/12/cropped-Screenshot_2021-12-22_at_15.12.45-removebg-preview.png" style="max-width: 100%;" height="auto" alt="">
+                                <img src="https://images.we-saas.com/insecure/fill/0/0/ce/0/plain/https://we-saas.com/wp-content/uploads/2021/12/cropped-Screenshot_2021-12-22_at_15.12.45-removebg-preview.png" style="max-width: 100%;" height="auto" alt="">
                             </a>
                             {{-- <x-default.system.tenant.logo style="max-width: 50px !important;"></x-default.system.tenant.logo> --}}
                         </div>
@@ -98,7 +98,7 @@
                 <livewire:forms.checkout-single-form :item="$model"></livewire:forms.checkout-single-form>
             </div>
         </div>
-        
+
 
     </div>
 @endsection

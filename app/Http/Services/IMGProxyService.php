@@ -155,7 +155,7 @@ class IMGProxyService
             $options['h'] = $options['h'] ?? 0;
 
             // TODO: Static logic is made for local development. On production all images should be routed through IMGProxy!
-            // The reason is because if we use images.ev-saas.com domain as an IMGProxy server for used for routing all images, we cannot make route stuff from localhost because localhost is local dev. server!
+            // The reason is because if we use images.we-saas.com domain as an IMGProxy server for used for routing all images, we cannot make route stuff from localhost because localhost is local dev. server!
             if(!($data['static'] ?? false)) {
                 $data['url'] = $this->host.'/insecure/fill/'.$options['w'].'/'.$options['h'].'/ce/0/plain/'.$data['url'].'@webp';
             }
