@@ -21,7 +21,7 @@
   
     <div class="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
-        <h1 class="text-sm font-semibold uppercase tracking-wide text-indigo-600">{{ translate('Thank you!') }}</h1>
+        <h1 class="text-sm font-semibold uppercase tracking-wide text-primary">{{ translate('Thank you!') }}</h1>
         @if($first_item->type === \App\Enums\ProductTypeEnum::bookable_service()->value)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Please review your order') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. Please select the available booking time.') }}</p>

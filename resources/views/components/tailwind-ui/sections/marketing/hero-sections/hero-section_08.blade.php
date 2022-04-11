@@ -1,4 +1,4 @@
-<section class="relative bg-white {!! $getSectionSettingsClasses !!}">
+<section class="relative {!! $getSectionSettingsClasses !!}">
   <div class="max-w-6xl mx-auto px-4 sm:px-5">
     <main class=" mx-auto max-w-7xl px-4 sm:px-6 ">
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
