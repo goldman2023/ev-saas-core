@@ -173,6 +173,21 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Event::class);
     }
 
+    public function plan() {
+        return $this->morphedByMany(Plan::class, 'subject', 'user_relationships');
+    }
+
+    public function subscribedTo($plan_slug) {
+        if(is_numeric($plan_slug)) {
+            return ($this->plan->first()?->id ?? null) === $plan_slug;
+        }
+        return ($this->plan->first()?->slug ?? null) === $plan_slug;
+    }
+
+    public function isSubscribed() {
+        return !empty($this->plan->first());
+    }
+
 
     public function getDynamicModelUploadProperties(): array
     {

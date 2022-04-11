@@ -9,7 +9,6 @@
         </div>
       </div>
 
-
       <div class="grid gap-10 grid-cols-12">
         @if($models->isNotEmpty())
           @foreach($models as $model)
