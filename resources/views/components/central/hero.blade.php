@@ -15,7 +15,7 @@
   ```
 -->
 <div class="relative bg-gray-800 overflow-hidden">
-    
+
     <div class="relative pt-6 pb-16 sm:pb-24">
 
         <main class="mt-16 sm:mt-24">
@@ -33,7 +33,7 @@
                             </p>
 
                             <div class="mt-10">
-                                <a href="https://demo.ev-saas.com/" target="_blank" type="button" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <a href="https://demo.we-saas.com/" target="_blank" type="button" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                     Try it live
                                     <!-- Heroicon name: solid/mail -->
                                     <svg class="ml-3 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -42,7 +42,7 @@
                                     </svg>
                                 </a>
 
-                                <a href="https://calendly.com/eim-solutions/new-project-inquries" target="_blank" 
+                                <a href="https://calendly.com/eim-solutions/new-project-inquries" target="_blank"
                                 type="button" class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-5">
                                     Book a Demo
                                     <!-- Heroicon name: solid/mail -->

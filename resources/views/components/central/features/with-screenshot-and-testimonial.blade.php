@@ -23,7 +23,7 @@
                             in one great package for your business
                         </p>
                         <div class="mt-6">
-                            <a href="https://demo.ev-saas.com/" target="_blank"
+                            <a href="https://demo.we-saas.com/" target="_blank"
                                 class="inline-flex px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
                                 Try it live
                             </a>

@@ -11,24 +11,34 @@
             </a>
         </div>
         <div class="min-w-0 flex-1">
-            <p class="text-md text-gray-800 font-bold">
+            <p class="text-lg text-gray-800 font-bold">
                 <a href="{{ $product->subject->getPermalink() }}">
 
                     {{ $product->subject->name }}
                 </a>
+
             </p>
+            <div>
+                <span class="font-bold text-md text-indigo-600">
+                    {{ $product->subject->getBasePrice(true) }}
+                </span>
+            </div>
             <div class="mt-2 flex">
                 <span class="inline-flex items-center text-sm">
-                    <button type="button" class="hidden inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            aria-hidden="true">
-                            <path fill-rule="evenodd"
-                                d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <span class="font-medium text-gray-900">291</span>
+                    <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/eye- -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        <span class="font-medium text-gray-900">
+                            {{ $product->subject->public_view_count() }}
+                        </span>
                     </button>
+                </span>
+                <span class="ml-3">
+                <livewire:actions.wishlist-button :object="$product->subject"></livewire:actions.wishlist-button>
+
                 </span>
             </div>
         </div>

@@ -211,7 +211,9 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     // OLD
     public function recently_viewed_products() {
-        $data = Activity::where('subject_type', 'App\Models\Product')
+        $data = Activity::
+        whereHas('subject')
+        ->where('subject_type', 'App\Models\Product')
         ->where('description', 'viewed')
         ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
         ->groupBy('subject_id')

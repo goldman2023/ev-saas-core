@@ -29,7 +29,7 @@ const { hideBin } = require('yargs/helpers');
 
 // NOTE: These webpacks are compiled from root folder by running ./development.sh! This means that paths are relative to the ROOT folder!
 // That is the reason why public path starts with "public/etc.", and not with "../../public/etc."!!!
-let theme = 'ev-saas-default';
+let theme = 'ev-tailwind';
 
 let childThemes = ['ev-saas-fox', 'ev-saas-gun'];
 
@@ -54,18 +54,13 @@ mix.setPublicPath(`public/themes/${theme}`)
 
 var entry_path = 'themes/ev-saas-default';
 mix.setPublicPath(`public/themes/${theme}`).js(`${entry_path}/js/app.js`, `public/themes/${theme}/js`).version()
-    .js(`${entry_path}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
     .js(`${entry_path}/js/alpine.js`, `public/themes/${theme}/js`).version()
-    .js(`${entry_path}/js/vue.js`, `public/themes/${theme}/js`)/*.vue({ version: 2 })*/.version() // Uses Vue v2 // TODO: Fix vue-loader version issue before using .vue()
     .sass(`${entry_path}/scss/app.scss`, `public/themes/${theme}/css`, {
         sassOptions: {
             processCssUrls: false
         },
     }).version()
-    .copy(`${entry_path}/js/crud/*.js`, `public/themes/${theme}/js/crud`)
-    .copyDirectory(`themes/ev-saas-default/images`, `public/themes/${theme}/images`)
-    .copyDirectory(`themes/ev-saas-default/vendor`, `public/themes/${theme}/vendor`)
-    .copyDirectory(`themes/ev-saas-default/svg`, `public/themes/${theme}/svg`)
+    .copy(`${entry_path}/js/crud/*.js`, `public/themes/${theme}/js/crud`);
     // TODO: Note that when .then() function is added, everything is compiled already, so no further compilings are possible!
 
 
