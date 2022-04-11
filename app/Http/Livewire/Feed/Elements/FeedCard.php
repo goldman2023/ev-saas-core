@@ -18,7 +18,7 @@ class FeedCard extends Component
 
         $this->ignore = false;
 
-        if(!$item->has('subject')) {
+        if(!$item->has('subject') || empty($item->subject)) {
             $this->ignore = true;
             return false;
         }
