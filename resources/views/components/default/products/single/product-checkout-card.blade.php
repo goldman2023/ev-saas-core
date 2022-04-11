@@ -19,58 +19,49 @@
                 $dispatch('display-flyout-panel', {'id': 'cart-panel'});
             }
         " @if($product->hasVariations())
-            @variation-changed.window="
-                qty = 0;
-                current_stock = $event.detail.current_stock;
-                is_low_stock = $event.detail.is_low_stock;
-                model_id = $event.detail.model_id;
-                model_type = $event.detail.model_type;
-                total_price = $event.detail.total_price;
-                total_price_display = $event.detail.total_price_display;
-                base_price = $event.detail.base_price;
-                base_price_display = $event.detail.base_price_display;
-            "
-            @endif
+    @variation-changed.window="
+    qty = 0;
+    current_stock = $event.detail.current_stock;
+    is_low_stock = $event.detail.is_low_stock;
+    model_id = $event.detail.model_id;
+    model_type = $event.detail.model_type;
+    total_price = $event.detail.total_price;
+    total_price_display = $event.detail.total_price_display;
+    base_price = $event.detail.base_price;
+    base_price_display = $event.detail.base_price_display;
+    "
+    @endif
     >
     <x-ev.loaders.spinner class="absolute-center z-10" x-show="processing_variation_change" x-cloak>
     </x-ev.loaders.spinner>
 
     <div class="w-full" :class="{'opacity-3':processing_variation_change}">
 
-        {{-- <div class="col-sm-12 d-flex flex-column">
-            <h2 class="h3">{{ $product->getTranslation('name') }}</h2>
-
-                @isset($product->brand)
-                <x-default.products.single.product-brand-box :product="$product">
-                </x-default.products.single.product-brand-box>
-                @endisset
-
-                <p class="mb-0">
-                    {{ $product->getTranslation('excerpt') }}
-                </p>
-        </div> --}}
-
         <div class="w-full flex flex-col pb-5 border-b border-gray-200">
             <livewire:tenant.product.price :model="$product" :with_label="true" :with-discount-label="true"
                 original-price-class="text-body text-16" total-price-class="text-24 fw-700 text-primary">
             </livewire:tenant.product.price>
 
-
-
-
             {{-- Variations Selector --}}
             @if($product->hasVariations())
-                <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2">
-                </livewire:tenant.product.product-variations-selector>
+            <livewire:tenant.product.product-variations-selector :product="$product" class="mt-2">
+            </livewire:tenant.product.product-variations-selector>
             @endif
 
             <p class="py-2 mb-0">
                 <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
-                <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
-                @if($product->isInStock())
-                    <span class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('In Stock') }}</span>
+                @if($product->showUnits())
+                    <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
                 @else
-                    <span class="badge-danger px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('Not In Stock') }}</span>
+                    <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
+                @endif
+
+                @if($product->isInStock())
+                <span class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('In
+                    Stock') }}</span>
+                @else
+                <span class="badge-danger px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('Not In
+                    Stock') }}</span>
                 @endif
             </p>
 
@@ -84,60 +75,28 @@
                     stocks. Hurry up!') }}</p>
             </template> --}}
 
-            {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}}
-            <div class="w-full flex mt-3">
+            {{-- DONE: Disable add to cart button and quantity counter if available stock is <= 0 --}} <div
+                class="w-full flex mt-3">
                 <x-system.quantity-counter :model="$product" class="mr-5"></x-system.quantity-counter>
 
                 @if(\Payments::isStripeEnabled() && \Payments::isStripeCheckoutEnabled())
-                    <x-system.buy-now-button
-                        :model="$product"
-                        class=""
-                        label="{{ translate('Buy now') }}"
-                        label-not-in-stock="{{ translate('Not in stock') }}">
-                    </x-system.buy-now-button>
+                <x-system.buy-now-button :model="$product" class="" label="{{ translate('Buy now') }}"
+                    label-not-in-stock="{{ translate('Not in stock') }}">
+                </x-system.buy-now-button>
                 @else
-                    <x-system.add-to-cart-button
-                        :model="$product"
-                        class=""
-                        label="{{ translate('Add to cart') }}"
-                        label-not-in-stock="{{ translate('Not in stock') }}">
-                    </x-system.add-to-cart-button>
+                <x-system.add-to-cart-button :model="$product" class="" label="{{ translate('Add to cart') }}"
+                    label-not-in-stock="{{ translate('Not in stock') }}">
+                </x-system.add-to-cart-button>
                 @endif
-            </div>
-
-            <div class="w-full">
-                <livewire:actions.wishlist-button
-                action="Wishlist"
-                template="wishlist-button-detailed" :object="$product">
-                </livewire:actions.wishlist-button>
-            </div>
         </div>
 
-
-        {{-- This is for GunOB --}}
-        {{-- <div class="w-full mt-2">
-            @guest
-                <a class="btn btn-sm d-flex mt-3 btn-dark justify-content-center text-center align-items-center">
-                    {{ svg('heroicon-o-key', ['class' => 'ev-icon__xs mr-2']) }}
-                    {{ translate('Join GunOB') }}
-
-                </a>
-                <div class="text-center">
-                    <small>
-                        {{ translate('Gun Enthusiast Marketplace and social network') }}
-                    </small>
-                    <br>
-                </div>
-            @endguest
-
-            <div class="text-center mt-3 d-flex align-items-center justify-content-center">
-                <div class="badge badge-soft-success mr-2 w-auto d-flex align-items-center">
-                    {{ svg('heroicon-o-shield-check', ['class' => 'ev-icon__xs text-success mr-2']) }}
-
-                    {{ get_site_name() }} {{ translate('Buyers Protection + Escrow') }}
-                </div>
-            </div>
-        </div> --}}
-
+        <div class="w-full">
+            <livewire:actions.wishlist-button action="Wishlist" template="wishlist-button-detailed" :object="$product">
+            </livewire:actions.wishlist-button>
+        </div>
     </div>
+
+
+
+
 </div>

@@ -1,6 +1,6 @@
 @guest
     <a href="{{ route('shops.create') }}" class="text-white d-lg-inline-block btn-login btn btn-primary">
-        {{ translate('Join GunOB') }}
+        {{ translate('Join') }} {{ get_site_name() }}
         <i class="la la-angle-right "></i>
     </a>
 

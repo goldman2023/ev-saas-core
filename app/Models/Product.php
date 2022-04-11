@@ -254,6 +254,11 @@ class Product extends EVBaseModel
         ];
     }
 
+    /* TODO: @vukasin Implement checkbox in product.create for enabling units display, by default it's disabled */
+    function showUnits($show = false) {
+        return $show;
+    }
+
     function public_view_count($period = 'all')
     {
 
