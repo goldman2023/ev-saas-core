@@ -25,19 +25,22 @@ class AddPost extends Component
         $post->name = 'Feed Post Post by ' . auth()->user()->name;
         $post->excerpt = $this->content;
         $post->content = $this->content;
-
-        $post->shop_id = MyShop::getShopID();
+        if (MyShop::getShop()) {
+            $post->shop_id = MyShop::getShopID();
+            $post->user_id = auth()->user()->id;
+        } else {
+            $post->user_id = auth()->user()->id;
+        }
         $post->save();
 
         $this->resetForm();
         $this->toastify(translate('Shared sucesfully!'), 'success');
 
         $this->emit('newPostAdded');
-
-
     }
 
-    public function resetForm() {
+    public function resetForm()
+    {
         $this->content = '';
     }
 }

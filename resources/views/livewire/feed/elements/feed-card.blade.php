@@ -103,8 +103,8 @@
                         </livewire:actions.wishlist-button>
                         @endif
                     </span>
-                    <span class="inline-flex items-center text-sm cursor-pointer" x-on:click="isModalOpen = true">
-                        <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                    <span class="hidden inline-flex items-center text-sm cursor-pointer" x-on:click="isModalOpen = true">
+                        <button type="button" class=" inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/chat-alt -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
