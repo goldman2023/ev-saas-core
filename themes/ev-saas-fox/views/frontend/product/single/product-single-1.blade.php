@@ -216,12 +216,12 @@
                 }">
                 <div class="sm:hidden">
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                    <select id="tabs" name="tabs"
+                    <select x-model="current" id="tabs" name="tabs"
                         class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option @click="current = 'description';">{{ translate('Description') }}</option>
-                        <option @click="current = 'specification';">Specification</option>
-                        <option @click="current = 'seller';">Seller information</option>
-                        {{-- <option @click="current = 'shipping';">Shipping</option> --}}
+                        <option value="description">{{ translate('Description') }}</option>
+                        <option value="specification">Specification</option>
+                        <option value="seller">Seller information</option>
+                        {{-- <option value="shipping">Shipping</option> --}}
                     </select>
                 </div>
                 <div class="hidden sm:block">
@@ -271,7 +271,7 @@
 
                     <div class="" x-show="current == 'seller'">
                         <div class="grid grid-cols-1 sm:grid-cols-4 gap-20">
-                            <div class="py-10">
+                            <div class="py-10 col-span-2">
                                 <h3 class="text-xl font-extrabold tracking-tight text-gray-900 mb-6">
                                     {{ translate("This product is sold by:") }}
                                 </h3>
@@ -280,9 +280,9 @@
 
                             </div>
 
-                            <div class='col-span-3 py-10'>
-                                <x-ecommerce.elements.shop.reviews-detailed :shop="$product->shop">
-                                </x-ecommerce.elements.shop.reviews-detailed>
+                            <div class='col-span-2 py-10'>
+                                {{-- <x-ecommerce.elements.shop.reviews-detailed :shop="$product->shop">
+                                </x-ecommerce.elements.shop.reviews-detailed> --}}
                             </div>
 
                         </div>
