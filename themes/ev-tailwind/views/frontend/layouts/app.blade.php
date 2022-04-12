@@ -24,11 +24,10 @@
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
     @include('frontend.layouts.global-partials.all')
-    
+
     {{ seo()->render() }}
 
     @livewireScripts
@@ -82,7 +81,12 @@
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
+    @auth
+    {{-- <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script> --}}
+    @endauth
+
     @yield('script')
+
 
     @stack('footer_scripts')
 

@@ -43,8 +43,8 @@
           From: "translate-x-0"
           To: "-translate-x-full"
       -->
-        <div class="relative flex-1 flex flex-col max-w-xs w-full pt-2 pb-5 bg-white max-h-[100%] overflow-x-hidden overflow-y-auto" 
-                x-show="show" 
+        <div class="relative flex-1 flex flex-col max-w-xs w-full pt-2 pb-5 bg-white max-h-[100%] overflow-x-hidden overflow-y-auto"
+                x-show="show"
                 x-transition:enter="transform transition ease-in-out duration-300 sm:duration-300"
                 x-transition:enter-start="translate-x-[-100%]"
                 x-transition:enter-end="translate-x-0 "
@@ -76,7 +76,7 @@
                     </x-tenant.system.image>
                 </a>
             </div>
-    
+
             <div class="flex-1 flex flex-col overflow-y-auto">
                 @include('frontend.dashboard.navigation.sidebar')
 
@@ -175,7 +175,7 @@
                 {{-- <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                     <h1 class="text-2xl font-semibold text-gray-900"></h1>
                 </div> --}}
-                <div class="w-full mx-auto px-4 sm:px-6 md:px-8">
+                <div class="w-full px-4 sm:px-6 md:px-8 max-w-7xl">
                     @yield('panel_content')
                 </div>
             </div>

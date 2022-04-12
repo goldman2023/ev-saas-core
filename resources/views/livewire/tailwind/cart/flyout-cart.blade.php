@@ -161,27 +161,3 @@
         </div>
     </div>
 </x-panels.flyout-panel>
-
-{{-- <div x-data="{ show: false }" x-cloak
-     x-init="$(document).on('keyup', function(e) { if (e.key == 'Escape' && show) {show = false} });">
-    <section
-        class="c-flyout-cart fixed bg-white shadow-lg"
-        :class="{ 'show': show }"
-        @toggle-cart.window="show = !show"
-        @display-cart.window="show = true"
-    >
-
-    </section>
-
-    <div class="c-flyout-cart__overlay"
-         x-show="show"
-         x-transition:enter="transition ease-out duration-500"
-         x-transition:enter-start="opacity-0 "
-         x-transition:enter-end="opacity-70 "
-         x-transition:leave="transition ease-in duration-500"
-         x-transition:leave-start="opacity-70 "
-         x-transition:leave-end="opacity-0 "
-         @click="show = false"
-    >
-    </div>
-</div> --}}

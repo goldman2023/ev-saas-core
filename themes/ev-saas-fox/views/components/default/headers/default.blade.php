@@ -366,42 +366,5 @@
 <!-- ========== END HEADER ========== -->
 
 @push('footer_scripts')
-<!-- JS Plugins Init. -->
-<script src="{{ static_asset('vendor/hs-header/dist/hs-header.min.js', false, true) }}"></script>
-<script src="{{ static_asset('vendor/hs-show-animation/dist/hs-show-animation.min.js', false, true) }}"></script>
-<script>
-    $(document).on('ready', function() {
-            // INITIALIZATION OF HEADER
-            // =======================================================
-            var header = new HSHeader($('#header')).init();
-
-
-            // INITIALIZATION OF HSMEGAMENU COMPONENT
-            // =======================================================
-            var megaMenu = new HSMegaMenu($('.js-mega-menu')).init();
-
-
-
-
-            // INITIALIZATION OF FORM VALIDATION
-            // =======================================================
-            $('.js-validate').each(function() {
-                $.HSCore.components.HSValidation.init($(this), {
-                    rules: {
-                        confirmPassword: {
-                            equalTo: '#signupPassword'
-                        }
-                    }
-                });
-            });
-
-
-            // INITIALIZATION OF SHOW ANIMATIONS
-            // =======================================================
-            $('.js-animation-link').each(function() {
-                var showAnimation = new HSShowAnimation($(this)).init();
-            });
-        });
-</script>
 
 @endpush
