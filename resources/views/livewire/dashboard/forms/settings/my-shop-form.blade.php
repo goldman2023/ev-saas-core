@@ -13,14 +13,21 @@
         cover: @js(['id' => $shop->cover->id ?? null, 'file_name' => $shop->cover->file_name ?? '']),
         meta_img: @js(['id' => $shop->meta_img->id ?? null, 'file_name' => $shop->meta_img->file_name ?? '']),
         content: @entangle('shop.content').defer,
-        settings: @entangle('settings').defer,
+        settings: @js($settings),
     }" x-init="$watch('current', function(value) {
         $([document.documentElement, document.body]).animate({
             scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
         }, 500);
     })" 
     @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
-    @submit-form.window="$wire.saveBasicInformation()"
+    @submit-form.window="
+        $wire.set('shop.thumbnail', thumbnail.id, true);
+        $wire.set('shop.cover', cover.id, true);
+        $wire.set('settings.websites', settings.websites, true);
+        $wire.set('settings.phones', settings.phones, true);
+        $wire.set('shop.content', content, true);
+        $wire.saveBasicInformation();
+    "
     x-cloak>
 
     <div class="w-full relative">
