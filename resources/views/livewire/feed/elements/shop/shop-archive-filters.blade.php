@@ -43,7 +43,7 @@
         </div>
         <div class="border-t border-gray-200 py-6 w-full" style="overflow:scroll" id="disclosure-1" x-show="open" x-cloak>
             <div class="max-w-7xl mx-auto flex overflow-scroll gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
-                @foreach(Category::getAll() as $category)
+                @foreach(Categories::getAll() as $category)
                 <div class="-m-1 flex flex-wrap items-center">
                     <span
                         @click="$wire.emit('filterByCategories', {{ $category->id }}); toggleCategory({{ $category->id }})"
