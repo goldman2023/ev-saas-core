@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\PermissionsService;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Permissions;
 
 class OnboardingController extends Controller
 {
@@ -44,11 +45,11 @@ class OnboardingController extends Controller
 
         /* @vukasin TODO: Replace this with new way of adding address */
         // $shop->address = $request->address;
-        $shop->save();
+
         if ($shop->save()) {
-            $shop->users()->attach($user);
-            $permissions = \Permissions::getAllPossiblePermissions();
-            $user->syncPermissions(\Permissions::getAllPossiblePermissions()->keys());
+            $shop->users()->sync($user); // Use sync instead of attach, otherwise there will be multiple records of reationships between same user and shop
+            $permissions = Permissions::getRolePermissions('Owner');
+            $user->syncPermissions($permissions);
             $user->syncRoles(['Owner']);
             if (get_setting('email_verification') != 1) {
 

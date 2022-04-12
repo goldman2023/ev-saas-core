@@ -17,7 +17,14 @@
             scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
         }, 500);
     })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
-        @submit-form.window="$wire.saveBasicInformation()"
+        @submit-form.window="
+            $wire.set('me.thumbnail', thumbnail.id, true);
+            $wire.set('me.cover', cover.id, true);
+            $wire.set('meta.bio.value', meta.bio.value, true);
+            {{-- $wire.set('meta.industry.value', meta.industry.value.id, true); --}}
+            $wire.set('meta.birthday.value', meta.birthday.value, true);
+            $wire.saveBasicInformation();
+        "
         x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden">
