@@ -80,16 +80,16 @@ class StripeService
         try {
             // Create Stripe Product
             $stripe_product = $this->stripe->products->create([
-                'id' => $model->id,
+                'id' => $model::class.'_'.$model->id,
                 'name' => $model->name,
                 'active' => true,
                 // 'livemode' => false, // TODO: Make it true in Production
                 'description' => $description,
                 'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
-                'shippable' => $model->is_digital ? false : true,
+                'shippable' => $this->isShippable($model),
                 // 'tax_code' => '',
                 'url' => $model->getPermalink(),
-                'unit_label' => substr($model->unit, 0, 12),
+                'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
                 // 'metadata' => []
             ]);
         } catch (\Exception $e) {
@@ -174,7 +174,7 @@ class StripeService
             $stripe_product = $this->stripe->products->retrieve($stripe_product_id, []);
         } catch(\Exception $e) {
             // What if there is no product in stripe under given ID?
-
+            
             // 1. Create a product and price if product is missing in Stripe
             $stripe_product = $this->createStripeProduct($model);
             // return $this->createCheckoutLink($model, $qty); // try again after product and price are created
@@ -229,7 +229,7 @@ class StripeService
         ];
 
         // Check if Modal is digital or not, and based on that display or hide Stripe shipping options
-        if(!$model->is_digital ?? true) {
+        if($this->isShippable($model)) {
             // If $model is not digital (like standard non-digital product)
             $stripe_args['shipping_address_collection'] = [
                 // TODO: Put all allowed shipping countries two-letter codes here. Keep in mind there should be two allowed_shipping_countries settings. One in TenantSettings and other in ShopSettings. ShpoSettings one is used when app is a marketplace!
@@ -357,12 +357,16 @@ class StripeService
     }
 
     protected function isSubscription($model) {
-        return $model instanceof Plan || ($model instanceof Product && $model->isSubscription());
+        return $model instanceof Plan || ($model instanceof Product && ($model->isSubscription() || $model->isPhysicalSubscription()));
     }
 
-    public function processWebhooks(Request $request) {
+    protected function isShippable($model) {
+        return $model instanceof Product && ($model->isStandard() || $model->isPhysicalSubscription());
+    }
+
+    public function processWebhooks(Request $request) { 
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
-        $endpoint_secret = 'whsec_IUN8xCktKu64YeKHp28hzpMZLjbFdic4';
+        $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
 
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
@@ -374,15 +378,18 @@ class StripeService
             );
         } catch(\UnexpectedValueException $e) {
             // Invalid payload
+			print_r($e);
             http_response_code(400);
             exit();
         } catch(\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
+			print_r($e);
             http_response_code(400);
             exit();
         }
 
-
+		print_r($event);
+		exit;
         // Handle the event
         switch ($event->type) {
             case 'charge.succeeded':

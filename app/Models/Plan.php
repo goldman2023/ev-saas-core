@@ -12,6 +12,7 @@ use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
+use App\Traits\PermalinkTrait;
 use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
@@ -24,6 +25,7 @@ class Plan extends EVBaseModel
     use SoftDeletes;
     use RegeneratesCache;
     use Purchasable;
+    use PermalinkTrait;
     use PriceTrait;
     use CategoryTrait;
     use AttributeTrait;
@@ -64,6 +66,10 @@ class Plan extends EVBaseModel
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public static function getRouteName() {
+        return 'plan.single';
     }
 
     public function getPriceColumn()

@@ -386,6 +386,18 @@
                         </div>
                     </div>
                     <!-- END Stripe Secrets Live Key -->
+
+                    <!-- Stripe Webhooks Endpoint Secret Key  -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
+                        <label class="block text-sm font-medium text-gray-900 ">
+                            {{ translate('Stripe Webhook Endpoint Secret Key') }}
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.input field="paymentMethod.stripe_webhook_secret" />
+                        </div>
+                    </div>
+                    <!-- END Stripe Webhooks Endpoint Secret Key -->
                 </div>
 
                 {{-- Other Stripe settings --}}
