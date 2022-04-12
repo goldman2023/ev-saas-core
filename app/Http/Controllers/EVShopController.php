@@ -19,7 +19,10 @@ class EVShopController extends Controller
     public function single(Request $request, $slug)
     {
         // TODO: Cleanup old active commerce code!
-        $shop = Shop::where('slug', $slug)->findOrFail();
+        $shop = Shop::where('slug', $slug)->first();
+        if(empty($shop)) {
+            return abort(404);
+        }
 
         activity()
             ->performedOn($shop)
@@ -38,10 +41,6 @@ class EVShopController extends Controller
             what is replacement?
             */
         return view('frontend.shop.single', compact('shop'));
-
-
-
-        abort(404);
     }
 
     /**
