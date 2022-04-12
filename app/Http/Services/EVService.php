@@ -278,6 +278,14 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
+                    [
+                        'label' => translate('Plans Management'),
+                        'icon' => 'heroicon-o-document',
+                        'route' => route('my.plans.management'),
+                        'is_active' => areActiveRoutes(['my.plans.management']),
+                        'user_types' => User::$user_types,
+                        'permissions' => []
+                    ],
                   /*   [
                         'label' => translate('My Wishlist'),
                         'icon' => 'heroicon-o-heart',

@@ -153,6 +153,8 @@ class TenantSettingsService
 
             // Features
             'feed_enabled' => 'boolean',
+            'multiplan_purchase' => 'boolean', // Buying multiple plans and distributing them among other users
+            
 
         ];
     }

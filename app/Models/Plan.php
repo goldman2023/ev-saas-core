@@ -99,6 +99,16 @@ class Plan extends EVBaseModel
         return $this->belongsTo(Shop::class);
     }
 
+    public function users()
+    {
+        return $this->morphToMany(User::class, 'subject', 'user_relationships');
+    }
+
+    public function blog_posts()
+    {
+        return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
+    }
+
     public function getFeaturesAttribute($value) {
         if(empty($value)) {
             return [''];
@@ -120,5 +130,25 @@ class Plan extends EVBaseModel
     public function getVariationModelClass()
     {
         return null;
+    }
+
+    /* TODO: Move this into trait once we know what it should be */
+    public function core_meta()
+    {
+        return $this->morphMany(CoreMeta::class, 'subject');
+    }
+
+    public function isStripeProduct()
+    {
+
+        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
+            return true;
+        }
+
+        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
+            return true;
+        }
+
+        return false;
     }
 }

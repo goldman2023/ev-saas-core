@@ -102,4 +102,6 @@ class EVAccountController extends Controller
 
         return view('frontend.dashboard.settings.shop-settings', compact('shop'));
     }
+
+    
 }

@@ -1,4 +1,4 @@
-<div class="p-5 mb-5 border-b bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
+<div class="p-5 mb-5 border bg-white border-gray-200 rounded-lg sm:flex sm:items-center sm:justify-between">
     <div class="">
         <h3 class="text-24 leading-6 font-semibold text-gray-900">{{ $title }}</h3>
         @if(!empty($text))
