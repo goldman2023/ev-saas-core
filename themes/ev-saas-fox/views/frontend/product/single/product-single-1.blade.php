@@ -221,7 +221,7 @@
                         <option @click="current = 'description';">{{ translate('Description') }}</option>
                         <option @click="current = 'specification';">Specification</option>
                         <option @click="current = 'seller';">Seller information</option>
-                        <option @click="current = 'shipping';">Shipping</option>
+                        {{-- <option @click="current = 'shipping';">Shipping</option> --}}
                     </select>
                 </div>
                 <div class="hidden sm:block">
@@ -232,7 +232,7 @@
                                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
                                 {{ translate('Description') }} </div>
                             <div
-
+                                @click="current = 'specification';"
                                 :class="{'text-primary border-primary ': current == 'specification'}"
                                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
                                 {{ translate('Specification') }} </div>
@@ -256,10 +256,10 @@
                                 </dd>
                                 @endif
                             </div>
-                            <div @click="current = 'shipping';"
+                            {{-- <div @click="current = 'shipping';"
                                 :class="{'text-primary border-primary ': current == 'shipping'}"
                                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"
-                                aria-current="page"> {{ translate('Shipping') }} </div>
+                                aria-current="page"> {{ translate('Shipping') }} </div> --}}
                         </nav>
                     </div>
                 </div>
