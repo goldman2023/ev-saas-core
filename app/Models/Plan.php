@@ -99,6 +99,16 @@ class Plan extends EVBaseModel
         return $this->belongsTo(Shop::class);
     }
 
+    public function users()
+    {
+        return $this->morphToMany(User::class, 'subject', 'user_relationships');
+    }
+
+    public function blog_posts()
+    {
+        return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
+    }
+
     public function getFeaturesAttribute($value) {
         if(empty($value)) {
             return [''];

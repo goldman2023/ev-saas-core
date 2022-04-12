@@ -18,8 +18,8 @@
             <div class="grid gap-10 grid-cols-12">
                 @if($plans->isNotEmpty())
                     @foreach($plans as $plan)
-                        <div class="col-span-12 sm:col-span-6 lg:col-span-3">
-                            <div class=" flex flex-col justify-between px-4 py-4 border-gray-300 hover:border-primary border rounded transition-all duration-300 hover:shadow-green" style="height: 505px;">
+                        <div class="bg-white border border-gray-200 hover:border-primary rounded-lg col-span-12 sm:col-span-6 lg:col-span-3">
+                            <div class=" flex flex-col justify-between px-4 py-4 transition-all duration-300 hover:shadow-green" style="height: 505px;">
                                 <div class="price-description">
                                     <h3 class="font-bold text-18 text-gray-700 pb-2">{{ $plan->name }}</h3>
                                     <div class="flex items-end">

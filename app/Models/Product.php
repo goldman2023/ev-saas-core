@@ -300,7 +300,6 @@ class Product extends EVBaseModel
 
     public function isStripeProduct()
     {
-
         if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
             return true;
         }
@@ -316,10 +315,6 @@ class Product extends EVBaseModel
         return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
     }
 
-    public function getBookingLink() {
-        return $this->core_meta?->where('key', 'calendly_link')->first()?->value ?? null;
-    }
-
     public function isEvent() {
         return $this->type === \App\Enums\ProductTypeEnum::event()->value;
     }
@@ -327,4 +322,10 @@ class Product extends EVBaseModel
     public function isSubscription() {
         return $this->type === \App\Enums\ProductTypeEnum::subscription()->value;
     }
+
+    public function getBookingLink() {
+        return $this->core_meta?->where('key', 'calendly_link')->first()?->value ?? null;
+    }
+
+    
 }

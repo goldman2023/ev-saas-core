@@ -435,6 +435,11 @@ class StripeService
                         }
                     }
 
+                    // Associate User with Plan (if plan is bought)
+                    if($model instanceof Plan) {
+                        auth()->user()->plans()->syncWithoutDetaching($model);
+                    }
+
                     /*
                     * Create Invoice
                     */
@@ -457,7 +462,6 @@ class StripeService
                     $invoice->billing_state = !empty($order->billing_state) ? $order->billing_state : '';
                     $invoice->billing_city = !empty($order->billing_city) ? $order->billing_city : '';
                     $invoice->billing_zip = !empty($order->billing_zip) ? $order->billing_zip : '';
-
 
                     // Take invoice totals from $order itself
                     $invoice->base_price = $order->base_price;
