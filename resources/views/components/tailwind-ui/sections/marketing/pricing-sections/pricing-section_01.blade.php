@@ -36,9 +36,18 @@
                       </div>
                   </div>
                   <div>
-                      <a href="#" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
-                          {{ translate('Try it free') }}
-                      </a>
+                      @auth
+                        <a href="{{ route('my.plans.management') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                            {{ translate('Try it free') }}
+                        </a>
+                      @endauth
+
+                      @guest
+                        <a href="{{ '/login?redirect-url='.route('my.plans.management') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                            {{ translate('Try it free') }}
+                        </a>
+                      @endguest
+                      
                   </div>
               </div>
             </div>

@@ -121,4 +121,24 @@ class Plan extends EVBaseModel
     {
         return null;
     }
+
+    /* TODO: Move this into trait once we know what it should be */
+    public function core_meta()
+    {
+        return $this->morphMany(CoreMeta::class, 'subject');
+    }
+
+    public function isStripeProduct()
+    {
+
+        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
+            return true;
+        }
+
+        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
+            return true;
+        }
+
+        return false;
+    }
 }

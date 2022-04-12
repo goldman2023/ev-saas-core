@@ -229,7 +229,7 @@
                         {{-- Features --}}
                         <div class="w-full px-5" x-show="current_tab === 'features'">
                              {{-- Feed Feature --}}
-                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900">{{ translate('Feed') }}</span>
                                     <p class="text-gray-500 text-sm">
@@ -247,11 +247,31 @@
                             </div>
                             {{-- END Feed Feature --}}
 
+                            {{-- Multiplan Purchase Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Multiplan purchase') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('If you want enable that users can buy multiple plans and distribute them among other accounts via invite') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <button type="button" @click="settings.multiplan_purchase.value = !settings.multiplan_purchase.value"
+                                                :class="{'bg-primary':settings.multiplan_purchase.value , 'bg-gray-200':!settings.multiplan_purchase.value}"
+                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                            <span :class="{'translate-x-5':settings.multiplan_purchase.value, 'translate-x-0':!settings.multiplan_purchase.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- END Multiplan Purchase Feature --}}
+
                             {{-- Save Features --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
                                         $wire.set('settings.feed_enabled.value', settings.feed_enabled.value, true);
+                                        $wire.set('settings.multiplan_purchase.value', settings.multiplan_purchase.value, true);
                                     "
                                     wire:click="saveFeatures()">
                                 {{ translate('Save') }}

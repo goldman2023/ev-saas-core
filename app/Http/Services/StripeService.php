@@ -11,6 +11,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\Plan;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
@@ -110,23 +112,7 @@ class StripeService
         );
 
         // Create Stripe Price
-        $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-            'currency' => strtolower($model->base_currency),
-            'product' => $stripe_product->id,
-        ]);
-
-        // Create CoreMeta with stripe Price ID
-        CoreMeta::updateOrCreate(
-            [
-                'subject_id' => $model->id,
-                'subject_type' => $model::class,
-                'key' => $this->mode_prefix .'stripe_price_id',
-            ],
-            [
-                'value' => $stripe_product_price->id
-            ]
-        );
+        $this->createStripePrice($model, $stripe_product->id);
 
         return $stripe_product;
     }
@@ -137,16 +123,32 @@ class StripeService
 
     protected function createStripePrice($model, $stripe_product_id = null) {
         // Get stripe product iD
-        if(empty($stripe_product_id))
+        if(empty($stripe_product_id)) {
             $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
+        }
 
-
-        // Create a new price and attach it to stripe product ID
-        $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-            'currency' => strtolower($model->base_currency),
-            'product' => $stripe_product_id,
-        ]);
+        // Create reccuring price if $model is Plan or a Subscription Product
+        if($this->isSubscription($model)) {
+            $args = [
+                'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
+                'currency' => strtolower($model->base_currency),
+                'product' => $stripe_product_id,
+                'recurring' => [
+                    "interval" => "month", // TODO: Can be 'year'
+                    "interval_count" => 1,
+                    "usage_type" => "licensed"
+                ]
+            ];
+        } else {
+            // Create a new price and attach it to stripe product ID
+            $args = [
+                'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
+                'currency' => strtolower($model->base_currency),
+                'product' => $stripe_product_id,
+            ];
+        }
+        
+        $stripe_product_price = $this->stripe->prices->create($args);
 
         CoreMeta::updateOrCreate(
             [
@@ -200,7 +202,7 @@ class StripeService
         }
 
         // If Preview, then don't crete temp order
-        if($preview) {
+        if(!$preview) {
             // Create an Order
             $order = $this->createTempOrder($model, $qty);
         }
@@ -215,7 +217,7 @@ class StripeService
                     'quantity' => $qty,
                 ]
             ],
-            'mode' => 'payment',
+            'mode' => $this->isSubscription($model) ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
             'client_reference_id' => $order->id,
             /* TODO: Create dynamic order on the fly when generating checkout link  */
@@ -293,9 +295,9 @@ class StripeService
             $order->buyers_consent = true;
             $order->is_temp = true;
             $order->email = '';
-
+            
             // TODO: Should be handled differently
-            if($model instanceof Plan) {
+            if($this->isSubscription($model)) {
                 /*
                 * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
                 */
@@ -303,7 +305,7 @@ class StripeService
                 $order->number_of_invoices = -1; // 'unlimited' for subscriptions
                 $order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
                 $order->invoice_grace_period = 0;
-                $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+                $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts - ***For trial invoicing starts X days from this moment
             } else {
                 $order->type = OrderTypeEnum::standard()->value;
                 $order->number_of_invoices = 1; // 'unlimited' for subscriptions
@@ -354,6 +356,9 @@ class StripeService
         return $order;
     }
 
+    protected function isSubscription($model) {
+        return $model instanceof Plan || ($model instanceof Product && $model->isSubscription());
+    }
 
     public function processWebhooks(Request $request) {
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
@@ -454,7 +459,7 @@ class StripeService
                     $invoice->billing_zip = !empty($order->billing_zip) ? $order->billing_zip : '';
 
 
-                    // Take invoice totals from Cart
+                    // Take invoice totals from $order itself
                     $invoice->base_price = $order->base_price;
                     $invoice->discount_amount = $order->discount_amount;
                     $invoice->subtotal_price = $order->subtotal_price;

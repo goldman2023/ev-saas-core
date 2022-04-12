@@ -2,6 +2,7 @@
 
 @php
   $first_item = $order->order_items->first()->subject;
+  $is_product = $first_item instanceof \App\Models\Product && $first_item->isBookableService();
 @endphp
 
 @section('meta_title'){{ translate('Your order is received').' - '.\TenantSettings::get('site_name').' | '.\TenantSettings::get('site_motto') }}@stop
@@ -9,7 +10,7 @@
 @section('meta_keywords'){{ translate('order, thank you page, checkout, cart, purchase, ecommerce') }}@stop
 
 @section('meta')
-  @if($first_item->isBookableService())
+  @if($is_product)
   <link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
   <script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
   @endif
@@ -22,14 +23,18 @@
     <div class="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
         <h1 class="text-sm font-semibold uppercase tracking-wide text-primary">{{ translate('Thank you!') }}</h1>
-        @if($first_item->type === \App\Enums\ProductTypeEnum::bookable_service()->value)
+        @if($first_item instanceof \App\Models\Plan)
+          <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Successfully bought a plan!') }}</p>
+          <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You have successfully subscribed to plan listed below.') }}</p>
+        @elseif($first_item->type === \App\Enums\ProductTypeEnum::bookable_service()->value)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Please review your order') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. Please select the available booking time.') }}</p>
 
           <div class="w-full mb-4">
-            @if($first_item->isBookableService())
-              <button type="button" class="btn-primary" 
-                @click="Calendly.showPopupWidget('{{ $first_item->getBookingLink() }}');">{{ translate('Schedule a meeting') }}</button>
+            @if($is_product)
+              <button type="button" class="btn-primary" @click="Calendly.showPopupWidget('{{ $first_item->getBookingLink() }}');">
+                {{ translate('Schedule a meeting') }}
+              </button>
             @endif
           </div>
         @elseif($first_item->type === \App\Enums\ProductTypeEnum::standard()->value)
@@ -39,7 +44,6 @@
           <div class="badge-info py-2 mb-2 text-18">{{ translate('processing') }}</div>
 
           <p class="text-base text-gray-500">{{ translate('Orders usually ship withing 2 days and you will receive tracking number and order tracking details.') }}</p>
-
         @endif
 
         
@@ -59,7 +63,7 @@
               {{-- @dd($item->subject) --}}
               <div class="w-full flex flex-col">
                 <div class="py-10 border-b border-gray-200 flex space-x-6">
-                  <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt="" class="flex-none w-20 h-20 object-center object-contain bg-gray-100 rounded-lg sm:w-40 sm:h-40">
+                  <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt="" class="flex-none w-20 h-20 object-center object-contain bg-gray-100 rounded-lg sm:w-40 sm:h-40">
                   <div class="flex-auto flex flex-col">
                     <div>
                         <h4 class="font-semibold text-gray-900">
@@ -82,7 +86,6 @@
                   </div>
                 </div>
               </div>
-                
             @endforeach
         @endif
         
