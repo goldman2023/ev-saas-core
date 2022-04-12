@@ -66,6 +66,10 @@ class StripeService
         }
     }
 
+	protected function generateStripeProductID($model) {
+		return $this->mode_prefix.strtolower(snake_case(class_basename($model::class))).'_'.$model->id;
+	}
+
     protected function createStripeProduct($model)
     {
         // Reminder: Stripe pricemust be in cents!!!
@@ -80,7 +84,7 @@ class StripeService
         try {
             // Create Stripe Product
             $stripe_product = $this->stripe->products->create([
-                'id' => $this->mode_prefix.$model::class.'_'.$model->id,
+                'id' => $this->generateStripeProductID($model),
                 'name' => $model->name,
                 'active' => true,
                 // 'livemode' => false, // TODO: Make it true in Production
@@ -96,7 +100,7 @@ class StripeService
             // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
 
             // 1. Get Stripe Product
-            $stripe_product = $this->stripe->products->retrieve($this->mode_prefix.$model::class.'_'.$model->id, []);
+            $stripe_product = $this->stripe->products->retrieve($this->generateStripeProductID($model), []);
         }
 
         // Create CoreMeta with stripe Product ID
