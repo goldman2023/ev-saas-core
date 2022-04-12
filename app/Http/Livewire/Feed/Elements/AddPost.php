@@ -21,22 +21,27 @@ class AddPost extends Component
 
     public function addFeedPost()
     {
-        $post = new BlogPost();
-        $post->name = 'Feed Post Post by ' . auth()->user()->name;
-        $post->excerpt = $this->content;
-        $post->content = $this->content;
-        if (MyShop::getShop()) {
-            $post->shop_id = MyShop::getShopID();
-            $post->user_id = auth()->user()->id;
+        if(!empty($this->content)) {
+            $post = new BlogPost();
+            $post->name = 'Feed Post Post by ' . auth()->user()->name;
+            $post->excerpt = $this->content;
+            $post->content = $this->content;
+            if (MyShop::getShop()) {
+                $post->shop_id = MyShop::getShopID();
+                $post->user_id = auth()->user()->id;
+            } else {
+                $post->user_id = auth()->user()->id;
+            }
+            $post->save();
+
+            $this->resetForm();
+            $this->toastify(translate('Shared sucesfully!'), 'success');
+
+            $this->emit('newPostAdded');
         } else {
-            $post->user_id = auth()->user()->id;
+            $this->toastify(translate('Your post is empty!'), 'danger');
         }
-        $post->save();
 
-        $this->resetForm();
-        $this->toastify(translate('Shared sucesfully!'), 'success');
-
-        $this->emit('newPostAdded');
     }
 
     public function resetForm()

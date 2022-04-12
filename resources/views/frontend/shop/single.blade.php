@@ -12,11 +12,11 @@
         <!-- Page header -->
         <div class="relative ">
 
-        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="absolute bg-white h-[320px] w-full" fit="cover"
-            :image="$shop->getCover()">
-        </x-tenant.system.image>
-        {{-- Background overlay --}}
-        <div class='h-[320px] from-gray-900 bg-gradient-to-t z-100 relative'></div>
+            <x-tenant.system.image alt="{{ get_site_name() }} logo" class="absolute bg-white h-[320px] w-full"
+                fit="cover" :image="$shop->getCover()">
+            </x-tenant.system.image>
+            {{-- Background overlay --}}
+            <div class='h-[320px] from-gray-900 bg-gradient-to-t z-100 relative'></div>
         </div>
         <div style="margin-top:-130px; z-index: 99;"
             class="relative z-100 max-w-3xl mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
@@ -34,7 +34,7 @@
                 <div>
                     <h1 class="text-2xl font-bold text-gray-200">{{ $shop->name }}</h1>
                     <p class="text-sm font-medium text-gray-300">{{ translate('Last active') }} <a href="#"
-                            class="text-gray-500">Front End Developer</a> on <time datetime="2020-08-25">August 25,
+                            class="text-gray-500">{{ $shop->taglin }}</a> on <time datetime="2020-08-25">August 25,
                             2020</time></p>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                             class="text-gray-900 rounded-l-lg  group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10"
                             x-state:on="Current" x-state:off="Default"
                             x-state-description="Current: &quot;text-gray-900&quot;, Default: &quot;text-gray-500 hover:text-gray-700&quot;">
-                            <span>{{ translate('Timeline') }}</span>
+                            <span>{{ translate('Seller Profile') }}</span>
                             <span aria-hidden="true" class="bg-rose-500 absolute inset-x-0 bottom-0 h-0.5"></span>
                         </a>
 
@@ -89,7 +89,7 @@
                         <a href="#"
                             class="text-gray-500 hover:text-gray-700  rounded-r-lg group relative min-w-0 flex-1 overflow-hidden bg-white py-4 px-6 text-sm font-medium text-center hover:bg-gray-50 focus:z-10"
                             x-state-description="undefined: &quot;text-gray-900&quot;, undefined: &quot;text-gray-500 hover:text-gray-700&quot;">
-                            <span>Most Answers</span>
+                            <span>{{ translate('Reviews') }}</span>
                             <span aria-hidden="true" class="bg-transparent absolute inset-x-0 bottom-0 h-0.5"></span>
                         </a>
 
@@ -97,9 +97,24 @@
                     <div class="bg-white shadow sm:rounded-lg">
                         <div class="px-4 py-5 sm:px-6">
                             <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
-                                {{ translate('Popular products') }}
+                               {{ $shop->name }} {{ translate('Activity') }}
                             </h2>
-                            <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500 flex items-center">
+                                <span
+                                    class="h-4 w-4 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white mr-3">
+                                    <!-- Heroicon name: solid/check -->
+                                    <svg class="w-3 h-3 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </span>
+                                <span class="text-indigo-600 font-medium">
+                                    {{ translate('Verified profile') }}
+                                </span>
+                            </p>
                         </div>
                         <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
                             <dl class="grid grid-cols-1 gap-10 sm:grid-cols-2">
@@ -124,7 +139,43 @@
 
             <section aria-labelledby="timeline-title" class="lg:col-start-3 lg:col-span-1">
                 <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
-                    <h2 id="timeline-title" class="text-lg font-medium text-gray-900">Timeline</h2>
+                    <div class="flex">
+                        <h2 id="timeline-title" class="text-lg font-medium text-gray-900 mb-6">
+                            {{ translate('Profile information') }}
+                        </h2>
+                        <div class="text-right ml-auto">
+                            <x-feed.elements.verified-badge :item="$shop"></x-feed.elements.verified-badge>
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3 flex">
+                        <x-tenant.system.image alt="{{ get_site_name() }} logo"
+                        class="ring-2 ring-indigo-400 bg-white h-16 w-16 rounded-full mr-3" fit="contain"
+                        :image="$shop->getThumbnail()">
+                    </x-tenant.system.image>
+
+                    <span class="text-lg font-bold">
+                    {{ $shop->name }}
+                        <div>
+                            @if($shop->addresses()->first())
+                            <span class="inline text-sm font-semibold">
+                                <img class="inline-block mr-2" src="{{ static_asset('assets/img/flags/' . $shop->addresses()->first()->country ) }}.png" >
+                                {{ country_name_by_code($shop->addresses()->first()->country) }}
+
+                            </span>
+                            @endif
+                        </div>
+
+                        <div>
+
+                        </div>
+                    </span>
+                    </div>
+
+                    <p class="text-sm">
+                        {{ $shop->excerpt }}
+                    </p>
 
                     <!-- Activity Feed -->
                     <div class="mt-6 flow-root">
@@ -148,11 +199,16 @@
                                         </div>
                                         <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                                             <div>
-                                                <p class="text-sm text-gray-500">Applied to <a href="#"
-                                                        class="font-medium text-gray-900">Front End Developer</a></p>
+                                                <p class="text-sm text-gray-500">
+                                                    {{ $shop->followers()->count() }} {{ translate('Followers')}}
+                                                    <a href="#" class="font-medium text-gray-900"></a>
+                                                </p>
                                             </div>
                                             <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2020-09-20">Sep 20</time>
+                                                @livewire('actions.wishlist-button', [
+                                                'object' => $shop,
+                                                'action' => 'Follow'
+                                                ])
                                             </div>
                                         </div>
                                     </div>
@@ -177,11 +233,18 @@
                                         </div>
                                         <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                                             <div>
-                                                <p class="text-sm text-gray-500">Advanced to phone screening by <a
-                                                        href="#" class="font-medium text-gray-900">Bethany Blake</a></p>
+                                                <p class="text-sm text-gray-500">
+                                                    {{ translate('Products') }}
+                                                    <a href="#" class="font-medium text-gray-900">
+                                                        {{ $shop->products()->count() }}
+                                                    </a>
+                                                </p>
                                             </div>
                                             <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2020-09-22">Sep 22</time>
+                                                <a
+                                                    class="inline-flex items-center px-3 py-0.5 rounded-full bg-indigo-50 text-sm font-medium text-indigo-700 hover:bg-indigo-100">
+                                                    {{ translate('View') }}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -207,12 +270,13 @@
                                         </div>
                                         <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                                             <div>
-                                                <p class="text-sm text-gray-500">Completed phone screening with <a
-                                                        href="#" class="font-medium text-gray-900">Martha Gardner</a>
+                                                <p class="text-sm text-gray-500">{{ translate('Joined') }}<a href="#"
+                                                        class="font-medium text-gray-900">
+                                                        {{ $shop->created_at->diffForHumans() }}</a>
                                                 </p>
                                             </div>
                                             <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2020-09-28">Sep 28</time>
+
                                             </div>
                                         </div>
                                     </div>
@@ -237,11 +301,10 @@
                                         </div>
                                         <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                                             <div>
-                                                <p class="text-sm text-gray-500">Advanced to interview by <a href="#"
-                                                        class="font-medium text-gray-900">Bethany Blake</a></p>
+                                                <p class="text-sm text-gray-500">{{ translate('Verified Profile') }}</p>
                                             </div>
                                             <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                <time datetime="2020-09-30">Sep 30</time>
+                                                <time datetime="2020-09-30">{{ $shop->updated_at->diffForHumans() }}</time>
                                             </div>
                                         </div>
                                     </div>
