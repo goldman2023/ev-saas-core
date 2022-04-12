@@ -94,11 +94,7 @@
                     <span class="inline-flex items-center text-sm">
 
                         @if($item->description != 'liked' && $item->description != 'User liked a product')
-                        <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                            <!-- Heroicon name: solid/thumb-up -->
 
-
-                        </button>
                         <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item->subject">
                         </livewire:actions.wishlist-button>
                         @endif

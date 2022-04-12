@@ -27,7 +27,7 @@ class FeedList extends Component
     {
         $data = Activity::whereHas('subject')
             ->whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked', 'add_to_cart', 'checkout'])
-            ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User']);
+            ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User', 'App/Models/SocialComment']);
 
         if ($this->type == "recent") {
             $data = $data->orderBy('id', 'desc');

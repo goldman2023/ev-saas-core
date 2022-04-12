@@ -46,6 +46,8 @@ class FeedCard extends Component
             } else {
                 // $this->product = $item->subject->subject;
             }
+        } elseif(($item->subject_type == 'App\Models\SocialComment')) {
+            $this->ignore = true;
         }
     }
 
