@@ -323,4 +323,8 @@ class Product extends EVBaseModel
     public function isEvent() {
         return $this->type === \App\Enums\ProductTypeEnum::event()->value;
     }
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
+    }
 }

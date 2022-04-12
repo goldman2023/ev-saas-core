@@ -102,9 +102,12 @@
                         <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item->subject">
                         </livewire:actions.wishlist-button>
                         @endif
+
+
                     </span>
-                    <span class="hidden inline-flex items-center text-sm cursor-pointer" x-on:click="isModalOpen = true">
-                        <button type="button" class=" inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                    <span class="inline-flex items-center text-sm cursor-pointer">
+                        <button wire:click="toggle_comments()" type="button"
+                            class=" inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/chat-alt -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
@@ -146,7 +149,16 @@
                 </div>
 
             </div>
+
+            {{-- This is triggered by :wire-click="toggle_comments()" --}}
+            @if($showComments)
+            <div>
+                <livewire:actions.social-comments :item="$item">
+                </livewire:actions.social-comments>
+            </div>
+            @endif
         </article>
+
     </div>
     <livewire:feed.elements.quick-views.main :item="$item">
     </livewire:feed.elements.quick-views.main>

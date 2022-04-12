@@ -208,91 +208,101 @@
                 </div>
             </div>
 
-            <div class="w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
-                <div x-data="{
-                        current: 'description'
-                    }">
-                    <div class="sm:hidden">
-                        <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                        <select id="tabs" name="tabs"
-                            class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                            <option>My Account</option>
-                            <option>Company</option>
-                            <option>Team Members</option>
-                            <option>Billing</option>
-                        </select>
-                    </div>
-                    <div class="hidden sm:block">
-                        <div class="border-b border-gray-200">
-                            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                                <div @click="current = 'description';"
-                                    :class="{'text-primary border-primary ': current == 'description'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
-                                    {{ translate('Description') }} </div>
-                                <div @click="current = 'specification';"
-                                    :class="{'text-primary border-primary ': current == 'specification'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
-                                    {{ translate('Specification') }} </div>
 
-                                <div @click="current = 'seller';"
-                                    :class="{'text-primary border-primary ': current == 'seller'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
-                                    {{ translate('Seller information') }}
-                                    @if($product->shop->isVerified())
-                                    <dd
-                                        class="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
-                                        <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                                            x-description="Heroicon name: solid/check-circle"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                            aria-hidden="true">
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                        {{ translate('Verified') }}
-                                    </dd>
-                                    @endif
-                                </div>
-                                <div @click="current = 'shipping';"
-                                    :class="{'text-primary border-primary ': current == 'shipping'}"
-                                    class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"
-                                    aria-current="page"> {{ translate('Shipping') }} </div>
-                            </nav>
-                        </div>
-                    </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-20 w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
+            <div class="sm:col-span-7" x-data="{
+                    current: 'description'
+                }">
+                <div class="sm:hidden">
+                    <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+                    <select id="tabs" name="tabs"
+                        class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option>My Account</option>
+                        <option>Company</option>
+                        <option>Team Members</option>
+                        <option>Billing</option>
+                    </select>
+                </div>
+                <div class="hidden sm:block">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            <div @click="current = 'description';"
+                                :class="{'text-primary border-primary ': current == 'description'}"
+                                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
+                                {{ translate('Description') }} </div>
+                            <div @click="current = 'specification';"
+                                :class="{'text-primary border-primary ': current == 'specification'}"
+                                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
+                                {{ translate('Specification') }} </div>
 
-                    <div class="w-full mt-5" x-cloak>
-                        <div class="" x-show="current == 'description'">
-                            {!! $product->description !!}
-                        </div>
-
-                        <div class="" x-show="current == 'seller'">
-                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-20">
-                                <div class="py-10">
-                                    <h3 class="text-xl font-extrabold tracking-tight text-gray-900 mb-6">
-                                        {{ translate("This product is sold by:") }}
-                                    </h3>
-                                    <livewire:feed.elements.shop-card :shop="$product->shop">
-                                    </livewire:feed.elements.shop-card>
-
-                                </div>
-
-                                <div class='col-span-3 py-10'>
-                                    <x-ecommerce.elements.shop.reviews-detailed :shop="$product->shop">
-                                    </x-ecommerce.elements.shop.reviews-detailed>
-                                </div>
-
+                            <div @click="current = 'seller';"
+                                :class="{'text-primary border-primary ': current == 'seller'}"
+                                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
+                                {{ translate('Seller information') }}
+                                @if($product->shop->isVerified())
+                                <dd
+                                    class="mt-3 flex items-center text-sm text-gray-500 font-medium sm:mr-6 sm:mt-0 capitalize">
+                                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
+                                        x-description="Heroicon name: solid/check-circle"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ translate('Verified') }}
+                                </dd>
+                                @endif
                             </div>
-                        </div>
-
-                        <div class="" x-show="current == 'specification'">
-                            <x-default.products.single.product-specification-table :product="$product">
-                            </x-default.products.single.product-specification-table>
-                        </div>
+                            <div @click="current = 'shipping';"
+                                :class="{'text-primary border-primary ': current == 'shipping'}"
+                                class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer"
+                                aria-current="page"> {{ translate('Shipping') }} </div>
+                        </nav>
                     </div>
                 </div>
 
+                <div class="w-full mt-5" x-cloak>
+                    <div class="" x-show="current == 'description'">
+                        {!! $product->description !!}
+                    </div>
+
+                    <div class="" x-show="current == 'seller'">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-20">
+                            <div class="py-10">
+                                <h3 class="text-xl font-extrabold tracking-tight text-gray-900 mb-6">
+                                    {{ translate("This product is sold by:") }}
+                                </h3>
+                                <livewire:feed.elements.shop-card :shop="$product->shop">
+                                </livewire:feed.elements.shop-card>
+
+                            </div>
+
+                            <div class='col-span-3 py-10'>
+                                <x-ecommerce.elements.shop.reviews-detailed :shop="$product->shop">
+                                </x-ecommerce.elements.shop.reviews-detailed>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="" x-show="current == 'specification'">
+                        <x-default.products.single.product-specification-table :product="$product">
+                        </x-default.products.single.product-specification-table>
+                    </div>
+                </div>
             </div>
+
+            <div class="sm:col-span-5">
+                 {{-- Comments --}}
+                 <h3 class="text-lg font-bold mb-3">
+                    {{ translate('Comments and Questions') }} ({{ $product->comments->count() }})
+                 </h3>
+                 <livewire:actions.social-comments :item="$product">
+                </livewire:actions.social-comments>
+            </div>
+
         </div>
     </div>
 </div>

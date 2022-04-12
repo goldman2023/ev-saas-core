@@ -13,6 +13,7 @@ class FeedCard extends Component
     public $product;
     public $ignore = false;
     public $likes = 0;
+    public $showComments = false;
     public function mount($item)
     {
 
@@ -46,6 +47,10 @@ class FeedCard extends Component
                 // $this->product = $item->subject->subject;
             }
         }
+    }
+
+    public function toggle_comments() {
+       $this->showComments = !$this->showComments;
     }
 
     public function render()
