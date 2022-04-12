@@ -57,7 +57,7 @@
         </div>
         @forelse ($comments as $comment)
         <div class="mb-6">
-            <div class="flex items-center mb-3">
+            <div class="flex items-center mb-3 relative">
                 <img src="{{ $comment->user->getThumbnail() }}" alt="{{ $comment->user->name }}"
                     class="h-12 w-12 rounded-full">
                 <div class="ml-4">
