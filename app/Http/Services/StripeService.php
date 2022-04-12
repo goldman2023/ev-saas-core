@@ -67,7 +67,7 @@ class StripeService
     }
 
 	protected function generateStripeProductID($model) {
-		return $this->mode_prefix.strtolower(snake_case(class_basename($model::class))).'_'.$model->id;
+		return $this->mode_prefix.strtolower((class_basename($model::class))).'_'.$model->id;
 	}
 
     protected function createStripeProduct($model)
@@ -151,7 +151,7 @@ class StripeService
                 'product' => $stripe_product_id,
             ];
         }
-        
+
         $stripe_product_price = $this->stripe->prices->create($args);
 
         CoreMeta::updateOrCreate(
@@ -178,7 +178,7 @@ class StripeService
             $stripe_product = $this->stripe->products->retrieve($stripe_product_id, []);
         } catch(\Exception $e) {
             // What if there is no product in stripe under given ID?
-            
+
             // 1. Create a product and price if product is missing in Stripe
             $stripe_product = $this->createStripeProduct($model);
             // return $this->createCheckoutLink($model, $qty); // try again after product and price are created
@@ -299,7 +299,7 @@ class StripeService
             $order->buyers_consent = true;
             $order->is_temp = true;
             $order->email = '';
-            
+
             // TODO: Should be handled differently
             if($this->isSubscription($model)) {
                 /*
@@ -368,7 +368,7 @@ class StripeService
         return $model instanceof Product && ($model->isStandard() || $model->isPhysicalSubscription());
     }
 
-    public function processWebhooks(Request $request) { 
+    public function processWebhooks(Request $request) {
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
         $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
 

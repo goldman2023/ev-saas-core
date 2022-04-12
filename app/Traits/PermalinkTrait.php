@@ -15,6 +15,6 @@ trait PermalinkTrait
             return route($this->getRouteName(), $this->attributes[$routeKeyName]);
         }
 
-        return '#';
+        return route('home');
     }
 }
