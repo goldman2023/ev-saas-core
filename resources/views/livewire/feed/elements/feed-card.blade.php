@@ -89,7 +89,7 @@
                 @endif
 
             </div>
-            <div class="mt-6 flex justify-between space-x-8">
+            <div class="mt-6 flex justify-between space-x-8 mb-3">
                 <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
 
@@ -115,8 +115,10 @@
                                     d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <span class="font-medium text-gray-900">11</span>
-                            <span class="sr-only">replies</span>
+                            @if($item->subject->comments())
+                                <span class="font-medium text-gray-900">{{ $item->subject()->comments()->count() }}</span>
+                                <span class="sr-only">replies</span>
+                            @endif
                         </button>
                     </span>
                     <span class="inline-flex items-center text-sm">
