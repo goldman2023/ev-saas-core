@@ -80,7 +80,7 @@ class StripeService
         try {
             // Create Stripe Product
             $stripe_product = $this->stripe->products->create([
-                'id' => $this->mode_prefix.'_'.$model::class.'_'.$model->id,
+                'id' => $this->mode_prefix.$model::class.'_'.$model->id,
                 'name' => $model->name,
                 'active' => true,
                 // 'livemode' => false, // TODO: Make it true in Production
@@ -96,7 +96,7 @@ class StripeService
             // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
 
             // 1. Get Stripe Product
-            $stripe_product = $this->stripe->products->retrieve($model->id, []);
+            $stripe_product = $this->stripe->products->retrieve($this->mode_prefix.$model::class.'_'.$model->id, []);
         }
 
         // Create CoreMeta with stripe Product ID
@@ -165,7 +165,7 @@ class StripeService
     }
 
 
-    public function createCheckoutLink($model, $qty = 1, $preview = true)
+    public function createCheckoutLink($model, $qty = 1, $preview = false)
     {
         // Check if Stripe Product actually exists
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
@@ -219,7 +219,7 @@ class StripeService
             ],
             'mode' => $this->isSubscription($model) ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
-            'client_reference_id' => $order->id,
+            'client_reference_id' => !$preview ? $order->id : '',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
             'success_url' => route('checkout.order.received', ['id' => $order->id]),
             'cancel_url' => route('checkout.order.canceled', ['id' => $order->id]),
