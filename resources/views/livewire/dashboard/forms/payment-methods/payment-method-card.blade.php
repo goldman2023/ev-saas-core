@@ -342,7 +342,7 @@
                     <!-- Stripe Publishable Test Key  -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
-                            {{ translate('Stripe Publishable Test Key') }}
+                            {{ translate('Publishable Test Key') }}
                         </label>
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
@@ -354,7 +354,7 @@
                     <!-- Stripe Secret Test Key -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
-                            {{ translate('Stripe Secret Test Key') }}
+                            {{ translate('Secret Test Key') }}
                         </label>
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
@@ -366,7 +366,7 @@
                     <!-- Stripe Publishable Live Key  -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
-                            {{ translate('Stripe Publishable Live Key') }}
+                            {{ translate('Publishable Live Key') }}
                         </label>
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
@@ -378,7 +378,7 @@
                     <!-- Stripe Secrets Live Key  -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
-                            {{ translate('Stripe Secrets Live Key') }}
+                            {{ translate('Secrets Live Key') }}
                         </label>
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
@@ -390,7 +390,7 @@
                     <!-- Stripe Webhooks Endpoint Secret Key  -->
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                         <label class="block text-sm font-medium text-gray-900 ">
-                            {{ translate('Stripe Webhook Endpoint Secret Key') }}
+                            {{ translate('Webhook Endpoint Secret Key') }}
                         </label>
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">

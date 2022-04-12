@@ -80,7 +80,7 @@ class StripeService
         try {
             // Create Stripe Product
             $stripe_product = $this->stripe->products->create([
-                'id' => $model::class.'_'.$model->id,
+                'id' => $this->mode_prefix.'_'.$model::class.'_'.$model->id,
                 'name' => $model->name,
                 'active' => true,
                 // 'livemode' => false, // TODO: Make it true in Production
