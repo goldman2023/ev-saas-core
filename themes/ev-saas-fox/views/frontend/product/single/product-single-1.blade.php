@@ -210,18 +210,18 @@
 
 
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-12 gap-20 w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
-            <div class="sm:col-span-7" x-data="{
+        <div class="mx-auto py-8 px-4 sm:py-18 sm:px-6 lg:max-w-7xl lg:px-4 w-full mt-16 lg:max-w-none lg:mt-0 lg:col-span-8 mb-10">
+            <div class="lg:row-end-1 lg:col-span-4" x-data="{
                     current: 'description'
                 }">
                 <div class="sm:hidden">
                     <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
                     <select id="tabs" name="tabs"
                         class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option>My Account</option>
-                        <option>Company</option>
-                        <option>Team Members</option>
-                        <option>Billing</option>
+                        <option @click="current = 'description';">{{ translate('Description') }}</option>
+                        <option @click="current = 'specification';">Specification</option>
+                        <option @click="current = 'seller';">Seller information</option>
+                        <option @click="current = 'shipping';">Shipping</option>
                     </select>
                 </div>
                 <div class="hidden sm:block">
@@ -231,7 +231,8 @@
                                 :class="{'text-primary border-primary ': current == 'description'}"
                                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
                                 {{ translate('Description') }} </div>
-                            <div @click="current = 'specification';"
+                            <div
+
                                 :class="{'text-primary border-primary ': current == 'specification'}"
                                 class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-18 cursor-pointer">
                                 {{ translate('Specification') }} </div>
@@ -294,7 +295,7 @@
                 </div>
             </div>
 
-            <div class="sm:col-span-5">
+            <div class="md:col-span-5 mt-12">
                  {{-- Comments --}}
                  <h3 class="text-lg font-bold mb-3">
                     {{ translate('Comments and Questions') }} ({{ $product->comments->count() }})
