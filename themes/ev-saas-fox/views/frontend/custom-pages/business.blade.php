@@ -175,7 +175,7 @@
                             <div class="mb-6">
                                 <span class="relative -top-10 right-1 text-3xl text-coolGray-900 font-bold">€</span>
                                 <span
-                                    class="text-6xl md:text-7xl text-coolGray-900 font-semibold tracking-tighter">10</span>
+                                    class="text-6xl md:text-7xl text-coolGray-900 font-semibold tracking-tighter">0</span>
                                 <span class="inline-block ml-1 text-coolGray-500 font-semibold">/forever</span>
                             </div>
                             @auth
