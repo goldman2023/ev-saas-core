@@ -319,8 +319,16 @@ class Product extends EVBaseModel
         return $this->type === \App\Enums\ProductTypeEnum::event()->value;
     }
 
+    public function isStandard() {
+        return $this->type === \App\Enums\ProductTypeEnum::standard()->value;
+    }
+
     public function isSubscription() {
         return $this->type === \App\Enums\ProductTypeEnum::subscription()->value;
+    }
+
+    public function isPhysicalSubscription() {
+        return $this->type === \App\Enums\ProductTypeEnum::physical_subscription()->value;
     }
 
     public function getBookingLink() {

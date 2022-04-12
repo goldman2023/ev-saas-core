@@ -37,7 +37,7 @@
               </button>
             @endif
           </div>
-        @elseif($first_item->type === \App\Enums\ProductTypeEnum::standard()->value)
+        @elseif($first_item->type === \App\Enumss\ProductTypeEnum::standard()->value)
           <p class="mb-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('We are processing the order!') }}</p>
           <p class="mb-2 text-base text-gray-500">{{ str_replace('%d%', $order->id, 'Your order #%d% has been received and will be processed asap.') }}</p>
 
