@@ -61,7 +61,7 @@
     } */
 </style>
 <nav class="nav-bottom text-dark" id="ev-app-bar">
-    <a href="{{ route('dashboard') }}" class="nav-link active">
+    <a href="{{ route('home') }}" class="nav-link active">
         <div>
         @svg('heroicon-s-home', ['class' => 'icon', 'style' => 'width: 24px;'])
         </div>
