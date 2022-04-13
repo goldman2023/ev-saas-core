@@ -26,9 +26,9 @@
     <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
-    
+
     @include('frontend.layouts.global-partials.all')
-    
+
     {{ seo()->render() }}
 
     @livewireScripts
@@ -69,6 +69,10 @@
     @guest
         <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
+
+    {{-- App bar --}}
+    <x-default.footers.app-bar>
+    </x-default.footers.app-bar>
 
     <x-system.info-modal></x-system.info-modal>
     <livewire:modals.delete-modal />

@@ -66,7 +66,7 @@
         @svg('heroicon-s-home', ['class' => 'icon', 'style' => 'width: 24px;'])
         </div>
         <div>
-        <span class="d-block text flex">{{ translate('Home') }}</span>
+        <span class="d-block text flex">{{ translate('My Feed') }}</span>
 
         </div>
 
@@ -89,7 +89,7 @@
     </a>
     @endif
 
-    <span @click="$dispatch('display-flyout-panel', {'id' : 'categories-panel'})" class="nav-link text-dark">
+    <span @click="$dispatch('display-flyout-panel', {'id' : 'categories-panel'})" class="hidden nav-link text-dark">
         @svg('heroicon-s-menu', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text">{{ translate('Menu') }}</span>
     </span>
