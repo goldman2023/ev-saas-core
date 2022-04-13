@@ -8,11 +8,13 @@
     </div>
 
     <!-- Filters -->
-    <section aria-labelledby="filter-heading" class="overflow-hidden relative z-10 border-t border-b border-gray-200 grid items-center"
+    <section aria-labelledby="filter-heading" class="relative z-10 border-t border-b border-gray-200 grid items-center"
         x-data="{
         open: false,
         active_filters_count: 0,
         selected_categories: [],
+        open_sort: false,
+        sort_by: 'newest',
         toggleCategory(id) {
             let index = this.selected_categories.indexOf(id);
             if(index !== -1) {
@@ -20,33 +22,93 @@
             } else {
                 this.selected_categories.push(id);
             }
+
+            this.filterArchive();
         },
-    }">
+        clearAllFilters() {
+            this.selected_categories = []; 
+            this.active_filters_count = 0;
+            this.sort_by = 'newest';
+
+            $wire.emit('clearAll');
+        },
+        filterArchive() {
+            $wire.emit('filterArchive', this.selected_categories, this.sort_by);
+        },
+    }"
+    >
         <h2 id="filter-heading" class="sr-only">{{ translate('Categories Selected') }}</h2>
         <div class="relative col-start-1 row-start-1 py-4">
-            <div class="max-w-7xl mx-auto flex space-x-6 divide-x divide-gray-200 text-sm px-4 sm:px-6 lg:px-8">
-                <div>
-                    <button @click="open = !open" type="button"
-                        class="group text-gray-700 font-medium flex items-center" aria-controls="disclosure-1"
-                        aria-expanded="false">
-                        @svg('heroicon-s-filter', ['class' => 'flex-none w-5 h-5 mr-2 text-gray-400
-                        group-hover:text-gray-500'])
-                        <span x-text="active_filters_count == 0 ? 'All' : active_filters_count"></span><span class="pl-1">
-                            {{ translate(' Categories') }}
-                        </span>
-                    </button>
+            <div class="max-w-7xl mx-auto flex space-x-6 text-sm px-4 sm:px-6 lg:px-8">
+                <div class="flex space-x-6 divide-x divide-gray-200">
+                    <div>
+                        <button @click="open = !open" type="button"
+                            class="group text-gray-700 font-medium flex items-center" aria-controls="disclosure-1"
+                            aria-expanded="false">
+                            @svg('heroicon-s-filter', ['class' => 'flex-none w-5 h-5 mr-2 text-gray-400
+                            group-hover:text-gray-500'])
+                            <span x-text="active_filters_count == 0 ? 'All' : active_filters_count"></span><span class="pl-1">
+                                {{ translate(' Categories') }}
+                            </span>
+                        </button>
+                    </div>
+                    <div class="pl-6">
+                        <button type="button" class="text-gray-500" @click="clearAllFilters()">{{ translate('Clear all') }}</button>
+                    </div>
                 </div>
-                <div class="pl-6">
-                    <button type="button" class="text-gray-500">{{ translate('Clear all') }}</button>
+                
+                {{-- Sort --}}
+                <div class="relative inline-block !ml-auto" @click.outside="open_sort = false">
+                    <div class="flex">
+                        <button @click="open_sort = !open_sort" type="button"
+                            class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
+                            id="menu-button" aria-expanded="false" aria-haspopup="true">
+                            {{ translate('Sort') }}
+                            @svg('heroicon-s-chevron-down', ['class' => 'flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400
+                            group-hover:text-gray-500'])
+                        </button>
+                    </div>
+
+                    <div class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        x-show="open_sort" x-cloak x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-75"
+                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+                        <div class="py-1" role="none">
+                            <div @click="sort_by = 'price'; filterArchive()"
+                                :class="{'font-medium text-gray-900': sort_by == 'price', 'text-gray-500': sort_by != 'price'}"
+                                class="block px-4 py-2 text-sm cursor-pointer" role="menuitem" tabindex="-1" id="menu-item-0"> {{
+                                translate('By Price') }} </div>
+                            <div @click="sort_by = 'discount'; filterArchive()"
+                                :class="{'font-medium text-gray-900': sort_by == 'discount', 'text-gray-500': sort_by != 'discount'}"
+                                class="block px-4 py-2 text-sm cursor-pointer" role="menuitem" tabindex="-1" id="menu-item-0"> {{
+                                translate('By Dicount') }} </div>
+                            <div @click="sort_by = 'most_popular'; filterArchive()"
+                                :class="{'font-medium text-gray-900': sort_by == 'most_popular', 'text-gray-500': sort_by != 'most_popular'}"
+                                class="block px-4 py-2 text-sm cursor-pointer" role="menuitem" tabindex="-1" id="menu-item-0"> {{
+                                translate('By Most Popular') }} </div>
+                            {{-- <a href="#" @click="sort_by = 'best_rating'"
+                                :class="{'font-medium text-gray-900': sort_by == 'best_rating', 'text-gray-500': sort_by != 'best_rating'}"
+                                class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1"> Best
+                                Rating </a> --}}
+                            <div @click="sort_by = 'newest'; filterArchive()"
+                                :class="{'font-medium text-gray-900': sort_by == 'newest', 'text-gray-500': sort_by != 'newest'}"
+                                class="block px-4 py-2 text-sm cursor-pointer" role="menuitem" tabindex="-1" id="menu-item-2"> {{
+                                translate('By Newest') }} </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="border-t border-gray-200 py-6 w-full" style="overflow:scroll" id="disclosure-1" x-show="open" x-cloak>
-            <div class="max-w-7xl mx-auto flex overflow-scroll gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
+
+
+        {{-- Filters --}}
+        <div class="border-t border-gray-200 py-6 w-full overflow-y-auto" x-show="open" x-cloak>
+            <div class="max-w-7xl mx-auto flex overflow-x-auto overflow-y-hidden gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
                 @foreach(Categories::getAll() as $category)
                 <div class="-m-1 flex flex-wrap items-center">
                     <span
-                        @click="$wire.emit('filterByCategories', {{ $category->id }}); toggleCategory({{ $category->id }})"
+                        @click="toggleCategory({{ $category->id }}); "
                         class="cursor-pointer whitespace-nowrap min-w-[50px] nowrap m-1 inline-flex rounded-full border border-gray-200 items-center py-1.5 pl-3 pr-2 text-sm font-medium "
                         :class="{'bg-info text-white':selected_categories.indexOf({{ $category->id }}) !== -1, 'bg-white text-gray-900':selected_categories.indexOf({{ $category->id }}) === -1}">
                         <span>{{ $category->name }}</span>
@@ -213,56 +275,11 @@
                 </div> --}}
             </div>
         </div>
-        <div class="col-start-1 row-start-1 py-4">
-            <div class="flex justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{
-            open: false,
-            active: 'newest',
-        }" x-init="
-            $watch('active', () => {
-                $wire.emit('sortArchive', active);
-            });
-        " @click.outside="open = false">
-                <div class="relative inline-block">
-                    <div class="flex">
-                        <button @click="open = !open" type="button"
-                            class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                            id="menu-button" aria-expanded="false" aria-haspopup="true">
-                            {{ translate('Sort') }}
-                            @svg('heroicon-s-chevron-down', ['class' => 'flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400
-                            group-hover:text-gray-500'])
-                        </button>
-                    </div>
 
-                    <div class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-                        x-show="open" x-cloak x-transition:enter="transition ease-out duration-100"
-                        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-75"
-                        x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-                        <div class="py-1" role="none">
-                            <a href="#" @click="active = 'price'"
-                                :class="{'font-medium text-gray-900': active == 'price', 'text-gray-500': active != 'price'}"
-                                class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0"> {{
-                                translate('By Price') }} </a>
-                            <a href="#" @click="active = 'discount'"
-                                :class="{'font-medium text-gray-900': active == 'discount', 'text-gray-500': active != 'discount'}"
-                                class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0"> {{
-                                translate('By Dicount') }} </a>
-                            <a href="#" @click="active = 'most_popular'"
-                                :class="{'font-medium text-gray-900': active == 'most_popular', 'text-gray-500': active != 'most_popular'}"
-                                class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0"> {{
-                                translate('By Most Popular') }} </a>
-                            {{-- <a href="#" @click="active = 'best_rating'"
-                                :class="{'font-medium text-gray-900': active == 'best_rating', 'text-gray-500': active != 'best_rating'}"
-                                class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1"> Best
-                                Rating </a> --}}
-                            <a href="#" @click="active = 'newest'"
-                                :class="{'font-medium text-gray-900': active == 'newest', 'text-gray-500': active != 'newest'}"
-                                class="block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2"> {{
-                                translate('By Newest') }} </a>
-                        </div>
-                    </div>
-                </div>
+        {{-- <div class="col-start-1 row-start-1 py-4">
+            <div class="flex justify-end max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"  @click.outside="open_sort = false">
+                
             </div>
-        </div>
+        </div> --}}
     </section>
 </div>

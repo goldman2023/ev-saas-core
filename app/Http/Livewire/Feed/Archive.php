@@ -28,8 +28,10 @@ class Archive extends Component
 
     protected $listeners = [
         'refreshArchive' => '$refresh',
+        'filterArchive' => 'filterArchive',
         'sortArchive' => 'sortArchive',
         'filterByCategories' => 'filterByCategories',
+        'clearAll' => 'clearAll',
     ];
 
     public function mount($model_class, $showFilters = false)
@@ -62,6 +64,19 @@ class Archive extends Component
         $this->lastPageNumber = $this->paginator->lastPage();
     }
 
+    public function clearAll() {
+        $this->sort_by = 'newest';
+        $this->filter_categories = [];
+        $this->page = 1;
+        $this->fetchArchive();
+        $this->dispatchBrowserEvent('clear-all-filters');
+    }
+
+    public function filterArchive($selected_categories, $sort_by) {
+        $this->sort_by = $sort_by;
+        $this->filter_categories = $selected_categories;
+        $this->fetchArchive();
+    }
 
 
     public function render()
