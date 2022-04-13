@@ -11,7 +11,7 @@ class SocialComment extends Model
     use HasFactory;
     use LogsActivity;
 
-    protected $fillable = ['user_id', 'shop_id', 'comment_text', 'parent_id', 'subject_id', 'subject_type'];
+    protected $fillable = ['user_id', 'shop_id', 'comment_text', 'parent_id', 'subject_id', 'subject_type', 'rating'];
 
     public function replies()
     {
