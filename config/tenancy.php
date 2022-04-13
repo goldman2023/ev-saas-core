@@ -11,7 +11,8 @@ $central_domains = [
     //'localhost',
     /* Production */];
 
-
+$central_domains[] = 'we-saas.com';
+$central_domains[] = 'app.we-saas.com';
 $central_domains[] = env('CENTRAL_DOMAIN');
 
 return [
