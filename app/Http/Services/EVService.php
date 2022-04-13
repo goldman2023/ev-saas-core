@@ -263,7 +263,7 @@ class EVService
                         'permissions' => []
                     ],
                     [
-                        'label' => translate('My Orders'),
+                        'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),

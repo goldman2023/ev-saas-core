@@ -22,8 +22,22 @@
   
     <div class="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
-        <h1 class="text-sm font-semibold uppercase tracking-wide text-primary">{{ translate('Thank you!') }}</h1>
-        @if($first_item instanceof \App\Models\Plan)
+        @if($order->is_temp)
+        <h1 class="text-sm font-semibold uppercase tracking-wide text-danger">{{ translate('Not processed') }}</h1>
+        @else
+          <h1 class="text-sm font-semibold uppercase tracking-wide text-primary">{{ translate('Thank you!') }}</h1>
+        @endif
+
+        @if($order->is_temp)
+          <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Abandoned order!') }}</p>
+          <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been abandoned. You can always continue with purchase by clicking the button below.') }}</p>
+
+          @if($order->is_temp)
+              <a href="{{ $order->getAbandonedOrderStripeCheckoutPermalink() }}" class="btn-primary">
+                {{ translate('Revive order') }}
+              </a>
+            @endif
+        @elseif($first_item instanceof \App\Models\Plan)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Successfully bought a plan!') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You have successfully subscribed to plan listed below.') }}</p>
         @elseif($first_item->type === \App\Enums\ProductTypeEnum::bookable_service()->value)
@@ -92,40 +106,40 @@
         
           <div class="sm:ml-40 sm:pl-6">
             @if(!$order->is_temp)
-            <dl class="grid grid-cols-2 gap-x-6 text-sm py-10">
-              <div>
-                <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
-                <dd class="mt-2 text-gray-700">
-                  @if($order->same_billing_shipping)
+              <dl class="grid grid-cols-2 gap-x-6 text-sm py-10">
+                <div>
+                  <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
+                  <dd class="mt-2 text-gray-700">
+                    @if($order->same_billing_shipping)
+                      <address class="not-italic">
+                        <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
+                        <span class="block">{{ $order->billing_address }}</span>
+                        <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
+                        <span class="block">{{ $order->billing_state == (\Countries::get(code: $order->billing_country)->name ?? '') ? \Countries::get(code: $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code: $order->billing_country)->name }}</span>
+                      </address>
+                    @else
+                      <address class="not-italic">
+                        <span class="block">{{ $order->shipping_first_name.' '.$order->shipping_last_name }}</span>
+                        <span class="block">{{ $order->shipping_address }}</span>
+                        <span class="block">{{ $order->shipping_city }}, {{ $order->shipping_zip }}</span>
+                        <span class="block">{{ $order->shipping_state == (\Countries::get(code: $order->shipping_country)->name ?? '') ? \Countries::get(code: $order->shipping_country)->name : $order->shipping_state.', '.\Countries::get(code: $order->shipping_country)->name }}</span>
+                      </address>
+                    @endif
+                    
+                  </dd>
+                </div>
+                <div>
+                  <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
+                  <dd class="mt-2 text-gray-700">
                     <address class="not-italic">
                       <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                       <span class="block">{{ $order->billing_address }}</span>
                       <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
                       <span class="block">{{ $order->billing_state == (\Countries::get(code: $order->billing_country)->name ?? '') ? \Countries::get(code: $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code: $order->billing_country)->name }}</span>
                     </address>
-                  @else
-                    <address class="not-italic">
-                      <span class="block">{{ $order->shipping_first_name.' '.$order->shipping_last_name }}</span>
-                      <span class="block">{{ $order->shipping_address }}</span>
-                      <span class="block">{{ $order->shipping_city }}, {{ $order->shipping_zip }}</span>
-                      <span class="block">{{ $order->shipping_state == (\Countries::get(code: $order->shipping_country)->name ?? '') ? \Countries::get(code: $order->shipping_country)->name : $order->shipping_state.', '.\Countries::get(code: $order->shipping_country)->name }}</span>
-                    </address>
-                  @endif
-                  
-                </dd>
-              </div>
-              <div>
-                <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
-                <dd class="mt-2 text-gray-700">
-                  <address class="not-italic">
-                    <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
-                    <span class="block">{{ $order->billing_address }}</span>
-                    <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
-                    <span class="block">{{ $order->billing_state == (\Countries::get(code: $order->billing_country)->name ?? '') ? \Countries::get(code: $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code: $order->billing_country)->name }}</span>
-                  </address>
-                </dd>
-              </div>
-            </dl>
+                  </dd>
+                </div>
+              </dl>
             @endif
     
             <h4 class="sr-only">Payment</h4>

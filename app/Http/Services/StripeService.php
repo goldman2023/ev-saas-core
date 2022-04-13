@@ -169,9 +169,10 @@ class StripeService
     }
 
 
-    public function createCheckoutLink($model, $qty = 1, $preview = false)
+    public function createCheckoutLink($model, $qty = 1, $preview = false, $abandoned_order_id = null)
     {
         // Check if Stripe Product actually exists
+		$order = null;
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
 
         try {
@@ -205,11 +206,14 @@ class StripeService
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
 
-        // If Preview, then don't crete temp order
-        if(!$preview) {
+        // Create temporary order if $review is false and $abandoned_order_id is empty
+        if(!$preview && empty($abandoned_order_id)) {
             // Create an Order
             $order = $this->createTempOrder($model, $qty);
-        }
+        } else if(Order::where('id', '=', $abandoned_order_id)->exists()) {
+			// Get abandoned order if order with $abandoned_order_id exists
+			$order = Order::find($abandoned_order_id);
+		} // otherwise, it's just a preview
 
         $checkout_link['url'] = "#";
 
@@ -223,7 +227,7 @@ class StripeService
             ],
             'mode' => $this->isSubscription($model) ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
-            'client_reference_id' => !$preview ? $order->id : '',
+            'client_reference_id' => !empty($order) ? $order->id : '',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
             'success_url' => route('checkout.order.received', ['id' => $order->id]),
             'cancel_url' => route('checkout.order.canceled', ['id' => $order->id]),
