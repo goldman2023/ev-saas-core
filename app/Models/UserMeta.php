@@ -23,6 +23,7 @@ class UserMeta extends EVBaseModel
             'headline' => 'string',
             'industry' => Category::class,
             'bio' => 'string',
+            'calendly_link' => 'string',
             'work_experience' => [
                 'title' => 'string',
                 'company_name' => 'string',

@@ -218,29 +218,14 @@
 
                             @if(!$onboarding)
                             <!-- Birthday -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{
-                                    getDateOptions() {
-                                        return {
-                                            mode: 'single',
-                                            enableTime: false,
-                                            dateFormat: 'd.m.Y.',
-                                        };
-                                    },
-                                }" x-init="$nextTick(() => { flatpickr('#user-meta-birthday-input', getDateOptions()); });">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Birthday') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input x-model="meta.birthday.value"
-                                                        type="text"
-                                                        id="user-meta-birthday-input"
-                                                        class="js-flatpickr flatpickr-custom form-standard @error('meta.birthday') is-invalid @enderror"
-                                                        placeholder="{{ translate('Pick a date(s)') }}"
-                                                        data-input />
-                                    <x-system.invalid-msg field="meta.birthday.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.date field="meta.birthday.value"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Birthday -->
@@ -261,8 +246,22 @@
                                 </div>
                             </div>
                             <!-- END Gender -->
-                            @endif
                             
+
+                            <!-- Calendly Link -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Calendly link') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="meta.calendly_link.value" />
+                                </div>
+                            </div>
+                            <!-- END Calendly Link -->
+                            @endif
 
                             {{-- <!-- Industry -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
