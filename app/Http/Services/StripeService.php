@@ -229,8 +229,8 @@ class StripeService
             'billing_address_collection' => 'required',
             'client_reference_id' => !empty($order) ? $order->id : '',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
-            'success_url' => route('checkout.order.received', ['id' => $order->id]),
-            'cancel_url' => route('checkout.order.canceled', ['id' => $order->id]),
+            'success_url' => !empty($order) ? route('checkout.order.received', ['id' => $order->id]) : '',
+            'cancel_url' => !empty($order) ? route('checkout.order.canceled', ['id' => $order->id]) : '',
             'automatic_tax' => [
                 'enabled' => false,
             ],
