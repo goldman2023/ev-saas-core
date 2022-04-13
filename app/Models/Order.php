@@ -85,9 +85,9 @@ class Order extends EVBaseModel
     protected static function booted()
     {
         // Show only MyShop Orders
-        static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
-            $builder->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
-        });
+        // static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
+        //     $builder->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
+        // });
 
         // Get amounts/totals from $order_items and sum them to corresponding Orders core_properties - THEY ARE NOT SET DURING THE ORDER CREATION!!!
         static::relationsRetrieved(function ($order) {
@@ -120,8 +120,40 @@ class Order extends EVBaseModel
                 ->orWhere('billing_last_name', 'like', '%'.$term.'%')
                 ->orWhere('payment_status', 'like', '%'.$term.'%')
                 ->orWhere('shipping_status', 'like', '%'.$term.'%')
-//                ->orWhere('total_price', 'like', '%'.$term.'%')
         );
+    }
+
+    public function scopeMy($query) {
+        return $query->where('user_id', '=', auth()->user()?->id ?? null);
+    }
+
+    public function scopeShopOrders() {
+        return $query->where('shop_id', '=', MyShop::getShop()?->id ?? -1);
+    }
+
+    public function scopeAbandoned($query) {
+        return $query->where('is_temp', '=', 1);
+    }
+
+    public function getAbandonedOrderStripeCheckoutPermalink($preview = false) {
+        $order_items = $this->order_items;
+
+        if($this->is_temp && $this->order_items->isNotEmpty()) {
+            // TODO: For now it takes only first order item - add support for multiple items in Stripe
+            $subject = $order_items->first()->subject;
+
+            $data = base64_encode(json_encode([
+                'id' => $subject->id,
+                'class' => $subject::class,
+                'qty' => $subject->quantity > 0 ? $subject->quantity : 1,
+                'preview' => $preview,
+                'abandoned_order_id' => $this->id,
+            ]));
+
+            return route('stripe.checkout_redirect').'?data='.$data;
+        }
+        
+        return '#';
     }
 
 
