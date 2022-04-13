@@ -87,7 +87,7 @@ class MyPurchasesTable extends DataTableComponent
                 ->date([
                     'max' => now()->format('Y-m-d') // Optional
                 ]),
-            'abandoned' => Filter::make('Viewed')
+            'abandoned' => Filter::make('Realized/Abandoned')
                 ->select([
                     'realized' => translate('Realized'),
                     'abandoned' => translate('Abandoned'),

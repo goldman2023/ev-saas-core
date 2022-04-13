@@ -7,12 +7,12 @@
 @endpush
 
 @section('panel_content')
-    <x-dashboard.section-headers.section-header title="{{ translate('All orders') }}" text="">
+    <x-dashboard.section-headers.section-header title="{{ translate('My purchases') }}" text="">
         <x-slot name="content">
-            <a href="{{ route('order.create') }}" class="btn-primary">
+            {{-- <a href="{{ route('order.create') }}" class="btn-primary">
                 @svg('heroicon-o-plus', ['class' => 'h-4 h-4 mr-2'])
                 <span>{{ translate('Add new') }}</span>
-            </a>
+            </a> --}}
         </x-slot>
     </x-dashboard.section-headers.section-header>
 
