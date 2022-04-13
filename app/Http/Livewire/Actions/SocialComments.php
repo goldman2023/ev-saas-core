@@ -12,13 +12,16 @@ class SocialComments extends Component
     public $comment_text;
     public $replyCommentId = NULL;
     public $item;
+    public $reviews;
 
     protected $rules = [
         'comment_text' => 'required'
     ];
 
-    public function mount($item) {
+    public function mount($item, $reviews = false)
+    {
         $this->item = $item;
+        $this->reviews = $reviews;
     }
 
     public function render()
@@ -30,8 +33,14 @@ class SocialComments extends Component
             ->where('subject_id', $this->item->id)
             ->where('subject_type', $this->item::class)
             ->take(5)
-            ->latest()
-            ->get();
+            ->latest();
+
+        if ($this->reviews) {
+            $comments->whereNotNull('rating');
+        }
+
+
+        $comments = $comments->get();
 
         return view('livewire.actions.social-comments', [
             'comments' => $comments
