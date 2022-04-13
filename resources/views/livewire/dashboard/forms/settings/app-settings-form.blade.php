@@ -238,11 +238,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="settings.feed_enabled.value = !settings.feed_enabled.value"
-                                                :class="{'bg-primary':settings.feed_enabled.value , 'bg-gray-200':!settings.feed_enabled.value}"
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.feed_enabled.value, 'translate-x-0':!settings.feed_enabled.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
+                                    <x-dashboard.form.toggle field="settings.feed_enabled.value" />
                                 </div>
                             </div>
                             {{-- END Feed Feature --}}
@@ -257,14 +253,25 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="settings.multiplan_purchase.value = !settings.multiplan_purchase.value"
-                                                :class="{'bg-primary':settings.multiplan_purchase.value , 'bg-gray-200':!settings.multiplan_purchase.value}"
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.multiplan_purchase.value, 'translate-x-0':!settings.multiplan_purchase.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
+                                    <x-dashboard.form.toggle field="settings.multiplan_purchase.value" />
                                 </div>
                             </div>
                             {{-- END Multiplan Purchase Feature --}}
+
+                            {{-- Onboarding flow --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Onboarding flow') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('If you want newly registered users to go through onboarding flow after registration') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.onboarding_flow.value" />
+                                </div>
+                            </div>
+                            {{-- END Onboarding flow --}}
 
                             {{-- Save Features --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
@@ -272,6 +279,7 @@
                                     @click="
                                         $wire.set('settings.feed_enabled.value', settings.feed_enabled.value, true);
                                         $wire.set('settings.multiplan_purchase.value', settings.multiplan_purchase.value, true);
+                                        $wire.set('settings.onboarding_flow.value', settings.onboarding_flow.value, true);
                                     "
                                     wire:click="saveFeatures()">
                                 {{ translate('Save') }}
