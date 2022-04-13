@@ -6,7 +6,7 @@
                 <img class="inline-block h-10 w-10 rounded-full" src="{{ auth()->user()->getThumbnail() }}" alt="">
             </div>
             <div class="min-w-0 flex-1">
-                @if(is_null($replyCommentId))
+                @if(!is_null($replyCommentId))
                 <h3 class="text-sm mt-2 mb-2">{{ is_null($replyCommentId) ? '' : 'Replying to a comment' }}</h3>
                 @endif
                 <div wire:submit.prevent class="relative">
