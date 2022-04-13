@@ -12,30 +12,28 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{--
-        SITE NAME:
-        To Use Site name globaly, use helper function get_site_name() - it's an alias fo get_setting('site_name')
+    SITE NAME:
+    To Use Site name globaly, use helper function get_site_name() - it's an alias fo get_setting('site_name')
     --}}
     <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
     <meta name="file-base-url" content="{{ getStorageBaseURL() }}">
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
+    {{-- TailwindCSS --}}
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
 
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
     @include('frontend.layouts.global-partials.all')
-    
+
     {{ seo()->render() }}
 
-    @livewireScripts
-    @livewireStyles
-    <script defer src="https://unpkg.com/@alpinejs/intersect@3.9.3/dist/cdn.min.js"></script>
 
-    <script defer src="https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js"></script>
+    @livewireStyles
+
 
     {{-- <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script> --}}
 
@@ -68,22 +66,28 @@
     <x-panels.flyout-categories></x-panels.flyout-categories>
 
     @guest
-        <x-panels.flyout-auth></x-panels.flyout-auth>
+    <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
     @auth
-        <x-panels.flyout-profile></x-panels.flyout-profile>
-        <x-default.chat.widget-chat></x-default.chat.widget-chat>
-        <livewire:we-media-library />
+    <x-panels.flyout-profile></x-panels.flyout-profile>
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    <livewire:we-media-library />
     @endauth
 
     <x-system.info-modal></x-system.info-modal>
-    <x-system.validation-errors-toast timeout="5000" ></x-system.validation-errors-toast>
+    <x-system.validation-errors-toast timeout="5000"></x-system.validation-errors-toast>
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
-    @yield('script')
+    <script defer src="https://unpkg.com/@alpinejs/intersect@3.9.3/dist/cdn.min.js"></script>
 
+    <script defer src="https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js"></script>
+
+    <!-- Scripts -->
+    @livewireScripts
+
+    @yield('script')
     @stack('footer_scripts')
 
 

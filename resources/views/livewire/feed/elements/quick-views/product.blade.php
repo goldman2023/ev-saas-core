@@ -165,6 +165,7 @@
                   </div>
 
                   <p class="absolute top-4 left-4 text-center sm:static sm:mt-6">
+
                     <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">View full details</a>
                   </p>
                 </form>

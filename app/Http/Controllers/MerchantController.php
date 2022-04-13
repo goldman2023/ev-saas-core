@@ -21,7 +21,7 @@ class MerchantController extends Controller
 
     public function shop($slug)
     {
-        $shop = Shop::where('slug', $slug)->first();
+        $shop = Shop::where('slug', $slug)->findOrFail();
 
         if (!empty($shop)) {
             $seller = $shop->seller();

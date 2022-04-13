@@ -1,7 +1,7 @@
 {{-- This is a separate file, you can overide global config in a child theme
 Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
 TODO: you can overide it with data from a database a sa setting --}}
-@php 
+@php
     $colors = TenantSettings::get('colors');
 @endphp
 
@@ -175,12 +175,11 @@ TODO: you can overide it with data from a database a sa setting --}}
 
 
         .we-dashboard-sidebar-background {
-            @apply bg-gray-900 !important;
-            /* background-color: "{{ get_setting('we_dashboard_sidebar_background_color', '#f5f5f5') }}"; */
+            background-color: {{ $colors['sidebar-bg'] }};
         }
 
         .we-sidebar-menu-item {
-            @apply text-gray-100 !important;
+            @apply text-gray-600 !important;
         }
 
         .ev-icon__xs {

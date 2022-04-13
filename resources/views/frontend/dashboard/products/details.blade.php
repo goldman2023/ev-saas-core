@@ -108,29 +108,35 @@
                             <h2 class="sr-only" id="quick-links-title">Quick links</h2>
 
                             <div
-                                class="rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
+                                class="relative min-h-[200px] rounded-tl-lg rounded-tr-lg sm:rounded-tr-none relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500">
                                 <div>
                                     <span class="rounded-lg inline-flex p-3 bg-teal-50 text-teal-700 ring-4 ring-white">
                                         <!-- Heroicon name: outline/clock -->
-                                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
+
+                                        @svg('heroicon-o-eye', ['class' => 'h-6 w-6'])
                                     </span>
                                 </div>
-                                <div class="mt-8">
+                                <div class="mt-8 ">
                                     <h3 class="text-lg font-medium">
 
-                                        <a href="#" class="focus:outline-none">
+                                        <a href="{{ route('product.single', $product->slug) }}" target="_blank" class="focus:outline-none">
                                             <!-- Extend touch target to entire panel -->
                                             <span class="absolute inset-0" aria-hidden="true"></span>
-                                            Request time off
+                                            {{ translate('Product Preview') }}
                                         </a>
                                     </h3>
-                                    <p class="mt-2 text-sm text-gray-500">Doloribus dolores nostrum quia qui natus
-                                        officia quod et dolorem. Sit repellendus qui ut at blanditiis et quo et
-                                        molestiae.</p>
+                                      {{-- TODO: Create product preview for tailwind --}}
+                                      {{-- <div class="absolute top-0 left-0 w-full h-full">
+                                        <div class="p-6 px-20">
+                                            <x-default.products.cards.product-card :product="$product">
+                                            </x-default.products.cards.product-card>
+                                        </div>
+
+                                      </div> --}}
+
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        {{ translate('View your product as a customer and share it with the world!') }}
+                                    </p>
                                 </div>
                                 <span
                                     class="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400"
@@ -407,9 +413,7 @@
 
 <div class="grid grid-cols-3 gap-5">
     <div>
-        {{-- TODO: Create product preview for tailwind --}}
-        <x-default.products.cards.product-card :product="$product">
-        </x-default.products.cards.product-card>
+
     </div>
 
     <div>

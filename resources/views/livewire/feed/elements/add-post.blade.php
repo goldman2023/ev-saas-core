@@ -28,7 +28,7 @@
                         {{ translate('Post will be visible publicly') }}
                     </span>
                 </a>
-                <button class="text-xs text-gray-500" x-on:click="isModalOpen = true">
+                <button class="hidden text-xs text-gray-500" x-on:click="isModalOpen = true">
                    {{ translate('Advanced editor') }}
                 </button>
 

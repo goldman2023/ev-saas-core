@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
  */
 trait StockManagementTrait
 {
+    public $track_inventory;
     public $sku;
     public $barcode;
     public $current_stock;
@@ -57,6 +58,7 @@ trait StockManagementTrait
             $model->getCurrentStockAttribute();
             $model->getLowStockQtyAttribute();
             $model->getAllowOutOfStockPurchasesAttribute();
+            $model->getTrackInventoryAttribute();
         });
     }
 
@@ -67,9 +69,9 @@ trait StockManagementTrait
      */
     public function initializeStockManagementTrait(): void
     {
-        $this->appendCoreProperties(['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
-        $this->append(['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
-        $this->fillable(array_unique(array_merge($this->fillable, ['sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases'])));
+        $this->appendCoreProperties(['track_inventory', 'sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
+        $this->append(['track_inventory', 'sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases']);
+        $this->fillable(array_unique(array_merge($this->fillable, ['track_inventory', 'sku', 'barcode', 'current_stock', 'low_stock_qty', 'use_serial', 'allow_out_of_stock_purchases'])));
     }
 
     /************************************
@@ -99,6 +101,11 @@ trait StockManagementTrait
     public function setUseSerialAttribute($value)
     {
         $this->use_serial = (bool) $value;
+    }
+
+    public function setTrackInventoryAttribute($value)
+    {
+        $this->track_inventory = (bool) $value;
     }
 
     public function setSkuAttribute($value)
@@ -169,6 +176,14 @@ trait StockManagementTrait
         }
 
         return $this->allow_out_of_stock_purchases;
+    }
+
+    public function getTrackInventoryAttribute() {
+        if(!isset($this->track_inventory)) {
+            $this->track_inventory = (bool) (empty($this->stock) ? false : ($this->stock->track_inventory ?? false));
+        }
+
+        return $this->track_inventory;
     }
 
 

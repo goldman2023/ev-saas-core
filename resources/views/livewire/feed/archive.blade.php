@@ -1,23 +1,22 @@
-<div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-4" x-data="{
-    page: @entangle('page'),
-}">
-    @foreach ($items as $item)
-        {{-- Add conditionals to specify which card template is used base on Model class --}}
-        <livewire:feed.elements.product-card :product="$item"></livewire:feed.elements.product-card>
-    @endforeach
+<div class="we-archive w-full flex flex-col">
+  <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-3" x-data="{
+      page: @entangle('page'),
+  }">
 
-    {{-- {{ $items->links() }} --}}
-    <div class="w-full mt-5 flex-1 flex">
-        @if ($page <= 1)
-          <div class="mr-2 opacity-50 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </div>
-        @else
-          <div @click="page = Number(page) - 1" class="mr-2 cursor-pointer relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </div>
-        @endif
+      @foreach ($items->items() as $item)
+          @if($item instanceof \App\Models\Product)
+            <x-feed.elements.product-card :product="$item"></x-feed.elements.product-card>
 
-        @if ($page == $lastPageNumber)
-          <div class="mr-2 opacity-50 rml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </div>
-        @else
-          <div @click="page = Number(page) + 1" class="cursor-pointer rml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </div>
-        @endif
-    </div>
+          @elseif($item instanceof \App\Models\Plan)
+            {{-- Create plan-card component --}}
+          @endif
+          {{-- <livewire:feed.elements.product-card :product="$item"></livewire:feed.elements.product-card> --}}
+      @endforeach
+
+  </div>
+
+
+  <div class="w-full mt-5 flex-1">
+    {{ $items->links() }}
+  </div>
 </div>

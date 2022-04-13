@@ -6,14 +6,16 @@ use Illuminate\View\Component;
 
 class ShopArchiveFilters extends Component
 {
+    public $hide_filters = false;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($hide = false)
     {
         //
+        $this->hide_filters = $hide;
     }
 
     /**

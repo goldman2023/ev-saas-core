@@ -1,11 +1,4 @@
 .c-flyout-panel {
-    height: 100vh;
-    max-height: 100vh;
-    overflow-y: auto;
-    top: 0;
-    transition: right 0.5s ease-in-out;
-    z-index: 1010;
-
     @apply mobile:w-full mobile:right-[-100%] tablet-portrait-up:w-full tablet-portrait-up:right-[-100%] tablet-landscape-up:w-[450px] tablet-landscape-up:right-[-451px];
 
     // @include mobile {

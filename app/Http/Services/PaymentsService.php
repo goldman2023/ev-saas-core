@@ -70,7 +70,12 @@ class PaymentsService
         return $this->stripe->stripe_checkout_enabled ?? false;
     }
     public function isStripeLiveMode() {
-        return $this->stripe->stripe_mode === 'live';
+        if($this->stripe) {
+            return $this->stripe->stripe_mode === 'live';
+
+        } else {
+            return abort(404);
+        }
     }
     public function isStripeTestMode() {
         return $this->stripe->stripe_mode !== 'live';

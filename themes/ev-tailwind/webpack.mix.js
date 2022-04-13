@@ -21,7 +21,8 @@ let theme = 'ev-tailwind';
 
 mix.setPublicPath(`public/themes/${theme}`)
     .js(`${__dirname}/js/app.js`, `public/themes/${theme}/js`).version()
-    .js(`${__dirname}/we-edit/src/index.js`, `public/themes/${theme}/we-edit`).version()
+    /* We edit Compilation - REMOVED Path was moved to /themes/features/we-edit */
+    // .js(`${__dirname}/we-edit/src/index.js`, `public/themes/${theme}/we-edit`).version()
     // .js(`${__dirname}/js/aiz-core.js`, `public/themes/${theme}/js`).version()
     .js(`${__dirname}/js/alpine.js`, `public/themes/${theme}/js`).version()
     .sass(`${__dirname}/scss/app.scss`, `public/themes/${theme}/css`, {}, [

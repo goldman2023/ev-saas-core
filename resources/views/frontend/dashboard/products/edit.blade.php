@@ -15,6 +15,13 @@
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('Edit Product') }}" text="">
             <x-slot name="content">
+                <a href="{{ route('product.details', [$product->slug]) }}" class="btn-standard mr-2 relative">
+                    <div class="absolute top-[-15px] left-[-20px] mb-2 px-2 py-1 text-gray-100 text-xs font-semibold bg-indigo-700 rounded-full">
+                        {{ translate('New!') }} 🔖
+                    </div>
+                    @svg('heroicon-o-eye', ['class' => 'h-4 h-4 mr-2'])
+                    <span>{{ translate('Product Details') }}</span>
+                </a>
                 <a href="{{ route('products.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
                     <span>{{ translate('All products') }}</span>
@@ -27,5 +34,5 @@
 @endsection
 
 @push('footer_scripts')
-  
+
 @endpush

@@ -1,9 +1,8 @@
 <div class="bg-white shadow mb-6">
-    <div class="px-4 sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
-        <div class="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
+    <div class="px-4 sm:px-6 lg:mx-auto lg:px-8">
+        <div class="py-6 lg:flex lg:flex-wrap lg:items-center lg:justify-between lg:border-t lg:border-gray-200">
             <div class="flex-1 min-w-0">
                 <!-- Profile -->
-
                 <div class="flex items-center relative">
                     <a href="{{ route('my.account.settings') }}" class="relative">
                     <img class="hidden h-16 w-16 rounded-full sm:block ring-2 ring-indigo-400 object-contain" src="{{ Auth::user()->getThumbnail() }}" alt="">
@@ -78,14 +77,19 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-6 flex space-x-3 md:mt-0 md:ml-4">
+            <div class="mt-6 flex space-x-3 lg:mt-0 lg:ml-4">
                 @if(MyShop::getShop())
                 <a type="button" href="{{ route('product.create') }}"
                     class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                     <span class="emoji mr-2">📦 </span> {{ translate("Add Products") }}
                 </a>
+
+                <a type="button" href="{{ route('settings.shop_settings') }}"
+                    class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                    <span class="emoji mr-2">💻 </span> {{ translate("Manage Shop") }}
+                </a>
                 @else
-                <a type="button" href="{{ route('shop.create') }}"
+                <a type="button" href="{{ route('onboarding.step3') }}"
                     class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                     <span class="emoji mr-2">📦 </span> {{ translate("Setup your store") }}
                 </a>

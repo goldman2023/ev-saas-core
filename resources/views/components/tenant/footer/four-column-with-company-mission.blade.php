@@ -105,7 +105,7 @@
         <div class="mt-12 border-t border-gray-200 pt-8">
             <p class="text-base text-gray-400 xl:text-center">
                 &copy; {{ date('Y') }} {{ get_site_name() }} .
-                <a href="https://ev-saas.com" target="_blank">
+                <a href="https://we-saas.com" target="_blank">
                     {{ __('All rights reserved. Powered by EV-Saas Platform')  }}
                 </a>
             </p>

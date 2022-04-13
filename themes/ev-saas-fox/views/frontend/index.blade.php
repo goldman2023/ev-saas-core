@@ -13,7 +13,7 @@
                 <div class="flex flex-wrap items-center">
                     <div class="w-full lg:w-1/2 mb-20 sm:mt-20 lg:mb-0 sm:pr-10">
                         <span
-                            class="inline-block mb-4 text-xs leading-4 text-white bg-blue-500 font-medium uppercase rounded-3xl p-4">
+                            class="inline-block mb-4 text-xs leading-4 text-white bg-indigo-500 font-medium uppercase rounded-3xl p-4">
                             {{ translate('FoxAsk Community') }}
                         </span>
                         <h1
@@ -21,20 +21,21 @@
                             {{ translate('Unlock your potential') }}
                         </h1>
                         <p class="mb-8 text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
-                        {{ translate(' With our platform, you can quantify your skills, grow in your role and stay relevant on critical topics.') }}
+                            {{ translate(' With our platform, you can quantify your skills, grow in your role and stay
+                            relevant on critical topics.') }}
                         </p>
                         <ul>
                             <li class="mb-6 flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
                                 <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
 
-                                  {{ translate('Find and share best resources for knowledge') }}
+                                    {{ translate('Find and share best resources for knowledge') }}
                                 </p>
                             </li>
                             <li class="mb-6 flex items-center">
                                 <img class="mr-3" src="flex-ui-assets/elements/checkbox-green.svg">
                                 <p class="text-lg md:text-xl leading-7 text-coolGray-500 font-medium">
-                                 {{ translate('Get mentoring and consulting from FoxAsk Mentors') }}
+                                    {{ translate('Get mentoring and consulting from FoxAsk Mentors') }}
                                 </p>
                             </li>
                             <li class="flex items-center">
@@ -51,19 +52,19 @@
                             <img class="bg-white p-4 relative -top-2 -mt-16 mb-6 h-16 rounded shadow"
                                 src="{{ get_site_logo('dark') }}" alt="">
                             <h2 class="mb-4 text-xl md:text-3xl text-coolGray-900 font-bold text-center">
-                              {{ translate('Join our community') }}
+                                {{ translate('Join our community') }}
                             </h2>
 
                             <x-tailwind-ui.forms.login-form> </x-tailwind-ui.forms.login-form>
                             {{--
-                            <a class="mb-4 inline-block py-3 px-7 w-full leading-6 text-blue-50 font-medium text-center bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-md"
+                            <a class="mb-4 inline-block py-3 px-7 w-full leading-6 text-blue-50 font-medium text-center bg-indigo-500 hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 rounded-md"
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Get Started') }}
                             </a>
 
                             <p class="text-sm text-coolGray-400 font-medium text-center">
                                 <span>{{ translate('Already have an account?') }}</span>
-                                <button class="text-blue-500 hover:text-blue-600"
+                                <button class="text-indigo-500 hover:text-indigo-600"
                                     @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
                                     {{ translate('Sign In') }}
                                 </button>
@@ -79,13 +80,14 @@
         <div class="container px-4 mx-auto">
             <div class="md:max-w-4xl mb-16 md:mb-20">
                 <span
-                    class="inline-block py-px px-2 mb-4 text-xs leading-5 text-blue-500 bg-blue-100 font-medium uppercase rounded-full shadow-sm">Features</span>
+                    class="inline-block py-px px-2 mb-4 text-xs leading-5 text-indigo-500 bg-blue-100 font-medium uppercase rounded-full shadow-sm">Features</span>
                 <h1 class="mb-4 text-3xl md:text-4xl leading-tight font-bold tracking-tighter">
-                    {{  translate('Why you should join') }} {{ get_site_name() }} {{ translate('platform?') }}
+                    {{ translate('Why you should join') }} {{ get_site_name() }} {{ translate('platform?') }}
 
                 </h1>
                 <p class="text-lg md:text-xl text-coolGray-500 font-medium">
-                   {{ translate(' You can become smarter and unlock your potential in any topic with best educational material from our community members') }}
+                    {{ translate(' You can become smarter and unlock your potential in any topic with best educational
+                    material from our community members') }}
                 </p>
             </div>
             <div class="flex flex-wrap lg:items-center -mx-4">
@@ -94,7 +96,7 @@
                         class="flex flex-wrap p-8 text-center md:text-left hover:bg-white rounded-md hover:shadow-xl transition duration-200">
                         <div class="w-full md:w-auto mb-6 md:mb-0 md:pr-6">
                             <div
-                                class="inline-flex h-14 w-14 mx-auto items-center justify-center text-white bg-blue-500 rounded-lg">
+                                class="inline-flex h-14 w-14 mx-auto items-center justify-center text-white bg-indigo-500 rounded-lg">
                                 <svg width="21" height="21" viewbox="0 0 24 21" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -105,7 +107,7 @@
                         </div>
                         <div class="w-full md:flex-1 md:pt-3">
                             <h3 class="mb-4 text-xl md:text-2xl leading-tight text-coolGray-900 font-bold">
-                              {{ translate('Interactive real-time knowledge') }}
+                                {{ translate('Interactive real-time knowledge') }}
                             </h3>
                             <p class="text-coolGray-500 font-medium">
                                 Explore interesting topic in your personal feed and connect with experts and mentors in
@@ -117,7 +119,7 @@
                         class="flex flex-wrap p-8 text-center md:text-left hover:bg-white rounded-md hover:shadow-xl transition duration-200">
                         <div class="w-full md:w-auto mb-6 md:mb-0 md:pr-6">
                             <div
-                                class="inline-flex h-14 w-14 mx-auto items-center justify-center text-white bg-blue-500 rounded-lg">
+                                class="inline-flex h-14 w-14 mx-auto items-center justify-center text-white bg-indigo-500 rounded-lg">
                                 <svg width="21" height="21" viewbox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -138,7 +140,7 @@
                         class="flex flex-wrap p-8 text-center md:text-left hover:bg-white rounded-md hover:shadow-xl transition duration-200">
                         <div class="w-full md:w-auto mb-6 md:mb-0 md:pr-6">
                             <div
-                                class="inline-flex h-14 w-14 mx-auto items-center justify-center text-white bg-blue-500 rounded-lg">
+                                class="inline-flex h-14 w-14 mx-auto items-center justify-center text-white bg-indigo-500 rounded-lg">
                                 <svg width="21" height="21" viewbox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -153,13 +155,22 @@
                             <p class="text-coolGray-500 font-medium">The first business platform to bring together all
                                 of your products from one place.</p>
                         </div>
+
+
+                    </div>
+                    <div class="text-center">
+
+                        <a class="bg-indigo-600  text-white inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto mb-2 md:mb-0 md:mr-4 md:w-auto text-lg leading-7 text-coolGray-800 bg-white hover:bg-coolGray-100 font-medium focus:ring-2 focus:ring-coolGray-200 focus:ring-opacity-50 border border-coolGray-200 border border-coolGray-100 rounded-md shadow-sm"
+                            href="/page/business">
+                            {{ translate('Explore') }} {{ get_site_name() }} {{ translate('Business')}}
+                        </a>
                     </div>
                 </div>
                 <div class="w-full md:w-1/2 px-4">
                     <div class="relative mx-auto md:mr-0 max-w-max">
                         <img class="absolute z-10 -left-8 -top-8 w-28 md:w-auto text-yellow-400"
                             src="flex-ui-assets/elements/circle3-violet.svg" alt="">
-                        <img class="absolute z-10 -right-7 -bottom-8 w-28 md:w-auto text-blue-500"
+                        <img class="absolute z-10 -right-7 -bottom-8 w-28 md:w-auto text-indigo-500"
                             src="flex-ui-assets/elements/dots3-red.svg" alt="">
                         <img src="https://www.webhuq.com/templates/collabs_team_collaboration_website_12145/assets/img/feature-img1.png"
                             alt="">
@@ -195,11 +206,11 @@
                         </ul>
                         <div class="flex flex-wrap items-center">
                             <a class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto mb-2 md:mb-0 md:mr-4 md:w-auto text-lg leading-7 text-coolGray-800 bg-white hover:bg-coolGray-100 font-medium focus:ring-2 focus:ring-coolGray-200 focus:ring-opacity-50 border border-coolGray-200 border border-coolGray-100 rounded-md shadow-sm"
-                                href="{{ route('user.registration') }}">
+                                href="/page/business">
                                 {{ translate('Become a mentor') }}
                             </a>
 
-                            <a class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto text-lg leading-7 text-blue-50 bg-blue-500 hover:bg-blue-600 font-medium focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 border border-transparent rounded-md shadow-sm"
+                            <a class="inline-flex items-center justify-center px-7 py-3 h-14 w-full md:w-auto text-lg leading-7 text-blue-50 bg-indigo-500 hover:bg-indigo-600 font-medium focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 border border-transparent rounded-md shadow-sm"
                                 href="{{ route('user.registration') }}">
                                 {{ translate('Join') }} {{ get_site_name()
                                 }}

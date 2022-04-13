@@ -263,7 +263,7 @@ class EVService
                         'permissions' => []
                     ],
                     [
-                        'label' => translate('My Orders'),
+                        'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
@@ -275,6 +275,14 @@ class EVService
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
+                        'user_types' => User::$user_types,
+                        'permissions' => []
+                    ],
+                    [
+                        'label' => translate('Plans Management'),
+                        'icon' => 'heroicon-o-document',
+                        'route' => route('my.plans.management'),
+                        'is_active' => areActiveRoutes(['my.plans.management']),
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],

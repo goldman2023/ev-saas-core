@@ -113,4 +113,8 @@ class BlogPost extends EVBaseModel
     public static function getRouteName() {
         return 'blog.single';
     }
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
+    }
 }

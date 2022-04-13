@@ -12,6 +12,7 @@ use App\Traits\Purchasable;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
+use App\Traits\PermalinkTrait;
 use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasSlug;
@@ -24,6 +25,7 @@ class Plan extends EVBaseModel
     use SoftDeletes;
     use RegeneratesCache;
     use Purchasable;
+    use PermalinkTrait;
     use PriceTrait;
     use CategoryTrait;
     use AttributeTrait;
@@ -47,9 +49,14 @@ class Plan extends EVBaseModel
         // TODO: Fix to show all plans in Frontend and only my posts in Backend
         // Show only MyShop Suscription Plans
         static::addGlobalScope('from_my_shop', function (BaseBuilder $builder) {
-            if(request()->is_dashboard) {
-                $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+            if(!request()->route()->getName() == 'my.plans.management') {
+                $builder->where('shop_id', '=', 1);
+            } else {
+                if(request()->is_dashboard) {
+                    $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1);
+                }
             }
+
         });
     }
 
@@ -64,6 +71,10 @@ class Plan extends EVBaseModel
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public static function getRouteName() {
+        return 'plan.single';
     }
 
     public function getPriceColumn()
@@ -99,6 +110,16 @@ class Plan extends EVBaseModel
         return $this->belongsTo(Shop::class);
     }
 
+    public function users()
+    {
+        return $this->morphToMany(User::class, 'subject', 'user_relationships');
+    }
+
+    public function blog_posts()
+    {
+        return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
+    }
+
     public function getFeaturesAttribute($value) {
         if(empty($value)) {
             return [''];
@@ -120,5 +141,25 @@ class Plan extends EVBaseModel
     public function getVariationModelClass()
     {
         return null;
+    }
+
+    /* TODO: Move this into trait once we know what it should be */
+    public function core_meta()
+    {
+        return $this->morphMany(CoreMeta::class, 'subject');
+    }
+
+    public function isStripeProduct()
+    {
+
+        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
+            return true;
+        }
+
+        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
+            return true;
+        }
+
+        return false;
     }
 }

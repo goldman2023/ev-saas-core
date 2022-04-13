@@ -7,18 +7,14 @@
             <div class="flex justify-between items-center py-4 md:justify-start md:space-x-10">
                 <div class="flex justify-start lg:w-0 lg:flex-1">
                     <a href="{{ route('home') }}">
-                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="max-w-[120px] w-auto sm:h-16"
+                        <x-tenant.system.image alt="{{ get_site_name() }} logo" class="w-auto sm:h-10 py-1 max-h-[65px]"
                             :image="get_site_logo()">
                         </x-tenant.system.image>
                     </a>
                 </div>
 
                 <div class="-mr-2 -my-2 md:hidden">
-                    <button type="button"
-                        class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                        @click="$dispatch('display-flyout-panel', {'id' : 'wishlist-panel'})">
-                        @svg('heroicon-o-heart', ['class' => 'h-6 w-6'])
-                    </button>
+
                 </div>
 
                 <div class="-mr-2 -my-2 md:hidden">
@@ -46,20 +42,18 @@
                 display Login and Try for free --}}
                 <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-[32px]">
                     @guest
-                    <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-                        @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
-                        {{ translate('Login') }}
-                    </div>
+                        <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                            @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
+                            {{ translate('Login') }}
+                        </div>
 
-                    <a href="{{ route('user.registration') }}"
-                        class="bg-indigo-700 text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
-                        {{ translate('Register') }}
-                    </a>
+                        <a href="{{ route('user.registration') }}"
+                            class="bg-indigo-700 text-white rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                            {{ translate('Register') }}
+                        </a>
                     @else
 
-
-
-                    <livewire:global.user-top-bar></livewire:global.user-top-bar>
+                        <livewire:global.user-top-bar></livewire:global.user-top-bar>
                     @endguest
                 </div>
 

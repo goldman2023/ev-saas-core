@@ -18,7 +18,7 @@
 
     .nav-bottom .nav-link {
         text-align: center;
-        display: flex;
+
         padding: 7px;
     }
 
@@ -61,35 +61,41 @@
     } */
 </style>
 <nav class="nav-bottom text-dark" id="ev-app-bar">
-    <a href="{{ route('dashboard') }}" class="nav-link active">
-        @svg('heroicon-s-home', ['style' => 'width: 24px;'])
-        <span class="d-block text flex">{{ translate('Home') }}</span>
+    <a href="{{ route('home') }}" class="nav-link active">
+        <div>
+        @svg('heroicon-s-home', ['class' => 'icon', 'style' => 'width: 24px;'])
+        </div>
+        <div>
+        <span class="d-block text flex">{{ translate('My Feed') }}</span>
+
+        </div>
+
     </a>
 
     <span x-data="" @click="$dispatch('display-flyout-panel', {'id' : 'cart-panel'})" class="nav-link text-dark we-primary-mobile-button">
-        @svg('heroicon-s-shopping-cart', ['style' => 'width: 24px;'])
+        @svg('heroicon-s-shopping-cart', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('My cart') }}</span>
     </span>
     @guest
     <a href="javascript:;"
     x-data="" @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})" class="nav-link text-dark">
-        @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])
+        @svg('heroicon-s-user-circle', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text text-dark">{{ translate('Join') }}</span>
     </a>
     @else
-    <a  x-data=""  @click="$dispatch('display-flyout-panel', {'id': 'profile-panel'})" class="nav-link text-dark">
-        @svg('heroicon-s-user-circle', ['style' => 'width: 24px;'])
-        <span class="text text-dark">{{ translate('Profile') }}</span>
+    <a x-data=""  @click="$dispatch('display-flyout-panel', {'id': 'profile-panel'})" class="nav-link text-dark">
+        @svg('heroicon-s-user-circle', ['class' => 'icon', 'style' => 'width: 24px;'])
+        <span class="text text-dark">{{ translate('Dashboard') }}</span>
     </a>
     @endif
 
-    <span @click="$dispatch('display-flyout-panel', {'id' : 'categories-panel'})" class="nav-link text-dark">
-        @svg('heroicon-s-menu', ['style' => 'width: 24px;'])
+    <span @click="$dispatch('display-flyout-panel', {'id' : 'categories-panel'})" class="hidden nav-link text-dark">
+        @svg('heroicon-s-menu', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text">{{ translate('Menu') }}</span>
     </span>
 
     <span @click="$dispatch('display-flyout-panel', {'id' : 'wishlist-panel'})" class="nav-link text-dark">
-        @svg('heroicon-s-heart', ['style' => 'width: 24px;'])
+        @svg('heroicon-s-heart', ['class' => 'icon', 'style' => 'width: 24px;'])
         <span class="text">{{ translate('Wishlist') }}</span>
     </span>
 </nav>

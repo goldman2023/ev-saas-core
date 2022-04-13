@@ -37,6 +37,7 @@ use App\Http\Middleware\VendorMode;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -149,8 +150,13 @@ Route::middleware([
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
+    // Products
     Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
     Route::get('/product/{id}/checkout-link', [EVProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
+
+    Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
+    Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');
+
 
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
@@ -209,7 +215,6 @@ Route::middleware([
     Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
 
     // Chat
-
     Route::get('/chat', 'ChatController@index')->name('chat.index');
 
 

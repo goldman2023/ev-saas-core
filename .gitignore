@@ -70,7 +70,7 @@ public/ev-assets/admin/css/admin.css
 react-feeds-example/*
 public/themes/ev-saas-default/mix-manifest.json
 public/themes/ev-saas-default/mix-manifest.json
-themes/ev-tailwind/we-edit/node_modules/*
+themes/features/we-edit/node_modules/*
 .env.backup
 
 !public/images

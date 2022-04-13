@@ -20,14 +20,14 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        $activities = Activity::orderBy('created_at', 'desc')->paginate(10);
+        $activities = Activity::orderBy('created_at', 'desc')->whereHas('subject')->paginate(10);
         return view('backend.activities.index', compact('activities'));
     }
 
 
     public function index_frontend()
     {
-        $activities = Activity::orderBy('created_at', 'desc')->paginate(10);
+        $activities = Activity::orderBy('created_at', 'desc')->whereHas('subject')->paginate(10);
         return view('frontend.activities.index', compact('activities'));
     }
 

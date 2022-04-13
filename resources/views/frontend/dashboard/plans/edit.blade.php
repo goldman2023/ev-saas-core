@@ -9,7 +9,7 @@
 
 @section('panel_content')
     <section>
-        <x-dashboard.section-headers.section-header title="{{ translate('Edit') }}: {{ $plan->getTranslation('title') }}" text="">
+        <x-dashboard.section-headers.section-header title="{{ translate('Edit') }}: {{ $plan->getTranslation('name') }}" text="">
             <x-slot name="content">
                 <a href="{{ route('plans.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])

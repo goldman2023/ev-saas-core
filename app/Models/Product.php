@@ -157,6 +157,23 @@ class Product extends EVBaseModel
         );
     }
 
+    public function scopeNewest($query)
+    {
+        $query->orderBy('created_at', 'DESC');
+    }
+    public function scopePriceAsc($query)
+    {
+        $query->orderBy('unit_price', 'ASC');
+    }
+    public function scopeDiscountDesc($query)
+    {
+        $query->orderBy('discount', 'DESC');
+    }
+    public function scopeMostPopular($query)
+    {
+        return $query; // TODO: Ask Eim about views
+    }
+
     /**
      * Stream: Add extra activity data - task name, and user's display name:
      */
@@ -237,6 +254,11 @@ class Product extends EVBaseModel
         ];
     }
 
+    /* TODO: @vukasin Implement checkbox in product.create for enabling units display, by default it's disabled */
+    function showUnits($show = false) {
+        return $show;
+    }
+
     function public_view_count($period = 'all')
     {
 
@@ -278,7 +300,6 @@ class Product extends EVBaseModel
 
     public function isStripeProduct()
     {
-
         if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
             return true;
         }
@@ -289,4 +310,33 @@ class Product extends EVBaseModel
 
         return false;
     }
+
+    public function isBookableService() {
+        return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
+    }
+
+    public function isEvent() {
+        return $this->type === \App\Enums\ProductTypeEnum::event()->value;
+    }
+
+    public function isStandard() {
+        return $this->type === \App\Enums\ProductTypeEnum::standard()->value;
+    }
+
+    public function isSubscription() {
+        return $this->type === \App\Enums\ProductTypeEnum::subscription()->value;
+    }
+
+    public function isPhysicalSubscription() {
+        return $this->type === \App\Enums\ProductTypeEnum::physical_subscription()->value;
+    }
+
+    public function getBookingLink() {
+        return $this->core_meta?->where('key', 'calendly_link')->first()?->value ?? null;
+    }
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
+    }
+
 }

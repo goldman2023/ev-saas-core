@@ -13,12 +13,14 @@ use DB;
 use EVS;
 use MyShop;
 use Categories;
+use Permissions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
 use App\Traits\Livewire\RulesSets;
+use Spatie\Permission\Models\Role;
 
 class MyShopForm extends Component
 {
@@ -141,13 +143,13 @@ class MyShopForm extends Component
             DB::commit();
 
             $this->inform(translate('Basic shop information successfully saved.'), '', 'success');
+
+            if($this->onboarding) {
+                return redirect()->route('onboarding.step4');
+            }
         } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save basic shop information.'), $e->getMessage(), 'fail');
-        }
-
-        if($this->onboarding) {
-            return redirect()->route('onboarding.step4');
         }
     }
 

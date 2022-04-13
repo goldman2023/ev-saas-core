@@ -1,5 +1,5 @@
 <div id="topbar" class="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
-    <button type="button" @click="$dispatch('sidebar-show')" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
+    <button type="button" @click="$dispatch('display-flyout-panel', {'id': 'dashboard-sidebar-panel'})" class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary lg:hidden">
       @svg('heroicon-o-menu-alt-2', ['class' => 'h-6 w-6'])
     </button>
     <div class="flex-1 px-4 flex justify-between">

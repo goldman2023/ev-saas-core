@@ -1,5 +1,5 @@
 <!-- Navigation -->
-<nav class="px-3 mt-6">
+<nav class="px-3 mt-6 pb-5">
     <div class="space-y-1 mb-6">
         @if($menu = \EVS::getDashboardMenu())
             @foreach($menu as $section)

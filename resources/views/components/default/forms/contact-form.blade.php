@@ -151,21 +151,3 @@
     </div>
 </div>
 <!-- End Signup Form Section -->
-
-@push('footer_scripts')
-    <!-- JS Plugins Init. -->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-    <script src="/front/js/hs.core.js"></script>
-    <script src="/front/js/hs.validation.js"></script>
-
-    <script>
-        $(document).on('ready', function() {
-            // INITIALIZATION OF FORM VALIDATION
-            // =======================================================
-            $('.js-validate').each(function() {
-                var validation = $.HSCore.components.HSValidation.init($(this));
-            });
-        });
-    </script>
-@endpush

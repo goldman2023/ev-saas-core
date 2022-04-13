@@ -14,6 +14,7 @@ class ChangeUserMetaValueNullableUserMetaTable extends Migration
     public function up()
     {
         Schema::table('user_meta', function (Blueprint $table) {
+            
             $table->string('value', 2500)->nullable()->change();
         });
     }

@@ -75,7 +75,9 @@
 
     {{-- <x-dashboard.elements.support-card class="mt-3"></x-dashboard.elements.support-card> --}}
     <div class="pt-6">
+        @auth
         <x-feed.elements.user-onboarding-flow>
         </x-feed.elements.user-onboarding-flow>
+        @endauth
     </div>
 </nav>

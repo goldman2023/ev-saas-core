@@ -3,11 +3,18 @@
         id: '{{ $id }}',
      }"
      x-cloak
-     x-init="$(document).on('keyup', function(e) { if (e.key == 'Escape' && show) {show = false} });"
+{{-- TODO: @vukasin add non jquery version for esc key --}}
      id="{{ $id }}">
     <section
-        class="c-flyout-panel fixed bg-white shadow-lg"
-        :class="{ 'show': show }"
+        class="c-flyout-panel h-[100%] overflow-y-auto fixed top-0 bg-white shadow-lg z-[1010]"
+        :class="{'show':show}"
+        x-cloak
+        {{-- x-transition:enter="transform transition ease-in-out duration-500"
+        x-transition:enter-start="translate-x-full"
+        x-transition:enter-end="translate-x-0 "
+        x-transition:leave="transform transition ease-in-out duration-500"
+        x-transition:leave-start="translate-x-0"
+        x-transition:leave-end="translate-x-full" --}}
         x-data="{
             targetItem: null,
             has_warnings: false,

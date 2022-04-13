@@ -48,6 +48,8 @@ class AppSettingsForm extends Component
             'features' => [
                 /* Example field for creating new TenantSetting */
                 'settings.feed_enabled.value' => ['boolean'],
+                'settings.multiplan_purchase.value' => ['boolean'],
+                'settings.onboarding_flow.value' => ['boolean']
             ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],

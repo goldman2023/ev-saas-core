@@ -263,6 +263,14 @@ trait IsPaymentMethod
                     ]
                 ],
                 [
+                    'property_name' => 'stripe_webhook_secret',
+                    'value' => $this->data->stripe_webhook_secret ?? '',
+                    'rules' => ['required'],
+                    'messages' => [
+                        'required' => translate('Stripe webhook endpoint secret key is required in order to use Stripe Webhooks'),
+                    ]
+                ],
+                [
                     'property_name' => 'stripe_statement_descriptor',
                     'value' => $this->data->stripe_statement_descriptor ?? '',
                     'rules' => [],
