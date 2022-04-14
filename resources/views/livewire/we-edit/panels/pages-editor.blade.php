@@ -160,8 +160,11 @@
                     </ul>
                 </div>
 
-                <div class="w-full flex mt-3" x-data="" x-init="">
-                    <button type="button" wire:click="savePreviewToPage" class="ml-auto inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <div class="w-full flex justify-between mt-3" x-data="" x-init="">
+                    <button type="button" @click="$dispatch('display-export-json-modal')" class="inline-flex justify-center rounded-md border border-transparent bg-info py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-info focus:outline-none focus:ring-2 focus:ring-info focus:ring-offset-2">
+                        {{ translate('Export JSON') }}
+                    </button>
+                    <button type="button" wire:click="savePreviewToPage" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         {{ translate('Publish') }}
                     </button>
                 </div>
@@ -173,5 +176,7 @@
     <livewire:we-edit.forms.section-edit :current_preview="$current_preview" key="{{ 'section-edit_'.now() }}"></livewire:we-edit.forms.section-edit>
     <livewire:we-edit.forms.page-form key="{{ 'page-form_'.now() }}"></livewire:we-edit.forms.page-form>
     
+    <x-we-edit.modals.export-json-modal :json="$current_page->content"></x-we-edit.modals.export-json-modal>
+
     {{-- <x-we-edit.flyout.flyout-edit-section :currentPreview="$current_preview"></x-we-edit.flyout.flyout-edit-section> --}}
 </div>
