@@ -1,24 +1,24 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Blog Post').': '.$blog_post->getTranslation('name'))
+@section('page_title', translate('Edit Page').': '.$blog_post->getTranslation('name'))
 
 @push('head_scripts')
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
+{{-- <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script> --}}
 @endpush
 
 @section('panel_content')
     <section>
-        <x-dashboard.section-headers.section-header title="{{ translate('Edit Blog Post') }}" text="">
+        <x-dashboard.section-headers.section-header title="{{ translate('New Page') }}" text="">
             <x-slot name="content">
-                <a href="{{ route('blog.posts.index') }}" class="btn-standard">
+                <a href="{{ route('pages.index') }}" class="btn-standard">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
-                    <span>{{ translate('All blog posts') }}</span>
+                    <span>{{ translate('All pages') }}</span>
                 </a>
             </x-slot>
         </x-dashboard.section-headers.section-header>
 
-        <livewire:dashboard.forms.blog-posts.blog-post-form :blogPost="$blog_post"></livewire:dashboard.forms.blog-posts.blog-post-form>
+        {{-- <livewire:dashboard.forms.pages.page-form :page="$page"></livewire:dashboard.forms.pages.page-form> --}}
     </section>
 @endsection
 

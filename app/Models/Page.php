@@ -7,14 +7,21 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App;
 use App\Traits\TranslationTrait;
+use App\Traits\PermalinkTrait;
+use App\Traits\UploadTrait;
+use App\Traits\GalleryTrait;
+
 
 class Page extends EVBaseModel
 {
     use HasSlug;
-
+    use PermalinkTrait;
+    use UploadTrait;
+    use GalleryTrait;
+    
     protected $table = 'pages';
 
-    protected $fillable = ['title', 'type', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
+    protected $fillable = ['name', 'type', 'status', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
 
     protected $casts = [
         // 'id' => 'string',
@@ -25,7 +32,7 @@ class Page extends EVBaseModel
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom('title')
+            ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
     }
 
@@ -34,6 +41,22 @@ class Page extends EVBaseModel
         return 'slug';
     }
 
+    public static function getRouteName() {
+        return 'custom-pages.show_custom_page';
+    }
+
+    /*
+     * Scope searchable parameters
+     */
+    // public function scopeSearch($query, $term)
+    // {
+    //     return $query->where(
+    //         fn ($query) =>  $query
+    //             ->where('name', 'like', '%'.$term.'%')
+    //             // ->orWhere('excerpt', 'like', '%'.$term.'%')
+    //             // ->orWhere('content', 'like', '%'.$term.'%')
+    //     );
+    // }
 
     public function page_previews() {
         return $this->hasMany(PagePreview::class, 'page_id');
@@ -51,11 +74,14 @@ class Page extends EVBaseModel
         $this->attributes['content'] = json_encode(array_values($value));
     }
 
-    // public function getTranslation($field = '', $lang = false){
-    //     $lang = $lang == false ? App::getLocale() : $lang;
-    //     $page_translation = $this->hasMany(PageTranslation::class)->where('lang', $lang)->first();
-    //     return $page_translation != null ? $page_translation->$field : $this->$field;
-    // }
+    public function getTranslation($field = '', $lang = false){
+        return $this->name;
+    }
+
+    public function getDynamicModelUploadProperties(): array
+    {
+        return [];
+    }
 
     // public function page_translations(){
     //   return $this->hasMany(PageTranslation::class);

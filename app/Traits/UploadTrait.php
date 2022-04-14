@@ -22,7 +22,7 @@ trait UploadTrait
      * @return void
      */
     protected static function bootUploadTrait()
-    {
+    { 
         static::addGlobalScope('withUploads', function(mixed $builder) {
             // Eager Load Uploads
             $builder->with(['uploads']);
@@ -143,27 +143,6 @@ trait UploadTrait
     }
 
     /**
-     * An abstract function which defines dynamic model upload-related properties.
-     *
-     * IMPORTANT: For property_name always use snake-case with underscore!!!
-     *
-     * Returns an array of properties where each property is consisted of desired parameters, like this:
-     * [
-     *       [
-     *          'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
-     *          'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
-     *          'is_image' => false, // This value determines if Upload URL will be proxified using IMGProxy. If true, URL will be proxified; If false, standard URL will be returned! Default: false!
-     *          'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
-     *       ],
-     *       ...
-     *       ...
-     *   ];
-     * @return array
-     */
-    abstract public function getDynamicModelUploadProperties() : array;
-
-
-    /**
      * Walks through DynamicModelUploadProperties and executes a provided closure for each property if conditions are met.
      *
      * Conditions:
@@ -235,4 +214,24 @@ trait UploadTrait
             $this->syncGalleryUploads($specific_property);
         }
     }
+
+    /**
+     * An abstract function which defines dynamic model upload-related properties.
+     *
+     * IMPORTANT: For property_name always use snake-case with underscore!!!
+     *
+     * Returns an array of properties where each property is consisted of desired parameters, like this:
+     * [
+     *       [
+     *          'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
+     *          'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
+     *          'is_image' => false, // This value determines if Upload URL will be proxified using IMGProxy. If true, URL will be proxified; If false, standard URL will be returned! Default: false!
+     *          'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+     *       ],
+     *       ...
+     *       ...
+     *   ];
+     * @return array
+     */
+    abstract public function getDynamicModelUploadProperties() : array;
 }

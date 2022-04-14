@@ -1,6 +1,6 @@
 <x-we-edit.flyout.flyout-panel id="we-edit-section-panel" title="{{ translate('Your Profile') }}">
     <div class="h-0 flex-1 overflow-y-auto" x-data="{
-        section: @entangle('section'),
+        section: @entangle('section').defer,
         custom_fields_html: @entangle('custom_fields_html').defer, // THIS MUST BE ENTANGLED!
         errors: []
     }"
@@ -23,11 +23,7 @@
             <h2 class="text-lg font-medium text-white" x-text="title"></h2>
             <div class="ml-3 flex h-7 items-center">
               <button type="button" @click="show = false" class="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
-                <span class="sr-only">Close panel</span>
-                <!-- Heroicon name: outline/x -->
-                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                @svg('heroicon-o-x', ['class' => 'h-6 w-6'])
               </button>
             </div>
           </div>
@@ -59,15 +55,16 @@
             {{ translate('Settings') }}
         </button>
 
-        <button type="button" wire:click="$refresh" class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        {{-- <button type="button" wire:click="$refresh" class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           {{ translate('Refresh') }}
-        </button>
+        </button> --}}
         <button type="button" @click="show = false" class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             {{ translate('Cancel') }}
         </button>
-        <button type="button" wire:click="saveSectionData" class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <button type="button" @click="$wire.saveSectionData()"  class="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             {{ translate('Save') }}
         </button>
+        {{-- wire:click="saveSectionData" --}}
     </div>
 
     

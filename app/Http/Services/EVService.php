@@ -94,6 +94,14 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
+                    [
+                        'label' => translate('Pages'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('pages.index'),
+                        'is_active' => areActiveRoutes(['pages.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => [] // TODO: Add App Pages Permissions
+                    ],
                 ]
             ],
             [
@@ -331,14 +339,14 @@ class EVService
                         'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_designs']
                     ],
-                    [
-                        'label' => translate('Payment settings'),
-                        'icon' => 'heroicon-o-cash',
-                        'route' => route('settings.payment_methods'),
-                        'is_active' => areActiveRoutes(['settings.payment_methods']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_uni_payment_methods']
-                    ],
+                    // [
+                    //     'label' => translate('Payment settings'),
+                    //     'icon' => 'heroicon-o-cash',
+                    //     'route' => route('settings.payment_methods'),
+                    //     'is_active' => areActiveRoutes(['settings.payment_methods']),
+                    //     'user_types' => User::$tenant_user_types,
+                    //     'permissions' => ['browse_uni_payment_methods']
+                    // ],
                     [
                         'label' => translate('Staff settings'),
                         'icon' => 'heroicon-s-user-group',

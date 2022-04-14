@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
+@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()?->rtl == 1)
     <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @else
     <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

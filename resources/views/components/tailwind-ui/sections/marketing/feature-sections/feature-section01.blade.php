@@ -51,18 +51,18 @@
                   <a class="block w-full" href="{{ $itt['href'] }}" target="{{ $itt['target'] ?? '_self' }}">
                 @endif
 
-                <div class="flow-root rounded-lg bg-gray-50 px-6 pb-8 h-full">
+                <div class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg px-6 py-5 h-full">
                   <div class="-mt-6 h-full">
                     @if(!empty($itt['image'] ?? null))
                       <div class="w-full aspect-square inline-flex items-center justify-center rounded-md ">
-                        <img src="{{ IMG::get($itt['image'], IMG::mergeWithDefaultOptions($itt['options'] ?? [], 'original')) }}" alt="{{ $itt['image_alt_text'] ?? '' }}" 
+                        <img src="{{ IMG::get($itt['image']['file_name'], IMG::mergeWithDefaultOptions($itt['options'] ?? [], 'original')) }}" alt="{{ $itt['image_alt_text'] ?? '' }}" 
                               class="" />
                       </div>
                     @endif
 
                     <div class="w-full">
                       @if(!empty($itt['title'] ?? null) && !empty($itt['title_tag'] ?? null))
-                        <{{ $itt['title_tag'] }} class="mt-8 text-lg font-medium tracking-tight text-gray-900">
+                        <{{ $itt['title_tag'] }} class="mt-8 text-20 font-medium tracking-tight text-gray-900 max-w-[250px] mx-auto">
                           {{ $itt['title'] }}
                         </{{ $itt['title_tag'] }}>
                       @endif
@@ -87,7 +87,7 @@
     </div>
 
     {{-- Buttons --}}
-    <div we-slot name="button_group_slot" we-title="Buttons" class="w-full">
+    <div we-slot name="button_group_slot" we-title="Buttons" class="w-full mt-[40px]">
       <x-ev.link-button-group
           we-name="buttons"
           we-title="Buttons"
