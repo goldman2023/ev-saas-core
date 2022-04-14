@@ -104,7 +104,7 @@ class AppSettingsForm extends Component
     }
 
     /**
-     * Create a new component instance.
+     * Mount a new component instance.
      *
      * @return void
      */

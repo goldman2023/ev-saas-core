@@ -61,7 +61,7 @@
                 :target="$weData['image_slot']['components']['hero_image']['data']['target'] ?? null"
                 :options="['w' => 600]"
                 :alt-text="$weData['image_slot']['components']['hero_image']['data']['alt_text'] ?? ''"
-                :src="$weData['image_slot']['components']['hero_image']['data']['src'] ?? ''">
+                :src="$weData['image_slot']['components']['hero_image']['data']['src']['file_name'] ?? ''">
             </x-ev.image>
           </div>
         </div>

@@ -9,6 +9,7 @@ use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVAttributesController;
+use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
@@ -90,7 +91,10 @@ Route::middleware([
         Route::get('/products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
         Route::get('/products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
 
-
+        /* Pages */
+        Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');
+        Route::get('/pages/create', [EVPageController::class, 'create'])->name('page.create');
+        Route::get('/pages/edit/{id}', [EVPageController::class, 'edit'])->name('page.edit');
 
         /* Blog Posts */
         Route::get('/blog/posts', [EVBlogPostController::class, 'index'])->name('blog.posts.index');

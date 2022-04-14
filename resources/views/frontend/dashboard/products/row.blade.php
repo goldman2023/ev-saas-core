@@ -79,7 +79,7 @@
             class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
         >
             <li>
-                <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }} "
+                <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="{{ $row->getPermalink() }}"
                     target="_blank">
                     @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2'])
                     <span class="ml-2">{{ translate('Preview') }}</span>
