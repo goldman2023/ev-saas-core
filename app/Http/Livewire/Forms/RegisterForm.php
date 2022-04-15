@@ -35,6 +35,11 @@ class RegisterForm extends Component
     public $password;
     public $password_confirmation;
     public $terms_consent;
+    public $redirect_url;
+ 
+    protected $queryString = [
+        'redirect_url' => ['except' => '']
+    ];
 
 
     protected function rules()

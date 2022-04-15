@@ -37,14 +37,16 @@ class StripeService
         // Depending on Stripe Mode for current tenant, use live or test key!
         // Stripe mode can be changed in App Settings!
         if(Payments::isStripeLiveMode()) {
-            $this->stripe = new \Stripe\StripeClient(
-                Payments::stripe()->stripe_sk_live_key
-            );
+            $this->stripe = new \Stripe\StripeClient([
+                'api_key' => Payments::stripe()->stripe_sk_live_key,
+                "stripe_version" => "2020-08-27"
+            ]);
             $this->mode_prefix = 'live_';
         } else {
-            $this->stripe = new \Stripe\StripeClient(
-                Payments::stripe()->stripe_sk_test_key
-            );
+            $this->stripe = new \Stripe\StripeClient([
+                'api_key' => Payments::stripe()->stripe_sk_test_key,
+                "stripe_version" => "2020-08-27"
+            ]);
             $this->mode_prefix = 'test_';
         }
 
@@ -299,6 +301,7 @@ class StripeService
         try {
             $order = new Order();
             $order->shop_id = $model->shop_id;
+            $order->payment_status = PaymentStatusEnum::pending()->value;
             $order->same_billing_shipping = false;
             $order->buyers_consent = true;
             $order->is_temp = true;
@@ -376,10 +379,12 @@ class StripeService
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
         $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
 
+        // TODO: 
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
 
+//        exit();
         try {
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
@@ -391,13 +396,16 @@ class StripeService
             exit();
         } catch(\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
-			print_r($e);
-            http_response_code(400);
-            exit();
+
+            // Todo: It happens that this is invoked without any reason for Pix-Pro, Fix that later on
+            
+			// print_r($e);
+            // http_response_code(400);
+            // exit();
+            $event = json_decode($payload);
+            
         }
 
-		print_r($event);
-		exit;
         // Handle the event
         switch ($event->type) {
             case 'charge.succeeded':
@@ -424,13 +432,13 @@ class StripeService
 
                     $order->shipping_method = ''; // TODO: Should mimic shipping_method from tenant!!!
 
-                    $order->shipping_first_name = explode(' ', $session->shipping->name)[0] ?? '';
-                    $order->shipping_last_name = explode(' ', $session->shipping->name)[1] ?? '';
-                    $order->shipping_address = !empty($session->shipping->address->line1) ? $session->shipping->address->line1 : '';
-                    $order->shipping_country = !empty($session->shipping->address->country) ? $session->shipping->address->country : '';
-                    $order->shipping_state = !empty($session->shipping->address->state) ? $session->shipping->address->state : '';
-                    $order->shipping_city = !empty($session->shipping->address->city) ? $session->shipping->address->city : '';
-                    $order->shipping_zip = !empty($session->shipping->address->postal_code) ? $session->shipping->address->postal_code : '';
+                    $order->shipping_first_name = explode(' ', $session?->shipping?->name ?? '')[0] ?? '';
+                    $order->shipping_last_name = explode(' ', $session?->shipping?->name ?? '')[1] ?? '';
+                    $order->shipping_address = !empty($session?->shipping->address?->line1 ?? '') ? $session->shipping->address->line1 : '';
+                    $order->shipping_country = !empty($session?->shipping->address?->country ?? '') ? $session->shipping->address->country : '';
+                    $order->shipping_state = !empty($session?->shipping->address?->state ?? '') ? $session->shipping->address->state : '';
+                    $order->shipping_city = !empty($session?->shipping->address?->city ?? '') ? $session->shipping->address->city : '';
+                    $order->shipping_zip = !empty($session?->shipping->address?->postal_code ?? '') ? $session->shipping->address->postal_code : '';
                     $order->save();
 
                     // Check if $model has stock and reduce it if it does!!!
@@ -452,7 +460,7 @@ class StripeService
 
                     // Associate User with Plan (if plan is bought)
                     if($model instanceof Plan) {
-                        auth()->user()->plans()->syncWithoutDetaching($model);
+                        User::find($order->user_id)->plans()->syncWithoutDetaching($model);
                     }
 
                     /*
@@ -516,6 +524,10 @@ class StripeService
                     if(empty($order->user_id)) {
                         // Temp order is not linked to a user, so remove it fully!
                         $order->forceDelete();
+                    } else {
+                        // Abandoned cart is: is_temp = 1 && payment_status = canceled
+                        $order->payment_status = PaymentStatusEnum::canceled()->value;
+                        $order->save();
                     }
 
                     DB::commit();

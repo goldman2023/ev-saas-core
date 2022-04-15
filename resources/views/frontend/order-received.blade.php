@@ -2,7 +2,7 @@
 
 @php
   $first_item = $order->order_items->first()->subject;
-  $is_product = $first_item instanceof \App\Models\Product && $first_item->isBookableService();
+  $is_bookable_product = $first_item instanceof \App\Models\Product && $first_item->isBookableService();
 @endphp
 
 @section('meta_title'){{ translate('Your order is received').' - '.\TenantSettings::get('site_name').' | '.\TenantSettings::get('site_motto') }}@stop
@@ -10,7 +10,7 @@
 @section('meta_keywords'){{ translate('order, thank you page, checkout, cart, purchase, ecommerce') }}@stop
 
 @section('meta')
-  @if($is_product)
+  @if($is_bookable_product)
   <link href="https://calendly.com/assets/external/widget.css" rel="stylesheet">
   <script src="https://calendly.com/assets/external/widget.js" type="text/javascript"></script>
   @endif
@@ -22,21 +22,24 @@
   
     <div class="max-w-3xl mx-auto px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
       <div class="w-full mb-3">
-        @if($order->is_temp)
-        <h1 class="text-sm font-semibold uppercase tracking-wide text-danger">{{ translate('Not processed') }}</h1>
+        @if($order->isAbandoned())
+          <h1 class="text-sm font-semibold uppercase tracking-wide text-danger">{{ translate('Not processed') }}</h1>
+        @elseif($order->isPendingPayment())
+          <h1 class="text-sm font-semibold uppercase tracking-wide text-info">{{ translate('In checkout process') }}</h1>
         @else
           <h1 class="text-sm font-semibold uppercase tracking-wide text-primary">{{ translate('Thank you!') }}</h1>
         @endif
 
-        @if($order->is_temp)
+        @if($order->isAbandoned())
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Abandoned order!') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been abandoned. You can always continue with purchase by clicking the button below.') }}</p>
 
-          @if($order->is_temp)
-              <a href="{{ $order->getAbandonedOrderStripeCheckoutPermalink() }}" class="btn-primary">
-                {{ translate('Revive order') }}
-              </a>
-            @endif
+          <a href="{{ $order->getAbandonedOrderStripeCheckoutPermalink() }}" class="btn-primary">
+            {{ translate('Revive order') }}
+          </a>
+        @elseif($order->isPendingPayment())
+          <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Please review your order') }}</p>
+          <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% is either waiting for checkout to be finished or is currently being processed by payment processor. Please continue with checkout process or wait until the payment is realized.') }}</p>
         @elseif($first_item instanceof \App\Models\Plan)
           <p class="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">{{ translate('Successfully bought a plan!') }}</p>
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. You have successfully subscribed to plan listed below.') }}</p>
@@ -45,7 +48,7 @@
           <p class="mt-2 text-base text-gray-500 mb-4">{{ str_replace('%d%', $order->id, 'Your order #%d% has been processed. Please select the available booking time.') }}</p>
 
           <div class="w-full mb-4">
-            @if($is_product)
+            @if($is_bookable_product)
               <button type="button" class="btn-primary" @click="Calendly.showPopupWidget('{{ $first_item->getBookingLink() }}');">
                 {{ translate('Schedule a meeting') }}
               </button>
@@ -108,25 +111,27 @@
             @if(!$order->is_temp)
               <dl class="grid grid-cols-2 gap-x-6 text-sm py-10">
                 <div>
-                  <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
-                  <dd class="mt-2 text-gray-700">
-                    @if($order->same_billing_shipping)
+                  @if($order->same_billing_shipping)
+                    <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
+                    <dd class="mt-2 text-gray-700">
                       <address class="not-italic">
                         <span class="block">{{ $order->billing_first_name.' '.$order->billing_last_name }}</span>
                         <span class="block">{{ $order->billing_address }}</span>
                         <span class="block">{{ $order->billing_city }}, {{ $order->billing_zip }}</span>
                         <span class="block">{{ $order->billing_state == (\Countries::get(code: $order->billing_country)->name ?? '') ? \Countries::get(code: $order->billing_country)->name : $order->billing_state.', '.\Countries::get(code: $order->billing_country)->name }}</span>
                       </address>
-                    @else
+                    </dd>
+                  @elseif(!empty($order->shipping_state))
+                    <dt class="font-medium text-gray-900">{{ translate('Shipping address') }}</dt>
+                    <dd class="mt-2 text-gray-700">
                       <address class="not-italic">
                         <span class="block">{{ $order->shipping_first_name.' '.$order->shipping_last_name }}</span>
                         <span class="block">{{ $order->shipping_address }}</span>
                         <span class="block">{{ $order->shipping_city }}, {{ $order->shipping_zip }}</span>
                         <span class="block">{{ $order->shipping_state == (\Countries::get(code: $order->shipping_country)->name ?? '') ? \Countries::get(code: $order->shipping_country)->name : $order->shipping_state.', '.\Countries::get(code: $order->shipping_country)->name }}</span>
                       </address>
-                    @endif
-                    
-                  </dd>
+                    </dd>
+                  @endif
                 </div>
                 <div>
                   <dt class="font-medium text-gray-900">{{ translate('Billing address') }}</dt>
