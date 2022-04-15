@@ -92,7 +92,8 @@ class EVService
                         'route' => route('chat.index'),
                         'is_active' => areActiveRoutes(['chat']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
+                        'enabled' => get_tenant_setting('chat_enabled', true),
                     ],
                     [
                         'label' => translate('Pages'),
@@ -300,7 +301,8 @@ class EVService
                         'route' => route('wishlist'),
                         'is_active' => areActiveRoutes(['wishlist']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
+                        'enabled' => get_tenant_setting('wishlist_enabled', true),
                     ], */
                 /*     [
                         'label' => translate('My Viewed Items'),
@@ -308,7 +310,8 @@ class EVService
                         'route' => route('wishlist.views'),
                         'is_active' => areActiveRoutes(['wishlist.views']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
+                        'enabled' => get_tenant_setting('viewed_products_enabled', true),
                     ] */
                 ]
             ],
@@ -337,7 +340,8 @@ class EVService
                         'route' => route('we-edit.index'),
                         'is_active' => areActiveRoutes(['we-edit.index']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_designs']
+                        'permissions' => ['browse_designs'],
+                        'enabled' => get_tenant_setting('we_edit_enabled', true),
                     ],
                     // [
                     //     'label' => translate('Payment settings'),
@@ -353,7 +357,8 @@ class EVService
                         'route' => route('settings.staff_settings'),
                         'is_active' => areActiveRoutes(['settings.staff_settings']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_staff'] // TODO: Add users managing permissions
+                        'permissions' => ['browse_staff'], // TODO: Add users managing permissions,
+                        'enabled' => get_tenant_setting('staff_enabled', true),
                     ],
 
                     // [
