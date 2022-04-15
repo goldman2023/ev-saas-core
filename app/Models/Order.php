@@ -135,6 +135,20 @@ class Order extends EVBaseModel
         return $query->where('is_temp', '=', 1);
     }
 
+    // All possible Order statuses
+    public function isAbandoned() {
+        return $this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value;
+    }
+
+    public function isPendingPayment() {
+        return $this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::pending()->value;
+    }
+
+    public function isPaid() {
+        return !$this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::paid()->value;
+    }
+    // END All possible Order statuses
+
     public function getAbandonedOrderStripeCheckoutPermalink($preview = false) {
         $order_items = $this->order_items;
 

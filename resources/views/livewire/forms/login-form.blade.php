@@ -33,7 +33,6 @@
                         data-test="we-login-email">
 
                         <x-system.invalid-icon field="email"/>
-
             </div>
 
             <x-system.invalid-msg field="email"/>
@@ -80,11 +79,9 @@
             </button>
         </div>
 
-
-
         <div class="text-center">
             <span class="text-12 w-full text-muted">{{ translate('Do not have an account?') }}</span>
-            <a class="text-12 font-semibold" href="{{ route('user.registration') }}">
+            <a class="text-12 font-semibold" href="{{ route('user.registration').(!empty($redirect_url) ? '?redirect_url='.urlencode($redirect_url) : '') }}">
                 {{ translate('Sign Up') }}
             </a>
 
