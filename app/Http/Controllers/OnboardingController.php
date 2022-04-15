@@ -49,8 +49,20 @@ class OnboardingController extends Controller
         if ($shop->save()) {
             $shop->users()->sync($user); // Use sync instead of attach, otherwise there will be multiple records of reationships between same user and shop
             $permissions = Permissions::getRolePermissions('Owner');
-            $user->syncPermissions($permissions);
-            $user->syncRoles(['Owner']);
+
+            /* TODO:  Move this to a general app layer to check if permisisons is missing, if so, run permissions populate */
+            try {
+                $user->syncPermissions($permissions);
+                $user->syncRoles(['Owner']);
+            } catch (\Exception $e) {
+                \Artisan::call('tenants:migrate --tenants=' . tenant()->id);
+                \Artisan::call('tenants:seed --tenants=' . tenant()->id);
+                \Artisan::call('permissions:populate --tenant_id=' . tenant()->id);
+                $user->syncPermissions($permissions);
+                $user->syncRoles(['Owner']);
+            }
+
+
             if (get_setting('email_verification') != 1) {
 
                 // Notification::send(User::where('id', '!=', $user->id)->get(), new NewCompanyJoin($user));
