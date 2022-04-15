@@ -61,6 +61,8 @@ class PagesEditor extends Component
         }
 
         $this->setCurrentPagePreview();
+
+        //dd($this->current_page->content);
     }
 
     protected function setSectionUUID(&$target_section) {

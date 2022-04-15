@@ -333,8 +333,6 @@
 
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                             <x-dashboard.form.select field="paymentMethod.stripe_mode" :items="['live' => translate('Live'), 'test' => translate('Test')]" selected="paymentMethod.stripe_mode" :nullable="false"></x-dashboard.form.select>
-                            <x-system.invalid-msg field="paymentMethod.stripe_mode"></x-system.invalid-msg>
-
                         </div>
                     </div>
                     <!-- END Stripe Mode -->
