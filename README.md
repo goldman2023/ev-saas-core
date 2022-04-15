@@ -1,6 +1,6 @@
 [![NodeJS with Webpack](https://github.com/eim-solutions/ev-saas-core/actions/workflows/webpack.yml/badge.svg)](https://github.com/eim-solutions/ev-saas-core/actions/workflows/webpack.yml)
 
-
+Who am I????
 We-SaaS Core. This is a repository of multitenancy SaaS Application builder We-SaaS. 
 
 # General Information
@@ -52,12 +52,12 @@ https://app.gitbook.com/o/2dee19VQhhAOUjO27T0L/s/3mdkYoieCX8rouQqo60o/
 -   Compiling webpack for both central and themes: `yarn dev` (not in watch mode)
 -   Compiling for central: `npx mix --mix-config="webpack.mix.js` (from root directory)
 -   Compiling specific theme: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js"`
--   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"` / Compiling EV-SaaS Default theme: `npx mix watch --mix-config="themes/ev-saas-default/webpack.mix.js"`
+-   Compiling specific theme watch: `npx mix watch --mix-config="themes/{theme-name}/webpack.mix.js"` / Compiling EV-SaaS Default theme: `npx mix watch --mix-config="themes/ev-tailwind/webpack.mix.js"`
 -   Compiling specific theme-tenant-combo: `npx mix --mix-config="themes/{theme-name}/webpack.mix.js" -- --env tenant_id={id}` (Note: running npx mix on specific theme compiles 1) default theme and 2) all tenants main scss who use that theme)
 
 ## Compiling for Default theme
 
-- `npx mix --mix-config="themes/ev-saas-default/webpack.mix.js"`
+- `npx mix --mix-config="themes/ev-tailwind/webpack.mix.js"`
 
 ## Compiling for EV-Tailwind theme
 
@@ -166,7 +166,7 @@ and *get
 For images optimization and resizing this project uses this library:
 https://imgproxy.net/
 
-All images sent via `images.ev-saas.com` will get resized and converted to desired formats (WEBP included)
+All images sent via `images.we-saas.com` will get resized and converted to desired formats (WEBP included)
 
 All urls that are passed via `uploaded_asset` function, will inherit image proxy for webp and reizing:
 
@@ -181,7 +181,7 @@ Please Include these `.env` variables on your local instance:
 ```
 
 IMGPROXY_ENABLED=true
-IMGPROXY_HOST=https://images.ev-saas.com
+IMGPROXY_HOST=https://images.we-saas.com
 IMGPROXY_KEY=6d1ac226357a834aa0ddda01e7697c0a93ce7dcc22b0620568efaadeb8681b5ddf1086b39ba358910e9009738efca8eced958b570149189c618688f4c6e9d290
 IMGPROXY_SALT=d6582e38a7bfe441518fa8c7ee3613563a47a37615acfe8640d19af38cc1e786f3141232cdd9117362c60077f382ef02473b3fe36c223a1cd2139c87322fcb87
 IMGPROXY_IGNORE_SSL_VERIFICATION=true

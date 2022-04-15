@@ -9,6 +9,7 @@ use App\Traits\GalleryTrait;
 use App\Traits\LikesTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
+use App\Traits\HasStatus;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,6 +34,7 @@ class BlogPost extends EVBaseModel
 //    use CommentsTrait;
    use PermalinkTrait;
    use LikesTrait;
+   use HasStatus;
 
 
     protected $table = 'blog_posts';
@@ -66,6 +68,15 @@ class BlogPost extends EVBaseModel
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug');
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public static function getRouteName() {
+        return 'blog.single';
     }
 
     /*
@@ -110,7 +121,9 @@ class BlogPost extends EVBaseModel
         return BlogPostTranslation::class;
     }
 
-    public static function getRouteName() {
-        return 'blog.single';
+    
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
     }
 }

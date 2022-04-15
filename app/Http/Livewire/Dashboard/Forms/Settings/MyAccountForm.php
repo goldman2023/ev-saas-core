@@ -43,7 +43,8 @@ class MyAccountForm extends Component
                 'meta.gender.value' => [''],
                 'meta.industry.value' => [''],
                 'meta.headline.value' => ['required'],
-                'meta.bio.value' => ['required'],
+                'meta.bio.value' => [''],
+                'meta.calendly_link.value' => ['nullable', 'url']
             ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],

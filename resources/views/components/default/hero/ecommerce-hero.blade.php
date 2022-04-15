@@ -19,7 +19,7 @@ $categories = App\Models\Category::where('level', 0)
             <div class="row">
                 <div class="col-sm-8">
                     <img class="w-100"
-                        src="https://images.ev-saas.com/insecure/fill/400/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/5469dff5-3707-417d-b152-d9950de45daf/1645470823_Screenshot%202022-02-21%20at%2021.12.41.png@webp" />
+                        src="https://images.we-saas.com/insecure/fill/400/0/ce/0/plain/https://ev-saas.fra1.digitaloceanspaces.com/uploads/5469dff5-3707-417d-b152-d9950de45daf/1645470823_Screenshot%202022-02-21%20at%2021.12.41.png@webp" />
 
                 </div>
                 <div class="col-sm-4">

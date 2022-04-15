@@ -1,5 +1,5 @@
 <!-- Navigation -->
-<nav class="px-3 mt-6">
+<nav class="px-3 mt-6 pb-5">
     <div class="space-y-1 mb-6">
         @if($menu = \EVS::getDashboardMenu())
             @foreach($menu as $section)
@@ -19,7 +19,7 @@
                                     }">
                                     <!-- Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
                                     <button type="button"
-                                        class="we-sidebar-menu-item hover:text-gray-400 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                        class="text-gray-700 hover:text-gray-900 group w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                                         @click="expanded = !expanded">
                                             @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6'])
 
@@ -32,10 +32,10 @@
                                         </svg>
                                     </button>
                                     <!-- Expandable link section, show/hide based on state. -->
-                                    <div class="space-y-1" x-show="expanded">
+                                    <div class="space-y-1" x-cloak x-show="expanded">
                                         @foreach($item['children'] as $child)
                                             <a href="{{ $child['route'] }}"
-                                                class="group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:text-gray-400">
+                                                class="text-gray-700 group w-full flex items-center pl-7 pr-2 py-2 text-sm font-medium rounded-md hover:text-gray-900">
                                                 @svg($child['icon'], ['class' => 'mr-2 flex-shrink-0 h-6 w-6 '])
                                                 <span class="flex-1">{{ $child['label'] }}</span>
 
@@ -51,7 +51,7 @@
                                 </div>
                             @else
                             <div class="{{ $key > 0 ? 'space-y-1':'' }} {{ $item['is_active'] }}" >
-                                <a href="{{ $item['route'] }}" class="we-sidebar-menu-item hover:text-gray-400 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
+                                <a href="{{ $item['route'] }}" class="text-gray-700 hover:text-gray-900 group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md">
 
                                     @svg($item['icon'], ['class' => 'mr-3 flex-shrink-0 h-6 w-6 '])
 

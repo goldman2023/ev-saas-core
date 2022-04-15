@@ -22,9 +22,9 @@
         </div>
         <div class="sm:grid sm:grid-cols-4 gap-5 gap-y-5 mb-12 grid">
 
-            <div>
+         {{--    <div>
                 <x-dashboard.widgets.top-categories></x-dashboard.widgets.top-categories>
-            </div>
+            </div> --}}
 
             <div>
                 <x-dashboard.elements.card>
@@ -90,15 +90,16 @@
 
 <section class="stats">
     <div class="grid sm:grid-cols-2 gap-5">
-        <x-default.dashboard.widgets.integrations-widget>
+    {{--     <x-default.dashboard.widgets.integrations-widget>
 
-        </x-default.dashboard.widgets.integrations-widget>
+        </x-default.dashboard.widgets.integrations-widget> --}}
 
         <x-default.products.recently-viewed-products></x-default.products.recently-viewed-products>
 
         <div class="">
             <div class="">
-                @livewire('dashboard.elements.activity-log', ['scope' => 'seller'])
+                {{-- TODO: Implement propper scope for seller activity viewing --}}
+                {{-- @livewire('dashboard.elements.activity-log', ['scope' => 'seller']) --}}
             </div>
         </div>
     </div>

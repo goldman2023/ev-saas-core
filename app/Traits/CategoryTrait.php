@@ -27,6 +27,8 @@ trait CategoryTrait
             if(!$model->relationLoaded('categories')) {
                 $model->load('categories');
             }
+
+            $model->getPrimaryCategoryAttribute();
         });
     }
 
@@ -38,7 +40,7 @@ trait CategoryTrait
     public function initializeCategoryTrait(): void
     {
         $this->appendCoreProperties(['category_id', 'primary_category']);
-        //$this->append(['category_id', 'primary_category']);
+        // $this->append(['category_id', 'primary_category']);
         $this->fillable(array_unique(array_merge($this->fillable, ['category_id', 'primary_category'])));
     }
 
@@ -66,7 +68,7 @@ trait CategoryTrait
     }
 
     public function getPrimaryCategoryAttribute() {
-        if(!isset($this->primary_category)) {
+        if(empty($this->primary_category)) {
             try {
                 $this->primary_category = $this->categories->whereNull('parent_id')?->first();
             } catch(\Throwable $e) {

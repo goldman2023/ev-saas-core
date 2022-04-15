@@ -156,12 +156,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-
-                                    <button type="button" @click="settings.maintenance_mode.value = !settings.maintenance_mode.value"
-                                                :class="{'bg-primary':settings.maintenance_mode.value , 'bg-gray-200':!settings.maintenance_mode.value}"
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.maintenance_mode.value, 'translate-x-0':!settings.maintenance_mode.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
+                                    <x-dashboard.form.toggle field="settings.maintenance_mode.value" />
                                 </div>
                             </div>
                             {{-- END Maintenance mode --}}
@@ -184,9 +179,29 @@
 
                         {{-- Design --}}
                         <div class="w-full px-5" x-show="current_tab === 'design'">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Theme selection') }}</span>
+                                    <p class="text-gray-500 text-sm">{{ translate('If you want to change app theme') }}</p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <livewire:dashboard.forms.settings.theme-select-form />
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-12 mb-6  sm:border-t sm:border-gray-200 sm:pt-5 mt-4">
+                                <div class="col-span-6 font-medium text-md">
+                                    {{ translate('For generating color variants we recommend using this tool: ') }}
+                                    <a href="https://tailwind.simeongriggs.dev/" class="text-indigo-600" target="_blank">Palette Generator </a>
+                                </div>
+                            </div>
                             {{-- Colors --}}
                             @php $i = 0; @endphp
                             @foreach(TenantSettings::settingsDataTypes()['colors'] as $color_key => $data_type)
+                            @if($loop->first)
+                            <div class="bg-indigo-400 p-6 rounded">
+                            @endif
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start {{ $i === 0 ? '':'sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5' }}" x-data="{}">
                                     <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                         {{ $color_key }}
@@ -197,9 +212,12 @@
                                     </div>
                                 </div>
                                 @php $i++; @endphp
+                                @if($loop->first)
+                                    </div>
+                                @endif
                             @endforeach
                             {{-- END Colors --}}
-                            
+
                             {{-- <x-dashboard.form.color-picker field="settings.colors.value.primary"></x-dashboard.form.color-picker> --}}
 
                             {{-- Save design --}}
@@ -217,7 +235,7 @@
                         {{-- Features --}}
                         <div class="w-full px-5" x-show="current_tab === 'features'">
                              {{-- Feed Feature --}}
-                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900">{{ translate('Feed') }}</span>
                                     <p class="text-gray-500 text-sm">
@@ -226,20 +244,48 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="settings.feed_enabled.value = !settings.feed_enabled.value"
-                                                :class="{'bg-primary':settings.feed_enabled.value , 'bg-gray-200':!settings.feed_enabled.value}"
-                                                class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.feed_enabled.value, 'translate-x-0':!settings.feed_enabled.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                    </button>
+                                    <x-dashboard.form.toggle field="settings.feed_enabled.value" />
                                 </div>
                             </div>
                             {{-- END Feed Feature --}}
+
+                            {{-- Multiplan Purchase Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Multiplan purchase') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('If you want enable that users can buy multiple plans and distribute them among other accounts via invite') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.multiplan_purchase.value" />
+                                </div>
+                            </div>
+                            {{-- END Multiplan Purchase Feature --}}
+
+                            {{-- Onboarding flow --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Onboarding flow') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('If you want newly registered users to go through onboarding flow after registration') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.onboarding_flow.value" />
+                                </div>
+                            </div>
+                            {{-- END Onboarding flow --}}
 
                             {{-- Save Features --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
                                         $wire.set('settings.feed_enabled.value', settings.feed_enabled.value, true);
+                                        $wire.set('settings.multiplan_purchase.value', settings.multiplan_purchase.value, true);
+                                        $wire.set('settings.onboarding_flow.value', settings.onboarding_flow.value, true);
                                     "
                                     wire:click="saveFeatures()">
                                 {{ translate('Save') }}

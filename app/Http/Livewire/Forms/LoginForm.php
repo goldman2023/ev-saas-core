@@ -29,6 +29,11 @@ class LoginForm extends Component
     public $email;
     public $password;
     public $remember;
+    public $redirect_url;
+ 
+    protected $queryString = [
+        'redirect_url' => ['except' => '']
+    ];
 
 
     protected function rules()
@@ -75,7 +80,11 @@ class LoginForm extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             request()->session()->regenerate();
 
-            return redirect()->route('home');
+            if(!empty($this->redirect_url)) {
+                return redirect($this->redirect_url);
+            } else {
+                return redirect()->route('home');
+            }
         }
 
         return redirect()->route('home');

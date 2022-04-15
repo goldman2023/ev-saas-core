@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Feed;
 
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -22,11 +24,14 @@ class Archive extends Component
     public $sort_by = 'newest';
     public $num_of_cols = 4;
     public $showFilters = false;
+    public $filter_categories = [];
 
     protected $listeners = [
         'refreshArchive' => '$refresh',
+        'filterArchive' => 'filterArchive',
         'sortArchive' => 'sortArchive',
-        'updateArchiveFilterBy' => 'fetchArchive',
+        'filterByCategories' => 'filterByCategories',
+        'clearAll' => 'clearAll',
     ];
 
     public function mount($model_class, $showFilters = false)
@@ -59,7 +64,20 @@ class Archive extends Component
         $this->lastPageNumber = $this->paginator->lastPage();
     }
 
-    
+    public function clearAll() {
+        $this->sort_by = 'newest';
+        $this->filter_categories = [];
+        $this->page = 1;
+        $this->fetchArchive();
+        $this->dispatchBrowserEvent('clear-all-filters');
+    }
+
+    public function filterArchive($selected_categories, $sort_by) {
+        $this->sort_by = $sort_by;
+        $this->filter_categories = $selected_categories;
+        $this->fetchArchive();
+    }
+
 
     public function render()
     {
@@ -73,7 +91,20 @@ class Archive extends Component
         ]);
     }
 
+    public function filterByCategories($id) {
+        
+        if (($key = array_search($id, $this->filter_categories)) !== false) {
+            unset($this->filter_categories[$key]);
+            $this->filter_categories = array_values($this->filter_categories);
+        } else {
+            $this->filter_categories[] = $id;
+        }
+
+        $this->fetchArchive();
+    }
+
     protected function query() {
+
         return  app($this->model_class)::query()
             ->when($this->sort_by === 'discount', fn($query, $value) => $query->discountDesc())
             ->when($this->sort_by === 'price', fn($query, $value) => $query->priceAsc())
@@ -83,6 +114,11 @@ class Archive extends Component
             ->when($this->sort_by === 'best_rating', fn($query, $value) => $query->bestRating())
             // ->when(!empty($this->search_query), fn($query, $value) => $query->search($this->search_query))
             // ->where('user_id' , auth()->user()->id)
+            ->whereHas('categories', function (Builder $query) {
+                if(count($this->filter_categories) > 0) {
+                    $query->whereIn('category_id', $this->filter_categories);
+                }
+            })
             ->paginate(perPage: $this->perPage, page: $this->page);
     }
 }

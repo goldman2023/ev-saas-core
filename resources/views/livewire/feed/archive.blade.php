@@ -1,5 +1,5 @@
 <div class="we-archive w-full flex flex-col">
-  <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-4" x-data="{
+  <div role="list" class="grid grid-cols-2 gap-5 md:grid-cols-3" x-data="{
       page: @entangle('page'),
   }">
 
@@ -15,7 +15,7 @@
 
   </div>
 
-  
+
   <div class="w-full mt-5 flex-1">
     {{ $items->links() }}
   </div>

@@ -21,6 +21,12 @@
             {{-- <livewire:onboarding.elements.steps-progress step="2">
             </livewire:onboarding.elements.steps-progress> --}}
             <x-default.elements.support-card></x-default.elements.support-card>
+
+            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="$dispatch('submit-form')">
+                    {{ translate('Save') }}
+                </button>
+            </div>
         </div>
     </div>
 </section>

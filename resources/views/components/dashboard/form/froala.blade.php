@@ -2,7 +2,6 @@
     id: '{{ $id }}',
     initEditor() {
         $nextTick(() => {
-            console.log('#'+this.id);
             let editor = new FroalaEditor('#'+this.id, {
                 heightMin: 200,
                 heightMax: 800,
@@ -19,7 +18,8 @@
     }
 }" 
 x-init="initEditor()"
-x-on:init-form.window="initEditor()">
+x-on:init-form.window="initEditor()"
+wire:ignore>
     <div :id="id">
 
     </div>

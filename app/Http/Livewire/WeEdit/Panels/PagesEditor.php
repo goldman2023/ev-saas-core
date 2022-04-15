@@ -24,7 +24,8 @@ class PagesEditor extends Component
 
     protected $listeners = [
         'addSectionToPreviewEvent' => 'addSectionToPreview',
-        'refreshPreviewEvent' => 'setCurrentPagePreview'
+        'refreshPreviewEvent' => 'setCurrentPagePreview',
+        'refreshPagesAndOpenNewPage' => 'refreshPagesAndOpenNewPage',
     ];
 
     protected $queryString = [
@@ -35,7 +36,7 @@ class PagesEditor extends Component
         return [
             'all_pages.*' => '',
             'current_page.id' => '',
-            'current_page.title' => '',
+            'current_page.name' => '',
             'current_page.slug' => '',
             'current_page.content' => '',
             'current_preview.id' => '',
@@ -199,6 +200,14 @@ class PagesEditor extends Component
         } catch(\Exception $e) {
             $this->dispatchGeneralError($e);
         }
+    }
+
+    public function refreshPagesAndOpenNewPage($page_id) {
+        $this->all_pages = Page::all();
+        $this->emit('$refresh');
+
+        $this->changeCurrentPage($page_id);
+
     }
 
     public function render()

@@ -1,5 +1,6 @@
 <div class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 relative">
-
+    <div class="absolute top-3 left-3">
+    </div>
     <div class="flex-1 flex flex-col p-3">
         <a href="{{  $product->getPermalink() }}">
             <img class="w-32 h-32 flex-shrink-0 mx-auto rounded object-contain" src="{{ $product->getThumbnail() }}" alt="">

@@ -60,12 +60,14 @@ class WishlistButton extends Component
     public $iconActive = 'heroicon-s-heart';
 
     public $action = 'Like';
+    public $selectedAction = 'Like';
     public $default_template = 'default';
 
     public $count = 0;
     public function mount($object, $action = 'Like',)
     {
         $this->model_class = $object::class;
+        $this->selectedAction = $action;
         $this->object = $object;
         $this->added = $this->checkIfProductExistsInWishlist();
         $this->action = $this->available_actions[$action];

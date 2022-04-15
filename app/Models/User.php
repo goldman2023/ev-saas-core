@@ -37,10 +37,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'banned' => 'boolean'
     ];
 
-    public static array $user_types = ['admin','moderator','seller','staff','customer'];
-    public static array $tenant_user_types = ['admin','moderator'];
-    public static array $vendor_user_types = ['seller','staff'];
-    public static array $non_customer_user_types = ['admin','moderator','seller','staff'];
+    public static array $user_types = ['admin', 'moderator', 'seller', 'staff', 'customer'];
+    public static array $tenant_user_types = ['admin', 'moderator'];
+    public static array $vendor_user_types = ['seller', 'staff'];
+    public static array $non_customer_user_types = ['admin', 'moderator', 'seller', 'staff'];
     public static string $customer_type = 'customer';
 
     public function sendEmailVerificationNotification()
@@ -60,36 +60,40 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     }
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
     ];
 
     /**
-    * The attributes that should be hidden for arrays.
-    *
-    * @var array
-    */
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return $this->user_type === 'admin';
     }
 
-    public function isSeller() {
+    public function isSeller()
+    {
         return $this->user_type === 'seller';
     }
 
-    public function isStaff() {
+    public function isStaff()
+    {
         return $this->user_type === 'staff';
     }
 
-    public function isCustomer() {
+    public function isCustomer()
+    {
         return $this->user_type === 'customer';
     }
 
@@ -110,12 +114,12 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function seller()
     {
-    return $this->hasOne(Seller::class);
+        return $this->hasOne(Seller::class);
     }
 
     public function affiliate_user()
     {
-    return $this->hasOne(AffiliateUser::class);
+        return $this->hasOne(AffiliateUser::class);
     }
 
     public function affiliate_withdraw_request()
@@ -126,7 +130,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function products()
     {
-    return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 
     public function shop()
@@ -134,8 +138,9 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->morphedByMany(Shop::class, 'subject', 'user_relationships');
     }
 
-    public function blog_posts() {
-        return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
+    public function blog_posts()
+    {
+        return $this->hasMany(BlogPost::class);
     }
 
     public function staff()
@@ -173,67 +178,107 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->hasMany(Event::class);
     }
 
+    public function plans()
+    {
+        return $this->morphedByMany(Plan::class, 'subject', 'user_relationships');
+    }
+
+    public function subscribedTo($plan_slug)
+    {
+        if (is_numeric($plan_slug)) {
+            return ($this->plans->first()?->id ?? null) === $plan_slug;
+        }
+        return ($this->plans->first()?->slug ?? null) === $plan_slug;
+    }
+
+    public function isSubscribed()
+    {
+        return !empty($this->plans->first());
+    }
+
 
     public function getDynamicModelUploadProperties(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
-    public function getAvatar(array $options = []) {
+    public function getAvatar(array $options = [])
+    {
         return $this->getUpload('thumbnail', $options);
     }
 
-    public static function getAvailableUserTypes($only_vendor_types = true) {
+    public static function getAvailableUserTypes($only_vendor_types = true)
+    {
         // Vendor types ar: Seller and Staff. Admin and moderator are tenant user types!
         return collect($only_vendor_types ? self::$vendor_user_types : self::$user_types)
-            ->keyBy(fn($item, $key) => $item)
-            ->map(fn($item) => ucfirst($item))
+            ->keyBy(fn ($item, $key) => $item)
+            ->map(fn ($item) => ucfirst($item))
             ->toArray();
     }
 
 
     // OLD
-    public function recently_viewed_products() {
-        $data = Activity::where('subject_type', 'App\Models\Product')
-        ->where('description', 'viewed')
-        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
-        ->groupBy('subject_id')
-        ->take(5)
-        ->get();
+    public function recently_viewed_products()
+    {
+        $data = Activity::whereHas('subject')
+            ->where('subject_type', 'App\Models\Product')
+            ->where('description', 'viewed')
+            ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+            ->groupBy('subject_id')
+            ->take(5)
+            ->get();
 
         return $data;
     }
 
-    public function recently_viewed_shops() {
+    public function recently_viewed_shops()
+    {
         $data = Activity::where('subject_type', 'App\Models\Shop')
-        ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
-        ->groupBy('subject_id')
-        ->paginate(18);
+            ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
+            ->groupBy('subject_id')
+            ->paginate(18);
 
         return $data;
     }
 
-    public function getFollowersCount() {
-
+    public function getFollowersCount()
+    {
     }
 
-    public function followers() {
+    public function followers()
+    {
         return $this->morphToMany(User::class, 'subject', 'wishlists');
         // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
     }
 
-    public function following() {
+    public function following()
+    {
         return Wishlist::where('user_id', $this->id)
-                ->where('subject_type', "App\Models\Shop");
+            ->where('subject_type', "App\Models\Shop");
 
 
         // return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
     }
 
-    public function getVerifiedAttribute() {
-        return true;
+    public function getVerifiedAttribute()
+    {
+        if ($this->verification_code) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /* TODO: Move this to verification trait */
+    public function isVerified()
+    {
+
+        /* TODO: Add dynamic verification column to shops table */
+        if ($this->verification_code) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -242,9 +287,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      *
      * @return string
      */
-    public static function getRouteName() {
+    public static function getRouteName()
+    {
         return 'user.profile.single';
     }
-
-
 }

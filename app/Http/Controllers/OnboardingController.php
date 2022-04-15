@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Services\PermissionsService;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Permissions;
 
 class OnboardingController extends Controller
 {
@@ -44,12 +45,25 @@ class OnboardingController extends Controller
 
         /* @vukasin TODO: Replace this with new way of adding address */
         // $shop->address = $request->address;
-        $shop->save();
+
         if ($shop->save()) {
-            $shop->users()->attach($user);
-            $permissions = \Permissions::getAllPossiblePermissions();
-            $user->syncPermissions(\Permissions::getAllPossiblePermissions()->keys());
-            $user->syncRoles(['Owner']);
+            $shop->users()->sync($user); // Use sync instead of attach, otherwise there will be multiple records of reationships between same user and shop
+            $permissions = Permissions::getRolePermissions('Owner');
+
+            /* TODO:  Move this to a general app layer to check if permisisons is missing, if so, run permissions populate */
+            try {
+                $user->syncPermissions($permissions);
+                $user->syncRoles(['Owner']);
+            } catch (\Exception $e) {
+                /* IMPORTANT These are for the refference what should be generated on a global level */
+                // \Artisan::call('tenants:migrate --tenants=' . tenant()->id);
+                // \Artisan::call('tenants:seed --tenants=' . tenant()->id);
+                \Artisan::call('permissions:populate --tenant_id=' . tenant()->id);
+                $user->syncPermissions($permissions);
+                $user->syncRoles(['Owner']);
+            }
+
+
             if (get_setting('email_verification') != 1) {
 
                 // Notification::send(User::where('id', '!=', $user->id)->get(), new NewCompanyJoin($user));

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
+@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()?->rtl == 1)
     <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @else
     <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -39,8 +39,6 @@
 
     <script src="{{ static_asset('js/app.js', false, true, true) }}"></script>
     <!-- Vendor Scripts -->
-    <script src="{{ static_asset('vendor/hs.core.js', false, true) }}"></script>
-    <script src="{{ static_asset('vendor/hs-unfold/dist/hs-unfold.min.js', false, true) }}"></script>
 
     <x-default.system.tracking-pixels>
     </x-default.system.tracking-pixels>

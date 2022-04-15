@@ -5,7 +5,7 @@
         currentAddress_is_billing: @entangle('currentAddress.is_billing').defer,
         addresses: @entangle('addresses'),
         available_features: @js(\App\Models\ShopAddress::getAvailableFeatures()),
-    }" @display-address-panel.window="$dispatch('display-flyout-panel', {'id': 'address-panel'});">
+    }" @display-address-panel.window="setTimeout(() => {$dispatch('display-flyout-panel', {'id': 'address-panel'})}, 150);">
     <div class="w-full flex justify-between items-center border-b border-gray-200 mb-3 pb-3">
         <div class="shrink-0">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Addresses') }}</h3>
@@ -98,8 +98,7 @@
                         {{ translate('Country') }}
                     </label>
                     <div class="mt-1">
-                        <x-dashboard.form.select field="currentAddress.country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="currentAddressCountry" :nullable="false"></x-dashboard.form.select>
-                        <x-system.invalid-msg field="currentAddress.country"></x-system.invalid-msg>
+                        <x-dashboard.form.select field="currentAddress.country" :items="\Countries::getAll()->keyBy('code')->map(fn($item) => $item->name)" selected="currentAddressCountry" :search="true" :nullable="false"></x-dashboard.form.select>
                     </div>
                 </div>
                 {{-- END Country --}}

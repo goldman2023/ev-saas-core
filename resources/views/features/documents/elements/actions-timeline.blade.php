@@ -97,27 +97,6 @@
         </div>
       </li>
 
-      <li>
-        <div class="relative pb-8">
-          <div class="relative flex space-x-3">
-            <div>
-              <span class="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
-                <!-- Heroicon name: solid/check -->
-                <svg class="h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                </svg>
-              </span>
-            </div>
-            <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-              <div>
-                <p class="text-sm text-gray-500">Completed interview with <a href="#" class="font-medium text-gray-900">Katherine Snyder</a></p>
-              </div>
-              <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                <time datetime="2020-10-04">Oct 4</time>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
+
     </ul>
   </div>

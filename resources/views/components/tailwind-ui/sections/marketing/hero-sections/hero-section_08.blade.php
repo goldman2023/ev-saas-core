@@ -1,4 +1,4 @@
-<section class="relative bg-white {!! $getSectionSettingsClasses !!}">
+<section class="relative {!! $getSectionSettingsClasses !!}">
   <div class="max-w-6xl mx-auto px-4 sm:px-5">
     <main class=" mx-auto max-w-7xl px-4 sm:px-6 ">
       <div class="lg:grid lg:grid-cols-12 lg:gap-8">
@@ -61,7 +61,7 @@
                 :target="$weData['image_slot']['components']['hero_image']['data']['target'] ?? null"
                 :options="['w' => 600]"
                 :alt-text="$weData['image_slot']['components']['hero_image']['data']['alt_text'] ?? ''"
-                :src="$weData['image_slot']['components']['hero_image']['data']['src'] ?? ''">
+                :src="$weData['image_slot']['components']['hero_image']['data']['src']['file_name'] ?? ''">
             </x-ev.image>
           </div>
         </div>

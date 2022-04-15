@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\ShopSetting;
 use App\Models\TenantSetting;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +58,19 @@ class PermissionsService
             }
         } else {
             $data = collect([
-                'Owner' => $this->getAllPossiblePermissions(),
+                'Owner' => array_merge(
+                    $this->getShopPermissions(),
+                    $this->getStaffPermissions(),
+                    $this->getOrdersPermissions(),
+                    $this->getProductPermissions(),
+                    $this->getPlansPermissions(),
+                    $this->getReviewsPermissions(),
+                    $this->getBlogPostsPermissions(),
+                    $this->getCustomersPermissions(),
+                    // $this->getPaymentsPermissions(),
+                    // $this->getDesignsPermissions(),
+                    $this->getLeadsPermissions()
+                ),
                 'Editor' => array_merge(
                     $this->getProductPermissions(),
                     $this->getBlogPostsPermissions(),
@@ -82,8 +95,13 @@ class PermissionsService
                 return $data->keys();
             }
         }
-
+ 
         return $data;
+    }
+
+    public function getRolePermissions($role_name) {
+        return array_keys($this->getRoles(from_db: false)->get($role_name));
+        // return Role::where('name', $role_name)->first()->permissions->pluck('id'); // this is from DB
     }
 
     public function getAllPossiblePermissions() {

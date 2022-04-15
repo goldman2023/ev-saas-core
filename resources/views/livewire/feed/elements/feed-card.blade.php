@@ -12,7 +12,7 @@
 
                     {{ translate('Liked a product') }} <span class="emoji ml-2">❤️</span>
 
-                    @elseif($item->subject_type == 'App\Models\Product')
+                    @elseif($item->subject_type == 'App\Models\Product' && $item->subject)
                     <a href="{{ $product->getPermalink() }}">
                         @if($item->description == 'created')
                         {{ translate('Added new product') }}
@@ -89,22 +89,21 @@
                 @endif
 
             </div>
-            <div class="mt-6 flex justify-between space-x-8">
+            <div class="mt-6 flex justify-between space-x-8 mb-3">
                 <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
 
                         @if($item->description != 'liked' && $item->description != 'User liked a product')
-                        <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                            <!-- Heroicon name: solid/thumb-up -->
 
-
-                        </button>
                         <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item->subject">
                         </livewire:actions.wishlist-button>
                         @endif
+
+
                     </span>
-                    <span class="inline-flex items-center text-sm cursor-pointer" x-on:click="isModalOpen = true">
-                        <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                    <span class="inline-flex items-center text-sm cursor-pointer">
+                        <button wire:click="toggle_comments()" type="button"
+                            class=" inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/chat-alt -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
@@ -112,8 +111,10 @@
                                     d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <span class="font-medium text-gray-900">11</span>
-                            <span class="sr-only">replies</span>
+                            @if($item->subject->comments())
+                                <span class="font-medium text-gray-900">{{ $item->subject()->comments()->count() }}</span>
+                                <span class="sr-only">replies</span>
+                            @endif
                         </button>
                     </span>
                     <span class="inline-flex items-center text-sm">
@@ -146,7 +147,16 @@
                 </div>
 
             </div>
+
+            {{-- This is triggered by :wire-click="toggle_comments()" --}}
+            @if($showComments)
+            <div>
+                <livewire:actions.social-comments :item="$item">
+                </livewire:actions.social-comments>
+            </div>
+            @endif
         </article>
+
     </div>
     <livewire:feed.elements.quick-views.main :item="$item">
     </livewire:feed.elements.quick-views.main>

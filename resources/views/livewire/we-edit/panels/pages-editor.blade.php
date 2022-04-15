@@ -1,7 +1,7 @@
 @push('head_scripts')
 <script>
     $(function() {
-        const sortable =  window.Sortable.create(document.querySelector('.p-pages-editor__sections-list'), {
+        const sortable = window.Sortable.create(document.querySelector('.p-pages-editor__sections-list'), {
             sort: true,
             draggable: ".p-pages-editor__sections-list__item",
             chosenClass: 'sortable-chosen',
@@ -51,7 +51,7 @@
                 },
                 getPlaceholder() {
                     if(this.countSelected() === 1) {
-                        return this.current_page.title || '';
+                        return this.current_page.name || '';
                     } else {
                         return '{{ translate('Edit page...') }}';
                     }
@@ -64,11 +64,11 @@
                     $wire.changeCurrentPage(this.current_page.id);
                     this.show = false;
                 }
-            }" >
+            }">
                 <label class="w-full input-label">{{ translate('Select page') }}</label>
 
                 <div class="we-select relative w-full mt-2" x-data="{}" @click.outside="show = false">
-                    <div class="we-select__selector select-none w-full flex flex-wrap border pl-3 pt-2 pb-1 pr-6 relative cursor-pointer" 
+                    <div class="we-select__selector select-none w-full flex flex-wrap border border-gray-300 pl-3 pt-2 pb-1 pr-6 relative cursor-pointer" 
                          @click="show = !show">
                             @svg('heroicon-o-chevron-down', ['class' => 'we-select__selector-arrow absolute w-[16px] h-[16px] top-[50%] -translate-y-2/4', ':class' => "{'rotate-180': show}"])
     
@@ -79,13 +79,17 @@
                         <ul class="we-select__dropdown-list select-none w-full">
                             <template x-for="item in items">
                                 <li class="we-select__dropdown-list-item py-2 px-3 cursor-pointer" 
-                                    x-text="item.title"
+                                    x-text="item.name"
                                     :class="{'selected': isSelected(item.id) }"
-                                    @click="select(item.id, item.title)"></li>
+                                    @click="select(item.id, item.name)"></li>
                             </template>
                         </ul>
                     </div>
                 </div>
+
+                <button type="button" class="btn-primary mt-2" @click="$dispatch('display-flyout-panel', {'id': 'we-edit-page-edit-panel', 'page_id': -1 });">
+                    {{ translate('Add new page') }}
+                </button>
             </div>
             {{-- END Page Selector --}}
 
@@ -102,7 +106,7 @@
                 <div class="w-full" x-data="" x-init="">
                     <h4 class="w-full flex text-16 font-medium mb-3" >
                         <span>{{ translate('Edit') }}</span>
-                        <span class="text-blue-500 ml-1 mr-1" x-text="current_page.title"></span>
+                        <span class="text-blue-500 ml-1 mr-1" x-text="current_page.name"></span>
                         <span>{{ translate('page sections') }}</span>
                     </h4>
 
@@ -156,8 +160,11 @@
                     </ul>
                 </div>
 
-                <div class="w-full flex mt-3" x-data="" x-init="">
-                    <button type="button" wire:click="savePreviewToPage" class="ml-auto inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <div class="w-full flex justify-between mt-3" x-data="" x-init="">
+                    <button type="button" @click="$dispatch('display-export-json-modal')" class="inline-flex justify-center rounded-md border border-transparent bg-info py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-info focus:outline-none focus:ring-2 focus:ring-info focus:ring-offset-2">
+                        {{ translate('Export JSON') }}
+                    </button>
+                    <button type="button" wire:click="savePreviewToPage" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         {{ translate('Publish') }}
                     </button>
                 </div>
@@ -166,6 +173,10 @@
         </div>
     </div>
 
-    <livewire:we-edit.forms.section-edit :current_preview="$current_preview" key="{{ now() }}"></livewire:we-edit.forms.section-edit>
+    <livewire:we-edit.forms.section-edit :current_preview="$current_preview" key="{{ 'section-edit_'.now() }}"></livewire:we-edit.forms.section-edit>
+    <livewire:we-edit.forms.page-form key="{{ 'page-form_'.now() }}"></livewire:we-edit.forms.page-form>
+    
+    <x-we-edit.modals.export-json-modal :json="$current_page->content"></x-we-edit.modals.export-json-modal>
+
     {{-- <x-we-edit.flyout.flyout-edit-section :currentPreview="$current_preview"></x-we-edit.flyout.flyout-edit-section> --}}
 </div>

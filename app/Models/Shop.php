@@ -99,8 +99,6 @@ class Shop extends EVBaseModel
         return $this->morphToMany(User::class, 'subject', 'user_relationships');
     }
 
-
-
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'company_category');

@@ -11,6 +11,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\Invoice;
+use App\Models\Product;
+use App\Models\Plan;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
@@ -29,20 +31,22 @@ class StripeService
     public $mode_prefix = null;
     protected $unsupported_shipping_countries = ['AS', 'CX', 'CC', 'CU', 'HM', 'IR', 'KP', 'MH', 'FM', 'NF', 'MP', 'PW', 'SD', 'SY', 'UM', 'VI'];
     protected $supported_shipping_countries = []; // TODO: Get Stripe available countries list!!!!
-    
+
     public function __construct($app)
     {
         // Depending on Stripe Mode for current tenant, use live or test key!
         // Stripe mode can be changed in App Settings!
         if(Payments::isStripeLiveMode()) {
-            $this->stripe = new \Stripe\StripeClient(
-                Payments::stripe()->stripe_sk_live_key
-            );
+            $this->stripe = new \Stripe\StripeClient([
+                'api_key' => Payments::stripe()->stripe_sk_live_key,
+                "stripe_version" => "2020-08-27"
+            ]);
             $this->mode_prefix = 'live_';
         } else {
-            $this->stripe = new \Stripe\StripeClient(
-                Payments::stripe()->stripe_sk_test_key
-            );
+            $this->stripe = new \Stripe\StripeClient([
+                'api_key' => Payments::stripe()->stripe_sk_test_key,
+                "stripe_version" => "2020-08-27"
+            ]);
             $this->mode_prefix = 'test_';
         }
 
@@ -64,6 +68,10 @@ class StripeService
         }
     }
 
+	protected function generateStripeProductID($model) {
+		return $this->mode_prefix.strtolower((class_basename($model::class))).'_'.$model->id;
+	}
+
     protected function createStripeProduct($model)
     {
         // Reminder: Stripe pricemust be in cents!!!
@@ -78,23 +86,23 @@ class StripeService
         try {
             // Create Stripe Product
             $stripe_product = $this->stripe->products->create([
-                'id' => $model->id,
+                'id' => $this->generateStripeProductID($model),
                 'name' => $model->name,
                 'active' => true,
                 // 'livemode' => false, // TODO: Make it true in Production
                 'description' => $description,
                 'images' => [$model->getThumbnail(['w' => 500]), $model->getCover(['w' => 800])],
-                'shippable' => $model->is_digital ? false : true,
+                'shippable' => $this->isShippable($model),
                 // 'tax_code' => '',
                 'url' => $model->getPermalink(),
-                'unit_label' => substr($model->unit, 0, 12),
+                'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
                 // 'metadata' => []
             ]);
         } catch (\Exception $e) {
             // This means that Product under $model->id already exists, BUT FOR SOME REASON tenant doesn't have the proper CoreMeta key.
 
             // 1. Get Stripe Product
-            $stripe_product = $this->stripe->products->retrieve($model->id, []);
+            $stripe_product = $this->stripe->products->retrieve($this->generateStripeProductID($model), []);
         }
 
         // Create CoreMeta with stripe Product ID
@@ -104,29 +112,13 @@ class StripeService
                 'subject_type' => $model::class,
                 'key' => $this->mode_prefix . 'stripe_product_id',
             ],
-            [    
+            [
                 'value' => $stripe_product->id
             ]
         );
-        
-        // Create Stripe Price
-        $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-            'currency' => strtolower($model->base_currency),
-            'product' => $stripe_product->id,
-        ]);
 
-        // Create CoreMeta with stripe Price ID
-        CoreMeta::updateOrCreate(
-            [
-                'subject_id' => $model->id,
-                'subject_type' => $model::class,
-                'key' => $this->mode_prefix .'stripe_price_id',
-            ],
-            [    
-                'value' => $stripe_product_price->id
-            ]
-        );
+        // Create Stripe Price
+        $this->createStripePrice($model, $stripe_product->id);
 
         return $stripe_product;
     }
@@ -137,16 +129,32 @@ class StripeService
 
     protected function createStripePrice($model, $stripe_product_id = null) {
         // Get stripe product iD
-        if(empty($stripe_product_id))
+        if(empty($stripe_product_id)) {
             $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
-        
-        
-        // Create a new price and attach it to stripe product ID
-        $stripe_product_price = $this->stripe->prices->create([
-            'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
-            'currency' => strtolower($model->base_currency),
-            'product' => $stripe_product_id,
-        ]);
+        }
+
+        // Create reccuring price if $model is Plan or a Subscription Product
+        if($this->isSubscription($model)) {
+            $args = [
+                'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
+                'currency' => strtolower($model->base_currency),
+                'product' => $stripe_product_id,
+                'recurring' => [
+                    "interval" => "month", // TODO: Can be 'year'
+                    "interval_count" => 1,
+                    "usage_type" => "licensed"
+                ]
+            ];
+        } else {
+            // Create a new price and attach it to stripe product ID
+            $args = [
+                'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
+                'currency' => strtolower($model->base_currency),
+                'product' => $stripe_product_id,
+            ];
+        }
+
+        $stripe_product_price = $this->stripe->prices->create($args);
 
         CoreMeta::updateOrCreate(
             [
@@ -154,25 +162,26 @@ class StripeService
                 'subject_type' => $model::class,
                 'key' => $this->mode_prefix .'stripe_price_id',
             ],
-            [    
+            [
                 'value' => $stripe_product_price->id
             ]
         );
 
         return $stripe_product_price;
     }
-        
 
-    public function createCheckoutLink($model, $qty, $preview)
+
+    public function createCheckoutLink($model, $qty = 1, $preview = false, $abandoned_order_id = null)
     {
         // Check if Stripe Product actually exists
+		$order = null;
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
-        
+
         try {
             $stripe_product = $this->stripe->products->retrieve($stripe_product_id, []);
         } catch(\Exception $e) {
             // What if there is no product in stripe under given ID?
-            
+
             // 1. Create a product and price if product is missing in Stripe
             $stripe_product = $this->createStripeProduct($model);
             // return $this->createCheckoutLink($model, $qty); // try again after product and price are created
@@ -189,7 +198,7 @@ class StripeService
             // 1. Create a new stripe price if price is missing in Stripe
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
-        
+
 
         // Compare current model price and Last Stripe Price and if it does not match, create a new price
         if((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
@@ -198,13 +207,16 @@ class StripeService
             // Create new Stripe Price
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
-        
-        // If Preview, then don't crete temp order
-        if($preview) {
+
+        // Create temporary order if $review is false and $abandoned_order_id is empty
+        if(!$preview && empty($abandoned_order_id)) {
             // Create an Order
             $order = $this->createTempOrder($model, $qty);
-        }
-        
+        } else if(Order::where('id', '=', $abandoned_order_id)->exists()) {
+			// Get abandoned order if order with $abandoned_order_id exists
+			$order = Order::find($abandoned_order_id);
+		} // otherwise, it's just a preview
+
         $checkout_link['url'] = "#";
 
         $stripe_args = [
@@ -215,19 +227,19 @@ class StripeService
                     'quantity' => $qty,
                 ]
             ],
-            'mode' => 'payment',
+            'mode' => $this->isSubscription($model) ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
-            'client_reference_id' => $order->id,
+            'client_reference_id' => !empty($order) ? $order->id : '',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
-            'success_url' => route('checkout.order.received', ['id' => $order->id]),
-            'cancel_url' => route('checkout.order.canceled', ['id' => $order->id]),
+            'success_url' => !empty($order) ? route('checkout.order.received', ['id' => $order->id]) : '',
+            'cancel_url' => !empty($order) ? route('checkout.order.canceled', ['id' => $order->id]) : '',
             'automatic_tax' => [
                 'enabled' => false,
             ],
         ];
 
         // Check if Modal is digital or not, and based on that display or hide Stripe shipping options
-        if(!$model->is_digital ?? true) {
+        if($this->isShippable($model)) {
             // If $model is not digital (like standard non-digital product)
             $stripe_args['shipping_address_collection'] = [
                 // TODO: Put all allowed shipping countries two-letter codes here. Keep in mind there should be two allowed_shipping_countries settings. One in TenantSettings and other in ShopSettings. ShpoSettings one is used when app is a marketplace!
@@ -281,7 +293,7 @@ class StripeService
         //                 }
         //             }
         //         }
-                
+
         //     }
         // }
         $default_grace_period = 5;
@@ -289,13 +301,14 @@ class StripeService
         try {
             $order = new Order();
             $order->shop_id = $model->shop_id;
+            $order->payment_status = PaymentStatusEnum::pending()->value;
             $order->same_billing_shipping = false;
             $order->buyers_consent = true;
-            $order->is_temp = 1;
+            $order->is_temp = true;
             $order->email = '';
 
             // TODO: Should be handled differently
-            if($model instanceof Plan) {
+            if($this->isSubscription($model)) {
                 /*
                 * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
                 */
@@ -303,7 +316,7 @@ class StripeService
                 $order->number_of_invoices = -1; // 'unlimited' for subscriptions
                 $order->invoicing_period = 'month'; // TODO: Add monthly/annual switch
                 $order->invoice_grace_period = 0;
-                $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
+                $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts - ***For trial invoicing starts X days from this moment
             } else {
                 $order->type = OrderTypeEnum::standard()->value;
                 $order->number_of_invoices = 1; // 'unlimited' for subscriptions
@@ -311,13 +324,13 @@ class StripeService
                 $order->invoice_grace_period = $default_grace_period;
                 $order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
             }
-            
+
             // If user is logged in
             if(Auth::check()) {
                 $order->email = auth()->user()->email ?? null;
                 $order->user_id = auth()->user()->id ?? null;
             }
-            
+
             $order->billing_first_name = '';
             $order->billing_last_name = '';
             $order->billing_address = '';
@@ -350,40 +363,55 @@ class StripeService
             // TODO: Think about fallback or some error page to notify user that there's an error on Order creation just before StripeCheckout redirect.
             dd($e);
         }
-        
+
         return $order;
     }
 
+    protected function isSubscription($model) {
+        return $model instanceof Plan || ($model instanceof Product && ($model->isSubscription() || $model->isPhysicalSubscription()));
+    }
+
+    protected function isShippable($model) {
+        return $model instanceof Product && ($model->isStandard() || $model->isPhysicalSubscription());
+    }
 
     public function processWebhooks(Request $request) {
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
-        $endpoint_secret = 'whsec_IUN8xCktKu64YeKHp28hzpMZLjbFdic4';
+        $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
 
+        // TODO: 
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
 
+//        exit();
         try {
             $event = \Stripe\Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
             );
         } catch(\UnexpectedValueException $e) {
             // Invalid payload
+			print_r($e);
             http_response_code(400);
             exit();
         } catch(\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
-            http_response_code(400);
-            exit();
-        }
 
+            // Todo: It happens that this is invoked without any reason for Pix-Pro, Fix that later on
+            
+			// print_r($e);
+            // http_response_code(400);
+            // exit();
+            $event = json_decode($payload);
+            
+        }
 
         // Handle the event
         switch ($event->type) {
             case 'charge.succeeded':
                 $charge = $event->data->object;
                 break;
-            case 'checkout.session.completed': 
+            case 'checkout.session.completed':
                 DB::beginTransaction();
 
                 try {
@@ -391,7 +419,7 @@ class StripeService
                     $session = $event->data->object;
                     $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
                     $order->payment_status = PaymentStatusEnum::paid()->value;
-                    $order->is_temp = 0;
+                    $order->is_temp = false;
                     $order->email = empty($order->email) ? $session->customer_details->email : $order->email;
                     $order->billing_first_name = explode(' ', $session->customer_details->name)[0] ?? '';
                     $order->billing_last_name = explode(' ', $session->customer_details->name)[1] ?? '';
@@ -401,22 +429,22 @@ class StripeService
                     $order->billing_city = !empty($session->customer_details->address->city) ? $session->customer_details->address->city : '';
                     $order->billing_zip = !empty($session->customer_details->address->postal_code) ? $session->customer_details->address->postal_code : '';
                     $order->phone_numbers = !empty($session->customer_details->phone) ? $session->customer_details->phone : [];
-                    
+
                     $order->shipping_method = ''; // TODO: Should mimic shipping_method from tenant!!!
 
-                    $order->shipping_first_name = explode(' ', $session->shipping->name)[0] ?? '';
-                    $order->shipping_last_name = explode(' ', $session->shipping->name)[1] ?? '';
-                    $order->shipping_address = !empty($session->shipping->address->line1) ? $session->shipping->address->line1 : '';
-                    $order->shipping_country = !empty($session->shipping->address->country) ? $session->shipping->address->country : '';
-                    $order->shipping_state = !empty($session->shipping->address->state) ? $session->shipping->address->state : '';
-                    $order->shipping_city = !empty($session->shipping->address->city) ? $session->shipping->address->city : '';
-                    $order->shipping_zip = !empty($session->shipping->address->postal_code) ? $session->shipping->address->postal_code : '';
+                    $order->shipping_first_name = explode(' ', $session?->shipping?->name ?? '')[0] ?? '';
+                    $order->shipping_last_name = explode(' ', $session?->shipping?->name ?? '')[1] ?? '';
+                    $order->shipping_address = !empty($session?->shipping->address?->line1 ?? '') ? $session->shipping->address->line1 : '';
+                    $order->shipping_country = !empty($session?->shipping->address?->country ?? '') ? $session->shipping->address->country : '';
+                    $order->shipping_state = !empty($session?->shipping->address?->state ?? '') ? $session->shipping->address->state : '';
+                    $order->shipping_city = !empty($session?->shipping->address?->city ?? '') ? $session->shipping->address->city : '';
+                    $order->shipping_zip = !empty($session?->shipping->address?->postal_code ?? '') ? $session->shipping->address->postal_code : '';
                     $order->save();
-                    
+
                     // Check if $model has stock and reduce it if it does!!!
                     $order_item =  $order->order_items->first();
                     $model = $order_item->subject;
-                    
+
                     if(method_exists($model, 'stock')) {
                         // Reduce the stock quantity of an $model
                         $serial_numbers = $model->reduceStock();
@@ -428,6 +456,11 @@ class StripeService
                         } else {
                             $order_item->serial_numbers = null;
                         }
+                    }
+
+                    // Associate User with Plan (if plan is bought)
+                    if($model instanceof Plan) {
+                        User::find($order->user_id)->plans()->syncWithoutDetaching($model);
                     }
 
                     /*
@@ -453,13 +486,12 @@ class StripeService
                     $invoice->billing_city = !empty($order->billing_city) ? $order->billing_city : '';
                     $invoice->billing_zip = !empty($order->billing_zip) ? $order->billing_zip : '';
 
-                
-                    // Take invoice totals from Cart
+                    // Take invoice totals from $order itself
                     $invoice->base_price = $order->base_price;
                     $invoice->discount_amount = $order->discount_amount;
                     $invoice->subtotal_price = $order->subtotal_price;
                     $invoice->total_price = $order->total_price; // should be TotalPrice in future...
-                
+
 
                     $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
                     $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
@@ -478,7 +510,7 @@ class StripeService
                     http_response_code(400);
                     die($e->getMessage());
                 }
-               
+
                 break;
             case 'checkout.session.expired':
                 // Checkout Session Expired webhook
@@ -488,10 +520,14 @@ class StripeService
                      // Remove Temp order when stripe checkout session expires, BUT only if order is made by guest user (user_id == null)
                     $session = $event->data->object;
                     $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
-                    
+
                     if(empty($order->user_id)) {
                         // Temp order is not linked to a user, so remove it fully!
                         $order->forceDelete();
+                    } else {
+                        // Abandoned cart is: is_temp = 1 && payment_status = canceled
+                        $order->payment_status = PaymentStatusEnum::canceled()->value;
+                        $order->save();
                     }
 
                     DB::commit();

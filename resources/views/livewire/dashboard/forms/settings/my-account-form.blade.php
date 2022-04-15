@@ -11,12 +11,21 @@
         current: 'basicInformation',
         thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
         cover: @js(['id' => $me->cover->id ?? null, 'file_name' => $me->cover->file_name ?? '']),
-        meta: @js($meta),
+        meta: @entangle('meta').defer,
     }" x-init="$watch('current', function(value) {
         $([document.documentElement, document.body]).animate({
             scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
         }, 500);
-    })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
+    })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
+        @submit-form.window="
+            $wire.set('me.thumbnail', thumbnail.id, true);
+            $wire.set('me.cover', cover.id, true);
+            $wire.set('meta.bio.value', meta.bio.value, true);
+            {{-- $wire.set('meta.industry.value', meta.industry.value.id, true); --}}
+            $wire.set('meta.birthday.value', meta.birthday.value, true);
+            $wire.saveBasicInformation();
+        "
+        x-cloak>
     <div class="w-full relative">
         <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden">
         </x-ev.loaders.spinner>
@@ -209,29 +218,14 @@
 
                             @if(!$onboarding)
                             <!-- Birthday -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{
-                                    getDateOptions() {
-                                        return {
-                                            mode: 'single',
-                                            enableTime: false,
-                                            dateFormat: 'd.m.Y.',
-                                        };
-                                    },
-                                }" x-init="$nextTick(() => { flatpickr('#user-meta-birthday-input', getDateOptions()); });">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
 
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Birthday') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input x-model="meta.birthday.value"
-                                                        type="text"
-                                                        id="user-meta-birthday-input"
-                                                        class="js-flatpickr flatpickr-custom form-standard @error('meta.birthday') is-invalid @enderror"
-                                                        placeholder="{{ translate('Pick a date(s)') }}"
-                                                        data-input />
-                                    <x-system.invalid-msg field="meta.birthday.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.date field="meta.birthday.value"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Birthday -->
@@ -252,8 +246,22 @@
                                 </div>
                             </div>
                             <!-- END Gender -->
-                            @endif
                             
+
+                            <!-- Calendly Link -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Calendly link') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="meta.calendly_link.value" />
+                                </div>
+                            </div>
+                            <!-- END Calendly Link -->
+                            @endif
 
                             {{-- <!-- Industry -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"

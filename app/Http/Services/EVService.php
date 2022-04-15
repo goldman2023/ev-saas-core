@@ -92,7 +92,16 @@ class EVService
                         'route' => route('chat.index'),
                         'is_active' => areActiveRoutes(['chat']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
+                        'enabled' => get_tenant_setting('chat_enabled', true),
+                    ],
+                    [
+                        'label' => translate('Pages'),
+                        'icon' => 'heroicon-o-document-text',
+                        'route' => route('pages.index'),
+                        'is_active' => areActiveRoutes(['pages.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => [] // TODO: Add App Pages Permissions
                     ],
                 ]
             ],
@@ -263,7 +272,7 @@ class EVService
                         'permissions' => []
                     ],
                     [
-                        'label' => translate('My Orders'),
+                        'label' => translate('My Purchases'),
                         'icon' => 'heroicon-o-document-text',
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
@@ -278,13 +287,22 @@ class EVService
                         'user_types' => User::$user_types,
                         'permissions' => []
                     ],
+                    [
+                        'label' => translate('Plans Management'),
+                        'icon' => 'heroicon-o-document',
+                        'route' => route('my.plans.management'),
+                        'is_active' => areActiveRoutes(['my.plans.management']),
+                        'user_types' => User::$user_types,
+                        'permissions' => []
+                    ],
                   /*   [
                         'label' => translate('My Wishlist'),
                         'icon' => 'heroicon-o-heart',
                         'route' => route('wishlist'),
                         'is_active' => areActiveRoutes(['wishlist']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
+                        'enabled' => get_tenant_setting('wishlist_enabled', true),
                     ], */
                 /*     [
                         'label' => translate('My Viewed Items'),
@@ -292,7 +310,8 @@ class EVService
                         'route' => route('wishlist.views'),
                         'is_active' => areActiveRoutes(['wishlist.views']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
+                        'enabled' => get_tenant_setting('viewed_products_enabled', true),
                     ] */
                 ]
             ],
@@ -321,23 +340,25 @@ class EVService
                         'route' => route('we-edit.index'),
                         'is_active' => areActiveRoutes(['we-edit.index']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_designs']
+                        'permissions' => ['browse_designs'],
+                        'enabled' => get_tenant_setting('we_edit_enabled', true),
                     ],
-                    [
-                        'label' => translate('Payment settings'),
-                        'icon' => 'heroicon-o-cash',
-                        'route' => route('settings.payment_methods'),
-                        'is_active' => areActiveRoutes(['settings.payment_methods']),
-                        'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_uni_payment_methods']
-                    ],
+                    // [
+                    //     'label' => translate('Payment settings'),
+                    //     'icon' => 'heroicon-o-cash',
+                    //     'route' => route('settings.payment_methods'),
+                    //     'is_active' => areActiveRoutes(['settings.payment_methods']),
+                    //     'user_types' => User::$tenant_user_types,
+                    //     'permissions' => ['browse_uni_payment_methods']
+                    // ],
                     [
                         'label' => translate('Staff settings'),
                         'icon' => 'heroicon-s-user-group',
                         'route' => route('settings.staff_settings'),
                         'is_active' => areActiveRoutes(['settings.staff_settings']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_staff'] // TODO: Add users managing permissions
+                        'permissions' => ['browse_staff'], // TODO: Add users managing permissions,
+                        'enabled' => get_tenant_setting('staff_enabled', true),
                     ],
 
                     // [

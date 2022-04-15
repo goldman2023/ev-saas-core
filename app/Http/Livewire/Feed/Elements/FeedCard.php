@@ -13,12 +13,13 @@ class FeedCard extends Component
     public $product;
     public $ignore = false;
     public $likes = 0;
+    public $showComments = false;
     public function mount($item)
     {
 
         $this->ignore = false;
 
-        if(!$item->has('subject')) {
+        if(!$item->has('subject') || empty($item->subject)) {
             $this->ignore = true;
             return false;
         }
@@ -45,7 +46,13 @@ class FeedCard extends Component
             } else {
                 // $this->product = $item->subject->subject;
             }
+        } elseif(($item->subject_type == 'App\Models\SocialComment')) {
+            $this->ignore = true;
         }
+    }
+
+    public function toggle_comments() {
+       $this->showComments = !$this->showComments;
     }
 
     public function render()

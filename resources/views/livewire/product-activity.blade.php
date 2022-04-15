@@ -39,22 +39,25 @@
                     </div>
                     <div class="mt-2 text-sm text-gray-700">
 
-                        @if($item->subject_type == 'App\Models\Product')
+                        @if($item->subject_type == 'App\Models\Product' && $item->subject)
 
-                        <div
-                            class="text-left">
-                            <a target="_blank" class="grid grid-cols-3 relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-3 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ $item->subject->getPermalink() }}" >
+                        <div class="text-left">
+                            <a target="_blank"
+                                class="grid grid-cols-3 relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-3 text-left hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                href="{{ $item->subject->getPermalink() }}">
                                 <img src="{{ $item->subject->getThumbnail() }}" class="w-10" />
 
-                               <span class="font-medium text-left text-gray-900">
-                                   {{ $item->subject->name }}
-                               </span>
+                                <span class="font-medium text-left text-gray-900">
+                                    {{ $item->subject->name }}
+                                </span>
                             </a>
                         </div>
                         @else
-                        <a href="{{ $item->subject->getPermalink() }}" class="font-medium text-gray-900">
-                            {{ $item->subject->name }}
-                        </a>
+                        @if($item->subject)
+                            <a href="#" class="font-medium text-gray-900">
+                                {{ $item->subject->name }}
+                            </a>
+                        @endif
                         @endif
                     </div>
                 </div>

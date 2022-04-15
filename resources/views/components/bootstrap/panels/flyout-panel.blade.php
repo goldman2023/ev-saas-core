@@ -3,7 +3,9 @@
         id: '{{ $id }}',
      }"
      x-cloak
-     x-init="$(document).on('keyup', function(e) { if (e.key == 'Escape' && show) {show = false} });">
+{{-- TODO: @vukasin add non jquery version for esc key --}}
+
+     x-init="">
     <section
         class="c-flyout-panel position-fixed bg-white shadow-lg"
         :class="{ 'show': show }"

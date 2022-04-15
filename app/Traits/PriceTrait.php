@@ -6,6 +6,7 @@ use App\Builders\BaseBuilder;
 use App\Models\FlashDeal;
 use App\Enums\AmountPercentTypeEnum;
 use FX;
+use App\Models\Plan;
 
 trait PriceTrait
 {
@@ -314,4 +315,28 @@ trait PriceTrait
         return $display ? FX::formatPrice($this->attributes[$price_column] ?? 0) : $this->attributes[$price_column] ?? 0;
     }
     // END PRICES
+
+    public function getTotalAnnualPrice() {
+        $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
+
+        if($this instanceof Plan) {
+            // First apply yearly discount, if any!
+            if ($this->yearly_discount_type === AmountPercentTypeEnum::percent()->value) {
+                $total_annual_price -= ($total_annual_price * $this->attributes['yearly_discount']) / 100;
+            } elseif ($this->yearly_discount_type === AmountPercentTypeEnum::amount()->value) {
+                $total_annual_price -= $this->attributes['yearly_discount'];
+            }
+
+            // Then, add Plan specific Tax, if any
+            if ($this->tax_type === AmountPercentTypeEnum::percent()->value) {
+                $total_annual_price += ($total_annual_price * $this->attributes['tax']) / 100;
+            } elseif ($this->tax_type === AmountPercentTypeEnum::amount()->value) {
+                $total_annual_price += $this->attributes['tax'];
+            }
+
+            // TODO: Then add global Tax (like VAT)
+        }
+        
+        return $total_annual_price;
+    }
 }

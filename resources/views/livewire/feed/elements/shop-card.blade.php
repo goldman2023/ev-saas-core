@@ -45,7 +45,7 @@
 
             <div class="-ml-px w-0 flex-1 flex">
                 <button
-                    x-on:click="CometChatWidget.openOrCloseChat(true); CometChatWidget.chatWithUser('web_{{ $shop->users()->first()->id }}'); "
+                    x-on:click="CometChatWidget.openOrCloseChat(true); CometChatWidget.chatWithUser('web_shop_{{ $shop->users()->first()->id }}'); "
                     class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
                     <!-- Heroicon name: solid/phone -->
                     <svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"

@@ -33,6 +33,7 @@ use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
+use App\Traits\HasStatus;
 use App\Traits\LikesTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -51,6 +52,7 @@ class Product extends EVBaseModel
     use PermalinkTrait;
     use AttributeTrait;
     use CategoryTrait;
+    use HasStatus;
 
     use UploadTrait;
     use GalleryTrait;
@@ -254,6 +256,11 @@ class Product extends EVBaseModel
         ];
     }
 
+    /* TODO: @vukasin Implement checkbox in product.create for enabling units display, by default it's disabled */
+    function showUnits($show = false) {
+        return $show;
+    }
+
     function public_view_count($period = 'all')
     {
 
@@ -295,7 +302,6 @@ class Product extends EVBaseModel
 
     public function isStripeProduct()
     {
-
         if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
             return true;
         }
@@ -306,4 +312,33 @@ class Product extends EVBaseModel
 
         return false;
     }
+
+    public function isBookableService() {
+        return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
+    }
+
+    public function isEvent() {
+        return $this->type === \App\Enums\ProductTypeEnum::event()->value;
+    }
+
+    public function isStandard() {
+        return $this->type === \App\Enums\ProductTypeEnum::standard()->value;
+    }
+
+    public function isSubscription() {
+        return $this->type === \App\Enums\ProductTypeEnum::subscription()->value;
+    }
+
+    public function isPhysicalSubscription() {
+        return $this->type === \App\Enums\ProductTypeEnum::physical_subscription()->value;
+    }
+
+    public function getBookingLink() {
+        return $this->core_meta?->where('key', 'calendly_link')->first()?->value ?? null;
+    }
+
+    public function comments() {
+        return $this->morphMany(SocialComment::class, 'subject');
+    }
+
 }
