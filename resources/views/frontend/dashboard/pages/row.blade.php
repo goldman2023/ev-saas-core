@@ -38,7 +38,7 @@
 
 <x-livewire-tables::table.cell class="align-middle">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-white flex items-center mr-2" href="{{ route('blog.post.edit', ['id' => $row->id]) }}">
+        <a class="btn btn-white flex items-center mr-2" href="{{ route('page.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 

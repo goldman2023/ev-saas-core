@@ -23,7 +23,7 @@ class EVPageController extends Controller
     }
 
     public function edit(Request $request, $id) {
-        $pages = Page::findOrFail($id);
+        $page = Page::findOrFail($id);
 
         return view('frontend.dashboard.pages.edit', compact('page'));
     }

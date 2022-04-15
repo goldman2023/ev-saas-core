@@ -1,6 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
-@section('page_title', translate('Edit Page').': '.$blog_post->getTranslation('name'))
+@section('page_title', translate('Edit Page').': '.$page->getTranslation('name'))
 
 @push('head_scripts')
 {{-- <link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
@@ -18,7 +18,7 @@
             </x-slot>
         </x-dashboard.section-headers.section-header>
 
-        {{-- <livewire:dashboard.forms.pages.page-form :page="$page"></livewire:dashboard.forms.pages.page-form> --}}
+        <livewire:dashboard.forms.pages.page-form :page="$page"></livewire:dashboard.forms.pages.page-form>
     </section>
 @endsection
 

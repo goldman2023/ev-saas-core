@@ -33,6 +33,7 @@ use App\Traits\PermalinkTrait;
 use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
+use App\Traits\HasStatus;
 use App\Traits\LikesTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -51,6 +52,7 @@ class Product extends EVBaseModel
     use PermalinkTrait;
     use AttributeTrait;
     use CategoryTrait;
+    use HasStatus;
 
     use UploadTrait;
     use GalleryTrait;
