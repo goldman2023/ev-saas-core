@@ -452,6 +452,7 @@ class StripeService
 
                     // Associate User with Plan (if plan is bought)
                     if($model instanceof Plan) {
+                        /* TODO: Create an event for running external Jobs */
                         auth()->user()->plans()->syncWithoutDetaching($model);
                     }
 
