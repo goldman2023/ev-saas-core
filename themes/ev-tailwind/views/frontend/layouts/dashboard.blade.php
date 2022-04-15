@@ -70,10 +70,6 @@
         <x-panels.flyout-auth></x-panels.flyout-auth>
     @endguest
 
-    @if(request()->is_dashboard)
-        <x-panels.flyout-dashboard-sidebar></x-panels.flyout-dashboard-sidebar>
-    @endif
-
     {{-- App bar --}}
     <x-default.footers.app-bar></x-default.footers.app-bar>
 

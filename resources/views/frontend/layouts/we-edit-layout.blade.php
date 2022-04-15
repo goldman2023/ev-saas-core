@@ -60,7 +60,21 @@
 </head>
 <body class="h-full">
     <div class="main-wrapper h-full">
-        @yield('content')
+        {{-- Sidebar (Mobile/Tablet and Laptop/Desktop) --}}
+        @include('frontend.dashboard.partials.sidebar')
+        @include('frontend.dashboard.partials.sidebar-mobile')
+
+        <div class="lg:pl-64 flex flex-col">
+            @include('frontend.dashboard.navigation.topbar')
+    
+            <main class="flex-1">
+                <div class="w-full ">
+                    @yield('content')
+                </div>
+            </main>
+    
+        </div>
+        
     </div>
 
     <x-default.system.cookies-agreement></x-default.system.cookies-agreement>
@@ -69,26 +83,7 @@
     <x-system.info-modal></x-system.info-modal>
 
 
-    {{-- TODO: Include this propertly --}}
-
-    @include('frontend.layouts.partials.app-js')
-
-    {{-- <script src="{{ static_asset('js/aiz-core.js', false, true) }}"></script> --}}
-    {{-- <script>
-        $(function() {
-            /* Init file managers */
-            $('.custom-file-manager [data-toggle="aizuploader"]').each(function(index, element) {
-                let selected_files = $.map($(element).find(".selected-files").val().split(','), function(value){
-                    let id = parseInt(value, 10);
-                    if(id) {
-                        return id;
-                    }
-                });
-
-                window.AIZ.uploader.inputSelectPreviewGenerate($(element), selected_files, true);
-            });
-        });
-    </script> --}}
+    {{-- @include('frontend.layouts.partials.app-js') --}}
 
     @stack('footer_scripts')
 </body>

@@ -26,6 +26,7 @@ class WeBuilderService
 {
     public $themes;
     public $sections_flat;
+    protected $html_section_template;
 
     public function __construct($app)
     {
@@ -412,6 +413,16 @@ class WeBuilderService
         }
 
         $this->sections_flat = $sections_flat;
+
+        // Construct HTML Section template
+        $this->html_section_template = [
+            'id' => 'html',
+            'title' => 'HTML Section',
+            'thumbnail' => 'https://repository-images.githubusercontent.com/134285701/635de980-586d-11ea-9220-1a3211239c30', // TODO: Replace this with something consistent as HTML section Placeholder
+            'order' => -1,
+            'html' => '',
+            'settings' => []
+        ];
     }
 
 
@@ -424,5 +435,9 @@ class WeBuilderService
         }
 
         return isset($this->themes[$theme_name]) ? $this->themes[$theme_name] : [];
+    }
+
+    public function getHtmlSectionTemplate() {
+        return $this->html_section_template;
     }
 }
