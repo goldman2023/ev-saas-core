@@ -22,11 +22,11 @@
                 </div>
 
                 <nav class="hidden md:flex space-x-[32px]">
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Features')
+                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'features']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Features')
                         }}</a>
                     <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'plans-pricing']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Pricing')
                         }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Blog')
+                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'blog']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Blog')
                         }}</a>
                     <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Contact')
                         }}</a>
@@ -38,25 +38,20 @@
                 display Login and Try for free --}}
                 <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-[32px]">
                     @guest
-                    <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-                        @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
-                        {{ translate('Login') }}
-                    </div>
+                        <div class="cursor-pointer whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                            @click="$dispatch('display-flyout-panel', {'id': 'auth-panel'})">
+                            {{ translate('Login') }}
+                        </div>
 
-                    <a href="{{ route('custom-pages.show_custom_page', ['pricing']) }}"
-                        class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
-                        {{ translate('Try for free') }}
-                    </a>
+                        <a href="{{ route('custom-pages.show_custom_page', ['plans-pricing']) }}"
+                            class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                            {{ translate('Try for free') }}
+                        </a>
                     @else
-                    <button @click="$dispatch('display-flyout-panel', {'id': 'cart-panel'});" type="button"
-                        class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                        @svg('heroicon-o-shopping-cart', ['class' => 'h-6 w-6'])
-                    </button>
-
-                    <a href="{{ route('dashboard') }}"
-                        class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
-                        {{ translate('Dashboard') }}
-                    </a>
+                        <a href="{{ route('dashboard') }}"
+                            class="bg-white text-primary rounded-[6px] shadow-lg px-[19px] py-[9px] text-16 font-semibold">
+                            {{ translate('Dashboard') }}
+                        </a>
                     @endguest
                 </div>
 
@@ -73,7 +68,7 @@
         From: "opacity-100 scale-100"
         To: "opacity-0 scale-95"
     -->
-        <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
+        <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-10"
             x-show="show_mobile_menu" x-transition:enter="ease-out duration-200"
             x-cloak
             x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
@@ -101,15 +96,15 @@
 
                     <div class="mt-6">
                         <nav class="grid gap-y-8">
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'features']) }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
                                 <span class="text-base font-medium text-gray-900">{{ translate('Features') }}</span>
                             </a>
 
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'plans-pricing']) }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
                                 <span class="text-base font-medium text-gray-900"> {{ translate('Pricing') }} </span>
                             </a>
 
-                            <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'blog']) }}" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
                                 <span class="text-base font-medium text-gray-900"> {{ translate('Blog') }} </span>
                             </a>
 

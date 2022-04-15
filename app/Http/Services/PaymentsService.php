@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Session;
 use EVS;
 use FX;
+use DB;
 
 class PaymentsService
 {
@@ -31,6 +32,27 @@ class PaymentsService
         $this->paypal = $this->payment_methods_all->where('gateway', 'paypal')->first();
         $this->wire_transfer = $this->payment_methods_all->where('gateway', 'wire_transfer')->first();
         $this->paysera = $this->payment_methods_all->where('gateway', 'paysera')->first();
+
+        // TODO: This should be done in some new admin middleware (maybe inside IsAdmin)
+        $all_possible_gateways = \App\Enums\PaymentGatewaysEnum::labels();
+        if(!empty($all_possible_gateways)) {
+            $gateways_in_db = $this->payment_methods_all->pluck('gateway');
+
+            foreach($all_possible_gateways as $gateway => $label) {
+                
+                if(!$gateways_in_db->contains($gateway)) {
+                    DB::table('payment_methods_universal')->insert([
+                        'enabled' => 0,
+                        'name' => $label,
+                        'gateway' => $gateway,
+                        'description' => '',
+                        'instructions' => '',
+                        'data' => json_encode([]),
+                    ]);
+                }
+            }
+        }
+        // Move the logic in middleware ^^^
     }
 
     public function getPaymentMethods() {

@@ -11,10 +11,10 @@
         </div>
       </div>
 
-      <div class="grid gap-10 grid-cols-12">
+      <div class="grid gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         @if($models->isNotEmpty())
           @foreach($models as $model)
-            <div class="col-span-12 sm:col-span-6 lg:col-span-3" x-data="{
+            <div class="w-full" x-data="{
                 month_price: @js($model->getTotalPrice(true)),
                 annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice(true) / 12)),
                 {{-- discount_percent: @js(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), --}}

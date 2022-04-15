@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    @if(get_tenant_setting('multiplan_purchase'))
+                                    {{-- @if(get_tenant_setting('multiplan_purchase'))
                                         <div class="w-full pb-3" >
                                             <label for="account-number" class="block text-sm font-medium text-gray-700">{{ translate('Quantity') }}</label>
                                             <div class="mt-1 relative rounded-md shadow-sm">
@@ -55,7 +55,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                    @endif --}}
 
                                     <a href="{{ $plan->getStripeCheckoutPermalink() }}" target="_blank" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
                                         {{ translate('Try it free') }}

@@ -208,78 +208,86 @@ class WeBuilderService
                                     'data' => [],
                                     'settings' => []
                                 ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_02' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_02',
-                                    'title' => 'Feature Section 02',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_03' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_03',
-                                    'title' => 'Feature Section 03',
+                                'tailwind-ui.sections.marketing.feature-sections.features-grid01' => [
+                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.features-grid01',
+                                    'title' => 'Features Grid 01',
                                     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.03-feature-grid-list-xl.png',
                                     'order' => -1,
                                     'data' => [],
                                     'settings' => []
                                 ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_04' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_04',
-                                    'title' => 'Feature Section 04',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.04-feature-list-xl.png',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_05' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_05',
-                                    'title' => 'Feature Section 05',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.05-offset-2x2-grid-xl.png',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_06' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_06',
-                                    'title' => 'Feature Section 06',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.07-simple-three-column-xl.png',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_07' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_07',
-                                    'title' => 'Feature Section 07',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.07-simple-three-column-xl.png',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_08' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_08',
-                                    'title' => 'Feature Section 08',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.07-simple-three-column-xl.png',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_09' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_09',
-                                    'title' => 'Feature Section 09',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
-                                'tailwind-ui.sections.marketing.feature-sections.feature-section_10' => [
-                                    'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_10',
-                                    'title' => 'Feature Section 10',
-                                    'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.11-grid-with-offset-icons-xl.png',
-                                    'order' => -1,
-                                    'data' => [],
-                                    'settings' => []
-                                ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_02' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_02',
+                                //     'title' => 'Feature Section 02',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_03' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_03',
+                                //     'title' => 'Feature Section 03',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.03-feature-grid-list-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_04' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_04',
+                                //     'title' => 'Feature Section 04',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.04-feature-list-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_05' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_05',
+                                //     'title' => 'Feature Section 05',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.05-offset-2x2-grid-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_06' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_06',
+                                //     'title' => 'Feature Section 06',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.07-simple-three-column-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_07' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_07',
+                                //     'title' => 'Feature Section 07',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.07-simple-three-column-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_08' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_08',
+                                //     'title' => 'Feature Section 08',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.07-simple-three-column-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_09' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_09',
+                                //     'title' => 'Feature Section 09',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
+                                // 'tailwind-ui.sections.marketing.feature-sections.feature-section_10' => [
+                                //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_10',
+                                //     'title' => 'Feature Section 10',
+                                //     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.11-grid-with-offset-icons-xl.png',
+                                //     'order' => -1,
+                                //     'data' => [],
+                                //     'settings' => []
+                                // ],
                             ]
                         ],
                         'pricing-sections' => [
@@ -373,7 +381,21 @@ class WeBuilderService
                                     'settings' => []
                                 ],
                             ]
-                        ]
+                        ],
+                        'blog-archive' => [
+                            'title' => 'Blog Archives',
+                            'description' => 'All kinds of different blog archive components',
+                            'sections' => [
+                                'tailwind-ui.sections.marketing.blog-archives.blog-archive01' => [
+                                    'id' => 'tailwind-ui.sections.marketing.blog-archives.blog-archive01',
+                                    'title' => 'Blog Archive 01',
+                                    'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.07-card-with-background-image-xl.jpg',
+                                    'order' => -1,
+                                    'data' => [],
+                                    'settings' => []
+                                ],
+                            ],
+                        ],
                     ],
                     'ecommerce' => [],
                     'application-ui' => []
