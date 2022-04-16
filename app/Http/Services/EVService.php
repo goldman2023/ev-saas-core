@@ -58,7 +58,7 @@ class EVService
             } else {
                 return true;
             }
-        })->count() > 0 ? $item : null)->filter()->toArray();
+        })->count() > 0 ? $item : null)->filter()->values()->toArray();
     }
 
     public function getDashboardMenu()
@@ -68,7 +68,7 @@ class EVService
                 return \Permissions::canAccess($child['user_types'], $child['permissions'], false);
             })->toArray();
             return  $group;
-        })->filter(fn ($group) => !empty($group['items']))->toArray();
+        })->filter(fn ($group) => !empty($group['items']))->values()->toArray();
     }
 
     protected function getDashboardMenuTemplate(): array

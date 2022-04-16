@@ -10,11 +10,13 @@ class AvailableSections extends Component
 {
     public $available_sections;
     public $available_sections_flat;
+    public $html_section_template;
 
     public function mount()
     {
         $this->available_sections = WeBuilder::getAllThemeSections('tailwind-ui');
         $this->available_sections_flat = WeBuilder::getAllThemeSections('tailwind-ui', true);
+        $this->html_section_template = WeBuilder::getHtmlSectionTemplate();
     }
 
     public function dehydrate() {
@@ -22,7 +24,6 @@ class AvailableSections extends Component
     }
 
     
-
     public function addSectionToPreview($section_id) {
         if(isset($this->available_sections_flat[$section_id])) {
             $this->emit('addSectionToPreviewEvent', [
@@ -30,6 +31,13 @@ class AvailableSections extends Component
                 'section' => $this->available_sections_flat[$section_id]
             ]);
         }
+    }
+
+    public function addHtmlSectionToPreview() {
+        $this->emit('addHtmlSectionToPreviewEvent', [
+            // 'id' => $section_id,
+            'section' => $this->html_section_template
+        ]);
     }
     
     public function render()

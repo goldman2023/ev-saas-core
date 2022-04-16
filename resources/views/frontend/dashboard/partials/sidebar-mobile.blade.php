@@ -1,8 +1,5 @@
+{{-- Dashboard Sidebar Menu Mobile  --}}
 <x-panels.flyout-panel id="dashboard-sidebar-panel">
-    <!-- <h3 class="text-18 mb-3 pb-2 border-b flex items-center" x-data="{}">
-        <span>{{ translate('') }}</span>
-    </h3> -->
-
     <div class="flex flex-col mb-1 grow">
         <div class="mt-3 flex flex-col">
             <div class="w-full flex items-center flex-shrink-0 px-6">
@@ -35,7 +32,8 @@
                 </button>
             </div>
 
-            @include('frontend.dashboard.navigation.sidebar')
+            @include('frontend.dashboard.navigation.sidebar-menu')
         </div>
     </div>
 </x-panels.flyout-panel>
+{{-- END Dashboard Sidebar Menu Mobile --}}

@@ -1,8 +1,3 @@
-@extends('frontend.layouts.user_panel')
-@section('meta_title')
-{{ translate('Page Builder') }}
-@endsection
-@section('panel_content')
 <div id="we-edit" class="h-full w-full flex" x-data="{}">
 
     {{--
@@ -51,4 +46,3 @@
 
     <livewire:we-media-library />
 </div>
-@endsection

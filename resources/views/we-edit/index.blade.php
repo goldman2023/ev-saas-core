@@ -1,5 +1,9 @@
 @extends('frontend.layouts.we-edit-layout')
 
+@section('meta_title')
+{{ translate('WeEdit Page Builder') }}
+@endsection
+
 @push('head_scripts')
 <link
   rel="stylesheet"
