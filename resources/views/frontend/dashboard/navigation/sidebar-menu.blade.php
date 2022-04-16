@@ -1,4 +1,4 @@
-<!-- Navigation -->
+{{-- Dashboard Sidebar Navigation --}}
 <nav class="px-3 mt-6 pb-5">
     <div class="space-y-1 mb-6">
         @if($menu = \EVS::getDashboardMenu())
@@ -104,6 +104,7 @@
             @endforeach
         @endif
     </div>
-    <x-dashboard.elements.support-card></x-dashboard.elements.support-card>
 
+    <x-dashboard.elements.support-card></x-dashboard.elements.support-card>
 </nav>
+{{-- END Dashboard Sidebar Navigation --}}

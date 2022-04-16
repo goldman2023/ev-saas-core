@@ -61,8 +61,6 @@ class PagesEditor extends Component
         }
 
         $this->setCurrentPagePreview();
-
-        //dd($this->current_page->content);
     }
 
     protected function setSectionUUID(&$target_section) {
@@ -145,6 +143,7 @@ class PagesEditor extends Component
             $section_data['section']['order'] = count($this->current_preview->content);
             $new_content = $this->current_preview->content;
             $this->setSectionUUID($section_data['section']); // set UUID to newly added section
+            dd($this->current_page->content);
             $new_content[] = $section_data['section'];
             $this->current_preview->content = $new_content; // replace old content with new one (old sections + new section)
             $this->current_preview->save(); // save preview to DB
