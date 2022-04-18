@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <div class="fixed z-[9999] inset-0 overflow-y-auto" x-data="{
   show: false,
   title: @entangle('title'),

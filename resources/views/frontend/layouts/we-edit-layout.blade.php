@@ -56,6 +56,12 @@
     @livewireStyles
     @livewireScripts
 
+    <style type="text/css">
+        .CodeMirror {
+            height: 100% !important;
+        }
+    </style>
+
     <script src="{{ static_asset('js/alpine.js', false, true, true) }}" defer></script>
 </head>
 <body class="h-full">
