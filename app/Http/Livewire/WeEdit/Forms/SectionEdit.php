@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Traits\Livewire\DispatchSupport;
 use App\Enums\WeEditLayoutEnum;
 use App\Models\PagePreview;
+use App\View\Components\TailwindUi\WeHtmlComponent;
 
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Container\Container;
@@ -51,11 +52,17 @@ class SectionEdit extends Component
 
     public function setSection($section_uuid) {
         $this->section = collect($this->current_preview->content)->firstWhere('uuid', $section_uuid);
-        $this->parseCustomFields();
+
+        if($this->section['id'] !== 'html') {
+            $this->parseCustomFields();
+        } else {
+            $this->parseSectionSettings();
+        }
     }
 
     public function saveSectionData() {
         try {
+            // Save current section to current_preview section with same UUID
             $new_content = collect($this->current_preview->content)->map(function($item) {
                 if($item['uuid'] === $this->section['uuid']) {
                     return $this->section;
@@ -91,6 +98,21 @@ class SectionEdit extends Component
             $this->inform(translate('Section settings saved successfully'), '', 'success');
         } catch(\Exception $e) {
             $this->dispatchGeneralError($e);
+        }
+    }
+
+    protected function parseSectionSettings() {
+        if($this->section['id'] !== 'html') {
+            $section_class = app($compiler->componentClass($this->section['id']));
+        } else {
+            $section_class = (new WeHtmlComponent());
+        }
+        
+
+        if(empty($this->section['settings'] ?? null)) {
+            $this->section['settings'] = $section_class->getDefaultSettings();
+        } else {
+            $this->section['settings'] = array_merge($section_class->getDefaultSettings(), $this->section['settings']); // replace defaults with section settings
         }
     }
 

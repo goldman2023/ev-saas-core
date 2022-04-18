@@ -24,6 +24,7 @@ class PagesEditor extends Component
 
     protected $listeners = [
         'addSectionToPreviewEvent' => 'addSectionToPreview',
+        'addHtmlSectionToPreviewEvent' => 'addHtmlSectionToPreview',
         'refreshPreviewEvent' => 'setCurrentPagePreview',
         'refreshPagesAndOpenNewPage' => 'refreshPagesAndOpenNewPage',
     ];
@@ -73,7 +74,7 @@ class PagesEditor extends Component
                     // if there is a sction with same UUID already present in current preview sections, fire this function again (it'll generate another random UUID, and break the loop)
                     // Probability for this is so fucking low that I don't even know why I wrote it :D
                     if(($section['uuid'] ?? '') === $target_section['uuid']) {
-                        $this->setSectionUUID($target_section); // this means that
+                        $this->setSectionUUID($target_section);
                         break;
                     }
                 }
@@ -139,11 +140,23 @@ class PagesEditor extends Component
     }
 
     public function addSectionToPreview($section_data) {
-        if(isset($section_data['id']) && $section_data['section']) {
+        if(isset($section_data['id']) && !empty($section_data['section'] ?? null)) {
             $section_data['section']['order'] = count($this->current_preview->content);
             $new_content = $this->current_preview->content;
             $this->setSectionUUID($section_data['section']); // set UUID to newly added section
-            dd($this->current_page->content);
+            $new_content[] = $section_data['section'];
+            $this->current_preview->content = $new_content; // replace old content with new one (old sections + new section)
+            $this->current_preview->save(); // save preview to DB
+
+            $this->emit('reloadCurrentPreviewEvent', $this->current_preview);
+        }
+    }
+
+    public function addHtmlSectionToPreview($section_data) {
+        if(!empty($section_data['section'] ?? null)) {
+            $section_data['section']['order'] = count($this->current_preview->content);
+            $new_content = $this->current_preview->content;
+            $this->setSectionUUID($section_data['section']); // set UUID to newly added section
             $new_content[] = $section_data['section'];
             $this->current_preview->content = $new_content; // replace old content with new one (old sections + new section)
             $this->current_preview->save(); // save preview to DB
