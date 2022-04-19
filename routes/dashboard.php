@@ -10,6 +10,7 @@ use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\EVPageController;
+use App\Http\Controllers\WeMediaController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Services\PaymentMethods\PayseraGateway;
@@ -19,24 +20,15 @@ use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SetDashboard;
 
-use App\Http\Controllers\Central\RegisterTenantController;
-use App\Http\Controllers\DocumentController;
-
 Route::middleware([
     'web',
-    'universal',
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     SetDashboard::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
-    Route::group([
-        'middleware' => ['auth'],
-        'prefix' => 'tenant'
-    ], function () {
-        Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
-    });
+
 
     Route::group([
         'middleware' => ['auth'],
@@ -146,21 +138,12 @@ Route::middleware([
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
         Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
         Route::get('/checkout/paysera/callback/{invoice_id}', [PayseraGateway::class, 'callback'])->name('gateway.paysera.callback');
-
         Route::post('/checkout/execute/payment/{invoice_id}', [EVCheckoutController::class, 'executePayment'])->name('checkout.execute.payment');
+
+        // WeMediaLibrary
+        Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');
+
         // ---------------------------------------------------- //
-
-        Route::post('/products/store/', 'ProductController@store')->name('products.store');
-        Route::post('/products/update/{id}', 'ProductController@update')->name('products.update');
-        Route::get('/products/destroy/{id}', 'ProductController@destroy')->name('products.destroy');
-        Route::get('/products/duplicate/{id}', 'ProductController@duplicate')->name('products.duplicate');
-        Route::post('/products/sku_combination', 'ProductController@sku_combination')->name('products.sku_combination');
-        Route::post('/products/sku_combination_edit', 'ProductController@sku_combination_edit')->name('products.sku_combination_edit');
-        Route::post('/products/seller/featured', 'ProductController@updateSellerFeatured')->name('products.seller.featured');
-        Route::post('/products/published', 'ProductController@updatePublished')->name('products.published');
-
-        Route::get('invoice/{order_id}', 'InvoiceController@invoice_download')->name('invoice.download');
-
 
 
         Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
@@ -232,3 +215,7 @@ Route::middleware([
     // Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.index');
 
 });
+
+
+
+

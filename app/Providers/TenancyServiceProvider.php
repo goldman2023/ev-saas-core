@@ -40,7 +40,8 @@ class TenancyServiceProvider extends ServiceProvider
 
                     \App\Jobs\Tenancy\CreateFrameworkDirectoriesForTenant::class, // Create framework/cache directory for each tenant, because they need it for temp file storage
                     \App\Jobs\Tenancy\GeneratePermissionsAndRoles::class, // generate permissions and roles and attach permissions to roles
-                    
+
+
                     // TODO: Populate Exchange Rates with FetchLatestFXRates::class
                 ])->send(function (Events\TenantCreated $event) {
                     return $event->tenant;
@@ -159,10 +160,19 @@ class TenancyServiceProvider extends ServiceProvider
                 ->group(base_path('routes/tenant.php'));
         }
 
+        if (file_exists(base_path('routes/central.php'))) {
+            Route::namespace(static::$controllerNamespace)
+                ->group(base_path('routes/central.php'));
+        }
+
         if (file_exists(base_path('routes/dashboard.php'))) {
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/dashboard.php'));
         }
+
+
+
+
     }
 
     protected function mapStorageToConfig()

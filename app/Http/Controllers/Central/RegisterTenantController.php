@@ -27,13 +27,13 @@ class RegisterTenantController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $domain = $data['domain'] . '.' . config('tenancy.central_domains.0');
+        $domain = $data['domain'] . '.' . config('tenancy.parent_domain');
         unset($data['domain']);
 
         $tenant = (new CreateTenantAction)($data, $domain);
 
         // We impersonate user with id 1. This user will be created by the CreateTenantAdmin job.
-        return redirect($tenant->impersonationUrl(1));
+        return redirect('https://'. $domain);
     }
 
     public function createDemoTenant() {
