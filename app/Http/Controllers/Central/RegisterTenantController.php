@@ -27,7 +27,7 @@ class RegisterTenantController extends Controller
 
         $data['password'] = bcrypt($data['password']);
 
-        $domain = $data['domain'] . '.' . config('tenancy.central_domains.0');
+        $domain = $data['domain'] . '.' . config('tenancy.parent_domain');
         unset($data['domain']);
 
         $tenant = (new CreateTenantAction)($data, $domain);
