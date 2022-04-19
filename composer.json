@@ -25,7 +25,6 @@
         "diglactic/laravel-breadcrumbs": "^7.1",
         "doctrine/dbal": "^3.1.4",
         "fideloper/proxy": "^4.0",
-        "froala/wysiwyg-editor-php-sdk": "^4.0",
         "genealabs/laravel-model-caching": "^0.11.3",
         "google/apiclient": "^2.12.1",
         "guzzlehttp/guzzle": "^7.0",
@@ -96,8 +95,7 @@
         },
         "files": [
             "app/Http/Helpers.php",
-            "vendor/webtopay/libwebtopay/WebToPay.php",
-            "vendor/froala/wysiwyg-editor-php-sdk/lib/FroalaEditor.php"
+            "vendor/webtopay/libwebtopay/WebToPay.php"
         ]
     },
     "autoload-dev": {

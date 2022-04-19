@@ -2,7 +2,8 @@
 
 namespace App\Actions;
 
-
+use App\Jobs\Tenancy\CreateFrameworkDirectoriesForTenant;
+use App\Jobs\Tenancy\GeneratePermissionsAndRoles;
 use App\Models\Central\Tenant;
 use App\Models\Central\Domain;
 
@@ -24,6 +25,23 @@ class CreateTenantAction
         $tenant->domains()->create(['domain' => $domain, 'theme' => 'ev-tailwind']); // Set default theme to: ev-tailwind
 
         $tenant->save();
+
+        \Artisan::call('tenants:migrate', [
+            '--tenants' => [$tenant->getTenantKey()],
+        ]);
+
+        \Artisan::call('tenants:seed', [
+            '--tenants' => [$tenant->getTenantKey()],
+        ]);
+
+        /* Fuck you TODO: @vukasin */
+        $tenant->run(function ($tenant) {
+            $storage_path = storage_path();
+
+            mkdir("$storage_path/framework/cache", 0775, true);
+        });
+
+
 
         if ($createStripeCustomer) {
             // $tenant->createAsStripeCustomer(); // TODO: Enable this logic when Spark and Central App are properly set!

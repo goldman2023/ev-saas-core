@@ -23,7 +23,7 @@ class PagesTableSeeder extends Seeder
                     array(
                         'id' => 1,
                         'type' => 'home_page',
-                        'title' => 'Home',
+                        'name' => 'Home',
                         'slug' => 'home',
                         'content' => NULL,
                         'meta_title' => NULL,
@@ -37,7 +37,7 @@ class PagesTableSeeder extends Seeder
                     array(
                         'id' => 2,
                         'type' => 'seller_policy_page',
-                        'title' => 'Seller Policy Pages',
+                        'name' => 'Seller Policy Pages',
                         'slug' => 'seller_policy',
                         'content' => NULL,
                         'meta_title' => NULL,
@@ -51,7 +51,7 @@ class PagesTableSeeder extends Seeder
                     array(
                         'id' => 3,
                         'type' => 'return_policy_page',
-                        'title' => 'Return Policy Page',
+                        'name' => 'Return Policy Page',
                         'slug' => 'return_policy',
                         'content' => NULL,
                         'meta_title' => NULL,
@@ -65,7 +65,7 @@ class PagesTableSeeder extends Seeder
                     array(
                         'id' => 4,
                         'type' => 'support_policy_page',
-                        'title' => 'Support Policy Page',
+                        'name' => 'Support Policy Page',
                         'slug' => 'support_policy',
                         'content' => NULL,
                         'meta_title' => NULL,
@@ -79,7 +79,7 @@ class PagesTableSeeder extends Seeder
                     array(
                         'id' => 5,
                         'type' => 'terms_conditions_page',
-                        'title' => 'Term and Conditions Page',
+                        'name' => 'Term and Conditions Page',
                         'slug' => 'terms_and_conditions',
                         'content' => NULL,
                         'meta_title' => NULL,
@@ -93,7 +93,7 @@ class PagesTableSeeder extends Seeder
                     array(
                         'id' => 6,
                         'type' => 'privacy_policy_page',
-                        'title' => 'Privacy Policy Page',
+                        'name' => 'Privacy Policy Page',
                         'slug' => 'privacy_policy',
                         'content' => NULL,
                         'meta_title' => NULL,
