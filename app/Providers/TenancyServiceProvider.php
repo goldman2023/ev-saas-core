@@ -154,6 +154,7 @@ class TenancyServiceProvider extends ServiceProvider
 
     protected function mapRoutes()
     {
+        /* Note: Do not include central app routes here ever. Because of midlewares applied in: makeTenancyMiddlewareHighestPriority */
         if (file_exists(base_path('routes/tenant.php'))) {
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/tenant.php'));
@@ -198,6 +199,7 @@ class TenancyServiceProvider extends ServiceProvider
     protected function makeTenancyMiddlewareHighestPriority()
     {
 
+        /* TODO: Destroy this code */
         $tenancyMiddleware = [
             // Even higher priority than the initialization middleware
             Middleware\PreventAccessFromCentralDomains::class,
