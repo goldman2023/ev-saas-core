@@ -239,8 +239,8 @@
 
                         {{-- Features --}}
                         <div class="w-full px-5" x-show="current_tab === 'features'">
-                             {{-- Feed Feature --}}
-                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
+                            {{-- Feed Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start " x-data="{}">
                                 <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                     <span class="text-sm font-medium text-gray-900">{{ translate('Feed') }}</span>
                                     <p class="text-gray-500 text-sm">
@@ -253,6 +253,36 @@
                                 </div>
                             </div>
                             {{-- END Feed Feature --}}
+
+                            {{-- Chat Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Chat') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('If you want to enable chat on website') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.chat_feature.value" />
+                                </div>
+                            </div>
+                            {{-- END Chat Feature --}}
+
+                            {{-- WeEdit Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('WeEdit') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('Enable/Disable WeEdit page builder') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.weedit_feature.value" />
+                                </div>
+                            </div>
+                            {{-- END WeEdit Feature --}}
 
                             {{-- Multiplan Purchase Feature --}}
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
@@ -317,6 +347,36 @@
                             </div>
                             {{-- END Onboarding flow --}}
 
+                            {{-- Wishlist Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Wishlist') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('Enable/Disable wishlists on website') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.wishlist_feature.value" />
+                                </div>
+                            </div>
+                            {{-- END Wishlist Feature --}}
+
+                            {{-- Vendor Mode Feature --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Vendor Mode') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('Enable/Disable single vendor mode (shops can add their domains and custom pages under multi-vendor platform)') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.vendor_mode_feature.value" />
+                                </div>
+                            </div>
+                            {{-- END Vendor Mode Feature --}}
+
                             {{-- Save Features --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
@@ -324,6 +384,10 @@
                                         $wire.set('settings.feed_enabled.value', settings.feed_enabled.value, true);
                                         $wire.set('settings.multiplan_purchase.value', settings.multiplan_purchase.value, true);
                                         $wire.set('settings.onboarding_flow.value', settings.onboarding_flow.value, true);
+                                        $wire.set('settings.chat_feature.value', settings.chat_feature.value, true);
+                                        $wire.set('settings.weedit_feature.value', settings.weedit_feature.value, true);
+                                        $wire.set('settings.wishlist_feature.value', settings.wishlist_feature.value, true);
+                                        $wire.set('settings.vendor_mode_feature.value', settings.vendor_mode_feature.value, true);
                                     "
                                     wire:click="saveFeatures()">
                                 {{ translate('Save') }}

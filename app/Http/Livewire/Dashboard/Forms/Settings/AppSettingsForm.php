@@ -52,6 +52,12 @@ class AppSettingsForm extends Component
                 'settings.onboarding_flow.value' => ['boolean'],
                 'settings.register_redirect_url.value' => ['nullable', 'url'],
                 'settings.login_redirect_url.value' => ['nullable', 'url'],
+
+                'settings.chat_feature.value' => ['boolean'],
+                'settings.weedit_feature.value' => ['boolean'],
+                'settings.wishlist_feature.value' => ['boolean'],
+                'settings.vendor_mode_feature.value' => ['boolean'],
+
             ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
