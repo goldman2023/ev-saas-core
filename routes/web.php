@@ -12,6 +12,7 @@ Route::get('/refresh-csrf', function() {
 Route::middleware([
     'web',
 ])
+->domain(config('tenancy.primary_central_domain'))
 ->group(function () {
 
         Route::get('/', [CentralController::class, 'index'])->name('central.index');
