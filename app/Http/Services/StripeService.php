@@ -54,6 +54,10 @@ class StripeService
         $this->supported_shipping_countries = array_values(array_diff(['LT', 'RS', 'DE', 'GB', 'ES', 'FR', 'US'], $this->unsupported_shipping_countries));
     }
 
+    public function getStripeMode() {
+        return $this->mode_prefix;
+    }
+
     public function saveStripeProduct($model)
     {
         // Find model's stripe ID in CoreMeta and based on it decide wheter to create OR update Stripe Product
@@ -236,6 +240,10 @@ class StripeService
             'automatic_tax' => [
                 'enabled' => true,
             ],
+            /* TODO: Add this enable disable as a stripe option */
+            'tax_id_collection' => [
+                'enabled' => true,
+              ],
         ];
 
         // Check if Modal is digital or not, and based on that display or hide Stripe shipping options
@@ -379,7 +387,7 @@ class StripeService
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
         $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
 
-        // TODO: 
+        // TODO:
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
@@ -398,12 +406,12 @@ class StripeService
             // Invalid signature
 
             // Todo: It happens that this is invoked without any reason for Pix-Pro, Fix that later on
-            
+
 			// print_r($e);
             // http_response_code(400);
             // exit();
             $event = json_decode($payload);
-            
+
         }
 
         // Handle the event
