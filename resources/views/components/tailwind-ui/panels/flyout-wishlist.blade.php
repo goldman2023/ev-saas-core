@@ -22,7 +22,7 @@
                         <h3 class="text-22">{{ translate('Wishlist is empty') }}</h3>
                         <p>{{ translate('Add some products/services to the wishlist in order to see them here.') }}</p>
                     </div>
-                    <a class="btn btn-info inline-flex items-center transition-3d-hover px-5" href="{{ route('search') }}">
+                    <a class="btn btn-info inline-flex items-center transition-3d-hover px-5" href="{{ route('feed.products') }}">
                         @svg('heroicon-o-shopping-cart', ['class' => 'mr-2 w-4 h-4'])
                         {{ translate('Go to catalog') }}
                     </a>

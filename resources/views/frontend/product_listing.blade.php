@@ -53,7 +53,7 @@ $meta_description = get_setting('site_motto');
                         @else
                         <li class="breadcrumb-item {{ !empty($selected_category) ? 'fw-400':'opacity-50' }} ">
                             <a class="text-white"
-                                href="{{ route('search') }}">{{ translate('All Categories') }}</a>
+                                href="{{ route('feed.products') }}">{{ translate('All Categories') }}</a>
                         </li>
                         @endisset
 

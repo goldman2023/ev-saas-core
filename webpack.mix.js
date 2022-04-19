@@ -52,7 +52,7 @@ mix.setPublicPath(`public/themes/${theme}`)
     });
 
 
-var entry_path = 'themes/ev-saas-default';
+var entry_path = 'themes/';
 mix.setPublicPath(`public/themes/${theme}`).js(`${entry_path}/js/app.js`, `public/themes/${theme}/js`).version()
     .js(`${entry_path}/js/alpine.js`, `public/themes/${theme}/js`).version()
     .sass(`${entry_path}/scss/app.scss`, `public/themes/${theme}/css`, {
