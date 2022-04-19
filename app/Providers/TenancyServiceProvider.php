@@ -160,10 +160,7 @@ class TenancyServiceProvider extends ServiceProvider
                 ->group(base_path('routes/tenant.php'));
         }
 
-        if (file_exists(base_path('routes/central.php'))) {
-            Route::namespace(static::$controllerNamespace)
-                ->group(base_path('routes/central.php'));
-        }
+
 
         if (file_exists(base_path('routes/dashboard.php'))) {
             Route::namespace(static::$controllerNamespace)
@@ -210,7 +207,7 @@ class TenancyServiceProvider extends ServiceProvider
 
         $tenancyMiddleware = [
             // Even higher priority than the initialization middleware
-            Middleware\PreventAccessFromCentralDomains::class,
+            // Middleware\PreventAccessFromCentralDomains::class,
 
             // IMPORTANT: This one is needed in order to consider both vendor and tenant domains when resolving a tenant!
             \App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains::class,
@@ -222,7 +219,7 @@ class TenancyServiceProvider extends ServiceProvider
         ];
 
         foreach (array_reverse($tenancyMiddleware) as $middleware) {
-            $this->app[\Illuminate\Contracts\Http\Kernel::class]->prependToMiddlewarePriority($middleware);
+            // $this->app[\Illuminate\Contracts\Http\Kernel::class]->prependToMiddlewarePriority($middleware);
         }
     }
 }
