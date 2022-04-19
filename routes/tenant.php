@@ -59,13 +59,10 @@ use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 Route::middleware([
     'web',
-    'universal',
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-    // Route::get('/we-edit-grape', 'WeEditController@grapejs_index')->name('we-edit-grape.index');
-
     Route::group([
         'middleware' => ['auth'],
     ], function () {

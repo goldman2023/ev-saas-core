@@ -148,7 +148,7 @@ class CheckoutSingleForm extends Component
         $this->items = CartService::getItems();
 
         $this->order = new Order();
-        $this->order->shop_id = $this->items->first()->shop_id; // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
+        $this->order->shop_id = ($this->items->first()?->shop_id ?? 1); // TODO: THIS IS VERY IMPORTANT - Separate $items based on shop_ids and create multiple orders
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
@@ -319,7 +319,7 @@ class CheckoutSingleForm extends Component
             $this->order->user_id = auth()->user()->id ?? null;
 
             // TODO: THIS IS ALSO VERY IMPORTANT - Separate $items based on type - is it a subscription or a standard product...or installment?
-            
+
             if($this->items->first() instanceof Plan) {
                 /*
                 * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
@@ -336,7 +336,7 @@ class CheckoutSingleForm extends Component
                 $this->order->invoice_grace_period = $default_grace_period;
                 $this->order->invoicing_start_date = Carbon::now()->timestamp; // when invoicing starts
             }
-         
+
             /*
             * Billing data (when Address is selected)
             * Only if user is logged-in
@@ -382,7 +382,7 @@ class CheckoutSingleForm extends Component
             $this->order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $this->order->shipping_cost = 0;
             $this->order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
-            
+
 
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
             // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)
@@ -449,13 +449,13 @@ class CheckoutSingleForm extends Component
             $invoice->billing_city = $this->order->billing_city;
             $invoice->billing_zip = $this->order->billing_zip;
 
-        
+
             // Take invoice totals from Cart
             $invoice->base_price = CartService::getOriginalPrice()['raw'];
             $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
             $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
             $invoice->total_price = CartService::getSubtotalPrice()['raw']; // should be TotalPrice in future...
-        
+
 
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created

@@ -31,7 +31,7 @@ class ExtendedDomainTenantResolver extends DomainTenantResolver
             return $tenant;
         }
         else {
-            return abort(404);
+            // return abort(404);
         }
 
         throw new TenantCouldNotBeIdentifiedOnDomainException($args[0]);

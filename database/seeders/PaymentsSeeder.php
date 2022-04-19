@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\PaymentMethodUniversal;
 
-class PaymentMethodsSeeder extends Seeder
+class PaymentsSeeder extends Seeder
 {
     /**
      * Run the database seeders.

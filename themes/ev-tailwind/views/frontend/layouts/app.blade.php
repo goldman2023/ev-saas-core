@@ -71,9 +71,15 @@
 
     @auth
     <x-panels.flyout-profile></x-panels.flyout-profile>
-    <x-default.chat.widget-chat></x-default.chat.widget-chat>
     <livewire:we-media-library />
     @endauth
+
+    @if(get_tenant_setting('chat_feature', false))
+    @auth
+        <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    @endauth
+    @endif
+
 
     <x-system.info-modal></x-system.info-modal>
     <x-system.validation-errors-toast timeout="5000"></x-system.validation-errors-toast>
