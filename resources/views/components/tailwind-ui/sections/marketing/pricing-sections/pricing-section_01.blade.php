@@ -59,7 +59,7 @@
                       @endauth
 
                       @guest
-                        <a href="{{ '/login?redirect_url='.urlencode(route('my.plans.management')) }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
+                        <a href="{{ route('user.registration') }}" class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
                             {{ translate('Try it free') }}
                         </a>
                       @endguest

@@ -35,12 +35,6 @@ class RegisterForm extends Component
     public $password;
     public $password_confirmation;
     public $terms_consent;
-    public $redirect_url;
- 
-    protected $queryString = [
-        'redirect_url' => ['except' => '']
-    ];
-
 
     protected function rules()
     {
@@ -75,6 +69,7 @@ class RegisterForm extends Component
      */
     public function mount()
     {
+ 
     }
 
     public function render()
@@ -144,10 +139,16 @@ class RegisterForm extends Component
 
     protected function registered()
     {
-        if ($this->user instanceof User && $this->user?->email == null) {
-            return redirect()->route('verification');
-        } else {
+        if(get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
+        }
+
+        if(!get_tenant_setting('onboarding_flow')) {
+            if(!empty(get_tenant_setting('register_redirect_url'))) {
+                return redirect(get_tenant_setting('register_redirect_url'));
+            } else {
+                return redirect()->route('verification');
+            } 
         }
     }
 }

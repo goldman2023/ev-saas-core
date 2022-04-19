@@ -27,4 +27,14 @@ class EVBlogPostController extends Controller
         return view('frontend.dashboard.blog-posts.edit', compact('blog_post'));
     }
 
+    // FRONTEND
+    public function single(Request $request, $slug) {
+        $blog_post = BlogPost::where('slug', $slug)->first();
+
+        if(!empty($blog_post)) {
+            return view('frontend.blog.single.blog-post-single-1', compact('blog_post'));
+        }
+
+        abort(404);
+    }
 }
