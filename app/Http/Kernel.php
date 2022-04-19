@@ -53,10 +53,11 @@ class Kernel extends HttpKernel
 
         'tenant' => [
             'web',
-            InitializeTenancyByDomainOrSubdomain::class,
         ],
 
-        'universal' => [],
+        'universal' => [
+
+        ],
     ];
 
     /**
