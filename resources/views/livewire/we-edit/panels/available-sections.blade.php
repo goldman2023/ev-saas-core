@@ -20,42 +20,47 @@
             </div>
         </div>
 
+        <div class="w-full pt-4">
+            <button type="button" class="btn-primary w-full justify-center" @click="$wire.addHtmlSectionToPreview()">
+                {{ translate('Add Custom HTML Section') }}
+            </button>
+        </div>
+
         <div class="w-full mt-4">
             @if(!empty($available_sections))
             @php
-            $marketing = $available_sections['sections']['marketing'] ?? [];
+                $marketing = $available_sections['sections']['marketing'] ?? [];
             @endphp
-            @foreach($marketing as $key => $group)
-            <div class="w-100 mb-4">
-                <div class="flex justify-between items-center">
-                    <strong>{{ $group['title'] }}</strong>
-                    <span class="text-12 hover:underline hover:text-gray-600 cursor-pointer">{{ translate('See all')
-                        }}</span>
-                </div>
-
-                <div class="w-full mt-3" style="display: flex; flex-wrap: no-wrap; overflow: scroll">
-
-                    <!-- Slides -->
-                    @if(!empty($group['sections']))
-                    @foreach($group['sections'] as $id => $section)
-                    <div class="rounded border flex flex-col cursor-pointer relative px-2 py-2 w-50" style="min-width: 200px;">
-                        <div
-                            class="absolute inset-0 bg-cover bg-center z-1 rounded w-full h-full flex justify-center items-center bg-stone-800 opacity-0 hover:opacity-100 bg-opacity-80 duration-300">
-                            <button type="button" class="cursor-pointer text-14 rounded text-white bg-sky-600 px-3 py-2"
-                                @click="$wire.addSectionToPreview('{{ $section['id'] ?? '' }}')">
-                                {{ translate('Add to page') }}
-                            </button>
+                @foreach($marketing as $key => $group)
+                    <div class="w-100 mb-4">
+                        <div class="flex justify-between items-center">
+                            <strong>{{ $group['title'] }}</strong>
+                            <span class="text-12 hover:underline hover:text-gray-600 cursor-pointer">{{ translate('See all') }}</span>
                         </div>
 
-                        <img class="rounded h-[80px] object-cover mb-2" src="{{ $section['thumbnail'] ?? '' }}" />
-                        <span class="text-14 line-clamp-1">{{ $section['title'] ?? '' }}</span>
-                    </div>
-                    @endforeach
-                    @endif
-                </div>
+                        <div class="w-full flex flex-nowrap overflow-auto mt-3 pb-3">
 
-            </div>
-            @endforeach
+                            <!-- Slides -->
+                            @if(!empty($group['sections']))
+                                @foreach($group['sections'] as $id => $section)
+                                <div class="rounded border flex flex-col cursor-pointer relative px-2 py-2 w-50 mr-3" style="min-width: 200px;">
+                                    <div
+                                        class="absolute inset-0 bg-cover bg-center z-1 rounded w-full h-full flex justify-center items-center bg-stone-800 opacity-0 hover:opacity-100 bg-opacity-80 duration-300">
+                                        <button type="button" class="cursor-pointer text-14 rounded text-white bg-sky-600 px-3 py-2"
+                                            @click="$wire.addSectionToPreview('{{ $section['id'] ?? '' }}')">
+                                            {{ translate('Add to page') }}
+                                        </button>
+                                    </div>
+
+                                    <img class="rounded h-[80px] object-cover mb-2" src="{{ $section['thumbnail'] ?? '' }}" />
+                                    <span class="text-14 line-clamp-1">{{ $section['title'] ?? '' }}</span>
+                                </div>
+                                @endforeach
+                            @endif
+                        </div>
+
+                    </div>
+                @endforeach
             @endif
         </div>
     </div>

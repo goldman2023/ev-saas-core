@@ -35,7 +35,7 @@ class AvailableSections extends Component
 
     public function addHtmlSectionToPreview() {
         $this->emit('addHtmlSectionToPreviewEvent', [
-            // 'id' => $section_id,
+            'id' => 'html',
             'section' => $this->html_section_template
         ]);
     }
