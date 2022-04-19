@@ -280,6 +280,7 @@ return [
         'Permissions' => App\Facades\Permissions::class,
         'MyShop' => App\Facades\MyShop::class,
         'Vendor' => App\Facades\Vendor::class,
+        'MediaService' => App\Facades\Media::class,
         'EVS' => App\Facades\EVS::class,
         'CartService' => App\Facades\CartService::class,
         'TenantSettings' => App\Facades\TenantSettings::class,

@@ -5,6 +5,7 @@
             let editor = new FroalaEditor('#'+this.id, {
                 heightMin: 200,
                 heightMax: 800,
+                imageUploadURL: '{{ route('we-media-library.froala.upload-image') }}',
                 events: {
                     'initialized': function () {
                         this.html.insert({{ $field }});

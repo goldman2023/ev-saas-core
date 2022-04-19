@@ -15,6 +15,7 @@ use Exception;
 use Image;
 use File;
 use MyShop;
+use MediaService;
 
 class WeMediaLibrary extends Component
 {
@@ -109,7 +110,7 @@ class WeMediaLibrary extends Component
 
                 $extension = $media->guessExtension();
 
-                if(isset($this->getPermittedExtensions()[$extension])) {
+                if(isset(MediaService::getPermittedExtensions()[$extension])) {
                     $upload->file_original_name = null;
 
                     $arr = explode('.', $media->getClientOriginalName());
@@ -142,10 +143,9 @@ class WeMediaLibrary extends Component
                     $upload->file_name = $tenant_path.'/'.$new_filename;
                     $upload->user_id = auth()->user()->id;
                     $upload->shop_id = empty(MyShop::getShopID()) ? null : MyShop::getShopID();
-                    $upload->type = $this->getPermittedExtensions()[$extension];
+                    $upload->type = MediaService::getPermittedExtensions()[$extension];
                     $upload->file_size = $media->getSize();
                     $upload->save();
-
 
                     $this->new_media[$key] = $upload;
                 }
@@ -171,42 +171,5 @@ class WeMediaLibrary extends Component
         $this->lastPageNumber = $this->paginator->lastPage();
     }
 
-    protected function getPermittedExtensions() {
-        return [
-            "jpg"=>"image",
-            "jpeg"=>"image",
-            "png"=>"image",
-            "svg"=>"image",
-            "webp"=>"image",
-            "gif"=>"image",
-            "mp4"=>"video",
-            "mpg"=>"video",
-            "mpeg"=>"video",
-            "webm"=>"video",
-            "ogg"=>"video",
-            "avi"=>"video",
-            "mov"=>"video",
-            "flv"=>"video",
-            "swf"=>"video",
-            "mkv"=>"video",
-            "wmv"=>"video",
-            "wma"=>"audio",
-            "aac"=>"audio",
-            "wav"=>"audio",
-            "mp3"=>"audio",
-            "zip"=>"archive",
-            "rar"=>"archive",
-            "7z"=>"archive",
-            "doc"=>"document",
-            "txt"=>"document",
-            "docx"=>"document",
-            "pdf"=>"document",
-            "csv"=>"document",
-            "xml"=>"document",
-            "ods"=>"document",
-            "xlr"=>"document",
-            "xls"=>"document",
-            "xlsx"=>"document"
-        ];
-    }
+    
 }
