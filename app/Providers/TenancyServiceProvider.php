@@ -8,6 +8,7 @@ use App\Listeners\Tenancy\StorageToConfigMapping;
 use App\Models\Shop;
 use App\Models\SocialAccount;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -40,8 +41,8 @@ class TenancyServiceProvider extends ServiceProvider
 
                     \App\Jobs\Tenancy\CreateFrameworkDirectoriesForTenant::class, // Create framework/cache directory for each tenant, because they need it for temp file storage
                     \App\Jobs\Tenancy\GeneratePermissionsAndRoles::class, // generate permissions and roles and attach permissions to roles
-                    
-                    
+
+
                     // TODO: Populate Exchange Rates with FetchLatestFXRates::class
                 ])->send(function (Events\TenantCreated $event) {
                     return $event->tenant;
@@ -164,6 +165,16 @@ class TenancyServiceProvider extends ServiceProvider
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/dashboard.php'));
         }
+
+        if (file_exists(base_path('routes/central.php'))) {
+            if(Request::getHost() == config('tenancy.primary_central_domain')) {
+                Route::namespace(static::$controllerNamespace)
+                ->group(base_path('routes/central.php'));
+            }
+
+        }
+
+
     }
 
     protected function mapStorageToConfig()

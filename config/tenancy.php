@@ -29,6 +29,7 @@ return [
      */
 
     'central_domains' => $central_domains,
+    'primary_central_domain' => env('CENTRAL_DOMAIN', 'ev-saas.com'),
     'parent_domain' => env('PARENT_DOMAIN', 'ev-saas.com'),
 
 

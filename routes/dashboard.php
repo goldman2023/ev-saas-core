@@ -19,8 +19,6 @@ use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SetDashboard;
 
-use App\Http\Controllers\Central\RegisterTenantController;
-use App\Http\Controllers\DocumentController;
 
 
 
@@ -34,13 +32,6 @@ Route::middleware([
 
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-
-    Route::group([
-        'middleware' => ['auth'],
-        'prefix' => 'tenant'
-    ], function () {
-        Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
-    });
 
     Route::group([
         'middleware' => ['auth'],
@@ -239,17 +230,4 @@ Route::middleware([
 
 
 
-/* FYI: This is central app routes  */
-Route::middleware([
-    'web',
-    'universal',
-])->group(function () {
-    Route::view('/', 'central.landing-pages.landing')->name('central.landing');
-    Route::view('/pricing', 'central.landing-pages.pricing')->name('central.pricing');
 
-    Route::get('/register', [RegisterTenantController::class, 'show'])->name('central.tenants.register');
-    Route::post('/register/submit', [RegisterTenantController::class, 'submit'])->name('central.tenants.register.submit');
-
-    Route::get('/login', [LoginTenantController::class, 'show'])->name('central.tenants.login');
-    Route::post('/login/submit', [LoginTenantController::class, 'submit'])->name('central.tenants.login.submit');
-});
