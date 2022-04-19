@@ -9,7 +9,8 @@ $central_domains = [
     //'ev-saas.com',
     //'ev-saas.test',
     //'localhost',
-    /* Production */];
+    /* Production */
+];
 
 $central_domains[] = 'we-saas.com';
 $central_domains[] = 'app.we-saas.com';
@@ -31,6 +32,8 @@ return [
     'central_domains' => $central_domains,
     'primary_central_domain' => env('CENTRAL_DOMAIN', 'ev-saas.com'),
     'parent_domain' => env('PARENT_DOMAIN', 'ev-saas.com'),
+
+    'parent_domain' =>  env('PARENT_DOMAIN', 'ev-saas.com'),
 
 
 

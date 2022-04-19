@@ -55,8 +55,9 @@ class OnboardingController extends Controller
                 $user->syncPermissions($permissions);
                 $user->syncRoles(['Owner']);
             } catch (\Exception $e) {
-                \Artisan::call('tenants:migrate --tenants=' . tenant()->id);
-                \Artisan::call('tenants:seed --tenants=' . tenant()->id);
+                /* IMPORTANT These are for the refference what should be generated on a global level */
+                // \Artisan::call('tenants:migrate --tenants=' . tenant()->id);
+                // \Artisan::call('tenants:seed --tenants=' . tenant()->id);
                 \Artisan::call('permissions:populate --tenant_id=' . tenant()->id);
                 $user->syncPermissions($permissions);
                 $user->syncRoles(['Owner']);

@@ -115,11 +115,9 @@ class TenancyServiceProvider extends ServiceProvider
         $this->mapStorageToConfig();
         $this->bootEvents();
         $this->mapRoutes();
-//        $this->enableTenantCacheLookup();
+        //        $this->enableTenantCacheLookup();
 
         $this->makeTenancyMiddlewareHighestPriority();
-
-
     }
 
     /**
@@ -128,7 +126,8 @@ class TenancyServiceProvider extends ServiceProvider
      *
      *
      */
-    public function enableTenantCacheLookup() {
+    public function enableTenantCacheLookup()
+    {
         // enable cache lookup
         DomainTenantResolver::$shouldCache = true;
 
@@ -155,29 +154,21 @@ class TenancyServiceProvider extends ServiceProvider
 
     protected function mapRoutes()
     {
+        /* Note: Do not include central app routes here ever. Because of midlewares applied in: makeTenancyMiddlewareHighestPriority */
         if (file_exists(base_path('routes/tenant.php'))) {
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/tenant.php'));
-        }
-
-        if (file_exists(base_path('routes/central.php'))) {
-            Route::namespace(static::$controllerNamespace)
-                ->group(base_path('routes/central.php'));
         }
 
         if (file_exists(base_path('routes/dashboard.php'))) {
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/dashboard.php'));
         }
-
-
-
-
     }
 
     protected function mapStorageToConfig()
     {
-        $social_template = collect(config('services'))->filter(fn($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
+        $social_template = collect(config('services'))->filter(fn ($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
         $mapping = [];
 
         /**
@@ -196,9 +187,9 @@ class TenancyServiceProvider extends ServiceProvider
          *
          * BOOM: config('{something}') returns data for current Tenant, not global data!
          */
-        foreach($social_template as $provider => $data) {
-            foreach($data as $key => $value) {
-                $mapping[$provider.'_'.$key] = 'services.'.$provider.'.'.$key;
+        foreach ($social_template as $provider => $data) {
+            foreach ($data as $key => $value) {
+                $mapping[$provider . '_' . $key] = 'services.' . $provider . '.' . $key;
             }
         }
 
@@ -208,6 +199,7 @@ class TenancyServiceProvider extends ServiceProvider
     protected function makeTenancyMiddlewareHighestPriority()
     {
 
+        /* TODO: Destroy this code */
         $tenancyMiddleware = [
             // Even higher priority than the initialization middleware
             Middleware\PreventAccessFromCentralDomains::class,

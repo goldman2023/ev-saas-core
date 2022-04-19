@@ -53,7 +53,7 @@ class StripeService
         // Set supported shipping countries
         $this->supported_shipping_countries = array_values(array_diff(['LT', 'RS', 'DE', 'GB', 'ES', 'FR', 'US'], $this->unsupported_shipping_countries));
     }
-    
+
     public function getStripeMode() {
         return $this->mode_prefix;
     }
@@ -226,13 +226,13 @@ class StripeService
         }
 
         $me->saveCoreMeta($stripe_customer_id_key, $stripe_customer->id);
-        
+
         return $stripe_customer;
     }
 
     public function createCheckoutLink($model, $qty = 1, $preview = false, $abandoned_order_id = null)
     {
-        
+
         // Check if Stripe Product actually exists
 		$order = null;
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
@@ -444,7 +444,7 @@ class StripeService
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
         $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
 
-        // TODO: 
+        // TODO:
         $payload = @file_get_contents('php://input');
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
         $event = null;
@@ -463,12 +463,12 @@ class StripeService
             // Invalid signature
 
             // Todo: It happens that this is invoked without any reason for Pix-Pro, Fix that later on
-            
+
 			// print_r($e);
             // http_response_code(400);
             // exit();
             $event = json_decode($payload);
-            
+
         }
 
         // Handle the event

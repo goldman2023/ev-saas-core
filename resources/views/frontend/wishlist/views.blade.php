@@ -53,7 +53,7 @@
                             <h3 class="h3">{{ translate('No viewed items') }}</h3>
                             <p>{{ translate('Before you can see your views you should explore the marketplace') }}</p>
                         </div>
-                        <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('search') }}">
+                        <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('feed.products') }}">
                             {{ translate('Explore') }}
                         </a>
                     </div>

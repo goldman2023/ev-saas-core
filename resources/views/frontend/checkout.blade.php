@@ -662,7 +662,7 @@
                                                     </div>
                                                 </div>
                                             </template>
-                                            
+
                                             {{-- <div class="col-6 col-md-3 px-2 mb-3 mb-md-0">
                                                 <div class="custom-control custom-radio custom-control-inline checkbox-outline checkbox-icon text-center w-100 h-100">
                                                     <input type="radio" id="checkout_payment_stripe" name="payment_method" x-model="selected" value="stripe" class="custom-control-input checkbox-outline-input checkbox-icon-input" x-bind:checked="selected === 'stripe'">
@@ -700,7 +700,7 @@
                                                     <div class="w-100">
                                                         {!! $payment_method->description !!}
                                                     </div>
-                                
+
                                                     @if($payment_method->gateway === 'stripe')
                                                         {{-- TODO: Add Stripe credit cards --}}
                                                     @endif
@@ -995,7 +995,7 @@
                                                 <h3 class="h3">{{ translate('Your cart is currently empty') }}</h3>
                                                 <p>{{ translate('Before you can checkout you must add some products to your shopping cart.') }}</p>
                                             </div>
-                                            <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('search') }}">
+                                            <a class="btn btn-primary btn-pill transition-3d-hover px-5" href="{{ route('feed.products') }}">
                                                 {{ translate('Start Shopping') }}
                                             </a>
                                         </div>
