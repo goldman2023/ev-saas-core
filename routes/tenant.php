@@ -193,6 +193,7 @@ Route::middleware([
     /* Old active commerce stripe routes */
     Route::get('stripe', [StripePaymentController::class, 'stripe']);
     Route::post('/stripe/create-checkout-session', [StripePaymentController::class, 'stripe'])->name('stripe.get_token');
+    Route::get('/stripe/create-portal-session', [StripePaymentController::class, 'createPortalSession'])->name('stripe.portal_session');
     Route::any('/stripe/payment/callback', [StripePaymentController::class, 'callback'])->name('stripe.callback');
     Route::get('/stripe/success', [StripePaymentController::class, 'success'])->name('stripe.success');
     Route::get('/stripe/cancel', [StripePaymentController::class, 'cancel'])->name('stripe.cancel');

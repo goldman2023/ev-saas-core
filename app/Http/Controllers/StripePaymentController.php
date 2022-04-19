@@ -36,4 +36,10 @@ class StripePaymentController extends Controller
         // Redirect to Stripe session checkout
         return redirect($link);
     }
+
+    public function createPortalSession() {
+        $link = \StripeService::createPortalSession();
+
+        return redirect($link);
+    }
 }

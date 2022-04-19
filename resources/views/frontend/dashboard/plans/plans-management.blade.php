@@ -7,8 +7,18 @@
 @endpush
 
 @section('panel_content')
+
 @if(auth()->user()->isSubscribed())
-I have a subscription!!
+
+<x-dashboard.section-headers.section-header title="{{ translate('Your current subscription') }}"
+    text="Mange your billing details, invoices and payment methods">
+    <x-slot name="content">
+        <a href="{{ route('stripe.portal_session') }}" class="btn btn-primary">
+            {{ translate('Manage your plans') }}
+        </a>
+    </x-slot>
+</x-dashboard.section-headers.section-header>
+
 @endif
 <section>
     <x-dashboard.section-headers.section-header title="{{ translate('Plans Management') }}"
