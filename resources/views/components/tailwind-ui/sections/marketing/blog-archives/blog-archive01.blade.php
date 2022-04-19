@@ -1,6 +1,6 @@
 <div class="relative bg-white py-16 sm:py-24 lg:py-32 {!! $getSectionSettingsClasses !!}">
     <div class="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:max-w-7xl lg:px-8">
-        <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 @if($blog_posts->hasPages()) mb-8 @endif">
             @if($blog_posts->isNotEmpty())
                 @foreach($blog_posts as $blog_post)
                     <a href="{{ $blog_post->getPermalink() }}" class="flow-root bg-white rounded-lg border border-gray-200 hover:shadow-lg h-full pb-4">
@@ -40,5 +40,12 @@
                 @endforeach
             @endif
         </div>
+
+        @if($blog_posts->hasPages())
+            <div class="w-full">
+                {{ $blog_posts->onEachSide(3)->links('pagination::tailwind') }}
+            </div>
+        @endif
+        
     </div> 
 </div>
