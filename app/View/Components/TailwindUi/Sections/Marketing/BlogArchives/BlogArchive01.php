@@ -14,7 +14,7 @@ class BlogArchive01 extends BlogArchive
     public function render()
     {
         return view('components.tailwind-ui.sections.marketing.blog-archives.blog-archive01')->with([
-            'blog_posts' => \App\Models\BlogPost::published()->with(['authors'])->get(),
+            'blog_posts' => \App\Models\BlogPost::published()->orderBy('created_at', 'desc')->with(['authors'])->paginate(9)->withQueryString(),
         ]);
     }
 }

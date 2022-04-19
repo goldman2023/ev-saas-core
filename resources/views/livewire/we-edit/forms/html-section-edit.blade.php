@@ -64,7 +64,7 @@
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
 
         <div class="flex gap-5 h-full">
-          <div class="min-w-[50%] h-full overflow-y-auto resize-x" x-html="section.html">
+          <div class="min-w-[50%] h-full overflow-y-auto resize-x" x-html="_.get(section, 'html', '')">
           
           </div>
 
