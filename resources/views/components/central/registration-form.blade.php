@@ -24,7 +24,7 @@
             <input autocomplete="off" value="{{ old('domain', '') }}" name="domain" id="domain" type="text" required autofocus class="appearance-none block rounded-l-md w-full px-3 py-2 border border-gray-300 placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('domain') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red @enderror" />
             <span class="flex items-center px-3 rounded-r-md border-t border-b border-r border-gray-300 bg-gray-50 text-gray-500 text-sm">
                             <span class="whitespace-no-wrap">
-                                .{{ config('tenancy.central_domains')[0] }}
+                                .{{ config('tenancy.parent_domain') }}
                             </span>
                         </span>
         </div>
