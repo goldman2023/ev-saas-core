@@ -34,6 +34,7 @@ use App\Traits\PriceTrait;
 use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\HasStatus;
+use App\Traits\CoreMetaTrait;
 use App\Traits\LikesTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -60,6 +61,7 @@ class Product extends EVBaseModel
     use StockManagementTrait;
     use PriceTrait;
     use Purchasable;
+    use CoreMetaTrait;
 
     use ReviewTrait;
 
@@ -81,7 +83,7 @@ class Product extends EVBaseModel
      * @var array
      */
     protected $with = ['variations'];
-    protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals', 'core_meta'];
+    protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals']; // TODO: Which core_met to clone???
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = [
@@ -292,25 +294,6 @@ class Product extends EVBaseModel
     public function main()
     {
         return null;
-    }
-
-    /* TODO: Move this into trait once we know what it should be */
-    public function core_meta()
-    {
-        return $this->morphMany(CoreMeta::class, 'subject');
-    }
-
-    public function isStripeProduct()
-    {
-        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
-            return true;
-        }
-
-        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
-            return true;
-        }
-
-        return false;
     }
 
     public function isBookableService() {

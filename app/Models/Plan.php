@@ -13,6 +13,7 @@ use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use App\Traits\VariationTrait;
 use App\Traits\PermalinkTrait;
+use App\Traits\CoreMetaTrait;
 use App\Traits\HasStatus;
 use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,11 +35,13 @@ class Plan extends EVBaseModel
     use GalleryTrait;
     use TranslationTrait;
     use VariationTrait;
+    use CoreMetaTrait;
     use HasStatus;
 
     protected $table = 'plans';
 
     protected $fillable = ['name', 'excerpt', 'content', 'status', 'features', 'price', 'discount', 'discount_type', 'yearly_discount', 'yearly_discount_type', 'tax', 'tax_type', 'meta_title', 'meta_description', 'meta_keywords'];
+    // protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals', 'core_meta'];
 
     protected $casts = [
         'features' => 'array',
@@ -138,25 +141,5 @@ class Plan extends EVBaseModel
     public function getVariationModelClass()
     {
         return null;
-    }
-
-    /* TODO: Move this into trait once we know what it should be */
-    public function core_meta()
-    {
-        return $this->morphMany(CoreMeta::class, 'subject');
-    }
-
-    public function isStripeProduct()
-    {
-
-        if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
-            return true;
-        }
-
-        if ($this->core_meta()->where('key', 'test_stripe_product_id')->first()) {
-            return true;
-        }
-
-        return false;
     }
 }

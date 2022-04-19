@@ -53,6 +53,10 @@ class StripeService
         // Set supported shipping countries
         $this->supported_shipping_countries = array_values(array_diff(['LT', 'RS', 'DE', 'GB', 'ES', 'FR', 'US'], $this->unsupported_shipping_countries));
     }
+    
+    public function getStripeMode() {
+        return $this->mode_prefix;
+    }
 
     public function saveStripeProduct($model)
     {
@@ -170,9 +174,65 @@ class StripeService
         return $stripe_product_price;
     }
 
+    protected function createStripeCustomer() {
+        $me = auth()->user();
+        $stripe_customer_id_key = $this->mode_prefix . 'stripe_customer_id';
+        $stripe_customer_id = $me->getCoreMeta($stripe_customer_id_key);
+
+        try {
+            $stripe_customer = $this->stripe->customers->retrieve(
+                $stripe_customer_id,
+                []
+              );
+
+              if($stripe_customer->deleted ?? null) {
+                  throw new \Exception();
+              }
+        } catch(\Exception $e) {
+            // If there's no customer under given ID (can be null or empty) then create stripe customer and associate it with our user
+            $params = [
+                'email' => $me->email,
+                'name' => $me->name.' '.$me->surname, // TODO: Can be a Cmpany name if $me is a `company user`
+                'phone' => $me->phone,
+            ];
+
+            // Billing address
+            if(!empty($billing_address = $me->addresses->where('is_billing', true)->first())) {
+                $params['address'] = [
+                    'city' => $billing_address->city,
+                    'country' => $billing_address->country,
+                    'state' => $billing_address->state,
+                    'postal_code' => $billing_address->zip_code,
+                    'line1' => $billing_address->address,
+                ];
+            }
+
+            // Shipping address
+            if(!empty($shipping_address = $me->addresses->where('is_primary', true)->first())) {
+                $params['shipping'] = [
+                    'address' => [
+                        'city' => $shipping_address->city,
+                        'country' => $shipping_address->country,
+                        'state' => $shipping_address->state,
+                        'postal_code' => $shipping_address->zip_code,
+                        'line1' => $shipping_address->address,
+                    ],
+                    'name' => $me->name.' '.$me->surname,
+                    'phone' => $me->phone
+                ];
+            }
+
+            $stripe_customer = $this->stripe->customers->create($params);
+        }
+
+        $me->saveCoreMeta($stripe_customer_id_key, $stripe_customer->id);
+        
+        return $stripe_customer;
+    }
 
     public function createCheckoutLink($model, $qty = 1, $preview = false, $abandoned_order_id = null)
     {
+        
         // Check if Stripe Product actually exists
 		$order = null;
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
@@ -234,7 +294,7 @@ class StripeService
             'success_url' => !empty($order) ? route('checkout.order.received', ['id' => $order->id]) : '',
             'cancel_url' => !empty($order) ? route('checkout.order.canceled', ['id' => $order->id]) : '',
             'automatic_tax' => [
-                'enabled' => true,
+                'enabled' => false,
             ],
         ];
 
@@ -247,12 +307,10 @@ class StripeService
             ];
         }
 
-        /* Guest Checkout, do not add email for guests */
         if (auth()->user()) {
-            $email =  auth()->user()->email;
-            $stripe_args['customer_email'] = $email;
-        } else {
-            $email = '';
+            // Create Stripe customer if it doesn't exist
+            $stripe_customer = $this->createStripeCustomer();
+            $stripe_args['customer'] = $stripe_customer->id;
         }
 
         // Create a Stripe Checkout Link
@@ -268,6 +326,7 @@ class StripeService
 
         return $checkout_link['url'] ?? null;
     }
+
 
     protected function createTempOrder($model, $qty) {
         DB::beginTransaction();

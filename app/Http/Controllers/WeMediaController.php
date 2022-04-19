@@ -17,7 +17,21 @@ use FroalaEditor_Image;
 class WeMediaController extends Controller
 {
     public function froalaLoadImages(Request $request) {
-        dd('teeet');
+        try {
+            // TODO: Add canAccess (if user can see all images of a shop)
+            // TODO: HOW TO DO PAGINATION HERE!!!!
+            $list = Upload::select(['file_name'])->where('user_id' , auth()->user()->id)->orWhere('shop_id', MyShop::getShopID())->get()->map(fn($item) => [
+                'name' => basename($item->file_name),
+                'thumb' => IMG::get($item->file_name),
+                'url' => IMG::get($item->file_name),
+            ]);
+            
+            // $response = FroalaEditor_Image::getList('/images/');
+            echo stripslashes(json_encode($list));
+            die();
+        } catch (Exception $e) {
+            http_response_code(404);
+        }
     }
 
     public function froalaImageUpload(Request $request) {

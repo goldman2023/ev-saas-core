@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\GalleryTrait;
 use App\Traits\UploadTrait;
 use App\Traits\SocialAccounts;
+use App\Traits\CoreMetaTrait;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
@@ -31,6 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialAccounts;
     use HasWalletFloat;
     use PermalinkTrait;
+    use CoreMetaTrait;
 
     protected $casts = [
         'trial_ends_at' => 'datetime',
@@ -186,14 +188,15 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function subscribedTo($plan_slug)
     {
         if (is_numeric($plan_slug)) {
-            return ($this->plans->first()?->id ?? null) === $plan_slug;
+            return $this->plans->where('id', $plan_slug)->count() > 0;
         }
-        return ($this->plans->first()?->slug ?? null) === $plan_slug;
+
+        return $this->plans->where('slug', $plan_slug)->count() > 0;
     }
 
     public function isSubscribed()
     {
-        return !empty($this->plans->first());
+        return $this->plans->count() > 0;
     }
 
 
