@@ -8,7 +8,7 @@ Route::get('/refresh-csrf', function() {
 });
 
 
-
+/* Central Routes - WARNING - They should stay in web.php becaue of tenancy midleware reasons in TenancySettingsProvider */
 Route::middleware([
     'web',
 ])
