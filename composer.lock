@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "08a318d978e0a9ef7ba22738897e90aa",
+    "content-hash": "851b62886402e00d47b3a448912fd9d5",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -5330,6 +5330,55 @@
                 }
             ],
             "time": "2020-05-30T13:11:16+00:00"
+        },
+        {
+            "name": "mailerlite/mailerlite-api-v2-php-sdk",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mailerlite/mailerlite-api-v2-php-sdk.git",
+                "reference": "9fb6b8adb3b0dd9eb964ba5169b229516c73fd78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mailerlite/mailerlite-api-v2-php-sdk/zipball/9fb6b8adb3b0dd9eb964ba5169b229516c73fd78",
+                "reference": "9fb6b8adb3b0dd9eb964ba5169b229516c73fd78",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "nyholm/psr7": "^1.0",
+                "php": "^7.1 || ^8.0",
+                "php-http/client-common": "^2.0",
+                "php-http/discovery": "^1.7"
+            },
+            "require-dev": {
+                "php-http/guzzle6-adapter": "^2.0",
+                "phpunit/phpunit": "6.* | 7.* | 8.* | 9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MailerLiteApi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "MailerLite API v2 PHP SDK",
+            "homepage": "https://github.com/mailerlite/mailerlite-api-v2-php-sdk",
+            "keywords": [
+                "email",
+                "mailerlite",
+                "marketing",
+                "sdk"
+            ],
+            "support": {
+                "issues": "https://github.com/mailerlite/mailerlite-api-v2-php-sdk/issues",
+                "source": "https://github.com/mailerlite/mailerlite-api-v2-php-sdk/tree/0.3.2"
+            },
+            "time": "2021-08-11T08:24:13+00:00"
         },
         {
             "name": "mailersend/laravel-driver",
@@ -16801,5 +16850,5 @@
         "ext-gd": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }
