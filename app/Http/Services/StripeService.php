@@ -296,10 +296,12 @@ class StripeService
             'automatic_tax' => [
                 'enabled' => false,
             ],
-            /* TODO: Add this enable disable as a stripe option */
             'tax_id_collection' => [
                 'enabled' => true,
-              ],
+            ],
+            'customer_update' => [
+                'name' => 'auto',
+            ],
         ];
 
         // Check if Modal is digital or not, and based on that display or hide Stripe shipping options
