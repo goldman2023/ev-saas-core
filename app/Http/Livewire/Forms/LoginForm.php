@@ -29,12 +29,6 @@ class LoginForm extends Component
     public $email;
     public $password;
     public $remember;
-    public $redirect_url;
- 
-    protected $queryString = [
-        'redirect_url' => ['except' => '']
-    ];
-
 
     protected function rules()
     {
@@ -80,8 +74,8 @@ class LoginForm extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             request()->session()->regenerate();
 
-            if(!empty($this->redirect_url)) {
-                return redirect($this->redirect_url);
+            if(!empty(get_tenant_setting('login_redirect_url'))) {
+                return redirect(get_tenant_setting('login_redirect_url'));
             } else {
                 return redirect()->route('home');
             }

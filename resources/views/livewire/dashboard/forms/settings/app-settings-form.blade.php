@@ -281,6 +281,39 @@
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
                                     <x-dashboard.form.toggle field="settings.onboarding_flow.value" />
                                 </div>
+
+                                <div class="col-span-3" x-show="!settings.onboarding_flow.value">
+                                {{-- Register Redirect URL --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Registration Redirect URL') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('This is a URL where you want all your newly registered users to land after account creation') }}
+                                            </p>
+                                        </div>
+        
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.input field="settings.register_redirect_url.value" placeholder="{{ translate('Leave empty for email verification page') }}" />
+                                        </div>
+                                    </div>
+                                    {{-- END Register Redirect URL --}}
+    
+                                    {{-- Login Redirect URL --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mt-3" x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Login Redirect URL') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('This is a URL where you want your users to land after logging-in') }}
+                                            </p>
+                                        </div>
+        
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.input field="settings.login_redirect_url.value" placeholder="{{ translate('Leave empty for dashboard') }}"/>
+                                        </div>
+                                    </div>
+                                    {{-- END Login Redirect URL --}}
+                                </div>
+                                
                             </div>
                             {{-- END Onboarding flow --}}
 

@@ -17,6 +17,7 @@ use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
+use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
@@ -63,7 +64,7 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-    Route::get('/we-edit-grape', 'WeEditController@grapejs_index')->name('we-edit-grape.index');
+    // Route::get('/we-edit-grape', 'WeEditController@grapejs_index')->name('we-edit-grape.index');
 
     Route::group([
         'middleware' => ['auth'],
@@ -144,11 +145,11 @@ Route::middleware([
     Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
 
-    Route::get('/search', [HomeController::class, 'search'])->name('products.index');
+    // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
 
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
+    // Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     // Products
     Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
@@ -168,6 +169,8 @@ Route::middleware([
 
     // Blog Posts
     Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
+    Route::get('/blog/posts/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
+
 
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());
