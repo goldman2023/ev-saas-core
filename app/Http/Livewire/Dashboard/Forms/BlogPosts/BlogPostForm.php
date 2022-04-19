@@ -119,8 +119,7 @@ class BlogPostForm extends Component
             // Insert or Update BlogPost
             $this->blogPost->subscription_only = (bool) $this->blogPost->subscription_only;
             $this->blogPost->shop_id = MyShop::getShopID();
-            $this->blogPost->authors()->syncWithoutDetaching(auth()->user()); //
-
+            
             // If user has no permissions to publish the post, change the status to Pending (all pending blog posts will be visible to users who can publish the Blog Post)
             if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_post'], false)) {
                 $this->blogPost->status = StatusEnum::pending();
@@ -128,9 +127,12 @@ class BlogPostForm extends Component
             }
 
             $this->blogPost->save();
+
+            // Sync gallery and uploads
             $this->blogPost->syncUploads();
 
-            
+            // Sync authors
+            $this->blogPost->authors()->syncWithoutDetaching(auth()->user()); //
 
             // TODO: Make a function to relate blog post and plans in order to make posts subscription_only
 
@@ -151,10 +153,10 @@ class BlogPostForm extends Component
 
             if($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a blog post...Please try again.'));
-                $this->inform(translate('There was an error while updating a blog post...Please try again.'), '', 'fail');
+                $this->inform(translate('There was an error while updating a blog post...Please try again.'), $e->getMessage(), 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a blog post...Please try again.'));
-                $this->inform(translate('There was an error while creating a blog post...Please try again.'), '', 'fail');
+                $this->inform(translate('There was an error while creating a blog post...Please try again.'), $e->getMessage(), 'fail');
             }
 
         }
