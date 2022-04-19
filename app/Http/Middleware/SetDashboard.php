@@ -17,7 +17,6 @@ class SetDashboard
     public function handle($request, Closure $next)
     {
         $request->is_dashboard = true;
-        // dd(auth()->user()->shop()->newQueryWithoutRelationships()->first());
 
         return $next($request);
     }

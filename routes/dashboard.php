@@ -28,6 +28,7 @@ Route::middleware([
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     SetDashboard::class,
+    
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
 
