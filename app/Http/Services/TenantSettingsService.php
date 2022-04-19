@@ -145,16 +145,19 @@ class TenantSettingsService
             'guest_checkout_active' => 'boolean',
 
             // Payments
-            'stripe_enabled' => 'boolean',
-            'stripe_pk_test_key' => 'string',
-            'stripe_sk_test_key' => 'string',
-            'stripe_pk_live_key' => 'string',
-            'stripe_sk_live_key' => 'string',
 
             // Features
             'feed_enabled' => 'boolean',
             'multiplan_purchase' => 'boolean', // Buying multiple plans and distributing them among other users
             'onboarding_flow' => 'boolean',
+            'chat_feature' => 'boolean',
+            'weedit_feature' => 'boolean',
+            'wishlist_feature' => 'boolean',
+            'vendor_mode_feature' => 'boolean',
+
+
+            'register_redirect_url' => 'string',
+            'login_redirect_url' => 'string', // 
 
         ];
     }

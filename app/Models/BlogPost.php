@@ -76,7 +76,7 @@ class BlogPost extends EVBaseModel
     }
 
     public static function getRouteName() {
-        return 'blog.single';
+        return 'blog.post.single';
     }
 
     /*

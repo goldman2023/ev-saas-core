@@ -394,6 +394,11 @@
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                             <x-dashboard.form.input field="paymentMethod.stripe_webhook_secret" />
                         </div>
+
+                        <div class="flex flex-row">
+                            <strong class="mr-2 text-14 text-gray-600">{{ translate('Webhooks URL') }}:</strong>
+                            <small class="text-14 text-gray-500">{{ route('webhooks.stripe') }}</small>
+                        </div>
                     </div>
                     <!-- END Stripe Webhooks Endpoint Secret Key -->
                 </div>

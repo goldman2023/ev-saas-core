@@ -234,7 +234,7 @@ class StripeService
             'success_url' => !empty($order) ? route('checkout.order.received', ['id' => $order->id]) : '',
             'cancel_url' => !empty($order) ? route('checkout.order.canceled', ['id' => $order->id]) : '',
             'automatic_tax' => [
-                'enabled' => false,
+                'enabled' => true,
             ],
         ];
 
