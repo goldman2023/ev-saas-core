@@ -301,6 +301,8 @@ class StripeService
             ],
             'customer_update' => [
                 'name' => 'auto',
+                'address' => 'auto',
+                'shipping' => 'auto',
             ],
         ];
 
