@@ -20,19 +20,15 @@ use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SetDashboard;
 
-
-
-
-
 Route::middleware([
     'web',
-    'universal',
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     SetDashboard::class,
-
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
+
+
 
     Route::group([
         'middleware' => ['auth'],

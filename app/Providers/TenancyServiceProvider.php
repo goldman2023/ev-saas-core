@@ -8,7 +8,6 @@ use App\Listeners\Tenancy\StorageToConfigMapping;
 use App\Models\Shop;
 use App\Models\SocialAccount;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -161,18 +160,17 @@ class TenancyServiceProvider extends ServiceProvider
                 ->group(base_path('routes/tenant.php'));
         }
 
+        if (file_exists(base_path('routes/central.php'))) {
+            Route::namespace(static::$controllerNamespace)
+                ->group(base_path('routes/central.php'));
+        }
+
         if (file_exists(base_path('routes/dashboard.php'))) {
             Route::namespace(static::$controllerNamespace)
                 ->group(base_path('routes/dashboard.php'));
         }
 
-        if (file_exists(base_path('routes/central.php'))) {
-            if(Request::getHost() == config('tenancy.primary_central_domain')) {
-                Route::namespace(static::$controllerNamespace)
-                ->group(base_path('routes/central.php'));
-            }
 
-        }
 
 
     }
