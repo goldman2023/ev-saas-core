@@ -146,7 +146,8 @@ Route::middleware([
 
         // WeMediaLibrary
         Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');
-
+        Route::get('/froala/load-images', [WeMediaController::class, 'froalaLoadImages'])->name('we-media-library.froala.load-images');
+        
         // ---------------------------------------------------- //
 
 

@@ -16,6 +16,10 @@ use FroalaEditor_Image;
 
 class WeMediaController extends Controller
 {
+    public function froalaLoadImages(Request $request) {
+        dd('teeet');
+    }
+
     public function froalaImageUpload(Request $request) {
         $options = array(
             'validation' => array(
@@ -62,7 +66,7 @@ class WeMediaController extends Controller
             // 4. Remove image from public/images (temp)
             unlink($_SERVER['DOCUMENT_ROOT'].$response->link);
 
-            // Return optimized image through IMGProxy!!! (webp version)
+            // 5. Return optimized image through IMGProxy!!! (webp version)
             echo stripslashes(json_encode(['link' => IMG::get($upload->file_name) ]));
             die();
         }
