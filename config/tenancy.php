@@ -13,7 +13,7 @@ $central_domains = [
 
 $central_domains[] = 'we-saas.com';
 $central_domains[] = 'app.we-saas.com';
-$central_domains[] = env('CENTRAL_DOMAIN');
+$central_domains[] = env('CENTRAL_DOMAIN', '127.0.0.1');
 
 return [
     'tenant_model' => \App\Models\Central\Tenant::class,
@@ -29,6 +29,8 @@ return [
      */
 
     'central_domains' => $central_domains,
+    'primary_central_domain' => env('CENTRAL_DOMAIN', 'ev-saas.com'),
+    'parent_domain' => env('PARENT_DOMAIN', 'ev-saas.com'),
 
 
 

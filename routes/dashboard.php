@@ -20,8 +20,9 @@ use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\SetDashboard;
 
-use App\Http\Controllers\Central\RegisterTenantController;
-use App\Http\Controllers\DocumentController;
+
+
+
 
 Route::middleware([
     'web',
@@ -29,16 +30,9 @@ Route::middleware([
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     SetDashboard::class,
-    
+
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-
-    Route::group([
-        'middleware' => ['auth'],
-        'prefix' => 'tenant'
-    ], function () {
-        Route::get('/demo/create', [RegisterTenantController::class, 'createDemoTenant'])->name('tenant.create.demo');
-    });
 
     Route::group([
         'middleware' => ['auth'],
@@ -225,3 +219,7 @@ Route::middleware([
     // Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.index');
 
 });
+
+
+
+
