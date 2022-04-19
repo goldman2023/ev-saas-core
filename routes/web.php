@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Central\CentralController;
+use App\Http\Controllers\Central\LoginTenantController;
 use App\Http\Controllers\Central\RegisterTenantController;
 use Illuminate\Support\Facades\Route;
 
