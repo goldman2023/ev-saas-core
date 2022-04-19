@@ -37,9 +37,8 @@ class PaymentsService
         $all_possible_gateways = \App\Enums\PaymentGatewaysEnum::labels();
         if(!empty($all_possible_gateways)) {
             $gateways_in_db = $this->payment_methods_all->pluck('gateway');
-
+        
             foreach($all_possible_gateways as $gateway => $label) {
-                
                 if(!$gateways_in_db->contains($gateway)) {
                     DB::table('payment_methods_universal')->insert([
                         'enabled' => 0,
