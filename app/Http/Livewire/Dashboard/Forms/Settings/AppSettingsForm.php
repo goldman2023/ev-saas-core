@@ -59,6 +59,10 @@ class AppSettingsForm extends Component
                 'settings.vendor_mode_feature.value' => ['boolean'],
 
             ],
+            'integrations' => [
+                'settings.mailersend_api_token.value' => [''],
+                'settings.mailerlite_api_token.value' => [''],
+            ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
                 'settings.google_login.value' => ['boolean'],
@@ -294,6 +298,32 @@ class AppSettingsForm extends Component
         }
     }
 
+    public function saveIntegrations() {
+        $rules = $this->getRuleSet('integrations');
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Integrations settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save integrations settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
     public function saveBasicInformation() {
         $rules = $this->getRuleSet('basic');
 
@@ -324,8 +354,6 @@ class AppSettingsForm extends Component
             $this->inform(translate('Could not save basic shop information.'), $e->getMessage(), 'fail');
         }
     }
-
-
 
     public function saveCompanyInfo() {
         $rules = $this->getRuleSet('company_info');

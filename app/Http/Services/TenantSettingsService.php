@@ -154,11 +154,13 @@ class TenantSettingsService
             'weedit_feature' => 'boolean',
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',
-
-
             'register_redirect_url' => 'string',
             'login_redirect_url' => 'string', // 
 
+            // Integrations
+            'mailerlite_api_token' => 'string',
+            'mailersend_api_token' => 'string',
+            
         ];
     }
 }
