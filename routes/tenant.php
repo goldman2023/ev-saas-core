@@ -63,9 +63,7 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-    Route::group([
-        'middleware' => ['auth'],
-    ], function () {
+    Route::middleware('auth')->group(function () {
         Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
         Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
 
@@ -172,7 +170,7 @@ Route::middleware([
     Route::get('/wishlist/views', [EVWishlistController::class, 'views'])->name('wishlist.views');
 
     // Checkout Routes
-    Route::group(['middleware' => ['checkout']], function () {
+    Route::middleware('checkout')->group(function () {
         Route::get('/checkout', [EVCheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout', [EVCheckoutController::class, 'store'])->name('checkout.post');
         Route::get('/checkout-single', [EVCheckoutController::class, 'single'])->name('checkout.single.page');
@@ -196,10 +194,8 @@ Route::middleware([
     Route::get('/categories', [HomeController::class, 'all_categories'])->name('categories.all');
     Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
-    Route::group(['middleware' => []], function () {
-        Route::resource('support_ticket', 'SupportTicketController');
-        Route::post('support_ticket/reply', 'SupportTicketController@seller_store')->name('support_ticket.seller_store');
-    });
+    Route::resource('support_ticket', 'SupportTicketController');
+    Route::post('support_ticket/reply', 'SupportTicketController@seller_store')->name('support_ticket.seller_store');
 
     //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');

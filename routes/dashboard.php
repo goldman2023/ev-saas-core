@@ -27,18 +27,12 @@ Route::middleware([
     SetDashboard::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-    Route::group([
-        'middleware' => ['auth'],
-        'prefix' => 'previews',
-    ], function () {
+    Route::middleware('auth')->prefix('previews')->group(function () {
         Route::get('/show', 'EVPreviewController@show')->name('show');
     });
 
     /* TODO: Admin only */
-    Route::group([
-        'middleware' => ['auth', 'admin'],
-        'prefix' => 'dashboard',
-    ], function () {
+    Route::middleware('auth', 'admin')->prefix('dashboard')->group(function () {
         // Categories
         Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
         Route::get('/categories/create', [EVCategoryController::class, 'create'])->name('category.create');
@@ -52,10 +46,7 @@ Route::middleware([
 
     /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
 
-    Route::group([
-        'middleware' => ['auth'],
-        'prefix' => 'dashboard',
-    ], function () {
+    Route::middleware('auth')->prefix('dashboard')->group(function () {
         Route::get('/', 'HomeController@dashboard')->name('dashboard');
 
         /* Leads Management - BY EIM */
@@ -155,7 +146,7 @@ Route::middleware([
         Route::post('/bulk-product-upload', 'ProductBulkUploadController@bulk_upload')->name('bulk_product_upload');
         Route::get('/product-csv-download/{type}', 'ProductBulkUploadController@import_product')->name('product_csv.download');
         Route::get('/vendor-product-csv-download/{id}', 'ProductBulkUploadController@import_vendor_product')->name('import_vendor_product.download');
-        Route::group(['prefix' => 'bulk-upload/download'], function () {
+        Route::prefix('bulk-upload/download')->group(function () {
             Route::get('/category', 'ProductBulkUploadController@pdf_download_category')->name('pdf.download_category');
             Route::get('/brand', 'ProductBulkUploadController@pdf_download_brand')->name('pdf.download_brand');
             Route::get('/seller', 'ProductBulkUploadController@pdf_download_seller')->name('pdf.download_seller');
