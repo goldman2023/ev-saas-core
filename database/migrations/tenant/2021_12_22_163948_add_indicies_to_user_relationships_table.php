@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIndiciesToUserRelationshipsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -31,4 +31,4 @@ class AddIndiciesToUserRelationshipsTable extends Migration
             $table->dropIndex(['subject_id', 'subject_type']);
         });
     }
-}
+};

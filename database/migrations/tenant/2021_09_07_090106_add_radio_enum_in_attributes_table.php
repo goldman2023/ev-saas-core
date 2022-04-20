@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRadioEnumInAttributesTable extends Migration
+return new class extends Migration
 {
     public $driver;
 
@@ -59,4 +59,4 @@ class AddRadioEnumInAttributesTable extends Migration
             DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'wysiwyg')");
         }
     }
-}
+};

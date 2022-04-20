@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIndexToAttributesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -40,4 +40,4 @@ class AddIndexToAttributesTable extends Migration
             $table->enum('type', ['checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'image', 'radio', 'text_list', 'wysiwyg'])->change();
         });
     }
-}
+};

@@ -9,7 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateWalletsUuidTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -46,4 +46,4 @@ class UpdateWalletsUuidTable extends Migration
     {
         return (new Wallet())->getTable();
     }
-}
+};

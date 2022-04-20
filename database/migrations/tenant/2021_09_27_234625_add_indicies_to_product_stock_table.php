@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIndiciesToProductStockTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -44,4 +44,4 @@ class AddIndiciesToProductStockTable extends Migration
             $table->dropUnique('product_stocks_sku_unique');
         });
     }
-}
+};
