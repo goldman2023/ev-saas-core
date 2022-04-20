@@ -61,11 +61,11 @@ trait RegeneratesCache
     public function defaultCacheKey() : string
     {
         /* Default Cache key for the Modal */
-        if($this instanceof Model) {
+        if ($this instanceof Model) {
             return Cache::store()->getModelCacheKey($this::class, $this->id);
         }
 
-        throw new LogicException('The class ' . static::class . ' has no default cache key.');
+        throw new LogicException('The class '.static::class.' has no default cache key.');
     }
 
     /**

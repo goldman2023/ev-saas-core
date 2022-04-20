@@ -16,7 +16,6 @@ class ConversationMailManager extends Mailable
      *
      * @return void
      */
-
     public $array;
 
     public function __construct($array)
@@ -38,7 +37,7 @@ class ConversationMailManager extends Mailable
                         'content' => $this->array['content'],
                         'link' => $this->array['link'],
                         'sender' => $this->array['sender'],
-                        'details' => $this->array['details']
+                        'details' => $this->array['details'],
                     ]);
     }
 }

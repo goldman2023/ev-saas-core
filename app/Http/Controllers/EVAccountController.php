@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use MyShop;
 use App\Models\PaymentMethod;
 use App\Models\PaymentMethodUniversal;
+use App\Models\User;
+use Cookie;
 use Illuminate\Http\Request;
+use MyShop;
 use Permissions;
 use Session;
-use Cookie;
 use Spatie\Activitylog\Models\Activity;
 
 class EVAccountController extends Controller
@@ -34,7 +34,6 @@ class EVAccountController extends Controller
         try {
             $user = User::findOrFail($id);
 
-
             return view('frontend.dashboard.users.account-settings', compact('user'));
         } catch (\Exception $e) {
             // Create error handling for not found exception to go to 404 page...
@@ -58,7 +57,6 @@ class EVAccountController extends Controller
         $domain = tenant()->domains()->first();
         $domain->theme = $request->theme;
         $domain->save();
-
 
         return redirect()->back();
     }
@@ -102,6 +100,4 @@ class EVAccountController extends Controller
 
         return view('frontend.dashboard.settings.shop-settings', compact('shop'));
     }
-
-    
 }

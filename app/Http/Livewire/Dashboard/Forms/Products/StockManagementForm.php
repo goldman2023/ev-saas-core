@@ -2,35 +2,42 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Products;
 
+use App\Enums\StockVisibilityStateEnum;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Rules\UniqueSKU;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
-use App\Enums\StockVisibilityStateEnum;
 
 class StockManagementForm extends Component
 {
     use RulesSets;
 
     public $product;
+
     public $variations;
+
     public $attributes;
+
     public $serial_numbers;
+
     public $serial_status;
+
     public $serial_search;
+
     public $new_serial_numbers;
+
     public $edit_serial_numbers;
 
     protected $listeners = [
-        'refreshForm' => '$refresh'
+        'refreshForm' => '$refresh',
     ];
 
     /*
@@ -56,13 +63,16 @@ class StockManagementForm extends Component
             'edit_serial_numbers.*.serial_number' => ['required'],
             'edit_serial_numbers.*.status' => ['required', 'in:'.SerialNumber::getStatusEnum(true)],
             'variations.*.name' => [],
-            'variations.*.sku' => ['required', 'filled', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.sku' => $item]; }))],
+            'variations.*.sku' => ['required', 'filled', new UniqueSKU($this->variations->mapWithKeys(function ($item, $key) {
+                return ['variations.'.$key.'.sku' => $item];
+            }))],
             'variations.*.low_stock_qty' => 'required|numeric|min:0',
             'variations.*.current_stock' => 'required|numeric|min:0',
         ];
     }
 
-    protected function messages() {
+    protected function messages()
+    {
         return [
             'product.sku.required' => translate('This field is required'),
             'product.sku.filled' => translate('This field cannot be empty'),
@@ -99,7 +109,6 @@ class StockManagementForm extends Component
         ];
     }
 
-
     /**
      * Create a new component instance.
      *
@@ -109,7 +118,7 @@ class StockManagementForm extends Component
     public function mount(Product &$product = null)
     {
         // Set default params
-        if($product) {
+        if ($product) {
             $this->product = $product;
             $this->variations = $this->product->variations;
             $this->fetchSerialNumbers();
@@ -130,8 +139,9 @@ class StockManagementForm extends Component
         return view('livewire.dashboard.forms.products.product-stock-management-form');
     }
 
-    protected function mapEditingSerialNumbers() {
-        $mapped = $this->serial_numbers->map(function($item) {
+    protected function mapEditingSerialNumbers()
+    {
+        $mapped = $this->serial_numbers->map(function ($item) {
             $is_trashed = $item->trashed();
             $item = $item->toArray();
 
@@ -144,14 +154,16 @@ class StockManagementForm extends Component
         $this->edit_serial_numbers = $mapped->toArray();
     }
 
-    public function invalidateSerialNumber(SerialNumber $serial_number) {
+    public function invalidateSerialNumber(SerialNumber $serial_number)
+    {
         $serial_number->delete();
 
         // 1. Get serial_numbers (a list without deleted serial_number)
         $this->fetchSerialNumbers();
     }
 
-    public function reviveSerialNumber($id) {
+    public function reviveSerialNumber($id)
+    {
         // We cannot use Model injection based on provided $id because model we want to get here is Soft Deleted and that's why we'll get error 404 page,
         // If we check debug bar, we are getting: No query results for model [App\Models\SerialNumber] in vendor/livewire/livewire/src/ImplicitlyBoundMethod.php#98
         // Basically Implicit Model injection does not work with soft deleted models
@@ -161,14 +173,15 @@ class StockManagementForm extends Component
         $this->fetchSerialNumbers();
     }
 
-    public function insertSerialNumbers() {
+    public function insertSerialNumbers()
+    {
         $this->validate($this->getRuleSet('new_serial_numbers'));
 
         DB::beginTransaction();
 
         try {
-            if(!empty($this->new_serial_numbers)) {
-                foreach($this->new_serial_numbers as $new_serial) {
+            if (! empty($this->new_serial_numbers)) {
+                foreach ($this->new_serial_numbers as $new_serial) {
                     $serial = SerialNumber::firstOrNew([
                         'subject_id' => $this->product->id,
                         'subject_type' => Product::class,
@@ -184,16 +197,17 @@ class StockManagementForm extends Component
             $this->fetchSerialNumbers();
 
             $this->new_serial_numbers = []; // reset new array
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
         }
     }
 
-    public function updateSerialNumber($id) {
+    public function updateSerialNumber($id)
+    {
         $serial_number = SerialNumber::withTrashed()->find($id); // Check why we don't use model injection in fun. parameters inside reviveSerialNumber() function
 
-        $item_key = collect($this->edit_serial_numbers)->search(fn($value, $key) => $serial_number->id === $value['id'] );
+        $item_key = collect($this->edit_serial_numbers)->search(fn ($value, $key) => $serial_number->id === $value['id']);
 
         $this->validate($this->getRuleSet('edit_serial_numbers'));
 
@@ -202,7 +216,7 @@ class StockManagementForm extends Component
         try {
             $updated_serial = collect($this->edit_serial_numbers)->get($item_key);
 
-            if(!empty($updated_serial)) {
+            if (! empty($updated_serial)) {
                 $serial_number->serial_number = $updated_serial['serial_number'];
                 $serial_number->status = $updated_serial['status'];
                 $serial_number->save();
@@ -211,32 +225,35 @@ class StockManagementForm extends Component
 
                 $this->fetchSerialNumbers();
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
         }
     }
 
-    public function updatedSerialStatus() {
+    public function updatedSerialStatus()
+    {
         $this->fetchSerialNumbers();
     }
 
-    public function updatedSerialSearch() {
+    public function updatedSerialSearch()
+    {
         $this->fetchSerialNumbers();
     }
 
-    protected function fetchSerialNumbers() {
+    protected function fetchSerialNumbers()
+    {
         $query = $this->product->serial_numbers();
 
         // Filtering by `Serial status`
-        if(in_array($this->serial_status, SerialNumber::getStatusEnum())) {
+        if (in_array($this->serial_status, SerialNumber::getStatusEnum())) {
             $query->where('status', $this->serial_status);
-        } else if($this->serial_status === 'trashed') {
+        } elseif ($this->serial_status === 'trashed') {
             $query->onlyTrashed();
         }
 
         // Filtering by `Search key`
-        if(!empty($trimmed_search = trim($this->serial_search))) {
+        if (! empty($trimmed_search = trim($this->serial_search))) {
             $query->where('serial_number', 'like', '%'.$trimmed_search.'%');
         }
 
@@ -245,7 +262,8 @@ class StockManagementForm extends Component
         $this->mapEditingSerialNumbers();
     }
 
-    public function updateMainStock() {
+    public function updateMainStock()
+    {
         $this->validate($this->getRuleSet('product'));
 
         DB::beginTransaction();
@@ -265,19 +283,20 @@ class StockManagementForm extends Component
             DB::commit();
 
             $this->dispatchBrowserEvent('toast', ['id' => 'stock-updated-toast', 'content' => translate('Main product updated successfully!')]);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
         }
     }
 
-    public function updateVariationsStocks() {
+    public function updateVariationsStocks()
+    {
         $this->validate($this->getRuleSet('variations'));
 
         DB::beginTransaction();
 
         try {
-            foreach($this->variations as $variation) {
+            foreach ($this->variations as $variation) {
                 $product_stock = ProductStock::firstOrNew(['subject_id' => $variation->id, 'subject_type' => $variation::class]);
                 $product_stock->sku = $variation->sku;
                 $product_stock->qty = $variation->current_stock;
@@ -287,10 +306,9 @@ class StockManagementForm extends Component
             DB::commit();
 
             $this->dispatchBrowserEvent('toast', ['id' => 'stock-updated-toast', 'content' => translate('Variations stocks updated successfully!')]);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
         }
     }
-
 }

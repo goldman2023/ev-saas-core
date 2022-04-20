@@ -14,7 +14,7 @@ class AddSoftDeleteToProductStocksTable extends Migration
     public function up()
     {
         Schema::table('product_stocks', function (Blueprint $table) {
-            if (!Schema::hasColumn('product_stocks', 'deleted_at')) {
+            if (! Schema::hasColumn('product_stocks', 'deleted_at')) {
                 $table->softDeletes('deleted_at', 0);
             }
         });

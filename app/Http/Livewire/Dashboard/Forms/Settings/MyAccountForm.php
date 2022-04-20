@@ -6,15 +6,15 @@ use App\Models\User;
 use App\Models\UserMeta;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
 
 class MyAccountForm extends Component
 {
@@ -22,20 +22,26 @@ class MyAccountForm extends Component
     use DispatchSupport;
 
     public $me;
+
     public $meta;
+
     public $currentPassword = '';
+
     public $newPassword = '';
+
     public $newPassword_confirmation = '';
+
     public $onboarding = false;
 
-    protected function getRuleSet($set = null) {
+    protected function getRuleSet($set = null)
+    {
         $rulesSets = collect([
             // Basic information rules
             'basic' => [
                 //'me' => [],
                 'me.name' => ['required', 'min:2'],
                 'me.surname' => ['required', 'min:2'],
-//                'me.email' => ['required', 'email:rfs,dns'],
+                //                'me.email' => ['required', 'email:rfs,dns'],
                 'me.phone' => [''],
                 'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
                 'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
@@ -44,7 +50,7 @@ class MyAccountForm extends Component
                 'meta.industry.value' => [''],
                 'meta.headline.value' => [''],
                 'meta.bio.value' => [''],
-                'meta.calendly_link.value' => ['nullable', 'url']
+                'meta.calendly_link.value' => ['nullable', 'url'],
             ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],
@@ -61,7 +67,7 @@ class MyAccountForm extends Component
     protected function rules()
     {
         $rules = [];
-        foreach($this->getRuleSet('all') as $key => $items) {
+        foreach ($this->getRuleSet('all') as $key => $items) {
             $rules = array_merge($rules, $items);
         }
 
@@ -100,9 +106,9 @@ class MyAccountForm extends Component
 
         // User Meta
         UserMeta::createMissingMeta($this->me->id);
-        $user_meta = $this->me->user_meta()->select('id','key','value')->get()->keyBy('key')->toArray();
+        $user_meta = $this->me->user_meta()->select('id', 'key', 'value')->get()->keyBy('key')->toArray();
         castValuesForGet($user_meta, UserMeta::metaDataTypes());
-        
+
         $this->meta = $user_meta;
     }
 
@@ -116,8 +122,8 @@ class MyAccountForm extends Component
         return view('livewire.dashboard.forms.settings.my-account-form');
     }
 
-
-    public function saveBasicInformation() {
+    public function saveBasicInformation()
+    {
         $rules = $this->getRuleSet('basic');
 
         try {
@@ -137,19 +143,18 @@ class MyAccountForm extends Component
             DB::commit();
 
             $this->inform(translate('Basic information successfully saved.'), '', 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save basic information settings.'), $e->getMessage(), 'fail');
         }
 
-        
-        if($this->onboarding) {
+        if ($this->onboarding) {
             return redirect()->route('onboarding.step4');
-
         }
     }
 
-    public function saveEmail() {
+    public function saveEmail()
+    {
         // TODO: Validation does not work for some reason. Check the error and fix it!
         $this->validate($this->getRuleSet('email'));
 
@@ -159,7 +164,8 @@ class MyAccountForm extends Component
         $this->inform(translate('Please go to your email to verify email change!'), '', 'success');
     }
 
-    public function updatePassword() {
+    public function updatePassword()
+    {
         $this->validate($this->getRuleSet('password'));
 
         // Update password
@@ -175,14 +181,15 @@ class MyAccountForm extends Component
     /*
      * Saves all UserMeta provided in $rules variable.
      */
-    protected function saveMeta($rules) {
-        foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'meta')) as $key => $value) {
+    protected function saveMeta($rules)
+    {
+        foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'meta')) as $key => $value) {
             $meta_key = explode('.', $key)[1]; // get the part after `settings.`
-            
-            if(!empty($meta_key) && $meta_key !== '*') {
+
+            if (! empty($meta_key) && $meta_key !== '*') {
                 UserMeta::where([
                     ['key', $meta_key],
-                    ['user_id', $this->me->id]
+                    ['user_id', $this->me->id],
                 ])->update(['value' => castValueForSave($meta_key, $this->meta[$meta_key], UserMeta::metaDataTypes())]);
             }
         }

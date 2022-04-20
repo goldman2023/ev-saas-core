@@ -18,7 +18,7 @@ class CreateVisitsTable extends Migration
             $table->string('primary_key');
             $table->string('secondary_key')->nullable();
             $table->unsignedBigInteger('score');
-            if(config('database.default') === 'pgsql') {
+            if (config('database.default') === 'pgsql') {
                 $table->jsonb('list')->nullable();
             } else {
                 $table->json('list')->nullable();

@@ -36,6 +36,5 @@ class UpdateAndOptimizeUploadsTable extends Migration
      */
     public function down()
     {
-        
     }
 }

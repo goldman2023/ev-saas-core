@@ -44,8 +44,8 @@ class CompanyVisit extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line($this->name . " visited your company profile.")
-                    ->action('View Company Profile', url('/shop/' . $this->slug));
+                    ->line($this->name.' visited your company profile.')
+                    ->action('View Company Profile', url('/shop/'.$this->slug));
     }
 
     /**
@@ -62,7 +62,6 @@ class CompanyVisit extends Notification
     }
 
     /**
-
      * Get the array representation of the notification.
 
      *
@@ -70,15 +69,13 @@ class CompanyVisit extends Notification
      * @param  mixed  $notifiable
 
      * @return array
-
      */
-
     public function toDatabase($notifiable)
     {
         return [
-            "subject_type" => "User",
-            "subject_id" => $this->user->id,
-            "message" => $this->user->name . " visited your company profile."
+            'subject_type' => 'User',
+            'subject_id' => $this->user->id,
+            'message' => $this->user->name.' visited your company profile.',
         ];
     }
 
@@ -91,6 +88,6 @@ class CompanyVisit extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-                    ->content($this->user->name . " visited your company profile.");
+                    ->content($this->user->name.' visited your company profile.');
     }
 }

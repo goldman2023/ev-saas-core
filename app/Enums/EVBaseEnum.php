@@ -2,19 +2,18 @@
 
 namespace App\Enums;
 
-use \Spatie\Enum\Enum;
-
+use Spatie\Enum\Enum;
 
 class EVBaseEnum extends Enum
 {
     // ALWAYS RETURNS EMPTY ARRAY! DON'T USE IT...
     public static function toArray($skip = null): array
-    {   
+    {
         $new_array = [];
-        $array = parent::toArray(); // TODO: THIS DOES NOT WORK FOR SOME WEIRD REASON! 
+        $array = parent::toArray(); // TODO: THIS DOES NOT WORK FOR SOME WEIRD REASON!
 
         foreach ($array as $value => $label) {
-            if((is_string($skip) && $skip === $value) || (is_array($skip) && in_array($value, $skip))) { 
+            if ((is_string($skip) && $skip === $value) || (is_array($skip) && in_array($value, $skip))) {
                 continue;
             }
 

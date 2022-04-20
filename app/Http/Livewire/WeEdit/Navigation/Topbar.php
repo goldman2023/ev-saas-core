@@ -6,10 +6,8 @@ use Livewire\Component;
 
 class Topbar extends Component
 {
-    
     public function mount()
     {
-        
     }
 
     public function render()

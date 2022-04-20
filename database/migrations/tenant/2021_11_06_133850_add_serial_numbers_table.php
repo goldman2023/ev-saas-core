@@ -40,7 +40,7 @@ class AddSerialNumbersTable extends Migration
         Schema::dropIfExists('serial_numbers');
 
         Schema::table('products', function (Blueprint $table) {
-            if(Schema::hasColumn('products', 'use_serial')) {
+            if (Schema::hasColumn('products', 'use_serial')) {
                 $table->dropColumn('use_serial');
             }
         });

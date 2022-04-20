@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Auth;
+use Closure;
 
 class IsUser
 {
@@ -16,11 +16,11 @@ class IsUser
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && (auth()->user()->isCustomer() || auth()->user()->isSeller()) ) {
+        if (Auth::check() && (auth()->user()->isCustomer() || auth()->user()->isSeller())) {
             return $next($request);
-        }
-        else{
+        } else {
             session(['link' => url()->current()]);
+
             return redirect()->route('business.login');
         }
     }

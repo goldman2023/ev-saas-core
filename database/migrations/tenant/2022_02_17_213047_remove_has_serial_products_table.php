@@ -13,13 +13,11 @@ class RemoveHasSerialProductsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('products', 'has_serial'))
-        {
+        if (Schema::hasColumn('products', 'has_serial')) {
             Schema::table('products', function (Blueprint $table) {
                 $table->dropColumn('has_serial');
             });
         }
-        
     }
 
     /**

@@ -2,21 +2,21 @@
 
 namespace App\Providers;
 
-use App\Nova\Central\Domain;
-use App\Nova\Central\Tenant as TenantResource;
-use App\Nova\Tenant\User;
 use App\Models\Tenant;
+use App\Nova\Central\Domain;
 use App\Nova\Central\Section;
-use App\Nova\Tenant\Blog;
-use App\Nova\Tenant\Shop;
-use App\Nova\Tenant\Wishlist;
-use App\Nova\Tenant\Product;
+use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\Activity;
+use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Category;
 use App\Nova\Tenant\PaymentMethodUniversal;
 use App\Nova\Tenant\Plan;
+use App\Nova\Tenant\Product;
+use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
+use App\Nova\Tenant\User;
+use App\Nova\Tenant\Wishlist;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Cards\Help;
 use Laravel\Nova\Nova;
@@ -67,7 +67,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-
             if ($user instanceof \App\Models\User) {
                 // return $user->isOwner();
             }

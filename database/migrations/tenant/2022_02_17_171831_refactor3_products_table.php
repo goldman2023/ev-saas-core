@@ -50,7 +50,6 @@ class Refactor3ProductsTable extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            
         });
     }
 }

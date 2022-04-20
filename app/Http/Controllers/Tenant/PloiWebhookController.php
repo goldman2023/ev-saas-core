@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Tenant;
 
-use App\Models\Domain;
 use App\Http\Controllers\Controller;
+use App\Models\Domain;
 use Illuminate\Http\Request;
 
 class PloiWebhookController extends Controller

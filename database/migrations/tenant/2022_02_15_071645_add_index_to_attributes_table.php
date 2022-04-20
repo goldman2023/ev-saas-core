@@ -14,8 +14,7 @@ class AddIndexToAttributesTable extends Migration
     public function up()
     {
         if (Schema::hasColumn('attributes', 'slug')) {
-            Schema::table('attributes', function (Blueprint $table)
-            {
+            Schema::table('attributes', function (Blueprint $table) {
                 $table->dropColumn('slug'); //drop it if exists
             });
         }

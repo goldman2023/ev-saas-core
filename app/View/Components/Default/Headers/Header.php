@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Header extends Component
 {
     public $style;
+
     /**
      * Create a new component instance.
      *
@@ -25,6 +26,6 @@ class Header extends Component
      */
     public function render()
     {
-        return view('components.default.headers.' . $this->style);
+        return view('components.default.headers.'.$this->style);
     }
 }

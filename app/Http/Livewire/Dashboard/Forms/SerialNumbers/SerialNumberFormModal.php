@@ -2,16 +2,16 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\SerialNumbers;
 
+use App\Enums\SerialNumberStatusEnum;
 use App\Facades\MyShop;
 use App\Models\SerialNumber;
 use App\Traits\Livewire\DispatchSupport;
-use App\Enums\SerialNumberStatusEnum;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 
 class SerialNumberFormModal extends Component
 {
@@ -19,9 +19,10 @@ class SerialNumberFormModal extends Component
     use DispatchSupport;
 
     public $serialNumber;
-    public $show;
-    public $product;
 
+    public $show;
+
+    public $product;
 
     /**
      * Create a new component instance.
@@ -44,7 +45,6 @@ class SerialNumberFormModal extends Component
         ];
     }
 
-
     protected function messages()
     {
         return [
@@ -62,20 +62,20 @@ class SerialNumberFormModal extends Component
         return view('livewire.dashboard.forms.serial-numbers.serial-number-form-modal');
     }
 
-    public function loadSerialNumber($id) {
-
-        if(empty($id)) {
+    public function loadSerialNumber($id)
+    {
+        if (empty($id)) {
             $this->serialNumber = new SerialNumber();
             $this->serialNumber->subject_id = $this->product->id;
             $this->serialNumber->subject_type = $this->product::class;
         } else {
             $this->serialNumber = SerialNumber::find($id);
         }
-        
     }
 
-    public function saveSerialNumber() {
-        $is_update = isset($this->serialNumber->id) && !empty($this->serialNumber->id);
+    public function saveSerialNumber()
+    {
+        $is_update = isset($this->serialNumber->id) && ! empty($this->serialNumber->id);
 
         try {
             $this->validate();
@@ -91,7 +91,7 @@ class SerialNumberFormModal extends Component
 
             DB::commit();
 
-            if($is_update) {
+            if ($is_update) {
                 $this->inform('Serial number successfully updated!', '', 'success');
             } else {
                 $this->inform('Serial number successfully created!', '', 'success');
@@ -99,21 +99,21 @@ class SerialNumberFormModal extends Component
 
             $this->emit('refreshDatatable');
             $this->emit('refreshForm');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
-            if($is_update) {
+            if ($is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a serial number...Please try again.'));
                 $this->inform('There was an error while updating a serial number...Please try again.', '', 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a serial number...Please try again.'));
                 $this->inform('There was an error while creating a serial number...Please try again.', '', 'fail');
             }
-
         }
     }
 
-    public function archiveSerialNumber() {
+    public function archiveSerialNumber()
+    {
 //        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
 //        $address->remove();
     }

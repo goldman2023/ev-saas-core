@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class AttributesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,13 +13,11 @@ class AttributesTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('attributes')->count() == 0) {
             \DB::table('attributes')->delete();
 
-            \DB::table('attributes')->insert(array(
-                0 =>
-                    array(
+            \DB::table('attributes')->insert([
+                0 => [
                         'id' => 1,
                         'name' => 'Demo Attribute',
                         'type' => 'dropdown',
@@ -31,9 +28,9 @@ class AttributesTableSeeder extends Seeder
                         'is_schema' => false,
                         'schema_key' => null,
                         'schema_value' => null,
-                        'is_default' => true
-                    ),
-            ));
+                        'is_default' => true,
+                    ],
+            ]);
         }
     }
 }

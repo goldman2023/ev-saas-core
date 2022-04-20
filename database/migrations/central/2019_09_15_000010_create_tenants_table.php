@@ -18,7 +18,7 @@ class CreateTenantsTable extends Migration
         Schema::create('tenants', function (Blueprint $table) {
             $table->string('id')->primary();
 
-            if(config('database.default') === 'pgsql') {
+            if (config('database.default') === 'pgsql') {
                 $table->jsonb('data')->nullable();
             } else {
                 $table->json('data')->nullable();

@@ -2,27 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\PageTranslation;
-
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-
-    public function privacy_policy_page() {
+    public function privacy_policy_page()
+    {
         return view('frontend.pages.privacy');
-
     }
-
 
     public function show_custom_page($slug)
     {
         try {
-            if(view('frontend.custom-pages.' . $slug)) {
-                return view('frontend.custom-pages.' . $slug);
+            if (view('frontend.custom-pages.'.$slug)) {
+                return view('frontend.custom-pages.'.$slug);
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $page = Page::where('slug', '=', $slug)->firstOrFail();
             $sections = $page->content;
 
@@ -33,8 +30,7 @@ class PageController extends Controller
                 ]);
             }
 
-            return view('frontend.pages.' . $slug);
-        }        
-
+            return view('frontend.pages.'.$slug);
+        }
     }
 }

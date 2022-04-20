@@ -9,14 +9,14 @@ class CountriesCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'id'      => $data->id,
                     'code' => $data->code,
                     'name' => $data->name,
                     'status' => $data->status,
                 ];
-            })
+            }),
         ];
     }
 
@@ -24,7 +24,7 @@ class CountriesCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

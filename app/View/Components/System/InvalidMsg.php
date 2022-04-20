@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class InvalidMsg extends Component
 {
     public $field;
+
     public $message;
+
     public $class;
+
     public $type;
 
     /**

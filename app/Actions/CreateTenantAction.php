@@ -4,8 +4,8 @@ namespace App\Actions;
 
 use App\Jobs\Tenancy\CreateFrameworkDirectoriesForTenant;
 use App\Jobs\Tenancy\GeneratePermissionsAndRoles;
-use App\Models\Central\Tenant;
 use App\Models\Central\Domain;
+use App\Models\Central\Tenant;
 
 /**
  * Create a tenant with the necessary information for the application.
@@ -40,8 +40,6 @@ class CreateTenantAction
 
             mkdir("$storage_path/framework/cache", 0775, true);
         });
-
-
 
         if ($createStripeCustomer) {
             // $tenant->createAsStripeCustomer(); // TODO: Enable this logic when Spark and Central App are properly set!

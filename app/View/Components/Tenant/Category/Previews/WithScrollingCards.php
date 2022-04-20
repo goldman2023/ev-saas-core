@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class WithScrollingCards extends Component
 {
     public $categories;
+
     /**
      * Create a new component instance.
      *

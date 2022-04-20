@@ -68,5 +68,4 @@ class CreateTaxCountryBusinessRelationshipTable extends Migration
             $table->dropColumn('type');
         });
     }
-
 }

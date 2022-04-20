@@ -63,12 +63,12 @@ class PopulatePermissions extends Command
         $all_keys = $all_permissions->keys();
 
         $now = Carbon::now('utc')->toDateTimeString();
-        $missing_permissions = $all_permissions->filter(fn($item, $key) => $all_keys->diff($existing_keys)->contains($key))
-        ->map(fn($item, $key) => [
+        $missing_permissions = $all_permissions->filter(fn ($item, $key) => $all_keys->diff($existing_keys)->contains($key))
+        ->map(fn ($item, $key) => [
             'name' => $key,
             'guard_name' => $default_guard,
             'created_at' => $now,
-            'updated_at' => $now
+            'updated_at' => $now,
         ])->values();
 
         // insert missing permissions
@@ -78,14 +78,13 @@ class PopulatePermissions extends Command
             app(config('permission.models.permission'))->insert($missing_permissions->toArray());
 
             DB::commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $this->error('Something went wrong while inserting missing permissions: '.$e->getMessage());
             Log::debug('Something went wrong while inserting missing permissions: '.$e->getMessage());
         }
 
         $this->info('Missing permissions inserted properly! Number of new permissions added: '.$missing_permissions->count());
-
 
         // Populate Roles
         $this->info('Inserting roles now...');
@@ -96,14 +95,13 @@ class PopulatePermissions extends Command
         $existing_roles_keys = $existing_roles->pluck('name');
         $all_roles_keys = $all_roles->keys();
 
-        $missing_roles = $all_roles->filter(fn($item, $key) => $all_roles_keys->diff($existing_roles_keys)->contains($key))
-            ->map(fn($item, $key) => [
+        $missing_roles = $all_roles->filter(fn ($item, $key) => $all_roles_keys->diff($existing_roles_keys)->contains($key))
+            ->map(fn ($item, $key) => [
                 'name' => $key,
                 'guard_name' => $default_guard,
                 'created_at' => $now,
-                'updated_at' => $now
+                'updated_at' => $now,
             ])->values();
-
 
         // insert missing roles
         DB::beginTransaction();
@@ -114,28 +112,26 @@ class PopulatePermissions extends Command
             $this->info('Missing roles inserted properly! Number of new roles added: '.$missing_roles->count());
 
             // Attaching permissions to roles
-            foreach($all_roles_keys as $key => $role_name) {
+            foreach ($all_roles_keys as $key => $role_name) {
                 $role_permissions = collect($all_roles->get($role_name))->keys();
                 $role = app(config('permission.models.role'))->where('name', $role_name)->first();
 
-                if(!empty($role)) {
-                    foreach($role_permissions as $perm) {
+                if (! empty($role)) {
+                    foreach ($role_permissions as $perm) {
                         $role->givePermissionTo($perm);
                     }
-                    $this->info('Following permissions added to role `'.$role_name.'` (total of '.$role_permissions->count().' permissions): '. $role_permissions->join(','));
+                    $this->info('Following permissions added to role `'.$role_name.'` (total of '.$role_permissions->count().' permissions): '.$role_permissions->join(','));
                 }
             }
 
             $this->info('Permissions added to all roles successfully!');
 
             DB::commit();
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             DB::rollback();
             $this->error('Something went wrong while inserting missing roles: '.$e->getMessage());
             Log::debug('Something went wrong while inserting missing roles: '.$e->getMessage());
         }
-
-
 
         return Command::SUCCESS;
     }

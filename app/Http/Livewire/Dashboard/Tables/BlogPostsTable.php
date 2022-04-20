@@ -18,11 +18,17 @@ class BlogPostsTable extends DataTableComponent
     use DispatchSupport;
 
     public $for = 'me';
+
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 25;
+
     public array $perPageAccepted = [10, 25, 50, 100];
 
 //    public array $sortNames = [
@@ -40,9 +46,11 @@ class BlogPostsTable extends DataTableComponent
     ];
 
     protected string $pageName = 'blog_posts';
+
     protected string $tableName = 'blog_posts';
 
-    public function mount($for = 'shop') {
+    public function mount($for = 'shop')
+    {
         $this->for = $for;
 
         parent::mount();
@@ -67,7 +75,7 @@ class BlogPostsTable extends DataTableComponent
                 ]),
             'date_created' => Filter::make('Date created')
                 ->date([
-                    'max' => now()->format('Y-m-d')
+                    'max' => now()->format('Y-m-d'),
                 ]),
         ];
     }
@@ -98,12 +106,12 @@ class BlogPostsTable extends DataTableComponent
     {
         return BlogPost::query()
 //            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
-            ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
+            ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
             ->when($this->getFilter('subscription_based'), fn ($query, $bool) => $query->where('subscription_only', $bool))
             ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
-      }
+    }
 
     public function rowView(): string
     {

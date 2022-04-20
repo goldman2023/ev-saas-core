@@ -36,7 +36,6 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
-
     'google' => [
         'client_id'     => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
@@ -78,8 +77,6 @@ return [
         'redirect_login' => env('APP_URL').'/social-login/github/callback',
         'redirect_connect' => env('APP_URL').'/social-login/github/callback',
     ],
-
-
 
     'paytm-wallet' => [
         'env' => env('PAYTM_ENVIRONMENT'),

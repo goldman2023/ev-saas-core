@@ -14,11 +14,11 @@ class RenameFirstNameToSurnameUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            if(Schema::hasColumn('users', 'first_name')) {
+            if (Schema::hasColumn('users', 'first_name')) {
                 $table->renameColumn('first_name', 'name');
             }
 
-            if(Schema::hasColumn('users', 'last_name')) {
+            if (Schema::hasColumn('users', 'last_name')) {
                 $table->renameColumn('last_name', 'surname');
             }
         });

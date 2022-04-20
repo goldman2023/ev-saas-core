@@ -13,7 +13,7 @@ class AddSparkColumnsToUsersTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('users')) {
+        if (! Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->string('stripe_id')->nullable()->index();
                 $table->string('card_brand')->nullable()->after('stripe_id');
@@ -32,7 +32,6 @@ class AddSparkColumnsToUsersTable extends Migration
             });
         }
     }
-
 
     /**
      * Reverse the migrations.

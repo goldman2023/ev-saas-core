@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class Toggle extends Component
 {
     public $field;
+
     public $label;
+
     public $class;
 
     /**

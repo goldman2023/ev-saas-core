@@ -29,6 +29,7 @@ class ConversationRequest extends FormRequest
             'message' => 'required|string|min:1',
         ];
     }
+
     public function messages()
     {
         return [

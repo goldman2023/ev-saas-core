@@ -13,11 +13,13 @@ class CoreMeta extends Model
 
     protected $fillable = ['subject_id', 'subject_type', 'key', 'value'];
 
-    public function subject() {
-        return $this->morphTo("subject");
+    public function subject()
+    {
+        return $this->morphTo('subject');
     }
 
-    public static function metaDataTypes() {
+    public static function metaDataTypes()
+    {
         return [
             'date_type' => 'string',
             'start_date' => 'date',
@@ -31,10 +33,10 @@ class CoreMeta extends Model
         ];
     }
 
-    public static function getMeta($core_meta) {
-
-        if(is_array($core_meta)) {
-            if(empty($core_meta)) {
+    public static function getMeta($core_meta)
+    {
+        if (is_array($core_meta)) {
+            if (empty($core_meta)) {
                 $core_meta = [];
             } else {
                 $core_meta = collect($core_meta)->keyBy('key')->toArray();
@@ -42,18 +44,18 @@ class CoreMeta extends Model
         } else {
             $core_meta = $core_meta->keyBy('key')->toArray();
         }
-        
+
         $data_types = self::metaDataTypes();
 
         castValuesForGet($core_meta, $data_types);
-        
+
         $missing = array_diff_key($data_types, $core_meta);
         $missing_clone = $missing;
-        
-        if(!empty($missing)) {
-            foreach($missing as $key => $type) {
+
+        if (! empty($missing)) {
+            foreach ($missing as $key => $type) {
                 $missing[$key] = [
-                    'value' => null
+                    'value' => null,
                 ];
             }
             castValuesForGet($missing, $missing_clone);

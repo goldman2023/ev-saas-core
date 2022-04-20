@@ -22,8 +22,7 @@ class UpdateWalletsUuidTable extends Migration
             $table->uuid('uuid')
                 ->after('slug')
                 ->nullable()
-                ->unique()
-            ;
+                ->unique();
         });
 
         Wallet::query()->chunk(10000, static function (Collection $wallets) {

@@ -3,29 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Upload;
-use MyShop;
-use Illuminate\Http\Request;
-use Permissions;
-use Session;
-use Cookie;
 use Categories;
-use Storage;
+use Cookie;
+use FroalaEditor_Image;
+use Illuminate\Http\Request;
 use IMG;
 use MediaService;
-use FroalaEditor_Image;
+use MyShop;
+use Permissions;
+use Session;
+use Storage;
 
 class WeMediaController extends Controller
 {
-    public function froalaLoadImages(Request $request) {
+    public function froalaLoadImages(Request $request)
+    {
         try {
             // TODO: Add canAccess (if user can see all images of a shop)
             // TODO: HOW TO DO PAGINATION HERE!!!!
-            $list = Upload::select(['file_name'])->where('user_id' , auth()->user()->id)->orWhere('shop_id', MyShop::getShopID())->get()->map(fn($item) => [
+            $list = Upload::select(['file_name'])->where('user_id', auth()->user()->id)->orWhere('shop_id', MyShop::getShopID())->get()->map(fn ($item) => [
                 'name' => basename($item->file_name),
                 'thumb' => IMG::get($item->file_name),
                 'url' => IMG::get($item->file_name),
             ]);
-            
+
             // $response = FroalaEditor_Image::getList('/images/');
             echo stripslashes(json_encode($list));
             die();
@@ -34,32 +35,33 @@ class WeMediaController extends Controller
         }
     }
 
-    public function froalaImageUpload(Request $request) {
-        $options = array(
-            'validation' => array(
-              'allowedExts' => array('gif', 'jpeg', 'jpg', 'png', 'svg', 'webp'),
-              'allowedMimeTypes' => array('image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png', 'image/svg+xml', 'image/webp')
-            )
-          );
+    public function froalaImageUpload(Request $request)
+    {
+        $options = [
+            'validation' => [
+                'allowedExts' => ['gif', 'jpeg', 'jpg', 'png', 'svg', 'webp'],
+                'allowedMimeTypes' => ['image/gif', 'image/jpeg', 'image/pjpeg', 'image/x-png', 'image/png', 'image/svg+xml', 'image/webp'],
+            ],
+        ];
 
-        try { 
+        try {
             // 1. Upload image to temp folder (public/images) and get miage info
             $response = FroalaEditor_Image::upload('/images/', $options);
-            
+
             $new_image_content = file_get_contents($_SERVER['DOCUMENT_ROOT'].$response->link);
-            $new_image_name = time() . '_' . basename($response->link);
+            $new_image_name = time().'_'.basename($response->link);
             $new_image_extension = $file_ext = pathinfo($new_image_name, PATHINFO_EXTENSION);
             $new_image_filesize = strlen($new_image_content);
 
             // 2. Store image to our S3 Do bucket
             $tenant_path = 'uploads/all';
 
-            if(tenant('id')) {
+            if (tenant('id')) {
                 $tenant_path = 'uploads/'.tenant('id');
-            }            
+            }
 
             // Check if tenant uploads folder exists an create it if not
-            if(!Storage::exists($tenant_path)){
+            if (! Storage::exists($tenant_path)) {
                 // Create Tenant folder on DO if it doesn't exist
                 Storage::makeDirectory($tenant_path, 0775, true, true);
             }
@@ -81,10 +83,9 @@ class WeMediaController extends Controller
             unlink($_SERVER['DOCUMENT_ROOT'].$response->link);
 
             // 5. Return optimized image through IMGProxy!!! (webp version)
-            echo stripslashes(json_encode(['link' => IMG::get($upload->file_name) ]));
+            echo stripslashes(json_encode(['link' => IMG::get($upload->file_name)]));
             die();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             http_response_code(404);
         }
     }

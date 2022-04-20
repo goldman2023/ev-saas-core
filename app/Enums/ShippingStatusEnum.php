@@ -14,7 +14,7 @@ class ShippingStatusEnum extends EVBaseEnum
         return [
             'not_sent' => 'not_sent',
             'sent' => 'sent',
-            'delivered' => 'delivered'
+            'delivered' => 'delivered',
         ];
     }
 
@@ -23,7 +23,7 @@ class ShippingStatusEnum extends EVBaseEnum
         return [
             'not_sent' => 'Not sent',
             'sent' => 'Sent',
-            'delivered' => 'Delivered'
+            'delivered' => 'Delivered',
         ];
     }
 }

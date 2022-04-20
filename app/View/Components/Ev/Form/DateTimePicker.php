@@ -7,29 +7,43 @@ use Illuminate\View\Component;
 class DateTimePicker extends Component
 {
     public $groupclass;
-    public $class;
-    public $id;
-    public $options;
-    public $name;
-    public $value;
-    public $label;
-    public $required;
-    public $placeholder;
-    public $placement;
-    public $icon;
-    public $merge;
-    public $errorBagName;
-    public $valueProperty;
-    public $labelProperty;
-    public $wireType;
 
+    public $class;
+
+    public $id;
+
+    public $options;
+
+    public $name;
+
+    public $value;
+
+    public $label;
+
+    public $required;
+
+    public $placeholder;
+
+    public $placement;
+
+    public $icon;
+
+    public $merge;
+
+    public $errorBagName;
+
+    public $valueProperty;
+
+    public $labelProperty;
+
+    public $wireType;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($options = ['dateFormat' => 'd/m/Y'], $name = '', $label = '',  $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $value = null, $placeholder = '', $placement = 'prepend', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
+    public function __construct($options = ['dateFormat' => 'd/m/Y'], $name = '', $label = '', $valueProperty = null, $labelProperty = null, $required = false, $class = '', $groupclass = '', $id = '', $value = null, $placeholder = '', $placement = 'prepend', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
     {
         $this->options = $options;
         $this->label = $label;
@@ -48,12 +62,11 @@ class DateTimePicker extends Component
         $this->wireType = $wireType;
         $this->errorBagName = $errorBagName ?: $name;
 
-        if(!empty($this->icon)) {
+        if (! empty($this->icon)) {
             $this->options['appendTo'] = '#'.$this->id;
             $this->options['wrap'] = true;
         }
     }
-
 
     /**
      * Get the view / contents that represent the component.

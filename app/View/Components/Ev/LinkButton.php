@@ -9,9 +9,13 @@ use Illuminate\View\Component;
 class LinkButton extends Component
 {
     public mixed $label;
+
     public $href;
+
     public $target;
+
     public $type; // Avaialbe types are: button, link
+
     public $class;
 
     /**
@@ -39,7 +43,8 @@ class LinkButton extends Component
     }
 
     // WeEdit Builder
-    public static function getDefaultData() {
+    public static function getDefaultData()
+    {
         return [
             'label' => 'Link',
             'class' => '',
@@ -49,7 +54,8 @@ class LinkButton extends Component
         ];
     }
 
-    public function getEditableData() {
+    public function getEditableData()
+    {
         return [
             'label' => $this->label,
             'class' => $this->class,
@@ -59,7 +65,8 @@ class LinkButton extends Component
         ];
     }
 
-    public function setEditableData($data) {
+    public function setEditableData($data)
+    {
         $this->label = $data['label'] ?? '';
         $this->class = $data['class'] ?? '';
         $this->type = $data['type'] ?? 'link';
@@ -67,7 +74,8 @@ class LinkButton extends Component
         $this->target = $data['target'] ?? '_self';
     }
 
-    public function renderFieldComponent($slot_name, $component_name) {
+    public function renderFieldComponent($slot_name, $component_name)
+    {
         return view('components.we-edit.field-components.link-button', ['slot_name' => $slot_name, 'component_name' => $component_name, 'component_data' => $this->getEditableData()]);
     }
 }

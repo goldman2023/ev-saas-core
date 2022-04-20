@@ -11,5 +11,8 @@ class Vendor extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'vendor'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'vendor';
+    }
 }

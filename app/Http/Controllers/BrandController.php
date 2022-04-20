@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Brand;
 use App\Models\BrandTranslation;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class BrandController extends Controller
@@ -17,13 +17,14 @@ class BrandController extends Controller
      */
     public function index(Request $request)
     {
-        $sort_search =null;
+        $sort_search = null;
         $brands = Brand::orderBy('name', 'asc');
-        if ($request->has('search')){
+        if ($request->has('search')) {
             $sort_search = $request->search;
             $brands = $brands->where('name', 'like', '%'.$sort_search.'%');
         }
         $brands = $brands->paginate(15);
+
         return view('backend.product.brands.index', compact('brands', 'sort_search'));
     }
 
@@ -50,8 +51,7 @@ class BrandController extends Controller
         $brand->meta_description = $request->meta_description;
         if ($request->slug != null) {
             $brand->slug = str_replace(' ', '-', $request->slug);
-        }
-        else {
+        } else {
             $brand->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         }
 
@@ -63,8 +63,8 @@ class BrandController extends Controller
         $brand_translation->save();
 
         flash(translate('Brand has been inserted successfully'))->success();
-        return redirect()->route('admin.brands.index');
 
+        return redirect()->route('admin.brands.index');
     }
 
     /**
@@ -86,9 +86,10 @@ class BrandController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $lang   = $request->lang;
-        $brand  = Brand::findOrFail($id);
-        return view('backend.product.brands.edit', compact('brand','lang'));
+        $lang = $request->lang;
+        $brand = Brand::findOrFail($id);
+
+        return view('backend.product.brands.edit', compact('brand', 'lang'));
     }
 
     /**
@@ -101,15 +102,14 @@ class BrandController extends Controller
     public function update(Request $request, $id)
     {
         $brand = Brand::findOrFail($id);
-        if($request->lang == config('app.locale')){
+        if ($request->lang == config('app.locale')) {
             $brand->name = $request->name;
         }
         $brand->meta_title = $request->meta_title;
         $brand->meta_description = $request->meta_description;
         if ($request->slug != null) {
             $brand->slug = strtolower($request->slug);
-        }
-        else {
+        } else {
             $brand->slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->name)).'-'.Str::random(5);
         }
         $brand->logo = $request->logo;
@@ -120,8 +120,8 @@ class BrandController extends Controller
         $brand_translation->save();
 
         flash(translate('Brand has been updated successfully'))->success();
-        return back();
 
+        return back();
     }
 
     /**
@@ -140,7 +140,7 @@ class BrandController extends Controller
         Brand::destroy($id);
 
         flash(translate('Brand has been deleted successfully'))->success();
-        return redirect()->route('admin.brands.index');
 
+        return redirect()->route('admin.brands.index');
     }
 }

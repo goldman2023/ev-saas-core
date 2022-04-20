@@ -29,8 +29,7 @@ class ExtendedDomainTenantResolver extends DomainTenantResolver
             $this->setCurrentDomain($tenant, $domain);
 
             return $tenant;
-        }
-        else {
+        } else {
             // return abort(404);
         }
 

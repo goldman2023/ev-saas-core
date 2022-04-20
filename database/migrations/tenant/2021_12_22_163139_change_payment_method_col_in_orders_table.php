@@ -38,7 +38,6 @@ class ChangePaymentMethodColInOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-
         });
 
         Schema::dropIfExists('order_relationships');

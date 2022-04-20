@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class CategoryListWithLeftTabs extends Component
 {
     public $categories;
+
     /**
      * Create a new component instance.
      *

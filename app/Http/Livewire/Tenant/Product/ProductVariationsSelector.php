@@ -2,25 +2,32 @@
 
 namespace App\Http\Livewire\Tenant\Product;
 
+use App\Facades\CartService;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\ProductVariation;
+use EVS;
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use App\Facades\CartService;
 use Session;
-use EVS;
 
-class ProductVariationsSelector extends Component {
-
+class ProductVariationsSelector extends Component
+{
     public Product $product;
+
     public $attributes_for_variations;
+
     public $variations;
+
     public $all_combinations;
+
     public $available_variants;
+
     public $missing_variants;
+
     public $current;
+
     public $class;
 
     protected function rules()
@@ -64,29 +71,33 @@ class ProductVariationsSelector extends Component {
         $this->attributes_for_variations = $product->variant_attributes()->toArray(); // <--- This must be an Array, NEVER...EVER...Eloquent/Collection!
     }
 
-    public function updatedCurrentVariant($value = null, $key = null) {
+    public function updatedCurrentVariant($value = null, $key = null)
+    {
         $this->current = $this->variations->where('variant', $this->current_variant)->first();
         $this->emitTo('tenant.product.price', 'changeVariation', $this->current);
     }
 
     // TODO: Disable att_values on FE for which there are no variations!!!
-    public function selectVariation($attribute_id, $attribute_value_id) {
+    public function selectVariation($attribute_id, $attribute_value_id)
+    {
         // Construct new variant based on current variant and new att and att_value ids
         $current_variant = $this->current->variant;
-        $selected_variant = collect($current_variant)->map(function($item, $key) use ($attribute_id, $attribute_value_id) {
-            if((int) $item['attribute_id'] === (int) $attribute_id) {
+        $selected_variant = collect($current_variant)->map(function ($item, $key) use ($attribute_id, $attribute_value_id) {
+            if ((int) $item['attribute_id'] === (int) $attribute_id) {
                 $item['attribute_value_id'] = (int) $attribute_value_id;
             }
+
             return $item;
         });
 
         $current_variation = $this->product->getVariationByVariant($current_variant);
         $selected_variation = $this->product->getVariationByVariant($selected_variant);
 
-        if($current_variation->id === $selected_variation->id) {
+        if ($current_variation->id === $selected_variation->id) {
             $this->dispatchBrowserEvent('select-variation-end');
+
             return null;
-        } else if($selected_variation->id) {
+        } elseif ($selected_variation->id) {
             // Select new current
             $this->current = $selected_variation;
 
@@ -95,7 +106,8 @@ class ProductVariationsSelector extends Component {
         }
     }
 
-    public function emitVariationChangedEvent() {
+    public function emitVariationChangedEvent()
+    {
         $this->dispatchBrowserEvent('variation-changed', [
             'current_stock' => $this->current->current_stock,
             'is_low_stock' => $this->current->isLowStock(),
@@ -108,7 +120,8 @@ class ProductVariationsSelector extends Component {
         ]);
     }
 
-    public function render() {
+    public function render()
+    {
         return view('livewire.tenant.product.product-variations-selector');
     }
 }

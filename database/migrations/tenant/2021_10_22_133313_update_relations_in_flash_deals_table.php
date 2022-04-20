@@ -52,7 +52,6 @@ class UpdateRelationsInFlashDealsTable extends Migration
     public function down()
     {
         Schema::table('flash_deals', function (Blueprint $table) {
-
         });
     }
 }

@@ -19,7 +19,7 @@ class AddIndiciesToWishlistTable extends Migration
 
             /* TODO: set this to nullable and enable foreign key then, right now guests have user_id 0 and this migration breaks */
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->index(['subject_id','subject_type']);
+            $table->index(['subject_id', 'subject_type']);
         });
     }
 

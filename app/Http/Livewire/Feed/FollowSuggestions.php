@@ -7,13 +7,12 @@ use Livewire\Component;
 
 class FollowSuggestions extends Component
 {
-
     public $accounts;
+
     public $readyToLoad = false;
 
     public function mount()
     {
-
         $currently_liked = auth()->user()->following()->pluck('subject_id')->toArray();
         $this->accounts = Shop::whereNotIn('id', $currently_liked)->where('id', '!=', auth()->user()->id)->take(5)->get();
     }
@@ -25,6 +24,6 @@ class FollowSuggestions extends Component
 
     public function loadInit()
     {
-        $this->readyToLoad  = true;
+        $this->readyToLoad = true;
     }
 }

@@ -18,7 +18,7 @@ class RefactorLeadsTable extends Migration
                 $table->dropColumn('user_id');
             }
 
-            if (!Schema::hasColumn('leads', 'business_id')) {
+            if (! Schema::hasColumn('leads', 'business_id')) {
                 $table->integer('business_id')->nullable(true)->after('id');
                 $table->foreign('business_id')
                     ->references('id')

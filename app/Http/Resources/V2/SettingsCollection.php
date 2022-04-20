@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources\V2;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
-use App\Models\TenantSetting;
 use App\Models\Currency;
+use App\Models\TenantSetting;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class SettingsCollection extends ResourceCollection
 {
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
                     'logo' => $data->logo,
@@ -23,12 +23,12 @@ class SettingsCollection extends ResourceCollection
                     'currency' => [
                         'name' => Currency::findOrFail(get_setting('system_default_currency'))->name,
                         'symbol' => Currency::findOrFail(get_setting('system_default_currency'))->symbol,
-                        'exchange_rate' => (double) $this->exchangeRate(Currency::findOrFail(get_setting('system_default_currency'))),
-                        'code' => Currency::findOrFail(get_setting('system_default_currency'))->code
+                        'exchange_rate' => (float) $this->exchangeRate(Currency::findOrFail(get_setting('system_default_currency'))),
+                        'code' => Currency::findOrFail(get_setting('system_default_currency'))->code,
                     ],
-                    'currency_format' => $data->currency_format
+                    'currency_format' => $data->currency_format,
                 ];
-            })
+            }),
         ];
     }
 
@@ -36,12 +36,14 @@ class SettingsCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 
-    public function exchangeRate($currency){
+    public function exchangeRate($currency)
+    {
         $base_currency = Currency::find(get_setting('system_default_currency'));
-        return $currency->exchange_rate/$base_currency->exchange_rate;
+
+        return $currency->exchange_rate / $base_currency->exchange_rate;
     }
 }

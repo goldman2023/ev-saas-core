@@ -17,7 +17,6 @@ class CategoriesTableMakeLevelFieldNullable extends Migration
         Schema::table('categories', function (Blueprint $table) {
             $table->integer('level')->nullable()->default(null)->change();
         });
-
     }
 
     /**

@@ -2,18 +2,17 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Addresses;
 
-
 use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\ShopAddress;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
+use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
 
 class AddressesForm extends Component
 {
@@ -21,8 +20,11 @@ class AddressesForm extends Component
     use DispatchSupport;
 
     public $componentId;
+
     public $addresses;
+
     public $type; // can be: 'address', 'shop_address'
+
     public ShopAddress|Address|null $currentAddress;
 
     // protected $listeners = ['refreshAddresses' => '$refresh'];
@@ -41,22 +43,23 @@ class AddressesForm extends Component
         $this->initNewAddress();
     }
 
-    public function initNewAddress() {
-        if($this->type === 'address') {
+    public function initNewAddress()
+    {
+        if ($this->type === 'address') {
             $this->currentAddress = new Address();
             $this->currentAddress->user_id = auth()->user()->id;
-        } else if($this->type === 'shop_address') {
+        } elseif ($this->type === 'shop_address') {
             $this->currentAddress = new ShopAddress();
             $this->currentAddress->shop_id = MyShop::getShopID();
-        }    
-        
+        }
+
         $this->currentAddress->is_primary = false;
         $this->currentAddress->is_billing = false;
     }
 
     protected function rules()
     {
-        if($this->currentAddress instanceof ShopAddress) {
+        if ($this->currentAddress instanceof ShopAddress) {
             return [
                 'addresses.*' => [],
                 'currentAddress.address' => ['required'],
@@ -70,7 +73,7 @@ class AddressesForm extends Component
                 'currentAddress.location' => [],
                 'currentAddress.features' => [],
             ];
-        } else if($this->currentAddress instanceof Address) {
+        } elseif ($this->currentAddress instanceof Address) {
             return [
                 'addresses.*' => [],
                 'currentAddress.address' => ['required'],
@@ -96,7 +99,8 @@ class AddressesForm extends Component
     //     }
     // }
 
-    public function changeCurrentAddress($key) {
+    public function changeCurrentAddress($key)
+    {
         $this->currentAddress = $this->addresses->get($key);
         $this->dispatchBrowserEvent('display-address-panel');
     }
@@ -118,51 +122,52 @@ class AddressesForm extends Component
         return view('livewire.dashboard.forms.addresses.addresses-form');
     }
 
-    public function saveAddress() {
+    public function saveAddress()
+    {
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
             // $this->dispatchValidationErrors($e);
             $this->validate();
         }
-        
+
         DB::beginTransaction();
 
         try {
             // Update address
-            if($this->type === 'address') {
+            if ($this->type === 'address') {
                 $this->currentAddress->user_id = auth()->user()->id;
-            } else if($this->type === 'shop_address') {
+            } elseif ($this->type === 'shop_address') {
                 $this->currentAddress->shop_id = MyShop::getShopID();
-            }     
+            }
             $this->currentAddress->save();
 
             // if address IS PRIMARY, set other user addresses to non-primary
-            if($this->currentAddress->is_primary) {
-                if($this->type === 'address') {
+            if ($this->currentAddress->is_primary) {
+                if ($this->type === 'address') {
                     app($this->currentAddress::class)::where([
                         ['id', '!=', $this->currentAddress->id],
-                        ['user_id', '=', auth()->user()->id]
+                        ['user_id', '=', auth()->user()->id],
                     ])->update(['is_primary' => 0]);
-                } else if($this->type === 'shop_address') {
+                } elseif ($this->type === 'shop_address') {
                     app($this->currentAddress::class)::where([
                         ['id', '!=', $this->currentAddress->id],
-                        ['shop_id', '=', MyShop::getShopID()]
+                        ['shop_id', '=', MyShop::getShopID()],
                     ])->update(['is_primary' => 0]);
                 }
             }
 
             // if address IS BILLING, set other user addresses to non-billing
-            if($this->currentAddress->is_billing) {
-                if($this->type === 'address') {
+            if ($this->currentAddress->is_billing) {
+                if ($this->type === 'address') {
                     app($this->currentAddress::class)::where([
                         ['id', '!=', $this->currentAddress->id],
-                        ['user_id', '=', auth()->user()->id]
+                        ['user_id', '=', auth()->user()->id],
                     ])->update(['is_billing' => 0]);
-                } else if($this->type === 'shop_address') {
+                } elseif ($this->type === 'shop_address') {
                     app($this->currentAddress::class)::where([
                         ['id', '!=', $this->currentAddress->id],
-                        ['shop_id', '=', MyShop::getShopID()]
+                        ['shop_id', '=', MyShop::getShopID()],
                     ])->update(['is_billing' => 0]);
                 }
             }
@@ -175,34 +180,34 @@ class AddressesForm extends Component
             $this->inform(translate('Address successfully saved!'), '', 'success');
 
             // $this->initNewAddress(); // restart current address
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             $this->inform(translate('Address could not be saved'), $e->getMessage(), 'fail');
         }
     }
 
-    public function removeAddress($address_id) {
+    public function removeAddress($address_id)
+    {
         try {
-            if($this->type === 'address') {
+            if ($this->type === 'address') {
                 Address::find($address_id)->delete();
-            } else if($this->type === 'shop_address') {
+            } elseif ($this->type === 'shop_address') {
                 ShopAddress::find($address_id)->delete();
             }
 
             $this->refreshAddresses();
             $this->inform(translate('Address successfully removed!'), '', 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->inform(translate('Address could not be removed'), $e->getMessage(), 'fail');
         }
     }
 
-    protected function refreshAddresses() {
-        if($this->type === 'shop_address') {
+    protected function refreshAddresses()
+    {
+        if ($this->type === 'shop_address') {
             $this->addresses = MyShop::getShop()->addresses()->get(); // re-init shop addresses
-        } else if($this->type === 'address') {
+        } elseif ($this->type === 'address') {
             $this->addresses = auth()->user()->addresses()->get(); // re-init user addresses
         }
     }
-
-
 }

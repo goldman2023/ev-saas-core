@@ -9,21 +9,21 @@ class SearchProductCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
                     'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'base_price' => (double) homeBasePrice($data->id),
-                    'base_discounted_price' => (double) homeDiscountedBasePrice($data->id),
-                    'rating' => (double) $data->rating,
+                    'base_price' => (float) homeBasePrice($data->id),
+                    'base_discounted_price' => (float) homeDiscountedBasePrice($data->id),
+                    'rating' => (float) $data->rating,
                     'links' => [
                         'details' => route('products.show', $data->id),
                         'reviews' => route('api.reviews.index', $data->id),
                         'related' => route('products.related', $data->id),
-                        'top_from_seller' => route('products.topFromSeller', $data->id)
-                    ]
+                        'top_from_seller' => route('products.topFromSeller', $data->id),
+                    ],
                 ];
-            })
+            }),
         ];
     }
 
@@ -31,7 +31,7 @@ class SearchProductCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

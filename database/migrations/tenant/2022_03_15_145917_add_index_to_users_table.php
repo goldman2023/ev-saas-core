@@ -32,8 +32,6 @@ class AddIndexToUsersTable extends Migration
             if ($doctrineTable->hasIndex('user_type')) {
                 $table->dropIndex('user_type');
             }
-
-
         });
     }
 }

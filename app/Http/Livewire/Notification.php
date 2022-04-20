@@ -6,8 +6,8 @@ use Livewire\Component;
 
 class Notification extends Component
 {
-
     public $notification_flag = false;
+
     public $text = null;
 
     protected $listeners = ['success-notification' => 'showSuccessNotification', 'remove-notification' => 'removeNotification'];
@@ -17,12 +17,14 @@ class Notification extends Component
         return view('livewire.notification');
     }
 
-    public function showSuccessNotification($message) {
+    public function showSuccessNotification($message)
+    {
         $this->text = $message;
         $this->notification_flag = true;
     }
 
-    public function removeNotification() {
+    public function removeNotification()
+    {
         $this->notification_flag = false;
     }
 }

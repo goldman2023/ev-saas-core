@@ -13,11 +13,11 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
+use Stancl\Tenancy\Features\TenantConfig;
 use Stancl\Tenancy\Jobs;
 use Stancl\Tenancy\Listeners;
 use Stancl\Tenancy\Middleware;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
-use Stancl\Tenancy\Features\TenantConfig;
 
 class TenancyServiceProvider extends ServiceProvider
 {
@@ -40,7 +40,6 @@ class TenancyServiceProvider extends ServiceProvider
 
                     \App\Jobs\Tenancy\CreateFrameworkDirectoriesForTenant::class, // Create framework/cache directory for each tenant, because they need it for temp file storage
                     \App\Jobs\Tenancy\GeneratePermissionsAndRoles::class, // generate permissions and roles and attach permissions to roles
-
 
                     // TODO: Populate Exchange Rates with FetchLatestFXRates::class
                 ])->send(function (Events\TenantCreated $event) {
@@ -90,7 +89,7 @@ class TenancyServiceProvider extends ServiceProvider
 
             Events\BootstrappingTenancy::class => [],
             Events\TenancyBootstrapped::class => [
-                StorageToConfigMapping::class
+                StorageToConfigMapping::class,
             ],
             Events\RevertingToCentralContext::class => [],
             Events\RevertedToCentralContext::class => [],
@@ -123,8 +122,6 @@ class TenancyServiceProvider extends ServiceProvider
     /**
      * avoid making a query to the central database on each tenant request — for tenant identification.
      * Even though the queries are very simple, the app has to establish a connection with the central database which is expensive.
-     *
-     *
      */
     public function enableTenantCacheLookup()
     {
@@ -189,7 +186,7 @@ class TenancyServiceProvider extends ServiceProvider
          */
         foreach ($social_template as $provider => $data) {
             foreach ($data as $key => $value) {
-                $mapping[$provider . '_' . $key] = 'services.' . $provider . '.' . $key;
+                $mapping[$provider.'_'.$key] = 'services.'.$provider.'.'.$key;
             }
         }
 

@@ -3,37 +3,41 @@
 namespace App\Http\Livewire\Forms;
 
 use App\Mail\WelcomeEmail;
+use App\Models\User;
+use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Auth;
+use Carbon;
+use Categories;
+use Cookie;
 use DB;
 use EVS;
-use Categories;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use Str;
-use Cookie;
-use Auth;
-use App\Models\User;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\DispatchSupport;
-
-use Illuminate\Auth\Events\Registered;
-
-use Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
+use Spatie\ValidationRules\Rules\ModelsExist;
+use Str;
 
 class RegisterForm extends Component
 {
     use DispatchSupport;
 
     protected $user;
+
     public $name;
+
     public $surname;
+
     public $email;
+
     public $password;
+
     public $password_confirmation;
+
     public $terms_consent;
 
     protected function rules()
@@ -43,7 +47,7 @@ class RegisterForm extends Component
             'surname' => 'required|min:2',
             'email' => 'required|unique:App\Models\User,email',
             'password' => ['required', 'min:8', 'regex:/^.*(?=.{1,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/', 'confirmed'],
-            'terms_consent' => ['required', 'boolean', 'is_true']
+            'terms_consent' => ['required', 'boolean', 'is_true'],
         ];
     }
 
@@ -69,7 +73,6 @@ class RegisterForm extends Component
      */
     public function mount()
     {
- 
     }
 
     public function render()
@@ -113,7 +116,6 @@ class RegisterForm extends Component
                 ->cc('eim@we-saas.com')
                 ->send(new WelcomeEmail($this->user));
         } catch (\Throwable $e) {
-
         }
     }
 
@@ -139,16 +141,16 @@ class RegisterForm extends Component
 
     protected function registered()
     {
-        if(get_tenant_setting('onboarding_flow')) {
+        if (get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
         }
 
-        if(!get_tenant_setting('onboarding_flow')) {
-            if(!empty(get_tenant_setting('register_redirect_url'))) {
+        if (! get_tenant_setting('onboarding_flow')) {
+            if (! empty(get_tenant_setting('register_redirect_url'))) {
                 return redirect(get_tenant_setting('register_redirect_url'));
             } else {
                 return redirect()->route('verification');
-            } 
+            }
         }
     }
 }

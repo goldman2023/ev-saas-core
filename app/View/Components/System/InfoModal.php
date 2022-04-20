@@ -7,9 +7,13 @@ use Illuminate\View\Component;
 class InfoModal extends Component
 {
     public $class;
+
     public $title;
+
     public $text;
+
     public $type; // success, warning, info, fail
+
     public $timeout;
 
     /**

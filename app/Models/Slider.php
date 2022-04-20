@@ -23,14 +23,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Slider whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-
 class Slider extends Model
 {
     protected static function boot()
     {
         parent::boot();
 
-        if(!auth()->check() || (auth()->check() && !auth()->user()->isAdmin())) {
+        if (! auth()->check() || (auth()->check() && ! auth()->user()->isAdmin())) {
             static::addGlobalScope('published', function (Builder $builder) {
                 $builder->where('published', 1);
             });

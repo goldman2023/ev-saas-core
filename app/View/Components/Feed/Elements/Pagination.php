@@ -7,7 +7,6 @@ use Illuminate\View\Component;
 
 class Pagination extends Component
 {
-
     /**
      * Create a new component instance.
      *
@@ -15,7 +14,6 @@ class Pagination extends Component
      */
     public function __construct()
     {
-        
     }
 
     /**

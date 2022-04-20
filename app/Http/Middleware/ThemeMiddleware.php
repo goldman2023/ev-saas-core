@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use \Qirolab\Theme\Theme as Theme;
+use Qirolab\Theme\Theme as Theme;
 
 class ThemeMiddleware
 {
@@ -44,10 +44,9 @@ class ThemeMiddleware
 
                     session(['style_framework' => 'tailwind']);
 
-                    /*
-                        TODO: Define this better but dashboard allways uses boostrap version for now
-                    */
-
+                /*
+                    TODO: Define this better but dashboard allways uses boostrap version for now
+                */
                 } else {
                     Theme::set($domain->theme, 'ev-tailwind');
                     session(['style_framework' => 'tailwind']);

@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class CurrenciesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,13 +13,11 @@ class CurrenciesTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('currencies')->count() == 0) {
             \DB::table('currencies')->delete();
 
-            \DB::table('currencies')->insert(array(
-                0 =>
-                    array(
+            \DB::table('currencies')->insert([
+                0 => [
                         'id' => 1,
                         'name' => 'U.S. Dollar',
                         'symbol' => '$',
@@ -28,9 +25,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'USD',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2018-10-17 08:50:52',
-                    ),
-                1 =>
-                    array(
+                    ],
+                1 => [
                         'id' => 2,
                         'name' => 'Australian Dollar',
                         'symbol' => '$',
@@ -38,9 +34,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'AUD',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:19',
-                    ),
-                2 =>
-                    array(
+                    ],
+                2 => [
                         'id' => 5,
                         'name' => 'Brazilian Real',
                         'symbol' => 'R$',
@@ -48,9 +43,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'BRL',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:19',
-                    ),
-                3 =>
-                    array(
+                    ],
+                3 => [
                         'id' => 6,
                         'name' => 'Canadian Dollar',
                         'symbol' => '$',
@@ -58,9 +52,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'CAD',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:20',
-                    ),
-                4 =>
-                    array(
+                    ],
+                4 => [
                         'id' => 7,
                         'name' => 'Czech Koruna',
                         'symbol' => 'Kč',
@@ -68,9 +61,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'CZK',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:21',
-                    ),
-                5 =>
-                    array(
+                    ],
+                5 => [
                         'id' => 8,
                         'name' => 'Danish Krone',
                         'symbol' => 'kr',
@@ -78,9 +70,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'DKK',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:22',
-                    ),
-                6 =>
-                    array(
+                    ],
+                6 => [
                         'id' => 9,
                         'name' => 'Euro',
                         'symbol' => '€',
@@ -88,9 +79,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'EUR',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2018-10-09 14:35:08',
-                    ),
-                7 =>
-                    array(
+                    ],
+                7 => [
                         'id' => 10,
                         'name' => 'Hong Kong Dollar',
                         'symbol' => '$',
@@ -98,9 +88,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'HKD',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:24',
-                    ),
-                8 =>
-                    array(
+                    ],
+                8 => [
                         'id' => 11,
                         'name' => 'Hungarian Forint',
                         'symbol' => 'Ft',
@@ -108,9 +97,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'HUF',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:24',
-                    ),
-                9 =>
-                    array(
+                    ],
+                9 => [
                         'id' => 12,
                         'name' => 'Israeli New Sheqel',
                         'symbol' => '₪',
@@ -118,9 +106,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'ILS',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:33',
-                    ),
-                10 =>
-                    array(
+                    ],
+                10 => [
                         'id' => 13,
                         'name' => 'Japanese Yen',
                         'symbol' => '¥',
@@ -128,9 +115,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'JPY',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:33',
-                    ),
-                11 =>
-                    array(
+                    ],
+                11 => [
                         'id' => 14,
                         'name' => 'Malaysian Ringgit',
                         'symbol' => 'RM',
@@ -138,9 +124,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'MYR',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:34',
-                    ),
-                12 =>
-                    array(
+                    ],
+                12 => [
                         'id' => 15,
                         'name' => 'Mexican Peso',
                         'symbol' => '$',
@@ -148,9 +133,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'MXN',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:35',
-                    ),
-                13 =>
-                    array(
+                    ],
+                13 => [
                         'id' => 16,
                         'name' => 'Norwegian Krone',
                         'symbol' => 'kr',
@@ -158,9 +142,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'NOK',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:36',
-                    ),
-                14 =>
-                    array(
+                    ],
+                14 => [
                         'id' => 17,
                         'name' => 'New Zealand Dollar',
                         'symbol' => '$',
@@ -168,9 +151,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'NZD',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:36',
-                    ),
-                15 =>
-                    array(
+                    ],
+                15 => [
                         'id' => 18,
                         'name' => 'Philippine Peso',
                         'symbol' => '₱',
@@ -178,9 +160,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'PHP',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:36',
-                    ),
-                16 =>
-                    array(
+                    ],
+                16 => [
                         'id' => 19,
                         'name' => 'Polish Zloty',
                         'symbol' => 'zł',
@@ -188,9 +169,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'PLN',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:37',
-                    ),
-                17 =>
-                    array(
+                    ],
+                17 => [
                         'id' => 20,
                         'name' => 'Pound Sterling',
                         'symbol' => '£',
@@ -198,9 +178,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'GBP',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:37',
-                    ),
-                18 =>
-                    array(
+                    ],
+                18 => [
                         'id' => 21,
                         'name' => 'Russian Ruble',
                         'symbol' => 'руб',
@@ -208,9 +187,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'RUB',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:38',
-                    ),
-                19 =>
-                    array(
+                    ],
+                19 => [
                         'id' => 22,
                         'name' => 'Singapore Dollar',
                         'symbol' => '$',
@@ -218,9 +196,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'SGD',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:50',
-                    ),
-                20 =>
-                    array(
+                    ],
+                20 => [
                         'id' => 23,
                         'name' => 'Swedish Krona',
                         'symbol' => 'kr',
@@ -228,9 +205,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'SEK',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:51',
-                    ),
-                21 =>
-                    array(
+                    ],
+                21 => [
                         'id' => 24,
                         'name' => 'Swiss Franc',
                         'symbol' => 'CHF',
@@ -238,9 +214,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'CHF',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:52',
-                    ),
-                22 =>
-                    array(
+                    ],
+                22 => [
                         'id' => 26,
                         'name' => 'Thai Baht',
                         'symbol' => '฿',
@@ -248,9 +223,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'THB',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:53',
-                    ),
-                23 =>
-                    array(
+                    ],
+                23 => [
                         'id' => 27,
                         'name' => 'Taka',
                         'symbol' => '৳',
@@ -258,9 +232,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'BDT',
                         'created_at' => '2018-10-09 14:35:08',
                         'updated_at' => '2021-04-08 13:00:54',
-                    ),
-                24 =>
-                    array(
+                    ],
+                24 => [
                         'id' => 28,
                         'name' => 'Indian Rupee',
                         'symbol' => 'Rs',
@@ -268,10 +241,8 @@ class CurrenciesTableSeeder extends Seeder
                         'code' => 'Rupee',
                         'created_at' => '2019-07-07 13:33:46',
                         'updated_at' => '2021-04-08 13:00:18',
-                    ),
-            ));
+                    ],
+            ]);
         }
-
-
     }
 }

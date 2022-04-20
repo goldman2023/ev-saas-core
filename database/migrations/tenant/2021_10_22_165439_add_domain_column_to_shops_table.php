@@ -13,7 +13,6 @@ class AddDomainColumnToShopsTable extends Migration
      */
     public function up()
     {
-
         Schema::create('shop_domains', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('shop_id');

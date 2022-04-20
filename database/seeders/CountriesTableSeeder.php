@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class CountriesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,2227 +13,1979 @@ class CountriesTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('countries')->count() == 0) {
             \DB::table('countries')->delete();
 
-            \DB::table('countries')->insert(array(
-                0 =>
-                    array(
+            \DB::table('countries')->insert([
+                0 => [
                         'id' => 1,
                         'code' => 'AF',
                         'name' => 'Afghanistan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                1 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                1 => [
                         'id' => 2,
                         'code' => 'AL',
                         'name' => 'Albania',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                2 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                2 => [
                         'id' => 3,
                         'code' => 'DZ',
                         'name' => 'Algeria',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                3 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                3 => [
                         'id' => 4,
                         'code' => 'DS',
                         'name' => 'American Samoa',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                4 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                4 => [
                         'id' => 5,
                         'code' => 'AD',
                         'name' => 'Andorra',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                5 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                5 => [
                         'id' => 6,
                         'code' => 'AO',
                         'name' => 'Angola',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                6 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                6 => [
                         'id' => 7,
                         'code' => 'AI',
                         'name' => 'Anguilla',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                7 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                7 => [
                         'id' => 8,
                         'code' => 'AQ',
                         'name' => 'Antarctica',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                8 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                8 => [
                         'id' => 9,
                         'code' => 'AG',
                         'name' => 'Antigua and Barbuda',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                9 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                9 => [
                         'id' => 10,
                         'code' => 'AR',
                         'name' => 'Argentina',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                10 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                10 => [
                         'id' => 11,
                         'code' => 'AM',
                         'name' => 'Armenia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                11 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                11 => [
                         'id' => 12,
                         'code' => 'AW',
                         'name' => 'Aruba',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                12 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                12 => [
                         'id' => 13,
                         'code' => 'AU',
                         'name' => 'Australia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                13 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                13 => [
                         'id' => 14,
                         'code' => 'AT',
                         'name' => 'Austria',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                14 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                14 => [
                         'id' => 15,
                         'code' => 'AZ',
                         'name' => 'Azerbaijan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                15 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                15 => [
                         'id' => 16,
                         'code' => 'BS',
                         'name' => 'Bahamas',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                16 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                16 => [
                         'id' => 17,
                         'code' => 'BH',
                         'name' => 'Bahrain',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                17 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                17 => [
                         'id' => 18,
                         'code' => 'BD',
                         'name' => 'Bangladesh',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                18 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                18 => [
                         'id' => 19,
                         'code' => 'BB',
                         'name' => 'Barbados',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                19 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                19 => [
                         'id' => 20,
                         'code' => 'BY',
                         'name' => 'Belarus',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                20 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                20 => [
                         'id' => 21,
                         'code' => 'BE',
                         'name' => 'Belgium',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                21 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                21 => [
                         'id' => 22,
                         'code' => 'BZ',
                         'name' => 'Belize',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                22 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                22 => [
                         'id' => 23,
                         'code' => 'BJ',
                         'name' => 'Benin',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                23 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                23 => [
                         'id' => 24,
                         'code' => 'BM',
                         'name' => 'Bermuda',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                24 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                24 => [
                         'id' => 25,
                         'code' => 'BT',
                         'name' => 'Bhutan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                25 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                25 => [
                         'id' => 26,
                         'code' => 'BO',
                         'name' => 'Bolivia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                26 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                26 => [
                         'id' => 27,
                         'code' => 'BA',
                         'name' => 'Bosnia and Herzegovina',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                27 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                27 => [
                         'id' => 28,
                         'code' => 'BW',
                         'name' => 'Botswana',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                28 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                28 => [
                         'id' => 29,
                         'code' => 'BV',
                         'name' => 'Bouvet Island',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                29 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                29 => [
                         'id' => 30,
                         'code' => 'BR',
                         'name' => 'Brazil',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                30 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                30 => [
                         'id' => 31,
                         'code' => 'IO',
                         'name' => 'British Indian Ocean Territory',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                31 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                31 => [
                         'id' => 32,
                         'code' => 'BN',
                         'name' => 'Brunei Darussalam',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                32 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                32 => [
                         'id' => 33,
                         'code' => 'BG',
                         'name' => 'Bulgaria',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                33 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                33 => [
                         'id' => 34,
                         'code' => 'BF',
                         'name' => 'Burkina Faso',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                34 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                34 => [
                         'id' => 35,
                         'code' => 'BI',
                         'name' => 'Burundi',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                35 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                35 => [
                         'id' => 36,
                         'code' => 'KH',
                         'name' => 'Cambodia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                36 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                36 => [
                         'id' => 37,
                         'code' => 'CM',
                         'name' => 'Cameroon',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                37 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                37 => [
                         'id' => 38,
                         'code' => 'CA',
                         'name' => 'Canada',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                38 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                38 => [
                         'id' => 39,
                         'code' => 'CV',
                         'name' => 'Cape Verde',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                39 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                39 => [
                         'id' => 40,
                         'code' => 'KY',
                         'name' => 'Cayman Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                40 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                40 => [
                         'id' => 41,
                         'code' => 'CF',
                         'name' => 'Central African Republic',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                41 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                41 => [
                         'id' => 42,
                         'code' => 'TD',
                         'name' => 'Chad',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                42 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                42 => [
                         'id' => 43,
                         'code' => 'CL',
                         'name' => 'Chile',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                43 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                43 => [
                         'id' => 44,
                         'code' => 'CN',
                         'name' => 'China',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                44 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                44 => [
                         'id' => 45,
                         'code' => 'CX',
                         'name' => 'Christmas Island',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                45 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                45 => [
                         'id' => 46,
                         'code' => 'CC',
                         'name' => 'Cocos (Keeling) Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                46 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                46 => [
                         'id' => 47,
                         'code' => 'CO',
                         'name' => 'Colombia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                47 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                47 => [
                         'id' => 48,
                         'code' => 'KM',
                         'name' => 'Comoros',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                48 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                48 => [
                         'id' => 49,
                         'code' => 'CG',
                         'name' => 'Congo',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                49 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                49 => [
                         'id' => 50,
                         'code' => 'CK',
                         'name' => 'Cook Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                50 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                50 => [
                         'id' => 51,
                         'code' => 'CR',
                         'name' => 'Costa Rica',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                51 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                51 => [
                         'id' => 52,
                         'code' => 'HR',
                         'name' => 'Croatia (Hrvatska)',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                52 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                52 => [
                         'id' => 53,
                         'code' => 'CU',
                         'name' => 'Cuba',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                53 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                53 => [
                         'id' => 54,
                         'code' => 'CY',
                         'name' => 'Cyprus',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                54 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                54 => [
                         'id' => 55,
                         'code' => 'CZ',
                         'name' => 'Czech Republic',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                55 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                55 => [
                         'id' => 56,
                         'code' => 'DK',
                         'name' => 'Denmark',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                56 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                56 => [
                         'id' => 57,
                         'code' => 'DJ',
                         'name' => 'Djibouti',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                57 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                57 => [
                         'id' => 58,
                         'code' => 'DM',
                         'name' => 'Dominica',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                58 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                58 => [
                         'id' => 59,
                         'code' => 'DO',
                         'name' => 'Dominican Republic',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                59 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                59 => [
                         'id' => 60,
                         'code' => 'TP',
                         'name' => 'East Timor',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                60 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                60 => [
                         'id' => 61,
                         'code' => 'EC',
                         'name' => 'Ecuador',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                61 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                61 => [
                         'id' => 62,
                         'code' => 'EG',
                         'name' => 'Egypt',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                62 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                62 => [
                         'id' => 63,
                         'code' => 'SV',
                         'name' => 'El Salvador',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                63 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                63 => [
                         'id' => 64,
                         'code' => 'GQ',
                         'name' => 'Equatorial Guinea',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                64 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                64 => [
                         'id' => 65,
                         'code' => 'ER',
                         'name' => 'Eritrea',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                65 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                65 => [
                         'id' => 66,
                         'code' => 'EE',
                         'name' => 'Estonia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                66 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                66 => [
                         'id' => 67,
                         'code' => 'ET',
                         'name' => 'Ethiopia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                67 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                67 => [
                         'id' => 68,
                         'code' => 'FK',
                         'name' => 'Falkland Islands (Malvinas)',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                68 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                68 => [
                         'id' => 69,
                         'code' => 'FO',
                         'name' => 'Faroe Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                69 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                69 => [
                         'id' => 70,
                         'code' => 'FJ',
                         'name' => 'Fiji',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                70 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                70 => [
                         'id' => 71,
                         'code' => 'FI',
                         'name' => 'Finland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                71 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                71 => [
                         'id' => 72,
                         'code' => 'FR',
                         'name' => 'France',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                72 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                72 => [
                         'id' => 73,
                         'code' => 'FX',
                         'name' => 'France, Metropolitan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                73 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                73 => [
                         'id' => 74,
                         'code' => 'GF',
                         'name' => 'French Guiana',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                74 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                74 => [
                         'id' => 75,
                         'code' => 'PF',
                         'name' => 'French Polynesia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                75 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                75 => [
                         'id' => 76,
                         'code' => 'TF',
                         'name' => 'French Southern Territories',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                76 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                76 => [
                         'id' => 77,
                         'code' => 'GA',
                         'name' => 'Gabon',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                77 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                77 => [
                         'id' => 78,
                         'code' => 'GM',
                         'name' => 'Gambia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                78 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                78 => [
                         'id' => 79,
                         'code' => 'GE',
                         'name' => 'Georgia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                79 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                79 => [
                         'id' => 80,
                         'code' => 'DE',
                         'name' => 'Germany',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                80 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                80 => [
                         'id' => 81,
                         'code' => 'GH',
                         'name' => 'Ghana',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                81 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                81 => [
                         'id' => 82,
                         'code' => 'GI',
                         'name' => 'Gibraltar',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                82 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                82 => [
                         'id' => 83,
                         'code' => 'GK',
                         'name' => 'Guernsey',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                83 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                83 => [
                         'id' => 84,
                         'code' => 'GR',
                         'name' => 'Greece',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                84 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                84 => [
                         'id' => 85,
                         'code' => 'GL',
                         'name' => 'Greenland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                85 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                85 => [
                         'id' => 86,
                         'code' => 'GD',
                         'name' => 'Grenada',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                86 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                86 => [
                         'id' => 87,
                         'code' => 'GP',
                         'name' => 'Guadeloupe',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                87 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                87 => [
                         'id' => 88,
                         'code' => 'GU',
                         'name' => 'Guam',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                88 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                88 => [
                         'id' => 89,
                         'code' => 'GT',
                         'name' => 'Guatemala',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                89 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                89 => [
                         'id' => 90,
                         'code' => 'GN',
                         'name' => 'Guinea',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                90 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                90 => [
                         'id' => 91,
                         'code' => 'GW',
                         'name' => 'Guinea-Bissau',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                91 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                91 => [
                         'id' => 92,
                         'code' => 'GY',
                         'name' => 'Guyana',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                92 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                92 => [
                         'id' => 93,
                         'code' => 'HT',
                         'name' => 'Haiti',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                93 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                93 => [
                         'id' => 94,
                         'code' => 'HM',
                         'name' => 'Heard and Mc Donald Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                94 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                94 => [
                         'id' => 95,
                         'code' => 'HN',
                         'name' => 'Honduras',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                95 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                95 => [
                         'id' => 96,
                         'code' => 'HK',
                         'name' => 'Hong Kong',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                96 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                96 => [
                         'id' => 97,
                         'code' => 'HU',
                         'name' => 'Hungary',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                97 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                97 => [
                         'id' => 98,
                         'code' => 'IS',
                         'name' => 'Iceland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                98 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                98 => [
                         'id' => 99,
                         'code' => 'IN',
                         'name' => 'India',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                99 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                99 => [
                         'id' => 100,
                         'code' => 'IM',
                         'name' => 'Isle of Man',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                100 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                100 => [
                         'id' => 101,
                         'code' => 'ID',
                         'name' => 'Indonesia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                101 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                101 => [
                         'id' => 102,
                         'code' => 'IR',
                         'name' => 'Iran (Islamic Republic of)',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                102 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                102 => [
                         'id' => 103,
                         'code' => 'IQ',
                         'name' => 'Iraq',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                103 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                103 => [
                         'id' => 104,
                         'code' => 'IE',
                         'name' => 'Ireland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                104 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                104 => [
                         'id' => 105,
                         'code' => 'IL',
                         'name' => 'Israel',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                105 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                105 => [
                         'id' => 106,
                         'code' => 'IT',
                         'name' => 'Italy',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                106 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                106 => [
                         'id' => 107,
                         'code' => 'CI',
                         'name' => 'Ivory Coast',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                107 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                107 => [
                         'id' => 108,
                         'code' => 'JE',
                         'name' => 'Jersey',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                108 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                108 => [
                         'id' => 109,
                         'code' => 'JM',
                         'name' => 'Jamaica',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                109 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                109 => [
                         'id' => 110,
                         'code' => 'JP',
                         'name' => 'Japan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                110 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                110 => [
                         'id' => 111,
                         'code' => 'JO',
                         'name' => 'Jordan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                111 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                111 => [
                         'id' => 112,
                         'code' => 'KZ',
                         'name' => 'Kazakhstan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                112 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                112 => [
                         'id' => 113,
                         'code' => 'KE',
                         'name' => 'Kenya',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                113 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                113 => [
                         'id' => 114,
                         'code' => 'KI',
                         'name' => 'Kiribati',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                114 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                114 => [
                         'id' => 115,
                         'code' => 'KP',
                         'name' => 'Korea, Democratic People\'s Republic of',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                115 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                115 => [
                         'id' => 116,
                         'code' => 'KR',
                         'name' => 'Korea, Republic of',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                116 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                116 => [
                         'id' => 117,
                         'code' => 'XK',
                         'name' => 'Kosovo',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                117 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                117 => [
                         'id' => 118,
                         'code' => 'KW',
                         'name' => 'Kuwait',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                118 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                118 => [
                         'id' => 119,
                         'code' => 'KG',
                         'name' => 'Kyrgyzstan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                119 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                119 => [
                         'id' => 120,
                         'code' => 'LA',
                         'name' => 'Lao People\'s Democratic Republic',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                120 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                120 => [
                         'id' => 121,
                         'code' => 'LV',
                         'name' => 'Latvia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                121 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                121 => [
                         'id' => 122,
                         'code' => 'LB',
                         'name' => 'Lebanon',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                122 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                122 => [
                         'id' => 123,
                         'code' => 'LS',
                         'name' => 'Lesotho',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                123 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                123 => [
                         'id' => 124,
                         'code' => 'LR',
                         'name' => 'Liberia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                124 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                124 => [
                         'id' => 125,
                         'code' => 'LY',
                         'name' => 'Libyan Arab Jamahiriya',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                125 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                125 => [
                         'id' => 126,
                         'code' => 'LI',
                         'name' => 'Liechtenstein',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                126 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                126 => [
                         'id' => 127,
                         'code' => 'LT',
                         'name' => 'Lithuania',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                127 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                127 => [
                         'id' => 128,
                         'code' => 'LU',
                         'name' => 'Luxembourg',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                128 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                128 => [
                         'id' => 129,
                         'code' => 'MO',
                         'name' => 'Macau',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                129 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                129 => [
                         'id' => 130,
                         'code' => 'MK',
                         'name' => 'Macedonia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                130 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                130 => [
                         'id' => 131,
                         'code' => 'MG',
                         'name' => 'Madagascar',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                131 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                131 => [
                         'id' => 132,
                         'code' => 'MW',
                         'name' => 'Malawi',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                132 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                132 => [
                         'id' => 133,
                         'code' => 'MY',
                         'name' => 'Malaysia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                133 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                133 => [
                         'id' => 134,
                         'code' => 'MV',
                         'name' => 'Maldives',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                134 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                134 => [
                         'id' => 135,
                         'code' => 'ML',
                         'name' => 'Mali',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                135 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                135 => [
                         'id' => 136,
                         'code' => 'MT',
                         'name' => 'Malta',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                136 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                136 => [
                         'id' => 137,
                         'code' => 'MH',
                         'name' => 'Marshall Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                137 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                137 => [
                         'id' => 138,
                         'code' => 'MQ',
                         'name' => 'Martinique',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                138 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                138 => [
                         'id' => 139,
                         'code' => 'MR',
                         'name' => 'Mauritania',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                139 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                139 => [
                         'id' => 140,
                         'code' => 'MU',
                         'name' => 'Mauritius',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                140 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                140 => [
                         'id' => 141,
                         'code' => 'TY',
                         'name' => 'Mayotte',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                141 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                141 => [
                         'id' => 142,
                         'code' => 'MX',
                         'name' => 'Mexico',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                142 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                142 => [
                         'id' => 143,
                         'code' => 'FM',
                         'name' => 'Micronesia, Federated States of',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                143 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                143 => [
                         'id' => 144,
                         'code' => 'MD',
                         'name' => 'Moldova, Republic of',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                144 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                144 => [
                         'id' => 145,
                         'code' => 'MC',
                         'name' => 'Monaco',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                145 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                145 => [
                         'id' => 146,
                         'code' => 'MN',
                         'name' => 'Mongolia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                146 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                146 => [
                         'id' => 147,
                         'code' => 'ME',
                         'name' => 'Montenegro',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                147 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                147 => [
                         'id' => 148,
                         'code' => 'MS',
                         'name' => 'Montserrat',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                148 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                148 => [
                         'id' => 149,
                         'code' => 'MA',
                         'name' => 'Morocco',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                149 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                149 => [
                         'id' => 150,
                         'code' => 'MZ',
                         'name' => 'Mozambique',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                150 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                150 => [
                         'id' => 151,
                         'code' => 'MM',
                         'name' => 'Myanmar',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                151 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                151 => [
                         'id' => 152,
                         'code' => 'NA',
                         'name' => 'Namibia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                152 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                152 => [
                         'id' => 153,
                         'code' => 'NR',
                         'name' => 'Nauru',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                153 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                153 => [
                         'id' => 154,
                         'code' => 'NP',
                         'name' => 'Nepal',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                154 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                154 => [
                         'id' => 155,
                         'code' => 'NL',
                         'name' => 'Netherlands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                155 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                155 => [
                         'id' => 156,
                         'code' => 'AN',
                         'name' => 'Netherlands Antilles',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                156 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                156 => [
                         'id' => 157,
                         'code' => 'NC',
                         'name' => 'New Caledonia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                157 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                157 => [
                         'id' => 158,
                         'code' => 'NZ',
                         'name' => 'New Zealand',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                158 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                158 => [
                         'id' => 159,
                         'code' => 'NI',
                         'name' => 'Nicaragua',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                159 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                159 => [
                         'id' => 160,
                         'code' => 'NE',
                         'name' => 'Niger',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                160 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                160 => [
                         'id' => 161,
                         'code' => 'NG',
                         'name' => 'Nigeria',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                161 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                161 => [
                         'id' => 162,
                         'code' => 'NU',
                         'name' => 'Niue',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                162 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                162 => [
                         'id' => 163,
                         'code' => 'NF',
                         'name' => 'Norfolk Island',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                163 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                163 => [
                         'id' => 164,
                         'code' => 'MP',
                         'name' => 'Northern Mariana Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                164 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                164 => [
                         'id' => 165,
                         'code' => 'NO',
                         'name' => 'Norway',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                165 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                165 => [
                         'id' => 166,
                         'code' => 'OM',
                         'name' => 'Oman',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                166 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                166 => [
                         'id' => 167,
                         'code' => 'PK',
                         'name' => 'Pakistan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                167 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                167 => [
                         'id' => 168,
                         'code' => 'PW',
                         'name' => 'Palau',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                168 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                168 => [
                         'id' => 169,
                         'code' => 'PS',
                         'name' => 'Palestine',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                169 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                169 => [
                         'id' => 170,
                         'code' => 'PA',
                         'name' => 'Panama',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                170 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                170 => [
                         'id' => 171,
                         'code' => 'PG',
                         'name' => 'Papua New Guinea',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                171 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                171 => [
                         'id' => 172,
                         'code' => 'PY',
                         'name' => 'Paraguay',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                172 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                172 => [
                         'id' => 173,
                         'code' => 'PE',
                         'name' => 'Peru',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                173 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                173 => [
                         'id' => 174,
                         'code' => 'PH',
                         'name' => 'Philippines',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                174 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                174 => [
                         'id' => 175,
                         'code' => 'PN',
                         'name' => 'Pitcairn',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                175 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                175 => [
                         'id' => 176,
                         'code' => 'PL',
                         'name' => 'Poland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                176 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                176 => [
                         'id' => 177,
                         'code' => 'PT',
                         'name' => 'Portugal',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                177 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                177 => [
                         'id' => 178,
                         'code' => 'PR',
                         'name' => 'Puerto Rico',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                178 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                178 => [
                         'id' => 179,
                         'code' => 'QA',
                         'name' => 'Qatar',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                179 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                179 => [
                         'id' => 180,
                         'code' => 'RE',
                         'name' => 'Reunion',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                180 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                180 => [
                         'id' => 181,
                         'code' => 'RO',
                         'name' => 'Romania',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                181 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                181 => [
                         'id' => 182,
                         'code' => 'RU',
                         'name' => 'Russian Federation',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                182 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                182 => [
                         'id' => 183,
                         'code' => 'RW',
                         'name' => 'Rwanda',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                183 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                183 => [
                         'id' => 184,
                         'code' => 'KN',
                         'name' => 'Saint Kitts and Nevis',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                184 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                184 => [
                         'id' => 185,
                         'code' => 'LC',
                         'name' => 'Saint Lucia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                185 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                185 => [
                         'id' => 186,
                         'code' => 'VC',
                         'name' => 'Saint Vincent and the Grenadines',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                186 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                186 => [
                         'id' => 187,
                         'code' => 'WS',
                         'name' => 'Samoa',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                187 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                187 => [
                         'id' => 188,
                         'code' => 'SM',
                         'name' => 'San Marino',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                188 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                188 => [
                         'id' => 189,
                         'code' => 'ST',
                         'name' => 'Sao Tome and Principe',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                189 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                189 => [
                         'id' => 190,
                         'code' => 'SA',
                         'name' => 'Saudi Arabia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                190 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                190 => [
                         'id' => 191,
                         'code' => 'SN',
                         'name' => 'Senegal',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                191 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                191 => [
                         'id' => 192,
                         'code' => 'RS',
                         'name' => 'Serbia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                192 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                192 => [
                         'id' => 193,
                         'code' => 'SC',
                         'name' => 'Seychelles',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                193 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                193 => [
                         'id' => 194,
                         'code' => 'SL',
                         'name' => 'Sierra Leone',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                194 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                194 => [
                         'id' => 195,
                         'code' => 'SG',
                         'name' => 'Singapore',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                195 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                195 => [
                         'id' => 196,
                         'code' => 'SK',
                         'name' => 'Slovakia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                196 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                196 => [
                         'id' => 197,
                         'code' => 'SI',
                         'name' => 'Slovenia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                197 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                197 => [
                         'id' => 198,
                         'code' => 'SB',
                         'name' => 'Solomon Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                198 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                198 => [
                         'id' => 199,
                         'code' => 'SO',
                         'name' => 'Somalia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                199 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                199 => [
                         'id' => 200,
                         'code' => 'ZA',
                         'name' => 'South Africa',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                200 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                200 => [
                         'id' => 201,
                         'code' => 'GS',
                         'name' => 'South Georgia South Sandwich Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                201 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                201 => [
                         'id' => 202,
                         'code' => 'SS',
                         'name' => 'South Sudan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                202 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                202 => [
                         'id' => 203,
                         'code' => 'ES',
                         'name' => 'Spain',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                203 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                203 => [
                         'id' => 204,
                         'code' => 'LK',
                         'name' => 'Sri Lanka',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                204 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                204 => [
                         'id' => 205,
                         'code' => 'SH',
                         'name' => 'St. Helena',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                205 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                205 => [
                         'id' => 206,
                         'code' => 'PM',
                         'name' => 'St. Pierre and Miquelon',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                206 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                206 => [
                         'id' => 207,
                         'code' => 'SD',
                         'name' => 'Sudan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                207 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                207 => [
                         'id' => 208,
                         'code' => 'SR',
                         'name' => 'Suriname',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                208 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                208 => [
                         'id' => 209,
                         'code' => 'SJ',
                         'name' => 'Svalbard and Jan Mayen Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                209 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                209 => [
                         'id' => 210,
                         'code' => 'SZ',
                         'name' => 'Swaziland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                210 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                210 => [
                         'id' => 211,
                         'code' => 'SE',
                         'name' => 'Sweden',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                211 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                211 => [
                         'id' => 212,
                         'code' => 'CH',
                         'name' => 'Switzerland',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                212 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                212 => [
                         'id' => 213,
                         'code' => 'SY',
                         'name' => 'Syrian Arab Republic',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                213 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                213 => [
                         'id' => 214,
                         'code' => 'TW',
                         'name' => 'Taiwan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                214 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                214 => [
                         'id' => 215,
                         'code' => 'TJ',
                         'name' => 'Tajikistan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                215 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                215 => [
                         'id' => 216,
                         'code' => 'TZ',
                         'name' => 'Tanzania, United Republic of',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                216 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                216 => [
                         'id' => 217,
                         'code' => 'TH',
                         'name' => 'Thailand',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                217 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                217 => [
                         'id' => 218,
                         'code' => 'TG',
                         'name' => 'Togo',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                218 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                218 => [
                         'id' => 219,
                         'code' => 'TK',
                         'name' => 'Tokelau',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                219 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                219 => [
                         'id' => 220,
                         'code' => 'TO',
                         'name' => 'Tonga',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                220 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                220 => [
                         'id' => 221,
                         'code' => 'TT',
                         'name' => 'Trinidad and Tobago',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                221 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                221 => [
                         'id' => 222,
                         'code' => 'TN',
                         'name' => 'Tunisia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                222 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                222 => [
                         'id' => 223,
                         'code' => 'TR',
                         'name' => 'Turkey',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                223 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                223 => [
                         'id' => 224,
                         'code' => 'TM',
                         'name' => 'Turkmenistan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                224 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                224 => [
                         'id' => 225,
                         'code' => 'TC',
                         'name' => 'Turks and Caicos Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                225 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                225 => [
                         'id' => 226,
                         'code' => 'TV',
                         'name' => 'Tuvalu',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                226 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                226 => [
                         'id' => 227,
                         'code' => 'UG',
                         'name' => 'Uganda',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                227 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                227 => [
                         'id' => 228,
                         'code' => 'UA',
                         'name' => 'Ukraine',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                228 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                228 => [
                         'id' => 229,
                         'code' => 'AE',
                         'name' => 'United Arab Emirates',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                229 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                229 => [
                         'id' => 230,
                         'code' => 'GB',
                         'name' => 'United Kingdom',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                230 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                230 => [
                         'id' => 231,
                         'code' => 'US',
                         'name' => 'United States',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                231 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                231 => [
                         'id' => 232,
                         'code' => 'UM',
                         'name' => 'United States minor outlying islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                232 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                232 => [
                         'id' => 233,
                         'code' => 'UY',
                         'name' => 'Uruguay',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                233 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                233 => [
                         'id' => 234,
                         'code' => 'UZ',
                         'name' => 'Uzbekistan',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                234 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                234 => [
                         'id' => 235,
                         'code' => 'VU',
                         'name' => 'Vanuatu',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                235 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                235 => [
                         'id' => 236,
                         'code' => 'VA',
                         'name' => 'Vatican City State',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                236 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                236 => [
                         'id' => 237,
                         'code' => 'VE',
                         'name' => 'Venezuela',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                237 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                237 => [
                         'id' => 238,
                         'code' => 'VN',
                         'name' => 'Vietnam',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                238 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                238 => [
                         'id' => 239,
                         'code' => 'VG',
                         'name' => 'Virgin Islands (British)',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                239 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                239 => [
                         'id' => 240,
                         'code' => 'VI',
                         'name' => 'Virgin Islands (U.S.)',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                240 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                240 => [
                         'id' => 241,
                         'code' => 'WF',
                         'name' => 'Wallis and Futuna Islands',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                241 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                241 => [
                         'id' => 242,
                         'code' => 'EH',
                         'name' => 'Western Sahara',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                242 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                242 => [
                         'id' => 243,
                         'code' => 'YE',
                         'name' => 'Yemen',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                243 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                243 => [
                         'id' => 244,
                         'code' => 'ZR',
                         'name' => 'Zaire',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                244 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                244 => [
                         'id' => 245,
                         'code' => 'ZM',
                         'name' => 'Zambia',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-                245 =>
-                    array(
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+                245 => [
                         'id' => 246,
                         'code' => 'ZW',
                         'name' => 'Zimbabwe',
                         'status' => 1,
-                        'created_at' => NULL,
-                        'updated_at' => NULL,
-                    ),
-            ));
-
+                        'created_at' => null,
+                        'updated_at' => null,
+                    ],
+            ]);
         }
     }
 }

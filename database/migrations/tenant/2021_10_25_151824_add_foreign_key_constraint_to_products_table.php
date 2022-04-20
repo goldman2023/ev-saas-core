@@ -14,7 +14,7 @@ class AddForeignKeyConstraintToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('shop_id')->after('name')->nullable(true);//->default(5);
+            $table->integer('shop_id')->after('name')->nullable(true); //->default(5);
             $table->foreign('shop_id')
                 ->references('id')
                 ->on('shops')

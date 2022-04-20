@@ -13,7 +13,7 @@ class CreateReceiptsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('receipts')) {
+        if (! Schema::hasTable('receipts')) {
             Schema::create('receipts', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('user_id')->index();

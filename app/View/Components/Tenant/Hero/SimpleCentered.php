@@ -6,8 +6,8 @@ use Illuminate\View\Component;
 
 class SimpleCentered extends Component
 {
-
     public $button;
+
     /**
      * Create a new component instance.
      *

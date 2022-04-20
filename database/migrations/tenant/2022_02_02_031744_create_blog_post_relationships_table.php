@@ -20,7 +20,7 @@ class CreateBlogPostRelationshipsTable extends Migration
             $table->string('subject_type');
             $table->timestamps();
 
-            $table->index(['subject_id','subject_type']);
+            $table->index(['subject_id', 'subject_type']);
             $table->foreign('blog_post_id')->references('id')->on('blog_posts')->onDelete('cascade')->onUpdate('cascade');
         });
     }

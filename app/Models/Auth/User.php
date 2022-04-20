@@ -11,10 +11,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
-class User extends EVBaseModel implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract
+class User extends EVBaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
 }

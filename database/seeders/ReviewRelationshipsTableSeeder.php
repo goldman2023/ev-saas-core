@@ -16,9 +16,8 @@ class ReviewRelationshipsTableSeeder extends Seeder
         if (\DB::table('review_relationships')->count() == 0) {
             \DB::table('review_relationships')->delete();
 
-            \DB::table('review_relationships')->insert(array(
-                0 =>
-                    array(
+            \DB::table('review_relationships')->insert([
+                0 => [
                         'id' => 1,
                         'subject_type' => 'App\Models\Shop',
                         'subject_id' => 1,
@@ -26,9 +25,8 @@ class ReviewRelationshipsTableSeeder extends Seeder
                         'creator_id' => 1,
                         'created_at' => '2021-05-26 11:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-                1 =>
-                    array(
+                    ],
+                1 => [
                         'id' => 2,
                         'subject_type' => 'App\Models\Shop',
                         'subject_id' => 1,
@@ -36,9 +34,8 @@ class ReviewRelationshipsTableSeeder extends Seeder
                         'creator_id' => 2,
                         'created_at' => '2021-05-26 11:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-                2 =>
-                    array(
+                    ],
+                2 => [
                         'id' => 3,
                         'subject_type' => 'App\Models\Shop',
                         'subject_id' => 1,
@@ -46,9 +43,8 @@ class ReviewRelationshipsTableSeeder extends Seeder
                         'creator_id' => 3,
                         'created_at' => '2021-05-26 11:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-                3 =>
-                    array(
+                    ],
+                3 => [
                         'id' => 4,
                         'subject_type' => 'App\Models\Shop',
                         'subject_id' => 1,
@@ -56,8 +52,8 @@ class ReviewRelationshipsTableSeeder extends Seeder
                         'creator_id' => 1,
                         'created_at' => '2021-05-26 11:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-            ));
+                    ],
+            ]);
         }
     }
 }

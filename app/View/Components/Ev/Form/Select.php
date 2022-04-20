@@ -7,34 +7,53 @@ use Illuminate\View\Component;
 class Select extends Component
 {
     public $x;
-    public $isWired;
-    public $class;
-    public $id;
-    public $name;
-    public $label;
-    public $type;
-    public $required;
-    public $placeholder;
-    public $icon;
-    public $merge;
-    public $items;
-    public $valueProperty;
-    public $labelProperty;
-    public $selected;
-    public $search;
-    public $multiple;
-    public $tags;
-    public $options;
-    public $errorBagName;
-    public $disabled;
 
+    public $isWired;
+
+    public $class;
+
+    public $id;
+
+    public $name;
+
+    public $label;
+
+    public $type;
+
+    public $required;
+
+    public $placeholder;
+
+    public $icon;
+
+    public $merge;
+
+    public $items;
+
+    public $valueProperty;
+
+    public $labelProperty;
+
+    public $selected;
+
+    public $search;
+
+    public $multiple;
+
+    public $tags;
+
+    public $options;
+
+    public $errorBagName;
+
+    public $disabled;
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($x = false, $isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $selected = null, $search = false, $multiple = false, $tags = false, $required = false,  $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null, $disabled = false)
+    public function __construct($x = false, $isWired = true, $type = 'text', $name = '', $label = '', $items = [], $valueProperty = null, $labelProperty = null, $selected = null, $search = false, $multiple = false, $tags = false, $required = false, $class = '', $id = '', $placeholder = '', $icon = null, $merge = false, $errorBagName = null, $disabled = false)
     {
         $this->x = $x;
         $this->isWired = $isWired;
@@ -60,25 +79,24 @@ class Select extends Component
         /*$this->options = [
             'customClass' => 'custom-select',
         ];*/
-        if(!$search) {
+        if (! $search) {
             $this->options['minimumResultsForSearch'] = 'Infinity';
         } else {
             $this->options['searchInputPlaceholder'] = translate('Search...');
         }
 
-        if($placeholder) {
+        if ($placeholder) {
             $this->options['placeholder'] = $placeholder;
         }
 
-        if($tags) {
+        if ($tags) {
             $this->options['tags'] = true;
         }
 
-        if($disabled) {
+        if ($disabled) {
             $this->options['disabled'] = true;
         }
     }
-
 
     /**
      * Get the view / contents that represent the component.
@@ -87,7 +105,7 @@ class Select extends Component
      */
     public function render()
     {
-        if($this->x) {
+        if ($this->x) {
             return view('components.ev.form.alpine.select');
         }
 

@@ -9,19 +9,19 @@ class ProductMiniCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'id' => $data->id,
                     'name' => $data->name,
                     'thumbnail_image' => api_asset($data->thumbnail_img),
-                    'base_price' => format_price(homeBasePrice($data->id)) ,
-                    'rating' => (double) $data->rating,
-                    'sales' => (integer) $data->num_of_sale,
+                    'base_price' => format_price(homeBasePrice($data->id)),
+                    'rating' => (float) $data->rating,
+                    'sales' => (int) $data->num_of_sale,
                     'links' => [
                         'details' => route('products.show', $data->id),
-                    ]
+                    ],
                 ];
-            })
+            }),
         ];
     }
 
@@ -29,7 +29,7 @@ class ProductMiniCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

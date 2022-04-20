@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
-use MyShop;
+use App\Models\Shop;
+use Categories;
+use Cookie;
 use Illuminate\Http\Request;
+use MyShop;
 use Permissions;
 use Session;
-use Cookie;
-use Categories;
-use App\Models\Shop;
 
 class EVShopController extends Controller
 {
@@ -20,7 +20,7 @@ class EVShopController extends Controller
     {
         // TODO: Cleanup old active commerce code!
         $shop = Shop::where('slug', $slug)->first();
-        if(empty($shop)) {
+        if (empty($shop)) {
             return abort(404);
         }
 
@@ -30,11 +30,8 @@ class EVShopController extends Controller
             ->withProperties([
                 'action' => 'viewed',
                 'action_title' => 'viewed a shop',
-                ])
+            ])
             ->log('viewed');
-
-
-
 
         /* TODO: Shop shop page only after veiriication
             - verification_status column on $seller does not exists,
@@ -49,6 +46,7 @@ class EVShopController extends Controller
     public function index(Request $request)
     {
         $blog_posts = BlogPost::all();
+
         return view('frontend.dashboard.blog-posts.index', compact('blog_posts'));
     }
 

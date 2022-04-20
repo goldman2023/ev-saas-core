@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Search;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
@@ -36,11 +36,10 @@ class SearchController extends Controller
     public function store(Request $request)
     {
         $search = Search::where('query', $request->q)->first();
-        if($search != null){
+        if ($search != null) {
             $search->count = $search->count + 1;
             $search->save();
-        }
-        else{
+        } else {
             $search = new Search;
             $search->query = $request->q;
             $search->save();

@@ -14,11 +14,12 @@ class EVWishlistController extends Controller
         'App\Models\Product' => 'Product',
         // 'App\Models\Shop' => 'Shop',
     ];
+
     public $wishlists;
 
     public function index()
     {
-        foreach($this->availableWishlistItems as $key => $type) {
+        foreach ($this->availableWishlistItems as $key => $type) {
             if (auth()->user()) {
                 $this->wishlists[$type] = Wishlist::where('user_id', auth()->user()->id)
                     ->where('subject_type', $key)
@@ -29,8 +30,6 @@ class EVWishlistController extends Controller
                     ->where('subject_type', $key)
                     ->get();
             }
-
-
 
             if ($this->wishlists[$type] === null) {
                 $this->wishlists[$type] = collect([]);

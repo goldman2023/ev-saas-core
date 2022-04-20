@@ -12,10 +12,15 @@ class FeedList extends Component
     use WithPagination;
 
     protected $activitiesObjects;
+
     public $perPage = 10;
+
     public $links;
+
     public $readyToLoad = false;
+
     public $loading = false;
+
     public $type = 'recent';
 
     public function mount()
@@ -29,7 +34,7 @@ class FeedList extends Component
             ->whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked', 'add_to_cart', 'checkout'])
             ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User', 'App/Models/SocialComment']);
 
-        if ($this->type == "recent") {
+        if ($this->type == 'recent') {
             $data = $data->orderBy('id', 'desc');
         } elseif ($this->type == 'trending') {
             $data = $data->orderBy('impressions', 'desc');
@@ -39,16 +44,15 @@ class FeedList extends Component
 
         $this->hasMorePages = $data->hasMorePages();
 
-
         return view('livewire.feed.feed-list', [
             'activities' => $data,
-            'hasMorePages' => $this->hasMorePages
+            'hasMorePages' => $this->hasMorePages,
         ]);
     }
 
     public function loadInit()
     {
-        $this->readyToLoad  = true;
+        $this->readyToLoad = true;
     }
 
     public function loadMore()

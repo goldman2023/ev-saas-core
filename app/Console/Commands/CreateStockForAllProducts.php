@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Console\Commands;  
+namespace App\Console\Commands;
 
-
- 
-
-use Illuminate\Console\Command;
-use App\Models\Product;
 use App\Models\Central\Tenant;
+use App\Models\Product;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -53,12 +50,12 @@ class CreateStockForAllProducts extends Command
 
         $products = \App\Models\Product::all();
         foreach ($products as $product) {
-            if(!$product->stock instanceof \App\Models\ProductStock || empty($product)) {
-                if($product->hasVariations()) {
+            if (! $product->stock instanceof \App\Models\ProductStock || empty($product)) {
+                if ($product->hasVariations()) {
                     // model has variations
                     $variations = $product->variations;
 
-                    foreach($variations as $variation) {
+                    foreach ($variations as $variation) {
                         $stock = new \App\Models\ProductStock();
                         $stock->subject_id = $variation->id;
                         $stock->subject_type = $variation::class;
@@ -79,10 +76,9 @@ class CreateStockForAllProducts extends Command
                     $stock->use_serial = 0;
                     $stock->save();
                 }
-                
             }
         }
-        
+
         dd();
     }
 }

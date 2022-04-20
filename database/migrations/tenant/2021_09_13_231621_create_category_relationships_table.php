@@ -13,8 +13,7 @@ class CreateCategoryRelationshipsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('category_relationships')) {
-
+        if (! Schema::hasTable('category_relationships')) {
             Schema::create('category_relationships', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('subject_type');

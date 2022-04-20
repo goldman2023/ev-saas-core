@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class ShopsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,7 +13,6 @@ class ShopsTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('shops')->count() == 0) {
             \DB::table('shops')->delete();
 
@@ -26,8 +24,8 @@ class ShopsTableSeeder extends Seeder
                     'slug' => 'demo-shop-1',
                     'excerpt' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget dolor quis ex sodales dictum. Suspendisse sed massa lorem',
                     'content' => null,
-                ]
-            ]); 
+                ],
+            ]);
 
             \DB::table('user_relationships')->insert([
                 [
@@ -41,9 +39,8 @@ class ShopsTableSeeder extends Seeder
                     'user_id' => 2, // seller
                     'subject_id' => 1,
                     'subject_type' => 'App\\Models\\Shop',
-                ]
+                ],
             ]);
-
         }
     }
 }

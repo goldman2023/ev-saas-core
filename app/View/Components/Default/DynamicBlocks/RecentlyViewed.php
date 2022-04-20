@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class RecentlyViewed extends Component
 {
     public $type = 'Shop';
+
     public $action_type = 'recently_viewed'; // In the future we could have, liked, saved, etc
+
     public $shops;
+
     /**
      * Create a new component instance.
      *
@@ -17,7 +20,7 @@ class RecentlyViewed extends Component
     public function __construct()
     {
         //
-        if(auth()->user()){
+        if (auth()->user()) {
             $this->shops = auth()->user()->recently_viewed_shops();
         } else {
             /* TODO: If user is guest save product's in session storage */
@@ -32,9 +35,10 @@ class RecentlyViewed extends Component
      */
     public function render()
     {
-        if($this->type = 'Shop'){
+        if ($this->type = 'Shop') {
             return view('components.default.dynamic-blocks.recently-viewed.shops');
         }
+
         return view('components.default.dynamic-blocks.recently-viewed.index');
     }
 }

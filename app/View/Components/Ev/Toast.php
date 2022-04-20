@@ -7,16 +7,27 @@ use Illuminate\View\Component;
 class Toast extends Component
 {
     public $class;
+
     public $titleClass;
+
     public $contentClass;
+
     public $id;
+
     public $type;
+
     public $title;
+
     public $icon;
+
     public $content;
+
     public $close;
+
     public $position;
+
     public $isX;
+
     public $timeout;
 
     /**

@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class AttributeValueTranslationsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,10 +13,8 @@ class AttributeValueTranslationsTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('attribute_value_translations')->count() == 0) {
 //            \DB::table('attribute_value_translations')->delete();
         }
-
     }
 }

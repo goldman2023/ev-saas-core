@@ -62,10 +62,10 @@ class PullTenants extends FreshCommand
         $type = $this->input->getOption('type');
         $fetch = $this->input->getOption('fetch');
 
-        if($type === 'demo') {
+        if ($type === 'demo') {
             $tenant = Tenant::find('demo');
 
-            if(!empty($tenant)) {
+            if (! empty($tenant)) {
                 //DB::statement("DROP DATABASE IF EXISTS ".$tenant->tenancy_db_name); // this is just in case.
 
                 // TODO: Change tenant_id foreign key in domains table to have a RESTRICT onDelete constraint
@@ -82,7 +82,7 @@ class PullTenants extends FreshCommand
                 'email' => 'demo@example.com',
                 'card_brand' => 'visa',
                 'card_last_four' => '0000',
-                'trial_ends_at' => date('Y-m-d',strtotime('+999 day'))
+                'trial_ends_at' => date('Y-m-d', strtotime('+999 day')),
             ]);
             $tenant->domains()->create(['domain' => 'demo-ev.localhost', 'theme' => 'ev-tailwind']);
 
@@ -94,12 +94,13 @@ class PullTenants extends FreshCommand
             Artisan::call('tenants:seed');
 
             $this->info('Demo Tenant successfully seeded.');
-        } else if($type === 'real') {
-            if($fetch === 'local') {
+        } elseif ($type === 'real') {
+            if ($fetch === 'local') {
                 $tenants = Tenant::all();
 
-                if(empty($tenants)) {
+                if (empty($tenants)) {
                     $this->error('Cannot create tenants from local Central DB because there are no tenants rows in tenants table');
+
                     return false;
                 }
 
@@ -127,9 +128,8 @@ class PullTenants extends FreshCommand
                 Artisan::call('tenants:seed');
 
                 $this->info('Tenants successfully seeded.');
-            } else if($fetch === 'production') {
+            } elseif ($fetch === 'production') {
                 // TODO: Download tenants DBs and import to local env
-
             }
         }
     }

@@ -2,11 +2,11 @@
 
 namespace App\Jobs\Tenancy;
 
-use Stancl\Tenancy\Contracts\Tenant;
-use Illuminate\Support\Facades\Artisan;
-use DB;
 use App\Models\User;
+use DB;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
+use Stancl\Tenancy\Contracts\Tenant;
 
 class GeneratePermissionsAndRoles
 {
@@ -34,17 +34,17 @@ class GeneratePermissionsAndRoles
                 $sellers = User::where('user_type', 'seller')->get();
                 $owner_permissions = Role::where('name', 'Owner')->first()->permissions->pluck('id');
 
-                foreach($sellers as $seller) {
+                foreach ($sellers as $seller) {
                     // assign all permissions to sellers
-                    foreach($owner_permissions as $perm_id) {
+                    foreach ($owner_permissions as $perm_id) {
                         $seller->givePermissionTo($perm_id);
                     }
 
                     $seller->assignRole(Role::where('name', 'Owner')->first()->id); // asign Owner role to seller
                 }
-                
+
                 DB::commit();
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 dd($e);
             }

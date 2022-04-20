@@ -77,8 +77,8 @@ return [
     ],
 
     'disk_types' => [
-        'local' => ['local','public','backup-local'],
-        'cloud' => ['s3','google'],
+        'local' => ['local', 'public', 'backup-local'],
+        'cloud' => ['s3', 'google'],
         'remote_plain' => [], // This is for 'sftp', 'ftp' etc.
     ],
 

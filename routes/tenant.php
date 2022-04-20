@@ -14,16 +14,16 @@ use App\Http\Controllers\CompareController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EVAccountController;
+use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
-use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
-use App\Http\Controllers\EVWishlistController;
 use App\Http\Controllers\EVShopController;
+use App\Http\Controllers\EVWishlistController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LanguageController;
@@ -33,16 +33,16 @@ use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
+use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\OwnerOnly;
 use App\Http\Middleware\VendorMode;
 use App\Http\Services\PaymentMethods\PayseraGateway;
+use App\Models\Plan;
 use App\Models\Product;
 use App\Models\Shop;
-use App\Models\Plan;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Features\UserImpersonation;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
-use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 /*
@@ -78,7 +78,6 @@ Route::middleware([
     Route::post('/webhooks/stripe', [StripePaymentController::class, 'webhooks'])->name('webhooks.stripe');
     Route::get('/stripe/create-checkout-session', [StripePaymentController::class, 'generateCheckoutSessionLink'])->name('stripe.checkout_redirect');
 
-
     // Route to show after creating new tenant:
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('onboarding.step1')->middleware(['auth']);
     Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
@@ -86,7 +85,6 @@ Route::middleware([
     Route::get('/welcome/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3')->middleware(['auth']);
     Route::get('/welcome/step4', [OnboardingController::class, 'step4'])->name('onboarding.step4')->middleware(['auth']);
     Route::get('/welcome/verification', [OnboardingController::class, 'verification'])->name('onboarding.verification')->middleware(['auth']);
-
 
     // Homepage For Multi/Single Vendor mode
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -101,7 +99,6 @@ Route::middleware([
         return csrf_token();
     });
 
-
     Route::post('/aiz-uploader', [AizUploadController::class, 'show_uploader']);
     Route::post('/aiz-uploader/upload', [AizUploadController::class, 'upload']);
     Route::get('/aiz-uploader/get_uploaded_files', [AizUploadController::class, 'get_uploaded_files']);
@@ -112,10 +109,8 @@ Route::middleware([
     Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
     // Tracking - END
 
-
     Route::resource('shops', 'ShopController');
     Route::resource('ev-social-commerce', 'SocialCommerceController');
-
 
     Auth::routes(['verify' => true]);
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
@@ -124,10 +119,8 @@ Route::middleware([
     Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
 
-
     Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
     Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');
-
 
     Route::get('/social-login/redirect/{provider}', [SocialController::class, 'redirectLoginToProvider'])->name('social.login');
     Route::get('/social-login/{provider}/callback', [SocialController::class, 'handleProviderLoginCallback'])->name('social.login.callback');
@@ -155,7 +148,6 @@ Route::middleware([
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());
     Route::get('/plan/{id}/checkout-link', [EVPlanController::class, 'createPlanCheckoutRedirect'])->name('plan.generate_checkout_link');
 
-
     // Category archive pages
     Route::get('/category/{slug}', [EVCategoryController::class, 'archiveByCategory'])->where('slug', '.+')->name('category.index');
     Route::get('/products/category/{slug}', [EVProductController::class, 'productsByCategory'])->where('slug', '.+')->name('category.products.index');
@@ -167,7 +159,6 @@ Route::middleware([
     // Blog Posts
     Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
     Route::get('/blog/posts/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
-
 
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());
@@ -218,7 +209,6 @@ Route::middleware([
     // Chat
     Route::get('/chat', 'ChatController@index')->name('chat.index');
 
-
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
 
@@ -236,7 +226,6 @@ Route::middleware([
         Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
         Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
-
 
     //Custom page
     Route::get('/page/privacy-policy', 'PageController@privacy_policy_page')->name('custom-pages.privacy-policy');

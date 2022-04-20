@@ -33,6 +33,5 @@ class ChangeExistingCategoryRootParentIdToNullTable extends Migration
      */
     public function down()
     {
-
     }
 }

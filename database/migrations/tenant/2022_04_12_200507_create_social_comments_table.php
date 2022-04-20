@@ -13,7 +13,7 @@ class CreateSocialCommentsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('social_comments')) {
+        if (! Schema::hasTable('social_comments')) {
             Schema::create('social_comments', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedInteger('user_id');

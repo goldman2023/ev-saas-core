@@ -9,12 +9,12 @@ class ColorCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
-                    'code' => $data->code
+                    'code' => $data->code,
                 ];
-            })
+            }),
         ];
     }
 
@@ -22,7 +22,7 @@ class ColorCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

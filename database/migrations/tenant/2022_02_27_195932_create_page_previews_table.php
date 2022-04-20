@@ -24,7 +24,7 @@ class CreatePagePreviewsTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->longText('content');
             $table->timestamps();
-            
+
             $table->foreign('page_id')->references('id')->on('pages')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('set null');
         });

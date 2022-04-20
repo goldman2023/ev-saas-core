@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class Date extends Component
 {
     public $field;
+
     public $mode;
+
     public $enableTime;
+
     public $dateFormat;
 
     /**

@@ -16,9 +16,8 @@ class ReviewsTableSeeder extends Seeder
         if (\DB::table('reviews')->count() == 0) {
             \DB::table('reviews')->delete();
 
-            \DB::table('reviews')->insert(array(
-                0 =>
-                    array(
+            \DB::table('reviews')->insert([
+                0 => [
                         'id' => 1,
                         'rating' => 5,
                         'comment' => '5 mark rating test',
@@ -27,9 +26,8 @@ class ReviewsTableSeeder extends Seeder
                         'content_type' => 'App\Models\Shop',
                         'created_at' => '2021-05-26 10:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-                1 =>
-                    array(
+                    ],
+                1 => [
                         'id' => 2,
                         'rating' => 4,
                         'comment' => '4 mark rating test',
@@ -38,9 +36,8 @@ class ReviewsTableSeeder extends Seeder
                         'content_type' => 'App\Models\Shop',
                         'created_at' => '2021-05-26 10:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-                2 =>
-                    array(
+                    ],
+                2 => [
                         'id' => 3,
                         'rating' => 2,
                         'comment' => '2 mark rating test',
@@ -49,9 +46,8 @@ class ReviewsTableSeeder extends Seeder
                         'content_type' => 'App\Models\Shop',
                         'created_at' => '2021-05-26 10:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-                3 =>
-                    array(
+                    ],
+                3 => [
                         'id' => 4,
                         'rating' => 5,
                         'comment' => '5 mark rating test 1',
@@ -60,8 +56,8 @@ class ReviewsTableSeeder extends Seeder
                         'content_type' => 'App\Models\Shop',
                         'created_at' => '2021-05-26 10:52:46',
                         'updated_at' => '2021-05-26 11:01:41',
-                    ),
-            ));
+                    ],
+            ]);
         }
     }
 }

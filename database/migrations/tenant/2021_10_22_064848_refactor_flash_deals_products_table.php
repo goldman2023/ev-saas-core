@@ -31,7 +31,7 @@ class RefactorFlashDealsProductsTable extends Migration
                 $table->unsignedBigInteger('subject_id')->nullable(true)->change();
             }
 
-            if (!Schema::hasColumn('flash_deal_relationships', 'subject_type')) {
+            if (! Schema::hasColumn('flash_deal_relationships', 'subject_type')) {
                 $table->string('subject_type')->nullable(true)->after('subject_id');
             }
 

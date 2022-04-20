@@ -26,7 +26,7 @@ class RefactorBusinessUserRelationshipsTable extends Migration
             $table->timestamp('deleted_at')->nullable();
         });
 
-        foreach($businesses as $business) {
+        foreach ($businesses as $business) {
             $rel = new UserRelationship();
             $rel->user_id = $business->user_id;
             $rel->subject_id = $business->id;

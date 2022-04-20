@@ -19,15 +19,21 @@ class PlansTable extends DataTableComponent
     use DispatchSupport;
 
     public $for = 'me';
+
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 10;
+
     public array $perPageAccepted = [10, 25];
 
     public array $filterNames = [
-        'status' => 'Status'
+        'status' => 'Status',
     ];
 
     public array $bulkActions = [
@@ -35,9 +41,11 @@ class PlansTable extends DataTableComponent
     ];
 
     protected string $pageName = 'plans';
+
     protected string $tableName = 'plans';
 
-    public function mount($for = 'shop') {
+    public function mount($for = 'shop')
+    {
         $this->for = $for;
 
         parent::mount();
@@ -83,10 +91,10 @@ class PlansTable extends DataTableComponent
     {
         return Plan::query()
 //            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
-            ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
+            ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
-      }
+    }
 
     public function rowView(): string
     {

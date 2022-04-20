@@ -3,19 +3,18 @@
 namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Textarea;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Spatie\Activitylog\Models\Activity as ModelsActivity;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphTo;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Resource as NovaResource;
 use Laravel\Nova\Fields\Number;
-
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Resource as NovaResource;
+use Spatie\Activitylog\Models\Activity as ModelsActivity;
 
 class Activity extends Resource
 {

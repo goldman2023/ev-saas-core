@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
+use App\Models\AttributeValue;
 use App\Models\Product;
 use App\Models\TenantSetting;
-use App\Models\AttributeValue;
 use Cache;
 
 class AttributeValuesObserver

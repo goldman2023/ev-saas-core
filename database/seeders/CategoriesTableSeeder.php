@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class CategoriesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,13 +13,11 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('categories')->count() == 0) {
             \DB::table('categories')->delete();
 
-            \DB::table('categories')->insert(array(
-                0 =>
-                    array(
+            \DB::table('categories')->insert([
+                0 => [
                         'id' => 1,
                         'parent_id' => null,
                         'level' => 0,
@@ -34,13 +31,12 @@ class CategoriesTableSeeder extends Seeder
                         'top' => 1,
                         'digital' => 0,
                         'description' => '',
-                        'meta_title' => NULL,
-                        'meta_description' => NULL,
+                        'meta_title' => null,
+                        'meta_description' => null,
                         'created_at' => '2021-04-08 17:25:04',
                         'updated_at' => '2021-04-08 14:25:04',
-                    ),
-            ));
+                    ],
+            ]);
         }
-
     }
 }

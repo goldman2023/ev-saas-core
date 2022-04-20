@@ -13,7 +13,7 @@ class CreateCurrencyRatesTable extends Migration
      */
     public function up()
     {
-        if(!Schema::hasTable('currency_rates')) {
+        if (! Schema::hasTable('currency_rates')) {
             Schema::create('currency_rates', function (Blueprint $table) {
                 $table->id();
                 $table->integer('base_currency_id');
@@ -21,22 +21,21 @@ class CreateCurrencyRatesTable extends Migration
                 $table->string('target', 10);
                 $table->double('fx_rate');
                 $table->timestamps();
-    
+
                 $table->index(['base', 'target']);
                 $table->foreign('base_currency_id')->references('id')->on('currencies')->onDelete('cascade')->onUpdate('cascade');
             });
         }
-        
 
         Schema::table('currencies', function (Blueprint $table) {
             if (Schema::hasColumn('currencies', 'exchange_rate')) {
                 $table->dropColumn('exchange_rate');
             }
-            
-            $unique_index_exists = collect(DB::select("SHOW INDEXES FROM currencies"))->pluck('Key_name')->contains('currencies_code_unique');
-            if (!$unique_index_exists) {
+
+            $unique_index_exists = collect(DB::select('SHOW INDEXES FROM currencies'))->pluck('Key_name')->contains('currencies_code_unique');
+            if (! $unique_index_exists) {
                 $table->unique('code');
-            } 
+            }
         });
     }
 

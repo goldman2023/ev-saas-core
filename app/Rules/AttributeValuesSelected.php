@@ -23,14 +23,14 @@ class AttributeValuesSelected implements Rule
         $this->pretty_name = $value['name'] ?? $attribute;
 
         // If attribute is selected, check it
-        if(($value['selected'] ?? null) || ($value['for_variations'] ?? null)) {
+        if (($value['selected'] ?? null) || ($value['for_variations'] ?? null)) {
             $att_values = $value['attribute_values'];
             $passed = false;
 
             // Try to find at least one selected attribute value, otherwise it cannot pass!
-            if($att_values) {
-                foreach($att_values as $val) {
-                    if($val['selected'] ?? null) {
+            if ($att_values) {
+                foreach ($att_values as $val) {
+                    if ($val['selected'] ?? null) {
                         $passed = true;
                     }
                 }

@@ -33,7 +33,6 @@ return [
 
     'connections' => [
 
-
         'tracker' => [
             'driver' => 'mysql',
             'host' => env('DB_MYSQL_HOST', '127.0.0.1'),

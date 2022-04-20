@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class NewsCard extends Component
 {
     public Blog $item;
+
     /**
      * Create a new component instance.
      *

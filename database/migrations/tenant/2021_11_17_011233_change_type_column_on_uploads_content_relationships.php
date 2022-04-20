@@ -14,7 +14,7 @@ class ChangeTypeColumnOnUploadsContentRelationships extends Migration
     public function up()
     {
         Schema::table('uploads_content_relationships', function (Blueprint $table) {
-            if(Schema::hasColumn('uploads_content_relationships', 'type')) {
+            if (Schema::hasColumn('uploads_content_relationships', 'type')) {
                 $table->renameColumn('type', 'relation_type');
             }
         });
@@ -28,7 +28,7 @@ class ChangeTypeColumnOnUploadsContentRelationships extends Migration
     public function down()
     {
         Schema::table('uploads_content_relationships', function (Blueprint $table) {
-            if(Schema::hasColumn('uploads_content_relationships', 'relation_type')) {
+            if (Schema::hasColumn('uploads_content_relationships', 'relation_type')) {
                 $table->renameColumn('relation_type', 'type');
             }
         });

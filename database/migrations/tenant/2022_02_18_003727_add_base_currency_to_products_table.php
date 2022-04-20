@@ -18,7 +18,7 @@ class AddBaseCurrencyToProductsTable extends Migration
                 $table->dropColumn('num_of_sale');
             }
 
-            if (!Schema::hasColumn('products', 'base_currency')) {
+            if (! Schema::hasColumn('products', 'base_currency')) {
                 $table->string('base_currency', 10)->after('unit_price');
             }
         });

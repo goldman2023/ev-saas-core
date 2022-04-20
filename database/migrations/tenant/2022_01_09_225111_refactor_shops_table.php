@@ -37,7 +37,6 @@ class RefactorShopsTable extends Migration
     public function down()
     {
         Schema::table('shops', function (Blueprint $table) {
-
         });
     }
 }

@@ -11,5 +11,8 @@ class FX extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'fx'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'fx';
+    }
 }

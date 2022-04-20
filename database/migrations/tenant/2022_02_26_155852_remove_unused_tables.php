@@ -58,8 +58,6 @@ class RemoveUnusedTables extends Migration
         Schema::dropIfExists('seller_package_payments');
         Schema::dropIfExists('seller_package_translations');
         Schema::dropIfExists('seller_packages');
-
-
     }
 
     /**

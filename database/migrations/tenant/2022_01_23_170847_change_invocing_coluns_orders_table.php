@@ -27,8 +27,8 @@ class ChangeInvocingColunsOrdersTable extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('invoicing_period',191)->nullable(false)->change();
-            $table->string('invoice_grace_period',191)->change();
+            $table->string('invoicing_period', 191)->nullable(false)->change();
+            $table->string('invoice_grace_period', 191)->change();
         });
     }
 }

@@ -4,10 +4,10 @@ namespace App\View\Components\Default\Merchant;
 
 use Illuminate\View\Component;
 
-
 class Header extends Component
 {
     public $logo;
+
     public $shop;
 
     /**

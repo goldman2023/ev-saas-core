@@ -13,7 +13,7 @@ class CreateSubscriptionsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('subscriptions')) {
+        if (! Schema::hasTable('subscriptions')) {
             Schema::create('subscriptions', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('user_id');

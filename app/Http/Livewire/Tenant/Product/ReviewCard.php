@@ -9,6 +9,7 @@ class ReviewCard extends Component
     public $review;
 
     protected $listeners = ['review-stored' => '$refresh'];
+
     /**
      * Create a new component instance.
      *

@@ -2,6 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Models\Attribute;
+use App\Models\AttributeValue;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\CategoryRelationship;
 use App\Models\Currency;
 use App\Models\Product;
@@ -9,23 +13,20 @@ use App\Models\Shop;
 use App\Models\ShopDomain;
 use Cache;
 use EVS;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Brand;
-use App\Models\Category;
-use Illuminate\Support\Facades\Request;
-use Illuminate\View\ComponentAttributeBag;
-use Session;
-
-use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\Compilers\ComponentTagCompiler;
+use Illuminate\View\ComponentAttributeBag;
+use Session;
+use Symfony\Component\DomCrawler\Crawler;
 
 class WeBuilderService
 {
     public $themes;
+
     public $sections_flat;
+
     protected $html_section_template;
 
     public function __construct($app)
@@ -51,7 +52,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.07-card-with-background-image-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.hero-sections.hero-section_01' => [
                                     'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_01',
@@ -59,7 +60,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.01-simple-centered-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.hero-sections.hero-section_02' => [
                                     'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_02',
@@ -67,7 +68,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.02-split-with-navbar-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.hero-sections.hero-section_03' => [
                                     'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_03',
@@ -75,7 +76,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.hero-sections.hero-section_04' => [
                                     'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_04',
@@ -83,7 +84,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.04-with-app-screenshot-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.hero-sections.hero-section_07' => [
                                     'id' => 'tailwind-ui.sections.marketing.hero-sections.hero-section_07',
@@ -91,10 +92,10 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.07-card-with-background-image-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
 
-                            ]
+                            ],
                         ],
                         'header-sections' => [
                             'title' => 'Header sections',
@@ -106,7 +107,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/header-section.01-simple-centered-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.header-sections.header-section_02' => [
                                     'id' => 'tailwind-ui.sections.marketing.header-sections.header-section_02',
@@ -114,7 +115,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/header-section.04-branded-with-background-image-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.header-sections.header-section_03' => [
                                     'id' => 'tailwind-ui.sections.marketing.header-sections.header-section_03',
@@ -122,9 +123,9 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/header-section.05-with-background-image-and-overlapping-cards-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
-                            ]
+                            ],
                         ],
                         'cta-sections' => [
                             'title' => 'CTA',
@@ -136,7 +137,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.01-brand-panel-with-app-screenshot-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_02' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_02',
@@ -144,7 +145,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.02-simple-center-branded-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_03' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_03',
@@ -152,7 +153,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.03-simple-centered-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_04' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_04',
@@ -160,7 +161,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.04-simple-justified-on-light-brand-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_05' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_05',
@@ -169,7 +170,7 @@ class WeBuilderService
                                     // Wrong image
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_06' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_06',
@@ -177,7 +178,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.06-simple-stacked-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_07' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_07',
@@ -185,7 +186,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.07-split-with-image-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.cta-sections.cta-section_08' => [
                                     'id' => 'tailwind-ui.sections.marketing.cta-sections.cta-section_08',
@@ -193,9 +194,9 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/cta-sections.08-brand-panel-with-overlapping-image-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
-                            ]
+                            ],
                         ],
                         'feature-sections' => [
                             'title' => 'Features',
@@ -207,7 +208,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.01-alternating-side-by-side-with-images-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.feature-sections.features-grid01' => [
                                     'id' => 'tailwind-ui.sections.marketing.feature-sections.features-grid01',
@@ -215,7 +216,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/feature-sections.03-feature-grid-list-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 // 'tailwind-ui.sections.marketing.feature-sections.feature-section_02' => [
                                 //     'id' => 'tailwind-ui.sections.marketing.feature-sections.feature-section_02',
@@ -289,7 +290,7 @@ class WeBuilderService
                                 //     'data' => [],
                                 //     'settings' => []
                                 // ],
-                            ]
+                            ],
                         ],
                         'pricing-sections' => [
                             'title' => 'Pricing',
@@ -301,7 +302,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.01-four-tiers-with-toggle-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_02' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_02',
@@ -309,7 +310,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.02-single-price-with-details-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_03' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_03',
@@ -317,7 +318,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.03-single-price-with-feature-list-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_04' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_04',
@@ -325,7 +326,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.04-split-with-brand-panel-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_05' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_05',
@@ -333,7 +334,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.05-three-tiers-with-emphasized-tier-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_06' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_06',
@@ -341,7 +342,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.06-two-tiers-with-extra-tier-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_07' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_07',
@@ -349,7 +350,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.07-with-comparison-table-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_08' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_08',
@@ -357,7 +358,7 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.08-three-tiers-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                                 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_09' => [
                                     'id' => 'tailwind-ui.sections.marketing.pricing-sections.pricing-section_09',
@@ -365,9 +366,9 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.09-three-tiers-on-brand-and-feature-comparison-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
-                            ]
+                            ],
                         ],
                         'incentives-sections' => [
                             'title' => 'Incentives / Benefits',
@@ -379,9 +380,9 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/pricing.01-four-tiers-with-toggle-xl.png',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
-                            ]
+                            ],
                         ],
                         'blog-archive' => [
                             'title' => 'Blog Archives',
@@ -393,14 +394,14 @@ class WeBuilderService
                                     'thumbnail' => 'https://tailwindui.com/img/components/hero-sections.07-card-with-background-image-xl.jpg',
                                     'order' => -1,
                                     'data' => [],
-                                    'settings' => []
+                                    'settings' => [],
                                 ],
                             ],
                         ],
                     ],
                     'ecommerce' => [],
-                    'application-ui' => []
-                ]
+                    'application-ui' => [],
+                ],
             ],
         ];
 
@@ -421,10 +422,9 @@ class WeBuilderService
             'thumbnail' => 'https://repository-images.githubusercontent.com/134285701/635de980-586d-11ea-9220-1a3211239c30', // TODO: Replace this with something consistent as HTML section Placeholder
             'order' => -1,
             'html' => '',
-            'settings' => []
+            'settings' => [],
         ];
     }
-
 
     public function getAllThemeSections($theme_name, $flat = false)
     {
@@ -437,7 +437,8 @@ class WeBuilderService
         return isset($this->themes[$theme_name]) ? $this->themes[$theme_name] : [];
     }
 
-    public function getHtmlSectionTemplate() {
+    public function getHtmlSectionTemplate()
+    {
         return $this->html_section_template;
     }
 }

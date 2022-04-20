@@ -2,23 +2,23 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\EVAccountController;
+use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\EVBlogPostController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
 use App\Http\Controllers\EVOrderController;
+use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
-use App\Http\Controllers\EVAttributesController;
-use App\Http\Controllers\EVPageController;
-use App\Http\Controllers\WeMediaController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
+use App\Http\Controllers\WeMediaController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
+use App\Http\Middleware\SetDashboard;
+use App\Http\Middleware\VendorMode;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\User;
-use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-use App\Http\Middleware\VendorMode;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\SetDashboard;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 Route::middleware([
     'web',
@@ -27,12 +27,9 @@ Route::middleware([
     SetDashboard::class,
     VendorMode::class,
 ])->namespace('App\Http\Controllers')->group(function () {
-
-
-
     Route::group([
         'middleware' => ['auth'],
-        'prefix' => 'previews'
+        'prefix' => 'previews',
     ], function () {
         Route::get('/show', 'EVPreviewController@show')->name('show');
     });
@@ -40,7 +37,7 @@ Route::middleware([
     /* TODO: Admin only */
     Route::group([
         'middleware' => ['auth', 'admin'],
-        'prefix' => 'dashboard'
+        'prefix' => 'dashboard',
     ], function () {
         // Categories
         Route::get('/categories', [EVCategoryController::class, 'index'])->name('categories.index');
@@ -57,7 +54,7 @@ Route::middleware([
 
     Route::group([
         'middleware' => ['auth'],
-        'prefix' => 'dashboard'
+        'prefix' => 'dashboard',
     ], function () {
         Route::get('/', 'HomeController@dashboard')->name('dashboard');
 
@@ -65,9 +62,7 @@ Route::middleware([
         Route::get('leads/success', 'LeadController@success')->name('leads.success');
         Route::resource('leads', 'LeadController');
 
-
         Route::get('/ev-activity', [ActivityController::class, 'index_frontend'])->name('activity.index');
-
 
         /* TODO: Admin and seller only */
 
@@ -132,8 +127,6 @@ Route::middleware([
         Route::get('/app-settings', [EVAccountController::class, 'app_settings'])->name('settings.app_settings');
         Route::get('/plans-management', [EVPlanController::class, 'my_plans_management'])->name('my.plans.management');
 
-
-
         // Payment Methods callback routes
         Route::get('/checkout/paysera/accepted/{invoice_id}', [PayseraGateway::class, 'accepted'])->name('gateway.paysera.accepted');
         Route::get('/checkout/paysera/canceled/{invoice_id}', [PayseraGateway::class, 'canceled'])->name('gateway.paysera.canceled');
@@ -143,9 +136,8 @@ Route::middleware([
         // WeMediaLibrary
         Route::post('/froala/upload-image', [WeMediaController::class, 'froalaImageUpload'])->name('we-media-library.froala.upload-image');
         Route::get('/froala/load-images', [WeMediaController::class, 'froalaLoadImages'])->name('we-media-library.froala.load-images');
-        
-        // ---------------------------------------------------- //
 
+        // ---------------------------------------------------- //
 
         Route::get('/reviews', 'ReviewController@index')->name('reviews.index');
         /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */
@@ -157,7 +149,6 @@ Route::middleware([
         Route::get('/withdraw_requests_all', 'SellerWithdrawRequestController@request_index')->name('withdraw_requests_all');
         Route::post('/withdraw_request/payment_modal', 'SellerWithdrawRequestController@payment_modal')->name('withdraw_request.payment_modal');
         Route::post('/withdraw_request/message_modal', 'SellerWithdrawRequestController@message_modal')->name('withdraw_request.message_modal');
-
 
         //Product Bulk Upload
         Route::get('/product-bulk-upload/index', 'ProductBulkUploadController@index')->name('product_bulk_upload.index');
@@ -196,7 +187,7 @@ Route::middleware([
         Route::post('/notifications/mark-all-as-read', 'NotificationController@markAllAsRead')->name('notifications.mark_all_as_read');
 
         /* Document (eSignatures and SmartID)  Roiutes */
-        Route::get('/documents',  'DocumentsController@index')->name('documents.index');
+        Route::get('/documents', 'DocumentsController@index')->name('documents.index');
     });
 
     // Integrations
@@ -214,9 +205,4 @@ Route::middleware([
     Route::get('/feed/products', 'FeedController@products')->name('feed.products');
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', 'PageController@show_custom_page')->name('custom-pages.index');
-
 });
-
-
-
-

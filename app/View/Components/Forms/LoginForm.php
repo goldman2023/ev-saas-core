@@ -23,7 +23,7 @@ class LoginForm extends Component
      */
     public function render()
     {
-        if(session('style_framework') === 'tailwind') {
+        if (session('style_framework') === 'tailwind') {
             return view('components.tailwind-ui.forms.login-form');
         }
 

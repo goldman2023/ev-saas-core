@@ -94,7 +94,6 @@ class RecreateOrderTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade'); // When order is removed, its items are removed too!
             $table->index(['subject_type', 'subject_id']);
         });
-
     }
 
     /**

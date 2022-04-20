@@ -2,19 +2,24 @@
 
 namespace App\Http\Livewire\Tenant\Product;
 
+use App\Facades\CartService;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use Livewire\Component;
-use App\Facades\CartService;
 use Session;
 
-class Price extends Component {
-
+class Price extends Component
+{
     public mixed $model;
+
     public $totalPriceClass = '';
+
     public $originalPriceClass = '';
+
     public $withLabel = false;
+
     public $wrapperClass = '';
+
     public $withDiscountLabel = false;
 
     protected $listeners = ['changeVariation'];
@@ -38,7 +43,8 @@ class Price extends Component {
 //        $this->model = $variation;
 //    }
 
-    public function render() {
+    public function render()
+    {
         return view('livewire.tenant.product.price');
     }
 }

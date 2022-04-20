@@ -33,10 +33,9 @@ class ProductsObserver
      * @param Product $product
      * @return void
      */
-    public function deleting(Product $product) {
+    public function deleting(Product $product)
+    {
         // TODO: Add removing stocks/uplaods-relations/attribute-relations/and other polymorphic relations!
         //TODO: IT SHOULD BE ON FORCE DELETE!!!
     }
-
-
 }

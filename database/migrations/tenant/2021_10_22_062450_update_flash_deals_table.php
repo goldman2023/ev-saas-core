@@ -20,11 +20,11 @@ class UpdateFlashDealsTable extends Migration
             //$table->tinyInteger('status')->change();
             //$table->tinyInteger('featured')->change();
 
-            if (!Schema::hasColumn('flash_deals', 'deleted_at')) {
+            if (! Schema::hasColumn('flash_deals', 'deleted_at')) {
                 $table->timestamp('deleted_at')->nullable(true)->after('updated_at');
             }
 
-            if (!Schema::hasColumn('flash_deals', 'business_id')) {
+            if (! Schema::hasColumn('flash_deals', 'business_id')) {
                 // foreign key to business
                 $table->integer('business_id')->nullable(false)->after('id');
                 $table->foreign('business_id')

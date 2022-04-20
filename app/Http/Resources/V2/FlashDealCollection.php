@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\V2;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Http\Resources\ProductCollection;
 use App\Models\FlashDeal;
 use App\Models\Product;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class FlashDealCollection extends ResourceCollection
 {
@@ -18,14 +18,14 @@ class FlashDealCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'id' => $data->id,
                     'title' => $data->title,
                     'date' => (int) $data->end_date,
-                    'banner' => api_asset($data->banner)
+                    'banner' => api_asset($data->banner),
                 ];
-            })
+            }),
         ];
     }
 
@@ -33,7 +33,7 @@ class FlashDealCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

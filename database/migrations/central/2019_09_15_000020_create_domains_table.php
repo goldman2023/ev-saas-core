@@ -24,7 +24,7 @@ class CreateDomainsTable extends Migration
             $table->string('certificate_status', 64)->nullable();
 
             $table->timestamps();
-           // $table->foreign('tenant_id')->references('id')->on('tenants')->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('tenant_id')->references('id')->on('tenants')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

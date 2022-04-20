@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
+use App\Traits\PermalinkTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\PermalinkTrait;
 
 /**
  * App\Models\Order
@@ -31,8 +31,11 @@ class Order extends EVBaseModel
     ];
 
     public mixed $base_price;
+
     public mixed $discount_amount;
+
     public mixed $subtotal_price;
+
     public mixed $total_price;
 
     protected $with = ['order_items', 'invoices'];
@@ -96,13 +99,14 @@ class Order extends EVBaseModel
             $order->appendCoreProperties($sums_properties);
             $order->append($sums_properties);
 
-            if(!empty($order->fillable))
+            if (! empty($order->fillable)) {
                 $order->fillable(array_unique(array_merge($order->fillable, $sums_properties)));
+            }
 
             $order->initCoreProperties();
 
-            foreach($sums_properties as $property) {
-                foreach($order->order_items as $item) {
+            foreach ($sums_properties as $property) {
+                foreach ($order->order_items as $item) {
                     $order->{$property} += $item->{$property} * $item->quantity;
                 }
             }
@@ -123,36 +127,43 @@ class Order extends EVBaseModel
         );
     }
 
-    public function scopeMy($query) {
+    public function scopeMy($query)
+    {
         return $query->where('user_id', '=', auth()->user()?->id ?? null);
     }
 
-    public function scopeShopOrders() {
+    public function scopeShopOrders()
+    {
         return $query->where('shop_id', '=', MyShop::getShop()?->id ?? -1);
     }
 
-    public function scopeAbandoned($query) {
+    public function scopeAbandoned($query)
+    {
         return $query->where('is_temp', '=', 1);
     }
 
     // All possible Order statuses
-    public function isAbandoned() {
+    public function isAbandoned()
+    {
         return $this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::canceled()->value;
     }
 
-    public function isPendingPayment() {
+    public function isPendingPayment()
+    {
         return $this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::pending()->value;
     }
 
-    public function isPaid() {
-        return !$this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::paid()->value;
+    public function isPaid()
+    {
+        return ! $this->is_temp && $this->payment_status === \App\Enums\PaymentStatusEnum::paid()->value;
     }
     // END All possible Order statuses
 
-    public function getAbandonedOrderStripeCheckoutPermalink($preview = false) {
+    public function getAbandonedOrderStripeCheckoutPermalink($preview = false)
+    {
         $order_items = $this->order_items;
 
-        if($this->is_temp && $this->order_items->isNotEmpty()) {
+        if ($this->is_temp && $this->order_items->isNotEmpty()) {
             // TODO: For now it takes only first order item - add support for multiple items in Stripe
             $subject = $order_items->first()->subject;
 
@@ -166,10 +177,9 @@ class Order extends EVBaseModel
 
             return route('stripe.checkout_redirect').'?data='.$data;
         }
-        
+
         return '#';
     }
-
 
 //    TODO: ORDER TRACKING NUMBER!!!
 //    public function refund_requests()
@@ -190,19 +200,17 @@ class Order extends EVBaseModel
 //        return $this->hasMany(ClubPoint::class);
 //    }
 
-
     public static function trend($period = 30)
     {
-        $present = Order::where('created_at', '>=', \Carbon::now()->subdays($period))->count();
+        $present = self::where('created_at', '>=', \Carbon::now()->subdays($period))->count();
 
-        $past = Order::where('created_at', '<=', \Carbon::now()->subdays($period))->count();
+        $past = self::where('created_at', '<=', \Carbon::now()->subdays($period))->count();
 
         if ($present == 0) {
             $present = 1;
         }
 
         $percentChange = (1 - $past / $present) * 100;
-
 
         return $percentChange;
     }

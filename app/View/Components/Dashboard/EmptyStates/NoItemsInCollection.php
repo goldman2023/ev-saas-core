@@ -6,11 +6,16 @@ use Illuminate\View\Component;
 
 class NoItemsInCollection extends Component
 {
-    public $icon; 
+    public $icon;
+
     public $title;
+
     public $text;
+
     public $linkHrefRoute;
+
     public $linkText;
+
     public $onClick;
 
     /**

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     /*
@@ -20,5 +20,5 @@ return [
     | Put APP ID in EXCHANGE_RATES_API_KEY .env variable
     |
     */
-    'exhange_rates_api_key' => env('EXCHANGE_RATES_API_KEY', '')
+    'exhange_rates_api_key' => env('EXCHANGE_RATES_API_KEY', ''),
 ];

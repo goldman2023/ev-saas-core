@@ -22,7 +22,6 @@ class AddOnDeleteCascadeAttributeRelatedTables extends Migration
             $table->foreign('attribute_value_id')->references('id')->on('attribute_values')->onDelete('cascade')->onUpdate('cascade');
         });
 
-
         Schema::table('attribute_relationships', function (Blueprint $table) {
             $table->dropForeign(['attribute_id']);
             $table->dropForeign(['attribute_value_id']);

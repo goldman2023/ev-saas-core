@@ -15,7 +15,7 @@ class AddSessionIdColumnToWishlistsTable extends Migration
     {
         Schema::table('wishlists', function (Blueprint $table) {
             //
-            if (!Schema::hasColumn('wishlists', 'session_id')) {
+            if (! Schema::hasColumn('wishlists', 'session_id')) {
                 $table->string('user_id')->nullable()->change();
                 $table->string('session_id')->nullable();
             }

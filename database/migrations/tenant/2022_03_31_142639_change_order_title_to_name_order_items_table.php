@@ -14,7 +14,7 @@ class ChangeOrderTitleToNameOrderItemsTable extends Migration
     public function up()
     {
         Schema::table('order_items', function (Blueprint $table) {
-            if(Schema::hasColumn('order_items', 'title')) {
+            if (Schema::hasColumn('order_items', 'title')) {
                 $table->renameColumn('title', 'name');
             }
             $table->json('serial_numbers')->nullable()->change();
@@ -29,7 +29,7 @@ class ChangeOrderTitleToNameOrderItemsTable extends Migration
     public function down()
     {
         Schema::table('order_items', function (Blueprint $table) {
-            if(Schema::hasColumn('order_items', 'name')) {
+            if (Schema::hasColumn('order_items', 'name')) {
                 $table->renameColumn('name', 'title');
             }
             $table->json('serial_numbers')->nullable(false)->change();

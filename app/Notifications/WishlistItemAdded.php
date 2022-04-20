@@ -12,6 +12,7 @@ class WishlistItemAdded extends Notification
     use Queueable;
 
     public $wishlistItem;
+
     /**
      * Create a new notification instance.
      *

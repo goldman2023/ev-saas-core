@@ -5,14 +5,14 @@ namespace App\Traits;
 use App\Builders\BaseBuilder;
 use App\Models\Category;
 use App\Models\Product;
-use Closure;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-use IMG;
-use Illuminate\Support\Collection;
 use App\Models\Upload;
 use App\Models\UploadsContentRelationship;
 use App\Models\UploadsGroup;
+use Closure;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use IMG;
 
 trait UploadTrait
 {
@@ -22,20 +22,20 @@ trait UploadTrait
      * @return void
      */
     protected static function bootUploadTrait()
-    { 
-        static::addGlobalScope('withUploads', function(mixed $builder) {
+    {
+        static::addGlobalScope('withUploads', function (mixed $builder) {
             // Eager Load Uploads
             $builder->with(['uploads']);
         });
 
         static::relationsRetrieved(function ($model): void {
-            if(!$model->relationLoaded('uploads')) {
+            if (! $model->relationLoaded('uploads')) {
                 $model->load('uploads');
             }
-            
+
             // Initiate dynamic properties values
-            $model->dynamicUploadPropertiesWalker(function($property) use (&$model) {
-                if($property['multiple'] ?? false) {
+            $model->dynamicUploadPropertiesWalker(function ($property) use (&$model) {
+                if ($property['multiple'] ?? false) {
                     // Multiple Uploads
                     $model->{$property['property_name']} = empty($model->uploads) ? null : $model->uploads->filter(function ($upload) use ($property) {
                         return $upload->pivot->relation_type === $property['relation_type'];
@@ -46,7 +46,6 @@ trait UploadTrait
                         return $upload->pivot->relation_type === $property['relation_type'];
                     })->first();
                 }
-
             });
         });
     }
@@ -58,14 +57,13 @@ trait UploadTrait
      */
     public function initializeUploadTrait(): void
     {
-        $this->dynamicUploadPropertiesWalker(function($property) {
+        $this->dynamicUploadPropertiesWalker(function ($property) {
             // Add dynamic properties to Model $append and $fillable vars
             $this->appendCoreProperties([$property['property_name']]);
             $this->append([$property['property_name']]);
             $this->fillable(array_unique(array_merge($this->fillable, [$property['property_name']])));
         });
     }
-
 
 //    /**
 //     * Fill the model with an array of attributes.
@@ -104,30 +102,30 @@ trait UploadTrait
     public function convertUploadModelsToIDs(): self
     {
         // Convert Dynamic Uploads to IDs
-        $this->dynamicUploadPropertiesWalker(function($property) {
-            if($this->{$property['property_name']} instanceof Collection) {
+        $this->dynamicUploadPropertiesWalker(function ($property) {
+            if ($this->{$property['property_name']} instanceof Collection) {
                 // Property is a collection of Upload instances or IDs
-                foreach($this->{$property['property_name']} as $key => $item) {
+                foreach ($this->{$property['property_name']} as $key => $item) {
                     $this->{$property['property_name']} = ($item instanceof Upload) ? $this->{$property['property_name']}->put($key, (int) $item->id) : $this->{$property['property_name']}->put($key, (int) $this->{$property['property_name']});
                 }
 
                 $this->{$property['property_name']} = $this->{$property['property_name']}->unique()->join(',');
-            } else if(is_array($this->{$property['property_name']})) {
-                foreach($this->{$property['property_name']} as $key => $item) {
+            } elseif (is_array($this->{$property['property_name']})) {
+                foreach ($this->{$property['property_name']} as $key => $item) {
                     $this->{$property['property_name']}[$key] = ($item instanceof Upload) ? (int) $item->id : (int) $this->{$property['property_name']};
                 }
                 $this->{$property['property_name']} = implode(',', array_unique($this->{$property['property_name']}));
-            } else if($this->{$property['property_name']} instanceof Upload) {
+            } elseif ($this->{$property['property_name']} instanceof Upload) {
                 // Property is single Upload instance
                 $this->{$property['property_name']} = (int) $this->{$property['property_name']}->id;
-            } else if(ctype_digit($this->{$property['property_name']})) {
+            } elseif (ctype_digit($this->{$property['property_name']})) {
                 // Property is not Upload nor Collection (it's most probably number already, but it can be numeric string, hence cast it to int)
                 $this->{$property['property_name']} = (int) $this->{$property['property_name']};
             }
         });
 
         // Convert Gallery Uploads to IDs (if GalleryTrait is present - we check that if convertGalleryModelsToIDs() method exists)
-        if(method_exists($this, 'convertGalleryModelsToIDs')) {
+        if (method_exists($this, 'convertGalleryModelsToIDs')) {
             $this->convertGalleryModelsToIDs();
         }
 
@@ -137,7 +135,8 @@ trait UploadTrait
     /************************************
      * Uploads Relation Functions *
      ************************************/
-    public function uploads() {
+    public function uploads()
+    {
         return $this->morphToMany(Upload::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
             ->withPivot('relation_type', 'group_id');
     }
@@ -152,52 +151,54 @@ trait UploadTrait
      *
      * @param ?Closure $callback
      */
-    protected function dynamicUploadPropertiesWalker(?Closure $callback = null): void {
+    protected function dynamicUploadPropertiesWalker(?Closure $callback = null): void
+    {
         $dynamic_properties = $this->getDynamicModelUploadProperties();
 
-        if(!empty($dynamic_properties)) {
+        if (! empty($dynamic_properties)) {
             foreach ($dynamic_properties as $property) {
                 // Both `property_name` and `relation_type` have to be set in order to create desired Upload properties (+ getter/setter functions)
-                if(!empty($property['property_name'] ?? null) && !empty($property['relation_type'] ?? null) && $callback instanceof Closure) {
+                if (! empty($property['property_name'] ?? null) && ! empty($property['relation_type'] ?? null) && $callback instanceof Closure) {
                     $callback($property);
                 }
             }
         }
     }
 
-    public function syncUploads($specific_property = null) {
+    public function syncUploads($specific_property = null)
+    {
         // Construct dynamic uploads sync array
-        $this->dynamicUploadPropertiesWalker(function($property) use($specific_property) {
-            if(empty($specific_property) || $specific_property === $property['property_name']) {
+        $this->dynamicUploadPropertiesWalker(function ($property) use ($specific_property) {
+            if (empty($specific_property) || $specific_property === $property['property_name']) {
                 $upload = $this->{$property['property_name']};
 
-                if($property['multiple']) {
-                    if(is_string($upload)) {
+                if ($property['multiple']) {
+                    if (is_string($upload)) {
                         // property is either multiple IDs (1,2,3...) or numeric string single ID ("55")
                         $upload_keys = explode(',', $upload);
-                    } else if ($upload instanceof Collection) {
+                    } elseif ($upload instanceof Collection) {
                         $upload_keys = $upload->toArray();
-                    } else if (is_array($upload)) {
+                    } elseif (is_array($upload)) {
                         $upload_keys = $upload;
                     } else {
                         $upload_keys = null;
                     }
                 } else {
-                    if($upload instanceof Upload) {
+                    if ($upload instanceof Upload) {
                         $upload_keys = [$upload->id];
-                    } else if(ctype_digit($upload) || is_int($upload)) {
+                    } elseif (ctype_digit($upload) || is_int($upload)) {
                         $upload_keys = [$upload];
                     } else {
                         $upload_keys = null;
                     }
                 }
 
-                if($upload_keys) {
+                if ($upload_keys) {
                     $upload_values = $upload_keys;
-                    array_walk($upload_values, function(&$value, $key) use($property) {
+                    array_walk($upload_values, function (&$value, $key) use ($property) {
                         $value = [
                             'relation_type' => $property['relation_type'],
-                            'order' => $key
+                            'order' => $key,
                         ];
                     });
                 }
@@ -206,11 +207,10 @@ trait UploadTrait
 
                 $this->uploads()->wherePivot('relation_type', $property['relation_type'])->sync($sync_array);
             }
-            
         });
 
         // Sync Gallery uploads
-        if(method_exists($this, 'syncGalleryUploads')) {
+        if (method_exists($this, 'syncGalleryUploads')) {
             $this->syncGalleryUploads($specific_property);
         }
     }

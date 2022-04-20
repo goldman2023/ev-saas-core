@@ -16,7 +16,6 @@ class SecondEmailVerifyMailManager extends Mailable
      *
      * @return void
      */
-
     public $array;
 
     public function __construct($array)

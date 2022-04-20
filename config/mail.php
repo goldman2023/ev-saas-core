@@ -128,7 +128,6 @@ return [
         ],
     ],
 
-
     'mailers' => [
         'mailersend' => [
             'transport' => 'mailersend',

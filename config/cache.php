@@ -73,7 +73,7 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'cache',
-            'ttl_redis_cache' => 60 * 60 * 24
+            'ttl_redis_cache' => 60 * 60 * 24,
         ],
 
     ],
