@@ -45,7 +45,7 @@
         "animate.css": "^4.1.1",
         "aos": "^2.3.4",
         "appear": "^1.0.1",
-        "axios": "^0.21.1",
+        "axios": "^0.25",
         "babel-loader": "8.1.0",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-polyfill": "^6.26.0",
