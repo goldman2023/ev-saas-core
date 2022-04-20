@@ -290,7 +290,7 @@ class TenantSettingsController extends Controller
 
     public function updateActivationSettings(Request $request)
     {
-        $env_changes = ['FORCE_HTTPS', 'FILESYSTEM_DRIVER'];
+        $env_changes = ['FORCE_HTTPS', 'FILESYSTEM_DISK'];
         if (in_array($request->type, $env_changes)) {
             return $this->updateActivationSettingsInEnv($request);
         }
@@ -327,9 +327,9 @@ class TenantSettingsController extends Controller
             if (strpos(env('APP_URL'), 'https:') !== false) {
                 $this->overWriteEnvFile('APP_URL', str_replace('https:', 'http:', env('APP_URL')));
             }
-        } elseif ($request->type == 'FILESYSTEM_DRIVER' && $request->value == '1') {
+        } elseif ($request->type == 'FILESYSTEM_DISK' && $request->value == '1') {
             $this->overWriteEnvFile($request->type, 's3');
-        } elseif ($request->type == 'FILESYSTEM_DRIVER' && $request->value == '0') {
+        } elseif ($request->type == 'FILESYSTEM_DISK' && $request->value == '0') {
             $this->overWriteEnvFile($request->type, 'local');
         }
 
