@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\App;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AffiliateBannerController;
 use App\Http\Controllers\AizUploadController;
@@ -62,14 +63,14 @@ Route::middleware([
     InitializeTenancyByDomainAndVendorDomains::class,
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
-])->namespace('App\Http\Controllers')->group(function () {
+])->group(function () {
     Route::middleware('auth')->group(function () {
-        Route::get('/we-analytics', 'WeAnalyticsController@index')->name('analytics.index');
-        Route::get('/we-menu', 'WeMenuController@index')->name('menu.index');
+        Route::get('/we-analytics', [App\Http\Controllers\WeAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/we-menu', [App\Http\Controllers\WeMenuController::class, 'index'])->name('menu.index');
 
-        Route::get('/we-edit', 'WeEditController@index')->name('we-edit.index');
-        Route::get('/we-edit/flow', 'WeEditController@flow')->name('we-edit.flow.pages');
-        Route::get('/we-edit/flow/menu', 'WeEditController@menuFlow')->name('we-edit.flow.menu');
+        Route::get('/we-edit', [App\Http\Controllers\WeEditController::class, 'index'])->name('we-edit.index');
+        Route::get('/we-edit/flow', [App\Http\Controllers\WeEditController::class, 'flow'])->name('we-edit.flow.pages');
+        Route::get('/we-edit/flow/menu', [App\Http\Controllers\WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
     });
 
     // Webhooks
@@ -130,8 +131,8 @@ Route::middleware([
     Route::get('/users/login', [HomeController::class, 'login_users'])->name('user.login');
     Route::get('/users/register', [HomeController::class, 'registration'])->name('user.registration');
     Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
-    Route::get('/admin/login', 'Auth\LoginController@showLoginForm')->name('admin.login');
-    Route::post('/admin/login')->name('login.attempt')->uses('Auth\LoginController@login');
+    Route::get('/admin/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/admin/login')->name('login.attempt')->uses([App\Http\Controllers\Auth\LoginController::class, 'login']);
 
     // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
@@ -195,7 +196,7 @@ Route::middleware([
     Route::get('/sellers', [CompanyController::class, 'index'])->name('sellers');
 
     Route::resource('support_ticket', 'SupportTicketController');
-    Route::post('support_ticket/reply', 'SupportTicketController@seller_store')->name('support_ticket.seller_store');
+    Route::post('support_ticket/reply', [App\Http\Controllers\SupportTicketController::class, 'seller_store'])->name('support_ticket.seller_store');
 
     //Blog Section
     Route::get('/news', [BlogController::class, 'all_blog'])->name('news');
@@ -203,7 +204,7 @@ Route::middleware([
     Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
 
     // Chat
-    Route::get('/chat', 'ChatController@index')->name('chat.index');
+    Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
@@ -214,8 +215,8 @@ Route::middleware([
     })->name('tenant.impersonate');
 
     Route::get('/settings/user', [UserSettingsController::class, 'show'])->name('tenant.settings.user');
-    Route::post('/settings/user/personal', 'UserSettingsController@personal')->name('tenant.settings.user.personal');
-    Route::post('/settings/user/password', 'UserSettingsController@password')->name('tenant.settings.user.password');
+    Route::post('/settings/user/personal', [App\Http\Controllers\UserSettingsController::class, 'personal'])->name('tenant.settings.user.personal');
+    Route::post('/settings/user/password', [App\Http\Controllers\UserSettingsController::class, 'password'])->name('tenant.settings.user.password');
 
     Route::middleware(OwnerOnly::class)->group(function () {
         Route::get('/settings/application', [ApplicationSettingsController::class, 'show'])->name('tenant.settings.application');
@@ -224,7 +225,7 @@ Route::middleware([
     });
 
     //Custom page
-    Route::get('/page/privacy-policy', 'PageController@privacy_policy_page')->name('custom-pages.privacy-policy');
-    Route::get('/page/{slug}', 'PageController@show_custom_page')->name('custom-pages.show_custom_page');
-    Route::get('/shop/create', 'PageController@show_custom_page')->name('shop.create');
+    Route::get('/page/privacy-policy', [App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
+    Route::get('/page/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
+    Route::get('/shop/create', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 });
