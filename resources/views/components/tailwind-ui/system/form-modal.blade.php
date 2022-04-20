@@ -36,6 +36,7 @@
           <h4 class="w-full text-18 pb-1 mb-3 border-b border-gray-200">{{ $title }}</h4>
 
           {{ $slot }}
+          
         </div>
       </div>
     </div>

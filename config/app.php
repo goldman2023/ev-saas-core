@@ -299,6 +299,7 @@ return [
         'Carbon' => Illuminate\Support\Carbon::class,
         'UUID' => Webpatser\Uuid\Uuid::class,
         'StripeService' => App\Facades\StripeService::class,
+        'MailerService' => App\Facades\MailerService::class,
     ],
 
 ];

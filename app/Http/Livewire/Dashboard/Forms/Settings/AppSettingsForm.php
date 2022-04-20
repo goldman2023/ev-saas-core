@@ -63,7 +63,7 @@ class AppSettingsForm extends Component
                 'settings.mailerlite_api_token.value' => [''],
 
                 'settings.mailersend_api_token.value' => [''],
-                
+
                 'settings.mail_from_address.value' => ['required'],
                 'settings.mail_from_name.value' => ['nullable'],
                 'settings.mail_reply_to_address.value' => ['required'],
@@ -306,7 +306,7 @@ class AppSettingsForm extends Component
 
     public function saveIntegrations() {
         $rules = $this->getRuleSet('integrations');
-
+        
         try {
             $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -322,6 +322,9 @@ class AppSettingsForm extends Component
             TenantSettings::clearCache();
 
             DB::commit();
+
+            // TODO: Move this somewhere else, to be MailerLite specific!!!
+            \MailerService::mailerlite()->addDefaultFields();
 
             $this->inform(translate('Integrations settings successfully saved.'), '', 'success');
         } catch(\Exception $e) {
