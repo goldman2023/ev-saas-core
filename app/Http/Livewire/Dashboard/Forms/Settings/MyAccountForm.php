@@ -166,7 +166,7 @@ class MyAccountForm extends Component
 
     public function updatePassword()
     {
-        $this->validate($this->getRuleSet('password'));
+        $this->validate($this->getRuleSet('current_password'));
 
         // Update password
         $this->me->password = Hash::make($this->newPassword);
