@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\App;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AffiliateBannerController;
 use App\Http\Controllers\AizUploadController;
+use App\Http\Controllers\App;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\VerificationController;

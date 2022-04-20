@@ -18,18 +18,18 @@ class AttributesTableSeeder extends Seeder
 
             \DB::table('attributes')->insert([
                 0 => [
-                        'id' => 1,
-                        'name' => 'Demo Attribute',
-                        'type' => 'dropdown',
-                        'content_type' => 'App\\Models\\Seller',
-                        'filterable' => 1,
-                        'is_admin' => false,
-                        'custom_properties' => '',
-                        'is_schema' => false,
-                        'schema_key' => null,
-                        'schema_value' => null,
-                        'is_default' => true,
-                    ],
+                    'id' => 1,
+                    'name' => 'Demo Attribute',
+                    'type' => 'dropdown',
+                    'content_type' => 'App\\Models\\Seller',
+                    'filterable' => 1,
+                    'is_admin' => false,
+                    'custom_properties' => '',
+                    'is_schema' => false,
+                    'schema_key' => null,
+                    'schema_value' => null,
+                    'is_default' => true,
+                ],
             ]);
         }
     }

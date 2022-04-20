@@ -5,8 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use OptimistDigital\MenuBuilder\MenuBuilder;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create(MenuBuilder::getMenusTableName(), function (Blueprint $table) {

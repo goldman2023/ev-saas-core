@@ -19,12 +19,12 @@ class AttributeRelationshipsTableSeeder extends Seeder
             \DB::table('attribute_relationships')->insert([
                 /* Just an example relationship */
                 0 => [
-                        'id' => 1,
-                        'subject_type' => 'App\Models\Seller',
-                        'subject_id' => 1,
-                        'attribute_id' => 1,
-                        'attribute_value_id' => 1,
-                    ],
+                    'id' => 1,
+                    'subject_type' => 'App\Models\Seller',
+                    'subject_id' => 1,
+                    'attribute_id' => 1,
+                    'attribute_value_id' => 1,
+                ],
             ]);
         }
     }

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\App;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\App;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\EVBlogPostController;
