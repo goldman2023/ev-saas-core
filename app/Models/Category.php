@@ -216,7 +216,7 @@ class Category extends EVBaseModel
 
     public function getFollowers()
     {
-        return Activity::whereHas('subject')->where('subject_id', $this->id)->where('subject_type', 'App\Models\Category');
+        return Activity::whereHas('subject')->where('subject_id', $this->id)->where('subject_type', \App\Models\Category::class);
     }
 
     public function getDynamicModelUploadProperties(): array

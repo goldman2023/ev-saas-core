@@ -34,9 +34,9 @@ class FeedCard extends Component
         if (empty($item->causer)) {
             $this->ignore = true;
         }
-        if ($item->subject_type == 'App\Models\Product') {
+        if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
-        } elseif ($item->subject_type == 'App\Models\Wishlist') {
+        } elseif ($item->subject_type == \App\Models\Wishlist::class) {
             if (empty($item->subject->subject)) {
                 $this->ignore = true;
             } else {

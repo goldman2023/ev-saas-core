@@ -19,7 +19,7 @@ class ReviewRelationshipsTableSeeder extends Seeder
             \DB::table('review_relationships')->insert([
                 0 => [
                         'id' => 1,
-                        'subject_type' => 'App\Models\Shop',
+                        'subject_type' => \App\Models\Shop::class,
                         'subject_id' => 1,
                         'review_id' => 1,
                         'creator_id' => 1,
@@ -28,7 +28,7 @@ class ReviewRelationshipsTableSeeder extends Seeder
                     ],
                 1 => [
                         'id' => 2,
-                        'subject_type' => 'App\Models\Shop',
+                        'subject_type' => \App\Models\Shop::class,
                         'subject_id' => 1,
                         'review_id' => 2,
                         'creator_id' => 2,
@@ -37,7 +37,7 @@ class ReviewRelationshipsTableSeeder extends Seeder
                     ],
                 2 => [
                         'id' => 3,
-                        'subject_type' => 'App\Models\Shop',
+                        'subject_type' => \App\Models\Shop::class,
                         'subject_id' => 1,
                         'review_id' => 3,
                         'creator_id' => 3,
@@ -46,7 +46,7 @@ class ReviewRelationshipsTableSeeder extends Seeder
                     ],
                 3 => [
                         'id' => 4,
-                        'subject_type' => 'App\Models\Shop',
+                        'subject_type' => \App\Models\Shop::class,
                         'subject_id' => 1,
                         'review_id' => 4,
                         'creator_id' => 1,

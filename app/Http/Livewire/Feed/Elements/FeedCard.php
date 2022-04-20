@@ -38,19 +38,19 @@ class FeedCard extends Component
             $this->ignore = true;
         }
 
-        if ($item->subject_type == 'App\Models\Product') {
+        if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
             if ($this->product->status == 'draft') {
                 // $this->ignore = true;
             }
-        } elseif ($item->subject_type == 'App\Models\Wishlist') {
+        } elseif ($item->subject_type == \App\Models\Wishlist::class) {
             $this->ignore = true;
             if (empty($item->subject->subject)) {
                 $this->ignore = true;
             } else {
                 // $this->product = $item->subject->subject;
             }
-        } elseif (($item->subject_type == 'App\Models\SocialComment')) {
+        } elseif (($item->subject_type == \App\Models\SocialComment::class)) {
             $this->ignore = true;
         }
     }

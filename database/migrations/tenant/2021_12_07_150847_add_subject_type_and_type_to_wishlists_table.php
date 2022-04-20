@@ -16,7 +16,7 @@ class AddSubjectTypeAndTypeToWishlistsTable extends Migration
         Schema::table('wishlists', function (Blueprint $table) {
             //
             if (! Schema::hasColumn('wishlists', 'subject_type')) {
-                $table->string('subject_type')->after('subject_id')->default('App\\\Models\\\Product');
+                $table->string('subject_type')->after('subject_id')->default(\App\Models\Product::class);
                 $table->string('type')->after('subject_type');
             }
         });

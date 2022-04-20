@@ -95,7 +95,7 @@ class EVProductController extends Controller
 
         $activity = Activity::all();
 
-        $activity = Activity::whereHas('subject')->where('subject_type', 'App\Models\Product')->where('subject_id', $product->id)->first();
+        $activity = Activity::whereHas('subject')->where('subject_type', \App\Models\Product::class)->where('subject_id', $product->id)->first();
 
         return view('frontend.dashboard.products.activity')->with('product', $product);
     }

@@ -32,13 +32,13 @@ class ShopsTableSeeder extends Seeder
                     'id' => 1,
                     'user_id' => 1, // admin
                     'subject_id' => 1,
-                    'subject_type' => 'App\\Models\\Shop',
+                    'subject_type' => \App\Models\Shop::class,
                 ],
                 [
                     'id' => 2,
                     'user_id' => 2, // seller
                     'subject_id' => 1,
-                    'subject_type' => 'App\\Models\\Shop',
+                    'subject_type' => \App\Models\Shop::class,
                 ],
             ]);
         }

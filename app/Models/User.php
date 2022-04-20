@@ -224,7 +224,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function recently_viewed_products()
     {
         $data = Activity::whereHas('subject')
-            ->where('subject_type', 'App\Models\Product')
+            ->where('subject_type', \App\Models\Product::class)
             ->where('description', 'viewed')
             ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
             ->groupBy('subject_id')
@@ -236,7 +236,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function recently_viewed_shops()
     {
-        $data = Activity::where('subject_type', 'App\Models\Shop')
+        $data = Activity::where('subject_type', \App\Models\Shop::class)
             ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
             ->groupBy('subject_id')
             ->paginate(18);
@@ -257,7 +257,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function following()
     {
         return Wishlist::where('user_id', $this->id)
-            ->where('subject_type', "App\Models\Shop");
+            ->where('subject_type', \App\Models\Shop::class);
 
         // return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
     }

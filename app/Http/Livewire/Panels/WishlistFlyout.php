@@ -29,7 +29,7 @@ class WishlistFlyout extends Component
 
     public function getData()
     {
-        return auth()->user()?->wishlists()->where('subject_type', 'App\Models\Product')->orderBy('created_at', 'desc')->limit($this->per_page)->offset(($this->page - 1) * $this->per_page)->get();
+        return auth()->user()?->wishlists()->where('subject_type', \App\Models\Product::class)->orderBy('created_at', 'desc')->limit($this->per_page)->offset(($this->page - 1) * $this->per_page)->get();
     }
 
     public function loadMore(): void
