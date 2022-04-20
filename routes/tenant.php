@@ -86,6 +86,7 @@ Route::middleware([
     Route::get('/welcome/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3')->middleware(['auth']);
     Route::get('/welcome/step4', [OnboardingController::class, 'step4'])->name('onboarding.step4')->middleware(['auth']);
     Route::get('/welcome/verification', [OnboardingController::class, 'verification'])->name('onboarding.verification')->middleware(['auth']);
+    Route::get('/email/verification', [EVAccountController::class, 'user_email_verification_page'])->name('user.email.verification.page');
 
 
     // Homepage For Multi/Single Vendor mode

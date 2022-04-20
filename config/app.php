@@ -219,6 +219,10 @@ return [
         App\Providers\MacrosServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         App\Providers\PaymentsProvider::class,
+
+        // Overriden Vendor providers
+        App\Providers\MailerSendServiceProvider::class,
+        
     ],
 
     /*
