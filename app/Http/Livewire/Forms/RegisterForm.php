@@ -108,13 +108,7 @@ class RegisterForm extends Component
             $this->inform(translate('Error: Could not create a new account!'), $e->getMessage(), 'fail');
         }
 
-        try {
-            Mail::to($this->user->email)
-                ->cc('eim@we-saas.com')
-                ->send(new WelcomeEmail($this->user));
-        } catch (\Throwable $e) {
-
-        }
+        
     }
 
     protected function createUser()
@@ -139,6 +133,16 @@ class RegisterForm extends Component
 
     protected function registered()
     {
+        // Send welcome email to the user
+        try {
+            Mail::to($this->user->email)
+                ->send(new WelcomeEmail($this->user));
+
+            // TODO: Add User to MailerLite group
+        } catch(\Exception $e) {
+
+        }
+        
         if(get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
         }
@@ -147,7 +151,7 @@ class RegisterForm extends Component
             if(!empty(get_tenant_setting('register_redirect_url'))) {
                 return redirect(get_tenant_setting('register_redirect_url'));
             } else {
-                return redirect()->route('verification');
+                return redirect()->route('user.email.verification.page');
             } 
         }
     }

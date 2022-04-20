@@ -160,6 +160,12 @@ class TenantSettingsService
             // Integrations
             'mailerlite_api_token' => 'string',
             'mailersend_api_token' => 'string',
+
+            // Mail
+            'mail_from_address' => 'string',
+            'mail_from_name' => 'string',
+            'mail_reply_to_address' => 'string',
+            'mail_reply_to_name' => 'string',
             
         ];
     }

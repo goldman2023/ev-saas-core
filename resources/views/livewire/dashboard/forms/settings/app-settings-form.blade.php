@@ -867,7 +867,7 @@
                                   </li>
                                   <x-system.form-modal id="app-settings-mailersend" title="MailerSend">
                                     <!-- MailerSend API Token-->
-                                    <div class="flex flex-col" x-data="{}">
+                                    <div class="flex flex-col mb-3" x-data="{}">
                                         <label class="block text-sm font-medium text-gray-900 mb-2">
                                             {{ translate('MailerSend API Token') }}
                                         </label>
@@ -877,6 +877,54 @@
                                         </div>
                                     </div>
                                     <!-- END MailerSend API Token -->
+
+                                    <!-- Mail From Address-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('From Address') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.mail_from_address.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Mail From Address -->
+
+                                    <!-- Mail From Name-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('From Name') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.mail_from_name.value" placeholder="{{ translate('Site name is used by default') }}"/>
+                                        </div>
+                                    </div>
+                                    <!-- END Mail From Name -->
+
+                                    <!-- Mail ReplyTo Address-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Reply to Address') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.mail_reply_to_address.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Mail ReplyTo Address -->
+
+                                    <!-- Mail ReplyTo Name-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Reply to Name') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.mail_reply_to_name.value" placeholder="{{ translate('Site name is used by default') }}"/>
+                                        </div>
+                                    </div>
+                                    <!-- END Mail ReplyTo Name -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveIntegrations()">
