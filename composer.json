@@ -39,7 +39,7 @@
         "laravel/slack-notification-channel": "^2.3",
         "laravel/socialite": "^5.2",
         "laravel/ui": "^3.2",
-        "league/flysystem-aws-s3-v3": "^1.0",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
         "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2",
@@ -108,8 +108,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": [
-            ]
+            "dont-discover": []
         }
     },
     "scripts": {
