@@ -141,7 +141,7 @@ class RegisterForm extends Component
             Mail::to($this->user->email)
                 ->send(new WelcomeEmail($this->user));
 
-            // TODO: Add User to MailerLite 'All Users' group
+            // Adding User to MailerLite 'All Users' group
             MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
         } catch(\Exception $e) {
             Log::error($e->getMessage());

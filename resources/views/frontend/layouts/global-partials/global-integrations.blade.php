@@ -1,16 +1,28 @@
+{{-- Google Analytics Integration --}}
+@if(get_tenant_setting('google_analytics_enabled') && !empty($gtag = get_tenant_setting('gtag_id')))
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ $gtag }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ $gtag }}');
+</script>
+@endif
+{{-- Google Analytics Integration --}}
+
 {{-- Facebook App Integration --}}
-@if(!empty(get_setting('facebook_app_id')) && !empty(get_setting('facebook_app_secret')))
+@if(!empty(get_tenant_setting('facebook_app_id')) && !empty(get_tenant_setting('facebook_app_secret')))
 <script>
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '{{ get_setting('facebook_app_id') }}',
+        appId      : '{{ get_tenant_setting('facebook_app_id') }}',
         cookie     : true,
         xfbml      : true,
         version    : 'v13.0'
       });
         
       FB.AppEvents.logPageView();   
-        
     };
   
     (function(d, s, id){

@@ -57,17 +57,22 @@ class AppSettingsForm extends Component
                 'settings.weedit_feature.value' => ['boolean'],
                 'settings.wishlist_feature.value' => ['boolean'],
                 'settings.vendor_mode_feature.value' => ['boolean'],
+                'settings.plans_trial_mode.value' => ['boolean'],
+                'settings.plans_trial_duration.value' => ['exclude_if:settings.plans_trial_mode.value,false', 'required', 'numeric', 'gt:0'],
 
             ],
             'integrations' => [
                 'settings.mailerlite_api_token.value' => [''],
-
                 'settings.mailersend_api_token.value' => [''],
 
                 'settings.mail_from_address.value' => ['required'],
                 'settings.mail_from_name.value' => ['nullable'],
                 'settings.mail_reply_to_address.value' => ['required'],
                 'settings.mail_reply_to_name.value' => ['nullable'],
+
+                'settings.google_analytics_enabled.value' => ['boolean'],
+                'settings.gtag_id.value' => ['exclude_if:settings.google_analytics_enabled.value,false', 'required'],
+
             ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],

@@ -50,6 +50,7 @@ class EVService
         return $this->tenantStylePath;
     }
 
+    // This one is just a supplement (currently not used...)
     public function getDashboardMenuByRole($role = 'customer')
     {
         return collect($this->getDashboardMenuTemplate())->map(fn ($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
@@ -61,10 +62,15 @@ class EVService
         })->count() > 0 ? $item : null)->filter()->values()->toArray();
     }
 
+    // This one is used!
     public function getDashboardMenu()
     {
         return collect($this->getDashboardMenuTemplate())->map(function ($group) {
             $group['items'] = collect($group['items'])->filter(function ($child) use ($group) {
+                // Check if enabled exists and is false - hide menu item
+                if(isset($child['enabled']) && !$child['enabled']) return false;
+
+                // Check if user has enough permissions to access the page
                 return \Permissions::canAccess($child['user_types'], $child['permissions'], false);
             })->toArray();
             return  $group;
@@ -93,7 +99,7 @@ class EVService
                         'is_active' => areActiveRoutes(['chat']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
-                        'enabled' => get_tenant_setting('chat_enabled', true),
+                        'enabled' => get_tenant_setting('chat_feature', true),
                     ],
                     [
                         'label' => translate('Pages'),
@@ -101,7 +107,8 @@ class EVService
                         'route' => route('pages.index'),
                         'is_active' => areActiveRoutes(['pages.index']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => [] // TODO: Add App Pages Permissions
+                        'permissions' => [], // TODO: Add App Pages Permissions
+                        'enabled' => true,
                     ],
                 ]
             ],
@@ -341,7 +348,7 @@ class EVService
                         'is_active' => areActiveRoutes(['we-edit.index']),
                         'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_designs'],
-                        'enabled' => get_tenant_setting('we_edit_enabled', true),
+                        'enabled' => get_tenant_setting('weedit_feature', true),
                     ],
                     // [
                     //     'label' => translate('Payment settings'),

@@ -154,12 +154,17 @@ class TenantSettingsService
             'weedit_feature' => 'boolean',
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',
+            'plans_trial_mode' => 'boolean',
+            'plans_trial_duration' => 'integer',
             'register_redirect_url' => 'string',
             'login_redirect_url' => 'string', // 
 
             // Integrations
             'mailerlite_api_token' => 'string',
             'mailersend_api_token' => 'string',
+            'google_analytics_enabled' => 'boolean',
+            'gtag_id' => 'string',
+
 
             // Mail
             'mail_from_address' => 'string',
