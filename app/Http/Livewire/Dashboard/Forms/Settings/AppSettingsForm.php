@@ -74,6 +74,9 @@ class AppSettingsForm extends Component
                 'settings.google_analytics_enabled.value' => ['boolean'],
                 'settings.gtag_id.value' => ['exclude_if:settings.google_analytics_enabled.value,false', 'required'],
 
+                'settings.google_recaptcha_enabled.value' => ['boolean'],
+                'settings.google_recaptcha_site_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required' ],
+                'settings.google_recaptcha_secret_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required'],
             ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],

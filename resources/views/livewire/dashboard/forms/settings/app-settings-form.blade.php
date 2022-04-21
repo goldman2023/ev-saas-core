@@ -1035,7 +1035,71 @@
                                         </button>
                                     </div>
                                 </x-system.form-modal>
-                                  {{-- END MailerLite --}}
+                                  {{-- END Google Analytics --}}
+
+                                {{-- Google ReCaptcha --}}
+                                <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
+                                    <div class="flex-1 flex flex-col p-8">
+                                        <img class="mx-auto h-[32px]" alt="Google Analytics" src="https://www.google.com/recaptcha/about/images/reCAPTCHA-logo@2x.png" loading="lazy">
+                                        <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('Google Recaptcha') }}</h3>
+                                    </div>
+                                    <div>
+                                      <div class="-mt-px flex divide-x divide-gray-200">
+                                        <div class="w-0 flex-1 flex">
+                                          <div @click="$dispatch('display-modal', {'id': 'app-settings-google-recaptcha'})" class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                            @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                            <span class="ml-2">{{ translate('Edit') }}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </li>
+                                <x-system.form-modal id="app-settings-google-recaptcha" title="Google Recaptcha">
+                                    <!-- Google Recaptcha Enabled-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Enable Google Recaptcha') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.toggle field="settings.google_recaptcha_enabled.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Google Recaptcha Enabled -->
+
+                                    <!-- Google Recaptcha Site Key-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Site Key') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.google_recaptcha_site_key.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Google Recaptcha Site Key -->
+
+                                    <!-- Google Recaptcha Secret Key-->
+                                    <div class="flex flex-col" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Secret Key') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.google_recaptcha_secret_key.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Google Recaptcha Secret Key -->
+
+                                    <div class="w-full flex justify-end mt-4" x-data="{}">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                            $wire.set('settings.google_recaptcha_enabled.value', settings.google_recaptcha_enabled.value, true);
+                                        "  wire:click="saveIntegrations()">
+                                            {{ translate('Save') }}
+                                        </button>
+                                    </div>
+                                </x-system.form-modal>
+                                {{-- END Google ReCaptcha --}}
                             </ul>
                         </div>
                         {{-- END Integrations --}}
