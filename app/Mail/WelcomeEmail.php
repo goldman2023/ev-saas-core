@@ -30,8 +30,7 @@ class WelcomeEmail extends WeEmail
         $to = Arr::get($this->to, '0.address');
         
         return $this
-            ->view('emails.user_welcome')
-            // ->text('emails.test_text')
+            ->view('emails.users.welcome')
             ->mailersend();
         
     }

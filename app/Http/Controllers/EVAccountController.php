@@ -29,10 +29,6 @@ class EVAccountController extends Controller
         }
     }
 
-    public function user_email_verification_page() {
-        dd('Go check your email :D');
-    }
-
     public function user_profile(Request $request, $id)
     {
         try {

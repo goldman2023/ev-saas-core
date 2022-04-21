@@ -313,8 +313,23 @@
                                 </div>
 
                                 <div class="col-span-3" x-show="!settings.onboarding_flow.value">
-                                {{-- Register Redirect URL --}}
-                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                    {{-- Force email verification --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3" x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Force email verification') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('Enable/Disable if users must verify their email address in order to preform some actions') }}
+                                            </p>
+                                        </div>
+        
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.toggle field="settings.force_email_verification.value" />
+                                        </div>
+                                    </div>
+                                    {{-- END Force email verification --}}
+
+                                    {{-- Register Redirect URL --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  mb-3" x-data="{}">
                                         <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                             <span class="text-sm font-medium text-gray-900">{{ translate('Registration Redirect URL') }}:</span>
                                             <p class="text-gray-500 text-sm">
@@ -329,7 +344,7 @@
                                     {{-- END Register Redirect URL --}}
     
                                     {{-- Login Redirect URL --}}
-                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mt-3" x-data="{}">
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
                                         <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                             <span class="text-sm font-medium text-gray-900">{{ translate('Login Redirect URL') }}:</span>
                                             <p class="text-gray-500 text-sm">
@@ -418,6 +433,7 @@
                                         $wire.set('settings.feed_enabled.value', settings.feed_enabled.value, true);
                                         $wire.set('settings.multiplan_purchase.value', settings.multiplan_purchase.value, true);
                                         $wire.set('settings.onboarding_flow.value', settings.onboarding_flow.value, true);
+                                        $wire.set('settings.force_email_verification.value', settings.force_email_verification.value, true);
                                         $wire.set('settings.chat_feature.value', settings.chat_feature.value, true);
                                         $wire.set('settings.weedit_feature.value', settings.weedit_feature.value, true);
                                         $wire.set('settings.wishlist_feature.value', settings.wishlist_feature.value, true);

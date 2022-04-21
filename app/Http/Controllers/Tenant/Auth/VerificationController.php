@@ -20,7 +20,7 @@ class VerificationController extends Controller
     |
     */
 
-    use VerifiesEmails;
+    // use VerifiesEmails;
 
     /** @override */
     public function show(Request $request)

@@ -156,6 +156,8 @@ class TenantSettingsService
             'vendor_mode_feature' => 'boolean',
             'plans_trial_mode' => 'boolean',
             'plans_trial_duration' => 'integer',
+
+            'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
             'login_redirect_url' => 'string', // 
 

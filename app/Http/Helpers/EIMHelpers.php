@@ -72,9 +72,9 @@ function get_site_name()
 }
 
 /* TODO: Make this tenant aware and also an option for single vendor */
-function get_site_logo($mode = 'default')
+function get_site_logo($mode = 'default', $options = null)
 {
-    $logo = IMG::get(get_setting('site_logo'));
+    $logo = IMG::get(get_setting('site_logo'), $options);
 
     // dd($logo);
 
