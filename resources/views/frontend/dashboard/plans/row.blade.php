@@ -6,6 +6,12 @@
 
 <x-livewire-tables::table.cell class="align-middle ">
     {{ $row->getTranslation('name') }}
+
+    @if($row->primary)
+        <span class="badge-info">
+            {{ translate('Primary') }}
+        </span>
+    @endif
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center">
@@ -27,6 +33,12 @@
         </span>
     @endif
 </x-livewire-tables::table.cell>
+
+@if (!$columnSelect || ($columnSelect && $this->isColumnSelectEnabled('featured')))
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+    <strong class="{{ $row->featured ? 'badge-success' : 'badge-dark' }}">{{ $row->featured ? translate('Featured') : translate('Not featured') }}</strong>
+</x-livewire-tables::table.cell>
+@endif
 
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>

@@ -45,6 +45,8 @@ class Plan extends EVBaseModel
 
     protected $casts = [
         'features' => 'array',
+        'featured' => 'boolean',
+        'primary' => 'boolean',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
     ];
