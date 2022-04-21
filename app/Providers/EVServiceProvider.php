@@ -9,6 +9,7 @@ use App\Http\Services\IMGProxyService;
 use App\Http\Services\MyShopService;
 use App\Http\Services\VendorService;
 use App\Http\Services\MediaService;
+use App\Http\Services\MailerService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container;
 use App\Http\Services\CategoryService;
@@ -41,6 +42,11 @@ class EVServiceProvider extends ServiceProvider
         // Register Media Singleton
         $this->app->singleton('media_service', function() {
             return new MediaService(fn () => Container::getInstance());
+        });
+
+        // Register Mailer Singleton
+        $this->app->singleton('mailer_service', function() {
+            return new MailerService(fn () => Container::getInstance());
         });
 
         // Register IMG (IMGProxy) Singleton

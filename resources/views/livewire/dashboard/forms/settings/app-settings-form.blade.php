@@ -377,6 +377,40 @@
                             </div>
                             {{-- END Vendor Mode Feature --}}
 
+                            {{-- Plans Trial Mode --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Plans trial mode') }}</span>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ translate('Allow trial period on all your plans') }}
+                                    </p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.plans_trial_mode.value" />
+                                </div>
+
+                                <div class="col-span-3" x-show="settings.plans_trial_mode.value">
+                                    {{-- Trial duration --}}
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                            <span class="text-sm font-medium text-gray-900">{{ translate('Trial duration (in days)') }}:</span>
+                                            <p class="text-gray-500 text-sm">
+                                                {{ translate('If you enable trial mode, you must specify trial duration') }}
+                                            </p>
+                                        </div>
+        
+                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                            <x-dashboard.form.input field="settings.plans_trial_duration.value" min="1" type="number" placeholder="{{ translate('Number of trial days') }}" />
+                                        </div>
+                                    </div>
+                                    {{-- END Trial duration --}}
+
+                                </div>
+                                
+                            </div>
+                            {{-- END Plans Trial Mode --}}
+
                             {{-- Save Features --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
@@ -388,6 +422,7 @@
                                         $wire.set('settings.weedit_feature.value', settings.weedit_feature.value, true);
                                         $wire.set('settings.wishlist_feature.value', settings.wishlist_feature.value, true);
                                         $wire.set('settings.vendor_mode_feature.value', settings.vendor_mode_feature.value, true);
+                                        $wire.set('settings.plans_trial_mode.value', settings.plans_trial_mode.value, true);
                                     "
                                     wire:click="saveFeatures()">
                                 {{ translate('Save') }}
@@ -864,8 +899,8 @@
                                         </div>
                                       </div>
                                     </div>
-                                  </li>
-                                  <x-system.form-modal id="app-settings-mailersend" title="MailerSend">
+                                </li>
+                                <x-system.form-modal id="app-settings-mailersend" title="MailerSend">
                                     <!-- MailerSend API Token-->
                                     <div class="flex flex-col mb-3" x-data="{}">
                                         <label class="block text-sm font-medium text-gray-900 mb-2">
@@ -932,8 +967,60 @@
                                         </button>
                                     </div>
                                 </x-system.form-modal>
-                                  {{-- END MailSend --}}
-                              </ul>
+                                {{-- END MailSend --}}
+
+                                {{-- Google Analytics --}}
+                                <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
+                                    <div class="flex-1 flex flex-col p-8">
+                                        <img class="devsite-product-logo h-[32px]" alt="Google Analytics" src="https://www.gstatic.com/analytics-suite/header/suite/v2/ic_analytics.svg" loading="lazy">
+                                        <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('Google Analytics') }}</h3>
+                                    </div>
+                                    <div>
+                                      <div class="-mt-px flex divide-x divide-gray-200">
+                                        <div class="w-0 flex-1 flex">
+                                          <div @click="$dispatch('display-modal', {'id': 'app-settings-google-analytics'})" class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                            @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                            <span class="ml-2">{{ translate('Edit') }}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </li>
+                                <x-system.form-modal id="app-settings-google-analytics" title="Google Analytics">
+                                    <!-- Google Analytics Enabled-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Enable Google Analytics') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.toggle field="settings.google_analytics_enabled.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Google Analytics Enabled -->
+
+                                    <!-- Gtag ID-->
+                                    <div class="flex flex-col" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Gtag ID') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.gtag_id.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Gtag ID -->
+
+                                    <div class="w-full flex justify-end mt-4" x-data="{}">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                            $wire.set('settings.google_analytics_enabled.value', settings.google_analytics_enabled.value, true);
+                                        "  wire:click="saveIntegrations()">
+                                            {{ translate('Save') }}
+                                        </button>
+                                    </div>
+                                </x-system.form-modal>
+                                  {{-- END MailerLite --}}
+                            </ul>
                         </div>
                         {{-- END Integrations --}}
                     </div>
