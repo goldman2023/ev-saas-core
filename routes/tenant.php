@@ -14,6 +14,7 @@ use App\Http\Controllers\CompareController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\CustomerProductController;
 use App\Http\Controllers\EVAccountController;
+use App\Http\Controllers\EVAccountVerificationController;
 use App\Http\Controllers\EVCartController;
 use App\Http\Controllers\EVCategoryController;
 use App\Http\Controllers\EVCheckoutController;
@@ -80,13 +81,20 @@ Route::middleware([
 
 
     // Route to show after creating new tenant:
+    Auth::routes(['verify' => true]);
+    Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
+    Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
+
     Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('onboarding.step1')->middleware(['auth']);
     Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
     Route::post('/welcome/profile/store', [OnboardingController::class, 'profile_store'])->name('onboarding.profile.store')->middleware(['auth']);
     Route::get('/welcome/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3')->middleware(['auth']);
     Route::get('/welcome/step4', [OnboardingController::class, 'step4'])->name('onboarding.step4')->middleware(['auth']);
     Route::get('/welcome/verification', [OnboardingController::class, 'verification'])->name('onboarding.verification')->middleware(['auth']);
-    Route::get('/email/verification', [EVAccountController::class, 'user_email_verification_page'])->name('user.email.verification.page');
+    Route::get('/email/verify', [EVAccountVerificationController::class, 'verification_page'])->name('user.email.verification.page');
+    Route::get('/email/verify/{id}/{hash}', [EVAccountVerificationController::class, 'verify'])->name('user.email.verification.verify');
+    Route::get('/email/verify/resend', [EVAccountVerificationController::class, 'resend'])->name('user.email.verification.resend');
+    // Route::get('/email/verification', [EVAccountController::class, 'user_email_verification_page'])->name('user.email.verification.page');
 
 
     // Homepage For Multi/Single Vendor mode
@@ -103,11 +111,6 @@ Route::middleware([
     });
 
 
-    Route::post('/aiz-uploader', [AizUploadController::class, 'show_uploader']);
-    Route::post('/aiz-uploader/upload', [AizUploadController::class, 'upload']);
-    Route::get('/aiz-uploader/get_uploaded_files', [AizUploadController::class, 'get_uploaded_files']);
-    Route::post('/aiz-uploader/get_file_by_ids', [AizUploadController::class, 'get_preview_files']);
-    Route::get('/aiz-uploader/download/{id}', [AizUploadController::class, 'attachment_download'])->name('download_attachment');
     // Tracking
     Route::get('/aff{id}', [AffiliateBannerController::class, 'track'])->name('affiliate_banner.track');
     Route::get('/link{id}', [CompanyController::class, 'track_website_clicks'])->name('website_clicks.track');
@@ -117,14 +120,12 @@ Route::middleware([
     Route::resource('shops', 'ShopController');
     Route::resource('ev-social-commerce', 'SocialCommerceController');
 
+    // Auth routes + email verification + password reset
 
-    Auth::routes(['verify' => true]);
-    Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
-    Route::get('/email/resend', [VerificationController::class, 'resend'])->name('email.verification.resend');
-    Route::get('/verification-confirmation/{code}', [VerificationController::class, 'verification_confirmation'])->name('email.verification.confirmation');
-    Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
-    Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
-
+    // Route::get('/email/resend', [VerificationController::class, 'resend'])->name('email.verification.resend');
+    // Route::get('/verification-confirmation/{code}', [VerificationController::class, 'verification_confirmation'])->name('email.verification.confirmation');
+    // Route::get('/email_change/callback', [HomeController::class, 'email_change_callback'])->name('email_change.callback');
+    
 
     Route::post('/language', [LanguageController::class, 'changeLanguage'])->name('language.change');
     Route::post('/currency', [CurrencyController::class, 'changeCurrency'])->name('currency.change');

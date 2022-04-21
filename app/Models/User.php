@@ -79,6 +79,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         'password', 'remember_token',
     ];
 
+    public function isEmailVerified() {
+        return !empty($this->email_verified_at);
+    }
+
     public function isAdmin()
     {
         return $this->user_type === 'admin';

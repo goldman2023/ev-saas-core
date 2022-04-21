@@ -50,6 +50,7 @@ class AppSettingsForm extends Component
                 'settings.feed_enabled.value' => ['boolean'],
                 'settings.multiplan_purchase.value' => ['boolean'],
                 'settings.onboarding_flow.value' => ['boolean'],
+                'settings.force_email_verification.value' => ['boolean'],
                 'settings.register_redirect_url.value' => ['nullable', 'url'],
                 'settings.login_redirect_url.value' => ['nullable', 'url'],
 
