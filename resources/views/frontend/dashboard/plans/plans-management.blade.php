@@ -7,9 +7,6 @@
 @endpush
 
 @section('panel_content')
-@if(auth()->user()->isSubscribed())
-I have a subscription!!
-@endif
 <section>
     <x-dashboard.section-headers.section-header title="{{ translate('Plans Management') }}"
         text="Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.">
@@ -17,6 +14,12 @@ I have a subscription!!
 
         </x-slot>
     </x-dashboard.section-headers.section-header>
+
+    @if(auth()->user()->isSubscribed())
+        <div class="w-full">
+            <livewire:dashboard.tables.plans-table for="me" />
+        </div>
+    @endif
 
     <div class="w-full">
         <div class="grid gap-10 grid-cols-12">

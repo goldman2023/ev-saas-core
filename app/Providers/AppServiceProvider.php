@@ -32,6 +32,19 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->registerCustomValidaionRules();
+
+        \App\Builders\BaseBuilder ::macro('reorder', function ($column = null, $direction = 'asc') {
+            $this->orders = null;
+            $this->unionOrders = null;
+            $this->bindings['order'] = [];
+            $this->bindings['unionOrder'] = [];
+            
+            if ($column) {
+               return $this->orderBy($column, $direction);
+            }
+         
+            return $this;
+         });
     }
 
     /**

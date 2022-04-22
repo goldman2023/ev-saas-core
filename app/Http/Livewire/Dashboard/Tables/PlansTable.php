@@ -82,8 +82,15 @@ class PlansTable extends DataTableComponent
 
     public function query(): Builder
     {
+        if($this->for === 'me') {
+            // dd(Plan::query()->join('user_relationships', 'plans.id', '=', 'user_relationships.subject_id')->get());
+            return Plan::query()
+                    ->join('user_relationships', 'plans.id', '=', 'user_relationships.subject_id')
+                    ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
+                    ->when($this->getFilter('status'), fn ($query, $status) => $query->where('plans.status', $status));
+        }
+
         return Plan::query()
-//            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
             ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
