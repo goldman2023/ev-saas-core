@@ -185,7 +185,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         App\Providers\SocialiteServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        // niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         \Laravel\Passport\PassportServiceProvider::class,
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
@@ -209,7 +209,7 @@ return [
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
         Laravel\Passport\PassportServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
+        // Barryvdh\Snappy\ServiceProvider::class,
 
         Mews\Purifier\PurifierServiceProvider::class,
 
