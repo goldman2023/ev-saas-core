@@ -18,8 +18,10 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
+
+class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat, Auditable
 {
     use Notifiable, HasApiTokens;
     use HasRoles;
@@ -32,7 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use HasWalletFloat;
     use PermalinkTrait;
     use CoreMetaTrait;
-
+    use \OwenIt\Auditing\Auditable;
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean',

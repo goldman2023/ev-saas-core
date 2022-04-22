@@ -8,13 +8,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "cypress:open": "cypress open",
-        "build-total-users": "cd nova-components/TotalUsers && npm run dev",
-        "build-total-users-prod": "cd nova-components/TotalUsers && npm run prod",
-        "build-users": "cd nova-components/Users && npm run dev",
-        "build-users-prod": "cd nova-components/Users && npm run prod",
-        "build-analytics": "cd nova-components/Analytics && npm run dev",
-        "build-analytics-prod": "cd nova-components/Analytics && npm run prod"
+        "cypress:open": "cypress open"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.16.11",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "601637eee4f1f6b4f9810d5cfd9dbb5c",
+    "content-hash": "dfe51e2bfa0450d83e91116db3add9e5",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -1231,6 +1231,54 @@
                 "source": "https://github.com/defuse/php-encryption/tree/v2.3.1"
             },
             "time": "2021-04-09T23:57:26+00:00"
+        },
+        {
+            "name": "devpartners/auditable-log",
+            "version": "v1.0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dev-partners/laravel-nova-auditable-log.git",
+                "reference": "c49736bd5d6806d23cd8555bcee45dbeb0ed6f64"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dev-partners/laravel-nova-auditable-log/zipball/c49736bd5d6806d23cd8555bcee45dbeb0ed6f64",
+                "reference": "c49736bd5d6806d23cd8555bcee45dbeb0ed6f64",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "suggest": {
+                "owen-it/laravel-auditing": "Provides the necessary functionality to audit your Eloquent models"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Devpartners\\AuditableLog\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Devpartners\\AuditableLog\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova resource tool for displaying the Laravel Auditing audit log.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/dev-partners/laravel-nova-auditable-log/issues",
+                "source": "https://github.com/dev-partners/laravel-nova-auditable-log/tree/v1.0.11"
+            },
+            "time": "2022-04-21T16:12:10+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
