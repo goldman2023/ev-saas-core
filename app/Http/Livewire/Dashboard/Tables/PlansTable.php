@@ -20,7 +20,7 @@ class PlansTable extends DataTableComponent
 
     public $for = 'me';
     public ?int $searchFilterDebounce = 800;
-    public string $defaultSortColumn = 'created_at';
+    public string $defaultSortColumn = 'plans.created_at';
     public string $defaultSortDirection = 'desc';
     public bool $columnSelect = true;
     public int $perPage = 10;
@@ -59,6 +59,23 @@ class PlansTable extends DataTableComponent
 
     public function columns(): array
     {
+
+        $columns = [];
+
+        if($this->for == 'me') {
+            return [
+                Column::make('Title')
+                    ->sortable()
+                    ->excludeFromSelectable(),
+                Column::make('Amount', 'amount')
+                    ->excludeFromSelectable(),
+                Column::make('Price', 'price')
+                    ->excludeFromSelectable(),
+                Column::make('Actions')
+                    ->excludeFromSelectable(),
+            ];
+        }
+
         return [
             Column::make('ID')
                 ->sortable()
@@ -83,11 +100,9 @@ class PlansTable extends DataTableComponent
     public function query(): Builder
     {
         if($this->for === 'me') {
-            // dd(Plan::query()->join('user_relationships', 'plans.id', '=', 'user_relationships.subject_id')->get());
-            return Plan::query()
-                    ->join('user_relationships', 'plans.id', '=', 'user_relationships.subject_id')
+            return auth()->user()->plans()->getQuery()
                     ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
-                    ->when($this->getFilter('status'), fn ($query, $status) => $query->where('plans.status', $status));
+                    ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
         }
 
         return Plan::query()
@@ -98,6 +113,11 @@ class PlansTable extends DataTableComponent
 
     public function rowView(): string
     {
+        if($this->for === 'me') {
+            return 'frontend.dashboard.plans.row-me';
+
+        }
+
         return 'frontend.dashboard.plans.row';
     }
 }
