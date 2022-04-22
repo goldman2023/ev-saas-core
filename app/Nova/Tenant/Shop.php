@@ -3,9 +3,14 @@
 namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
+use App\Nova\Tenant\User;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 
@@ -44,13 +49,14 @@ class Shop extends Resource
     {
         return [
 
-            ID::make()->sortable(),
             Text::make('Name'),
-            Text::make('Shop ID'),
+            Text::make('slug'),
+            Text::make('email'),
+            HasMany::make('products'),
+            MorphMany::make('Activity', 'activities'),
+            DateTime::make('Created At')
 
-            // MorphToMany::make(User::class, 'subject')
 
-            // BelongsTo::make('Author', 'author', User::class),
         ];
     }
 
@@ -76,6 +82,8 @@ class Shop extends Resource
         return [];
     }
 
+
+
     /**
      * Get the lenses available for the resource.
      *
@@ -96,5 +104,15 @@ class Shop extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    /**
+     * Determine if the given resource is authorizable.
+     *
+     * @return bool
+     */
+    public static function authorizable()
+    {
+        return false;
     }
 }

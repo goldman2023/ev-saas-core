@@ -11,11 +11,13 @@ use App\Nova\Dashboards\Main;
 use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
-use App\Nova\Tenant\Product;
 use App\Nova\Tenant\Activity;
 use App\Nova\Tenant\Category;
 use App\Nova\Tenant\PaymentMethodUniversal;
 use App\Nova\Tenant\Plan;
+use App\Nova\Tenant\Product;
+use App\Nova\Tenant\ProductVariation;
+use App\Nova\Tenant\ProductVariations;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
 use Illuminate\Support\Facades\Gate;
@@ -142,11 +144,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Wishlist::class,
                 ShopSetting::class,
                 PaymentMethodUniversal::class,
-                Shop::class,
                 Category::class,
                 Plan::class,
                 Translation::class,
+                ProductVariation::class,
                 Product::class,
+                Shop::class,
             ]);
         } else {
             Nova::resources([

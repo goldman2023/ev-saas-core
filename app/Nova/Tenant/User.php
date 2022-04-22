@@ -6,6 +6,7 @@ use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
@@ -63,6 +64,7 @@ class User extends Resource
                 ->updateRules('nullable', 'string', 'min:8'),
 
             MorphToMany::make('Wishlist', 'followers'),
+            MorphMany::make('Activity', 'activities'),
 
             // MorphToMany::make(User::class, 'subject')
         ];

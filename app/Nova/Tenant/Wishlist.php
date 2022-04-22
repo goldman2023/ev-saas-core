@@ -56,8 +56,8 @@ class Wishlist extends Resource
             // Text::make('User ID', 'user_id')
             // ->sortable(),
 
-            BelongsTo::make('User'),
-            MorphTo::make('Subject'),
+            // BelongsTo::make('User'),
+            // MorphTo::make('Subject'),
 
         ];
     }

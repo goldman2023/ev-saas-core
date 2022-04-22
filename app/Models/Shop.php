@@ -11,6 +11,7 @@ use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\SlugOptions;
 
 /**
@@ -57,6 +58,7 @@ class Shop extends EVBaseModel
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
+    use LogsActivity;
     use PermalinkTrait;
 
     protected $table = 'shops';
