@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class FlashDeal extends Model
 {
-    use Cachable;
+    // use Cachable;
     use SoftDeletes;
 
     public function getTranslation($field = '', $lang = false)

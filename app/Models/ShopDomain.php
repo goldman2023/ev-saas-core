@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 
 class ShopDomain extends Model
 {
-    use Cachable;
+    // use Cachable;
     use Notifiable;
 
     protected $table = 'shop_domains';

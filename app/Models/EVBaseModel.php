@@ -6,6 +6,8 @@ use App\Builders\BaseBuilder;
 use App\Traits\Eloquent\Base\Model\hasCoreProperties;
 use Illuminate\Database\Eloquent\Model;
 use Str;
+use Spatie\Activitylog\LogOptions;
+
 
 class EVBaseModel extends Model
 {
@@ -192,5 +194,12 @@ class EVBaseModel extends Model
     public function scopeNoEagerLoads($query)
     {
         return $query->setEagerLoads([]);
+    }
+
+
+    /* Default Log */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
     }
 }

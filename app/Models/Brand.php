@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Brand extends EVBaseModel
 {
-    use Cachable;
+    // use Cachable;
     use GalleryTrait;
 
     protected static function boot()

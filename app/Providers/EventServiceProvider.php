@@ -48,16 +48,6 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected array $observers = [
-        TenantSetting::class => [TenantSettingsObserver::class],
-        Product::class => [ProductsObserver::class],
-        ProductVariation::class => [ProductVariationsObserver::class],
-        ProductStock::class => [ProductStocksObserver::class],
-        SerialNumber::class => [SerialNumbersObserver::class],
-        CategoryRelationship::class => [CategoryRelationshipsObserver::class],
-        Attribute::class => [AttributeObserver::class],
-        AttributeValue::class => [AttributeValuesObserver::class],
-    ];
 
     /**
      * Register any events for your application.

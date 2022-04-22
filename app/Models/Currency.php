@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Currency extends Model
 {
-    use Cachable;
+    // use Cachable;
 
     protected $fillable = ['name', 'symbol', 'status', 'code', 'created_at', 'updated_at'];
 

@@ -11,6 +11,7 @@ use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
@@ -48,10 +49,10 @@ Route::middleware([
     /* TODO: Make this dashboard group for routes, to prefix for /orders /products etc, to be /dashboard/products / dashboard/orders/ ... */
 
     Route::middleware('auth')->prefix('dashboard')->group(function () {
-        Route::get('/', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
+        Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
 
         /* Leads Management - BY EIM */
-        Route::get('leads/success', [App\Http\Controllers\LeadController::class, 'success'])->name('leads.success');
+        Route::get('leads/success', [\App\Http\Controllers\LeadController::class, 'success'])->name('leads.success');
         Route::resource('leads', 'LeadController');
 
         Route::get('/ev-activity', [ActivityController::class, 'index_frontend'])->name('activity.index');
