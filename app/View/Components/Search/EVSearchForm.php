@@ -6,7 +6,6 @@ use Illuminate\View\Component;
 
 class EVSearchForm extends Component
 {
-
     /**
      * Create a new component instance.
      *

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RefactorWishlistForGuestsWishlistsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -33,4 +32,4 @@ class RefactorWishlistForGuestsWishlistsTable extends Migration
             $table->renameColumn('guest_id', 'session_id');
         });
     }
-}
+};

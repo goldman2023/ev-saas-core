@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use Auth;
 use App\Models\TenantSetting;
+use Auth;
+use Closure;
 
 class CheckoutMiddleware
 {
@@ -18,15 +18,14 @@ class CheckoutMiddleware
     public function handle($request, Closure $next)
     {
         if (get_setting('guest_checkout_active') != 1) {
-            if(Auth::check()){
+            if (Auth::check()) {
                 return $next($request);
-            }
-            else {
+            } else {
                 session(['link' => url()->current()]);
+
                 return redirect()->route('business.login');
             }
-        }
-        else{
+        } else {
             return $next($request);
         }
     }

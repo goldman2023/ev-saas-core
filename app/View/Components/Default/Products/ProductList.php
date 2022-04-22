@@ -1,23 +1,25 @@
 <?php
 
 namespace App\View\Components\Default\Products;
-use App\Models\Product;
 
+use App\Models\Product;
 use Illuminate\View\Component;
 
 class ProductList extends Component
 {
     public $products;
-    public $items;
-    public bool $slider;
-    public $sliderOptions;
-    public $style = 'product-list'; // Available styles: products-list/ top-products-slider / products-slider
 
+    public $items;
+
+    public bool $slider;
+
+    public $sliderOptions;
+
+    public $style = 'product-list'; // Available styles: products-list/ top-products-slider / products-slider
 
     public function __construct($items = 8, $slider = false, $products = null, $style = 'product-list')
     {
-
-        $this->products = !empty($products) ? $products : Product::orderBy('created_at')->fromCache()->paginate($items);
+        $this->products = ! empty($products) ? $products : Product::orderBy('created_at')->fromCache()->paginate($items);
         $this->slider = $slider;
         $this->style = $style;
     }
@@ -29,6 +31,6 @@ class ProductList extends Component
      */
     public function render()
     {
-        return view('components.default.products.product-list.' . $this->style);
+        return view('components.default.products.product-list.'.$this->style);
     }
 }

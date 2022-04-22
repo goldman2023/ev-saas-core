@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubscriptionItemsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +12,7 @@ class CreateSubscriptionItemsTable extends Migration
      */
     public function up()
     {
-        if(!Schema::hasTable('subscription_items')) {
+        if (! Schema::hasTable('subscription_items')) {
             Schema::create('subscription_items', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('subscription_id');
@@ -24,8 +23,7 @@ class CreateSubscriptionItemsTable extends Migration
 
                 $table->unique(['subscription_id', 'stripe_plan']);
             });
-        };
-
+        }
     }
 
     /**
@@ -37,4 +35,4 @@ class CreateSubscriptionItemsTable extends Migration
     {
         Schema::dropIfExists('subscription_items');
     }
-}
+};

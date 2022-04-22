@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class ProductTaxesTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,11 +13,8 @@ class ProductTaxesTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('product_taxes')->count() == 0) {
             \DB::table('product_taxes')->delete();
-
         }
-
     }
 }

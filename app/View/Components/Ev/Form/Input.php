@@ -7,24 +7,43 @@ use Illuminate\View\Component;
 class Input extends Component
 {
     public $x;
+
     public $class;
+
     public $id;
+
     public $name;
+
     public $value;
+
     public $label;
+
     public $type;
+
     public $required;
+
     public $placeholder;
+
     public $placement;
+
     public $icon;
+
     public $text;
+
     public $merge;
+
     public $groupclass;
+
     public $errorBagName;
+
     public $valueProperty;
+
     public $labelProperty;
+
     public $wireType;
+
     public $quantityCounter;
+
     public $disabled;
 
     /**
@@ -32,7 +51,7 @@ class Input extends Component
      *
      * @return void
      */
-    public function __construct($x = false, $type = 'text', $quantityCounter = false, $name = '', $label = '', $value = '', $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $groupclass = '', $id = '', $placeholder = '', $placement = 'prepend', $icon = null, $text = null, $merge = false, $errorBagName = null, $wireType = 'defer', $disabled = false)
+    public function __construct($x = false, $type = 'text', $quantityCounter = false, $name = '', $label = '', $value = '', $valueProperty = null, $labelProperty = null, $required = false, $class = '', $groupclass = '', $id = '', $placeholder = '', $placement = 'prepend', $icon = null, $text = null, $merge = false, $errorBagName = null, $wireType = 'defer', $disabled = false)
     {
         $this->x = $x;
         $this->type = $type;
@@ -56,7 +75,6 @@ class Input extends Component
         $this->errorBagName = $errorBagName ?: $name;
     }
 
-
     /**
      * Get the view / contents that represent the component.
      *
@@ -64,7 +82,7 @@ class Input extends Component
      */
     public function render()
     {
-        if($this->x) {
+        if ($this->x) {
             return view('components.ev.form.alpine.input');
         }
 

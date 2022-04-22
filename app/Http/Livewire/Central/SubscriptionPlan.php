@@ -11,7 +11,9 @@ use Livewire\Component;
 class SubscriptionPlan extends Component
 {
     public $plan = '';
+
     public $success = '';
+
     public $error = '';
 
     protected $listeners = ['billingUpdated' => '$refresh'];

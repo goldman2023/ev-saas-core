@@ -3,6 +3,7 @@
 namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
+use Comodolab\Nova\Fields\Help\Help;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasOne;
@@ -11,7 +12,6 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Comodolab\Nova\Fields\Help\Help;
 
 class Category extends Resource
 {
@@ -52,7 +52,7 @@ class Category extends Resource
             Text::make('Name'),
             // Textarea::make('Content'),
 
-            HasOne::make('Parent', 'parent', Category::class),
+            HasOne::make('Parent', 'parent', self::class),
 
             Number::make('Commision Rate'),
 

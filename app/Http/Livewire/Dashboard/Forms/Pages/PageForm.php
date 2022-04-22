@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Pages;
 
-use App\Enums\StatusEnum;
 use App\Enums\AmountPercentTypeEnum;
+use App\Enums\StatusEnum;
 use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\Category;
@@ -11,16 +11,16 @@ use App\Models\Page;
 use App\Models\ShopAddress;
 use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use FX;
 use Illuminate\Validation\Rule;
-use Purifier;
-use Permissions;
-use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
+use Permissions;
+use Purifier;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class PageForm extends Component
 {
@@ -28,6 +28,7 @@ class PageForm extends Component
     use DispatchSupport;
 
     public $page;
+
     public $is_update;
 
     /**
@@ -36,15 +37,14 @@ class PageForm extends Component
      * @return void
      */
     public function mount($page = null)
-    { 
+    {
         $this->page = empty($page) ? new Page() : $page;
-        $this->is_update = isset($this->page->id) && !empty($this->page->id);
-        
-        if(!$this->is_update) {
+        $this->is_update = isset($this->page->id) && ! empty($this->page->id);
+
+        if (! $this->is_update) {
             // If insert
             $this->page->status = StatusEnum::draft()->value;
         }
-        
     }
 
     protected function rules()
@@ -57,7 +57,6 @@ class PageForm extends Component
         ];
     }
 
-
     protected function messages()
     {
         return [];
@@ -68,7 +67,8 @@ class PageForm extends Component
         $this->dispatchBrowserEvent('init-form');
     }
 
-    public function savePage() {
+    public function savePage()
+    {
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -82,13 +82,14 @@ class PageForm extends Component
 
             $this->inform(translate('Page saved successfully!'), '', 'success');
 
-            $this->emit('refreshPagesAndOpenNewPage', $this->page->id); // 
-        } catch(\Exception $e) {
+            $this->emit('refreshPagesAndOpenNewPage', $this->page->id); //
+        } catch (\Exception $e) {
             $this->inform(translate('There was an error while saving a page...Please try again.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function removePage() {
+    public function removePage()
+    {
 //        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
 //        $address->remove();
     }

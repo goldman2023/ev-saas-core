@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use App;
 use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * App\Models\Brand
@@ -29,12 +29,10 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Brand whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-
 class Brand extends EVBaseModel
 {
     use Cachable;
     use GalleryTrait;
-
 
     protected static function boot()
     {

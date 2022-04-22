@@ -6,7 +6,7 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
-     /**
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool

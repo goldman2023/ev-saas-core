@@ -7,27 +7,30 @@ use Categories;
 trait HasCategories
 {
     public $categories;
+
     public $selected_categories;
 
-    public function initCategories(&$model = null) {
+    public function initCategories(&$model = null)
+    {
         $this->categories = Categories::getAll();
 
-        if(!empty($model)) {
+        if (! empty($model)) {
             $this->selected_categories = $model->selected_categories('slug_path');
         } else {
             $this->selected_categories = collect([]);
         }
     }
 
-    protected function setCategories(&$model = null) {
-        if(!empty($this->selected_categories) && !empty($model)) {
+    protected function setCategories(&$model = null)
+    {
+        if (! empty($this->selected_categories) && ! empty($model)) {
             $categories_idx = collect([]);
 
-            foreach($this->selected_categories as $selected) {
+            foreach ($this->selected_categories as $selected) {
                 // $selected is a slug_path of the category
                 $cat = Categories::getBySlugPath($selected);
 
-                if($cat) {
+                if ($cat) {
                     $categories_idx->push($cat['id']);
                 }
             }
@@ -36,13 +39,14 @@ trait HasCategories
         }
     }
 
-    public function levelSelectedCategories() {
+    public function levelSelectedCategories()
+    {
         $data = [];
 
-        if($this->selected_categories) {
-            foreach($this->selected_categories as $selected) {
+        if ($this->selected_categories) {
+            foreach ($this->selected_categories as $selected) {
                 $level = count(explode('.', $selected)) - 1;
-                if(!isset($data[$level])) {
+                if (! isset($data[$level])) {
                     $data[$level] = [];
                 }
 

@@ -12,13 +12,15 @@ class PromoBanner extends Component
      * @return void
      */
     public $heading;
+
     public $buttonText;
+
     public $imageSource;
+
     public $body;
 
     public function __construct($heading, $body, $buttonText, $imageSource)
     {
-
         $this->heading = $heading;
         $this->buttonText = $buttonText;
         $this->imageSource = $imageSource;
@@ -32,7 +34,6 @@ class PromoBanner extends Component
      */
     public function render()
     {
-
         return view('components.promo-banner');
     }
 }

@@ -8,10 +8,13 @@ use Livewire\Component;
 class Review extends Component
 {
     public Product $product;
+
     public $product_id;
+
     public $reviews;
 
     protected $listeners = ['review-stored' => '$refresh'];
+
     /**
      * Create a new component instance.
      *
@@ -28,10 +31,12 @@ class Review extends Component
     public function render()
     {
         $this->reviews = Product::find($this->product_id)->reviews;
+
         return view('livewire.tenant.product.review');
     }
 
-    public function getProductReview() {
+    public function getProductReview()
+    {
         $this->reviews = Product::find($this->product_id)->reviews;
     }
 }

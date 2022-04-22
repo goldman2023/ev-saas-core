@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlogPostRelationshipsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -20,7 +19,7 @@ class CreateBlogPostRelationshipsTable extends Migration
             $table->string('subject_type');
             $table->timestamps();
 
-            $table->index(['subject_id','subject_type']);
+            $table->index(['subject_id', 'subject_type']);
             $table->foreign('blog_post_id')->references('id')->on('blog_posts')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -34,4 +33,4 @@ class CreateBlogPostRelationshipsTable extends Migration
     {
         Schema::dropIfExists('blog_post_relationships');
     }
-}
+};

@@ -7,9 +7,13 @@ use Illuminate\View\Component;
 class SocialLoginButtons extends Component
 {
     public $enabled;
+
     public $fb_enabled;
+
     public $google_enabled;
+
     public $linkedin_enabled;
+
     public $class;
 
     /**

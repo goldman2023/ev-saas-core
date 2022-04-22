@@ -3,8 +3,8 @@
 namespace App\Models\Central;
 
 use App\Exceptions\DomainCannotBeChangedException;
-use Stancl\Tenancy\Database\Models\Domain as BaseDomain;
 use Illuminate\Support\Str;
+use Stancl\Tenancy\Database\Models\Domain as BaseDomain;
 
 /**
  * @property int $id
@@ -46,7 +46,7 @@ class Domain extends BaseDomain
 
     public static function domainFromSubdomain(string $subdomain): string
     {
-        return $subdomain . '.' . config('tenancy.central_domains')[0];
+        return $subdomain.'.'.config('tenancy.central_domains')[0];
     }
 
     public function makePrimary(): self

@@ -7,13 +7,13 @@ use App\Models\Address;
 use App\Models\Category;
 use App\Models\ShopAddress;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
+use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
 
 class CategoryForm extends Component
 {
@@ -49,7 +49,6 @@ class CategoryForm extends Component
         ];
     }
 
-
     protected function messages()
     {
         return [
@@ -69,9 +68,9 @@ class CategoryForm extends Component
     }
 
 //    public function updatingCategory(&$category) {
-////        if(!($category instanceof Category) && is_array($category)) {
-////            $category = (new Category())->forceFill($category);
-////        }
+    ////        if(!($category instanceof Category) && is_array($category)) {
+    ////            $category = (new Category())->forceFill($category);
+    ////        }
 //    }
 
     public function render()
@@ -79,8 +78,9 @@ class CategoryForm extends Component
         return view('livewire.dashboard.forms.categories.category-form');
     }
 
-    public function saveCategory() {
-        $is_update = isset($this->category->id) && !empty($this->category->id);
+    public function saveCategory()
+    {
+        $is_update = isset($this->category->id) && ! empty($this->category->id);
 
         try {
             $this->validate();
@@ -92,11 +92,11 @@ class CategoryForm extends Component
         DB::beginTransaction();
 
         try {
-            if(empty($this->category->parent_id)) {
+            if (empty($this->category->parent_id)) {
                 $this->category->parent_id = null;
             }
             $this->category->level = \Categories::getCategoryLevel($this->category);
-            if(empty($this->category->featured)) {
+            if (empty($this->category->featured)) {
                 $this->category->featured = false;
             }
             $this->category->save();
@@ -106,26 +106,26 @@ class CategoryForm extends Component
 
             Categories::clearCache(); // clear cache after category is added/updated
 
-            if($is_update) {
+            if ($is_update) {
                 $this->inform('Category successfully updated!', '', 'success');
             } else {
                 $this->inform('Category successfully created!', '', 'success');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
-            if($is_update) {
+            if ($is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a category...Please try again.'));
                 $this->inform('There was an error while updating a category...Please try again.', '', 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a category...Please try again.'));
                 $this->inform('There was an error while creating a category...Please try again.', '', 'fail');
             }
-
         }
     }
 
-    public function removeCategory() {
+    public function removeCategory()
+    {
 //        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
 //        $address->remove();
     }

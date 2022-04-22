@@ -2,24 +2,27 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Settings;
 
+use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
-use App\Traits\Livewire\DispatchSupport;
 
 class ThemeSelectForm extends Component
 {
     use DispatchSupport;
 
     public $themes;
+
     public $currentTheme;
+
     public $theme;
+
     public $domain;
-    
+
     protected function rules()
     {
-       return [
-           'theme' => ['required', Rule::in(array_values(array_diff(scandir(base_path().'/themes'), array('..', '.'))))]
-       ];
+        return [
+            'theme' => ['required', Rule::in(array_values(array_diff(scandir(base_path().'/themes'), ['..', '.'])))],
+        ];
     }
 
     protected function messages()
@@ -29,7 +32,7 @@ class ThemeSelectForm extends Component
             'theme.in' => translate('Theme must be one of the available themes in dropdown.'),
         ];
     }
-    
+
     /**
      * Mount a new component instance.
      *
@@ -40,12 +43,13 @@ class ThemeSelectForm extends Component
         $this->domain = tenant()->domains()->first();
         $this->currentTheme = $this->domain->theme;
         $this->theme = $this->domain->theme;
-        $this->themes = collect(array_values(array_diff(scandir(base_path().'/themes'), array('..', '.'))))->keyBy(function ($item) {
+        $this->themes = collect(array_values(array_diff(scandir(base_path().'/themes'), ['..', '.'])))->keyBy(function ($item) {
             return $item;
         })->toArray();
     }
 
-    public function saveTheme() {
+    public function saveTheme()
+    {
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -60,9 +64,9 @@ class ThemeSelectForm extends Component
             $this->currentTheme = $this->theme;
 
             $this->inform(translate('Application theme successfully changed!'), '', 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->inform(translate('Could not change app theme.'), $e->getMessage(), 'fail');
-        }    
+        }
     }
 
     /**

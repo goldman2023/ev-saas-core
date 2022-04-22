@@ -4,7 +4,6 @@
 // this import. This is nice for IDE syntax and refactoring.
 use App\Models\Category;
 use Diglactic\Breadcrumbs\Breadcrumbs;
-
 // This import is also not required, and you could replace `BreadcrumbTrail $trail`
 //  with `$trail`. This is nice for IDE type checking and completion.
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
@@ -20,7 +19,7 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, Category $categor
 
     $ancestors = $category->ancestors;
 
-    if(!empty($ancestors)) {
+    if (! empty($ancestors)) {
         foreach ($ancestors as $ancestor) {
             $trail->push($ancestor->name, $ancestor->getPermalink($content_type));
         }

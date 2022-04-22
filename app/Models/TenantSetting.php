@@ -33,20 +33,21 @@ class TenantSetting extends Model
 
     protected $fillable = ['setting', 'value'];
 
-    public function getValueAttribute($value) {
-        if(is_array($value)) {
+    public function getValueAttribute($value)
+    {
+        if (is_array($value)) {
             return $value;
-        } else if(is_string($value)) {
+        } elseif (is_string($value)) {
             $decoded = json_decode($value, true);
 
-            if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
                 return $decoded;
             }
-        } else if(ctype_digit($value)) {
+        } elseif (ctype_digit($value)) {
             $int = (int) $value;
             $float = (float) $value;
 
-            if($int == $float) {
+            if ($int == $float) {
                 return $int;
             }
 

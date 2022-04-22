@@ -6,27 +6,29 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Rules\UniqueSKU;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
 
 class PaymentMethodForm extends Component
 {
     use RulesSets;
 
     public $payment_method;
+
     public $type;
+
     public $class;
 
     protected function rules()
     {
         return [
-            'payment_method.*' => []
+            'payment_method.*' => [],
         ];
     }
 

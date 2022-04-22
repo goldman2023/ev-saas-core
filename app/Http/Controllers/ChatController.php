@@ -8,7 +8,8 @@ class ChatController extends Controller
 {
     //
 
-    public function index() {
+    public function index()
+    {
         return view('frontend.chat.index');
     }
 }

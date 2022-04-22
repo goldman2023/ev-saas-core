@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class NewsCard extends Component
 {
     public $item;
+
     /**
      * Create a new component instance.
      *

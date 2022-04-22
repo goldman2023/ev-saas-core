@@ -6,13 +6,20 @@ use Illuminate\View\Component;
 
 class Select extends Component
 {
-    public $items; 
+    public $items;
+
     public $selected;
+
     public $field;
+
     public $placeholder;
+
     public $nullable;
+
     public $search;
+
     public $selectorClass;
+
     public $hideError = false;
 
     /**

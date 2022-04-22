@@ -8,8 +8,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWalletsTable extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::dropIfExists($this->table());
@@ -33,8 +32,7 @@ class CreateWalletsTable extends Migration
             $table->foreign('wallet_id')
                 ->references('id')
                 ->on($this->table())
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
         });
     }
 
@@ -53,4 +51,4 @@ class CreateWalletsTable extends Migration
     {
         return (new Transaction())->getTable();
     }
-}
+};

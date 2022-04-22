@@ -6,8 +6,8 @@ use Illuminate\View\Component;
 
 class VerifiedCompanyBadge extends Component
 {
-
     public $company;
+
     /**
      * Create a new component instance.
      *

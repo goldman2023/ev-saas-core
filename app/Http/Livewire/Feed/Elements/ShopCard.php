@@ -6,9 +6,10 @@ use Livewire\Component;
 
 class ShopCard extends Component
 {
-
     public $shop;
-    public function mount($shop) {
+
+    public function mount($shop)
+    {
         $this->shop = $shop;
     }
 

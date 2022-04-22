@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIndiciesToWishlistTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -19,7 +18,7 @@ class AddIndiciesToWishlistTable extends Migration
 
             /* TODO: set this to nullable and enable foreign key then, right now guests have user_id 0 and this migration breaks */
             // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->index(['subject_id','subject_type']);
+            $table->index(['subject_id', 'subject_type']);
         });
     }
 
@@ -37,4 +36,4 @@ class AddIndiciesToWishlistTable extends Migration
             $table->string('user_id')->nullable(true)->change();
         });
     }
-}
+};

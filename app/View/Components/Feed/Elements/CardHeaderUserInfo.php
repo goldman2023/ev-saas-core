@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class CardHeaderUserInfo extends Component
 {
     public $item;
+
     public $user;
+
     /**
      * Create a new component instance.
      *

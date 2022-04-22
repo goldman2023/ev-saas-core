@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductVariationsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -49,17 +48,15 @@ class CreateProductVariationsTable extends Migration
             });
         }
 
-
-
         Schema::table('product_stocks', function (Blueprint $table) {
             if (Schema::hasColumn('product_stocks', 'variation_id')) {
                 $table->dropColumn('variation_id');
             }
-            if (Schema::hasColumn('product_stocks', 'product_id') && !Schema::hasColumn('product_stocks', 'subject_id')) {
+            if (Schema::hasColumn('product_stocks', 'product_id') && ! Schema::hasColumn('product_stocks', 'subject_id')) {
                 $table->renameColumn('product_id', 'subject_id');
             }
 
-            if (Schema::hasColumn('product_stocks', 'variant') && !Schema::hasColumn('product_stocks', 'subject_type')) {
+            if (Schema::hasColumn('product_stocks', 'variant') && ! Schema::hasColumn('product_stocks', 'subject_type')) {
                 $table->renameColumn('variant', 'subject_type');
             }
         });
@@ -80,4 +77,4 @@ class CreateProductVariationsTable extends Migration
             $table->renameColumn('subject_type', 'variant');
         });
     }
-}
+};

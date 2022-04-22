@@ -7,11 +7,17 @@ use Illuminate\View\Component;
 class EmptyStateCard extends Component
 {
     public $title;
+
     public $text;
+
     public $routeOwner;
+
     public $route;
+
     public $ctaText;
+
     public $ctaTextOwner;
+
     /**
      * Create a new component instance.
      *

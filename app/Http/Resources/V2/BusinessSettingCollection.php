@@ -4,17 +4,17 @@ namespace App\Http\Resources\V2;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class TenantSettingCollection extends ResourceCollection
+class BusinessSettingCollection extends ResourceCollection
 {
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'type' => $data->type,
-                    'value' => $data->type == 'verification_form' ? json_decode($data->value) : $data->value
+                    'value' => $data->type == 'verification_form' ? json_decode($data->value) : $data->value,
                 ];
-            })
+            }),
         ];
     }
 
@@ -22,7 +22,7 @@ class TenantSettingCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

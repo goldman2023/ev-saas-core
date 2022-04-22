@@ -8,11 +8,11 @@ class SocialAccount extends Model
 {
     protected $table = 'social_accounts';
 
-    protected $fillable = ['id', 'user_id', 'provider', 'connected', 'data', 'created_at', 'updated_at',];
+    protected $fillable = ['id', 'user_id', 'provider', 'connected', 'data', 'created_at', 'updated_at'];
 
     protected $casts = [
         'data' => 'array',
-        'connected' => 'boolean'
+        'connected' => 'boolean',
     ];
 
     public static $available_providers = [
@@ -21,14 +21,16 @@ class SocialAccount extends Model
         'twitter' => 'Twitter',
         'linkedin' => 'LinkedIn',
         'github' => 'Github',
-        'pinterest' => 'Pinterest'
+        'pinterest' => 'Pinterest',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function getAvailableProviders() {
+    public function getAvailableProviders()
+    {
         return self::$available_providers;
     }
 }

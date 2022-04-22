@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Http\Services\SocialiteManagerExtended;
-use Laravel\Socialite\Contracts\Factory;
 use Illuminate\Container\Container;
+use Laravel\Socialite\Contracts\Factory;
 
 class SocialiteServiceProvider extends \Laravel\Socialite\SocialiteServiceProvider
 {
@@ -19,5 +19,4 @@ class SocialiteServiceProvider extends \Laravel\Socialite\SocialiteServiceProvid
             return new SocialiteManagerExtended(fn () => Container:: getInstance());
         });
     }
-
 }

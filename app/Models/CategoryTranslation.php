@@ -8,7 +8,8 @@ class CategoryTranslation extends Model
 {
     protected $fillable = ['category_id', 'name', 'lang', 'meta_title', 'meta_description'];
 
-    public function category() {
-    	return $this->belongsTo(Category::class);
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

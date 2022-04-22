@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             DB::table('users')->insert([
                 'id' => 1,
                 'user_type' => 'admin',
-                'name' => "EIM Solutions",
+                'name' => 'EIM Solutions',
                 'email' => 'team@eim.solutions',
                 'password' => Hash::make('123456'),
                 'email_verified_at' => '2021-06-01 15:35:41',
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             DB::table('users')->insert([
                 'id' => 2,
                 'user_type' => 'seller',
-                'name' => "Mr Seller",
+                'name' => 'Mr Seller',
                 'email' => 'seller@eim.solutions',
                 'password' => Hash::make('123456'),
                 'email_verified_at' => '2021-06-01 15:35:41',
@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
             DB::table('users')->insert([
                 'id' => 3,
                 'user_type' => 'customer',
-                'name' => "Mr Customer",
+                'name' => 'Mr Customer',
                 'email' => 'customer@eim.solutions',
                 'password' => Hash::make('123456'),
                 'email_verified_at' => '2021-06-01 15:35:41',

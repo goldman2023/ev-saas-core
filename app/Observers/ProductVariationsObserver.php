@@ -25,7 +25,6 @@ class ProductVariationsObserver
     public function saved(ProductVariation $product_variation)
     {
         // TODO: When ProductVariation is saved, clear the parent Product cache
-
     }
 
     /**
@@ -39,7 +38,7 @@ class ProductVariationsObserver
         // Remove variation stock when variation is deleted!
         $stock = $product_variation->stock()->first();
 
-        if($stock) {
+        if ($stock) {
             $stock->delete(); // soft delete
         }
     }
@@ -56,7 +55,7 @@ class ProductVariationsObserver
         // Remove variation stock when variation is deleted!
         $stock = $product_variation->stock->first();
 
-        if($stock) {
+        if ($stock) {
             $stock->forceDelete(); // full delete
         }
 
@@ -65,6 +64,5 @@ class ProductVariationsObserver
 
         // Remove Translation
         // TODO: Change ProductTranslations table to include foreign key on product_id and index!!!
-
     }
 }

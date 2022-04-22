@@ -6,8 +6,8 @@ use Illuminate\View\Component;
 
 class BrandsList extends Component
 {
-
     public $brands;
+
     /**
      * Create a new component instance.
      *

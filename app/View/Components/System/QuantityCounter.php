@@ -7,10 +7,15 @@ use Illuminate\View\Component;
 class QuantityCounter extends Component
 {
     public $id;
+
     public $wired;
+
     public $mini;
+
     public $model;
+
     public $disabled;
+
     public $class;
 
     /**
@@ -18,13 +23,13 @@ class QuantityCounter extends Component
      *
      * @return void
      */
-    public function __construct($model = null, $id = null, $wired = false, $mini = false, $class = "")
+    public function __construct($model = null, $id = null, $wired = false, $mini = false, $class = '')
     {
         $this->id = $id;
         $this->model = $model;
         $this->wired = $wired;
         $this->mini = $mini;
-        $this->disabled = !$model->isInStock() && !$model->allow_out_of_stock_purchases;
+        $this->disabled = ! $model->isInStock() && ! $model->allow_out_of_stock_purchases;
         $this->class = $class;
     }
 

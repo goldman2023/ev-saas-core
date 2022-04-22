@@ -7,7 +7,7 @@ use Closure;
 trait IsPaymentMethod
 {
     public static $available_gateways = ['wire_transfer', 'paypal', 'stripe', 'paysera'];
-   
+
     /**
      * Boot the trait
      *
@@ -18,7 +18,7 @@ trait IsPaymentMethod
         // When model data is retrieved/hydrated, populate gateway data properties!
         static::retrieved(function ($model): void {
             // Initiate dynamic properties values
-            $model->dynamicPaymentMethodPropertiesWalker(function($property) use (&$model) {
+            $model->dynamicPaymentMethodPropertiesWalker(function ($property) use (&$model) {
                 $model->appendCoreProperties([$property['property_name']]);
                 $model->append([$property['property_name']]);
                 $model->fillable(array_unique(array_merge($model->fillable, [$property['property_name']])));
@@ -29,15 +29,15 @@ trait IsPaymentMethod
 
         static::saving(function ($model) {
             // Save dynamic properties to Data
-            $model->dynamicPaymentMethodPropertiesWalker(function($property) use (&$model) {
+            $model->dynamicPaymentMethodPropertiesWalker(function ($property) use (&$model) {
                 $data = $model->data;
-                
-                 if(is_object($data)) {
+
+                if (is_object($data)) {
                     $data->{$property['property_name']} = $model->{$property['property_name']} ?? null;
-                 } else if(is_array($data)) {
+                } elseif (is_array($data)) {
                     $data[$property['property_name']] = $model[$property['property_name']] ?? null;
-                 }
-                
+                }
+
                 $model->data = $data;
             });
         });
@@ -53,10 +53,11 @@ trait IsPaymentMethod
      *
      * @param ?Closure $callback
      */
-    protected function dynamicPaymentMethodPropertiesWalker(?Closure $callback = null): void {
+    protected function dynamicPaymentMethodPropertiesWalker(?Closure $callback = null): void
+    {
         $dynamic_properties = $this->getDynamicModelPaymentMethodProperties();
 
-        if(in_array($this->gateway, self::$available_gateways, true)) {
+        if (in_array($this->gateway, self::$available_gateways, true)) {
             foreach ($dynamic_properties as $property) {
                 $callback($property);
             }
@@ -65,7 +66,7 @@ trait IsPaymentMethod
 
     public function getDynamicModelPaymentMethodProperties(): array
     {
-       if($this->gateway === 'wire_transfer') {
+        if ($this->gateway === 'wire_transfer') {
             // TODO: Support multiple bank accounts!
             return [
                 [
@@ -74,50 +75,50 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('Bank account name is required'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'bank_account_number',
                     'value' => $this->data->bank_account_number ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Bank account number is required')
-                    ]
+                        'required' => translate('Bank account number is required'),
+                    ],
                 ],
                 [
                     'property_name' => 'bank_name',
                     'value' => $this->data->bank_name ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Bank name is required')
-                    ]
+                        'required' => translate('Bank name is required'),
+                    ],
                 ],
                 [
                     'property_name' => 'bank_sort_code',
                     'value' => $this->data->bank_sort_code ?? '',
                     'rules' => [],
                     'messages' => [
-//                        'required' => translate('Bank sort code is required')
-                    ]
+                        //                        'required' => translate('Bank sort code is required')
+                    ],
                 ],
                 [
                     'property_name' => 'iban',
                     'value' => $this->data->iban ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('IBAN is required')
-                    ]
+                        'required' => translate('IBAN is required'),
+                    ],
                 ],
                 [
                     'property_name' => 'bank_swift',
                     'value' => $this->data->bank_swift ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Swift is required')
-                    ]
-                ]
+                        'required' => translate('Swift is required'),
+                    ],
+                ],
             ];
-        } else if($this->gateway === 'paypal') {
+        } elseif ($this->gateway === 'paypal') {
             return [
                 [
                     'property_name' => 'paypal_email',
@@ -157,7 +158,7 @@ trait IsPaymentMethod
                     'value' => $this->data->paypal_invoice_prefix ?? '',
                     'rules' => ['sometimes', 'min:1'],
                     'messages' => [
-                        'min' => translate('Minimum characters for invoice prefix must be 1')
+                        'min' => translate('Minimum characters for invoice prefix must be 1'),
                     ],
                 ],
                 [
@@ -191,7 +192,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('API username is required'),
-                    ]
+                    ],
                 ],
 
                 [
@@ -200,7 +201,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('API pasword is required'),
-                    ]
+                    ],
                 ],
 
                 [
@@ -209,10 +210,10 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('API signature is required'),
-                    ]
+                    ],
                 ],
             ];
-        } else if($this->gateway === 'stripe') {
+        } elseif ($this->gateway === 'stripe') {
             return [
                 [
                     'property_name' => 'stripe_mode',
@@ -220,7 +221,7 @@ trait IsPaymentMethod
                     'rules' => ['required', 'in:live,test'],
                     'messages' => [
                         'required' => translate('Stripe mode must be either test or live'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_checkout_enabled',
@@ -228,7 +229,7 @@ trait IsPaymentMethod
                     'rules' => ['boolean'],
                     'messages' => [
                         'boolean' => translate('Stripe checkout should either be enabled or disabled'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_pk_test_key',
@@ -236,7 +237,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('Stripe test publishable key is required in order to use Stripe gateway'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_sk_test_key',
@@ -244,7 +245,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('Stripe test secret key is required in order to use Stripe gateway'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_pk_live_key',
@@ -252,7 +253,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('Stripe live publishable key is required in order to use Stripe gateway'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_sk_live_key',
@@ -260,7 +261,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('Stripe live secret key is required in order to use Stripe gateway'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_webhook_secret',
@@ -268,7 +269,7 @@ trait IsPaymentMethod
                     'rules' => ['required'],
                     'messages' => [
                         'required' => translate('Stripe webhook endpoint secret key is required in order to use Stripe Webhooks'),
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_statement_descriptor',
@@ -276,7 +277,7 @@ trait IsPaymentMethod
                     'rules' => [],
                     'messages' => [
 
-                    ]
+                    ],
                 ],
                 [
                     'property_name' => 'stripe_inline_credit_card_form',
@@ -311,14 +312,14 @@ trait IsPaymentMethod
                     ],
                 ],
             ];
-        } else if($this->gateway === 'paysera') {
+        } elseif ($this->gateway === 'paysera') {
             return [
                 [
                     'property_name' => 'paysera_project_id',
                     'value' => $this->data->paysera_project_id ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Paysera project ID is required')
+                        'required' => translate('Paysera project ID is required'),
                     ],
                 ],
                 [
@@ -326,7 +327,7 @@ trait IsPaymentMethod
                     'value' => $this->data->paysera_project_password ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Paysera project password is required')
+                        'required' => translate('Paysera project password is required'),
                     ],
                 ],
             ];
@@ -335,20 +336,22 @@ trait IsPaymentMethod
         return [];
     }
 
-    public function getPaymentMethodValidationRules($key_prefix = '', $as_collection = false) {
+    public function getPaymentMethodValidationRules($key_prefix = '', $as_collection = false)
+    {
         $properties = $this->getDynamicModelPaymentMethodProperties();
 
-        $rules = collect($properties)->keyBy(fn($item) => $key_prefix.'.'.$item['property_name'])->map(fn($item, $key) => $item['rules']);
+        $rules = collect($properties)->keyBy(fn ($item) => $key_prefix.'.'.$item['property_name'])->map(fn ($item, $key) => $item['rules']);
 
         return $as_collection ? $rules : $rules->toArray();
     }
 
-    public function getPaymentMethodValidationMessages($key_prefix = '', $as_collection = false) {
+    public function getPaymentMethodValidationMessages($key_prefix = '', $as_collection = false)
+    {
         $properties = $this->getDynamicModelPaymentMethodProperties();
         $messages = [];
 
-        collect($properties)->each(function($item) use($key_prefix, &$messages) {
-            $messages = array_merge($messages, collect($item['messages'])->keyBy(fn($msg, $key) => $key_prefix.'.'.$item['property_name'].'.'.$key)->toArray());
+        collect($properties)->each(function ($item) use ($key_prefix, &$messages) {
+            $messages = array_merge($messages, collect($item['messages'])->keyBy(fn ($msg, $key) => $key_prefix.'.'.$item['property_name'].'.'.$key)->toArray());
         });
 
         return $as_collection ? collect($messages) : $messages;
@@ -357,11 +360,11 @@ trait IsPaymentMethod
     /*
      * Get Paypal Payment action choices
      */
-    public static function getPaypalPaymentActions() {
+    public static function getPaypalPaymentActions()
+    {
         return [
             'capture' => 'Capture',
-            'authorize' => 'Authorize'
+            'authorize' => 'Authorize',
         ];
     }
-
 }

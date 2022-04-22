@@ -8,6 +8,7 @@ use Route;
 class Breadcrumbs extends Component
 {
     public $style = 'default';
+
     public $breadcrumbs;
 
     /**
@@ -29,6 +30,6 @@ class Breadcrumbs extends Component
      */
     public function render()
     {
-        return view('components.default.breadcrumbs.' . $this->style);
+        return view('components.default.breadcrumbs.'.$this->style);
     }
 }

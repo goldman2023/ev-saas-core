@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class IntegrationsWidget extends Component
 {
     public $integrations = [];
+
     /**
      * Create a new component instance.
      *
@@ -18,7 +19,7 @@ class IntegrationsWidget extends Component
         $this->integrations = [
             'facebook',
             'woocommerce',
-            'google'
+            'google',
         ];
     }
 

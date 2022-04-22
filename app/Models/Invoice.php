@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Builders\BaseBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use App\Builders\BaseBuilder;
 use MyShop;
 
 /**
@@ -52,7 +52,8 @@ class Invoice extends EVBaseModel
         return $this->belongsTo(Order::class, 'order_id');
     }
 
-    public function payment_method() {
+    public function payment_method()
+    {
         return $this->morphTo('payment_method');
     }
 
@@ -80,23 +81,25 @@ class Invoice extends EVBaseModel
      * 2. Subscription order - x invoices are generated and invoice is never last
      * 3. Installments - Invoice can be last if Number_of_invoices is reached
      */
-    public function isLastInvoice() {
-        if($this->order->type === OrderTypeEnum::standard()->value) {
+    public function isLastInvoice()
+    {
+        if ($this->order->type === OrderTypeEnum::standard()->value) {
             return true;
-        } else if($this->order->type === OrderTypeEnum::subscription()->value) {
+        } elseif ($this->order->type === OrderTypeEnum::subscription()->value) {
             return false;
-        } else if($this->order->type === OrderTypeEnum::installments()->value) {
+        } elseif ($this->order->type === OrderTypeEnum::installments()->value) {
             return $this->order->number_of_invoices === $this->order->invoices()->count();
         }
     }
 
-    public static function generateInvoiceNumber($first_name, $last_name, $company_name) {
+    public static function generateInvoiceNumber($first_name, $last_name, $company_name)
+    {
         // TODO: Add invoicing number template to Shop settings, otherwise use Default
         $random_number = random_int(0, 100000);
         $current_date = date('dmY');
-        $first_name_char = strtoupper($first_name[0]??'x');
-        $last_name_char = strtoupper($last_name[0]??'y');
-        $company_name_char = strtoupper($company_name[0]??'');
+        $first_name_char = strtoupper($first_name[0] ?? 'x');
+        $last_name_char = strtoupper($last_name[0] ?? 'y');
+        $company_name_char = strtoupper($company_name[0] ?? '');
 
         return $current_date.$first_name_char.$last_name_char.$company_name_char.$random_number;
     }
@@ -119,5 +122,4 @@ class Invoice extends EVBaseModel
 //    {
 //        return $this->hasMany(ClubPoint::class);
 //    }
-
 }

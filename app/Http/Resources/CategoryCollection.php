@@ -2,15 +2,15 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
 use App\Utility\CategoryUtility;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CategoryCollection extends ResourceCollection
 {
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
                     'banner' => api_asset($data->banner),
@@ -18,10 +18,10 @@ class CategoryCollection extends ResourceCollection
                     'number_of_children' => CategoryUtility::get_immediate_children_count($data->id),
                     'links' => [
                         'products' => route('api.category.products.index', $data->id),
-                        'sub_categories' => route('subCategories.index', $data->id)
-                    ]
+                        'sub_categories' => route('subCategories.index', $data->id),
+                    ],
                 ];
-            })
+            }),
         ];
     }
 
@@ -29,7 +29,7 @@ class CategoryCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

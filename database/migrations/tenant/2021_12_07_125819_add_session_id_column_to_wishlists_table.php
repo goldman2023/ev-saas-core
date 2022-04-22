@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSessionIdColumnToWishlistsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,7 +14,7 @@ class AddSessionIdColumnToWishlistsTable extends Migration
     {
         Schema::table('wishlists', function (Blueprint $table) {
             //
-            if (!Schema::hasColumn('wishlists', 'session_id')) {
+            if (! Schema::hasColumn('wishlists', 'session_id')) {
                 $table->string('user_id')->nullable()->change();
                 $table->string('session_id')->nullable();
             }
@@ -35,4 +34,4 @@ class AddSessionIdColumnToWishlistsTable extends Migration
             $table->string('user_id')->change();
         });
     }
-}
+};

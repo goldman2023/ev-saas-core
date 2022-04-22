@@ -2,34 +2,34 @@
 
 namespace App\Http\Livewire\Forms;
 
-use DB;
-use EVS;
-use Categories;
-use CartService;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
-use Purifier;
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use Str;
-use Auth;
-use App\Models\User;
-use App\Models\OrderItem;
-use App\Models\Invoice;
-use App\Models\Order;
-use App\Models\Address;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\DispatchSupport;
-use App\Models\PaymentMethodUniversal;
-use LVR\CreditCard\CardCvc;
-use LVR\CreditCard\CardNumber;
-use LVR\CreditCard\CardExpirationDate;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusTypeEnum;
+use App\Models\Address;
+use App\Models\Invoice;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\PaymentMethodUniversal;
+use App\Models\User;
+use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Auth;
 use Carbon;
+use CartService;
+use Categories;
+use DB;
+use EVS;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
+use LVR\CreditCard\CardCvc;
+use LVR\CreditCard\CardExpirationDate;
+use LVR\CreditCard\CardNumber;
+use Purifier;
+use Spatie\ValidationRules\Rules\ModelsExist;
+use Str;
 
 class CheckoutSingleForm extends Component
 {
@@ -37,32 +37,47 @@ class CheckoutSingleForm extends Component
     use DispatchSupport;
 
     public $items;
+
     public $order;
+
     public $manual_mode_billing = true;
+
     public $manual_mode_shipping = true;
+
     public $show_addresses = false;
+
     public $addresses = [];
+
     public $selected_billing_address_id;
+
     public $selected_shipping_address_id;
+
     public $checkout_newsletter = false;
+
     public $buyers_consent = false;
+
     public $selected_payment_method = 'wire_transfer';
 
     public $cc_number;
+
     public $cc_name;
+
     public $cc_expiration_date;
+
     public $cc_cvc;
 
     // Account
     public $account_password;
+
     public $account_password_confirmation;
 
     protected $listeners = [];
 
-    protected function rulesSets() {
+    protected function rulesSets()
+    {
         return [
             'items' => [
-                'items.*' => ['']
+                'items.*' => [''],
             ],
             'main' => [
                 'order.email' => 'required|email:rfc,dns',
@@ -78,7 +93,7 @@ class CheckoutSingleForm extends Component
                 'selected_billing_address_id' => '',
             ],
             'account_creation' => [
-                'account_password' => 'required|confirmed|min:6'
+                'account_password' => 'required|confirmed|min:6',
             ],
             'billing' => [
                 'order.billing_address' => 'required|min:5',
@@ -102,17 +117,17 @@ class CheckoutSingleForm extends Component
                 'selected_shipping_address_id' => 'required|if_id_exists:App\Models\Address,id',
             ],
             'registered_user_password_rule' => [
-                'account_password' => 'match_password:App\Models\User,email,order.email'
+                'account_password' => 'match_password:App\Models\User,email,order.email',
             ],
             'non_registered_user_password_rule' => [
-                'account_password' => 'required|confirmed|min:6'
+                'account_password' => 'required|confirmed|min:6',
             ],
             'cc' => [
                 'cc_number' => ['required', new CardNumber],
                 'cc_name' => 'required|min:3',
                 'cc_expiration_date' => ['required', new CardExpirationDate('m/y')],
                 'cc_cvc' => ['required'], // new LVR\CreditCard\CardCvc($request->get('card_number'))
-            ]
+            ],
         ];
     }
 
@@ -120,7 +135,7 @@ class CheckoutSingleForm extends Component
     {
         $rules = [];
 
-        foreach($this->rulesSets() as $key => $array) {
+        foreach ($this->rulesSets() as $key => $array) {
             $rules = array_merge($rules, $array);
         }
 
@@ -134,7 +149,7 @@ class CheckoutSingleForm extends Component
             'order.buyers_consent.is_true' => translate('You must agree with terms of service'),
             'cc_expiration_date.required' => translate('CC expiration date is required'),
             'cc_cvc.required' => translate('Card CVC is required'),
-            'cc_number.card_invalid' => translate('Card is invalid')
+            'cc_number.card_invalid' => translate('Card is invalid'),
         ];
     }
 
@@ -152,7 +167,7 @@ class CheckoutSingleForm extends Component
         $this->order->same_billing_shipping = true;
         $this->order->buyers_consent = false;
 
-        if(auth()->user()->id) {
+        if (auth()->user()->id) {
             $this->order->email = auth()->user()->email;
             $this->order->billing_first_name = auth()->user()->name;
             $this->order->billing_last_name = auth()->user()?->name;
@@ -163,11 +178,12 @@ class CheckoutSingleForm extends Component
         $this->cc_expiration_date = '';
         $this->cc_cvc = '';
 
-        $this->manual_mode_billing = !\Auth::check();
-        $this->manual_mode_shipping = !\Auth::check();
+        $this->manual_mode_billing = ! \Auth::check();
+        $this->manual_mode_shipping = ! \Auth::check();
         $this->show_addresses = \Auth::check() && auth()->user()->addresses->isNotEmpty();
-        $this->addresses = \Auth::check() ? auth()->user()->addresses->map(function($item) {
+        $this->addresses = \Auth::check() ? auth()->user()->addresses->map(function ($item) {
             $item->country = \Countries::get(code: $item->country)->name ?? translate('Unknown');
+
             return $item;
         }) : [];
         $this->selected_billing_address_id = $this->show_addresses ?
@@ -176,11 +192,13 @@ class CheckoutSingleForm extends Component
         $this->selected_shipping_address_id = $this->show_addresses ?
             (auth()->user()->addresses->firstWhere('is_primary', true)->id ?? -1) : -1;
 
-        if($this->selected_billing_address_id === -1)
+        if ($this->selected_billing_address_id === -1) {
             $this->manual_mode_billing = true;
+        }
 
-        if($this->selected_shipping_address_id === -1)
+        if ($this->selected_shipping_address_id === -1) {
             $this->manual_mode_shipping = true;
+        }
     }
 
     public function dehydrate()
@@ -193,15 +211,16 @@ class CheckoutSingleForm extends Component
         return view('livewire.checkout.checkout-single-form');
     }
 
-    protected function getSpecificRules() {
+    protected function getSpecificRules()
+    {
         $rules = [];
         $rulesSets = $this->rulesSets();
 
-        $add_billing_shipping_rules = function($is_billing_selected = false) use(&$rulesSets, &$rules) {
+        $add_billing_shipping_rules = function ($is_billing_selected = false) use (&$rulesSets, &$rules) {
             $rules = array_merge($rulesSets['main'], $is_billing_selected ? $rulesSets['selected_billing_address'] : $rulesSets['billing']);
 
-            if(empty($this->order->same_billing_shipping)) {
-                if((int) $this->selected_shipping_address_id === -1) {
+            if (empty($this->order->same_billing_shipping)) {
+                if ((int) $this->selected_shipping_address_id === -1) {
                     // Shipping address IS NOT a selected address, but a manually added address!
                     $rules = array_merge($rules, $rulesSets['shipping']);
                 } else {
@@ -211,11 +230,11 @@ class CheckoutSingleForm extends Component
             }
 
             // User cretion rules (password)
-            if(!Auth::check()) {
+            if (! Auth::check()) {
                 $new_user = User::where('email', $this->order->email)->first(); // check if user with a given email already exists
 
                 // Check if user with email is not already registered user.
-                if($new_user instanceof User && !empty($new_user->id ?? null)) {
+                if ($new_user instanceof User && ! empty($new_user->id ?? null)) {
                     // Registered user
                     $rules = array_merge($rules, $rulesSets['registered_user_password_rule']);
                 } else {
@@ -225,8 +244,8 @@ class CheckoutSingleForm extends Component
             }
         };
 
-        if(Auth::check()) {
-            if((int) $this->selected_billing_address_id === -1) {
+        if (Auth::check()) {
+            if ((int) $this->selected_billing_address_id === -1) {
                 // Always validate billing info when user IS logged-in AND DID NOT select billing address
                 $add_billing_shipping_rules();
             } else {
@@ -261,10 +280,10 @@ class CheckoutSingleForm extends Component
             $phone_numbers = [];
             $user = auth()->user() ?? null;
 
-            if(!Auth::check()) {
+            if (! Auth::check()) {
                 $user = User::where('email', $this->order->email)->first();
 
-                if(!empty($user->id ?? null) && Hash::check($this->account_password, $user->password)) { // check password again just in case
+                if (! empty($user->id ?? null) && Hash::check($this->account_password, $user->password)) { // check password again just in case
                     // There is a user under given Email AND passwords match -> LOG IN USER
                     auth()->login($user, true); // log the user in
                 } else {
@@ -277,9 +296,8 @@ class CheckoutSingleForm extends Component
                         'name' => $this->order->billing_first_name.' '.$this->order->billing_last_name,
                         'user_type' => User::$customer_type,
                         'email' => $this->order->email,
-                        'password' => bcrypt($this->account_password)
+                        'password' => bcrypt($this->account_password),
                     ]);
-
 
                     // Create address
                     $address_billing = Address::create([
@@ -291,10 +309,10 @@ class CheckoutSingleForm extends Component
                         'city' => $this->order->billing_city,
                         'zip_code' => $this->order->billing_zip,
                         'phones' => json_encode($this->order->phone_numbers),
-                        'set_default' => 1
+                        'set_default' => 1,
                     ]);
 
-                    if(!$this->order->same_billing_shipping) {
+                    if (! $this->order->same_billing_shipping) {
                         // Create another address with shipping info
                         $address_shipping = Address::create([
                             'user_id' => $user->id,
@@ -305,7 +323,7 @@ class CheckoutSingleForm extends Component
                             'city' => $this->order->shipping_city,
                             'zip_code' => $this->order->shipping_zip,
                             'phones' => json_encode($this->order->phone_numbers),
-                            'set_default' => 1
+                            'set_default' => 1,
                         ]);
 
                         $address_billing->set_default = 0;
@@ -320,7 +338,7 @@ class CheckoutSingleForm extends Component
 
             // TODO: THIS IS ALSO VERY IMPORTANT - Separate $items based on type - is it a subscription or a standard product...or installment?
 
-            if($this->items->first() instanceof Plan) {
+            if ($this->items->first() instanceof Plan) {
                 /*
                 * Invoicing data for SUBSCRIPTIONS/PLANS or INCREMENTAL orders
                 */
@@ -342,7 +360,7 @@ class CheckoutSingleForm extends Component
             * Only if user is logged-in
             */
             // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
-            if(Auth::check() && $this->selected_billing_address_id > 0 && Address::where('id', $this->selected_billing_address_id)->exists()) {
+            if (Auth::check() && $this->selected_billing_address_id > 0 && Address::where('id', $this->selected_billing_address_id)->exists()) {
                 // Billing Address is selected from the list
                 $address = Address::find($this->selected_billing_address_id);
 
@@ -354,12 +372,11 @@ class CheckoutSingleForm extends Component
                 $this->order->phone_numbers = $phone_numbers = $address->phones; // TODO: To overwrite phones or no???
             }
 
-
-           /*
-            * Shipping data (when billing and shipping data are not the same)
-            * Address (user logged-in) + Manual
-            */
-            if(!$this->order->same_billing_shipping) {
+            /*
+             * Shipping data (when billing and shipping data are not the same)
+             * Address (user logged-in) + Manual
+             */
+            if (! $this->order->same_billing_shipping) {
                 // TODO: Do we need shipping first_name, last_name and shipping_company ???
                 $this->order->shipping_first_name = $this->order->billing_first_name;
                 $this->order->shipping_last_name = $this->order->billing_last_name;
@@ -367,7 +384,7 @@ class CheckoutSingleForm extends Component
 
                 // Check if Shipping Address is selected from user's addresses
                 // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
-                if(Auth::check() && $this->selected_shipping_address_id > 0 && Address::where('id', $this->selected_shipping_address_id)->exists()) {
+                if (Auth::check() && $this->selected_shipping_address_id > 0 && Address::where('id', $this->selected_shipping_address_id)->exists()) {
                     // Billing Address is selected from the list
                     $address = Address::find($this->selected_shipping_address_id);
 
@@ -383,7 +400,6 @@ class CheckoutSingleForm extends Component
             $this->order->shipping_cost = 0;
             $this->order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
 
-
             // payment_status - `unpaid` by default (this should be changed on payment processor callback before Thank you page is shown - if payment goes through of course)
             // shipping_status - `not_sent` by default (this is changed manually in Order management pages by company staff)
             // viewed - is 0 by default (if it's not viewed by company stuff, it'll be marked as `New` in company dashboard)
@@ -393,7 +409,7 @@ class CheckoutSingleForm extends Component
             /*
              * Create OrderItem
              */
-            foreach($this->items as $item) {
+            foreach ($this->items as $item) {
                 $order_item = new OrderItem();
                 $order_item->order_id = $this->order->id;
                 $order_item->subject_type = $item::class;
@@ -401,16 +417,16 @@ class CheckoutSingleForm extends Component
                 $order_item->name = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->name : $item->name; // TODO: Think about changing Product `name` col to `title`, it's more universal!
                 $order_item->excerpt = method_exists($item, 'hasMain') && $item->hasMain() ? $item->main->excerpt : $item->excerpt;
                 $order_item->variant = method_exists($item, 'hasMain') && $item->hasMain() ? $item->getVariantName(key_by: 'name') : null;
-                $order_item->quantity = !empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
+                $order_item->quantity = ! empty($item->purchase_quantity) ? $item->purchase_quantity : 1;
 
                 // Check if $item has stock and reduce it if it does
-                if(method_exists($item, 'stock')) {
+                if (method_exists($item, 'stock')) {
                     // Reduce the stock quantity of an $item
                     $serial_numbers = $item->reduceStock();
 
                     // Serial Numbers only work for Simple Products.
                     // TODO: Make Product Variations support serial numbers!
-                    if($item->use_serial) {
+                    if ($item->use_serial) {
                         $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
                     } else {
                         $order_item->serial_numbers = null;
@@ -449,13 +465,11 @@ class CheckoutSingleForm extends Component
             $invoice->billing_city = $this->order->billing_city;
             $invoice->billing_zip = $this->order->billing_zip;
 
-
             // Take invoice totals from Cart
             $invoice->base_price = CartService::getOriginalPrice()['raw'];
             $invoice->discount_amount = CartService::getDiscountAmount()['raw'];
             $invoice->subtotal_price = CartService::getSubtotalPrice()['raw'];
             $invoice->total_price = CartService::getSubtotalPrice()['raw']; // should be TotalPrice in future...
-
 
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
@@ -479,7 +493,7 @@ class CheckoutSingleForm extends Component
             CartService::fullCartReset();
 
             return redirect()->route('checkout.order.received', $this->order->id);
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
 
             $this->dispatchGeneralError(translate('There was an error while processing the order...Please try again.'));
@@ -487,13 +501,14 @@ class CheckoutSingleForm extends Component
         }
     }
 
-    protected function executePayment(mixed $request, $invoice_id) {
+    protected function executePayment(mixed $request, $invoice_id)
+    {
         $invoice = Invoice::with('payment_method')->find($invoice_id);
         $invoice->load('payment_method');
 
-        if($invoice->payment_method->gateway === 'wire_transfer') {
+        if ($invoice->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-        } else if($invoice->payment_method->gateway === 'paysera') {
+        } elseif ($invoice->payment_method->gateway === 'paysera') {
             $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
             $paysera->pay();
         }

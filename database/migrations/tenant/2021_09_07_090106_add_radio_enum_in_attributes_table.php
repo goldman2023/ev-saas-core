@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRadioEnumInAttributesTable extends Migration
-{
+return new class extends Migration {
     public $driver;
 
     public function __construct()
@@ -22,6 +21,7 @@ class AddRadioEnumInAttributesTable extends Migration
         $connection = config('database.default');
         $this->driver = config("database.connections.{$connection}.driver");
     }
+
     /**
      * Run the migrations.
      *
@@ -32,9 +32,9 @@ class AddRadioEnumInAttributesTable extends Migration
         // Have in mind that changing enum possible values through Schema(Doctrine) is not possible. Check:
         // https://stackoverflow.com/questions/64534892/laravel-8-migration-change-enum-values
 
-        if($this->driver === 'pgsql') {
+        if ($this->driver === 'pgsql') {
             DB::transaction(function () {
-                DB::statement("ALTER TABLE attributes DROP CONSTRAINT attributes_type_check");
+                DB::statement('ALTER TABLE attributes DROP CONSTRAINT attributes_type_check');
                 DB::statement("ALTER TABLE attributes ADD CONSTRAINT attributes_type_check CHECK (type in ('checkbox', 'radio', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'wysiwyg'))");
             });
         } else {
@@ -49,13 +49,13 @@ class AddRadioEnumInAttributesTable extends Migration
      */
     public function down()
     {
-        if($this->driver === 'pgsql') {
+        if ($this->driver === 'pgsql') {
             DB::transaction(function () {
-                DB::statement("ALTER TABLE attributes DROP CONSTRAINT attributes_type_check");
+                DB::statement('ALTER TABLE attributes DROP CONSTRAINT attributes_type_check');
                 DB::statement("ALTER TABLE attributes ADD CONSTRAINT attributes_type_check CHECK (type in ('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'wysiwyg'))");
             });
         } else {
             DB::statement("ALTER TABLE attributes MODIFY COLUMN type ENUM('checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number', 'date', 'text_list', 'wysiwyg')");
         }
     }
-}
+};

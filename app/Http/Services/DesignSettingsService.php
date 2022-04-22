@@ -8,17 +8,14 @@ use App\Models\Brand;
 use App\Models\Category;
 use Illuminate\View\ComponentAttributeBag;
 
-class DesignSettings
+class DesignSettingsService
 {
-
-
-    public function getMappedProductCardDesigns() {
+    public function getMappedProductCardDesigns()
+    {
         return [
             'product-card' => 'Default',
             'product-card-detailed' => 'Detailed',
             'product-card-detailed2' => 'Detailed2',
         ];
     }
-
-
 }

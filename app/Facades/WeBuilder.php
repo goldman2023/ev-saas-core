@@ -11,5 +11,8 @@ class WeBuilder extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'we_builder_sections'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'we_builder_sections';
+    }
 }

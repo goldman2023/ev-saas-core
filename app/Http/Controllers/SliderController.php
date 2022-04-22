@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Slider;
+use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
@@ -15,6 +15,7 @@ class SliderController extends Controller
     public function index()
     {
         $sliders = Slider::all();
+
         return view('sliders.index', compact('sliders'));
     }
 
@@ -36,7 +37,7 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->hasFile('photos')){
+        if ($request->hasFile('photos')) {
             foreach ($request->photos as $key => $photo) {
                 $slider = new Slider;
                 $slider->link = $request->url;
@@ -45,6 +46,7 @@ class SliderController extends Controller
             }
             flash(translate('Slider has been inserted successfully'))->success();
         }
+
         return redirect()->route('home_settings.index');
     }
 
@@ -77,15 +79,13 @@ class SliderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, $id)
     {
         $slider = Slider::find($id);
         $slider->published = $request->status;
-        if($slider->save()){
+        if ($slider->save()) {
             return '1';
-        }
-        else {
+        } else {
             return '0';
         }
     }
@@ -99,13 +99,13 @@ class SliderController extends Controller
     public function destroy($id)
     {
         $slider = Slider::findOrFail($id);
-        if(Slider::destroy($id)){
+        if (Slider::destroy($id)) {
             //unlink($slider->photo);
             flash(translate('Slider has been deleted successfully'))->success();
-        }
-        else{
+        } else {
             flash(translate('Something went wrong'))->error();
         }
+
         return redirect()->route('home_settings.index');
     }
 }

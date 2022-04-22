@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App;
+use App\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\TranslationTrait;
 
 class AttributeValue extends EVBaseModel
 {
@@ -23,25 +23,29 @@ class AttributeValue extends EVBaseModel
         return $this->belongsTo(Attribute::class);
     }
 
-    public function attribute_value_relationship(){
+    public function attribute_value_relationship()
+    {
         return $this->hasMany(AttributeRelationship::class, 'attribute_value_id', 'id');
     }
 
-    public function getSelectedAttribute() {
-        if(empty($this->selected)) {
+    public function getSelectedAttribute()
+    {
+        if (empty($this->selected)) {
             $this->selected = false;
         }
-        
+
         return $this->selected;
     }
 
-    public function setSelectedAttribute($value) {
+    public function setSelectedAttribute($value)
+    {
         $this->selected = $value;
 
         return $this->selected;
     }
 
-    public function getTranslationModel(): ?string {
+    public function getTranslationModel(): ?string
+    {
         return AttributeValueTranslation::class;
     }
 }

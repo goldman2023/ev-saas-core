@@ -7,11 +7,14 @@ use Livewire\Component;
 
 class DynamicButton extends Component
 {
-
     public $label;
+
     public $href;
+
     public $show_input_field = false;
+
     public $type;
+
     public $target;
 
     protected $rules = [
@@ -19,19 +22,19 @@ class DynamicButton extends Component
         'label.value' => 'string|required',
     ];
 
-    public function mount($label, $href = '#',   $type = 'text' )
+    public function mount($label, $href = '#', $type = 'text')
     {
         $this->href = $href;
         $this->label = $label;
     }
-
 
     public function editLabel()
     {
         $this->show_input_field = true;
     }
 
-    public function close() {
+    public function close()
+    {
         $this->show_input_field = false;
     }
 
@@ -48,7 +51,6 @@ class DynamicButton extends Component
         $editedLabel = EVLabel::where('key', $this->label->key)->first();
         $editedLabel->value = $this->label->value;
         $editedLabel->save();
-
 
         $this->show_input_field = false;
     }

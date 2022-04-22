@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Facades\MyShop;
 use App\Facades\StripeService;
-use EVS;
 use App\Models\Product;
 use App\Models\Shop;
 use Auth;
 use Categories;
+use EVS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Spatie\Activitylog\Models\Activity;
@@ -19,12 +19,12 @@ class EVProductController extends Controller
     //
     public function index(Request $request)
     {
-        if(Auth::user()->user_type == 'admin') {
+        if (Auth::user()->user_type == 'admin') {
             $products = Product::orderBy('created_at', 'desc')->paginate(20);
         } else {
             $products = Auth::user()->products()->orderBy('created_at', 'desc')->paginate(20);
-
         }
+
         return view('frontend.dashboard.products.index')->with('products', $products);
     }
 
@@ -36,10 +36,11 @@ class EVProductController extends Controller
     public function create2(Request $request)
     {
         /* Check if user has shop */
-        if (!MyShop::getShop()) {
+        if (! MyShop::getShop()) {
             /* If not, redirect to shop creation */
             return redirect()->route('onboarding.step3');
         }
+
         return view('frontend.dashboard.products.create2');
     }
 
@@ -94,7 +95,8 @@ class EVProductController extends Controller
 
         $activity = Activity::all();
 
-        $activity = Activity::whereHas('subject')->where('subject_type', 'App\Models\Product')->where('subject_id', $product->id)->first();
+        $activity = Activity::whereHas('subject')->where('subject_type', \App\Models\Product::class)->where('subject_id', $product->id)->first();
+
         return view('frontend.dashboard.products.activity')->with('product', $product);
     }
 
@@ -119,12 +121,11 @@ class EVProductController extends Controller
         return view('frontend.products.archive', compact('products', 'shops', 'selected_category'));
     }
 
-
     public function show(Request $request, $slug)
     {
         /* TODO This is duplicate for consistent naming, let's refactor to better approach */
         if (Product::where('slug', $slug)->first()) {
-            $product  = Product::where('slug', $slug)->first()->load(['shop']);
+            $product = Product::where('slug', $slug)->first()->load(['shop']);
         } else {
             return abort(404);
         }
@@ -136,8 +137,7 @@ class EVProductController extends Controller
         }
 
         /* TODO: add this eventually: && $product->published */
-        if (!empty($product)) {
-
+        if (! empty($product)) {
             if (auth()->check()) {
                 $user = auth()->user();
             } else {
@@ -156,13 +156,14 @@ class EVProductController extends Controller
         /* TODO: Make this optional (style1/style2/etc) per tenant/vendor */
 
         $template = 'product-single-1';
-        return view('frontend.product.single.' . $template, compact('product'));
+
+        return view('frontend.product.single.'.$template, compact('product'));
     }
 
     public function createProductCheckoutRedirect($id)
     {
         $product = Product::find($id);
-        $qty = !empty(request()->qty ?? null) ? (int) request()->qty : 1;
+        $qty = ! empty(request()->qty ?? null) ? (int) request()->qty : 1;
 
         $link = StripeService::createCheckoutLink($product, $qty);
 

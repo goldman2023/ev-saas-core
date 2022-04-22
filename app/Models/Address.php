@@ -6,23 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-
     protected $table = 'addresses';
 
-    protected $fillable = ['id', 'user_id', 'address','country','city', 'zip_code','phones','is_primary', 'is_billing','state','address_2'];
+    protected $fillable = ['id', 'user_id', 'address', 'country', 'city', 'zip_code', 'phones', 'is_primary', 'is_billing', 'state', 'address_2'];
 
     protected $casts = [
         'phones' => 'array',
         'is_primary' => 'boolean',
-        'is_billing' => 'boolean'
+        'is_billing' => 'boolean',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function getPhonesAttribute($value) {
-        if(empty($value)) {
+    public function getPhonesAttribute($value)
+    {
+        if (empty($value)) {
             return [''];
         }
 

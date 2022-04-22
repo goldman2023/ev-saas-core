@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RefactorBusinessUserRelationshipsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -26,7 +25,7 @@ class RefactorBusinessUserRelationshipsTable extends Migration
             $table->timestamp('deleted_at')->nullable();
         });
 
-        foreach($businesses as $business) {
+        foreach ($businesses as $business) {
             $rel = new UserRelationship();
             $rel->user_id = $business->user_id;
             $rel->subject_id = $business->id;
@@ -50,4 +49,4 @@ class RefactorBusinessUserRelationshipsTable extends Migration
     {
         //
     }
-}
+};

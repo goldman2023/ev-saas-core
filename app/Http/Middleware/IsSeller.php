@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Auth;
+use Closure;
 
 class IsSeller
 {
@@ -16,10 +16,9 @@ class IsSeller
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && auth()->user()->isSeller()  && !auth()->user()->banned) {
+        if (Auth::check() && auth()->user()->isSeller() && ! auth()->user()->banned) {
             return $next($request);
-        }
-        else{
+        } else {
             abort(404);
         }
     }

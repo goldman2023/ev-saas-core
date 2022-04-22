@@ -116,8 +116,8 @@ return [
              * The disk names on which the backups will be stored.
              */
             'disks' => [
-                'google'
-//                'backup-local'
+                'google',
+                //                'backup-local'
             ],
         ],
 
@@ -176,16 +176,16 @@ return [
         ],
 
         'slack' => [
-            'webhook_url' => env('SLACK_WEBHOOK',''),
+            'webhook_url' => env('SLACK_WEBHOOK', ''),
 
             /*
              * If this is set to null the default channel of the webhook will be used.
              */
-            'channel' => env('SLACK_CHANNEL',''),
+            'channel' => env('SLACK_CHANNEL', ''),
 
-            'username' => env('SLACK_USERNAME',''),
+            'username' => env('SLACK_USERNAME', ''),
 
-            'icon' => env('SLACK_ICON',''),
+            'icon' => env('SLACK_ICON', ''),
 
         ],
     ],
@@ -199,8 +199,8 @@ return [
         [
             'name' => env('GOOGLE_DRIVE_FOLDER_ID', ''),
             'disks' => [
-                'google'
-//                'backup-local'
+                'google',
+                //                'backup-local'
             ],
             'health_checks' => [
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,

@@ -12,6 +12,7 @@ class VerifiedBadge extends Component
      * @return void
      */
     public $item; // So far supports only Shop and User
+
     public function __construct($item)
     {
         //

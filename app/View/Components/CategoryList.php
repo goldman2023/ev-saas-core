@@ -10,8 +10,8 @@ use Illuminate\View\Component;
  */
 class CategoryList extends Component
 {
-
     public $categories;
+
     public $options = [
         'type' => 'featured/latest/popular',
         'show_count' => false,
@@ -20,7 +20,6 @@ class CategoryList extends Component
         'show_description' => false,
         'show_image' => false,
     ]; // Options Featured / Latest / Popular
-
 
     /**
      * Create a new component instance.

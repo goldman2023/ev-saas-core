@@ -6,7 +6,6 @@ use Illuminate\View\Component;
 
 class HeroSearch extends Component
 {
-
     public $class;
 
     /**

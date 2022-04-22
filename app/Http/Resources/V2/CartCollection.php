@@ -9,22 +9,22 @@ class CartCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'id' => $data->id,
                     'seller_id' => $data->seller_id,
                     'product' => [
                         'name' => $data->product->name,
-                        'image' => api_asset($data->product->thumbnail_img)
+                        'image' => api_asset($data->product->thumbnail_img),
                     ],
                     'variation' => $data->variation,
-                    'price' => (double) $data->price,
-                    'tax' => (double) $data->tax,
-                    'shipping_cost' => (double) $data->shipping_cost,
-                    'quantity' => (integer) $data->quantity,
-                    'date' => $data->created_at->diffForHumans()
+                    'price' => (float) $data->price,
+                    'tax' => (float) $data->tax,
+                    'shipping_cost' => (float) $data->shipping_cost,
+                    'quantity' => (int) $data->quantity,
+                    'date' => $data->created_at->diffForHumans(),
                 ];
-            })
+            }),
         ];
     }
 
@@ -32,7 +32,7 @@ class CartCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

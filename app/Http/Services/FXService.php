@@ -2,16 +2,19 @@
 
 namespace App\Http\Services;
 
-use Cache;
-use Session;
-use EVS;
 use App\Models\Currency;
+use Cache;
+use EVS;
+use Session;
 
 class FXService
 {
     public mixed $currencies;
+
     public Currency $currency;
+
     public Currency $default_currency;
+
     public string $currency_symbol;
 
     public function __construct($app)
@@ -22,7 +25,7 @@ class FXService
 
     protected function setAllCurrencies()
     {
-        $this->currencies = Cache::remember(tenant('id') . '_all_currencies',  60 * 60 * 24, function () {
+        $this->currencies = Cache::remember(tenant('id').'_all_currencies', 60 * 60 * 24, function () {
             return $this->currencies = Currency::get();
         }); // Get all currencies with fx_rates
     }
@@ -35,7 +38,7 @@ class FXService
         }
 
         if ($formatted) {
-            return $this->currencies->keyBy('code')->map(fn ($item) => $item->code . ' (' . $item->symbol . ')')->toArray();
+            return $this->currencies->keyBy('code')->map(fn ($item) => $item->code.' ('.$item->symbol.')')->toArray();
         }
 
         return $this->currencies;
@@ -43,8 +46,7 @@ class FXService
 
     protected function setCurrency()
     {
-
-        $code =  get_setting('system_default_currency'); // Already converted to Currency in TenantSettingsService
+        $code = get_setting('system_default_currency'); // Already converted to Currency in TenantSettingsService
 
         if ($code) {
             $code = $code->code;
@@ -52,13 +54,12 @@ class FXService
             $code = Currency::find(1)->code;
         }
 
-
         $this->default_currency = Currency::where('code', $code)->first(); // set system default currency
 
         if (Session::has('currency_code')) {
             $selected_code = Session::get('currency_code', $code); // get currently selected currency code, otherwise use system_default_code
 
-            $this->currency =  Cache::remember(tenant('id') . '_' . $selected_code . '_cache', 86400, function () use ($selected_code) {
+            $this->currency = Cache::remember(tenant('id').'_'.$selected_code.'_cache', 86400, function () use ($selected_code) {
                 return Currency::where('code', $selected_code)->first();
             });
         } else {
@@ -72,7 +73,6 @@ class FXService
     {
         return $this->currency;
     }
-
 
     public function getDefaultCurrency()
     {
@@ -105,10 +105,10 @@ class FXService
         }
 
         if (get_setting('symbol_format') === 1) {
-            return $this->currency_symbol . $formatted_price;
+            return $this->currency_symbol.$formatted_price;
         }
 
-        return $formatted_price . $this->currency_symbol;
+        return $formatted_price.$this->currency_symbol;
     }
 
     public function reductionPercentage($full, $part)

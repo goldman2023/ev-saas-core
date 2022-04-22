@@ -34,9 +34,12 @@ class Steps extends Component
             'route' => 'onboarding.step4',
         ],
     ];
-    public function mount($current_step = 1) {
+
+    public function mount($current_step = 1)
+    {
         $this->current_step = $current_step;
     }
+
     public function render()
     {
         return view('livewire.onboarding.elements.steps');

@@ -8,14 +8,19 @@ use Livewire\Component;
 class SocialComments extends Component
 {
     public $postId;
+
     public $username;
+
     public $comment_text;
-    public $replyCommentId = NULL;
+
+    public $replyCommentId = null;
+
     public $item;
+
     public $reviews;
 
     protected $rules = [
-        'comment_text' => 'required'
+        'comment_text' => 'required',
     ];
 
     public function mount($item, $reviews = false)
@@ -39,11 +44,10 @@ class SocialComments extends Component
             $comments->whereNotNull('rating');
         }
 
-
         $comments = $comments->get();
 
         return view('livewire.actions.social-comments', [
-            'comments' => $comments
+            'comments' => $comments,
         ]);
     }
 
@@ -51,17 +55,16 @@ class SocialComments extends Component
     {
         $this->validate();
 
-
         SocialComment::create([
             'subject_id' => $this->item->id,
             'subject_type' => $this->item::class,
             'user_id' => auth()->user()->id,
             'comment_text' => $this->comment_text,
-            'parent_id' => $this->replyCommentId
+            'parent_id' => $this->replyCommentId,
         ]);
 
         $this->comment_text = '';
-        $this->replyCommentId = NULL;
+        $this->replyCommentId = null;
     }
 
     public function reply($commentId)

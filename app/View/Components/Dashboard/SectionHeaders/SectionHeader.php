@@ -7,8 +7,8 @@ use Illuminate\View\Component;
 class SectionHeader extends Component
 {
     public $title;
-    public $text;
 
+    public $text;
 
     /**
      * Create a new component instance.

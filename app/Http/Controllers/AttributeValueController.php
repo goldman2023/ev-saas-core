@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AttributeValue;
-use Illuminate\Http\Request;
 use App\Models\Attribute;
+use App\Models\AttributeValue;
 use App\Models\AttributeValueTranslation;
+use Illuminate\Http\Request;
 
 class AttributeValueController extends Controller
 {
@@ -26,8 +26,9 @@ class AttributeValueController extends Controller
      */
     public function create(Request $request)
     {
-        $lang      = $request->lang;
+        $lang = $request->lang;
         $attribute = Attribute::findOrFail($request->attribute_id);
+
         return view('backend.attribute_value.create', compact(['attribute', 'lang']));
     }
 
@@ -46,11 +47,10 @@ class AttributeValueController extends Controller
         $attribute_value->attribute_id = $request->attribute_id;
         $attribute_value->values = $request->name;
         $attribute_value->save();
-        if($request->lang) {
-
+        if ($request->lang) {
         } else {
             /* TODO Falback value for incorect logic */
-            $request->lang = "en";
+            $request->lang = 'en';
         }
 
         $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => $request->lang, 'attribute_value_id' => $attribute_value->id]);
@@ -81,8 +81,9 @@ class AttributeValueController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $lang      = $request->lang;
+        $lang = $request->lang;
         $attribute_value = AttributeValue::findOrFail($id);
+
         return view('backend.attribute_value.edit', compact(['attribute_value', 'lang']));
     }
 
@@ -96,7 +97,7 @@ class AttributeValueController extends Controller
     public function update(Request $request, $id)
     {
         $attribute_value = AttributeValue::findOrFail($id);
-        if($request->lang == config('app.locale')){
+        if ($request->lang == config('app.locale')) {
             $attribute_value->values = $request->name;
         }
         $attribute_value->save();
@@ -106,6 +107,7 @@ class AttributeValueController extends Controller
         $attribute_value_translation->save();
 
         flash(translate('Attribute value has been updated successfully'))->success();
+
         return back();
     }
 

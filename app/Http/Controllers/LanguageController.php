@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Session;
-use File;
 use App\Models\Language;
 use App\Models\Translation;
+use File;
+use Illuminate\Http\Request;
+use Session;
 
 class LanguageController extends Controller
 {
     public function changeLanguage(Request $request)
     {
-    	$request->session()->put('locale', $request->locale);
+        $request->session()->put('locale', $request->locale);
         $language = Language::where('code', $request->locale)->first();
-    	flash(translate('Language changed to ').$language->name)->success();
+        flash(translate('Language changed to ').$language->name)->success();
     }
 
     public function index(Request $request)
     {
         $languages = Language::paginate(10);
+
         return view('backend.setup_configurations.languages.index', compact('languages'));
     }
 
@@ -33,13 +34,13 @@ class LanguageController extends Controller
         $language = new Language;
         $language->name = $request->name;
         $language->code = $request->code;
-        if($language->save()){
-
+        if ($language->save()) {
             flash(translate('Language has been inserted successfully'))->success();
+
             return redirect()->route('admin.languages.index');
-        }
-        else{
+        } else {
             flash(translate('Something went wrong'))->error();
+
             return back();
         }
     }
@@ -49,17 +50,19 @@ class LanguageController extends Controller
         $sort_search = null;
         $language = Language::findOrFail($id);
         $lang_keys = Translation::where('lang', config('app.locale'));
-        if ($request->has('search')){
+        if ($request->has('search')) {
             $sort_search = $request->search;
             $lang_keys = $lang_keys->where('lang_key', 'like', '%'.$sort_search.'%');
         }
         $lang_keys = $lang_keys->paginate(50);
-        return view('backend.setup_configurations.languages.language_view', compact('language','lang_keys','sort_search'));
+
+        return view('backend.setup_configurations.languages.language_view', compact('language', 'lang_keys', 'sort_search'));
     }
 
     public function edit($id)
     {
         $language = Language::findOrFail($id);
+
         return view('backend.setup_configurations.languages.edit', compact('language'));
     }
 
@@ -68,12 +71,13 @@ class LanguageController extends Controller
         $language = Language::findOrFail($id);
         $language->name = $request->name;
         $language->code = $request->code;
-        if($language->save()){
+        if ($language->save()) {
             flash(translate('Language has been updated successfully'))->success();
+
             return redirect()->route('admin.languages.index');
-        }
-        else{
+        } else {
             flash(translate('Something went wrong'))->error();
+
             return back();
         }
     }
@@ -83,19 +87,19 @@ class LanguageController extends Controller
         $language = Language::findOrFail($request->id);
         foreach ($request->values as $key => $value) {
             $translation_def = Translation::where('lang_key', $key)->where('lang', $language->code)->first();
-            if($translation_def == null){
+            if ($translation_def == null) {
                 $translation_def = new Translation;
                 $translation_def->lang = $language->code;
                 $translation_def->lang_key = $key;
                 $translation_def->lang_value = $value;
                 $translation_def->save();
-            }
-            else {
+            } else {
                 $translation_def->lang_value = $value;
                 $translation_def->save();
             }
         }
         flash(translate('Translations updated for ').$language->name)->success();
+
         return back();
     }
 
@@ -103,10 +107,12 @@ class LanguageController extends Controller
     {
         $language = Language::findOrFail($request->id);
         $language->rtl = $request->status;
-        if($language->save()){
+        if ($language->save()) {
             flash(translate('RTL status updated successfully'))->success();
+
             return 1;
         }
+
         return 0;
     }
 
@@ -115,14 +121,14 @@ class LanguageController extends Controller
         $language = Language::findOrFail($id);
         if (config('app.locale') == $language->code) {
             flash(translate('Default language can not be deleted'))->error();
-        }
-        else {
-            if($language->code == Session::get('locale')){
+        } else {
+            if ($language->code == Session::get('locale')) {
                 Session::put('locale', config('app.locale'));
             }
             Language::destroy($id);
             flash(translate('Language has been deleted successfully'))->success();
         }
+
         return redirect()->route('admin.languages.index');
     }
 }

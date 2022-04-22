@@ -7,9 +7,10 @@ use Illuminate\View\Component;
 
 class ProductList extends Component
 {
-
     public $products;
+
     public $style = 'with-inline-price';
+
     /**
      * Create a new component instance.
      *
@@ -30,6 +31,6 @@ class ProductList extends Component
      */
     public function render()
     {
-        return view('components.tenant.product-list.'. $this->style);
+        return view('components.tenant.product-list.'.$this->style);
     }
 }

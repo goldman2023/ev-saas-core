@@ -24,7 +24,7 @@ class UpdateAttributeRequest extends FormRequest
     public function rules()
     {
         return [
-            'min_value' => 'lt:max_value'
+            'min_value' => 'lt:max_value',
         ];
     }
 
@@ -36,7 +36,7 @@ class UpdateAttributeRequest extends FormRequest
     public function messages()
     {
         return [
-            'min_value.lt' => 'Minimum value must be smaller than Maximum value.'
+            'min_value.lt' => 'Minimum value must be smaller than Maximum value.',
         ];
     }
 }

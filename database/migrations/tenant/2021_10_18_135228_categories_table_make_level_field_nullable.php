@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CategoriesTableMakeLevelFieldNullable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -17,7 +16,6 @@ class CategoriesTableMakeLevelFieldNullable extends Migration
         Schema::table('categories', function (Blueprint $table) {
             $table->integer('level')->nullable()->default(null)->change();
         });
-
     }
 
     /**
@@ -32,4 +30,4 @@ class CategoriesTableMakeLevelFieldNullable extends Migration
             $table->integer('level')->default(0)->change();
         });
     }
-}
+};

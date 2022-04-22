@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttributesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,7 +17,7 @@ class CreateAttributesTable extends Migration
             $table->string('name', 255)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
-            $table->enum('type', ['checkbox', 'dropdown','plain_text','country','option','other','number']);
+            $table->enum('type', ['checkbox', 'dropdown', 'plain_text', 'country', 'option', 'other', 'number']);
             $table->boolean('filterable')->default(0);
             $table->text('content_type');
             $table->boolean('is_admin')->default(0);
@@ -35,4 +34,4 @@ class CreateAttributesTable extends Migration
     {
         Schema::dropIfExists('attributes');
     }
-}
+};

@@ -37,7 +37,8 @@ class Currency extends Model
         // }
     }
 
-    public function fx_rates() {
+    public function fx_rates()
+    {
         return $this->hasMany(CurrencyRate::class, 'base_currency_id');
     }
 }

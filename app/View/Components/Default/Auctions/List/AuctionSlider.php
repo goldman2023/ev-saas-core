@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class AuctionSlider extends Component
 {
     public $products;
+
     /**
      * Create a new component instance.
      *

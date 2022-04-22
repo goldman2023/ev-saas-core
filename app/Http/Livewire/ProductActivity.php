@@ -7,7 +7,9 @@ use Livewire\Component;
 class ProductActivity extends Component
 {
     public $activity;
+
     public $product;
+
     public function mount($product)
     {
         $this->activity = \Spatie\Activitylog\Models\Activity::whereHas('subject')
@@ -25,6 +27,7 @@ class ProductActivity extends Component
             'created_at',
             'desc'
         )->take(5)->get();
+
         return view('livewire.product-activity');
     }
 }

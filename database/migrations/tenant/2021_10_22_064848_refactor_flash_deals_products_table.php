@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RefactorFlashDealsProductsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -31,7 +30,7 @@ class RefactorFlashDealsProductsTable extends Migration
                 $table->unsignedBigInteger('subject_id')->nullable(true)->change();
             }
 
-            if (!Schema::hasColumn('flash_deal_relationships', 'subject_type')) {
+            if (! Schema::hasColumn('flash_deal_relationships', 'subject_type')) {
                 $table->string('subject_type')->nullable(true)->after('subject_id');
             }
 
@@ -73,4 +72,4 @@ class RefactorFlashDealsProductsTable extends Migration
     {
         //
     }
-}
+};

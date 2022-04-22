@@ -2,13 +2,11 @@
 
 namespace App\Traits;
 
-use Route;
 use App\Models\CoreMeta;
+use Route;
 
 trait CoreMetaTrait
 {
-    
-
     public function core_meta()
     {
         return $this->morphMany(CoreMeta::class, 'subject');
@@ -16,7 +14,6 @@ trait CoreMetaTrait
 
     public function isStripeProduct()
     {
-
         if ($this->core_meta()->where('key', 'live_stripe_product_id')->first()) {
             return true;
         }
@@ -28,12 +25,14 @@ trait CoreMetaTrait
         return false;
     }
 
-    public function getCoreMeta($key) {
+    public function getCoreMeta($key)
+    {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
         return $this->core_meta->where('key', $key)?->first()?->value ?? null;
     }
 
-    public function saveCoreMeta($key, $value) {
+    public function saveCoreMeta($key, $value)
+    {
         try {
             CoreMeta::updateOrCreate(
                 [
@@ -42,12 +41,12 @@ trait CoreMetaTrait
                     'key' => $key,
                 ],
                 [
-                    'value' => $value
+                    'value' => $value,
                 ]
             );
 
             return true;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }

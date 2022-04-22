@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
@@ -10,5 +11,8 @@ class AttributesService extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'ev_attributes'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'ev_attributes';
+    }
 }

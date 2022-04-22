@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class FlyoutPanel extends Component
 {
     public $id;
+
     public $title;
+
     public $framework;
 
     /**

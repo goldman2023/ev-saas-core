@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateFlashDealsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -20,11 +19,11 @@ class UpdateFlashDealsTable extends Migration
             //$table->tinyInteger('status')->change();
             //$table->tinyInteger('featured')->change();
 
-            if (!Schema::hasColumn('flash_deals', 'deleted_at')) {
+            if (! Schema::hasColumn('flash_deals', 'deleted_at')) {
                 $table->timestamp('deleted_at')->nullable(true)->after('updated_at');
             }
 
-            if (!Schema::hasColumn('flash_deals', 'business_id')) {
+            if (! Schema::hasColumn('flash_deals', 'business_id')) {
                 // foreign key to business
                 $table->integer('business_id')->nullable(false)->after('id');
                 $table->foreign('business_id')
@@ -45,4 +44,4 @@ class UpdateFlashDealsTable extends Migration
     {
         //
     }
-}
+};

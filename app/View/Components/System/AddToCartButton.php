@@ -2,21 +2,28 @@
 
 namespace App\View\Components\System;
 
+use App\Facades\CartService;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use Illuminate\View\Component;
-use App\Facades\CartService;
 use Session;
 
 class AddToCartButton extends Component
 {
     public $model;
+
     public $class;
+
     public $icon;
+
     public $label;
+
     public $labelNotInStock;
+
     public $qty;
+
     public $processing;
+
     public $disabled;
 
     /**
@@ -27,7 +34,7 @@ class AddToCartButton extends Component
     public function __construct($model = null, $class = '', $icon = '', $label = 'Add to cart', $labelNotInStock = 'Not in stock')
     {
         $this->model = $model;
-        $this->disabled = !$model->isInStock() && !$model->allow_out_of_stock_purchases;
+        $this->disabled = ! $model->isInStock() && ! $model->allow_out_of_stock_purchases;
         $this->label = $label;
         $this->labelNotInStock = $labelNotInStock;
         $this->class = $class;
@@ -41,7 +48,8 @@ class AddToCartButton extends Component
      *
      * @return \Illuminate\Contracts\View\View|\Closure|string
      */
-    public function render() {
+    public function render()
+    {
         return view('components.tailwind-ui.system.add-to-cart-button');
     }
 }

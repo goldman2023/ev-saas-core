@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIndexToUsersTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -32,8 +31,6 @@ class AddIndexToUsersTable extends Migration
             if ($doctrineTable->hasIndex('user_type')) {
                 $table->dropIndex('user_type');
             }
-
-
         });
     }
-}
+};

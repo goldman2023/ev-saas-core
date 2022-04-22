@@ -6,7 +6,6 @@ use Illuminate\View\Component;
 
 class CategoryTabsWithProducts extends Component
 {
-
     public $categories;
 
     /**
@@ -14,7 +13,6 @@ class CategoryTabsWithProducts extends Component
      *
      * @return void
      */
-
     public function __construct($categories)
     {
         //

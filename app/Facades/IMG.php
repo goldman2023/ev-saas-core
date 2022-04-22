@@ -11,5 +11,8 @@ class IMG extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'imgproxy'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'imgproxy';
+    }
 }

@@ -9,9 +9,9 @@ class UserCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
-                    'id' => (integer) $data->id,
+                    'id' => (int) $data->id,
                     'name' => $data->name,
                     'type' => $data->user_type,
                     'email' => $data->email,
@@ -21,9 +21,9 @@ class UserCollection extends ResourceCollection
                     'city' => $data->city,
                     'country' => $data->country,
                     'postal_code' => $data->postal_code,
-                    'phone' => $data->phone
+                    'phone' => $data->phone,
                 ];
-            })
+            }),
         ];
     }
 
@@ -31,7 +31,7 @@ class UserCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

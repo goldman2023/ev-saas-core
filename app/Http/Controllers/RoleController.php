@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\RoleTranslation;
+use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -16,6 +16,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::paginate(10);
+
         return view('backend.staff.staff_roles.index', compact('roles'));
     }
 
@@ -37,7 +38,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->has('permissions')){
+        if ($request->has('permissions')) {
             $role = new Role;
             $role->name = $request->name;
             $role->permissions = json_encode($request->permissions);
@@ -48,11 +49,12 @@ class RoleController extends Controller
             $role_translation->save();
 
             flash(translate('Role has been inserted successfully'))->success();
+
             return redirect()->route('admin.roles.index');
         }
         flash(translate('Something went wrong'))->error();
-        return back();
 
+        return back();
     }
 
     /**
@@ -76,7 +78,8 @@ class RoleController extends Controller
     {
         $lang = $request->lang;
         $role = Role::findOrFail($id);
-        return view('backend.staff.staff_roles.edit', compact('role','lang'));
+
+        return view('backend.staff.staff_roles.edit', compact('role', 'lang'));
     }
 
     /**
@@ -90,8 +93,8 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        if($request->has('permissions')){
-            if($request->lang == config('app.locale')){
+        if ($request->has('permissions')) {
+            if ($request->lang == config('app.locale')) {
                 $role->name = $request->name;
             }
             $role->permissions = json_encode($request->permissions);
@@ -102,9 +105,11 @@ class RoleController extends Controller
             $role_translation->save();
 
             flash(translate('Role has been updated successfully'))->success();
+
             return redirect()->route('admin.roles.index');
         }
         flash(translate('Something went wrong'))->error();
+
         return back();
     }
 
@@ -123,6 +128,7 @@ class RoleController extends Controller
 
         Role::destroy($id);
         flash(translate('Role has been deleted successfully'))->success();
+
         return redirect()->route('admin.roles.index');
     }
 }

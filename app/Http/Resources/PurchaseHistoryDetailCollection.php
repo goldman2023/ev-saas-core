@@ -9,7 +9,7 @@ class PurchaseHistoryDetailCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'product' => $data->product->name,
                     'variation' => $data->variation,
@@ -19,9 +19,9 @@ class PurchaseHistoryDetailCollection extends ResourceCollection
                     'coupon_discount' => $data->coupon_discount,
                     'quantity' => $data->quantity,
                     'payment_status' => $data->payment_status,
-                    'delivery_status' => $data->delivery_status
+                    'delivery_status' => $data->delivery_status,
                 ];
-            })
+            }),
         ];
     }
 
@@ -29,7 +29,7 @@ class PurchaseHistoryDetailCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

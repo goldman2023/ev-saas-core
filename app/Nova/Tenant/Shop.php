@@ -50,7 +50,6 @@ class Shop extends Resource
 
             // MorphToMany::make(User::class, 'subject')
 
-
             // BelongsTo::make('Author', 'author', User::class),
         ];
     }

@@ -7,25 +7,28 @@ use Livewire\Component;
 
 class DynamicImage extends Component
 {
-
     protected $rules = [
         'src.value' => 'required|string|min:6',
         'href.value' => 'string',
     ];
 
     public $label;
+
     public $src;
+
     public $href;
+
     public $show_input_field = false;
+
     public $info;
+
     public $type;
 
-    public function mount($src, $href = '#', $type = 'text' )
+    public function mount($src, $href = '#', $type = 'text')
     {
         $this->src = $src;
         $this->href = $href;
     }
-
 
     /*  TODO: These could be moved to higher level component like Editable and extended  */
     public function editLabel()
@@ -33,7 +36,8 @@ class DynamicImage extends Component
         $this->show_input_field = true;
     }
 
-    public function closeEditing() {
+    public function closeEditing()
+    {
         $this->show_input_field = false;
     }
 
@@ -50,7 +54,6 @@ class DynamicImage extends Component
         $editedLabel = EVLabel::where('key', $this->href->key)->first();
         $editedLabel->value = $this->href->value;
         $editedLabel->save();
-
 
         $this->show_input_field = false;
     }

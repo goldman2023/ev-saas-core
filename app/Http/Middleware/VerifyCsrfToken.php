@@ -18,14 +18,14 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array
      */
-     protected $except = [
-         '/sslcommerz*',
-         '/config_content',
-         '/paytm*',
-         '/payhere*',
-         '/stripe*',
-         '/iyzico*',
-         '/payfast*',
-         '/bkash*'
-     ];
+    protected $except = [
+        '/sslcommerz*',
+        '/config_content',
+        '/paytm*',
+        '/payhere*',
+        '/stripe*',
+        '/iyzico*',
+        '/payfast*',
+        '/bkash*',
+    ];
 }

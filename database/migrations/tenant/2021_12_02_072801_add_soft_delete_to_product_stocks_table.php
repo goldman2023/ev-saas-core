@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftDeleteToProductStocksTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,7 +13,7 @@ class AddSoftDeleteToProductStocksTable extends Migration
     public function up()
     {
         Schema::table('product_stocks', function (Blueprint $table) {
-            if (!Schema::hasColumn('product_stocks', 'deleted_at')) {
+            if (! Schema::hasColumn('product_stocks', 'deleted_at')) {
                 $table->softDeletes('deleted_at', 0);
             }
         });
@@ -31,4 +30,4 @@ class AddSoftDeleteToProductStocksTable extends Migration
             $table->removeColumn('deleted_at');
         });
     }
-}
+};

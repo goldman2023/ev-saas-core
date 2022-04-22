@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Closure;
 use App\Enums\StatusEnum;
+use Closure;
 
 trait HasStatus
 {

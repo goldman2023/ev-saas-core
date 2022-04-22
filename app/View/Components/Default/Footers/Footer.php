@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Footer extends Component
 {
     public $style = 'default';
+
     /**
      * Create a new component instance.
      *
@@ -25,6 +26,6 @@ class Footer extends Component
      */
     public function render()
     {
-        return view('components.default.footers.' . $this->style);
+        return view('components.default.footers.'.$this->style);
     }
 }

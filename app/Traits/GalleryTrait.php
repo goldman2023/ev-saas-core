@@ -2,17 +2,20 @@
 
 namespace App\Traits;
 
-use IMG;
-use Illuminate\Support\Collection;
 use App\Models\Upload;
 use App\Models\UploadsContentRelationship;
 use App\Models\UploadsGroup;
+use Illuminate\Support\Collection;
+use IMG;
 
 trait GalleryTrait
 {
     public mixed $thumbnail;
+
     public mixed $cover;
+
     public mixed $gallery;
+
     public mixed $meta_img;
 
     /**
@@ -48,14 +51,15 @@ trait GalleryTrait
      *
      * @return void
      */
-    public function convertGalleryModelsToIDs() {
+    public function convertGalleryModelsToIDs()
+    {
         $this->thumbnail = ($this->thumbnail instanceof Upload) ? ($this->thumbnail->id ?? null) : $this->thumbnail;
         $this->cover = ($this->cover instanceof Upload) ? ($this->cover->id ?? null) : $this->cover;
         $this->meta_img = ($this->meta_img instanceof Upload) ? ($this->meta_img->id ?? null) : $this->meta_img;
 
         $gallery_ids = [];
-        if(($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && !empty($this->gallery))) {
-            foreach($this->gallery as $img) {
+        if (($this->gallery instanceof Collection && $this->gallery->isNotEmpty()) || (is_array($this->gallery) && ! empty($this->gallery))) {
+            foreach ($this->gallery as $img) {
                 $gallery_ids[] = ($img instanceof Upload) ? ($img->id ?? null) : $img;
             }
         }
@@ -83,14 +87,14 @@ trait GalleryTrait
 //    }
 
     /******* START THUMBNAIL *******/
-    public function getThumbnailAttribute() {
-        if(!isset($this->thumbnail)) {
-            
+    public function getThumbnailAttribute()
+    {
+        if (! isset($this->thumbnail)) {
             $this->thumbnail = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
                 return $upload->pivot->relation_type === 'thumbnail';
             })->first();
         }
-        
+
         return $this->thumbnail;
     }
 
@@ -106,8 +110,9 @@ trait GalleryTrait
     }
 
     /******* START COVER *******/
-    public function getCoverAttribute() {
-        if(!isset($this->cover)) {
+    public function getCoverAttribute()
+    {
+        if (! isset($this->cover)) {
             $this->cover = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
                 return $upload->pivot->relation_type === 'cover';
             })->first();
@@ -128,8 +133,9 @@ trait GalleryTrait
     }
 
     /******* START GALLERY *******/
-    public function getGalleryAttribute() {
-        if(!isset($this->gallery)) {
+    public function getGalleryAttribute()
+    {
+        if (! isset($this->gallery)) {
             $this->gallery = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
                 return $upload->pivot->relation_type === 'gallery';
             })->sortBy('order');
@@ -149,19 +155,19 @@ trait GalleryTrait
     {
         $gallery = [];
 
-        if(!empty($this->gallery)) {
-            foreach($this->gallery as $image) {
+        if (! empty($this->gallery)) {
+            foreach ($this->gallery as $image) {
                 $gallery[] = IMG::get($image, IMG::mergeWithDefaultOptions($options, 'gallery'));
             }
         }
-
 
         return $cast_to === 'collection' ? collect($gallery) : $gallery;
     }
 
     /******* START THUMBNAIL *******/
-    public function getMetaImgAttribute() {
-        if(!isset($this->meta_img)) {
+    public function getMetaImgAttribute()
+    {
+        if (! isset($this->meta_img)) {
             $this->meta_img = empty($this->uploads) ? null : $this->uploads->filter(function ($upload) {
                 return $upload->pivot->relation_type === 'meta_img';
             })->first();
@@ -197,54 +203,53 @@ trait GalleryTrait
             [$this->getGallery($options)]
         )));
 
-        if($include_meta) {
+        if ($include_meta) {
             $all[] = $this->getMetaImg($options);
         }
 
         return $cast_to === 'collection' ? collect($all) : $all;
     }
 
-    public function syncGalleryUploads($specific_property = null) {
+    public function syncGalleryUploads($specific_property = null)
+    {
+        $gallery_uploads = ['thumbnail', 'cover', 'gallery', 'meta_img'];
 
-        $gallery_uploads = ['thumbnail', 'cover', 'gallery','meta_img'];
-
-        foreach($gallery_uploads as $property) {
-            if(empty($specific_property) || $property === $specific_property) {
+        foreach ($gallery_uploads as $property) {
+            if (empty($specific_property) || $property === $specific_property) {
                 $upload = $this->{$property};
 
-                if($property === 'gallery') {
-                    if(is_string($upload)) {
+                if ($property === 'gallery') {
+                    if (is_string($upload)) {
                         // property is either multiple IDs (1,2,3...) or numeric string single ID ("55")
                         $upload_keys = explode(',', $upload);
-                    } else if ($upload instanceof Collection) {
+                    } elseif ($upload instanceof Collection) {
                         $upload_keys = $upload->toArray();
-                    } else if (is_array($upload)) {
+                    } elseif (is_array($upload)) {
                         $upload_keys = $upload;
                     } else {
                         return;
                     }
                 } else {
-                    if($upload instanceof Upload) {
+                    if ($upload instanceof Upload) {
                         $upload_keys = [$upload->id];
-                    } else if(ctype_digit($upload) || is_int($upload)) {
+                    } elseif (ctype_digit($upload) || is_int($upload)) {
                         $upload_keys = [$upload];
                     } else {
                         continue;
                     }
                 }
 
-
                 $upload_values = $upload_keys;
-                array_walk($upload_values, function(&$value, $key) use($property) {
+                array_walk($upload_values, function (&$value, $key) use ($property) {
                     $value = [
                         'relation_type' => $property,
-                        'order' => $property === 'gallery' ? $key : 0
+                        'order' => $property === 'gallery' ? $key : 0,
                     ];
                 });
-                
+
                 try {
                     $sync_array = array_combine($upload_keys, $upload_values);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     continue;
                 }
 
@@ -253,19 +258,19 @@ trait GalleryTrait
         }
     }
 
-
     // Upload Groups Relations functions
-    public function uploads_groups() {
+    public function uploads_groups()
+    {
         return $this->hasMany(UploadsGroup::class, 'user_id', 'user_id');
     }
 
-    public function gallery_uploads_groups() {
+    public function gallery_uploads_groups()
+    {
         return $this->hasMany(UploadsGroup::class, 'user_id', 'user_id')->where('type', 'gallery');
     }
 
-    public function document_uploads_groups() {
+    public function document_uploads_groups()
+    {
         return $this->hasMany(UploadsGroup::class, 'user_id', 'user_id')->where('type', 'document');
     }
-
-
 }

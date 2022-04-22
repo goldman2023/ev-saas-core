@@ -17,8 +17,8 @@ class LeadController extends Controller
         //
 
         $leads = Lead::paginate(20);
-        return view('frontend.dashboard.leads.index', compact('leads'));
 
+        return view('frontend.dashboard.leads.index', compact('leads'));
     }
 
     /**
@@ -45,7 +45,6 @@ class LeadController extends Controller
         $lead->save();
         /*  TODO: Create notification for new leads */
         return redirect()->route('leads.success');
-
     }
 
     public function success()

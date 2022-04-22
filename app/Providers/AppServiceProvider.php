@@ -8,10 +8,10 @@ use App\Rules\MatchPassword;
 use DebugBar\DebugBar;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 use Qirolab\Theme\Theme;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,7 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
 
@@ -64,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('check_array', function ($attribute, $value, $parameters, $validator) {
             return count(array_filter($value, function ($var) use ($parameters) {
-                return ($var && $var >= $parameters[0] && strlen($var) >= $parameters[1]);
+                return $var && $var >= $parameters[0] && strlen($var) >= $parameters[1];
             }));
         });
     }

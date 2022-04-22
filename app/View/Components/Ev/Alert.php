@@ -7,13 +7,18 @@ use Illuminate\View\Component;
 class Alert extends Component
 {
     public $class;
-    public $contentClass;
-    public $id;
-    public $type;
-    public $title;
-    public $content;
-    public $footer;
 
+    public $contentClass;
+
+    public $id;
+
+    public $type;
+
+    public $title;
+
+    public $content;
+
+    public $footer;
 
     /**
      * Create a new component instance.

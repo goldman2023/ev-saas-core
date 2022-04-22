@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use OptimistDigital\MenuBuilder\MenuBuilder;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use OptimistDigital\MenuBuilder\MenuBuilder;
 
-class CreateMenusTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create(MenuBuilder::getMenusTableName(), function (Blueprint $table) {
@@ -39,4 +38,4 @@ class CreateMenusTable extends Migration
         Schema::dropIfExists(MenuBuilder::getMenuItemsTableName());
         Schema::dropIfExists(MenuBuilder::getMenusTableName());
     }
-}
+};

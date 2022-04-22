@@ -11,7 +11,8 @@ class UniqueSKU implements Rule
 {
     protected $items;
 
-    public function __construct($items = null) {
+    public function __construct($items = null)
+    {
         $this->items = $items;
     }
 
@@ -19,15 +20,14 @@ class UniqueSKU implements Rule
     {
         $exists = false;
 
-        if($this->items->has($attribute)) {
+        if ($this->items->has($attribute)) {
             $item = $this->items->get($attribute);
 
             $exists = ProductStock::where([
                 ['sku', '=', $value],
                 ['subject_id', '!=', $item->id],
-                ['subject_type', '!=', $item::class]
+                ['subject_type', '!=', $item::class],
             ])->exists();
-
 
 //            ProductStock::where([
 //                ['sku', '=', $value],
@@ -36,7 +36,7 @@ class UniqueSKU implements Rule
 //            ])->dd();
         }
 
-        return !$exists;
+        return ! $exists;
     }
 
     public function message()

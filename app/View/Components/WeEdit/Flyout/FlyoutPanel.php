@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class FlyoutPanel extends Component
 {
     public $id;
+
     public $title;
 
     /**
@@ -14,7 +15,7 @@ class FlyoutPanel extends Component
      *
      * @return void
      */
-    public function __construct($id = 'we_edit_flyout_panel', $title = 'Flyout panel') 
+    public function __construct($id = 'we_edit_flyout_panel', $title = 'Flyout panel')
     {
         $this->id = $id;
         $this->title = $title;
