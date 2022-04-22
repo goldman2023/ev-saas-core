@@ -4,7 +4,7 @@
   @display-section-settings-modal.window="show = true;"
   x-show="show">
     <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
             x-show="show"
             x-transition:enter="ease-out duration-300"
             x-transition:enter-start="opacity-0"
@@ -51,22 +51,22 @@
               }
             })
           ">
-      
+
             <div class="border-b border-gray-200 block">
               <nav class="flex space-x-4" aria-label="Tabs">
                 <!-- Current: "bg-indigo-100 text-indigo-700", Default: "text-gray-500 hover:text-gray-700" -->
                 <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                   :class="{'bg-white text-indigo-700': active_tab === 'spacing', 'text-gray-500 hover:text-gray-700': active_tab !== 'spacing'}"
                   @click="active_tab = 'spacing'"> {{ translate('Spacing') }} </a>
-          
-                <a href="#" class="px-3 py-2 font-medium text-sm rounded-md" 
+
+                <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                   :class="{'bg-white text-indigo-700': active_tab === 'background', 'text-gray-500 hover:text-gray-700': active_tab !== 'background'}"
                   @click="active_tab = 'background'"> {{ translate('Background') }} </a>
-          
-                <a href="#" class="px-3 py-2 font-medium text-sm rounded-md" 
+
+                <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                   :class="{'bg-white text-indigo-700': active_tab === 'visibility', 'text-gray-500 hover:text-gray-700': active_tab !== 'visibility'}"
                   @click="active_tab = 'visibility'"> {{ translate('Visibility') }} </a>
-          
+
                 <a href="#" class="px-3 py-2 font-medium text-sm rounded-md"
                   :class="{'bg-white text-indigo-700': active_tab === 'other', 'text-gray-500 hover:text-gray-700': active_tab !== 'other'}"
                   @click="active_tab = 'other'"> {{ translate('Other') }} </a>
@@ -184,7 +184,7 @@
                         -->
                         <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer" @click="section.settings.background.type = key; show_type_dropdown= false;">
                           <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-                          <span class="font-normal block truncate" 
+                          <span class="font-normal block truncate"
                                 :class="{'font-semibold': key === section.settings.background.type, 'font-normal': key !== section.settings.background.type }"
                                 x-text="type">
                           </span>
@@ -217,11 +217,11 @@
 
                       {{-- Image Pickers --}}
                       <div class="w-full mt-4" x-show="section.settings.background.type === '{{ \App\Enums\BackgroundTypeEnum::image()->value }}'">
-                      
+
                         {{-- Mobile image --}}
                         <div class="w-full" x-data="{
                             id: 'section-background-mobile'
-                          }" 
+                          }"
                           @we-media-selected-event.window="
                             if($event.detail.for_id === id) {
                               section.settings.background.urls.mobile = $event.detail.selected[0] || '';
@@ -229,14 +229,14 @@
                           "
                         >
                           <label for="cover-photo" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Mobile image') }} </label>
-                          
+
                           <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'section-background-mobile', 'image', [section.settings.background.urls.mobile])">
                             <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md"
                                  :class="{'px-6 pt-5 pb-6':section.settings.background.urls.mobile.length <= 0}">
-                              
+
                               <template x-if="section.settings.background.urls.mobile.length > 0">
                                 <div class="h-[200px] w-full rounded cursor-pointer">
-                                  <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(section.settings.background.urls.mobile)" />
+                                  <img class="w-full h-[200px] object-contain" x-bind:src="window.WE.IMG.url(section.settings.background.urls.mobile)" />
                                 </div>
                               </template>
 
@@ -254,7 +254,7 @@
                                   <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
                                 </div>
                               </template>
-                              
+
                             </div>
                           </div>
                         </div>
@@ -262,7 +262,7 @@
                         {{-- Tablet image --}}
                         <div class="w-full" x-data="{
                             id: 'section-background-tablet'
-                          }" 
+                          }"
                           @we-media-selected-event.window="
                             if($event.detail.for_id === id) {
                               section.settings.background.urls.tablet = $event.detail.selected[0] || '';
@@ -270,14 +270,14 @@
                           "
                         >
                           <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Tablet image') }} </label>
-                          
+
                           <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'section-background-tablet', 'image', [section.settings.background.urls.tablet])">
                             <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md"
                                 :class="{'px-6 pt-5 pb-6':section.settings.background.urls.tablet.length <= 0}">
-                              
+
                               <template x-if="section.settings.background.urls.tablet.length > 0">
                                 <div class="h-[200px] w-full rounded cursor-pointer">
-                                  <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(section.settings.background.urls.tablet)" />
+                                  <img class="w-full h-[200px] object-contain" x-bind:src="window.WE.IMG.url(section.settings.background.urls.tablet)" />
                                 </div>
                               </template>
 
@@ -295,7 +295,7 @@
                                   <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
                                 </div>
                               </template>
-                              
+
                             </div>
                           </div>
                         </div>
@@ -312,14 +312,14 @@
                           "
                         >
                           <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 pb-2"> {{ translate('Desktop image') }} </label>
-                          
+
                           <div class="mt-1 sm:mt-0 sm:col-span-2 cursor-pointer" @click="$wire.emit('showMediaLibrary', 'section-background-desktop', 'image', [section.settings.background.urls.desktop])">
                             <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md"
                                 :class="{'px-6 pt-5 pb-6':section.settings.background.urls.desktop.length <= 0}">
-                              
+
                               <template x-if="section.settings.background.urls.desktop.length > 0">
                                 <div class="h-[200px] w-full rounded cursor-pointer">
-                                  <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(section.settings.background.urls.desktop)" />
+                                  <img class="w-full h-[200px] object-contain" x-bind:src="window.WE.IMG.url(section.settings.background.urls.desktop)" />
                                 </div>
                               </template>
 
@@ -337,7 +337,7 @@
                                   <p class="text-xs text-gray-500">{{ translate('PNG, JPG, GIF up to 3MB') }}</p>
                                 </div>
                               </template>
-                              
+
                             </div>
                           </div>
                         </div>
@@ -351,7 +351,7 @@
               </div>
 
               <div class="w-full grid grid-cols-1 gap-4" x-show="active_tab === 'visibility'">
-                
+
                 {{-- Responsive Visibility --}}
                 <div class="col-span-3" x-data="{
                     responsive_visibility: @js(\App\Enums\ResponsiveVisibilityEnum::labels()),
@@ -375,12 +375,12 @@
 
                       <template x-for="(type, key) in responsive_visibility">
                         <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer" @click="section.settings.responsive_visibility = key; show_responsive_visibility_dropdown = false;">
-                          <span class="font-normal block truncate" 
+                          <span class="font-normal block truncate"
                                 :class="{'font-semibold': key === section.settings.responsive_visibility, 'font-normal': key !== section.settings.responsive_visibility }"
                                 x-text="type">
                           </span>
 
-                          <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4" 
+                          <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
                                 x-show="key === section.settings.responsive_visibility">
                             @svg('heroicon-s-check', ['class' => 'w-5 h-5'])
                           </span>
@@ -397,7 +397,7 @@
                     show_user_visibility_dropdown: false,
                   }">
                   <label class="block text-sm font-medium text-gray-700">{{ translate('User visibility') }}</label>
-                  
+
                   <div class="mt-1 relative">
                     <button type="button" @click="show_user_visibility_dropdown = !show_user_visibility_dropdown" class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                       <span class="block truncate" x-text="user_visibility[section.settings.user_visibility]"></span>
@@ -415,12 +415,12 @@
 
                       <template x-for="(type, key) in user_visibility">
                         <li class="text-gray-900 select-none relative py-2 pl-3 pr-9 cursor-pointer" @click="section.settings.user_visibility = key; show_user_visibility_dropdown = false;">
-                          <span class="font-normal block truncate" 
+                          <span class="font-normal block truncate"
                                 :class="{'font-semibold': key === section.settings.user_visibility, 'font-normal': key !== section.settings.user_visibility }"
                                 x-text="type">
                           </span>
 
-                          <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4" 
+                          <span class="text-indigo-600 absolute inset-y-0 right-0 flex items-center pr-4"
                                 x-show="key === section.settings.user_visibility">
                             @svg('heroicon-s-check', ['class' => 'w-5 h-5'])
                           </span>
@@ -435,8 +435,8 @@
 
                 <div>
                   <label class="flex items-center text-sm font-medium text-gray-700">{{ translate('Extra classes') }}</label>
-                  
-                  <div class="mt-1 relative rounded-md shadow-sm w-full">                    
+
+                  <div class="mt-1 relative rounded-md shadow-sm w-full">
                     <input type="text" x-model.lazy="section.settings.extra_classes" class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                   </div>
                 </div>

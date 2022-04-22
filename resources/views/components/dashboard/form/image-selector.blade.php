@@ -12,7 +12,7 @@
                 file_name: null,
             };
         }
-        
+
         {{ $field }}.id = $event.detail.selected[0]['id'] || '';
         {{ $field }}.file_name = $event.detail.selected[0]['file_name'] || '';
     }
@@ -23,7 +23,7 @@
 
         <template x-if="hasImage()">
             <div class="h-[200px] w-full rounded cursor-pointer">
-                <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url({{ $field }}.file_name)" />
+                <img class="w-full h-[200px] object-contain" x-bind:src="window.WE.IMG.url({{ $field }}.file_name)" />
             </div>
         </template>
 

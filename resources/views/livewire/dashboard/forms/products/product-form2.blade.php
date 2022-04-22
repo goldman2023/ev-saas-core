@@ -93,21 +93,21 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Basic info') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('This is basic and required info about the product') }}</p>
                         </div>
-                
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
                             <!-- Title -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Name') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text" class="form-standard @error('product.name') is-invalid @enderror"
                                             placeholder="{{ translate('New post title') }}"
                                             {{-- @input="generateURL($($el).val())" --}}
                                             wire:model.defer="product.name" />
-                                
+
                                     <x-system.invalid-msg field="product.name"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -115,17 +115,17 @@
 
                             <!-- Excerpt -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Excerpt') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <textarea type="text" class="form-standard h-[80px] @error('product.excerpt') is-invalid @enderror"
                                                 placeholder="{{ translate('Write a short promo description for this product') }}"
                                                 wire:model.defer="product.excerpt">
                                     </textarea>
-                                
+
                                     <x-system.invalid-msg class="w-full" field="product.excerpt"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -133,14 +133,14 @@
 
                             <!-- Description -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
-                
+
                                 <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Description') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <x-dashboard.form.froala field="description" id="product-description-wysiwyg"></x-dashboard.form.froala>
-                                
+
                                     <x-system.invalid-msg class="w-full" field="product.description"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -155,22 +155,22 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Locked Content') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('User will be able to access this content once product is purchased') }}</p>
                         </div>
-                
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
                             <template x-if="core_meta.unlocakbles.value != null && core_meta.unlocakbles.value.length > 0">
                                 <template x-for="item in core_meta.unlocakbles.value">
                                     <!-- Title -->
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                        
+
                                         <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                             {{ translate('Name') }}
                                         </label>
-                        
+
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('product.name') is-invalid @enderror"
                                                     placeholder="{{ translate('New post title') }}"
                                                     wire:model.defer="product.name" />
-                                        
+
                                             <x-system.invalid-msg field="product.name"></x-system.invalid-msg>
                                         </div>
                                     </div>
@@ -178,23 +178,23 @@
                                 </template>
                             </template>
                         </div>
-                        
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
 
 
                             <!-- Excerpt -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                 <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Excerpt') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <textarea type="text" class="form-standard h-[80px] @error('product.excerpt') is-invalid @enderror"
                                                 placeholder="{{ translate('Write a short promo description for this product') }}"
                                                 wire:model.defer="product.excerpt">
                                     </textarea>
-                                
+
                                     <x-system.invalid-msg class="w-full" field="product.excerpt"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -202,14 +202,14 @@
 
                             <!-- Description -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
-                
+
                                 <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                     {{ translate('Description') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <x-dashboard.form.froala field="description" id="product-description-wysiwyg"></x-dashboard.form.froala>
-                                
+
                                     <x-system.invalid-msg class="w-full" field="product.description"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -218,7 +218,7 @@
                     </div> --}}
                     {{-- END Card Unlockables --}}
 
-                    
+
                     {{-- Card Pricing --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{
                             show_tax: {{ !empty($product->tax) ? 'true':'false' }},
@@ -227,7 +227,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Pricing') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Product pricing details') }}</p>
                         </div>
-                
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
                             <!-- Price -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -238,14 +238,14 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <div class="grid grid-cols-10 gap-3">
                                         <div class="col-span-6">
-                                            <input type="number" 
-                                                    step="0.01" 
+                                            <input type="number"
+                                                    step="0.01"
                                                     class="form-standard @error('product.unit_price') is-invalid @enderror"
                                                     placeholder="{{ translate('0.00') }}"
                                                     wire:model.defer="product.unit_price" />
                                         </div>
 
-                                        <div class="col-span-4" x-data="{}"> 
+                                        <div class="col-span-4" x-data="{}">
                                             <x-dashboard.form.select :items="\FX::getAllCurrencies(formatted: true)" selected="base_currency" :nullable="false"></x-dashboard.form.select>
                                         </div>
 
@@ -264,15 +264,15 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <div class="grid grid-cols-10 gap-3">
                                         <div class="col-span-6">
-                                            <input type="number" 
-                                                    step="0.01" 
+                                            <input type="number"
+                                                    step="0.01"
                                                     min="0"
                                                     class="form-standard @error('product.discount') is-invalid @enderror"
                                                     placeholder="{{ translate('0.00') }}"
                                                     wire:model.defer="product.discount" />
                                         </div>
 
-                                        <div class="col-span-4" x-data="{}"> 
+                                        <div class="col-span-4" x-data="{}">
                                             <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="discount_type" :nullable="false"></x-dashboard.form.select>
                                         </div>
 
@@ -290,8 +290,8 @@
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <button type="button" @click="show_tax = !show_tax" 
-                                                :class="{'bg-primary':show_tax, 'bg-gray-200':!show_tax}" 
+                                    <button type="button" @click="show_tax = !show_tax"
+                                                :class="{'bg-primary':show_tax, 'bg-gray-200':!show_tax}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':show_tax, 'translate-x-0':!show_tax}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
@@ -308,15 +308,15 @@
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <div class="grid grid-cols-10 gap-3">
                                             <div class="col-span-6">
-                                                <input type="number" 
-                                                        step="0.01" 
+                                                <input type="number"
+                                                        step="0.01"
                                                         min="0"
                                                         class="form-standard @error('product.tax') is-invalid @enderror"
                                                         placeholder="{{ translate('Additional fee (fixed or percentage)') }}"
                                                         wire:model.defer="product.tax" />
                                             </div>
 
-                                            <div class="col-span-4" x-data="{}"> 
+                                            <div class="col-span-4" x-data="{}">
                                                 <x-dashboard.form.select :items="\App\Enums\AmountPercentTypeEnum::toArray()" selected="tax_type" :nullable="false"></x-dashboard.form.select>
                                             </div>
 
@@ -337,8 +337,8 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <div class="grid grid-cols-10 gap-3">
                                         <div class="col-span-6">
-                                            <input type="number" 
-                                                    step="0.01" 
+                                            <input type="number"
+                                                    step="0.01"
                                                     class="form-standard @error('product.purchase_price') is-invalid @enderror"
                                                     placeholder="{{ translate('0.00') }}"
                                                     wire:model.defer="product.purchase_price" />
@@ -356,7 +356,7 @@
                         </div>
                     </div>
                     {{-- END Card Pricing --}}
-                    
+
 
                     {{-- Card Inventory --}}
                     <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}">
@@ -364,7 +364,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Inventory') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Track your product inventory') }}</p>
                         </div>
-                
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
 
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
@@ -373,30 +373,30 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="track_inventory = !track_inventory" 
-                                                :class="{'bg-primary':track_inventory, 'bg-gray-200':!track_inventory}" 
+                                    <button type="button" @click="track_inventory = !track_inventory"
+                                                :class="{'bg-primary':track_inventory, 'bg-gray-200':!track_inventory}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':track_inventory, 'translate-x-0':!track_inventory}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
                                 </div>
                             </div>
 
-                            
+
                             <div class="w-full space-y-6 sm:space-y-5" x-show="track_inventory">
                                 {{-- SKU --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                            
+
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('SKU') }}
                                     </label>
-                    
+
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <input type="text" class="form-standard @error('product.sku') is-invalid @enderror"
                                                 placeholder="{{ translate('Product SKU') }}"
                                                 wire:model.defer="product.sku" />
 
                                         <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
-                                    
+
                                         <x-system.invalid-msg field="product.sku"></x-system.invalid-msg>
                                     </div>
                                 </div>
@@ -404,16 +404,16 @@
 
                                 {{-- Barcode --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                            
+
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('Barcode') }}
                                     </label>
-                    
+
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <input type="text" class="form-standard @error('product.barcode') is-invalid @enderror"
                                                 placeholder="{{ translate('Product barcode') }}"
                                                 wire:model.defer="product.barcode" />
-                                    
+
                                         <small class="text-muted">{{ translate('Leave empty if you want to add only Barcode of the variations.') }}</small>
 
                                         <x-system.invalid-msg field="product.barcode"></x-system.invalid-msg>
@@ -429,8 +429,8 @@
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                        <button type="button" @click="use_serial = !use_serial" 
-                                                    :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}" 
+                                        <button type="button" @click="use_serial = !use_serial"
+                                                    :class="{'bg-primary':use_serial, 'bg-gray-200':!use_serial}"
                                                     class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                                 <span :class="{'translate-x-5':use_serial, 'translate-x-0':!use_serial}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                         </button>
@@ -445,8 +445,8 @@
                                     </div>
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases" 
-                                                    :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}" 
+                                        <button type="button" @click="allow_out_of_stock_purchases = !allow_out_of_stock_purchases"
+                                                    :class="{'bg-primary':allow_out_of_stock_purchases, 'bg-gray-200':!allow_out_of_stock_purchases}"
                                                     class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                                 <span :class="{'translate-x-5':allow_out_of_stock_purchases, 'translate-x-0':!allow_out_of_stock_purchases}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                         </button>
@@ -464,8 +464,8 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <div class="grid grid-cols-10 gap-3">
                                                 <div class="col-span-6">
-                                                    <input type="number" 
-                                                            step="0.01" 
+                                                    <input type="number"
+                                                            step="0.01"
                                                             class="form-standard @error('product.min_qty') is-invalid @enderror"
                                                             placeholder="{{ translate('0.00') }}"
                                                             wire:model.defer="product.min_qty" />
@@ -486,8 +486,8 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <div class="grid grid-cols-10 gap-3">
                                                 <div class="col-span-6">
-                                                    <input type="number" 
-                                                            step="0.01" 
+                                                    <input type="number"
+                                                            step="0.01"
                                                             class="form-standard @error('product.current_stock') is-invalid @enderror"
                                                             placeholder="{{ translate('0.00') }}"
                                                             wire:model.defer="product.current_stock" />
@@ -502,11 +502,11 @@
 
                                 {{-- Unit --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                            
+
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('Unit') }}
                                     </label>
-                    
+
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <div class="grid grid-cols-10 gap-3">
                                             <div class="col-span-6">
@@ -530,7 +530,7 @@
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
                                         <div class="grid grid-cols-10 gap-3">
                                             <div class="col-span-6">
-                                                <input type="number" 
+                                                <input type="number"
                                                         step="0.01"
                                                         min="0"
                                                         class="form-standard @error('product.low_stock_qty') is-invalid @enderror"
@@ -544,7 +544,7 @@
                                 </div>
                                 <!-- END Low stock quantity -->
                             </div>
-                            
+
                         </div>
                     </div>
                     {{-- END Card Inventory --}}
@@ -556,7 +556,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Shipping') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Set available delivery options for your product') }}</p>
                         </div>
-                
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
                             <!-- Is digital product? -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 " x-data="{}">
@@ -566,15 +566,15 @@
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <button type="button" @click="is_digital = !is_digital" 
-                                                :class="{'bg-primary':is_digital, 'bg-gray-200':!is_digital}" 
+                                    <button type="button" @click="is_digital = !is_digital"
+                                                :class="{'bg-primary':is_digital, 'bg-gray-200':!is_digital}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':is_digital, 'translate-x-0':!is_digital}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
                                 </div>
                             </div>
 
-                            
+
                             <div class="w-full" x-show="is_digital">
                                 {{-- TODO: Add Shipping methods first and then edit this part --}}
                             </div>
@@ -589,12 +589,12 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Attributes') }}</h3>
                             <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Enrich your products with additional data') }}</p>
                         </div>
-                
+
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
                             <template x-for="attribute in attributes">
                                 <div class="w-full mb-3" x-data="{
-                                        getSelectorID() { 
-                                            return 'attributes_'+this.attribute.id+'_attribute_values'; 
+                                        getSelectorID() {
+                                            return 'attributes_'+this.attribute.id+'_attribute_values';
                                         },
                                         hasCustomProperty(name) {
                                             return this.attribute.custom_properties !== null &&
@@ -602,16 +602,16 @@
                                                     this.attribute.custom_properties.hasOwnProperty(name);
                                         },
                                         getMinValue() {
-                                            return this.hasCustomProperty('min_value') ? this.attribute.custom_properties.min_value : 0; 
+                                            return this.hasCustomProperty('min_value') ? this.attribute.custom_properties.min_value : 0;
                                         },
                                         getMaxValue() {
-                                            return this.hasCustomProperty('max_value') ? this.attribute.custom_properties.max_value : 999; 
+                                            return this.hasCustomProperty('max_value') ? this.attribute.custom_properties.max_value : 999;
                                         },
                                         getMinRows() {
-                                            return this.hasCustomProperty('min_rows') ? this.attribute.custom_properties.min_rows : 0; 
+                                            return this.hasCustomProperty('min_rows') ? this.attribute.custom_properties.min_rows : 0;
                                         },
                                         getMaxRows() {
-                                            return this.hasCustomProperty('max_rows') ? this.attribute.custom_properties.max_rows : 999; 
+                                            return this.hasCustomProperty('max_rows') ? this.attribute.custom_properties.max_rows : 999;
                                         },
                                     }" x-cloak>
 
@@ -654,26 +654,26 @@
                                                             this.selected_items.push(Number(key));
                                                         }
                                                     }
-                
+
                                                     if(!this.multiple) {
                                                         this.show = false;
                                                         this.placeholder = label;
                                                     }
-            
+
                                                     selected_attribute_values['attribute.'+attribute.id] = this.selected_items;
                                                 }
                                             }">
                                             <div class="justify-center h-full col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
                                                 <span class="text-sm font-medium text-gray-900" x-text="attribute.name"></span>
                                             </div>
-            
+
                                             <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full">
-            
+
                                                 <div class="we-select relative w-full" x-data="{}" @click.outside="show = false">
-                                                    <div class="we-select__selector select-none w-full flex flex-wrap border pl-3 pt-2 pb-1 pr-6 relative cursor-pointer" 
+                                                    <div class="we-select__selector select-none w-full flex flex-wrap border pl-3 pt-2 pb-1 pr-6 relative cursor-pointer"
                                                         @click="show = !show">
                                                         @svg('heroicon-o-chevron-down', ['class' => 'we-select__selector-arrow absolute w-[16px] h-[16px] vertical-center', ':class' => "{'rotate-180': show}"])
-                                    
+
                                                         <template x-if="!multiple">
                                                             <span class="block pb-1" x-text="getPlaceholder()"></span>
                                                         </template>
@@ -686,7 +686,7 @@
                                                                     })">
                                                                         <div class="we-select__selector-selected-item rounded mr-2 mb-1 relative">
                                                                             <span class="we-select__selector-selected-item-label pl-1 mr-1" x-text="item.values"></span>
-                                                                            <button type="button" class="we-select__selector-selected-item-remove px-2" 
+                                                                            <button type="button" class="we-select__selector-selected-item-remove px-2"
                                                                                     @click="event.stopPropagation(); select(item.id, item.values)">
                                                                                 <span>×</span>
                                                                             </button>
@@ -699,11 +699,11 @@
                                                             </div>
                                                         </template>
                                                     </div>
-                    
+
                                                     <div class="we-select__dropdown  absolute bg-white shadow border rounded mt-1  w-full" x-show="show">
                                                         <ul class="we-select__dropdown-list select-none w-full">
                                                             <template x-for="item in items">
-                                                                <li class="we-select__dropdown-list-item py-2 px-3 cursor-pointer" 
+                                                                <li class="we-select__dropdown-list-item py-2 px-3 cursor-pointer"
                                                                     x-text="item.values"
                                                                     :class="{'selected': isSelected(item.id) }"
                                                                     @click="select(item.id, item.values)"></li>
@@ -721,8 +721,8 @@
 
                                                         <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                                            <button type="button" @click="attribute.for_variations = !attribute.for_variations" 
-                                                                        :class="{'bg-primary':attribute.for_variations, 'bg-gray-200':!attribute.for_variations}" 
+                                                            <button type="button" @click="attribute.for_variations = !attribute.for_variations"
+                                                                        :class="{'bg-primary':attribute.for_variations, 'bg-gray-200':!attribute.for_variations}"
                                                                         class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                                                     <span :class="{'translate-x-5':attribute.for_variations, 'translate-x-0':!attribute.for_variations}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                             </button>
@@ -739,14 +739,14 @@
                                     {{-- Plain Text --}}
                                     <template x-if="attribute.type === 'plain_text'">
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                                <input type="text" 
+                                                <input type="text"
                                                         class="form-standard"
                                                         :id="'attributes_'+attribute.id+'_attribute_values'"
-                                                        x-model="attribute.attribute_values[0].values" />                                            
+                                                        x-model="attribute.attribute_values[0].values" />
                                             </div>
                                         </div>
                                     </template>
@@ -755,9 +755,9 @@
                                     {{-- Number --}}
                                     <template x-if="attribute.type === 'number'">
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2 flex rounded-md shadow-sm">
                                                 <input type="number"
                                                         :id="'attributes_'+attribute.id+'_attribute_values'"
@@ -768,7 +768,7 @@
 
                                                 <template x-if="hasCustomProperty('unit')">
                                                     <span x-text="attribute.custom_properties.unit" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"></span>
-                                                </template>                                           
+                                                </template>
                                             </div>
                                         </div>
                                     </template>
@@ -783,14 +783,14 @@
                                                         mode: 'single',
                                                         enableTime: false,
                                                     };
-                                        
+
                                                     if(this.hasCustomProperty('with_time') && this.attribute.custom_properties.with_time) {
                                                         options.enableTime = true;
                                                         options.dateFormat = 'd.m.Y. H:i';
                                                     } else {
                                                         options.dateFormat = 'd.m.Y.';
                                                     }
-                                        
+
                                                     if(this.hasCustomProperty('range') && this.attribute.custom_properties.range) {
                                                         options.mode = 'range';
                                                     }
@@ -798,15 +798,15 @@
                                                     return options;
                                                 },
                                             }" x-init="$nextTick(() => { flatpickr('.js-flatpickr', getDateOptions()); });">
-                
+
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2 flex rounded-md shadow-sm">
                                                 <input x-model="attribute.attribute_values[0].values"
                                                         type="text"
                                                         class="js-flatpickr flatpickr-custom form-standard"
                                                         placeholder="{{ translate('Pick a date(s)') }}"
-                                                        data-input />                                       
+                                                        data-input />
                                             </div>
                                         </div>
                                     </template>
@@ -816,9 +816,9 @@
                                     {{-- Checkbox --}}
                                     <template x-if="attribute.type === 'checkbox'">
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col rounded-md shadow-sm space-y-4">
                                                 <template x-for="(attribute_value, index) in attribute.attribute_values">
                                                     <div class="relative flex items-center " :class="{'!mt-0': index === 0}">
@@ -843,9 +843,9 @@
                                     {{-- Radio --}}
                                     <template x-if="attribute.type === 'radio'">
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2 flex flex-col rounded-md shadow-sm space-y-4">
                                                 <template x-for="(attribute_value, index) in attribute.attribute_values">
                                                     <div class="relative flex items-center " :class="{'!mt-0': index === 0}">
@@ -881,7 +881,7 @@
                                                             values: ''
                                                         }];
                                                     }
-                                        
+
                                                     return this.attribute.attribute_values.length;
                                                 },
                                                 add() {
@@ -908,7 +908,7 @@
                                                 {{-- $watch('items', items => {
                                                     items.forEach((item, index) => {
                                                         if(attribute.attribute_values[index] === undefined || attribute.attribute_values[index] === null) {
-                                                            attribute.attribute_values[index] = { 
+                                                            attribute.attribute_values[index] = {
                                                                 values: item
                                                             };
                                                         } else {
@@ -924,7 +924,7 @@
                                                     }
                                                 }); --}}
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                                 <template x-if="count() <= 1">
                                                     <div class="flex w-full">
@@ -954,7 +954,7 @@
                                                 <div href="javascript:;" class="btn-ghost !pl-0 !text-14 mt-1" @click="add()" x-show="count() < getMaxRows()">
                                                     @svg('heroicon-o-plus', ['class' => 'h-3 w-3 mr-2'])
                                                     {{ translate('Add new') }}
-                                                </div>                                 
+                                                </div>
                                             </div>
                                         </div>
                                     </template>
@@ -963,9 +963,9 @@
                                     {{-- Image --}}
                                     <template x-if="attribute.type === 'image'">
                                         <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                
+
                                             <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" x-text="attribute.name"></label>
-                            
+
                                             <div class="mt-1 sm:mt-0 sm:col-span-2">
                                                 <div class="w-full" x-data="{
                                                     id: 'attributes_'+attribute.id+'_attribute_values',
@@ -980,13 +980,13 @@
                                                     <div class="max-w-lg flex justify-center border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
                                                             :class="{'px-6 pt-5 pb-6': attribute.attribute_values[0].values !== undefined && attribute.attribute_values[0].values !== null && attribute.attribute_values[0].values > 0 }"
                                                             @click="$wire.emit('showMediaLibrary', id, 'image', [{id:attribute.attribute_values[0].values, file_name:file_name}])">
-                                                
+
                                                         <template x-if="attribute.attribute_values[0].values !== undefined && attribute.attribute_values[0].values !== null && attribute.attribute_values[0].values > 0">
                                                             <div class="h-[200px] w-full rounded cursor-pointer">
-                                                                <img class="w-full h-[200px] object-cover" x-bind:src="window.WE.IMG.url(file_name)" />
+                                                                <img class="w-full h-[200px] object-contain" x-bind:src="window.WE.IMG.url(file_name)" />
                                                             </div>
                                                         </template>
-                                                
+
                                                         <template x-if="!(attribute.attribute_values[0].values !== undefined && attribute.attribute_values[0].values !== null && attribute.attribute_values[0].values > 0)">
                                                             <div class="space-y-1 text-center py-7">
                                                                 <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -1002,12 +1002,12 @@
                                                             </div>
                                                         </template>
                                                     </div>
-                                                </div>                                
+                                                </div>
                                             </div>
                                         </div>
                                     </template>
                                     {{-- END Image --}}
-                                    
+
                                     {{-- TODO: Add wysiwyg, gallery, country type attribute --}}
                                 </div>
                             </template>
@@ -1181,7 +1181,7 @@
                         <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Media') }}</h3>
                         </div>
-                
+
                         <div class="w-full" x-data="{
                             show_video: {{ !empty($product->video_link) ? 'true':'false' }},
                             show_pdf: {{ !empty($product->pdf) ? 'true':'false' }},
@@ -1189,14 +1189,14 @@
                             {{-- Thumbnail --}}
                             <div class="sm:items-start">
                                 <div class="flex flex-col " x-data="{}">
-                                            
+
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         {{ translate('Thumbnail image') }}
                                     </label>
-    
+
                                     <div class="mt-1 sm:mt-0">
                                         <x-dashboard.form.image-selector field="thumbnail" error-field="product.thumbnail" id="product-thumbnail-image" :selected-image="$product->thumbnail"></x-dashboard.form.image-selector>
-                                        
+
                                         <x-system.invalid-msg field="product.thumbnail"></x-system.invalid-msg>
                                     </div>
                                 </div>
@@ -1206,14 +1206,14 @@
                             {{-- Cover --}}
                             <div class="sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                                 <div class="flex flex-col " x-data="{}">
-                                            
+
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         {{ translate('Cover image') }}
                                     </label>
-    
+
                                     <div class="mt-1 sm:mt-0">
                                         <x-dashboard.form.image-selector field="cover" error-field="product.cover" id="product-cover-image" :selected-image="$product->cover"></x-dashboard.form.image-selector>
-    
+
                                         <x-system.invalid-msg field="product.cover"></x-system.invalid-msg>
                                     </div>
                                 </div>
@@ -1228,8 +1228,8 @@
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <button type="button" @click="show_video = !show_video" 
-                                                :class="{'bg-primary':show_video, 'bg-gray-200':!show_video}" 
+                                    <button type="button" @click="show_video = !show_video"
+                                                :class="{'bg-primary':show_video, 'bg-gray-200':!show_video}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':show_video, 'translate-x-0':!show_video}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
@@ -1251,7 +1251,7 @@
 
                                 <!-- Video Link -->
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
-                                                    
+
                                     <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                                         {{ translate('Video link') }}
                                     </label>
@@ -1260,7 +1260,7 @@
                                         <input type="text" class="form-standard @error('product.video_link') is-invalid @enderror"
                                                 placeholder="{{ translate('Link to the video...') }}"
                                                 wire:model.defer="product.video_link" />
-                                    
+
                                         <x-system.invalid-msg field="product.video_link"></x-system.invalid-msg>
 
                                         <div class="w-full">
@@ -1281,8 +1281,8 @@
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
 
-                                    <button type="button" @click="show_pdf = !show_pdf" 
-                                                :class="{'bg-primary':show_pdf, 'bg-gray-200':!show_pdf}" 
+                                    <button type="button" @click="show_pdf = !show_pdf"
+                                                :class="{'bg-primary':show_pdf, 'bg-gray-200':!show_pdf}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                             <span :class="{'translate-x-5':show_pdf, 'translate-x-0':!show_pdf}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
@@ -1295,10 +1295,10 @@
                                         <label class="block text-sm font-medium text-gray-700 mb-2">
                                             {{ translate('PDF Specification (optional)') }}
                                         </label>
-        
+
                                         <div class="mt-1 sm:mt-0">
                                             <x-dashboard.form.image-selector field="pdf" id="product-document-pdf" :selected-image="$product->pdf"></x-dashboard.form.image-selector>
-                                            
+
                                             <x-system.invalid-msg field="product.pdf"></x-system.invalid-msg>
                                         </div>
                                     </div>
@@ -1318,13 +1318,13 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900 @error('selected_categories') !text-danger @enderror">{{ translate('Categories') }}</h3>
                             @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                         </div>
-                
+
                         <div class="w-full" x-show="open">
                             <x-dashboard.form.category-selector> </x-dashboard.form.category-selector>
                         </div>
                     </div>
                     {{-- END Category Selector --}}
-                    
+
 
                     {{-- Tags --}}
                     <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
@@ -1346,7 +1346,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Tags') }}</h3>
                             @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                         </div>
-                
+
                         <div class="w-full" x-show="open">
                             <!-- Tags -->
                             <div class="flex sm:items-start">
@@ -1355,12 +1355,12 @@
                                         <input type="text" class="form-standard @error('product.tags') is-invalid @enderror"
                                                 placeholder="{{ translate('Write desired tag and press "comma", "space" or "enter" to insert it') }}"
                                                 x-ref="product_tags_input"
-                                                @keyup.enter="add($($el).val())" 
-                                                @keyup.space="add($($el).val())"  
+                                                @keyup.enter="add($($el).val())"
+                                                @keyup.space="add($($el).val())"
                                                 @keyup="if(event.keyCode == 188) { add($($el).val().replaceAll(',','')) };" />
                                     </div>
 
-                                    
+
                                     <div class="col-span-10 flex flex-row flex-wrap " x-show="tags !== null && tags.length > 0">
                                         <template x-for="(tag, index) in tags">
                                             <span :class="{'!ml-0':index === 0}" class="mr-2 inline-flex rounded-full items-center py-0.5 pl-2.5 pr-1 mb-2 text-sm font-medium bg-primary text-white">
@@ -1388,7 +1388,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Brand') }}</h3>
                             @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                         </div>
-                
+
                         <div class="w-full" x-show="open">
                             <!-- Brand -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-startsm:pt-5">
@@ -1420,21 +1420,21 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('SEO') }}</h3>
                             @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
                         </div>
-                
+
                         <div class="w-full" x-show="open">
                             <!-- Meta Title -->
                             <div class="flex flex-col " x-data="{}">
-                                        
+
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     {{ translate('Meta title') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0">
-                                    <input type="text" 
+                                    <input type="text"
                                             class="form-standard @error('product.meta_title') is-invalid @enderror"
                                             {{-- placeholder="{{ translate('Write meta title...') }}" --}}
                                             wire:model.defer="product.meta_title" />
-                                
+
                                     <x-system.invalid-msg field="product.meta_title"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -1442,17 +1442,17 @@
 
                             <!-- Meta Description -->
                             <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5" x-data="{}">
-                
+
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     {{ translate('Meta Description') }}
                                 </label>
-                
+
                                 <div class="mt-1 sm:mt-0">
                                     <textarea type="text" class="form-standard h-[80px] @error('product.meta_description') is-invalid @enderror"
                                                 {{-- placeholder="{{ translate('Meta description which will be shown when link is shared on social network and') }}" --}}
                                                 wire:model.defer="product.meta_description">
                                     </textarea>
-                                
+
                                     <x-system.invalid-msg class="w-full" field="product.meta_description"></x-system.invalid-msg>
                                 </div>
                             </div>
@@ -1461,20 +1461,20 @@
                             {{-- Meta Image --}}
                             <div class="flex flex-col sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
                                 <div class=s"flex flex-col " x-data="{}">
-                                            
+
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         {{ translate('Meta image') }}
                                     </label>
 
                                     <div class="mt-1 sm:mt-0">
                                         <x-dashboard.form.image-selector field="meta_img" id="product-meta-image" :selected-image="$product->meta_img"></x-dashboard.form.image-selector>
-                                        
+
                                         <x-system.invalid-msg field="product.meta_img"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
                             {{-- END Meta Image --}}
-                            
+
                         </div>
                     </div>
                     {{-- END SEO --}}
