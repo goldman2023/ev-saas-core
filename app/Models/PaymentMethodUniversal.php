@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\PaymentMethodUniversal
  */
-class PaymentMethodUniversal extends EVBaseModel
+class PaymentMethodUniversal extends WeBaseModel
 {
     use IsPaymentMethod;
 

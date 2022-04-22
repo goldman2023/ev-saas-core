@@ -6,7 +6,7 @@ use App\Events\Eloquent\ItemsQueried;
 use App\Models\Category;
 use App\Traits\Eloquent\Base\Builder\RetrievedRelationsEvent;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\EVBaseModel as Model;
+use App\Models\WeBaseModel as Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\PaymentMethod
  */
-class PaymentMethod extends EVBaseModel
+class PaymentMethod extends WeBaseModel
 {
     use IsPaymentMethod;
 

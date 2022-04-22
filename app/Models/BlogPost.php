@@ -20,7 +20,7 @@ use Spatie\Sluggable\SlugOptions;
 
 // use GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-class BlogPost extends EVBaseModel
+class BlogPost extends WeBaseModel
 {
     use HasSlug;
     use SoftDeletes;

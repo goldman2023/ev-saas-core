@@ -9,7 +9,7 @@ use IMG;
 use Storage;
 use MyShop;
 
-class Upload extends EVBaseModel
+class Upload extends WeBaseModel
 {
     use SoftDeletes;
     // use Cachable;

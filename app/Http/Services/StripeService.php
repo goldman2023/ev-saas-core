@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Plan;
+use App\Models\UserSubscription;
 use Cache;
 use Illuminate\Database\Eloquent\Collection;
 use Session;
@@ -323,7 +324,7 @@ class StripeService
 
         // Create a Stripe Checkout Link
         $checkout_link = $this->stripe->checkout->sessions->create($stripe_args);
-
+     
         // Save payment intent inside Order meta
         $meta = $order->meta;
         $meta['stripe_payment_intent_id'] = $checkout_link['payment_intent'] ?? null; // store payment intent id
@@ -466,11 +467,10 @@ class StripeService
 
             // Todo: It happens that this is invoked without any reason for Pix-Pro, Fix that later on
 
-			// print_r($e);
-            // http_response_code(400);
-            // exit();
-            $event = json_decode($payload);
-
+			print_r($e);
+            http_response_code(400);
+            exit();
+            // $event = json_decode($payload);
         }
 
         // Handle the event
@@ -479,131 +479,16 @@ class StripeService
                 $charge = $event->data->object;
                 break;
             case 'checkout.session.completed':
-                DB::beginTransaction();
-
-                try {
-                     // Populate Order with data from stripe
-                    $session = $event->data->object;
-                    $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
-                    $order->payment_status = PaymentStatusEnum::paid()->value;
-                    $order->is_temp = false;
-                    $order->email = empty($order->email) ? $session->customer_details->email : $order->email;
-                    $order->billing_first_name = explode(' ', $session->customer_details->name)[0] ?? '';
-                    $order->billing_last_name = explode(' ', $session->customer_details->name)[1] ?? '';
-                    $order->billing_address = !empty($session->customer_details->address->line1) ? $session->customer_details->address->line1 : '';
-                    $order->billing_country = !empty($session->customer_details->address->country) ? $session->customer_details->address->country : '';
-                    $order->billing_state = !empty($session->customer_details->address->state) ? $session->customer_details->address->state : '';
-                    $order->billing_city = !empty($session->customer_details->address->city) ? $session->customer_details->address->city : '';
-                    $order->billing_zip = !empty($session->customer_details->address->postal_code) ? $session->customer_details->address->postal_code : '';
-                    $order->phone_numbers = !empty($session->customer_details->phone) ? $session->customer_details->phone : [];
-
-                    $order->shipping_method = ''; // TODO: Should mimic shipping_method from tenant!!!
-
-                    $order->shipping_first_name = explode(' ', $session?->shipping?->name ?? '')[0] ?? '';
-                    $order->shipping_last_name = explode(' ', $session?->shipping?->name ?? '')[1] ?? '';
-                    $order->shipping_address = !empty($session?->shipping->address?->line1 ?? '') ? $session->shipping->address->line1 : '';
-                    $order->shipping_country = !empty($session?->shipping->address?->country ?? '') ? $session->shipping->address->country : '';
-                    $order->shipping_state = !empty($session?->shipping->address?->state ?? '') ? $session->shipping->address->state : '';
-                    $order->shipping_city = !empty($session?->shipping->address?->city ?? '') ? $session->shipping->address->city : '';
-                    $order->shipping_zip = !empty($session?->shipping->address?->postal_code ?? '') ? $session->shipping->address->postal_code : '';
-                    $order->save();
-
-                    // Check if $model has stock and reduce it if it does!!!
-                    $order_item =  $order->order_items->first();
-                    $model = $order_item->subject;
-
-                    if(method_exists($model, 'stock')) {
-                        // Reduce the stock quantity of an $model
-                        $serial_numbers = $model->reduceStock();
-
-                        // Serial Numbers only work for Simple Products.
-                        // TODO: Make Product Variations support serial numbers!
-                        if($model->use_serial) {
-                            $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $model uses serials
-                        } else {
-                            $order_item->serial_numbers = null;
-                        }
-                    }
-
-                    // Associate User with Plan (if plan is bought)
-                    if($model instanceof Plan) {
-                        User::find($order->user_id)->plans()->syncWithoutDetaching($model);
-                    }
-
-                    /*
-                    * Create Invoice
-                    */
-                    $invoice = new Invoice();
-
-                    $invoice->order_id = $order->id;
-                    $invoice->shop_id = $order->shop_id;
-                    $invoice->user_id = $order->user_id;
-                    $invoice->payment_method_type = (Payments::stripe())::class;
-                    $invoice->payment_method_id = Payments::stripe()->id;
-                    $invoice->payment_status = PaymentStatusEnum::paid()->value;
-                    $invoice->invoice_number = Invoice::generateInvoiceNumber($order->billing_first_name, $order->billing_last_name, $order->billing_company); // Default: VJ21012022
-
-                    $invoice->email = $order->email;
-                    $invoice->billing_first_name = !empty($order->billing_first_name) ? $order->billing_first_name : '';
-                    $invoice->billing_last_name = !empty($order->billing_last_name) ? $order->billing_last_name : '';
-                    $invoice->billing_company = !empty($order->billing_company) ? $order->billing_company : '';
-                    $invoice->billing_address = !empty($order->billing_address) ? $order->billing_address : '';
-                    $invoice->billing_country = !empty($order->billing_country) ? $order->billing_country : '';
-                    $invoice->billing_state = !empty($order->billing_state) ? $order->billing_state : '';
-                    $invoice->billing_city = !empty($order->billing_city) ? $order->billing_city : '';
-                    $invoice->billing_zip = !empty($order->billing_zip) ? $order->billing_zip : '';
-
-                    // Take invoice totals from $order itself
-                    $invoice->base_price = $order->base_price;
-                    $invoice->discount_amount = $order->discount_amount;
-                    $invoice->subtotal_price = $order->subtotal_price;
-                    $invoice->total_price = $order->total_price; // should be TotalPrice in future...
-
-
-                    $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
-                    $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
-
-                    // TODO: Add Shop Settings for general due_date and grace_period
-                    // TODO: Trial can determine invoicing start_date because trial can append X days on top of current date-time, so invoicing starts on e.g. 15 days from current date, or 30 or X
-                    $invoice->start_date = $order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
-                    $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
-                    $invoice->grace_period = $order->invoice_grace_period; // NULL; or 5 days grace_period by default
-
-                    $invoice->save();
-
-                    DB::commit();
-                } catch (\Exception $e) {
-                    DB::rollBack();
-                    http_response_code(400);
-                    die($e->getMessage());
-                }
-
+                $this->whCheckoutSessionCompleted($event);
                 break;
             case 'checkout.session.expired':
-                // Checkout Session Expired webhook
-                DB::beginTransaction();
-
-                try {
-                     // Remove Temp order when stripe checkout session expires, BUT only if order is made by guest user (user_id == null)
-                    $session = $event->data->object;
-                    $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
-
-                    if(empty($order->user_id)) {
-                        // Temp order is not linked to a user, so remove it fully!
-                        $order->forceDelete();
-                    } else {
-                        // Abandoned cart is: is_temp = 1 && payment_status = canceled
-                        $order->payment_status = PaymentStatusEnum::canceled()->value;
-                        $order->save();
-                    }
-
-                    DB::commit();
-                } catch (\Exception $e) {
-                    DB::rollBack();
-                    http_response_code(400);
-                    die($e->getMessage());
-                }
-
+                $this->whCheckoutSessionExpired($event);
+                break;
+            case 'invoice.created':
+                $this->whInvoiceCreated($event);
+                break;
+            case 'invoice.paid':
+                $this->whInvoicePaid($event);
                 break;
             case 'payment_intent.created':
                 $paymentIntent = $event->data->object;
@@ -614,11 +499,264 @@ class StripeService
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data->object;
                 break;
+            case 'customer.subscription.created':
+                $this->whCustomerSubscriptionCreated($event);
+                break;
+            case 'customer.subscription.updated':
+                $paymentIntent = $event->data->object;
+                break;
+            case 'customer.subscription.deleted':
+                $paymentIntent = $event->data->object;
+                break;
+                        
             // ... handle other event types
             default:
                 echo 'Received unknown event type ' . $event->type;
         }
 
         http_response_code(200);
+        die();
+    }
+
+    // WEBHOOKS
+
+    // checkout.session.completed
+    public function whCheckoutSessionCompleted($event) {
+        DB::beginTransaction();
+
+        try {
+            // Populate Order with data from stripe
+            $session = $event->data->object;
+            $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
+            $order->payment_status = PaymentStatusEnum::paid()->value;
+            $order->is_temp = false;
+            $order->email = empty($order->email) ? $session->customer_details->email : $order->email;
+            $order->billing_first_name = explode(' ', $session->customer_details->name)[0] ?? '';
+            $order->billing_last_name = explode(' ', $session->customer_details->name)[1] ?? '';
+            $order->billing_address = !empty($session->customer_details->address->line1) ? $session->customer_details->address->line1 : '';
+            $order->billing_country = !empty($session->customer_details->address->country) ? $session->customer_details->address->country : '';
+            $order->billing_state = !empty($session->customer_details->address->state) ? $session->customer_details->address->state : '';
+            $order->billing_city = !empty($session->customer_details->address->city) ? $session->customer_details->address->city : '';
+            $order->billing_zip = !empty($session->customer_details->address->postal_code) ? $session->customer_details->address->postal_code : '';
+            $order->phone_numbers = !empty($session->customer_details->phone) ? $session->customer_details->phone : [];
+
+            $order->shipping_method = ''; // TODO: Should mimic shipping_method from tenant!!!
+
+            $order->shipping_first_name = explode(' ', $session?->shipping?->name ?? '')[0] ?? '';
+            $order->shipping_last_name = explode(' ', $session?->shipping?->name ?? '')[1] ?? '';
+            $order->shipping_address = !empty($session?->shipping->address?->line1 ?? '') ? $session->shipping->address->line1 : '';
+            $order->shipping_country = !empty($session?->shipping->address?->country ?? '') ? $session->shipping->address->country : '';
+            $order->shipping_state = !empty($session?->shipping->address?->state ?? '') ? $session->shipping->address->state : '';
+            $order->shipping_city = !empty($session?->shipping->address?->city ?? '') ? $session->shipping->address->city : '';
+            $order->shipping_zip = !empty($session?->shipping->address?->postal_code ?? '') ? $session->shipping->address->postal_code : '';
+
+            $meta = $order->meta;
+            $meta['stripe_payment_mode'] = $session->mode ?? null; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
+            $meta['stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
+            $order->meta = $meta;
+
+            $order->save();
+
+            // Check if $model has stock and reduce it if it does!!!
+            $order_item =  $order->order_items->first();
+            $model = $order_item->subject;
+
+            if(method_exists($model, 'stock')) {
+                // Reduce the stock quantity of an $model
+                $serial_numbers = $model->reduceStock();
+
+                // Serial Numbers only work for Simple Products.
+                // TODO: Make Product Variations support serial numbers!
+                if($model->use_serial) {
+                    $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $model uses serials
+                } else {
+                    $order_item->serial_numbers = null;
+                }
+            }
+
+            // Associate User with Plan (if plan is bought)
+            if($model instanceof Plan) {
+                if(!get_tenant_setting('multiplan_purchase')) {
+                    // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
+                    // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
+                    User::find($order->user_id)->plans()->sync($model);
+                    $user_subscription = User::find($order->user_id)->plan_subscriptions()->first();
+                    $meta = $user_subscription->data;
+                    $meta['stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
+                    $user_subscription->data = $meta;
+                    $user_subscription->save();
+                } else {
+                    // TODO: If multiplan purchase is available, logic is different!
+                }
+                
+            }
+
+            /*
+            * Create Invoice
+            */
+            $invoice = new Invoice();
+
+            $invoice->order_id = $order->id;
+            $invoice->shop_id = $order->shop_id;
+            $invoice->user_id = $order->user_id;
+            $invoice->payment_method_type = (Payments::stripe())::class;
+            $invoice->payment_method_id = Payments::stripe()->id;
+            
+            // Change invoice status to paid if mode is 'payment', but if it's a subscription, change status to 'pending' because status will truly change on 'invoice.paid' webhook
+            $invoice->payment_status = $model->isSubscribable() ? PaymentStatusEnum::pending()->value : PaymentStatusEnum::paid()->value; 
+            $invoice->invoice_number = Invoice::generateInvoiceNumber($order->billing_first_name, $order->billing_last_name, $order->billing_company); // Default: VJ21012022
+
+            $invoice->email = $order->email;
+            $invoice->billing_first_name = !empty($order->billing_first_name) ? $order->billing_first_name : '';
+            $invoice->billing_last_name = !empty($order->billing_last_name) ? $order->billing_last_name : '';
+            $invoice->billing_company = !empty($order->billing_company) ? $order->billing_company : '';
+            $invoice->billing_address = !empty($order->billing_address) ? $order->billing_address : '';
+            $invoice->billing_country = !empty($order->billing_country) ? $order->billing_country : '';
+            $invoice->billing_state = !empty($order->billing_state) ? $order->billing_state : '';
+            $invoice->billing_city = !empty($order->billing_city) ? $order->billing_city : '';
+            $invoice->billing_zip = !empty($order->billing_zip) ? $order->billing_zip : '';
+
+            // Take invoice totals from $order itself
+            $invoice->base_price = $order->base_price;
+            $invoice->discount_amount = $order->discount_amount;
+            $invoice->subtotal_price = $order->subtotal_price;
+            $invoice->total_price = $order->total_price; // should be TotalPrice in future...
+
+
+            $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
+            $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
+
+            // TODO: Add Shop Settings for general due_date and grace_period
+            // TODO: Trial can determine invoicing start_date because trial can append X days on top of current date-time, so invoicing starts on e.g. 15 days from current date, or 30 or X
+            $invoice->start_date = $order->invoicing_start_date; // current unix_timestamp (for non-trial plans)
+            $invoice->due_date = null; // Default due_date is NULL days for subscription (if not trial mode, if it's trial it's null)
+            $invoice->grace_period = $order->invoice_grace_period; // NULL; or 5 days grace_period by default
+
+            $meta = $invoice->meta;
+            $meta['stripe_customer_id'] = $session->customer ?? '';
+            $meta['stripe_subscription_id'] = $session->subscription ?? null; // store psubscription ID in invoice meta
+            $invoice->meta = $meta;
+
+            $invoice->save();
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            http_response_code(400);
+            die($e->getMessage());
+        }
+    }
+
+    // checkout.session.expired
+    public function whCheckoutSessionExpired($event) {
+        // Checkout Session Expired webhook
+        DB::beginTransaction();
+
+        try {
+             // Remove Temp order when stripe checkout session expires, BUT only if order is made by guest user (user_id == null)
+            $session = $event->data->object;
+            $order = Order::withoutGlobalScopes()->findOrFail($session->client_reference_id);
+
+            if(empty($order->user_id)) {
+                // Temp order is not linked to a user, so remove it fully!
+                $order->forceDelete();
+            } else {
+                // Abandoned cart is: is_temp = 1 && payment_status = canceled
+                $order->payment_status = PaymentStatusEnum::canceled()->value;
+                $order->save();
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            http_response_code(400);
+            die($e->getMessage());
+        }
+    }
+
+    // invoice.created
+    public function whInvoiceCreated($event) {
+        DB::beginTransaction();
+        $stripe_invoice = $event->data->object;
+        $stripe_subscription_id = $stripe_invoice->subscription;
+
+        try {    
+            $invoice = Invoice::withoutGlobalScopes()->whereJsonContains('meta->stripe_subscription_id', $stripe_subscription_id)->first();
+
+            if(!empty($invoice)) {
+                $invoice->start_date = $stripe_invoice?->lines?->data?->period?->start ?? now();
+                $invoice->end_date = $stripe_invoice?->lines?->data?->period?->end ?? Invoice::getDaysFromPeriod($invoice->order->invoicing_period);
+                $invoice->due_date = $stripe_invoice?->due_date;
+
+                $meta = $invoice->meta;
+                $meta['stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
+                $meta['stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
+                $meta['stripe_invoice_number'] = $stripe_invoice->number ?? '';
+                $meta['stripe_customer_id'] = $stripe_invoice->customer ?? '';
+                $meta['stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? '';
+                $invoice->meta = $meta;
+
+                $invoice->save();
+
+                DB::commit();
+
+                http_response_code(200);
+                die();
+            }
+
+            print_r('Our latest Invoice related to subscription with stripe ID: '.$stripe_subscription_id.' ; could not be found in our DB.');
+            http_response_code(400);
+            die();
+            // Get our invoice through stripe_subscription_id
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            http_response_code(400);
+            die($e->getMessage());
+        }
+    }
+
+    // invoice.paid
+    public function whInvoicePaid($event) {
+        $stripe_invoice = $event->data->object;
+        $stripe_subscription_id = $stripe_invoice->subscription;
+
+        try {    
+            $invoice = Invoice::withoutGlobalScopes()->whereJsonContains('meta->stripe_subscription_id', $stripe_subscription_id)->first();
+
+            if(!empty($invoice)) {
+                $invoice->payment_status = \App\Enums\PaymentStatusEnum::paid()->value;
+                $invoice->save();
+            }
+
+        } catch (\Exception $e) {
+            http_response_code(400);
+            die($e->getMessage());
+        }
+    }
+
+    // customer.subscription.created
+    public function whCustomerSubscriptionCreated($event) {
+        $stripe_subscription = $event->data->object;
+        $stripe_subscription_id = $stripe_subscription->id;
+
+        try {    
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
+
+            if(!empty($user_subscription)) {
+                $user_subscription->start_date = $stripe_subscription->current_period_start ?? now();
+                $user_subscription->end_date = $stripe_subscription->current_period_end;
+
+                $data = $user_subscription->data;
+                $data['stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice ?? null;
+                $user_subscription->data = $data;
+
+                $user_subscription->save();
+            }
+
+        } catch (\Exception $e) {
+            http_response_code(400);
+            die($e->getMessage());
+        }
     }
 }

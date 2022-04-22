@@ -3,7 +3,7 @@
 namespace App\Traits\Eloquent\Base\Builder;
 
 use App\Builders\CteBuilder;
-use App\Models\EVBaseModel as Model;
+use App\Models\WeBaseModel as Model;
 
 trait RetrievedRelationsEvent
 {

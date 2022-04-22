@@ -23,8 +23,8 @@ class CustomAttributesEagerLoad
      */
     public function handle(ItemsQueried $event)
     {
-        dd($event->items->load(['custom_attributes' => function($query) {
-            dd($query);
-        }]));
+        // dd($event->items->load(['custom_attributes' => function($query) {
+        //     dd($query);
+        // }]));
     }
 }

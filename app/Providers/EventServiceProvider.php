@@ -23,8 +23,10 @@ use App\Observers\AttributeValuesObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-
+use App\Events\Plans\PlanSubscriptionCanceled;
+use App\Listeners\Plans\CancelStripePlanSubscription;
 use App\Traits\ServiceProviders\RegisterObservers;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -41,7 +43,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         ItemsQueried::class => [
             CustomAttributesEagerLoad::class
-        ]
+        ],
+
+        // Plans Events
+        PlanSubscriptionCanceled::class => [CancelStripePlanSubscription::class]
     ];
 
     /**

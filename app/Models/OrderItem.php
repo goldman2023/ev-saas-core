@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\OrderItem
  */
-class OrderItem extends EVBaseModel
+class OrderItem extends WeBaseModel
 {
     protected $table = 'order_items';
 

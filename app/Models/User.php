@@ -189,6 +189,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
         return $this->morphedByMany(Plan::class, 'subject', 'user_subscriptions')->withPivot('start_date', 'end_date', 'qty', 'data');
     }
 
+    public function plan_subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class)->where('subject_type', Plan::class);
+    }
+
     public function subscribedTo($plan_slug)
     {
         if (is_numeric($plan_slug)) {

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class PagePreview extends EVBaseModel
+class PagePreview extends WeBaseModel
 {
 
     protected $table = 'page_previews';

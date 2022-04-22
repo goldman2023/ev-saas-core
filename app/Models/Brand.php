@@ -30,7 +30,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
  * @mixin \Eloquent
  */
 
-class Brand extends EVBaseModel
+class Brand extends WeBaseModel
 {
     use Cachable;
     use GalleryTrait;

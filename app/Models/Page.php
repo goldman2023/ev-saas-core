@@ -12,7 +12,7 @@ use App\Traits\UploadTrait;
 use App\Traits\GalleryTrait;
 
 
-class Page extends EVBaseModel
+class Page extends WeBaseModel
 {
     use HasSlug;
     use PermalinkTrait;

@@ -50,7 +50,7 @@ use Spatie\Sluggable\SlugOptions;
  * @mixin \Eloquent
  */
 
-class Shop extends EVBaseModel
+class Shop extends WeBaseModel
 {
     use HasSlug;
     use RegeneratesCache;

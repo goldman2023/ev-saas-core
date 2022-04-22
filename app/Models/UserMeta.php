@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 
-class UserMeta extends EVBaseModel
+class UserMeta extends WeBaseModel
 {
     protected $table = 'user_meta';
 

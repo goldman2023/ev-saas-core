@@ -16,7 +16,7 @@ use App\Traits\PermalinkTrait;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class UserSubscriptions extends WeBaseModel
+class UserSubscription extends WeBaseModel
 {
     use LogsActivity;
     use UploadTrait;
@@ -28,8 +28,7 @@ class UserSubscriptions extends WeBaseModel
     protected $fillable = ['user_id', 'subject_id', 'subject_type', 'start_date', 'end_date', 'qty', 'data'];
 
     protected $casts = [
-        'start_date' => 'U',
-        'end_date' => 'U'
+        'data' => 'array'
     ];
 
     public function user()
@@ -44,4 +43,8 @@ class UserSubscriptions extends WeBaseModel
     // public static function getSubscriptionsAmount($subscriptions) {
     //     return $subscriptions->where([])
     // }
+
+    public function getDynamicModelUploadProperties() : array {
+        return [];
+    }
 }

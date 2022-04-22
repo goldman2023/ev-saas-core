@@ -10,12 +10,12 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use App\Traits\TranslationTrait;
 
-class Attribute extends EVBaseModel
+class Attribute extends WeBaseModel
 {
     use HasSlug;
     use TranslationTrait;
 
-    // TODO: Think about uncommenting this because Attribute inherits EVBaseModel
+    // TODO: Think about uncommenting this because Attribute inherits WeBaseModel
     // protected $with = ['attribute_relationships', 'attributes_values'];
 
     protected $fillable = ['name', 'type', 'group', 'filterable', 'content_type', 'is_admin', 'is_default', 'is_schema', 'schema_key', 'schema_value', 'custom_properties'];

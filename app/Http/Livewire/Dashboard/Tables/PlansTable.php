@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
+use Carbon;
+use App\Events\Plans\PlanSubscriptionCanceled;
 use App\Enums\StatusEnum;
 use App\Facades\MyShop;
 use App\Models\BlogPost;
@@ -100,7 +102,7 @@ class PlansTable extends DataTableComponent
     public function query(): Builder
     {
         if($this->for === 'me') {
-            return auth()->user()->plans()->getQuery()
+            return auth()->user()->plans()->getQuery()->where('end_date', '>', now())->orWhere('end_date', null)
                     ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
                     ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status));
         }
@@ -119,5 +121,25 @@ class PlansTable extends DataTableComponent
         }
 
         return 'frontend.dashboard.plans.row';
+    }
+
+    public function cancelPlan($user_subscription_id) {
+
+        if($this->for === 'me') {
+            $plan_subscription = auth()->user()->plan_subscriptions->where('id', $user_subscription_id)->first();
+
+            if(!empty($plan_subscription)) {
+                // TODO: This should depend on the order <-> last invoice
+                $plan_subscription->end_date = Carbon::now()->addDays(7)->timestamp;
+            }
+
+            $plan_subscription->save();
+
+            PlanSubscriptionCanceled::dispatch($plan_subscription);
+
+            $this->inform(translate('Subscription plan successfully canceled!'), '', 'success');
+        }
+
+        return false;
     }
 }
