@@ -26,7 +26,7 @@ class AddOrderingOfPlansTable extends Migration
     public function down()
     {
         Schema::table('plans', function (Blueprint $table) {
-            $table->dropCOolumn('order');
+            $table->dropColumn('order');
         });
     }
 }
