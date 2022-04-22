@@ -229,7 +229,7 @@ Route::middleware([
     });
 
     //Custom page
-    Route::get('/page/privacy-policy', [App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
-    Route::get('/page/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
-    Route::get('/shop/create', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
+    Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
+    Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
+    Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
 });
