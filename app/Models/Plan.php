@@ -118,7 +118,7 @@ class Plan extends EVBaseModel
 
     public function users()
     {
-        return $this->morphToMany(User::class, 'subject', 'user_relationships');
+        return $this->morphToMany(User::class, 'subject', 'user_subscriptions');
     }
 
     public function blog_posts()
