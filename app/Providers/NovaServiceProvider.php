@@ -7,6 +7,7 @@ use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
 use App\Nova\Central\Section;
+use App\Nova\Dashboards\Main;
 use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
@@ -97,7 +98,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function dashboards()
     {
-        return [];
+        return [
+            new Main,
+        ];
     }
 
     /**
@@ -109,13 +112,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             return [
-                new \OptimistDigital\MenuBuilder\MenuBuilder,
 
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
             return [
-                new \OptimistDigital\MenuBuilder\MenuBuilder,
                 // new \Tighten\NovaStripe\NovaStripe,
             ];
         }

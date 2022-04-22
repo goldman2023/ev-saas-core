@@ -159,7 +159,7 @@ class TenantSettingsService
 
             'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
-            'login_redirect_url' => 'string', // 
+            'login_redirect_url' => 'string', //
 
             // Integrations
             'mailerlite_api_token' => 'string',
@@ -177,7 +177,7 @@ class TenantSettingsService
             'mail_from_name' => 'string',
             'mail_reply_to_address' => 'string',
             'mail_reply_to_name' => 'string',
-            
+
         ];
     }
 }

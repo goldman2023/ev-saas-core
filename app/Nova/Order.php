@@ -1,23 +1,19 @@
 <?php
 
-namespace App\Nova\Tenant;
+namespace App\Nova;
 
-use App\Nova\Resource;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Blog extends Resource
+class Order extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\BlogPost::class;
+    public static $model = \App\Models\Order::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -44,12 +40,7 @@ class Blog extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
-
-            Text::make('Name'),
-            Textarea::make('Content'),
-
-            // BelongsTo::make('Author', 'author', User::class),
+            ID::make(__('ID'), 'id')->sortable(),
         ];
     }
 

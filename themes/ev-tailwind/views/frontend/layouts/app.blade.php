@@ -62,8 +62,10 @@
     <livewire:cart.cart template="flyout-cart" />
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-    <x-panels.flyout-wishlist></x-panels.flyout-wishlist>
-    <x-panels.flyout-categories></x-panels.flyout-categories>
+    {{-- <x-panels.flyout-wishlist></x-panels.flyout-wishlist> --}}
+    <livewire:flyout.wishlist />
+
+    {{-- <x-panels.flyout-categories></x-panels.flyout-categories> --}}
 
     @guest
     <x-panels.flyout-auth></x-panels.flyout-auth>

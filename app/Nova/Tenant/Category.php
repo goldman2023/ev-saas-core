@@ -55,7 +55,6 @@ class Category extends Resource
             HasOne::make('Parent', 'parent', Category::class),
 
             Number::make('Commision Rate'),
-            Help::make('Commision rate title', 'What % of the order amount is commisioned for platform for specific category'),
 
         ];
     }
