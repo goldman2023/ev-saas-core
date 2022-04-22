@@ -138,7 +138,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             Nova::resources([
                 Blog::class,
                 User::class,
-                Product::class,
                 Activity::class,
                 Wishlist::class,
                 ShopSetting::class,
@@ -147,6 +146,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 Category::class,
                 Plan::class,
                 Translation::class,
+                Product::class,
             ]);
         } else {
             Nova::resources([

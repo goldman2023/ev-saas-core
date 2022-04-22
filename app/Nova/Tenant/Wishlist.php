@@ -35,7 +35,7 @@ class Wishlist extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'email',
+        'id',
     ];
 
     /**

@@ -63,7 +63,10 @@
         "stripe/stripe-php": "^7.124",
         "symfony/dom-crawler": "^6.0",
         "webpatser/laravel-uuid": "^4.0",
-        "webtopay/libwebtopay": "^1.8"
+        "webtopay/libwebtopay": "^1.8",
+        "we/total-users": "*",
+        "we/users": "*",
+        "acme/analytics": "*"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",
@@ -129,6 +132,18 @@
         {
             "type": "composer",
             "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/TotalUsers"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/Users"
+        },
+        {
+            "type": "path",
+            "url": "./nova-components/Analytics"
         }
     ]
 }
