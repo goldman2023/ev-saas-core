@@ -166,6 +166,10 @@ class TenantSettingsService
             'mailersend_api_token' => 'string',
             'google_analytics_enabled' => 'boolean',
             'gtag_id' => 'string',
+            'google_recaptcha_enabled' => 'boolean',
+            'google_recaptcha_site_key' => 'string',
+            'google_recaptcha_secret_key' => 'string',
+
 
 
             // Mail

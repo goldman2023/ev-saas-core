@@ -60,6 +60,8 @@ class PlanForm extends Component
     {
         return [
             'selected_categories' => 'required',
+            'plan.featured' => ['boolean'],
+            'plan.primary' => ['boolean'],
             'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
             'plan.name' => 'required|min:2',
@@ -143,6 +145,11 @@ class PlanForm extends Component
                 $msg = translate('Plan status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
             
+            // If current Plan is set to primary, all other plans must NOT BE primary
+            if($this->plan->primary) {
+                Plan::where('primary', 1)->update(['primary' => 0]);
+            }
+
             $this->plan->save();
             $this->plan->syncUploads();
 
