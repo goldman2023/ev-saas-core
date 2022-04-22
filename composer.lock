@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0ee6d31df158c6490abfbfaacd7da47",
+    "content-hash": "601637eee4f1f6b4f9810d5cfd9dbb5c",
     "packages": [
         {
             "name": "automattic/woocommerce",
@@ -5623,69 +5623,6 @@
             "time": "2021-07-01T14:25:37+00:00"
         },
         {
-            "name": "mediconesystems/livewire-datatables",
-            "version": "v0.9.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/MedicOneSystems/livewire-datatables.git",
-                "reference": "141b6fd0a21937bf56e54eac2ff090def6ce793a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/MedicOneSystems/livewire-datatables/zipball/141b6fd0a21937bf56e54eac2ff090def6ce793a",
-                "reference": "141b6fd0a21937bf56e54eac2ff090def6ce793a",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^7.0|^8.0|^9.0",
-                "livewire/livewire": "^2.4.4",
-                "maatwebsite/excel": "^3.1",
-                "php": "^7.2.5|^8.0"
-            },
-            "require-dev": {
-                "laravel/legacy-factories": "^1.0.4",
-                "orchestra/testbench": "^4.0|5.0|6.0|^7.0",
-                "phpunit/phpunit": "^8.0|9.0|^9.5.10"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Mediconesystems\\LivewireDatatables\\LivewireDatatablesServiceProvider"
-                    ],
-                    "aliases": {
-                        "LivewireDatatables": "Mediconesystems\\LivewireDatatables\\LivewireDatatablesFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Mediconesystems\\LivewireDatatables\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mark Salmon",
-                    "email": "mark.salmon@mediconesystems.com",
-                    "role": "Developer"
-                }
-            ],
-            "homepage": "https://github.com/mediconesystems/livewire-datatables",
-            "keywords": [
-                "livewire-datatables",
-                "mediconesystems"
-            ],
-            "support": {
-                "issues": "https://github.com/MedicOneSystems/livewire-datatables/issues",
-                "source": "https://github.com/MedicOneSystems/livewire-datatables/tree/v0.9.4"
-            },
-            "time": "2022-04-04T13:57:02+00:00"
-        },
-        {
             "name": "mews/purifier",
             "version": "3.3.7",
             "source": {
@@ -8486,16 +8423,16 @@
         },
         {
             "name": "rappasoft/laravel-livewire-tables",
-            "version": "v2.1.1",
+            "version": "v1.25.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rappasoft/laravel-livewire-tables.git",
-                "reference": "2788f4ad1c65fc1104c93c5ecc0a6aa384d95965"
+                "reference": "2465eae744d715e1c6fc96bdaa3b42f6eac68511"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rappasoft/laravel-livewire-tables/zipball/2788f4ad1c65fc1104c93c5ecc0a6aa384d95965",
-                "reference": "2788f4ad1c65fc1104c93c5ecc0a6aa384d95965",
+                "url": "https://api.github.com/repos/rappasoft/laravel-livewire-tables/zipball/2465eae744d715e1c6fc96bdaa3b42f6eac68511",
+                "reference": "2465eae744d715e1c6fc96bdaa3b42f6eac68511",
                 "shasum": ""
             },
             "require": {
@@ -8508,7 +8445,8 @@
                 "ext-sqlite3": "*",
                 "orchestra/testbench": "^6.13|^7.0",
                 "phpunit/phpunit": "^9.3",
-                "spatie/laravel-ray": "^1.9"
+                "spatie/laravel-ray": "^1.9",
+                "vimeo/psalm": "^4.4"
             },
             "type": "library",
             "extra": {
@@ -8545,7 +8483,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rappasoft/laravel-livewire-tables/issues",
-                "source": "https://github.com/rappasoft/laravel-livewire-tables/tree/v2.1.1"
+                "source": "https://github.com/rappasoft/laravel-livewire-tables/tree/v1.25.1"
             },
             "funding": [
                 {
@@ -8553,7 +8491,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-04-12T23:30:11+00:00"
+            "time": "2022-03-30T01:55:23+00:00"
         },
         {
             "name": "romanzipp/laravel-seo",
