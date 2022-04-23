@@ -139,7 +139,7 @@ class StripeService
         }
 
         // Create reccuring price if $model is Plan or a Subscription Product
-        if($model->isSubscribable($model)) {
+        if($model->isSubscribable()) {
             $args = [
                 'unit_amount' => $model->getTotalPrice() * 100, // TODO: Is it Total, Base, or Subtotal, Original etc.???
                 'currency' => strtolower($model->base_currency),
