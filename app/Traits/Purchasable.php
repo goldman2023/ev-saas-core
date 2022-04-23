@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\Plan;
+use App\Models\Product;
+
 trait Purchasable
 {
     public bool $is_purchasable = true;
@@ -36,7 +39,7 @@ trait Purchasable
     }
 
     public function isSubscribable() {
-        return $this instanceof Plan || ($this instanceof Product && $this->isSubscription());
+        return $this instanceof Plan || ($this instanceof Product && ($this?->isSubscription() ?? false));
     }
 
     public function getSingleCheckoutPermalink() {
