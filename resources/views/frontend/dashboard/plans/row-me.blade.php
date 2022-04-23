@@ -8,6 +8,42 @@
     {{ $row->getTranslation('name') }}
 </x-livewire-tables::table.cell>
 
+<x-livewire-tables::table.cell class="align-middle text-center">
+    @if($row->status === App\Enums\UserSubscriptionStatusEnum::active()->value)
+        <span class="badge-success">
+            {{ App\Enums\UserSubscriptionStatusEnum::active()->label }}
+        </span>
+    @elseif($row->status === App\Enums\UserSubscriptionStatusEnum::inactive()->value)
+        <span class="badge-danger">
+            {{ App\Enums\UserSubscriptionStatusEnum::inactive()->label }}
+        </span>
+    @elseif($row->status === App\Enums\UserSubscriptionStatusEnum::active_until_end()->value)
+        <span class="badge-warning">
+            {{ App\Enums\UserSubscriptionStatusEnum::active_until_end()->label }}
+        </span>
+    @endif
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="align-middle text-center">
+    @if($row->payment_status === App\Enums\PaymentStatusEnum::paid()->value)
+        <span class="badge-success">
+            {{ App\Enums\PaymentStatusEnum::paid()->label }}
+        </span>
+    @elseif($row->payment_status === App\Enums\PaymentStatusEnum::unpaid()->value)
+        <span class="badge-danger">
+            {{ App\Enums\PaymentStatusEnum::unpaid()->label }}
+        </span>
+    @elseif($row->payment_status === App\Enums\PaymentStatusEnum::canceled()->value)
+        <span class="badge-dark">
+            {{ App\Enums\PaymentStatusEnum::canceled()->label }}
+        </span>
+    @elseif($row->payment_status === App\Enums\PaymentStatusEnum::pending()->value)
+        <span class="badge-info">
+            {{ App\Enums\PaymentStatusEnum::pending()->label }}
+        </span>
+    @endif
+</x-livewire-tables::table.cell>
+
 <x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
     <strong class="text-14">1</strong>
 </x-livewire-tables::table.cell>

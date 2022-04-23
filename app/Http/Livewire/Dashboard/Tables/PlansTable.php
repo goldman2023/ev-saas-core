@@ -69,6 +69,10 @@ class PlansTable extends DataTableComponent
                 Column::make('Title')
                     ->sortable()
                     ->excludeFromSelectable(),
+                Column::make('Status', 'status')
+                    ->excludeFromSelectable(),
+                Column::make('Payment status', 'payment_status')
+                    ->excludeFromSelectable(),
                 Column::make('Amount', 'amount')
                     ->excludeFromSelectable(),
                 Column::make('Price', 'price')
