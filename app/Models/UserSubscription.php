@@ -25,10 +25,10 @@ class UserSubscription extends WeBaseModel
 
     protected $table = 'user_subscriptions';
 
-    protected $fillable = ['user_id', 'subject_id', 'subject_type', 'start_date', 'end_date', 'payment_status', 'qty', 'data'];
+    protected $fillable = ['user_id', 'subject_id', 'subject_type', 'start_date', 'end_date', 'status', 'payment_status', 'qty', 'data'];
 
     protected $casts = [
-        'data' => 'array'
+        'data' => 'array',
     ];
 
     public function user()

@@ -584,6 +584,7 @@ class StripeService
 
                     $user_subscription = User::find($order->user_id)->plan_subscriptions()->first();
                     $user_subscription->payment_method = App\Enums\PaymentStatusEnum::pending()->value; // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
+                    $user_subscription->status = App\Enums\UserSubscriptionStatusEnum::inactive()->value; // User subscription is still not active because we need to wait for invoice.paid!
 
                     $meta = $user_subscription->data;
                     $meta['stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
@@ -882,8 +883,9 @@ class StripeService
 
                 $invoice->save();
 
-                // Change UserSubscription to paid, because we are certain that it's paid for next billing period!
+                // Change UserSubscription payment_status to paid and status to active, because we are certain that it's paid for next billing period hence why we can activate it!
                 $user_subscription->payment_status = \App\Enums\PaymentStatusEnum::paid()->value;
+                $user_subscription->status = App\Enums\UserSubscriptionStatusEnum::active()->value;
                 $user_subscription->save();
             }
 
@@ -922,6 +924,7 @@ class StripeService
             // Because payment failed, we should disable all user_subscriptions related to current stripe_subscription_id
             UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->update([
                 'payment_status' => \App\Enums\PaymentStatusEnum::unpaid()->value,
+                'status' => \App\Enums\UserSubscriptionStatusEnum::inactive()->value,
             ]);
 
         } catch (\Exception $e) {
@@ -967,6 +970,8 @@ class StripeService
 
             if(!empty($user_subscription)) {
                 $user_subscription->payment_status = \App\Enums\PaymentStatusEnum::pending()->value; // Set to pending because only on 'invoice.paid' we are sure that subscription is 100% paid!
+                $user_subscription->status = \App\Enums\UserSubscriptionStatusEnum::active_until_end()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
+
                 $user_subscription->start_date = $stripe_subscription->current_period_start ?? '';
                 $user_subscription->end_date = $stripe_subscription->current_period_end ?? '';
 
