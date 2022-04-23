@@ -39,7 +39,11 @@ trait Purchasable
     }
 
     public function isSubscribable() {
-        return $this instanceof Plan || ($this instanceof Product && ($this?->isSubscription() ?? false));
+        return $this instanceof Plan || ($this instanceof Product && (($this?->isSubscription() ?? false) || ($this->isPhysicalSubscription() ?? false)));
+    }
+
+    public function isShippable() {
+        return $this instanceof Product && (($this?->isStandard() ?? false) || ($this?->isPhysicalSubscription() ?? false));
     }
 
     public function getSingleCheckoutPermalink() {
