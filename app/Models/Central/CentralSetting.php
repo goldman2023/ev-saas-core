@@ -26,7 +26,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class CentralSetting extends Model
 {
-    use Cachable;
+    // use Cachable;
     use Notifiable;
 
     protected $table = 'central_settings';

@@ -32,7 +32,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Brand extends WeBaseModel
 {
-    use Cachable;
+    // use Cachable;
     use GalleryTrait;
 
 

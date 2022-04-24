@@ -9,6 +9,7 @@ trait RegisterObservers
      *
      * @return void
      */
+
     protected function registerObservers(): void
     {
         foreach ($this->observers ?? [] as $model => $handlers) {

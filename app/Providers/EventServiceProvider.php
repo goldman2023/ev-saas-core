@@ -37,13 +37,13 @@ class EventServiceProvider extends ServiceProvider
     use RegisterObservers;
 
     /**
-    * The event listener mappings for the application.
-    *
-    * @var array
-    */
+     * The event listener mappings for the application.
+     *
+     * @var array
+     */
     protected $listen = [
         Registered::class => [
-          SendEmailVerificationNotification::class,
+            SendEmailVerificationNotification::class,
         ],
         ItemsQueried::class => [
             CustomAttributesEagerLoad::class
@@ -56,29 +56,38 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     /**
-     * The observers mappings for the application.
+     * Register any events for your application.
      *
-     * @var array
+     * @return void
      */
-    protected array $observers = [
-        TenantSetting::class => [TenantSettingsObserver::class],
-        Product::class => [ProductsObserver::class],
-        ProductVariation::class => [ProductVariationsObserver::class],
-        ProductStock::class => [ProductStocksObserver::class],
-        SerialNumber::class => [SerialNumbersObserver::class],
-        CategoryRelationship::class => [CategoryRelationshipsObserver::class],
-        Attribute::class => [AttributeObserver::class],
-        AttributeValue::class => [AttributeValuesObserver::class],
-    ];
-
-    /**
-    * Register any events for your application.
-    *
-    * @return void
-    */
     public function boot()
     {
         parent::boot();
+
+
+
+        /**
+         * The observers mappings for the application.
+         *
+         * @var array
+         */
+        $observers = [
+            TenantSetting::class => [TenantSettingsObserver::class],
+            Product::class => [ProductsObserver::class],
+            ProductVariation::class => [ProductVariationsObserver::class],
+            ProductStock::class => [ProductStocksObserver::class],
+            SerialNumber::class => [SerialNumbersObserver::class],
+            CategoryRelationship::class => [CategoryRelationshipsObserver::class],
+            Attribute::class => [AttributeObserver::class],
+            AttributeValue::class => [AttributeValuesObserver::class],
+        ];
+
+
+        foreach ($observers ?? [] as $model => $handlers) {
+            foreach ((array) $handlers as $handler) {
+                $model::observe($handler);
+            }
+        }
 
         // Register All Observers
         $this->registerObservers();
