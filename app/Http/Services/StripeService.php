@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Facades\CartService;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
+use App\Enums\UserSubscriptionStatusEnum;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -295,7 +296,7 @@ class StripeService
                     'quantity' => $qty,
                 ]
             ],
-            'mode' => $mode->isSubscribable() ? 'subscription' : 'payment',
+            'mode' => $model->isSubscribable() ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
             'client_reference_id' => !empty($order) ? $order->id : '',
             /* TODO: Create dynamic order on the fly when generating checkout link  */
@@ -480,7 +481,7 @@ class StripeService
         // Handle the event
         switch ($event->type) {
             case 'charge.succeeded':
-                $this->whChargeSucceeded($event);
+                // $this->whChargeSucceeded($event);
                 break;
             case 'checkout.session.completed':
                 $this->whCheckoutSessionCompleted($event);
@@ -559,6 +560,7 @@ class StripeService
             $meta = $order->meta;
             $meta['stripe_payment_mode'] = $session->mode ?? null; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
             $meta['stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
+            $order->meta = $meta;
             $order->save();
 
             // Check if $model has stock and reduce it if it does!!!
@@ -584,16 +586,16 @@ class StripeService
                     // Single Plan Subscription mode: THIS PART CREATES ONE UserSubscription AND "detaches all other" (hence sync)
                     // IMPORTANT: Attach stripe_subscription_id to our UserSubscription
                     // If multiplan purchase is not available, 1) synch user subscription and 2) update stripe data
-                    User::find($order->user_id)->plans()->sync($model);
-
-                    $user_subscription = User::find($order->user_id)->plan_subscriptions()->first();
-                    $user_subscription->payment_method = App\Enums\PaymentStatusEnum::pending()->value; // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
-                    $user_subscription->status = App\Enums\UserSubscriptionStatusEnum::inactive()->value; // User subscription is still not active because we need to wait for invoice.paid!
-
-                    $meta = $user_subscription->data;
-                    $meta['stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
-                    $user_subscription->data = $meta;
-                    $user_subscription->save();
+                    User::find($order->user_id)->plans()->sync([
+                        $model->id => [
+                            'order_id' => $order->id,
+                            'payment_status' => PaymentStatusEnum::pending()->value, // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
+                            'status' => UserSubscriptionStatusEnum::inactive()->value, // User subscription is still not active because we need to wait for invoice.paid!
+                            'data' => json_encode([
+                                'stripe_subscription_id' => $session->subscription ?? null // store stripe_subscription_id
+                            ])
+                        ]
+                    ]);
                 } else {
                     // TODO: If multiplan purchase is available, logic is different!
                 }
@@ -709,7 +711,7 @@ class StripeService
     }
 
     // charge.succeeded
-    public function whChargeSucceeded($event) {
+    /* public function whChargeSucceeded($event) {
         $stripe_charge = $event->data->object;
         
         // Take receipt_url from Charge object and store it to: 1) for subscriptions - invoice this charge is related to, 2) for one-time payment - both invoice and order meta
@@ -757,7 +759,7 @@ class StripeService
             die($e->getMessage());
         }
         
-    }
+    } */
 
     // invoice.created
     public function whInvoiceCreated($event) {
@@ -883,13 +885,20 @@ class StripeService
                 $meta['stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments 
                 $meta['stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
                 $meta['stripe_currency'] = $stripe_invoice->currency ?? null;
-                $invoice->meta = $meta;
+                
+                // Append receipt_url to invoice (and get it through charge)
+                $ch = $this->stripe->charges->retrieve(
+                    $stripe_invoice->charge,
+                    []
+                );
+                $meta['stripe_receipt_url'] = $ch->receipt_url;
 
+                $invoice->meta = $meta;
                 $invoice->save();
 
                 // Change UserSubscription payment_status to paid and status to active, because we are certain that it's paid for next billing period hence why we can activate it!
-                $user_subscription->payment_status = \App\Enums\PaymentStatusEnum::paid()->value;
-                $user_subscription->status = App\Enums\UserSubscriptionStatusEnum::active()->value;
+                $user_subscription->payment_status = PaymentStatusEnum::paid()->value;
+                $user_subscription->status = UserSubscriptionStatusEnum::active()->value;
                 $user_subscription->save();
             }
 
@@ -910,7 +919,7 @@ class StripeService
             $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_latest_invoice_id', $stripe_invoice->id)->first();
 
             $invoice->invoice_number = $stripe_invoice->number;
-            $invoice->payment_status = \App\Enums\PaymentStatusEnum::unpaid()->value;
+            $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
 
             $meta = $invoice->meta;
             $meta['stripe_invoice_id'] = $stripe_invoice->id ?? '';
@@ -927,8 +936,8 @@ class StripeService
 
             // Because payment failed, we should disable all user_subscriptions related to current stripe_subscription_id
             UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->update([
-                'payment_status' => \App\Enums\PaymentStatusEnum::unpaid()->value,
-                'status' => \App\Enums\UserSubscriptionStatusEnum::inactive()->value,
+                'payment_status' => PaymentStatusEnum::unpaid()->value,
+                'status' => UserSubscriptionStatusEnum::inactive()->value,
             ]);
 
         } catch (\Exception $e) {
@@ -973,8 +982,8 @@ class StripeService
             $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
 
             if(!empty($user_subscription)) {
-                $user_subscription->payment_status = \App\Enums\PaymentStatusEnum::pending()->value; // Set to pending because only on 'invoice.paid' we are sure that subscription is 100% paid!
-                $user_subscription->status = \App\Enums\UserSubscriptionStatusEnum::active_until_end()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
+                $user_subscription->payment_status = PaymentStatusEnum::pending()->value; // Set to pending because only on 'invoice.paid' we are sure that subscription is 100% paid!
+                $user_subscription->status = UserSubscriptionStatusEnum::active_until_end()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
 
                 $user_subscription->start_date = $stripe_subscription->current_period_start ?? '';
                 $user_subscription->end_date = $stripe_subscription->current_period_end ?? '';

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Dashboard\Tables;
 
 use Carbon;
-use App\Events\Plans\PlanSubscriptionCanceled;
+use App\Events\Plans\PlanSubscriptionCancel;
 use App\Enums\StatusEnum;
 use App\Facades\MyShop;
 use App\Models\BlogPost;
@@ -138,7 +138,7 @@ class PlansTable extends DataTableComponent
 
             try {
                 if(!empty($plan_subscription)) {
-                    PlanSubscriptionCanceled::dispatch($plan_subscription);
+                    PlanSubscriptionCancel::dispatch($plan_subscription);
                 } else {
                     throw new \Exception('Cannot find a subscription with ID: '.$user_subscription_id);
                 }
@@ -150,8 +150,25 @@ class PlansTable extends DataTableComponent
             $end_date = Carbon::createFromTimestamp($plan_subscription->end_date)->format('d. M Y, H:i');
             $this->inform(translate('Subscription plan successfully canceled!'), 'Have in mind that you can still use the plan before ending period: '.$end_date, 'success', 5000);
         }
+    }
 
-        return false;
-        
+    public function revivePlan($user_subscription_id) {
+
+        if($this->for === 'me') {
+            $plan_subscription = auth()->user()->plan_subscriptions->where('id', $user_subscription_id)->first();
+
+            try {
+                if(!empty($plan_subscription)) {
+                    PlanSubscriptionRevive::dispatch($plan_subscription);
+                } else {
+                    throw new \Exception('Cannot find a subscription with ID: '.$user_subscription_id);
+                }
+            } catch(\Exception $e) {
+                $this->inform(translate('Error: Cannot revive a subscription...'), $e->getMessage(), 'fail');
+                return false;
+            }
+            
+            $this->inform(translate('Subscription plan successfully revived!'), '', 'success', 5000);
+        }
     }
 }

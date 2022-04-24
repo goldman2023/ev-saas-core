@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Plans;
 
-use App\Events\Plans\PlanSubscriptionCanceled;
+use App\Events\Plans\PlanSubscriptionCancel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Enums\UserSubscriptionStatusEnum;
@@ -24,10 +24,10 @@ class CancelStripePlanSubscription
     /**
      * Handle the event.
      *
-     * @param  PlanSubscriptionCanceled  $event
+     * @param  PlanSubscriptionCancel  $event
      * @return void
      */
-    public function handle(PlanSubscriptionCanceled $event)
+    public function handle(PlanSubscriptionCancel $event)
     {
         // Do it if stripe is enabled
         if(Payments::stripe()->enabled) {
@@ -64,11 +64,11 @@ class CancelStripePlanSubscription
     /**
      * Handle a job failure.
      *
-     * @param  PlanSubscriptionCanceled $event
+     * @param  PlanSubscriptionCancel $event
      * @param  \Throwable  $exception
      * @return void
      */
-    public function failed(PlanSubscriptionCanceled $event, $exception)
+    public function failed(PlanSubscriptionCancel $event, $exception)
     {
         //
     }

@@ -101,6 +101,13 @@
                             <span class="ml-2">{{ translate('Cancel plan') }}</span>
                         </div>
                     </li>
+                @else
+                <li>
+                    <div wire:click="revivePlan({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
+                        @svg('heroicon-o-refresh', ['class' => 'text-info w-[18px] h-[18px]'])
+                        <span class="ml-2">{{ translate('Revive plan') }}</span>
+                    </div>
+                </li>
                 @endif
             </ul>
         @endif
