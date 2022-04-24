@@ -1111,9 +1111,6 @@
 
                         {{-- Advanced --}}
                         <div class="w-full px-5" x-show="current_tab === 'advanced'">
-                            @usermeta_onboarding('gender')
-                                YEEEEEEEEEYasdasd
-                            @endusermeta_onboarding
                             {{-- User meta in use --}}
                             <div class="flex flex-col" x-data="{
                                 all_user_meta: @js(\App\Models\UserMeta::metaDataTypes()),
