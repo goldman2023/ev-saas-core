@@ -28,6 +28,7 @@ use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\EVWishlistController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Integrations\PixProLicenseController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OnboardingController;
@@ -227,6 +228,8 @@ Route::middleware([
         Route::post('/settings/application/configuration', [ApplicationSettingsController::class, 'storeConfiguration'])->name('tenant.settings.application.configuration');
         Route::get('/settings/application/invoice/{id}/download', [DownloadInvoiceController::class])->name('tenant.invoice.download');
     });
+
+    Route::get('/integrations/pix', [PixProLicenseController::class, 'index']);
 
     //Custom page
     Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
