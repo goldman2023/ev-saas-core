@@ -160,6 +160,32 @@ class AppSettingsForm extends Component
         return view('livewire.dashboard.forms.settings.app-settings-form');
     }
 
+    public function saveAdvanced($rule_set) {
+        $rules = $this->getRuleSet($rule_set);
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Advanced settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save advanced settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
     public function saveGeneral() {
         $rules = $this->getRuleSet('general');
 

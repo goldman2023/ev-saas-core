@@ -26,6 +26,7 @@ class TenantSettingsService
         $this->app = $app;
 
         $this->setAll();
+        // dd($this->getAll()); // testing castValuesForGet
     }
 
     public function get($name, $default = null) {
@@ -70,7 +71,7 @@ class TenantSettingsService
 
         if (empty($settings)) {
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
-
+            
             castValuesForGet($settings, $data_types);
 
             // dd($settings);

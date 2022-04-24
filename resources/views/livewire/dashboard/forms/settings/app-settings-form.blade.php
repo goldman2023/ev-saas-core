@@ -86,6 +86,11 @@
                                         @svg('lineawesome-plug-solid', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
                                         <span>{{ translate('Integrations') }}</span>
                                     </a>
+
+                                    <a href="#" @click="current_tab = 'advanced'" :class="{'border-primary text-primary':current_tab === 'advanced', 'border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300':current_tab !== 'advanced'}" class="border-transparent group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm">
+                                        @svg('heroicon-o-cog', ['class' => '-ml-0.5 mr-2 h-5 w-5'])
+                                        <span>{{ translate('Advanced') }}</span>
+                                    </a>
                                 </nav>
                             </div>
                         </div>
@@ -1103,6 +1108,114 @@
                             </ul>
                         </div>
                         {{-- END Integrations --}}
+
+                        {{-- Advanced --}}
+                        <div class="w-full px-5" x-show="current_tab === 'advanced'">
+                            {{-- User meta in use --}}
+                            <div class="flex flex-col" x-data="{
+                                all_user_meta: @js(\App\Models\UserMeta::metaDataTypes()),
+                                toggleField(key) {
+                                    if(settings.user_meta_fields_in_use.value == null || settings.user_meta_fields_in_use.value == undefined) {
+                                        settings.user_meta_fields_in_use.value = {};
+                                    }
+
+                                    if(settings.user_meta_fields_in_use.value.hasOwnProperty(key)) {
+                                        delete settings.user_meta_fields_in_use.value[key];
+                                    } else {
+                                        settings.user_meta_fields_in_use.value[key] = {
+                                            'required': false,
+                                            'onboarding': false,
+                                        };
+                                    }
+                                },
+                                toggleProperty(key, property) {
+                                    if(_.get(settings.user_meta_fields_in_use.value, key+'.'+property, null) === null) {
+                                        _.set(settings.user_meta_fields_in_use.value, key+'.'+property, false); // if it doesn't exist, set it!
+                                    }
+
+                                    if(_.get(settings.user_meta_fields_in_use.value, key+'.'+property, null) === false) {
+                                        _.set(settings.user_meta_fields_in_use.value, key+'.'+property, true);
+                                    } else {
+                                        _.set(settings.user_meta_fields_in_use.value, key+'.'+property, false);
+                                    }
+                                },
+                            }">
+                                <div class="flex flex-col mb-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('User meta fields in use') }}</span>
+                                    <p class="text-gray-500 text-sm">{{ translate('Here you can enable/disable which metadata should be visible and editable for all user accounts. You can also set if specific meta is required or not.') }}</p>
+                                </div>
+
+                                <div class="flex items-center">
+                                    <button type="button" @click="$dispatch('display-modal', {'id': 'app-settings-user_meta_fields_in_use'})"
+                                            class="btn-primary" >
+                                            {{ translate('Edit fields')}}
+                                    </button>
+                                </div>
+
+                                <x-system.form-modal id="app-settings-user_meta_fields_in_use" title="User meta fields in use" class="sm:max-w-2xl">
+                                    <!-- User meta fields in use-->
+                                    <div class="mt-0 flex flex-col">
+                                        <div class="overflow-x-auto ">
+                                          <div class="inline-block min-w-full py-2 px-1 align-middle">
+                                            <div class="shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                                              <table class="min-w-full divide-y divide-gray-300">
+                                                <thead class="bg-gray-50">
+                                                  <tr>
+                                                    <th scope="col" class="py-1 px-3 text-left text-sm font-semibold text-gray-900">{{ translate('Meta') }}</th>
+                                                    <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Use') }}</th>
+                                                    <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Required') }}</th>
+                                                    <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Onboarding') }}</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody class="divide-y divide-gray-200 bg-white">
+                                                    <template x-for="(type, key) in all_user_meta">
+                                                        <tr>
+                                                            <td class="whitespace-nowrap py-2 px-3 text-14 font-medium text-gray-900 " x-text="key"></td>
+                                                            <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
+                                                                <button type="button" @click="toggleField(key)"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key, null) !== null , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key, null) === null}"
+                                                                            class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key, null) !== null, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key, null) === null}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                </button>
+                                                            </td>
+                                                            <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
+                                                                <button type="button" @click="toggleProperty(key, 'required')" x-show="_.get(settings.user_meta_fields_in_use.value, key, null) !== null"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.required', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.required', false) === false}"
+                                                                            class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.required', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.required', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                </button>
+                                                            </td>
+                                                            <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
+                                                                <button type="button" @click="toggleProperty(key, 'onboarding')" x-show="_.get(settings.user_meta_fields_in_use.value, key, null) !== null"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) === false}"
+                                                                            class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    <!-- END User meta fields in use -->
+
+                                    <div class="w-full flex justify-end mt-4" x-data="{}">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" 
+                                            @click="
+                                                $wire.set('settings.user_meta_fields_in_use.value', settings.user_meta_fields_in_use.value, true);
+                                            "
+                                            wire:click="saveAdvanced('user_meta_fields')">
+                                            {{ translate('Save') }}
+                                        </button>
+                                    </div>
+                                </x-system.form-modal>
+                            </div>
+                            {{-- END User meta in use --}}
+                        </div>
+                        {{-- END Advanced --}}
                     </div>
                     {{-- END Tabs --}}
 

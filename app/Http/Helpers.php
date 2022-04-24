@@ -54,25 +54,32 @@ if (!function_exists('castValueForSave')) {
 if (!function_exists('castValuesForGet')) {
     function castValuesForGet(&$settings, $data_types) {
         if(!empty($settings)) {
+            
             foreach($settings as $key => $setting) {
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
                 
                 try {
+                    
                     // This means that there are more sub items inside
                     if(is_array($data_type)) {
+                        // If data type is ARRAY, it means that JSON is stored in setting value!
+                        // In order to recursively go through it's properties and cast data types, we need to decode it with json_decode first!
+                        $settings[$key]['value'] = json_decode($settings[$key]['value'], true);
+
                         // Check if there are missing sub fields and create them
                         $missing_sub_fields = array_diff_key($data_type, !empty($settings[$key]['value']) ? $settings[$key]['value'] : []);
+                        
                         if(!empty($missing_sub_fields)) {
                             foreach($missing_sub_fields as $subkey => $subvalue) {
                                 $missing_sub_fields[$subkey] = ''; // reset values to ''
                             }
                         }
-                        
-                        // Merge missing sub fields and existing sub fields
+ 
+                        // Merge missing sub fields and existing sub fields (this is imporatant if we add any new tenant setting field!)
                         $settings[$key]['value'] = array_merge(!empty($settings[$key]['value']) ? $settings[$key]['value'] : [], $missing_sub_fields);
                         
-                        // convert Sub Fields values to proper data type
+                        // Convert Sub Fields values to proper data type
                         castValuesForGet($settings[$key]['value'], $data_type);
                         continue;
                     }
