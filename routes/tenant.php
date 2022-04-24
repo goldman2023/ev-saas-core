@@ -33,6 +33,9 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\WeEditController;
+use App\Http\Controllers\WeAnalyticsController;
+use App\Http\Controllers\WeMenuController;
 use App\Http\Controllers\Tenant\ApplicationSettingsController;
 use App\Http\Controllers\Tenant\DownloadInvoiceController;
 use App\Http\Controllers\Tenant\UserSettingsController;
@@ -67,12 +70,12 @@ Route::middleware([
     VendorMode::class,
 ])->group(function () {
     Route::middleware('auth')->group(function () {
-        Route::get('/we-analytics', [App\Http\Controllers\WeAnalyticsController::class, 'index'])->name('analytics.index');
-        Route::get('/we-menu', [App\Http\Controllers\WeMenuController::class, 'index'])->name('menu.index');
+        Route::get('/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
+        Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
 
-        Route::get('/we-edit', [App\Http\Controllers\WeEditController::class, 'index'])->name('we-edit.index');
-        Route::get('/we-edit/flow', [App\Http\Controllers\WeEditController::class, 'flow'])->name('we-edit.flow.pages');
-        Route::get('/we-edit/flow/menu', [App\Http\Controllers\WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
+        Route::get('/we-edit', [WeEditController::class, 'index'])->name('we-edit.index');
+        Route::get('/we-edit/flow', [WeEditController::class, 'flow'])->name('we-edit.flow.pages');
+        Route::get('/we-edit/flow/menu', [WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
     });
 
     // Webhooks
