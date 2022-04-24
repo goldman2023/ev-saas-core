@@ -52,6 +52,14 @@
     <strong class="text-14">{{ \FX::formatPrice($row->total_price) }}</strong>
 </x-livewire-tables::table.cell>
 
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+    <span class="text-14">{{ Carbon::createFromTimestamp($row->start_date)->format('d. M Y, H:i') }}</span>
+</x-livewire-tables::table.cell>
+
+<x-livewire-tables::table.cell class="hidden md:table-cell align-middle text-center">
+    <span class="text-14">{{ Carbon::createFromTimestamp($row->end_date)->format('d. M Y, H:i') }}</span>
+</x-livewire-tables::table.cell>
+
 <x-livewire-tables::table.cell class="align-middle static ">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
         <a class="btn btn-white flex items-center mr-2" href="#">
@@ -70,24 +78,30 @@
                 @click.away="isOpen = false"
                 class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
             >
-                <li>
-                    <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
-                        @svg('heroicon-o-arrow-circle-up', ['class' => 'w-[18px] h-[18px]'])
-                        <span class="ml-2">{{ translate('Upgrade Plan') }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
-                        @svg('heroicon-o-arrow-circle-down', ['class' => 'w-[18px] h-[18px]'])
-                        <span class="ml-2">{{ translate('Downgrade Plan') }}</span>
-                    </a>
-                </li>
-                <li>
-                    <div wire:click="cancelPlan({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
-                        @svg('heroicon-o-trash', ['class' => 'text-danger w-[18px] h-[18px]'])
-                        <span class="ml-2">{{ translate('Cancel plan') }}</span>
-                    </div>
-                </li>
+                @if($row->status === App\Enums\UserSubscriptionStatusEnum::active()->value)
+                    {{-- Only if subscription plan is active, user can upgrade/downgrade or cancel it! --}}
+
+                    <li>
+                        <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                            @svg('heroicon-o-arrow-circle-up', ['class' => 'w-[18px] h-[18px]'])
+                            <span class="ml-2">{{ translate('Upgrade Plan') }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
+                            @svg('heroicon-o-arrow-circle-down', ['class' => 'w-[18px] h-[18px]'])
+                            <span class="ml-2">{{ translate('Downgrade Plan') }}</span>
+                        </a>
+                    </li>
+
+                
+                    <li>
+                        <div wire:click="cancelPlan({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
+                            @svg('heroicon-o-trash', ['class' => 'text-danger w-[18px] h-[18px]'])
+                            <span class="ml-2">{{ translate('Cancel plan') }}</span>
+                        </div>
+                    </li>
+                @endif
             </ul>
         @endif
         

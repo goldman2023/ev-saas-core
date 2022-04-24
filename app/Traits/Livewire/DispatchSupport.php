@@ -12,8 +12,8 @@ trait DispatchSupport
         $this->dispatchBrowserEvent('toastit', ['id' => $this->toast_id, 'content' => $msg, 'type' => $type ]);
     }
 
-    protected function inform($title, $text, $type) {
-        $this->dispatchBrowserEvent('inform', ['id' => $this->info_modal_basic_id, 'title' => $title, 'text' => $text, 'type' => $type]);
+    protected function inform($title, $text, $type, $timeout = 3000) {
+        $this->dispatchBrowserEvent('inform', ['id' => $this->info_modal_basic_id, 'title' => $title, 'text' => $text, 'type' => $type, 'timeout' => $timeout]);
     }
 
     protected function dispatchGeneralError(mixed $errors) {

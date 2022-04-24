@@ -55,6 +55,10 @@ class StripeService
         $this->supported_shipping_countries = array_values(array_diff(['LT', 'RS', 'DE', 'GB', 'ES', 'FR', 'US'], $this->unsupported_shipping_countries));
     }
 
+    public function stripe() {
+        return $this->stripe;
+    }
+
     public function getStripeMode() {
         return $this->mode_prefix;
     }

@@ -77,6 +77,10 @@ class PlansTable extends DataTableComponent
                     ->excludeFromSelectable(),
                 Column::make('Price', 'price')
                     ->excludeFromSelectable(),
+                Column::make('Starting', 'start_date')
+                    ->excludeFromSelectable(),
+                Column::make('Ending', 'end_date')
+                    ->excludeFromSelectable(),
                 Column::make('Actions')
                     ->excludeFromSelectable(),
             ];
@@ -132,18 +136,22 @@ class PlansTable extends DataTableComponent
         if($this->for === 'me') {
             $plan_subscription = auth()->user()->plan_subscriptions->where('id', $user_subscription_id)->first();
 
-            if(!empty($plan_subscription)) {
-                // TODO: This should depend on the order <-> last invoice
-                $plan_subscription->end_date = Carbon::now()->addDays(7)->timestamp;
+            try {
+                if(!empty($plan_subscription)) {
+                    PlanSubscriptionCanceled::dispatch($plan_subscription);
+                } else {
+                    throw new \Exception('Cannot find a subscription with ID: '.$user_subscription_id);
+                }
+            } catch(\Exception $e) {
+                $this->inform(translate('Error: Cannot cancel a subscription...'), $e->getMessage(), 'fail');
+                return false;
             }
-
-            $plan_subscription->save();
-
-            PlanSubscriptionCanceled::dispatch($plan_subscription);
-
-            $this->inform(translate('Subscription plan successfully canceled!'), '', 'success');
+            
+            $end_date = Carbon::createFromTimestamp($plan_subscription->end_date)->format('d. M Y, H:i');
+            $this->inform(translate('Subscription plan successfully canceled!'), 'Have in mind that you can still use the plan before ending period: '.$end_date, 'success', 5000);
         }
 
         return false;
+        
     }
 }
