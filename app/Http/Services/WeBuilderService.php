@@ -126,6 +126,20 @@ class WeBuilderService
                                 ],
                             ]
                         ],
+                        'header-section' => [
+                            'title' => 'Content sections',
+                            'description' => 'A lovely description for content sections',
+                            'sections' => [
+                                'tailwind-ui.sections.marketing.content-sections.content-section_01' => [
+                                    'id' => 'tailwind-ui.sections.marketing.content-sections.content-section_01',
+                                    'title' => 'Content Section 01',
+                                    'thumbnail' => 'https://tailwindui.com/img/components/header-section.01-simple-centered-xl.png',
+                                    'order' => -1,
+                                    'data' => [],
+                                    'settings' => []
+                                ],
+                            ]
+                        ],
                         'cta-sections' => [
                             'title' => 'CTA',
                             'description' => 'A lovely description for cta sections',
