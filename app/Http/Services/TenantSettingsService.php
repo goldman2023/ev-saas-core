@@ -177,6 +177,9 @@ class TenantSettingsService
             'mail_from_name' => 'string',
             'mail_reply_to_address' => 'string',
             'mail_reply_to_name' => 'string',
+
+            // Advanced
+            'user_meta_fields_in_use' => 'array',
             
         ];
     }

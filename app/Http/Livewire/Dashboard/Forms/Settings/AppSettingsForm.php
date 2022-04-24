@@ -106,6 +106,9 @@ class AppSettingsForm extends Component
             ],
             'design' => [
                 'settings.colors.value' => ['']
+            ],
+            'user_meta_fields' => [
+                'settings.user_meta_fields_in_use.value' => ['']
             ]
         ]);
 

@@ -515,6 +515,7 @@ class StripeService
                 $this->whCustomerSubscriptionUpdated($event);
                 break;
             case 'customer.subscription.deleted':
+                $this->whCustomerSubscriptionDeleted($event);
                 break;
                         
             // ... handle other event types
@@ -972,6 +973,10 @@ class StripeService
 
     // customer.subscription.updated
     public function whCustomerSubscriptionUpdated($event) {
+        // Check if hook should do any action
+        $this->shouldProcess($event);
+
+
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;
 
@@ -998,6 +1003,37 @@ class StripeService
         } catch (\Exception $e) {
             http_response_code(400);
             die($e->getMessage());
+        }
+    }
+
+    // customer.subscription.deleted
+    public function whCustomerSubscriptionDeleted($event) {
+        $stripe_subscription = $event->data->object;
+        $stripe_subscription_id = $stripe_subscription->id;
+
+        try {
+            // This means that subscription is finally canceled (no revive is possible and it's final, so we should disable subscription on our end!)
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
+
+            if(!empty($user_subscription)) {
+                // Delete subscription on our end! User will have to go through standard process again!
+                $user_subscription->delete();
+            }
+        } catch (\Exception $e) {
+            http_response_code(400);
+            die($e->getMessage());
+        }
+    }
+
+    protected function shouldProcess($event) {
+        $object = $event->data->object;
+        
+        // IMPORTANT: All metadata is passed as key:value pairs where `value` is string stype regardless of the real data type, so 1 becomes "1", true becomes "true" etc.).
+        // For this reason we use loose comparison (==) instead of strict (===)
+        if(isset($object->metadata['stop_hook']) && $object->metadata['stop_hook'] == 1) {
+            print_r($object->metadata['stop_hook']);
+            http_response_code(200);
+            die();
         }
     }
 }
