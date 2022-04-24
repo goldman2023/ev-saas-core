@@ -9,12 +9,19 @@ use Illuminate\View\Component;
 class ImageTitleText extends Component
 {
     public $image;
+
     public $imageAltText;
+
     public $title;
+
     public $titleTag;
+
     public $text;
+
     public $href;
+
     public $target;
+
     public $class;
 
     /**
@@ -45,7 +52,8 @@ class ImageTitleText extends Component
     }
 
     // WeEdit Builder
-    public static function getDefaultData() {
+    public static function getDefaultData()
+    {
         return [
             'image' => '',
             'image_alt_text' => '',
@@ -58,7 +66,8 @@ class ImageTitleText extends Component
         ];
     }
 
-    public function getEditableData() {
+    public function getEditableData()
+    {
         return [
             'image' => $this->image,
             'image_alt_text' => $this->imageAltText,
@@ -71,7 +80,8 @@ class ImageTitleText extends Component
         ];
     }
 
-    public function setEditableData($data) {
+    public function setEditableData($data)
+    {
         $this->image = $data['image'] ?? '';
         $this->imageAltText = $data['image_alt_text'] ?? '';
         $this->title = $data['title'] ?? '';
@@ -82,7 +92,8 @@ class ImageTitleText extends Component
         $this->class = $data['class'] ?? '';
     }
 
-    public function renderFieldComponent($slot_name, $component_name) {
+    public function renderFieldComponent($slot_name, $component_name)
+    {
         return view('components.we-edit.field-components.image-title-text', ['slot_name' => $slot_name, 'component_name' => $component_name, 'component_data' => $this->getEditableData()]);
     }
 }

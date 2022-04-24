@@ -2,14 +2,15 @@
 
 namespace App\View\Components\TailwindUi;
 
-use Illuminate\View\Component;
-use App\Enums\UserVisibilityEnum;
 use App\Enums\ResponsiveVisibilityEnum;
+use App\Enums\UserVisibilityEnum;
 use App\Facades\IMG;
+use Illuminate\View\Component;
 
 class WeHtmlComponent extends Component
 {
     public $settings;
+
     public $weData;
 
     /**
@@ -45,27 +46,27 @@ class WeHtmlComponent extends Component
                 'urls' => [
                     'mobile' => '',
                     'tablet' => '',
-                    'desktop' => ''
+                    'desktop' => '',
                 ],
-                'position' => 'center'
+                'position' => 'center',
             ],
             'spacing' => [
                 'mobile' => [
                     'top' => '0',
-                    'bottom' => '0'
+                    'bottom' => '0',
                 ],
                 'tablet' => [
                     'top' => '0',
-                    'bottom' => '0'
+                    'bottom' => '0',
                 ],
                 'desktop' => [
                     'top' => '0',
-                    'bottom' => '0'
+                    'bottom' => '0',
                 ],
             ],
             'extra_classes' => '',
             'user_visibility' => 'all', // all, guest, auth, subscriber, non_subscriber
-            'responsive_visibility' => 'all' // all, Mobile (), Tablet portrait(sm), Tablet Landscape(md), Laptop(lg), Full Desktop(xl)
+            'responsive_visibility' => 'all', // all, Mobile (), Tablet portrait(sm), Tablet Landscape(md), Laptop(lg), Full Desktop(xl)
         ];
     }
 
@@ -75,26 +76,26 @@ class WeHtmlComponent extends Component
 
         // Desktop
         if ($this->settings['spacing']['desktop']['top'] !== 0) {
-            $spacing_classes .= ' lg:pt-[' . $this->settings['spacing']['desktop']['top'] . 'px] ';
+            $spacing_classes .= ' lg:pt-['.$this->settings['spacing']['desktop']['top'].'px] ';
         }
         if ($this->settings['spacing']['desktop']['bottom'] !== 0) {
-            $spacing_classes .= ' lg:pb-[' . $this->settings['spacing']['desktop']['bottom'] . 'px] ';
+            $spacing_classes .= ' lg:pb-['.$this->settings['spacing']['desktop']['bottom'].'px] ';
         }
 
         // Tablet
         if ($this->settings['spacing']['tablet']['top'] !== 0) {
-            $spacing_classes .= ' sm:pt-[' . $this->settings['spacing']['tablet']['top'] . 'px] ';
+            $spacing_classes .= ' sm:pt-['.$this->settings['spacing']['tablet']['top'].'px] ';
         }
         if ($this->settings['spacing']['tablet']['bottom'] !== 0) {
-            $spacing_classes .= ' sm:pb-[' . $this->settings['spacing']['tablet']['bottom'] . 'px] ';
+            $spacing_classes .= ' sm:pb-['.$this->settings['spacing']['tablet']['bottom'].'px] ';
         }
 
         // Mobile
         if ($this->settings['spacing']['mobile']['top'] !== 0) {
-            $spacing_classes .= ' pt-[' . $this->settings['spacing']['mobile']['top'] . 'px] ';
+            $spacing_classes .= ' pt-['.$this->settings['spacing']['mobile']['top'].'px] ';
         }
         if ($this->settings['spacing']['mobile']['bottom'] !== 0) {
-            $spacing_classes .= ' pb-[' . $this->settings['spacing']['mobile']['bottom'] . 'px] ';
+            $spacing_classes .= ' pb-['.$this->settings['spacing']['mobile']['bottom'].'px] ';
         }
 
         return $spacing_classes;
@@ -103,33 +104,33 @@ class WeHtmlComponent extends Component
     public function getBackgroundClasses()
     {
         if ($this->settings['background']['type'] === 'color') {
-            return ' bg-[' . $this->settings['background']['color'] . '] ';
-        } else if ($this->settings['background']['type'] === 'image') {
-            return ' bg-[url(\'' . IMG::get($this->settings['background']['urls']['desktop'], IMG::mergeWithDefaultOptions([], 'original')) . '\')] bg-center bg-cover ';
-        } else if ($this->settings['background']['type'] === 'video') {
+            return ' bg-['.$this->settings['background']['color'].'] ';
+        } elseif ($this->settings['background']['type'] === 'image') {
+            return ' bg-[url(\''.IMG::get($this->settings['background']['urls']['desktop'], IMG::mergeWithDefaultOptions([], 'original')).'\')] bg-center bg-cover ';
+        } elseif ($this->settings['background']['type'] === 'video') {
             // TODO: Add video support for background!
         }
     }
 
     public function getResponsiveVisibilityClasses()
     {
-        if ($this->settings['responsive_visibility'] ===  ResponsiveVisibilityEnum::all()->value) {
+        if ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::all()->value) {
             return '';
-        } else if ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::mobile()->value) {
+        } elseif ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::mobile()->value) {
             return ' sm:hidden '; // show only on mobile
-        } else if ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::tablet_portrait()->value) {
+        } elseif ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::tablet_portrait()->value) {
             return ' hidden sm:block ';
-        } else if ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::tablet_landscape()->value) {
+        } elseif ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::tablet_landscape()->value) {
             return ' hidden md:block ';
-        } else if ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::laptop()->value) {
+        } elseif ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::laptop()->value) {
             return ' hidden lg:block ';
-        } else if ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::desktop()->value) {
+        } elseif ($this->settings['responsive_visibility'] === ResponsiveVisibilityEnum::desktop()->value) {
             return ' hidden xl:block ';
         }
     }
 
     public function getSectionSettingsClasses()
     {
-        return $this->getSpacingClasses() . ' ' . $this->getBackgroundClasses() . ' ' . $this->getResponsiveVisibilityClasses() . ' ' . ($this->settings['extra_classes'] ?? '');
+        return $this->getSpacingClasses().' '.$this->getBackgroundClasses().' '.$this->getResponsiveVisibilityClasses().' '.($this->settings['extra_classes'] ?? '');
     }
 }

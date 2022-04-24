@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class ProductCard extends Component
 {
     public ?Product $product;
+
     /**
      * Create a new component instance.
      *

@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class CardOverlay extends Component
 {
     public $text = 'Information about this company is incomplete';
+
     public $extraButtonsEnabled = true;
+
     /**
      * Create a new component instance.
      *

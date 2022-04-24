@@ -2,27 +2,32 @@
 
 namespace App\Http\Livewire\Tenant;
 
-use Livewire\Component;
+use App\Models\Product;
 use App\Models\Review;
 use App\Models\ReviewRelationship;
-use App\Models\Product;
+use Livewire\Component;
 
 class AddReview extends Component
 {
     public $rating = 0;
-    public $comment;
-    public $content_type = Product::class;
-    public $product_id;
-    public $ratingError = null;
-    public $open = false;
 
+    public $comment;
+
+    public $content_type = Product::class;
+
+    public $product_id;
+
+    public $ratingError = null;
+
+    public $open = false;
 
     protected $rules = [
         'comment' => 'required',
-        'rating' => 'required|min:1'
+        'rating' => 'required|min:1',
     ];
 
-    protected $listeners = ['show-modal' => 'showModal','hide-modal' => 'hideModal' ];
+    protected $listeners = ['show-modal' => 'showModal', 'hide-modal' => 'hideModal'];
+
     /**
      * Create a new component instance.
      *
@@ -38,7 +43,6 @@ class AddReview extends Component
      *
      * @return void
      */
-
     public function render()
     {
         return view('livewire.tenant.add-review');
@@ -50,7 +54,6 @@ class AddReview extends Component
      * @param number $val
      * @return void
      */
-
     public function setRating($val)
     {
         if ($this->rating == $val) {    // user can click on the same rating to reset the value
@@ -61,7 +64,6 @@ class AddReview extends Component
         }
     }
 
-
     /**
      * Store the Review and RevieRelationship
      *
@@ -69,12 +71,13 @@ class AddReview extends Component
      */
     public function store()
     {
-        if(!auth()->user()){
+        if (! auth()->user()) {
             return redirect('/login');
         }
-        if ($this->rating ==  0) {
-            $this->ratingError = "The rating field is required";
+        if ($this->rating == 0) {
+            $this->ratingError = 'The rating field is required';
             $this->validate();
+
             return;
         }
         $this->validate();
@@ -93,14 +96,16 @@ class AddReview extends Component
         $review_relationship->save();
         $this->hideModal();
         $this->emit('review-stored');
-        $this->emit('success-notification', "Review successfully created!");
+        $this->emit('success-notification', 'Review successfully created!');
     }
 
-    public function showModal () {
+    public function showModal()
+    {
         $this->open = true;
     }
 
-    public function hideModal () {
+    public function hideModal()
+    {
         $this->open = false;
         $this->comment = null;
         $this->rating = 0;

@@ -7,13 +7,21 @@ use Illuminate\View\Component;
 class Toggle extends Component
 {
     public $class;
+
     public $classLabel;
+
     public $id;
+
     public $name;
+
     public $prependText;
+
     public $appendText;
+
     public $options;
+
     public $selected;
+
     public $errorBagName;
 
     /**
@@ -33,7 +41,6 @@ class Toggle extends Component
         $this->options = $options;
         $this->errorBagName = $errorBagName;
     }
-
 
     /**
      * Get the view / contents that represent the component.

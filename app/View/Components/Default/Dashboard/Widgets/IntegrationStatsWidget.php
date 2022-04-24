@@ -7,15 +7,19 @@ use Illuminate\View\Component;
 class IntegrationStatsWidget extends Component
 {
     public $type;
+
     public $img;
+
     public $url;
+
     public $title;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($img, $url, $title = "Integration", $type = 'analytics')
+    public function __construct($img, $url, $title = 'Integration', $type = 'analytics')
     {
         //
         $this->type = $type;

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use App\Models\Customer;
-use App\Models\TenantSetting;
-use App\Models\OtpConfiguration;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\OTPVerificationController;
+use App\Models\Customer;
+use App\Models\OtpConfiguration;
+use App\Models\TenantSetting;
+use App\Models\User;
+use Cookie;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Cookie;
 use Nexmo;
 use Twilio\Rest\Client;
 
@@ -81,15 +81,13 @@ class RegisterController extends Controller
             $customer = new Customer;
             $customer->user_id = $user->id;
             $customer->save();
-        }
-        else {
-
+        } else {
         }
 
-        if(Cookie::has('referral_code')){
+        if (Cookie::has('referral_code')) {
             $referral_code = Cookie::get('referral_code');
             $referred_by_user = User::where('referral_code', $referral_code)->first();
-            if($referred_by_user != null){
+            if ($referred_by_user != null) {
                 $user->referred_by = $referred_by_user->id;
                 $user->save();
             }
@@ -101,13 +99,14 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            if(User::where('email', $request->email)->first() != null){
+            if (User::where('email', $request->email)->first() != null) {
                 flash(translate('Email or Phone already exists.'));
+
                 return back();
             }
-        }
-        elseif (User::where('phone', '+'.$request->country_code.$request->phone)->first() != null) {
+        } elseif (User::where('phone', '+'.$request->country_code.$request->phone)->first() != null) {
             flash(translate('Phone already exists.'));
+
             return back();
         }
 
@@ -117,13 +116,12 @@ class RegisterController extends Controller
 
         $this->guard()->login($user);
 
-        if($user->email != null){
-            if(get_setting('email_verification') != 1){
+        if ($user->email != null) {
+            if (get_setting('email_verification') != 1) {
                 $user->email_verified_at = date('Y-m-d H:m:s');
                 $user->save();
                 flash(translate('Registration successfull.'))->success();
-            }
-            else {
+            } else {
                 event(new Registered($user));
                 flash(translate('Registration successfull. Please verify your email.'))->success();
             }
@@ -137,8 +135,7 @@ class RegisterController extends Controller
     {
         if ($user->email == null) {
             return redirect()->route('verification');
-        }
-        else {
+        } else {
             return redirect()->route('onboarding.step1');
         }
     }

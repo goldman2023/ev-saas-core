@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddBaseCurrencyToProductsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,7 +17,7 @@ class AddBaseCurrencyToProductsTable extends Migration
                 $table->dropColumn('num_of_sale');
             }
 
-            if (!Schema::hasColumn('products', 'base_currency')) {
+            if (! Schema::hasColumn('products', 'base_currency')) {
                 $table->string('base_currency', 10)->after('unit_price');
             }
         });
@@ -35,4 +34,4 @@ class AddBaseCurrencyToProductsTable extends Migration
             $table->dropColumn('base_currency');
         });
     }
-}
+};

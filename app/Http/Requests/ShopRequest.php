@@ -23,7 +23,6 @@ class ShopRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
             'company_name' => 'required|string|min:1',
             'address' => 'required|string|min:1',
@@ -32,7 +31,7 @@ class ShopRequest extends FormRequest
             'email' => 'required|string|min:1|email|unique:users,email',
             'phone_number' => 'required|string|min:1',
             'password' => 'required|string|min:1|confirmed',
-            'password_confirmation' => 'required|string|min:1'
+            'password_confirmation' => 'required|string|min:1',
         ];
     }
 

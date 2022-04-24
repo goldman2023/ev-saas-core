@@ -6,10 +6,10 @@ use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
+use App\Traits\HasStatus;
 use App\Traits\LikesTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
-use App\Traits\HasStatus;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -25,21 +25,21 @@ class BlogPost extends WeBaseModel
     use HasSlug;
     use SoftDeletes;
     use LogsActivity;
-
     use UploadTrait;
     use GalleryTrait;
     use TranslationTrait;
     use CategoryTrait;
+
 //    use ReactionsTrait;
 //    use CommentsTrait;
-   use PermalinkTrait;
-   use LikesTrait;
-   use HasStatus;
-
+    use PermalinkTrait;
+    use LikesTrait;
+    use HasStatus;
 
     protected $table = 'blog_posts';
 
     public const ROUTING_SINGULAR_NAME_PREFIX = 'post';
+
     public const ROUTING_PLURAL_NAME_PREFIX = 'posts';
 
     protected $fillable = ['shop_id', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
@@ -52,15 +52,13 @@ class BlogPost extends WeBaseModel
 
     protected static function booted()
     {
-
-        if(request()->is_dashboard) {
-   // TODO: Fix to show all blog posts in Frontend and only my posts in Backend
-        // Show only MyShop Blog Posts
-        static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
-            $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1); // restrict to current user's shop blog posts
-        });
+        if (request()->is_dashboard) {
+            // TODO: Fix to show all blog posts in Frontend and only my posts in Backend
+            // Show only MyShop Blog Posts
+            static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
+                $builder->where('shop_id', '=', MyShop::getShop()->id ?? -1); // restrict to current user's shop blog posts
+            });
         }
-
     }
 
     public function getSlugOptions(): SlugOptions
@@ -75,7 +73,8 @@ class BlogPost extends WeBaseModel
         return 'slug';
     }
 
-    public static function getRouteName() {
+    public static function getRouteName()
+    {
         return 'blog.post.single';
     }
 
@@ -92,12 +91,13 @@ class BlogPost extends WeBaseModel
         );
     }
 
-
-    public function shop() {
+    public function shop()
+    {
         return $this->belongsTo(Shop::class, 'shop_id');
     }
 
-    public function authors() {
+    public function authors()
+    {
         return $this->morphedByMany(User::class, 'subject', 'blog_post_relationships');
     }
 
@@ -105,11 +105,10 @@ class BlogPost extends WeBaseModel
 //        return $this->morphedByMany(Category::class, 'subject', 'blog_post_relationships');
 //    }
 
-   public function plans()
-   {
-       return $this->morphedByMany(Plan::class, 'subject', 'blog_post_relationships');
-   }
-
+    public function plans()
+    {
+        return $this->morphedByMany(Plan::class, 'subject', 'blog_post_relationships');
+    }
 
     public function getDynamicModelUploadProperties(): array
     {
@@ -121,9 +120,8 @@ class BlogPost extends WeBaseModel
         return BlogPostTranslation::class;
     }
 
-    
-
-    public function comments() {
+    public function comments()
+    {
         return $this->morphMany(SocialComment::class, 'subject');
     }
 }

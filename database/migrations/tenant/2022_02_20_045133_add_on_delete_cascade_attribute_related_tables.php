@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddOnDeleteCascadeAttributeRelatedTables extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -21,7 +20,6 @@ class AddOnDeleteCascadeAttributeRelatedTables extends Migration
             $table->dropForeign(['attribute_value_id']);
             $table->foreign('attribute_value_id')->references('id')->on('attribute_values')->onDelete('cascade')->onUpdate('cascade');
         });
-
 
         Schema::table('attribute_relationships', function (Blueprint $table) {
             $table->dropForeign(['attribute_id']);
@@ -45,4 +43,4 @@ class AddOnDeleteCascadeAttributeRelatedTables extends Migration
     {
         //
     }
-}
+};

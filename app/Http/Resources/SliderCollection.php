@@ -9,11 +9,11 @@ class SliderCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
-                    'photo' => api_asset($data)
+                    'photo' => api_asset($data),
                 ];
-            })
+            }),
         ];
     }
 
@@ -21,7 +21,7 @@ class SliderCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

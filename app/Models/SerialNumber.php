@@ -19,6 +19,7 @@ class SerialNumber extends Model
      */
 
     protected $fillable = ['subject_id', 'subject_type', 'serial_number', 'status'];
+
     protected $visible = ['id', 'subject_id', 'subject_type', 'serial_number', 'status', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
@@ -28,11 +29,13 @@ class SerialNumber extends Model
 
     public const STATUS_ENUM = ['in_stock', 'out_of_stock', 'reserved'];
 
-    public static function getStatusEnum($as_string = false, $separator = ',') {
+    public static function getStatusEnum($as_string = false, $separator = ',')
+    {
         return $as_string ? implode($separator, self::STATUS_ENUM) : self::STATUS_ENUM;
     }
 
-    public function subject() {
+    public function subject()
+    {
         return $this->morphTo('subject');
     }
 }

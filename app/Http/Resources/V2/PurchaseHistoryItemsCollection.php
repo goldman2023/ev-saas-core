@@ -9,7 +9,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'product_id' => $data->product->id,
                     'product_name' => $data->product->name,
@@ -22,9 +22,9 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
                     'payment_status' => $data->payment_status,
                     'payment_status_string' => ucwords(str_replace('_', ' ', $data->payment_status)),
                     'delivery_status' => $data->delivery_status,
-                    'delivery_status_string' => $data->delivery_status == 'pending'? "Order Placed" : ucwords(str_replace('_', ' ',  $data->delivery_status)),
+                    'delivery_status_string' => $data->delivery_status == 'pending' ? 'Order Placed' : ucwords(str_replace('_', ' ', $data->delivery_status)),
                 ];
-            })
+            }),
         ];
     }
 
@@ -32,7 +32,7 @@ class PurchaseHistoryItemsCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

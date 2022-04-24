@@ -14,7 +14,7 @@ class PricingSection01 extends WeComponent
      */
     public function render()
     {
-         //TODO: This should depend on selected content type
+        //TODO: This should depend on selected content type
         return view('components.tailwind-ui.sections.marketing.pricing-sections.pricing-section_01')->with([
             'models' => \App\Models\Plan::published()->get(),
         ]);

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDomainColumnToShopsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +12,6 @@ class AddDomainColumnToShopsTable extends Migration
      */
     public function up()
     {
-
         Schema::create('shop_domains', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('shop_id');
@@ -37,4 +35,4 @@ class AddDomainColumnToShopsTable extends Migration
     {
         Schema::dropIfExists('shop_domains');
     }
-}
+};

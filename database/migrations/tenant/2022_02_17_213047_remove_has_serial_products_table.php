@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveHasSerialProductsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,13 +12,11 @@ class RemoveHasSerialProductsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('products', 'has_serial'))
-        {
+        if (Schema::hasColumn('products', 'has_serial')) {
             Schema::table('products', function (Blueprint $table) {
                 $table->dropColumn('has_serial');
             });
         }
-        
     }
 
     /**
@@ -31,4 +28,4 @@ class RemoveHasSerialProductsTable extends Migration
     {
         //
     }
-}
+};

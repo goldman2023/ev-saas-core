@@ -6,13 +6,13 @@ use App\Models\Shop;
 use App\Models\ShopSetting;
 use App\Models\TenantSetting;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Cache;
+use EVS;
+use FX;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Session;
-use EVS;
-use FX;
+use Spatie\Permission\Models\Role;
 
 class PermissionsService
 {
@@ -23,21 +23,25 @@ class PermissionsService
     // Create a script that will feed the DB permissions table with all these permissions. Each time script is called, it should NOT update existing permissions, just add new!
     public function __construct($app = null, $init = true)
     {
-        if($init) {
-            $this->permissions = app(config('permission.models.permission'))->select(['id','name','guard_name'])->get();
+        if ($init) {
+            $this->permissions = app(config('permission.models.permission'))->select(['id', 'name', 'guard_name'])->get();
         }
     }
 
-    public function getPermissions() {
+    public function getPermissions()
+    {
         return $this->permissions;
     }
 
-    public function getUserPermissions(User|int|null $user, $key_by = 'name') {
-        if(empty($user))
+    public function getUserPermissions(User|int|null $user, $key_by = 'name')
+    {
+        if (empty($user)) {
             return collect();
+        }
 
-        if(is_int($user))
+        if (is_int($user)) {
             $user = User::find($user);
+        }
 
         $user_permissions = DB::table(config('permission.table_names.model_has_permissions'))
                                 ->where('model_id', '=', $user->id)
@@ -45,14 +49,15 @@ class PermissionsService
                                 ->get()->keyBy('permission_id')->toArray();
 
         return collect($this->permissions->toArray())
-                ->map(fn($item) => array_merge($item, ['selected' => isset($user_permissions[$item['id']])]))->keyBy($key_by);
+                ->map(fn ($item) => array_merge($item, ['selected' => isset($user_permissions[$item['id']])]))->keyBy($key_by);
     }
 
-    public function getRoles($only_role_names = false, $from_db = true) {
-        if($from_db) {
+    public function getRoles($only_role_names = false, $from_db = true)
+    {
+        if ($from_db) {
             $data = app(config('permission.models.role'))->with('permissions')->get();
 
-            if($only_role_names) {
+            if ($only_role_names) {
                 return $data->pluck('name');
             }
         } else {
@@ -90,20 +95,22 @@ class PermissionsService
                 // More roles should be added later, like: Marketer, Manager of XZY, {whatever} etc.
             ]);
 
-            if($only_role_names) {
+            if ($only_role_names) {
                 return $data->keys();
             }
         }
- 
+
         return $data;
     }
 
-    public function getRolePermissions($role_name) {
+    public function getRolePermissions($role_name)
+    {
         return array_keys($this->getRoles(from_db: false)->get($role_name));
         // return Role::where('name', $role_name)->first()->permissions->pluck('id'); // this is from DB
     }
 
-    public function getAllPossiblePermissions() {
+    public function getAllPossiblePermissions()
+    {
         return collect(array_merge(
             $this->getShopPermissions(),
             $this->getStaffPermissions(),
@@ -119,7 +126,8 @@ class PermissionsService
         ));
     }
 
-    public function getAllPermissionsGroupsFunctionNames() {
+    public function getAllPermissionsGroupsFunctionNames()
+    {
         return [
             translate('Shop') => 'getShopPermissions',
             translate('Staff') => 'getStaffPermissions',
@@ -132,13 +140,14 @@ class PermissionsService
             translate('Leads') => 'getLeadsPermissions',
             translate('Payment Methods Universal') => [
                 'fname' => 'getPaymentsPermissions',
-                'user_types' => User::$tenant_user_types
+                'user_types' => User::$tenant_user_types,
             ],
-            translate('Design') => 'getDesignsPermissions'
+            translate('Design') => 'getDesignsPermissions',
         ];
     }
 
-    public function getShopPermissions() {
+    public function getShopPermissions()
+    {
         return [
             'view_shop_data' => 'View shop data',
             'update_shop_data' => 'Update shop data',
@@ -151,7 +160,8 @@ class PermissionsService
         ];
     }
 
-    public function getStaffPermissions() {
+    public function getStaffPermissions()
+    {
         return [
             'browse_staff' => 'Browse staff members',
             'view_staff' => 'View staff member',
@@ -162,7 +172,8 @@ class PermissionsService
         ];
     }
 
-    public function getProductPermissions() {
+    public function getProductPermissions()
+    {
         return [
             'all_products' => 'Allow managing all products',
             'browse_products' => 'Browse products',
@@ -171,7 +182,7 @@ class PermissionsService
             'insert_product' => 'Create product',
             'delete_product' => 'Delete product',
             'publish_product' => 'Publish product',
-//            'unpublish_product' => 'Unpublish product',
+            //            'unpublish_product' => 'Unpublish product',
             'update_product_stock' => 'Update product stock',
             'view_product_attributes' => 'View product attributes',
             'insert_product_attributes' => 'Create product attributes',
@@ -181,7 +192,8 @@ class PermissionsService
         ];
     }
 
-    public function getOrdersPermissions() {
+    public function getOrdersPermissions()
+    {
         return [
             'browse_orders' => 'Browse orders',
             'view_order' => 'View order',
@@ -192,14 +204,15 @@ class PermissionsService
         ];
     }
 
-    public function getBlogPostsPermissions() {
+    public function getBlogPostsPermissions()
+    {
         return [
             'all_posts' => 'Allow managing all blog posts',
             'browse_posts' => 'Browse blog posts',
             'view_post' => 'View blog post',
             'insert_post' => 'Create blog post',
             'update_post' => 'Update blog post',
-//            'update_post_status' => 'Update blog post status',
+            //            'update_post_status' => 'Update blog post status',
             'publish_post' => 'Publish blog post',
             'delete_post' => 'Delete blog post',
             'view_post_attributes' => 'View blog post attributes',
@@ -209,7 +222,8 @@ class PermissionsService
         ];
     }
 
-    public function getReviewsPermissions() {
+    public function getReviewsPermissions()
+    {
         return [
             'browse_reviews' => 'Browse reviews',
             'view_review' => 'View review',
@@ -221,22 +235,25 @@ class PermissionsService
         ];
     }
 
-    public function getCustomersPermissions() {
+    public function getCustomersPermissions()
+    {
         return [
             'all_customers' => 'Allow managing all customers',
             'browse_customers' => 'Browse customers',
-            'view_customer' => 'View customer'
+            'view_customer' => 'View customer',
         ];
     }
 
-    public function getDesignsPermissions() {
+    public function getDesignsPermissions()
+    {
         return [
             'browse_designs' => 'Browse designs',
 
         ];
     }
 
-    public function getPaymentsPermissions() {
+    public function getPaymentsPermissions()
+    {
         return [
             'browse_uni_payment_methods' => 'Browse uni. payment methods',
             'view_uni_payment_methods' => 'View uni. payment method',
@@ -246,7 +263,8 @@ class PermissionsService
         ];
     }
 
-    public function getLeadsPermissions() {
+    public function getLeadsPermissions()
+    {
         return [
             'all_leads' => 'All leads',
             'browse_leads' => 'Browse leads',
@@ -257,7 +275,8 @@ class PermissionsService
         ];
     }
 
-    public function getPlansPermissions() {
+    public function getPlansPermissions()
+    {
         return [
             'all_plans' => 'Allow managing all plans',
             'browse_plans' => 'Browse plans',
@@ -273,16 +292,15 @@ class PermissionsService
         ];
     }
 
-
-    public function canAccess(string|array $allowed_user_types, string|array $allowed_permissions, bool $abort = true) {
+    public function canAccess(string|array $allowed_user_types, string|array $allowed_permissions, bool $abort = true)
+    {
         // Super admin has the access to all pages!
-        if(auth()->user()->user_type === 'admin') {
+        if (auth()->user()->user_type === 'admin') {
             return true;
         }
 
-        
         /* Old version that causes the error  */
-        if(in_array(auth()->user()->user_type, $allowed_user_types, true) &&
+        if (in_array(auth()->user()->user_type, $allowed_user_types, true) &&
             (empty($allowed_permissions) || auth()->user()->hasAnyDirectPermission($allowed_permissions))) {
             return true;
         }

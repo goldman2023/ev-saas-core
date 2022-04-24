@@ -28,7 +28,7 @@ class WeEditController extends Controller
             $count++;
             $page['data'] = ['label' => $page->title];
             $page->type = 'wenode';
-            $page->key = 'key_' . $count;
+            $page->key = 'key_'.$count;
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
         }
@@ -37,13 +37,13 @@ class WeEditController extends Controller
         $weEditData = [
             'pages' => json_encode($pages),
             'available_pages' => json_encode($available_pages),
-            'menu_flow' => json_encode($menu_flow)
+            'menu_flow' => json_encode($menu_flow),
         ];
 
         return view(
             'we-edit.flow',
             [
-                'weEditData' => $weEditData
+                'weEditData' => $weEditData,
             ]
         );
     }
@@ -58,7 +58,7 @@ class WeEditController extends Controller
             $count++;
             $page['data'] = ['label' => $page->title];
             $page->type = 'wenode';
-            $page->key = 'key_' . $count;
+            $page->key = 'key_'.$count;
             $page->type = 'system';
             $page['position'] = ['x' =>  $positions['x'], 'y' => $positions['y']];
             $positions['x'] += 200;
@@ -67,16 +67,16 @@ class WeEditController extends Controller
 
         $pages = [];
 
-
         $weEditData = [
             'pages' => json_encode($pages),
             'available_pages' => json_encode($available_pages),
-            'menu_flow' => json_encode($menu_flow)
+            'menu_flow' => json_encode($menu_flow),
         ];
+
         return view(
             'we-edit.flow',
             [
-                'weEditData' => $weEditData
+                'weEditData' => $weEditData,
             ]
         );
     }

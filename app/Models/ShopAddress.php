@@ -18,7 +18,7 @@ class ShopAddress extends Model
         'outdoor' => 'Outdoor',
         'smoking_allowed' => 'Allowed smoking',
         'delivery' => 'Delivery',
-        'wifi' => 'Free WiFi'
+        'wifi' => 'Free WiFi',
     ];
 
     protected $casts = [
@@ -26,7 +26,7 @@ class ShopAddress extends Model
         'location' => 'array',
         'features' => 'array',
         'is_primary' => 'boolean',
-        'is_billing' => 'boolean'
+        'is_billing' => 'boolean',
     ];
 
     public function shop()
@@ -34,15 +34,17 @@ class ShopAddress extends Model
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
 
-    public function getPhonesAttribute($value) {
-        if(empty($value)) {
+    public function getPhonesAttribute($value)
+    {
+        if (empty($value)) {
             return [''];
         }
 
         return is_array($value) ? $value : json_decode($value, true);
     }
 
-    public static function getAvailableFeatures() {
+    public static function getAvailableFeatures()
+    {
         return self::$available_features;
     }
 }

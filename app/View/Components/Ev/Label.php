@@ -3,14 +3,18 @@
 namespace App\View\Components\Ev;
 
 use Illuminate\View\Component;
+
 // TODO: Check wtf is wrong with extending WeEditableComponent in resolving he component with app()!
 
 // class Label extends WeEditableComponent
 class Label extends Component
 {
     public $tag = 'div';
+
     public $label;
+
     public $class;
+
     public $id;
 
     /**
@@ -37,7 +41,8 @@ class Label extends Component
     }
 
     // WeEdit Builder
-    public function getEditableData() {
+    public function getEditableData()
+    {
         return [
             'label' => $this->label,
             'class' => $this->class,
@@ -46,14 +51,16 @@ class Label extends Component
         ];
     }
 
-    public function setEditableData($data) {
+    public function setEditableData($data)
+    {
         $this->label = $data['label'] ?? '';
         $this->class = $data['class'] ?? '';
         $this->tag = $data['tag'] ?? 'span';
         $this->id = $data['id'] ?? '';
     }
 
-    public function renderFieldComponent($slot_name, $component_name) {
+    public function renderFieldComponent($slot_name, $component_name)
+    {
         return view('components.we-edit.field-components.label', ['slot_name' => $slot_name, 'component_name' => $component_name, 'component_data' => $this->getEditableData()]);
     }
 }

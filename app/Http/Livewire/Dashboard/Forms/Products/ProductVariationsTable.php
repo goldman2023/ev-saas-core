@@ -19,9 +19,13 @@ class ProductVariationsTable extends \Livewire\Component
     use RulesSets;
 
     public $product;
+
     public $attributes;
+
     public $variations;
+
     public $all_combinations;
+
     public $class;
 
     protected $listeners = [
@@ -29,10 +33,11 @@ class ProductVariationsTable extends \Livewire\Component
         'saveVariations' => 'setVariationsData',
         'generateAllVariations' => 'Generate all',
         'triggerSetAllPricesModal' => 'Set price for all',
-        'setGenericSKUs' => 'Set generic SKUs'
+        'setGenericSKUs' => 'Set generic SKUs',
     ];
 
     public $bulkActionSetPricesID;
+
     public $bulkActionSetGenericSKUID;
 
     protected function messages()
@@ -51,7 +56,8 @@ class ProductVariationsTable extends \Livewire\Component
         ];
     }
 
-    protected function rules() {
+    protected function rules()
+    {
         return [
             'all_combinations.*' => [],
             'product.*' => [],
@@ -61,13 +67,15 @@ class ProductVariationsTable extends \Livewire\Component
             'variations.*.variant' => [],
             'variations.*.product_id' => [],
             'variations.*.price' => 'required|numeric|min:1',
-            'variations.*.sku' => ['required', new UniqueSKU($this->variations->mapWithKeys(function($item, $key) { return ['variations.'.$key.'.sku' => $item]; }))],
+            'variations.*.sku' => ['required', new UniqueSKU($this->variations->mapWithKeys(function ($item, $key) {
+                return ['variations.'.$key.'.sku' => $item];
+            }))],
             'variations.*.current_stock' => 'required|numeric|min:0',
             'variations.*.low_stock_qty' => 'numeric|min:0',
             'variations.*.discount' => [],
             'variations.*.discount_type' => [],
             'variations.*.created_at' => [],
-            'variations.*.updated_at' => []
+            'variations.*.updated_at' => [],
         ];
     }
 
@@ -90,7 +98,6 @@ class ProductVariationsTable extends \Livewire\Component
         return view('livewire.dashboard.forms.products.product-variations-table');
     }
 
-
     /**
      * Create a new component instance.
      *
@@ -104,12 +111,11 @@ class ProductVariationsTable extends \Livewire\Component
         $this->attributes = $this->product->variant_attributes(); // these attributes are only attributes used for_variations*/
 
         $this->variations = $this->product->getMappedVariations();
-        
+
         $this->class = $class;
 
         // Create or Fetch all combinations.
         $this->createAllCombinations();
-
     }
 
     public function createAllCombinations()
@@ -124,29 +130,29 @@ class ProductVariationsTable extends \Livewire\Component
         // Change variations keys and sort by them (setConnection custom macro is important here because Livewire rises "Queueing collections with multiple model connections is not supported"
         // error if any item in eloquent collection doesn't have the same 'connection' property as other items.
         // When we create new Model manually, connection property is null, which later rises this error when variations and all_combinations collection are being entangled
-        $this->all_combinations = $this->all_combinations->setConnection()->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
+        $this->all_combinations = $this->all_combinations->setConnection()->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
 
         // If $this->variations are empty (product doesn't have variations for now), make $this->variations to have $this->all_combinations
-        if($this->variations->isEmpty()) {
+        if ($this->variations->isEmpty()) {
             $this->variations = $this->all_combinations;
         } else {
             $this->generateAllVariations();
         }
     }
 
-
     /*
      * Generates all possible variations combinations
      */
-    public function generateAllVariations() {
-
-        $this->variations = $this->variations->intersectByKeys($this->all_combinations->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name'])))
-            ->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']))
+    public function generateAllVariations()
+    {
+        $this->variations = $this->variations->intersectByKeys($this->all_combinations->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name'])))
+            ->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))
             ->union($this->all_combinations)
-            ->keyBy(fn($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
+            ->keyBy(fn ($item) => ProductVariation::composeVariantKey($item['name']))->sortKeys();
     }
 
-    public function saveVariation($index) {
+    public function saveVariation($index)
+    {
         $variation = $this->variations->get($index);
 
         $this->dispatchBrowserEvent('display-current-variation', ['current' => $index]);
@@ -166,24 +172,23 @@ class ProductVariationsTable extends \Livewire\Component
             $this->variations->put($index, $variation);
 
             DB::commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             dd($e);
         }
     }
 
-
-    public function removeVariation($variation_id) {
+    public function removeVariation($variation_id)
+    {
         $variation = $this->variations->firstWhere('id', $variation_id);
-        $variation_index = $this->variations->search(function ($item, $key) use($variation_id) {
+        $variation_index = $this->variations->search(function ($item, $key) use ($variation_id) {
             return $item->id === (int) $variation_id;
         });
-        $variation_in_all_combinations_index = $this->all_combinations->search(function ($item, $key) use($variation) {
+        $variation_in_all_combinations_index = $this->all_combinations->search(function ($item, $key) use ($variation) {
             return $item->name === $variation->name;
         });
 
-
-        if(!empty($variation)) {
+        if (! empty($variation)) {
             $variation->forceDelete();
 
             $this->variations->put($variation_index, $this->all_combinations[$variation_in_all_combinations_index]);
@@ -192,8 +197,9 @@ class ProductVariationsTable extends \Livewire\Component
         }
     }
 
-    protected function setProductVariationStock($variation_model = null) {
-        if($variation_model->id ?? null) {
+    protected function setProductVariationStock($variation_model = null)
+    {
+        if ($variation_model->id ?? null) {
             $product_stock = ProductStock::firstOrNew(['subject_id' => $variation_model->id, 'subject_type' => ProductVariation::class]);
             $product_stock->qty = (float) ($variation_model->current_stock ?? 0);
             $product_stock->sku = $variation_model->sku;
@@ -202,27 +208,30 @@ class ProductVariationsTable extends \Livewire\Component
         }
     }
 
-    public function triggerSetAllPricesModal() {
+    public function triggerSetAllPricesModal()
+    {
         //$this->dispatchBrowserEvent('triggerModal', ['id' => '#'.$this->bulkActionSetPricesID]);
     }
 
-    public function setAllVariationsPrice($price) {
-        if($this->variations->isNotEmpty()) {
-            $this->variations = $this->variations->map(function($variation) use ($price) {
+    public function setAllVariationsPrice($price)
+    {
+        if ($this->variations->isNotEmpty()) {
+            $this->variations = $this->variations->map(function ($variation) use ($price) {
                 $variation['price'] = $price;
+
                 return $variation;
             });
         }
-
     }
 
-    public function setGenericSKUs() {
-        if($this->variations->isNotEmpty()) {
-            $this->variations = $this->variations->map(function($variation) {
+    public function setGenericSKUs()
+    {
+        if ($this->variations->isNotEmpty()) {
+            $this->variations = $this->variations->map(function ($variation) {
                 $variation['stock']['sku'] = $this->product->slug.'-'.Str::slug($variation['name']).'-001';
+
                 return $variation;
             })->sortKeys();
         }
-
     }
 }

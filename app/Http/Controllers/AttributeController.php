@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AttributeRelationship;
-use App\Models\Shop;
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateAttributeRequest;
 use App\Models\Attribute;
 use App\Models\AttributeGroup;
+use App\Models\AttributeRelationship;
 use App\Models\AttributeTranslation;
 use App\Models\AttributeValue;
+use App\Models\Product;
+use App\Models\Shop;
+use Illuminate\Http\Request;
 use OwenIt\Auditing\Models\Audit;
-use App\Http\Requests\UpdateAttributeRequest;
-
 
 class AttributeController extends Controller
 {
@@ -25,6 +24,7 @@ class AttributeController extends Controller
     {
 //        CoreComponentRepository::instantiateShopRepository();
         $attributes = Attribute::orderBy('created_at', 'desc')->get();
+
         return view('backend.attribute.index', compact('attributes'));
     }
 
@@ -35,7 +35,6 @@ class AttributeController extends Controller
      */
     public function slug_index(Request $request, $slug)
     {
-
         $content_type = Product::class;
         switch ($slug) {
             case 'sellers':
@@ -50,6 +49,7 @@ class AttributeController extends Controller
         }
         $attribute_groups = AttributeGroup::where('content_type', $content_type)->orderBy('created_at', 'desc')->get();
         $attributes = Attribute::where('content_type', $content_type)->orderBy('created_at', 'desc')->get();
+
         return view('backend.attribute.index', compact(['attributes', 'attribute_groups', 'content_type', 'slug']));
     }
 
@@ -82,7 +82,7 @@ class AttributeController extends Controller
             if (strpos($request->group, 'existing_group_') !== false) {
                 //If group exist
                 $attribute->group = substr($request->group, 15);
-            }else {
+            } else {
                 //If group not exist, create new one
                 $attribute_group = new AttributeGroup;
                 $attribute_group->name = $request->group;
@@ -105,19 +105,19 @@ class AttributeController extends Controller
             $attribute->schema_value = $request->schema_value;
         }
 
-        if ($request->type === "number") {
-            $custom_properties["min_value"] = '';
-            $custom_properties["max_value"] = '';
-            $custom_properties["unit"] = '';
+        if ($request->type === 'number') {
+            $custom_properties['min_value'] = '';
+            $custom_properties['max_value'] = '';
+            $custom_properties['unit'] = '';
 
             $attribute->custom_properties = $custom_properties;
-        }  else if($attribute->type === "dropdown" || $attribute->type === "image") {
-            $custom_properties["multiple"] = false;
+        } elseif ($attribute->type === 'dropdown' || $attribute->type === 'image') {
+            $custom_properties['multiple'] = false;
             $attribute->custom_properties = $custom_properties;
-        } else if($attribute->type === "date") {
-            $custom_properties["with_time"] = false;
-            $custom_properties["range"] = false;
-            $custom_properties["historic"] = false;
+        } elseif ($attribute->type === 'date') {
+            $custom_properties['with_time'] = false;
+            $custom_properties['range'] = false;
+            $custom_properties['historic'] = false;
             $attribute->custom_properties = $custom_properties;
         }
 
@@ -156,6 +156,7 @@ class AttributeController extends Controller
         $lang = $request->lang;
         $attribute = Attribute::findOrFail($id);
         $custom_properties = $attribute->custom_properties;
+
         return view('backend.attribute.edit', compact('attribute', 'custom_properties', 'lang'));
     }
 
@@ -168,16 +169,15 @@ class AttributeController extends Controller
      */
     public function update(UpdateAttributeRequest $request, $id)
     {
-
         $attribute = Attribute::findOrFail($id);
         if ($request->lang == config('app.locale')) {
             $attribute->name = $request->name;
         }
 
-        $attribute->filterable = $request->filterable == "on" ? true : false;
-        $attribute->is_admin = $request->is_admin == "on" ? true : false;
+        $attribute->filterable = $request->filterable == 'on' ? true : false;
+        $attribute->is_admin = $request->is_admin == 'on' ? true : false;
 
-        if ($request->is_schema == "on") {
+        if ($request->is_schema == 'on') {
             $attribute->is_schema = 1;
             $attribute->schema_key = $request->schema_key;
             $attribute->schema_value = $request->schema_value;
@@ -187,24 +187,22 @@ class AttributeController extends Controller
             $attribute->schema_value = null;
         }
 
-
-        if ($attribute->type === "number") {
-            $custom_properties = array();
-            $custom_properties["min_value"] = $request->min_value;
-            $custom_properties["max_value"] = $request->max_value;
-            $custom_properties["unit"] = $request->unit ?? '';
+        if ($attribute->type === 'number') {
+            $custom_properties = [];
+            $custom_properties['min_value'] = $request->min_value;
+            $custom_properties['max_value'] = $request->max_value;
+            $custom_properties['unit'] = $request->unit ?? '';
 
             $attribute->custom_properties = $custom_properties;
-        } else if($attribute->type === "dropdown" || $attribute->type === "image") {
-            $custom_properties["multiple"] = !empty($request->multiple);
+        } elseif ($attribute->type === 'dropdown' || $attribute->type === 'image') {
+            $custom_properties['multiple'] = ! empty($request->multiple);
             $attribute->custom_properties = $custom_properties;
-        } else if($attribute->type === "date") {
-            $custom_properties["with_time"] = !empty($request->with_time);
-            $custom_properties["range"] = !empty($request->range);
-            $custom_properties["historic"] = !empty($request->historic);
+        } elseif ($attribute->type === 'date') {
+            $custom_properties['with_time'] = ! empty($request->with_time);
+            $custom_properties['range'] = ! empty($request->range);
+            $custom_properties['historic'] = ! empty($request->historic);
             $attribute->custom_properties = $custom_properties;
         }
-
 
         $attribute->save();
 
@@ -213,6 +211,7 @@ class AttributeController extends Controller
         $attribute_translation->save();
 
         flash(translate('Attribute has been updated successfully'))->success();
+
         return back();
     }
 
@@ -236,12 +235,12 @@ class AttributeController extends Controller
         $attribute->delete();
 
         flash(translate('Attribute has been deleted successfully'))->success();
-        return redirect()->route('admin.attributes.slug_index', ['slug' => $slug]);
 
+        return redirect()->route('admin.attributes.slug_index', ['slug' => $slug]);
     }
 
     /* Custom Functions */
-    function createAttributeValue($attribute, $value)
+    public function createAttributeValue($attribute, $value)
     {
         $attribute_value = new AttributeValue;
         $attribute_value->attribute()->associate($attribute);
@@ -249,17 +248,16 @@ class AttributeController extends Controller
         $attribute_value->save();
     }
 
-    function attribute_history($id)
+    public function attribute_history($id)
     {
         $shop_audits = Audit::whereHasMorph('auditable', AttributeRelationship::class, function ($query) use ($id) {
             $query->where('subject_id', $id);
         })->orderBy('created_at', 'desc')->paginate(10);
-        if ($shop_audits->count()>0) {
+        if ($shop_audits->count() > 0) {
             return view('backend.sellers.attribute_histories.index', compact('shop_audits'));
         }
         flash(translate('No company history available'))->warning();
+
         return back();
-
-
     }
 }

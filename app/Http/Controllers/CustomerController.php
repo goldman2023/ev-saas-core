@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Customer;
-use App\Models\User;
 use App\Models\Order;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
     public function __construct()
     {
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +24,8 @@ class CustomerController extends Controller
         $customers = Customer::orderBy('created_at', 'desc');
 
         $customers = $customers->paginate(15);
-        return view($type . '.customer.customers.index', compact('customers', 'sort_search'));
+
+        return view($type.'.customer.customers.index', compact('customers', 'sort_search'));
     }
 
     /**
@@ -62,9 +64,9 @@ class CustomerController extends Controller
         if (isset($user->id)) {
             $html = '';
             $html .= '<option value="">
-                        '. translate("Walk In Customer") .'
+                        '.translate('Walk In Customer').'
                     </option>';
-            foreach(Customer::all() as $key => $customer){
+            foreach (Customer::all() as $key => $customer) {
                 if ($customer->user) {
                     $html .= '<option value="'.$customer->user->id.'" data-contact="'.$customer->user->email.'">
                                 '.$customer->user->name.'
@@ -123,12 +125,14 @@ class CustomerController extends Controller
     {
         Order::where('user_id', Customer::findOrFail($id)->user->id)->delete();
         User::destroy(Customer::findOrFail($id)->user->id);
-        if(Customer::destroy($id)){
+        if (Customer::destroy($id)) {
             flash(translate('Customer has been deleted successfully'))->success();
+
             return redirect()->route('admin.customers.index');
         }
 
         flash(translate('Something went wrong'))->error();
+
         return back();
     }
 
@@ -136,17 +140,18 @@ class CustomerController extends Controller
     {
         $customer = Customer::findOrFail($id);
 
-        $user  = $customer->user;
+        $user = $customer->user;
 
         auth()->login($user, true);
 
         return redirect()->route('dashboard');
     }
 
-    public function ban($id) {
+    public function ban($id)
+    {
         $customer = Customer::findOrFail($id);
 
-        if($customer->user->banned == 1) {
+        if ($customer->user->banned == 1) {
             $customer->user->banned = 0;
             flash(translate('Customer UnBanned Successfully'))->success();
         } else {

@@ -63,7 +63,6 @@ class NewCompanyJoin extends Notification
     }
 
     /**
-
      * Get the array representation of the notification.
 
      *
@@ -71,15 +70,13 @@ class NewCompanyJoin extends Notification
      * @param  mixed  $notifiable
 
      * @return array
-
      */
-
     public function toDatabase($notifiable)
     {
         return [
-            "subject_type" => "User",
-            "subject_id" => $this->user->id,
-            "message" => $this->user->email . " has joined to" . get_site_name()
+            'subject_type' => 'User',
+            'subject_id' => $this->user->id,
+            'message' => $this->user->email.' has joined to'.get_site_name(),
         ];
     }
 
@@ -92,6 +89,6 @@ class NewCompanyJoin extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-                    ->content($this->user->email . " has joined to" . get_site_name());
+                    ->content($this->user->email.' has joined to'.get_site_name());
     }
 }

@@ -19,7 +19,6 @@ class Collection extends \Illuminate\Database\Eloquent\Collection
      * - Hydrated/Dehydrated by Livewire
      *
      * @return string|null
-     *
      */
     public function getQueueableClass()
     {

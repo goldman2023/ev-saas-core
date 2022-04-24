@@ -16,7 +16,7 @@ class PaymentStatusEnum extends EVBaseEnum
             'unpaid' => 'unpaid',
             'pending' => 'pending',
             'canceled' => 'canceled',
-            'paid' => 'paid'
+            'paid' => 'paid',
         ];
     }
 
@@ -26,7 +26,7 @@ class PaymentStatusEnum extends EVBaseEnum
             'unpaid' => 'Unpaid',
             'pending' => 'Pending',
             'canceled' => 'Canceled',
-            'paid' => 'Paid'
+            'paid' => 'Paid',
         ];
     }
 }

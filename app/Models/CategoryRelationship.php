@@ -12,8 +12,9 @@ class CategoryRelationship extends Model implements \OwenIt\Auditing\Contracts\A
 
     public function subject()
     {
-        return $this->morphTo("subject");
+        return $this->morphTo('subject');
     }
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');

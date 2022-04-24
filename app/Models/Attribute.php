@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App;
-use App\Models\AttributeTranslation;
 use App\Models\AttributeGroup;
+use App\Models\AttributeTranslation;
+use App\Traits\TranslationTrait;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use App\Traits\TranslationTrait;
 
 class Attribute extends WeBaseModel
 {
@@ -36,7 +36,6 @@ class Attribute extends WeBaseModel
 
         // TODO: Move this to AttributeObserver
         static::deleting(function ($attribute) {
-            
         });
     }
 
@@ -67,10 +66,11 @@ class Attribute extends WeBaseModel
         );
     }
 
-    public function setDefault($content_type) {
+    public function setDefault($content_type)
+    {
         $this->content_type = $content_type;
-        $this->name = "";
-        $this->type = "plain_text";
+        $this->name = '';
+        $this->type = 'plain_text';
         $this->group = null;
         $this->filterable = false;
         $this->is_admin = false;
@@ -98,21 +98,23 @@ class Attribute extends WeBaseModel
 
     public function attribute_values()
     {
-        if($this->is_predefined) {
-            // If attribute is predefined, there is only strict amount of values that it should return from DB, 
+        if ($this->is_predefined) {
+            // If attribute is predefined, there is only strict amount of values that it should return from DB,
             // it should not use hasManyThrough relationship, but hasMany, because it does not depend on any AttributeRelationship
             return $this->hasMany(AttributeValue::class, 'attribute_id', 'id');
-        } 
+        }
 
         return $this->hasManyThrough(AttributeValue::class, AttributeRelationship::class, 'attribute_id', 'id', 'id', 'attribute_value_id');
     }
 
-    public function group() {
+    public function group()
+    {
         return $this->belongsTo(AttributeGroup::class, 'group_id');
     }
 
-    public function get_group() {
-        if (!empty($this->group_id)) {
+    public function get_group()
+    {
+        if (! empty($this->group_id)) {
             return AttributeGroup::findOrFail($this->group_id);
         }
 

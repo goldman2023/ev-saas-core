@@ -11,7 +11,9 @@ use Livewire\Component;
 class SubscriptionPlan extends Component
 {
     public $plan = '';
+
     public $success = '';
+
     public $error = '';
 
     protected $listeners = ['billingUpdated' => '$refresh'];
@@ -49,7 +51,7 @@ class SubscriptionPlan extends Component
             }
 
             $subscription->create(tenant()->defaultPaymentMethod()->asStripePaymentMethod());
-            
+
             $this->success = 'Subscription created.';
             $this->error = '';
         }
@@ -61,7 +63,7 @@ class SubscriptionPlan extends Component
     {
         DB::transaction(function () use ($cancelationReason) {
             tenant()->subscription('default')->cancel();
-    
+
             SubscriptionCancelation::create([
                 'tenant_id' => tenant('id'),
                 'reason' => $cancelationReason,

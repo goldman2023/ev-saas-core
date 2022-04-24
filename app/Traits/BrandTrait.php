@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-
 use App\Builders\BaseBuilder;
 use App\Models\Brand;
 use App\Models\ProductVariation;
@@ -18,14 +17,14 @@ trait BrandTrait
      */
     protected static function bootBrandTrait()
     {
-        static::addGlobalScope('withBrand', function(mixed $builder) {
+        static::addGlobalScope('withBrand', function (mixed $builder) {
             // Eager Load Brand
             $builder->with(['brand']);
         });
 
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model) {
-            if(!$model->relationLoaded('brand')) {
+            if (! $model->relationLoaded('brand')) {
                 $model->load('brand');
             }
 
@@ -54,12 +53,14 @@ trait BrandTrait
     /************************************
      * Stock Attributes Getters/Setters *
      ************************************/
-    public function getBrandIdAttribute() {
+    public function getBrandIdAttribute()
+    {
         // TODO: Create brand_relationships table (polymorphic) so we can attach different content types to Brands in n-to-n fashion.
         return $this->attributes['brand_id'];
     }
 
-    public function setBrandIdAttribute($value) {
+    public function setBrandIdAttribute($value)
+    {
         $this->attributes['brand_id'] = $value;
     }
 }

@@ -38,7 +38,5 @@ class GenerateAvailableSections extends Command
     public function handle()
     {
         $theme = $this->option('theme');
-
-
     }
 }

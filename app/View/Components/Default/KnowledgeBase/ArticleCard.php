@@ -8,7 +8,9 @@ use Illuminate\View\Component;
 class ArticleCard extends Component
 {
     public $user;
+
     public $article;
+
     /**
      * Create a new component instance.
      *

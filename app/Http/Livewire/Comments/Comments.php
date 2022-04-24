@@ -8,13 +8,16 @@ use Livewire\Component;
 class Comments extends Component
 {
     public $postId;
+
     public $username;
+
     public $comment_text;
-    public $replyCommentId = NULL;
+
+    public $replyCommentId = null;
 
     protected $rules = [
         'username' => 'required',
-        'comment_text' => 'required'
+        'comment_text' => 'required',
     ];
 
     public function render()
@@ -23,8 +26,9 @@ class Comments extends Component
             ->with('replies')
             ->latest()
             ->get();
+
         return view('livewire.comments', [
-            'comments' => $comments
+            'comments' => $comments,
         ]);
     }
 
@@ -36,12 +40,12 @@ class Comments extends Component
             'post_id' => $this->postId,
             'username' => $this->username,
             'comment_text' => $this->comment_text,
-            'parent_id' => $this->replyCommentId
+            'parent_id' => $this->replyCommentId,
         ]);
 
         $this->username = '';
         $this->comment_text = '';
-        $this->replyCommentId = NULL;
+        $this->replyCommentId = null;
     }
 
     public function reply($commentId)

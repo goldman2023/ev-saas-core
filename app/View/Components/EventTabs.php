@@ -6,7 +6,10 @@ use Illuminate\View\Component;
 
 class EventTabs extends Component
 {
-    public $event, $type;
+    public $event;
+
+    public $type;
+
     /**
      * Create a new component instance.
      *

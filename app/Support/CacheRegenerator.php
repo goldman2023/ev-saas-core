@@ -2,10 +2,10 @@
 
 namespace App\Support;
 
+use Cache;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Cache;
 use Serializable;
 
 class CacheRegenerator implements Serializable
@@ -109,7 +109,7 @@ class CacheRegenerator implements Serializable
      */
     public function regenerate($ttl = 60, bool $force = false): bool
     {
-        if (!$force && !$this->shouldRegenerate()) {
+        if (! $force && ! $this->shouldRegenerate()) {
             return false;
         }
 
@@ -132,7 +132,7 @@ class CacheRegenerator implements Serializable
      */
     public static function regenerateModel($model, int $ttl = 60): bool
     {
-        if($model instanceof Model && method_exists($model, 'toCache')) {
+        if ($model instanceof Model && method_exists($model, 'toCache')) {
             $model_cache_key = Cache::store()->getModelCacheKey($model::class, $model->id);
 
             Cache::store()->forget($model_cache_key);
@@ -156,7 +156,7 @@ class CacheRegenerator implements Serializable
      */
     protected function shouldRegenerate(): bool
     {
-        if (!$this->invalidAt) {
+        if (! $this->invalidAt) {
             return true;
         }
 

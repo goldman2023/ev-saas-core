@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RefactorLeadsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,7 +17,7 @@ class RefactorLeadsTable extends Migration
                 $table->dropColumn('user_id');
             }
 
-            if (!Schema::hasColumn('leads', 'business_id')) {
+            if (! Schema::hasColumn('leads', 'business_id')) {
                 $table->integer('business_id')->nullable(true)->after('id');
                 $table->foreign('business_id')
                     ->references('id')
@@ -38,4 +37,4 @@ class RefactorLeadsTable extends Migration
     {
         //
     }
-}
+};

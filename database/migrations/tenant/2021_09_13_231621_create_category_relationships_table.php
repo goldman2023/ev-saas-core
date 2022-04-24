@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoryRelationshipsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,8 +12,7 @@ class CreateCategoryRelationshipsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('category_relationships')) {
-
+        if (! Schema::hasTable('category_relationships')) {
             Schema::create('category_relationships', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('subject_type');
@@ -37,4 +35,4 @@ class CreateCategoryRelationshipsTable extends Migration
     {
         Schema::dropIfExists('category_relationships');
     }
-}
+};

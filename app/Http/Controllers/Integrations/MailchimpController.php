@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Newsletter\NewsletterFacade as Newsletter;
 
-
 class MailchimpController extends Controller
 {
     //
-
 
     public function subscribe(Request $request, $type)
     {
@@ -23,9 +21,11 @@ class MailchimpController extends Controller
         if ($data === false) {
             $error = Newsletter::getLastError();
             flash(($error));
+
             return redirect()->back();
         } else {
             flash(translate('Thank you! Please check your emails about early-bird campaign details. '));
+
             return redirect()->back();
         }
     }

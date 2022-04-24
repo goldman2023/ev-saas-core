@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeAttributeRelationshipTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,7 +17,7 @@ class ChangeAttributeRelationshipTable extends Migration
         });
 
         Schema::table('attributes', function (Blueprint $table) {
-         //   $table->index('content_type');
+            //   $table->index('content_type');
         });
     }
 
@@ -37,4 +36,4 @@ class ChangeAttributeRelationshipTable extends Migration
             $table->dropIndex('content_type');
         });
     }
-}
+};

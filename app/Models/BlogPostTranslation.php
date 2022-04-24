@@ -30,8 +30,8 @@ class BlogPostTranslation extends WeBaseModel
             ->saveSlugsTo('slug');
     }
 
-    public function blog_post() {
+    public function blog_post()
+    {
         return $this->belongsTo(BlogPost::class, 'blog_post_id');
     }
-
 }

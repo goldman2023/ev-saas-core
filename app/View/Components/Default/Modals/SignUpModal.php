@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class SignUpModal extends Component
 {
     public $style = 'default';
+
     public $id;
 
     /**
@@ -28,6 +29,6 @@ class SignUpModal extends Component
      */
     public function render()
     {
-        return view('components.default.modals.' . $this->style);
+        return view('components.default.modals.'.$this->style);
     }
 }

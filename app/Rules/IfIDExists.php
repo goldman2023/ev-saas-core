@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Hash;
 
 class IfIDExists implements Rule, ValidatorAwareRule, DataAwareRule
 {
-
     protected $parameters;
+
     protected $validator;
+
     protected $data = [];
 
-    public function __construct($parameters, $validator) {
+    public function __construct($parameters, $validator)
+    {
         $this->parameters = $parameters;
 
         $this->setValidator($validator);
@@ -30,35 +32,36 @@ class IfIDExists implements Rule, ValidatorAwareRule, DataAwareRule
         $model_type = $this->parameters[0] ?? null;
         $model_identificator = $this->parameters[1];
         $pass_if_empty = ($this->parameters[2] ?? null) === 'true';
-        
+
         // If pass_if_empty is TRUE, check if 'id' of the $value is empty, and if it is let it pass
-        if($pass_if_empty && empty($value['id'] ?? null)) {
+        if ($pass_if_empty && empty($value['id'] ?? null)) {
             return true;
         }
-        
-        if($value instanceof Model) {
+
+        if ($value instanceof Model) {
             $value = $value->id;
-        } else if(is_array($value)) {
+        } elseif (is_array($value)) {
             $value = $value['id'];
-        } else if(is_object($value)) {
+        } elseif (is_object($value)) {
             $value = $value->id;
-        } else if(is_numeric($value)) {
+        } elseif (is_numeric($value)) {
             $value = (int) $value;
         } else {
             return false;
         }
 
-        if(!empty($model_type)) {
+        if (! empty($model_type)) {
             // Check if user with email is not already registered.
             $model = app($model_type)::where($model_identificator, $value)->first();
 
-            return !empty($model->id ?? null);
+            return ! empty($model->id ?? null);
         }
 
         return false;
     }
 
-    public function validate($attribute, $value) {
+    public function validate($attribute, $value)
+    {
         return $this->passes($attribute, $value);
     }
 

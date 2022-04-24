@@ -7,21 +7,37 @@ use Illuminate\View\Component;
 class FileSelector extends Component
 {
     public $class;
+
     public $id;
+
     public $name;
+
     public $label;
+
     public $datatype;
+
     public $required;
+
     public $multiple;
+
     public $placeholder;
+
     public $icon_placement;
+
     public $icon;
+
     public $merge;
+
     public $sortable;
+
     public $sortableOptions;
+
     public $errorBagName;
+
     public $selectedFile;
+
     public $template;
+
     public $wireType;
 
     /**
@@ -29,7 +45,7 @@ class FileSelector extends Component
      *
      * @return void
      */
-    public function __construct($datatype = 'image', $name = '', $label = '', $template = 'input', $multiple = false, $required = false,  $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [], $errorBagName = null, $selectedFile = null, $wireType = null)
+    public function __construct($datatype = 'image', $name = '', $label = '', $template = 'input', $multiple = false, $required = false, $class = '', $id = '', $placeholder = 'Choose File', $icon_placement = 'prepend', $icon = null, $merge = false, $sortable = false, $sortableOptions = [], $errorBagName = null, $selectedFile = null, $wireType = null)
     {
         $this->datatype = $datatype;
         $this->label = $label;
@@ -49,7 +65,6 @@ class FileSelector extends Component
         $this->template = $template; // can be input or avatar
         $this->wireType = $wireType;
     }
-
 
     /**
      * Get the view / contents that represent the component.

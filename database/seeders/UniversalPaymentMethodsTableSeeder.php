@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class UniversalPaymentMethodsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,7 +13,6 @@ class UniversalPaymentMethodsTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('payment_methods_universal')->count() == 0) {
             \DB::table('payment_methods_universal')->delete();
 
@@ -25,7 +23,7 @@ class UniversalPaymentMethodsTableSeeder extends Seeder
                     'description' => '',
                     'instructions' => '',
                     'data' => '',
-                    'enabled' => 0
+                    'enabled' => 0,
                 ],
                 [
                     'name' => 'Paypal',
@@ -33,7 +31,7 @@ class UniversalPaymentMethodsTableSeeder extends Seeder
                     'description' => '',
                     'instructions' => '',
                     'data' => '',
-                    'enabled' => 0
+                    'enabled' => 0,
                 ],
                 [
                     'name' => 'Stripe',
@@ -41,7 +39,7 @@ class UniversalPaymentMethodsTableSeeder extends Seeder
                     'description' => '',
                     'instructions' => '',
                     'data' => '',
-                    'enabled' => 0
+                    'enabled' => 0,
                 ],
                 [
                     'name' => 'Paysera',
@@ -49,10 +47,9 @@ class UniversalPaymentMethodsTableSeeder extends Seeder
                     'description' => '',
                     'instructions' => '',
                     'data' => '',
-                    'enabled' => 0
+                    'enabled' => 0,
                 ],
             ]);
         }
-
     }
 }

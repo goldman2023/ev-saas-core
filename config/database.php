@@ -33,7 +33,6 @@ return [
 
     'connections' => [
 
-
         'tracker' => [
             'driver' => 'mysql',
             'host' => env('DB_MYSQL_HOST', '127.0.0.1'),
@@ -79,7 +78,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
-            'schema' => 'public',
+            'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
 

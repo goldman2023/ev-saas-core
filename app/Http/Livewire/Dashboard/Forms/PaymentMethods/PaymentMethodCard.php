@@ -8,15 +8,15 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Rules\UniqueSKU;
+use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\DispatchSupport;
 
 class PaymentMethodCard extends Component
 {
@@ -24,7 +24,9 @@ class PaymentMethodCard extends Component
     use DispatchSupport;
 
     public $paymentMethod;
+
     public $class;
+
     protected $type;
 
     protected $listeners = [];
@@ -63,7 +65,7 @@ class PaymentMethodCard extends Component
     public function mount(mixed &$paymentMethod = null, $class = '')
     {
         $this->paymentMethod = $paymentMethod;
-        $this->type = ($paymentMethod instanceof PaymentMethod) ? 'custom':'universal';
+        $this->type = ($paymentMethod instanceof PaymentMethod) ? 'custom' : 'universal';
         $this->class = $class;
     }
 
@@ -76,14 +78,16 @@ class PaymentMethodCard extends Component
 //        $this->validate();
 //    }
 
-    public function updatedPaymentMethodEnabled($value) {
+    public function updatedPaymentMethodEnabled($value)
+    {
         $this->paymentMethod->save();
 
         $msg = $value ? $this->paymentMethod->name.' '.translate('method enabled!') : $this->paymentMethod->name.' '.translate('method disabled!');
-        $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $msg, 'type' => $value ? 'success' : 'danger' ]);
+        $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $msg, 'type' => $value ? 'success' : 'danger']);
     }
 
-    public function save() {
+    public function save()
+    {
         $this->validate();
 
         $this->paymentMethod->save();
@@ -91,7 +95,8 @@ class PaymentMethodCard extends Component
         $this->inform($this->paymentMethod->name.' '.translate(' method updated successfully!'), '', 'success');
     }
 
-    public function toggle($enabled) {
+    public function toggle($enabled)
+    {
         $this->paymentMethod->enabled = false;
         $this->paymentMethod->save();
         $this->validate();
@@ -99,7 +104,7 @@ class PaymentMethodCard extends Component
         $this->paymentMethod->enabled = $enabled;
         $this->paymentMethod->save();
 
-        $this->inform($this->paymentMethod->name.' '.translate(' payment method ').($enabled ? translate('enabled'):translate('disabled')), '', 'success');
+        $this->inform($this->paymentMethod->name.' '.translate(' payment method ').($enabled ? translate('enabled') : translate('disabled')), '', 'success');
 
         // $this->dispatchBrowserEvent('toast', ['id' => 'payment-method-updated-toast', 'content' => $this->paymentMethod->name.' '.translate(' method updated successfully!'), 'type' => 'success' ]);
     }

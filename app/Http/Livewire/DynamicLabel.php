@@ -3,14 +3,15 @@
 namespace App\Http\Livewire;
 
 use App\Models\Models\EVLabel;
-use Livewire\Component;
 use Illuminate\Support\Facades\Route;
-
+use Livewire\Component;
 
 class DynamicLabel extends Component
 {
     public $label;
+
     public $show_input_field = false;
+
     public $info;
 
     /* Available types for now: text, textarea */
@@ -28,16 +29,15 @@ class DynamicLabel extends Component
         $this->info = 0;
     }
 
-
     public function editLabel()
     {
-
         $this->info++;
 
         $this->show_input_field = true;
     }
 
-    public function close() {
+    public function close()
+    {
         $this->show_input_field = false;
     }
 
@@ -54,7 +54,7 @@ class DynamicLabel extends Component
     public function render()
     {
         return view('livewire.dynamic-label', [
-            'label' => $this->label
+            'label' => $this->label,
         ]);
     }
 }

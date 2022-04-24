@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class HttpsProtocol {
+class HttpsProtocol
+{
     /**
      * Handle an incoming request.
      *
@@ -14,9 +15,10 @@ class HttpsProtocol {
      */
     public function handle($request, Closure $next)
     {
-        if (config('app.force_https') && !$request->secure()) {
+        if (config('app.force_https') && ! $request->secure()) {
             return $next($request);
         }
+
         return $next($request);
     }
 }

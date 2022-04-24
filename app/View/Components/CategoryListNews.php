@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class CategoryListNews extends Component
 {
     public $categories;
+
     /**
      * Create a new component instance.
      *
@@ -16,7 +17,6 @@ class CategoryListNews extends Component
     {
         //
         $this->categories = $categories;
-
     }
 
     /**

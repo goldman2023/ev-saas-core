@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class PricingPlanCard extends Component
 {
     public $plan;
+
     public $key;
+
     /**
      * Create a new component instance.
      *

@@ -19,17 +19,15 @@ class PaymentMethod extends WeBaseModel
 
     protected $with = [];
 
-    protected $fillable = ['shop_id','enabled','name','gateway','description','instructions','data'];
+    protected $fillable = ['shop_id', 'enabled', 'name', 'gateway', 'description', 'instructions', 'data'];
 
     protected $cast = [
         'data' => 'object',
-        'enabled' => 'bool'
+        'enabled' => 'bool',
     ];
-
 
     public function shop()
     {
         return $this->belongsTo(Shop::class);
     }
-
 }

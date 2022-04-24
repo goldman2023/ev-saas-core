@@ -3,15 +3,17 @@
 namespace App\Traits;
 
 use App\Builders\BaseBuilder;
-use App\Models\FlashDeal;
 use App\Enums\AmountPercentTypeEnum;
-use FX;
+use App\Models\FlashDeal;
 use App\Models\Plan;
+use FX;
 
 trait PriceTrait
 {
     public mixed $total_price;
+
     public mixed $discounted_price;
+
     public mixed $base_price;
 
     /************************************
@@ -27,16 +29,15 @@ trait PriceTrait
      */
     protected static function bootPriceTrait()
     {
-        static::addGlobalScope('withPricesAndTaxAndFlashDeals', function(mixed $builder) {
+        static::addGlobalScope('withPricesAndTaxAndFlashDeals', function (mixed $builder) {
             // Eager Load Flash Deals
             $builder->with(['flash_deals']);
             // dd($builder);
         });
 
-
         // When model relations data is retrieved, populate model prices data!
         static::relationsRetrieved(function ($model) {
-            if(!$model->relationLoaded('flash_deals')) {
+            if (! $model->relationLoaded('flash_deals')) {
                 $model->load('flash_deals');
             }
 
@@ -63,7 +64,8 @@ trait PriceTrait
     /************************************
      * Price Relation Functions *
      ************************************/
-    public function flash_deals() {
+    public function flash_deals()
+    {
         return $this->morphToMany(FlashDeal::class, 'subject', 'flash_deal_relationships', 'subject_id', 'flash_deal_id')
             ->where([
                 ['status', '=', 1],
@@ -91,14 +93,12 @@ trait PriceTrait
     // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
     public function getTotalPrice(bool $display = false, bool $both_formats = false): mixed
     {
-
-        if(empty($this->attributes[$this->getPriceColumn()])) {
+        if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->total_price = 0;
-        } else if(empty($this->total_price)) {
+        } elseif (empty($this->total_price)) {
             $this->total_price = $this->attributes[$this->getPriceColumn()] ?? 0;
 
-
-            if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
+            if (method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
                 /*if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
@@ -115,7 +115,7 @@ trait PriceTrait
                 // TODO: We need to create a column which will determine flash_deal "stacking" type. Stacking type can be:
                 // TODO: ~ 1) 'compound' (stacks with others), 2) 'single' (does not stack)
 
-                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
                     $flash_deal = $this->flash_deals->first();
 
                     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
@@ -132,7 +132,7 @@ trait PriceTrait
                 }
             } else {
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
                     $flash_deal = $this->flash_deals->first();
 
                     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
@@ -151,27 +151,27 @@ trait PriceTrait
 
             // TODO: Create tax_relationships table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if(!empty($this->attributes['tax'])) {
+            if (! empty($this->attributes['tax'])) {
                 if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
                     $this->total_price += ($this->total_price * $this->attributes['tax']) / 100;
                 } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
                     $this->total_price += $this->attributes['tax'];
                 }
             }
-
         }
 
         if ($both_formats) {
             return [
                 'raw' => $this->total_price,
-                'display' => FX::formatPrice($this->total_price)
+                'display' => FX::formatPrice($this->total_price),
             ];
         }
 
         return $display ? FX::formatPrice($this->total_price) : $this->total_price;
     }
 
-    public function getTotalPriceAttribute() {
+    public function getTotalPriceAttribute()
+    {
         return $this->getTotalPrice();
     }
 
@@ -186,12 +186,12 @@ trait PriceTrait
      */
     public function getDiscountedPrice(bool $display = false, bool $both_formats = false): mixed
     {
-        if(empty($this->attributes[$this->getPriceColumn()])) {
+        if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->discounted_price = 0;
-        } else if(empty($this->discounted_price)) {
+        } elseif (empty($this->discounted_price)) {
             $this->discounted_price = $this->attributes[$this->getPriceColumn()];
 
-            if(method_exists($this, 'hasVariations') && $this->hasVariations()) {
+            if (method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION
                 /*if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
                     $lowest_price -= ($lowest_price * $flash_deal_product->discount) / 100;
@@ -201,7 +201,7 @@ trait PriceTrait
                     $highest_price -= $flash_deal_product->discount;
                 }*/
 
-                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
+                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
                     $flash_deal = $this->flash_deals->first();
 
                     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
@@ -219,7 +219,7 @@ trait PriceTrait
             } else {
 
                 // NOTE: If FlashDeal is present for current product, DO NOT take Product's discount into consideration!
-                if((is_array($this->flash_deals) && !empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty()) ) {
+                if ((is_array($this->flash_deals) && ! empty($this->flash_deals)) || ($this->flash_deals instanceof Collection && $this->flash_deals->isNotEmpty())) {
                     $flash_deal = $this->flash_deals->first();
 
                     if ($flash_deal->discount_type === AmountPercentTypeEnum::percent()->value) {
@@ -240,14 +240,15 @@ trait PriceTrait
         if ($both_formats) {
             return [
                 'raw' => $this->discounted_price,
-                'display' => FX::formatPrice($this->discounted_price)
+                'display' => FX::formatPrice($this->discounted_price),
             ];
         }
 
         return $display ? FX::formatPrice($this->discounted_price) : $this->discounted_price;
     }
 
-    public function getDiscountedPriceAttribute() {
+    public function getDiscountedPriceAttribute()
+    {
         return $this->getDiscountedPrice();
     }
 
@@ -262,14 +263,14 @@ trait PriceTrait
      */
     public function getBasePrice(bool $display = false, bool $both_formats = false): mixed
     {
-        if(empty($this->attributes[$this->getPriceColumn()])) {
+        if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->base_price = 0;
-        } else if(empty($this->base_price)) {
+        } elseif (empty($this->base_price)) {
             $this->base_price = $this->attributes[$this->getPriceColumn()];
 
             // TODO: Create tax_relationship table and link it to subjects and taxes!
             // TODO: Create Global Taxes (as admin/single-vendor) or subject-specific taxes
-            if(!empty($this->attributes['tax'])) {
+            if (! empty($this->attributes['tax'])) {
                 if ($this->attributes['tax_type'] === AmountPercentTypeEnum::percent()->value) {
                     $this->base_price += ($this->base_price * (float) $this->attributes['tax']) / 100;
                 } elseif ($this->attributes['tax_type'] === AmountPercentTypeEnum::amount()->value) {
@@ -281,14 +282,15 @@ trait PriceTrait
         if ($both_formats) {
             return [
                 'raw' => $this->base_price,
-                'display' => FX::formatPrice($this->base_price)
+                'display' => FX::formatPrice($this->base_price),
             ];
         }
 
         return $display ? FX::formatPrice($this->base_price) : $this->base_price;
     }
 
-    public function getBasePriceAttribute() {
+    public function getBasePriceAttribute()
+    {
         return $this->getBasePrice();
     }
 
@@ -308,7 +310,7 @@ trait PriceTrait
         if ($both_formats) {
             return [
                 'raw' => $this->attributes[$price_column] ?? 0,
-                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0)
+                'display' => FX::formatPrice($this->attributes[$price_column] ?? 0),
             ];
         }
 
@@ -316,10 +318,11 @@ trait PriceTrait
     }
     // END PRICES
 
-    public function getTotalAnnualPrice() {
+    public function getTotalAnnualPrice()
+    {
         $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
 
-        if($this instanceof Plan) {
+        if ($this instanceof Plan) {
             // First apply yearly discount, if any!
             if ($this->yearly_discount_type === AmountPercentTypeEnum::percent()->value) {
                 $total_annual_price -= ($total_annual_price * $this->attributes['yearly_discount']) / 100;
@@ -336,7 +339,7 @@ trait PriceTrait
 
             // TODO: Then add global Tax (like VAT)
         }
-        
+
         return $total_annual_price;
     }
 }

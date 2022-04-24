@@ -8,7 +8,9 @@ use Illuminate\View\Component;
 class ProductCard extends Component
 {
     public ?Product $product;
+
     public string $style; // Available styles now: product-card / product-card-detailed
+
     /**
      * Create a new component instance.
      *
@@ -28,6 +30,6 @@ class ProductCard extends Component
      */
     public function render()
     {
-        return view('components.default.products.cards.' . $this->style);
+        return view('components.default.products.cards.'.$this->style);
     }
 }

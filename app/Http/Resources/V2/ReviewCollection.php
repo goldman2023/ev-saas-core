@@ -9,16 +9,16 @@ class ReviewCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'user' => [
-                        'name' => $data->user->name
+                        'name' => $data->user->name,
                     ],
                     'rating' => $data->rating,
                     'comment' => $data->comment,
-                    'time' => $data->created_at->diffForHumans()
+                    'time' => $data->created_at->diffForHumans(),
                 ];
-            })
+            }),
         ];
     }
 
@@ -26,7 +26,7 @@ class ReviewCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

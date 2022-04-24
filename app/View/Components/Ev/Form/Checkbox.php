@@ -7,19 +7,32 @@ use Illuminate\View\Component;
 class Checkbox extends Component
 {
     public $class;
+
     //public $id;
     public $appendToName;
+
     public $name;
+
     public $label;
+
     public $required;
+
     public $items;
+
     public $icon;
+
     public $merge;
+
     public $style;
+
     public $value;
+
     public $errorBagName;
+
     public $valueProperty;
+
     public $labelProperty;
+
     public $wireType;
 
     /**
@@ -27,7 +40,7 @@ class Checkbox extends Component
      *
      * @return void
      */
-    public function __construct($items = [], $style = 'vanilla', $value = '', $name = '', $appendToName = false, $label = '',  $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
+    public function __construct($items = [], $style = 'vanilla', $value = '', $name = '', $appendToName = false, $label = '', $valueProperty = null, $labelProperty = null, $required = false, $class = '', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
     {
         $this->items = $items;
         $this->label = $label;
@@ -45,7 +58,6 @@ class Checkbox extends Component
         $this->errorBagName = $errorBagName ?: $name;
         $this->wireType = $wireType;
     }
-
 
     /**
      * Get the view / contents that represent the component.

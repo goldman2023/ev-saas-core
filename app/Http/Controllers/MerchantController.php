@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Seller;
 use App\Models\Shop;
 use App\Notifications\CompanyVisit;
-use Illuminate\Http\Request;
 use App\Traits\LoggingTrait;
-
+use Illuminate\Http\Request;
 
 class MerchantController extends Controller
 {
     //
     use LoggingTrait;
 
-    public function index() {
-
+    public function index()
+    {
         return view('frontend.shop_listing');
     }
 
@@ -23,20 +22,17 @@ class MerchantController extends Controller
     {
         $shop = Shop::where('slug', $slug)->findOrFail();
 
-        if (!empty($shop)) {
+        if (! empty($shop)) {
             $seller = $shop->seller();
 
-            if(auth()->check()) {
+            if (auth()->check()) {
                 $user = auth()->user();
-
             } else {
                 $user = null;
             }
 
-
-
             // Seo integration with Schema.org
-            if (get_setting('enable_seo_company') == "on") {
+            if (get_setting('enable_seo_company') == 'on') {
                 seo()->addSchema($seller->get_schema());
             }
 
@@ -44,7 +40,7 @@ class MerchantController extends Controller
             - verification_status column on $seller does not exists,
             what is replacement?
             */
-                return view('frontend.company.profile', compact('shop', 'seller'));
+            return view('frontend.company.profile', compact('shop', 'seller'));
 
             // Show company profile only for company owner user
             if ($seller->user->id === auth()->user()->id ?? null) {

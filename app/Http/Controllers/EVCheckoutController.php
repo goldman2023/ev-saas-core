@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderTypeEnum;
+use App\Enums\PaymentStatusEnum;
+use App\Enums\ShippingStatusEnum;
 use App\Http\Services\PaymentMethods\PayseraGateway;
 use App\Models\Address;
 use App\Models\Invoice;
@@ -9,21 +12,19 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentMethodUniversal;
 use App\Models\User;
-use CartService;
 use Auth;
+use CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
-use App\Enums\OrderTypeEnum;
-use App\Enums\PaymentStatusEnum;
-use App\Enums\ShippingStatusEnum;
+use Illuminate\Validation\Rule;
 
 class EVCheckoutController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $cart_items = CartService::getItems();
         $total_items_count = CartService::getTotalItemsCount();
 
@@ -31,17 +32,16 @@ class EVCheckoutController extends Controller
         $discountAmount = CartService::getDiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
-        return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'));
+        return view('frontend.checkout', compact('cart_items', 'total_items_count', 'originalPrice', 'discountAmount', 'subtotalPrice'));
     }
 
     public function store(Request $request)
     {
-
         $cart_items = CartService::getItems();
         $total_items_count = CartService::getTotalItemsCount();
 
         // Check if there are items in cart
-        if($total_items_count <= 0) {
+        if ($total_items_count <= 0) {
             // Should redirect to empty cart page
             return redirect('cart');
         }
@@ -50,8 +50,8 @@ class EVCheckoutController extends Controller
         $discountAmount = CartService::getDiscountAmount();
         $subtotalPrice = CartService::getSubtotalPrice();
 
-        $same_billing_shipping = !empty($request->input('same_billing_shipping'));
-        $subscribe_newsletter = !empty($request->input('newsletter'));
+        $same_billing_shipping = ! empty($request->input('same_billing_shipping'));
+        $subscribe_newsletter = ! empty($request->input('newsletter'));
 
         $data_to_validate = [
             'email' => 'required|email:rfc,dns',
@@ -63,7 +63,7 @@ class EVCheckoutController extends Controller
             'same_billing_shipping' => 'nullable',
             'newsletter' => 'nullable',
             'buyers_consent' => 'required',
-            'selected_billing_address_id' => ''
+            'selected_billing_address_id' => '',
         ];
 
         $address_rules = [
@@ -76,9 +76,9 @@ class EVCheckoutController extends Controller
         ];
 
         $shipping_rules = [
-//            'shipping_first_name' => 'required|min:3',
-//            'shipping_last_name' => 'required|min:3',
-//            'shipping_company' => 'nullable',
+            //            'shipping_first_name' => 'required|min:3',
+            //            'shipping_last_name' => 'required|min:3',
+            //            'shipping_company' => 'nullable',
             'shipping_address' => 'required|min:5',
             'shipping_country' => ['required', Rule::in(\Countries::getCodesAll(true))],
             'shipping_state' => 'nullable',
@@ -86,11 +86,11 @@ class EVCheckoutController extends Controller
             'shipping_zip' => 'required|min:2',
         ];
 
-        $add_billing_shipping_rules = function() use($request, &$data_to_validate, $address_rules, $shipping_rules) {
+        $add_billing_shipping_rules = function () use ($request, &$data_to_validate, $address_rules, $shipping_rules) {
             $data_to_validate = array_merge($data_to_validate, $address_rules);
 
-            if(empty($request->input('same_billing_shipping'))) {
-                if((int) $request->input('selected_shipping_address_id') === -1 || empty($request->input('selected_shipping_address_id'))) {
+            if (empty($request->input('same_billing_shipping'))) {
+                if ((int) $request->input('selected_shipping_address_id') === -1 || empty($request->input('selected_shipping_address_id'))) {
                     // Shipping address IS NOT a selected address, but a manually added address!
                     $data_to_validate = array_merge($data_to_validate, $shipping_rules);
                 } else {
@@ -102,8 +102,8 @@ class EVCheckoutController extends Controller
             }
         };
 
-        if(Auth::check()) {
-            if((int) $request->input('selected_billing_address_id') === -1 || empty($request->input('selected_billing_address_id'))) {
+        if (Auth::check()) {
+            if ((int) $request->input('selected_billing_address_id') === -1 || empty($request->input('selected_billing_address_id'))) {
                 // Always validate billing info when user IS logged in AND DID NOT select billing address
                 $add_billing_shipping_rules();
             } else {
@@ -111,10 +111,10 @@ class EVCheckoutController extends Controller
                     'selected_billing_address_id' => 'required|if_id_exists:App\Models\Address,id',
                 ]);
 
-                if(!$same_billing_shipping) {
+                if (! $same_billing_shipping) {
                     // shipping address IS NOT the same as the billing address
 
-                    if((int) $request->input('selected_shipping_address_id') === -1 || empty($request->input('selected_shipping_address_id'))) {
+                    if ((int) $request->input('selected_shipping_address_id') === -1 || empty($request->input('selected_shipping_address_id'))) {
                         // Shipping address IS NOT a selected address, but a manually added address!
                         $data_to_validate = array_merge($data_to_validate, $shipping_rules);
                     } else {
@@ -136,11 +136,11 @@ class EVCheckoutController extends Controller
         if ($validator->fails()) {
             // dd($validator);
             session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
-            return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
+
+            return view('frontend.checkout', compact('cart_items', 'total_items_count', 'originalPrice', 'discountAmount', 'subtotalPrice'))
                 ->withErrors($validator);
         }
 
-         
         // Retrieve the validated input...
         $data = $validator->validated();
 
@@ -148,9 +148,9 @@ class EVCheckoutController extends Controller
         // If user is not logged in and `create account` is set to TRUE
         $new_user = User::where('email', $data['email'])->first();
         $to_create_user = empty(auth()->user()->id ?? null) && $request->input('create_account') === 'on';
-        if($to_create_user) {
+        if ($to_create_user) {
             // Check if user with email is not already registered user.
-            if($new_user instanceof User && !empty($new_user->id ?? null)) {
+            if ($new_user instanceof User && ! empty($new_user->id ?? null)) {
                 // Registered user
                 $account_password_rules = 'match_password:App\Models\User,email';
             } else {
@@ -161,16 +161,16 @@ class EVCheckoutController extends Controller
             if (($password_validator = Validator::make($request->all(), [
                 'account_password' => $account_password_rules,
             ], [
-                'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.')
+                'account_password.match_password' => translate('Password is not correct for a given email. If you want to create an order under provided email, you have to know password of the user under given email. If you don\'t know, either use Forgot password or create another account. under different email.'),
             ]))->fails()) {
                 session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
-                return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
+
+                return view('frontend.checkout', compact('cart_items', 'total_items_count', 'originalPrice', 'discountAmount', 'subtotalPrice'))
                     ->withErrors($password_validator);
             }
 
             $password_data = $password_validator->validated();
         }
-
 
         DB::beginTransaction();
 
@@ -195,10 +195,9 @@ class EVCheckoutController extends Controller
 
             // Check if Billing Address is selected from user's addresses
             // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
-            if($selected_billing_address_id > 0 && Address::where('id', $selected_billing_address_id)->exists()) {
+            if ($selected_billing_address_id > 0 && Address::where('id', $selected_billing_address_id)->exists()) {
                 // Billing Address is selected from the list
                 $address = Address::find($selected_billing_address_id);
-
 
                 $order->billing_address = $address->address;
                 $order->billing_country = $address->country;
@@ -216,11 +215,10 @@ class EVCheckoutController extends Controller
                 $order->phone_numbers = $phone_numbers = array_values(array_filter($data['phone_numbers'] ?? ['']));
             }
 
-
             $order->same_billing_shipping = $same_billing_shipping;
 
             // Check if billing and shipping address are NOT THE SAME!
-            if(!$same_billing_shipping) {
+            if (! $same_billing_shipping) {
                 // TODO: Do we need shipping first_name, last_name and shipping_company ???
                 $order->shipping_first_name = $data['billing_first_name'];
                 $order->shipping_last_name = $data['billing_last_name'];
@@ -228,7 +226,7 @@ class EVCheckoutController extends Controller
 
                 // Check if Shipping Address is selected from user's addresses
                 // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
-                if($selected_shipping_address_id > 0 && Address::where('id', $selected_shipping_address_id)->exists()) {
+                if ($selected_shipping_address_id > 0 && Address::where('id', $selected_shipping_address_id)->exists()) {
                     // Billing Address is selected from the list
                     $address = Address::find($selected_shipping_address_id);
 
@@ -247,8 +245,6 @@ class EVCheckoutController extends Controller
                 }
             }
 
-
-
             $order->base_price = $originalPrice['raw'];
             $order->discount_amount = $discountAmount['raw'];
             $order->subtotal_price = $subtotalPrice['raw'];
@@ -257,7 +253,6 @@ class EVCheckoutController extends Controller
             $order->shipping_method = 'free'; // TODO: Change this to use shipping methods and calculations when the shipping logic is added in BE
             $order->shipping_cost = 0;
             $order->tax = 0; // TODO: Change this to use Taxes from DB (Create Tax logic in BE first)
-
 
 //            $order->terms TODO: Where are Order Terms added? In shop settings(default), in each purchasable item (specific)?
 
@@ -276,10 +271,10 @@ class EVCheckoutController extends Controller
             $order->save();
 
             // Save Order items
-            foreach($cart_items as $item) {
+            foreach ($cart_items as $item) {
                 // Check if there are enough items in stock for each item
                 // TODO: Checking if there are enough items in stock should be done before creating an order and by locking the table (maybe).
-                if($item->current_stock >= $item->purchase_quantity) {
+                if ($item->current_stock >= $item->purchase_quantity) {
                     $order_item = new OrderItem();
                     $order_item->order_id = $order->id;
                     $order_item->subject_type = $item::class;
@@ -293,7 +288,7 @@ class EVCheckoutController extends Controller
                     $serial_numbers = $item->reduceStock();
 
                     // Serial Numbers only work for Simple Products. TODO: Make Product Variations support serial numbers!
-                    if($item->use_serial) {
+                    if ($item->use_serial) {
                         $order_item->serial_numbers = $serial_numbers; // reduceStockBy returns serial numbers in array if $item uses serials
                     }
 
@@ -306,7 +301,6 @@ class EVCheckoutController extends Controller
                     $order_item->save();
                 }
             }
-
 
             // Create Invoices
             // TODO: Create Invoice(s)
@@ -325,7 +319,7 @@ class EVCheckoutController extends Controller
 
             // Check if Billing Address is selected from user's addresses
             // TODO: Add validation that if address is selected, that address must be related to the user who is checking out
-            if($selected_billing_address_id > 0 && Address::where('id', $selected_billing_address_id)->exists()) {
+            if ($selected_billing_address_id > 0 && Address::where('id', $selected_billing_address_id)->exists()) {
                 // Billing Address is selected from the list
                 $address = Address::find($selected_billing_address_id);
 
@@ -348,7 +342,6 @@ class EVCheckoutController extends Controller
             $invoice->subtotal_price = $subtotalPrice['raw'];
             $invoice->total_price = $subtotalPrice['raw'];
 
-
             $invoice->shipping_cost = 0; // TODO: Don't forget to change this when shipping mechanism is created
             $invoice->tax = 0; // TODO: Don't forget to change this when tax mechanism is created
 
@@ -361,8 +354,8 @@ class EVCheckoutController extends Controller
 //            throw new \Exception($invoice->toJson());
 
             // If user is not logged in and `create account` is set to TRUE - Create account if it doesn't exist
-            if($to_create_user) {
-                if(!empty($new_user->id ?? null) && Hash::check($data['account_password'], $new_user->password)) { // check password again just in case
+            if ($to_create_user) {
+                if (! empty($new_user->id ?? null) && Hash::check($data['account_password'], $new_user->password)) { // check password again just in case
                     // There is a user under given Email AND passwords match -> LOG IN USER
                     auth()->login($new_user, true); // log the user in
                 } else {
@@ -375,9 +368,8 @@ class EVCheckoutController extends Controller
                         'name' => $data['billing_first_name'].' '.$data['billing_last_name'],
                         'user_type' => User::$customer_type,
                         'email' => $data['email'],
-                        'password' => bcrypt($password_data['account_password'])
+                        'password' => bcrypt($password_data['account_password']),
                     ]);
-
 
                     // Create address
                     $address_billing = Address::create([
@@ -389,10 +381,10 @@ class EVCheckoutController extends Controller
                         'city' => $data['billing_city'],
                         'zip_code' => $data['billing_zip'],
                         'phones' => $phone_numbers,
-                        'set_default' => 1
+                        'set_default' => 1,
                     ]);
 
-                    if(!$same_billing_shipping) {
+                    if (! $same_billing_shipping) {
                         // Create another address with shipping info
                         $address_shipping = Address::create([
                             'user_id' => $new_user->id,
@@ -403,26 +395,24 @@ class EVCheckoutController extends Controller
                             'city' => $data['shipping_city'],
                             'zip_code' => $data['shipping_zip'],
                             'phones' => $phone_numbers,
-                            'set_default' => 1
+                            'set_default' => 1,
                         ]);
 
                         $address_billing->set_default = 0;
                         $address_billing->save();
                     }
-
-
                 }
             }
 
             DB::commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
             session()->flashInput($request->input()); // needed in order to use $request()->old('{input_name}')
-            return view('frontend.checkout', compact('cart_items','total_items_count','originalPrice','discountAmount','subtotalPrice'))
+
+            return view('frontend.checkout', compact('cart_items', 'total_items_count', 'originalPrice', 'discountAmount', 'subtotalPrice'))
                 ->withErrors(['general' => $e->getMessage()]);
         }
-
 
         // TODO: Check if newsletter is checked and based on that add email to mailing list (CRM)
         // $subscribe_newsletter
@@ -438,22 +428,22 @@ class EVCheckoutController extends Controller
         return redirect()->route('checkout.order.received', $order);
     }
 
-    public function single() {
-
-        if(empty(request()->data)) {
+    public function single()
+    {
+        if (empty(request()->data)) {
             $models = CartService::getItems();
         } else {
             $data = json_decode(base64_decode(request()->data ?? null));
-            
+
             $models = collect([app($data->class)->findOrFail($data->id)]); // for now only one model can be bouoght using a link approach
             // TODO: Add purchase_quantity to $model here, based on $qty
         }
 
         // If models are empty, redirect to Homepage
-        if($models->isEmpty()) {
+        if ($models->isEmpty()) {
             return redirect()->route('home');
         }
-  
+
         return view('frontend.checkout-single', compact('models'));
     }
 
@@ -461,7 +451,7 @@ class EVCheckoutController extends Controller
     {
         $order = Order::find($order_id);
 
-        if(auth()->user()->id ?? null) {
+        if (auth()->user()->id ?? null) {
             // Redirect user to proper Order Details page
         } else {
             // Redirect non-logged user to order-received (like Thank you page)
@@ -477,12 +467,13 @@ class EVCheckoutController extends Controller
         return view('frontend.order-canceled', compact('order'));
     }
 
-    public function executePayment(Request $request, $invoice_id) {
+    public function executePayment(Request $request, $invoice_id)
+    {
         $invoice = Invoice::with('payment_method')->find($invoice_id);
 
-        if($invoice->payment_method->gateway === 'wire_transfer') {
+        if ($invoice->payment_method->gateway === 'wire_transfer') {
             // TODO: Add different payment methods checkout flows here (going to payment gateway page with callback URL for payment_status change route)
-        } else if($invoice->payment_method->gateway === 'paysera') {
+        } elseif ($invoice->payment_method->gateway === 'paysera') {
             $paysera = new PayseraGateway(order: $invoice->order, invoice: $invoice, payment_method: $invoice->payment_method, lang: 'ENG', paytext: translate('Payment for goods and services (for nb. [order_nr]) ([site_name])'));
             $paysera->pay();
         }

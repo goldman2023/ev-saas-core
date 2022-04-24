@@ -8,19 +8,23 @@ use Spatie\Activitylog\Models\Activity;
 
 class FeedCard extends Component
 {
-
     public $item;
+
     public $product;
+
     public $ignore = false;
+
     public $likes = 0;
+
     public $showComments = false;
+
     public function mount($item)
     {
-
         $this->ignore = false;
 
-        if(!$item->has('subject') || empty($item->subject)) {
+        if (! $item->has('subject') || empty($item->subject)) {
             $this->ignore = true;
+
             return false;
         }
 
@@ -34,32 +38,32 @@ class FeedCard extends Component
             $this->ignore = true;
         }
 
-        if ($item->subject_type == 'App\Models\Product') {
+        if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
-            if($this->product->status == 'draft') {
+            if ($this->product->status == 'draft') {
                 // $this->ignore = true;
             }
-        } elseif ($item->subject_type == 'App\Models\Wishlist') {
+        } elseif ($item->subject_type == \App\Models\Wishlist::class) {
             $this->ignore = true;
             if (empty($item->subject->subject)) {
                 $this->ignore = true;
             } else {
                 // $this->product = $item->subject->subject;
             }
-        } elseif(($item->subject_type == 'App\Models\SocialComment')) {
+        } elseif (($item->subject_type == \App\Models\SocialComment::class)) {
             $this->ignore = true;
         }
     }
 
-    public function toggle_comments() {
-       $this->showComments = !$this->showComments;
+    public function toggle_comments()
+    {
+        $this->showComments = ! $this->showComments;
     }
 
     public function render()
     {
-
         return view('livewire.feed.elements.feed-card', [
-            'ignore' => $this->ignore
+            'ignore' => $this->ignore,
         ]);
     }
 

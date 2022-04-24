@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSubjectTypeAndTypeToWishlistsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,8 +14,8 @@ class AddSubjectTypeAndTypeToWishlistsTable extends Migration
     {
         Schema::table('wishlists', function (Blueprint $table) {
             //
-            if (!Schema::hasColumn('wishlists', 'subject_type')) {
-                $table->string('subject_type')->after('subject_id')->default('App\\\Models\\\Product');
+            if (! Schema::hasColumn('wishlists', 'subject_type')) {
+                $table->string('subject_type')->after('subject_id')->default(\App\Models\Product::class);
                 $table->string('type')->after('subject_type');
             }
         });
@@ -34,4 +33,4 @@ class AddSubjectTypeAndTypeToWishlistsTable extends Migration
             $table->dropColumn('type');
         });
     }
-}
+};

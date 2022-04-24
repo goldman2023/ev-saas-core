@@ -22,7 +22,6 @@ class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHe
         return MyShop::getShop()->products()->get();
     }
 
-
     public function headings(): array
     {
         return [
@@ -40,7 +39,7 @@ class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHe
 
     public function map($product): array
     {
-        $brand = "inhouse";
+        $brand = 'inhouse';
         if (isset($product->brand)) {
             $brand = $product->brand->name;
         }
@@ -61,7 +60,7 @@ class ProductsExportFacebookBasic implements FromCollection, WithMapping, WithHe
             $price,
             $product->getPermalink(),
             $product->getThumbnail(),
-            $brand
+            $brand,
         ];
     }
 }

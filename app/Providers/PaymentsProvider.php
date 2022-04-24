@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use App\Http\Services\PaymentsService;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use App\Http\Services\PaymentsService;
 
 class PaymentsProvider extends ServiceProvider
 {
@@ -17,10 +17,9 @@ class PaymentsProvider extends ServiceProvider
     public function boot()
     {
         // Register PaymentsService singleton
-        $this->app->singleton('payments', function() {
+        $this->app->singleton('payments', function () {
             return new PaymentsService(fn () => Container::getInstance());
         });
-
     }
 
     /**
@@ -30,6 +29,5 @@ class PaymentsProvider extends ServiceProvider
      */
     public function register()
     {
-
     }
 }

@@ -8,8 +8,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransfersTable extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create($this->table(), function (Blueprint $table) {
@@ -21,27 +20,23 @@ class CreateTransfersTable extends Migration
                     'status',
                     ['exchange', 'transfer', 'paid', 'refund', 'gift']
                 )
-                ->default('transfer')
-            ;
+                ->default('transfer');
 
             $table
                 ->enum(
                     'status_last',
                     ['exchange', 'transfer', 'paid', 'refund', 'gift']
                 )
-                ->nullable()
-            ;
+                ->nullable();
 
             $table->unsignedBigInteger('deposit_id');
             $table->unsignedBigInteger('withdraw_id');
 
             $table->decimal('discount', 64, 0)
-                ->default(0)
-            ;
+                ->default(0);
 
             $table->decimal('fee', 64, 0)
-                ->default(0)
-            ;
+                ->default(0);
 
             $table->uuid('uuid')->unique();
             $table->timestamps();
@@ -49,14 +44,12 @@ class CreateTransfersTable extends Migration
             $table->foreign('deposit_id')
                 ->references('id')
                 ->on($this->transactionTable())
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
 
             $table->foreign('withdraw_id')
                 ->references('id')
                 ->on($this->transactionTable())
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
         });
     }
 
@@ -74,4 +67,4 @@ class CreateTransfersTable extends Migration
     {
         return (new Transaction())->getTable();
     }
-}
+};

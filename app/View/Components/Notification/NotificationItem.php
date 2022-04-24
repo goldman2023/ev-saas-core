@@ -6,8 +6,8 @@ use Illuminate\View\Component;
 
 class NotificationItem extends Component
 {
-
     public $notification;
+
     /**
      * Create a new component instance.
      *

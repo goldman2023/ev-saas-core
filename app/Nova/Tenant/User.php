@@ -3,9 +3,11 @@
 namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
+use Devpartners\AuditableLog\AuditableLog;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
@@ -48,24 +50,32 @@ class User extends Resource
             ID::make()->sortable(),
 
             Text::make('Name')
-            ->sortable()
+                ->sortable()
                 ->rules('required', 'max:255'),
 
             Text::make('Email')
-            ->sortable()
+                ->sortable()
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
             Password::make('Password')
-            ->onlyOnForms()
+                ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
 
             MorphToMany::make('Wishlist', 'followers'),
-
+            MorphMany::make('Activity', 'activities'),
+            // Shows audit log button on detail view, which expands audit trail
+            AuditableLog::make()
             // MorphToMany::make(User::class, 'subject')
         ];
+    }
+
+    // Is the user able to access the audit log for this resource?
+    public function audit($loggedInUser, $resource)
+    {
+        return true;
     }
 
     /**

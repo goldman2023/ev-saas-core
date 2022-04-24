@@ -7,18 +7,31 @@ use Illuminate\View\Component;
 class Modal extends Component
 {
     public $class;
+
     public $btnClass;
+
     public $id;
+
     public $color;
+
     public $headerTitle;
+
     public $btnText;
+
     public $dialogClass;
+
     public $contentClass;
+
     public $bodyClass;
+
     public $wireTarget;
+
     public $hasTrigger;
+
     public $triggerWireClick;
+
     public $hasClose;
+
     public $noAnimation;
 
     /**
@@ -26,7 +39,7 @@ class Modal extends Component
      *
      * @return void
      */
-    public function __construct($class = '', $btnClass = '', $btnText = '', $id = '', $color = 'primary', $headerTitle = '',  $dialogClass = '', $bodyClass = '', $contentClass = '', $wireTarget = null, $hasTrigger = true, $triggerWireClick = null, $hasClose = true, $noAnimation = false)
+    public function __construct($class = '', $btnClass = '', $btnText = '', $id = '', $color = 'primary', $headerTitle = '', $dialogClass = '', $bodyClass = '', $contentClass = '', $wireTarget = null, $hasTrigger = true, $triggerWireClick = null, $hasClose = true, $noAnimation = false)
     {
         $this->class = $class;
         $this->btnClass = $btnClass;

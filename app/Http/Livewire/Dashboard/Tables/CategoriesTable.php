@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Http\Livewire\Dashboard\Tables;
 
 use App\Enums\StatusEnum;
-use App\Models\Category;
 use App\Facades\MyShop;
+use App\Models\Category;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -15,10 +16,15 @@ class CategoriesTable extends DataTableComponent
     use DispatchSupport;
 
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 25;
+
     public array $perPageAccepted = [10, 25, 50, 100];
 
     public array $filterNames = [
@@ -30,9 +36,11 @@ class CategoriesTable extends DataTableComponent
     ];
 
     protected string $pageName = 'categories';
+
     protected string $tableName = 'categories';
 
-    public function mount() {
+    public function mount()
+    {
         parent::mount();
     }
 
@@ -47,7 +55,7 @@ class CategoriesTable extends DataTableComponent
                 ]),
             'date_created' => Filter::make('Date created')
                 ->date([
-                    'max' => now()->format('Y-m-d')
+                    'max' => now()->format('Y-m-d'),
                 ]),
         ];
     }
@@ -77,7 +85,7 @@ class CategoriesTable extends DataTableComponent
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('featured'), fn ($query, $featured) => $query->where('featured', $featured))
             ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
-      }
+    }
 
     public function rowView(): string
     {

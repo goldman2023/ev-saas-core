@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class ShopSettingsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,12 +13,11 @@ class ShopSettingsTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('shop_settings')->count() == 0) {
             \DB::table('shop_settings')->delete();
 
             // TODO: This MUST BE defined VERY SOON!!! Along with Tenant Settings!!!
-            
+
             // \DB::table('shop_settings')->insert(array(
             //     0 =>
             //         array(
@@ -823,7 +821,6 @@ class ShopSettingsTableSeeder extends Seeder
             //             'updated_at' => '2021-04-08 12:59:02',
             //         ),
             // ));
-
         }
     }
 }

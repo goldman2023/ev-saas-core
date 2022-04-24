@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class InvalidIcon extends Component
 {
     public $icon;
+
     public $field;
 
     /**

@@ -8,20 +8,19 @@ use Spatie\Activitylog\Models\Activity;
 class ActivityLog extends Component
 {
     public $acitivites;
+
     public $scope;
 
-    public function mount($scope = 'all') {
+    public function mount($scope = 'all')
+    {
         $this->scope = $scope;
-        if($this->scope == 'all') {
+        if ($this->scope == 'all') {
             $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
-
-        } else if($scope == 'seller') {
-        $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
-
+        } elseif ($scope == 'seller') {
+            $this->acitivites = Activity::latest()->whereNotNull('causer_id')->take(10)->get();
         } else {
             $this->scope = 'customer';
         }
-
     }
 
     public function render()

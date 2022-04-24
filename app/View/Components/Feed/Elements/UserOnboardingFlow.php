@@ -6,8 +6,8 @@ use Illuminate\View\Component;
 
 class UserOnboardingFlow extends Component
 {
-
     public $steps = [];
+
     /**
      * Create a new component instance.
      *
@@ -21,7 +21,7 @@ class UserOnboardingFlow extends Component
             'route' => route('feed.shops'),
             'title' => translate('Follow 5 users'),
         ];
-        if(auth()->user()->following()->count() > 5) {
+        if (auth()->user()->following()->count() > 5) {
             $step['completed'] = true;
         }
 
@@ -34,7 +34,7 @@ class UserOnboardingFlow extends Component
             'title' => translate('Add your first post'),
         ];
 
-        if(auth()->user()->blog_posts()->count() > 1) {
+        if (auth()->user()->blog_posts()->count() > 1) {
             $step['completed'] = true;
         }
 
@@ -46,7 +46,7 @@ class UserOnboardingFlow extends Component
             'route' => route('onboarding.step4'),
             'title' => translate('Create a shop'),
         ];
-        if(auth()->user()->shop()->count() > 1) {
+        if (auth()->user()->shop()->count() > 1) {
             $step['completed'] = true;
         }
 
@@ -59,7 +59,7 @@ class UserOnboardingFlow extends Component
             'title' => translate('Verify your profile'),
         ];
 
-        if(auth()->user()->verified) {
+        if (auth()->user()->verified) {
             $step['completed'] = true;
         }
 
@@ -72,13 +72,11 @@ class UserOnboardingFlow extends Component
             'title' => translate('Add your first product'),
         ];
 
-        if(auth()->user()->products()->count() > 1) {
+        if (auth()->user()->products()->count() > 1) {
             $step['completed'] = true;
         }
 
         $this->steps[] = $step;
-
-
     }
 
     /**

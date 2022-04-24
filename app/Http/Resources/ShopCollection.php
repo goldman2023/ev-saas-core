@@ -9,14 +9,14 @@ class ShopCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
                     'user' => [
                         'name' => $data->user->name,
                         'email' => $data->user->email,
                         'avatar' => $data->user->avatar,
-                        'avatar_original' => $data->user->avatar_original
+                        'avatar_original' => $data->user->avatar_original,
                     ],
                     'logo' => api_asset($data->logo),
                     'sliders' => $this->convertPhotos(explode(',', $data->sliders)),
@@ -28,13 +28,13 @@ class ShopCollection extends ResourceCollection
                     'instagram' => $data->instagram,
                     'links' => [
                         'featured' => route('shops.featuredProducts', $data->id),
-                        'top' => route('shops.topSellingProducts',  $data->id),
+                        'top' => route('shops.topSellingProducts', $data->id),
                         'new' => route('shops.newProducts', $data->id),
                         'all' => route('shops.allProducts', $data->id),
-                        'brands' => route('shops.brands', $data->id)
-                    ]
+                        'brands' => route('shops.brands', $data->id),
+                    ],
                 ];
-            })
+            }),
         ];
     }
 
@@ -42,15 +42,17 @@ class ShopCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 
-    protected function convertPhotos($data){
-        $result = array();
+    protected function convertPhotos($data)
+    {
+        $result = [];
         foreach ($data as $key => $item) {
             array_push($result, api_asset($item));
         }
+
         return $result;
     }
 }

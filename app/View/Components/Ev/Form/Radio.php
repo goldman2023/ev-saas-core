@@ -7,20 +7,34 @@ use Illuminate\View\Component;
 class Radio extends Component
 {
     public $isWired;
+
     public $class;
+
     //public $id;
     public $name;
+
     public $appendToName;
+
     public $label;
+
     public $required;
+
     public $items;
+
     public $icon;
+
     public $merge;
+
     public $style;
+
     public $value;
+
     public $errorBagName;
+
     public $valueProperty;
+
     public $labelProperty;
+
     public $wireType;
 
     /**
@@ -28,7 +42,7 @@ class Radio extends Component
      *
      * @return void
      */
-    public function __construct($isWired = true, $items = [], $style = 'vanilla', $value = '', $name = '', $appendToName = false, $label = '', $valueProperty = null, $labelProperty = null, $required = false,  $class = '', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
+    public function __construct($isWired = true, $items = [], $style = 'vanilla', $value = '', $name = '', $appendToName = false, $label = '', $valueProperty = null, $labelProperty = null, $required = false, $class = '', $icon = null, $merge = false, $errorBagName = null, $wireType = 'defer')
     {
         $this->isWired = $isWired;
         $this->wireType = $wireType;
@@ -47,7 +61,6 @@ class Radio extends Component
         $this->value = $value;
         $this->errorBagName = $errorBagName ?: $name;
     }
-
 
     /**
      * Get the view / contents that represent the component.

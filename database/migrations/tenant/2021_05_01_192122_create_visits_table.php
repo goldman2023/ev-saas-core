@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVisitsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,7 +17,7 @@ class CreateVisitsTable extends Migration
             $table->string('primary_key');
             $table->string('secondary_key')->nullable();
             $table->unsignedBigInteger('score');
-            if(config('database.default') === 'pgsql') {
+            if (config('database.default') === 'pgsql') {
                 $table->jsonb('list')->nullable();
             } else {
                 $table->json('list')->nullable();
@@ -38,4 +37,4 @@ class CreateVisitsTable extends Migration
     {
         Schema::dropIfExists('visits');
     }
-}
+};

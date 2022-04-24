@@ -6,6 +6,8 @@ use App\Builders\BaseBuilder;
 use App\Traits\Eloquent\Base\Model\HasCoreProperties;
 use Illuminate\Database\Eloquent\Model;
 use Str;
+use Spatie\Activitylog\LogOptions;
+
 
 class WeBaseModel extends Model
 {
@@ -37,7 +39,8 @@ class WeBaseModel extends Model
      * @param  array  $attributes
      * @return $this
      */
-    public function forceFill(array $attributes = []) {
+    public function forceFill(array $attributes = [])
+    {
         parent::forceFill($attributes); // Fill standard Laravel attributes
         $this->initCoreProperties($attributes); // Fill core_properties with passed data
 
@@ -55,9 +58,10 @@ class WeBaseModel extends Model
         return new BaseBuilder($query);
     }
 
-    protected function getPropertyMutatorName($name, $inverse = false) {
-        if($inverse) {
-            return Str::snake(s($name)->replaceFirst('get','')->replaceLast('Attribute','')->__toString());
+    protected function getPropertyMutatorName($name, $inverse = false)
+    {
+        if ($inverse) {
+            return Str::snake(s($name)->replaceFirst('get', '')->replaceLast('Attribute', '')->__toString());
         }
 
         return 'get'.Str::studly($name).'Attribute';
@@ -75,8 +79,6 @@ class WeBaseModel extends Model
         return array_merge(parent::toArray(), $this->corePropertiesToArray());
     }
 
-
-
     /**
      * Set a given attribute on the model.
      *
@@ -89,8 +91,9 @@ class WeBaseModel extends Model
      */
     public function setAttribute($key, $value): mixed
     {
-        if(in_array($key, $this->getCoreProperties(), true)) {
+        if (in_array($key, $this->getCoreProperties(), true)) {
             $this->{$key} = $value;
+
             return $this;
         }
 
@@ -116,7 +119,7 @@ class WeBaseModel extends Model
      */
     public function getAttribute($key): mixed
     {
-        if(in_array($key, $this->getCoreProperties(), true)) {
+        if (in_array($key, $this->getCoreProperties(), true)) {
             return $this->{$key};
         }
 
@@ -139,13 +142,12 @@ class WeBaseModel extends Model
      */
     public function __call($method, $parameters)
     {
-        if(in_array($method, $this->getCorePropertiesMutators(), true)) {
+        if (in_array($method, $this->getCorePropertiesMutators(), true)) {
             return $this->{$this->getPropertyMutatorName($method, true)};
         }
 
         return parent::__call($method, $parameters);
     }
-
 
     /**
      * Get the observable event names.
@@ -159,7 +161,7 @@ class WeBaseModel extends Model
         return array_merge(
             parent::getObservableEvents(),
             [
-                'relationsRetrieved'
+                'relationsRetrieved',
             ]
         );
     }
@@ -189,8 +191,15 @@ class WeBaseModel extends Model
         return parent::fireModelEvent($event, $halt);
     }
 
-
-    public function scopeNoEagerLoads($query) {
+    public function scopeNoEagerLoads($query)
+    {
         return $query->setEagerLoads([]);
+    }
+
+
+    /* Default Log */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
     }
 }

@@ -2,20 +2,20 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
+use App\Enums\AttributeTypeEnum;
 use App\Enums\StatusEnum;
 use App\Facades\MyShop;
+use App\Models\Attribute;
 use App\Models\BlogPost;
 use App\Models\Order;
 use App\Models\Orders;
 use App\Models\Plan;
-use App\Models\Attribute;
-use App\Enums\AttributeTypeEnum;
 use App\Traits\Livewire\DispatchSupport;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Rappasoft\LaravelLivewireTables\Views\Filter;
-use DB;
 
 class AttributesTable extends DataTableComponent
 {
@@ -23,17 +23,23 @@ class AttributesTable extends DataTableComponent
 
     // public $for = 'me';
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 25;
+
     public array $perPageAccepted = [10, 25, 50, 100];
+
     public ?string $content = null;
 
     public array $filterNames = [
         'type' => 'Type',
         'filterable' => 'Filterable',
-        'has_schema' => 'Has Schema'
+        'has_schema' => 'Has Schema',
     ];
 
     public array $bulkActions = [
@@ -41,9 +47,11 @@ class AttributesTable extends DataTableComponent
     ];
 
     protected string $pageName = 'attributes';
+
     protected string $tableName = 'attributes';
 
-    public function mount() {
+    public function mount()
+    {
         $this->content_type = base64_decode(request()->content_type);
     }
 
@@ -103,7 +111,8 @@ class AttributesTable extends DataTableComponent
         return 'frontend.dashboard.attributes.row';
     }
 
-    public function removeAttribute($id) {
+    public function removeAttribute($id)
+    {
         $attribute = Attribute::findOrFail($id);
 
         DB::beginTransaction();
@@ -116,7 +125,8 @@ class AttributesTable extends DataTableComponent
             DB::commit();
 
             $this->toastify(translate('Attribute successfully deleted!'), 'success');
-        } catch(\Exception $e) { dd($e);
+        } catch (\Exception $e) {
+            dd($e);
             $this->dispatchGeneralError(translate('here was an error while deleting an attribute and it\'s translations, values and relationships: '.$e->getMessage()));
             $this->toastify(translate('There was an error while deleting an attribute and it\'s translations, values and relationships: '.$e->getMessage()), 'danger');
         }

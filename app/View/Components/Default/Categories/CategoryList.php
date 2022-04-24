@@ -8,11 +8,14 @@ use Illuminate\View\Component;
 
 class CategoryList extends Component
 {
-
     public $categories;
+
     public $selectedCategory;
+
     public bool $slider;
+
     public $style;
+
     /**
      * Create a new component instance.
      *
@@ -33,6 +36,6 @@ class CategoryList extends Component
      */
     public function render()
     {
-        return view('components.default.categories.list.' . $this->style );
+        return view('components.default.categories.list.'.$this->style);
     }
 }

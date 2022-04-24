@@ -8,10 +8,12 @@ use Illuminate\View\Component;
 class Button extends Component
 {
     public $class;
-    public $onclick;
-    public $wireclick;
-    public $type;
 
+    public $onclick;
+
+    public $wireclick;
+
+    public $type;
 
     /**
      * Create a new component instance.

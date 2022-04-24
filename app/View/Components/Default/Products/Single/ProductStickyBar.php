@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class ProductStickyBar extends Component
 {
     public $product;
+
     /**
      * Create a new component instance.
      *

@@ -12,7 +12,7 @@ class AmountPercentTypeEnum extends EVBaseEnum
     {
         return [
             'amount' => 'amount',
-            'percent' => 'percent'
+            'percent' => 'percent',
         ];
     }
 
@@ -20,7 +20,7 @@ class AmountPercentTypeEnum extends EVBaseEnum
     {
         return [
             'amount' => 'Amount',
-            'percent' => 'Percent'
+            'percent' => 'Percent',
         ];
     }
 }

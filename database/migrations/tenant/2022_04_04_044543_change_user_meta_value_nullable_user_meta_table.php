@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeUserMetaValueNullableUserMetaTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,7 +13,6 @@ class ChangeUserMetaValueNullableUserMetaTable extends Migration
     public function up()
     {
         Schema::table('user_meta', function (Blueprint $table) {
-            
             $table->string('value', 2500)->nullable()->change();
         });
     }
@@ -30,4 +28,4 @@ class ChangeUserMetaValueNullableUserMetaTable extends Migration
             $table->string('value', 2500)->nullable(false)->change();
         });
     }
-}
+};

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\VerifiesEmails;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Http\Controllers\OTPVerificationController;
+use App\Models\User;
 use App\Notifications\NewCompanyJoin;
+use Carbon\Carbon;
+use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
 class VerificationController extends Controller
@@ -57,14 +57,13 @@ class VerificationController extends Controller
             return $request->user()->hasVerifiedEmail()
                             ? redirect($this->redirectPath())
                             : view('auth.verify');
-        }
-        else {
+        } else {
             $otpController = new OTPVerificationController;
             $otpController->send_code($request->user());
+
             return redirect()->route('verification');
         }
     }
-
 
     /**
      * Resend the email verification notification.
@@ -83,16 +82,16 @@ class VerificationController extends Controller
         return back()->with('resent', true);
     }
 
-    public function verification_confirmation($code){
+    public function verification_confirmation($code)
+    {
         $user = User::where('verification_code', $code)->first();
-        if($user != null){
+        if ($user != null) {
             $user->email_verified_at = Carbon::now();
             $user->save();
             Notification::send(User::where('id', '!=', $user->id)->get(), new NewCompanyJoin($user));
             auth()->login($user, true);
             flash(translate('Your email has been verified successfully'))->success();
-        }
-        else {
+        } else {
             flash(translate('Sorry, we could not verifiy you. Please try again'))->error();
         }
 

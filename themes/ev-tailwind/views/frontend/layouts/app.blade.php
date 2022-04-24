@@ -62,8 +62,10 @@
     <livewire:cart.cart template="flyout-cart" />
     <!-- Wishlist -->
     {{-- TODO: Refactor this for unified structure, preffered in separate folder --}}
-    <x-panels.flyout-wishlist></x-panels.flyout-wishlist>
-    <x-panels.flyout-categories></x-panels.flyout-categories>
+    {{-- <x-panels.flyout-wishlist></x-panels.flyout-wishlist> --}}
+    <livewire:flyout.wishlist />
+
+    {{-- <x-panels.flyout-categories></x-panels.flyout-categories> --}}
 
     @guest
     <x-panels.flyout-auth></x-panels.flyout-auth>
@@ -76,7 +78,7 @@
 
     @if(get_tenant_setting('chat_feature', false))
     @auth
-        <x-default.chat.widget-chat></x-default.chat.widget-chat>
+    <x-default.chat.widget-chat></x-default.chat.widget-chat>
     @endauth
     @endif
 
@@ -95,7 +97,15 @@
 
     @yield('script')
     @stack('footer_scripts')
-
+    <script src="https://cdn.jsdelivr.net/npm/highlight.run@latest"></script>
+    <script>
+        window.H.init('jgoq16el')
+    </script>
+    @auth
+    <script>
+        window.H.identify(auth()->user()->email, {id: auth()->user()->id,});
+    </script>
+    @endauth
 
 </body>
 

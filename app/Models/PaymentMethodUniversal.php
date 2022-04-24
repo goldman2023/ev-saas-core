@@ -15,13 +15,12 @@ class PaymentMethodUniversal extends WeBaseModel
 
     protected $table = 'payment_methods_universal';
 
-    protected $fillable = ['enabled','name','gateway','description','instructions','data'];
+    protected $fillable = ['enabled', 'name', 'gateway', 'description', 'instructions', 'data'];
 
     protected $casts = [
         'data' => 'object',
-        'enabled' => 'boolean'
+        'enabled' => 'boolean',
     ];
-
 
     public function shop()
     {

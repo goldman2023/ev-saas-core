@@ -9,7 +9,9 @@ class RecentlyViewedProducts extends Component
     public $products;
 
     public $columns = 3;
+
     public $style = 'grid';
+
     /**
      * Create a new component instance.
      *
@@ -18,7 +20,7 @@ class RecentlyViewedProducts extends Component
     public function __construct($columns = 3, $style = 'grid')
     {
         //
-        if(auth()->user()){
+        if (auth()->user()) {
             $this->products = auth()->user()->recently_viewed_products();
         } else {
             /* TODO: If user is guest save product's in session storage */
@@ -36,11 +38,10 @@ class RecentlyViewedProducts extends Component
      */
     public function render()
     {
-if($this->style == 'grid'){
-        return view('components.default.products.recently-viewed-products');
-    } else {
-        return view('components.default.products.recently-viewed-products-list');
-
+        if ($this->style == 'grid') {
+            return view('components.default.products.recently-viewed-products');
+        } else {
+            return view('components.default.products.recently-viewed-products-list');
+        }
     }
-}
 }

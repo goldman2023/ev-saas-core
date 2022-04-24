@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvoicesTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -80,7 +79,6 @@ class CreateInvoicesTable extends Migration
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade')->onUpdate('cascade'); // When shop is removed, it's orders are removed
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null')->onUpdate('set null'); // When user is removed, Set relation to NULL (We DON'T want to remove orders when user is removed!)
             $table->index(['payment_method_type', 'payment_method_id']); // Index payment_method_type and payment_method_id. Each invoice can be payed with a different payment method!
-
         });
     }
 
@@ -93,4 +91,4 @@ class CreateInvoicesTable extends Migration
     {
         Schema::dropIfExists('invoices');
     }
-}
+};

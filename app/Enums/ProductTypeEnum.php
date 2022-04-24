@@ -24,7 +24,7 @@ class ProductTypeEnum extends EVBaseEnum
             'physical_subscription' => 'physical_subscription',
             'course' => 'course',
             'bookable_service' => 'bookable_service',
-            'bookable_subscription_service' => 'bookable_subscription_service'
+            'bookable_subscription_service' => 'bookable_subscription_service',
         ];
     }
 
@@ -38,7 +38,7 @@ class ProductTypeEnum extends EVBaseEnum
             'physical_subscription' => 'Physical Subscrption',
             'course' => 'Course',
             'bookable_service' => 'Bookable Service',
-            'bookable_subscription_service' => 'Bookable Subscription Service'
+            'bookable_subscription_service' => 'Bookable Subscription Service',
         ];
     }
 }

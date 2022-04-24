@@ -3,8 +3,8 @@
 namespace App\Http\Livewire;
 
 use Illuminate\Support\Facades\Validator;
-use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\Component;
 
 class NewDomain extends Component
 {
@@ -21,9 +21,9 @@ class NewDomain extends Component
                 'regex:/\\./', // Must contain a dot
                 function ($attribute, $value, $fail) {
                     if (Str::endsWith($value, config('tenancy.central_domains')[0])) {
-                        $fail($attribute . ' must be a custom domain.');
+                        $fail($attribute.' must be a custom domain.');
                     }
-                }
+                },
             ],
         ]);
 

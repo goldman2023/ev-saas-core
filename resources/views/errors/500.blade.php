@@ -1,4 +1,4 @@
-@extends('frontend.layouts.' . $globalLayout)
+@extends('frontend.layouts.app')
 
 @section('content')
 <section class="text-center py-6">

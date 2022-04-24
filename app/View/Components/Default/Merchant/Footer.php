@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class Footer extends Component
 {
     public $shop;
+
     public $logo;
+
     /**
      * Create a new component instance.
      *

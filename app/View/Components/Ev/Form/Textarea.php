@@ -7,12 +7,19 @@ use Illuminate\View\Component;
 class Textarea extends Component
 {
     public $class;
+
     public $id;
+
     public $name;
+
     public $label;
+
     public $required;
+
     public $placeholder;
+
     public $max;
+
     public $errorBagName;
 
     /**
@@ -20,7 +27,7 @@ class Textarea extends Component
      *
      * @return void
      */
-    public function __construct($name = '', $label = '', $max = null, $required = false,  $class = '', $id = null, $placeholder = 'Type your description...', $errorBagName = null)
+    public function __construct($name = '', $label = '', $max = null, $required = false, $class = '', $id = null, $placeholder = 'Type your description...', $errorBagName = null)
     {
         $this->name = $name;
         $this->label = $label;
@@ -29,9 +36,8 @@ class Textarea extends Component
         $this->class = $class;
         $this->id = $id;
         $this->max = $max;
-        $this->errorBagName = !empty($errorBagName) ? $errorBagName: $name;
+        $this->errorBagName = ! empty($errorBagName) ? $errorBagName : $name;
     }
-
 
     /**
      * Get the view / contents that represent the component.

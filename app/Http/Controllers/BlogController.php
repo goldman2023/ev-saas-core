@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Traits\LoggingTrait;
-use Illuminate\Http\Request;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Models\Category;
+use App\Traits\LoggingTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
     use LoggingTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -22,16 +23,15 @@ class BlogController extends Controller
     {
         $sort_search = null;
 
-
         $blogs = BlogPost::orderBy('created_at', 'desc');
 
         if ($request->search != null) {
-            $blogs = $blogs->where('title', 'like', '%' . $request->search . '%');
+            $blogs = $blogs->where('title', 'like', '%'.$request->search.'%');
             $sort_search = $request->search;
         }
 
-
         $blogs = $blogs->paginate(15);
+
         return view('backend.blog_system.blog.index', compact('blogs', 'sort_search'));
     }
 
@@ -43,6 +43,7 @@ class BlogController extends Controller
     public function create()
     {
         $blog_categories = Category::all();
+
         return view('backend.blog_system.blog.create', compact('blog_categories'));
     }
 
@@ -54,7 +55,6 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'category_id' => 'required',
             'title' => 'required|max:255',
@@ -77,8 +77,9 @@ class BlogController extends Controller
         $blog->meta_keywords = $request->meta_keywords;
         $blog->user_id = auth()->user()->id;
         $blog->save();
-        $this->log($blog,"created a news post");
+        $this->log($blog, 'created a news post');
         flash(translate('Blog post has been created successfully'))->success();
+
         return redirect()->route('admin.blog.index');
     }
 
@@ -90,7 +91,6 @@ class BlogController extends Controller
      */
     public function show($id)
     {
-
     }
 
     /**
@@ -103,6 +103,7 @@ class BlogController extends Controller
     {
         $blog = BlogPost::find($id);
         $blog_categories = Category::all();
+
         return view('backend.blog_system.blog.edit', compact('blog', 'blog_categories'));
     }
 
@@ -134,8 +135,9 @@ class BlogController extends Controller
         $blog->meta_description = $request->meta_description;
         $blog->meta_keywords = $request->meta_keywords;
         $blog->save();
-        $this->log($blog,"updated a news post");
+        $this->log($blog, 'updated a news post');
         flash(translate('Blog post has been updated successfully'))->success();
+
         return redirect()->route('admin.blog.index');
     }
 
@@ -145,6 +147,7 @@ class BlogController extends Controller
         $blog->status = $request->status;
 
         $blog->save();
+
         return 1;
     }
 
@@ -157,40 +160,39 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = BlogPost::find($id);
-        $this->log($blog,"Blog post is removed.");
+        $this->log($blog, 'Blog post is removed.');
         $blog->delete();
 
         return back();
     }
 
-
     public function all_blog()
     {
         $blogs = BlogPost::where('subscription_only', 0)->orderBy('created_at', 'desc')->paginate(12);
         $categories = $categories = Category::where('level', 0)->orderBy('order_level', 'desc')->get();
-        return view("frontend.blog.index", compact('blogs', 'categories'));
+
+        return view('frontend.blog.index', compact('blogs', 'categories'));
     }
 
     public function blog_details($slug)
     {
-
         $blog = BlogPost::where('slug', $slug)->first();
 
-       /* TODO: Add visits and views counting  */
-        return view("frontend.blog.show", compact('blog'));
+        /* TODO: Add visits and views counting  */
+        return view('frontend.blog.show', compact('blog'));
     }
 
     public function blog_category($slug)
     {
         $category = Category::where('slug', $slug)->first();
-        return view("frontend.blog.category", compact('category'));
+
+        return view('frontend.blog.category', compact('category'));
     }
 
     public function calculate_read_estimation($text)
     {
-        $words = explode(" ", $text);
+        $words = explode(' ', $text);
         // average reading speed 200wpm http://ezinearticles.com/?What-is-the-Average-Reading-Speed-and-the-Best-Rate-of-Reading?&id=2298503
         return ceil(count($words) / 200);
-
     }
 }

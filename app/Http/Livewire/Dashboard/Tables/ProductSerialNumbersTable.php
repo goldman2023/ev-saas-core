@@ -4,9 +4,9 @@ namespace App\Http\Livewire\Dashboard\Tables;
 
 use App\Enums\SerialNumberStatusEnum;
 use App\Facades\MyShop;
-use App\Models\Product;
 use App\Models\Order;
 use App\Models\Orders;
+use App\Models\Product;
 use App\Models\SerialNumber;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,11 +19,17 @@ class ProductSerialNumbersTable extends DataTableComponent
     use DispatchSupport;
 
     public $product;
+
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 10;
+
     public array $perPageAccepted = [10, 25, 50];
 
     public array $filterNames = [
@@ -35,12 +41,14 @@ class ProductSerialNumbersTable extends DataTableComponent
 
     ];
 
-    public function mount($product) {
+    public function mount($product)
+    {
         $this->product = $product;
         parent::mount();
     }
 
     protected string $pageName = 'product_serial_numbers';
+
     protected string $tableName = 'product_serial_numbers';
 
     public function filters(): array
@@ -78,25 +86,27 @@ class ProductSerialNumbersTable extends DataTableComponent
     public function query(): Builder
     {
         return SerialNumber::where([
-                ['subject_type', $this->product::class],
-                ['subject_id', $this->product->id]
-            ])
+            ['subject_type', $this->product::class],
+            ['subject_id', $this->product->id],
+        ])
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
             ->when($this->getFilter('archived'), fn ($query, $archived) => ($archived === 'yes') ? $query->onlyTrashed() : $query);
-      }
+    }
 
     public function rowView(): string
     {
         return 'frontend.dashboard.serial-numbers.serial-number-row';
     }
 
-    public function archiveSerialNumber($serial_number_id) {
+    public function archiveSerialNumber($serial_number_id)
+    {
         $serialNumber = SerialNumber::find($serial_number_id);
 
         try {
-            if(empty($serialNumber))
+            if (empty($serialNumber)) {
                 throw new \Exception('');
+            }
 
             $serialNumber->delete();
 
@@ -104,7 +114,7 @@ class ProductSerialNumbersTable extends DataTableComponent
 
             $this->emit('refreshDatatable');
             $this->emit('refreshForm');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $this->inform('There was an error while archiving a serial number...Please try again.', $e->getMessage(), 'fail');
         }
     }

@@ -9,18 +9,18 @@ use App\Models\Shop;
 use App\Models\ShopSetting;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use MyShop;
-use Categories;
-use Permissions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Purifier;
-use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
+use MyShop;
+use Permissions;
+use Purifier;
 use Spatie\Permission\Models\Role;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class MyShopForm extends Component
 {
@@ -28,12 +28,17 @@ class MyShopForm extends Component
     use DispatchSupport;
 
     public $shop;
+
     public $settings;
+
     public $addresses;
+
     public $domains;
+
     public $onboarding = false;
 
-    protected function getRuleSet($set = null, $with_wildcard = true) {
+    protected function getRuleSet($set = null, $with_wildcard = true)
+    {
         $rulesSets = collect([
             'basic' => [
                 // 'shop.*' => [],
@@ -45,12 +50,12 @@ class MyShopForm extends Component
                 'shop.content' => 'nullable', //['required', 'min:50'],
                 'settings.tagline' => ['required'],
                 'settings.phones' => ['required'],
-                'settings.email' => ['required', ], //'email:rfs,dns'
+                'settings.email' => ['required'], //'email:rfs,dns'
                 'settings.websites' => ['required'],
             ],
             'company_info' => [
                 'settings.tax_number' => [''],
-                'settings.registration_number' => ['']
+                'settings.registration_number' => [''],
             ],
             'settings' => [
                 'settings.*' => [],
@@ -73,7 +78,7 @@ class MyShopForm extends Component
     protected function rules()
     {
         $rules = [];
-        foreach($this->getRuleSet('all') as $key => $items) {
+        foreach ($this->getRuleSet('all') as $key => $items) {
             $rules = array_merge($rules, $items);
         }
 
@@ -97,7 +102,7 @@ class MyShopForm extends Component
     {
         $this->onboarding = $onboarding;
         $this->shop = MyShop::getShop();
-        $this->settings = $this->shop->settings()->get()->keyBy('setting')->map(fn($item) => $item['value'])->toArray();
+        $this->settings = $this->shop->settings()->get()->keyBy('setting')->map(fn ($item) => $item['value'])->toArray();
         $this->addresses = $this->shop->addresses;
         $this->domains = $this->shop->domains;
     }
@@ -118,7 +123,8 @@ class MyShopForm extends Component
         return view('livewire.dashboard.forms.settings.my-shop-form');
     }
 
-    public function saveBasicInformation() {
+    public function saveBasicInformation()
+    {
         $rules = $this->getRuleSet('basic');
 
         try {
@@ -144,18 +150,17 @@ class MyShopForm extends Component
 
             $this->inform(translate('Basic shop information successfully saved.'), '', 'success');
 
-            if($this->onboarding) {
+            if ($this->onboarding) {
                 return redirect()->route('onboarding.step4');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save basic shop information.'), $e->getMessage(), 'fail');
         }
     }
 
-
-
-    public function saveCompanyInfo() {
+    public function saveCompanyInfo()
+    {
         $rules = $this->getRuleSet('company_info');
 
         try {
@@ -171,27 +176,29 @@ class MyShopForm extends Component
             DB::commit();
 
             $this->inform(translate('Company information successfully saved.'), '', 'success');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save company information.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveContactDetails($contacts, $current = null) {
-        if($current['is_primary'] ?? null) {
-            $contacts = collect($contacts)->map(function($item) use ($current) {
-                if($item['email'] == $current['email'] && $item['department_name'] == $current['department_name']) {
+    public function saveContactDetails($contacts, $current = null)
+    {
+        if ($current['is_primary'] ?? null) {
+            $contacts = collect($contacts)->map(function ($item) use ($current) {
+                if ($item['email'] == $current['email'] && $item['department_name'] == $current['department_name']) {
                     $item['is_primary'] = true;
                 } else {
                     $item['is_primary'] = false;
                 }
+
                 return $item;
             })->toArray();
         }
 
         $contact_details = $this->shop->settings()->get()->keyBy('setting')->get('contact_details');
 
-        if(empty($contact_details)) {
+        if (empty($contact_details)) {
             $contact_details = new ShopSetting();
             $contact_details->shop_id = $this->shop->id;
             $contact_details->setting = 'contact_details';
@@ -207,11 +214,12 @@ class MyShopForm extends Component
         $this->inform(translate('Contact details successfully updated.'), '', 'success');
     }
 
-    public function removeContactDetails($contacts, $current = null) {
+    public function removeContactDetails($contacts, $current = null)
+    {
         $contact_details = $this->shop->settings->keyBy('setting')->get('contact_details');
 
-        foreach($contacts as $key => $contact) {
-            if($contact == $current) {
+        foreach ($contacts as $key => $contact) {
+            if ($contact == $current) {
                 unset($contacts[$key]);
             }
         }
@@ -219,13 +227,13 @@ class MyShopForm extends Component
         $contacts = array_values($contacts);
 
         $has_primary = false;
-        foreach($contacts as $key => $contact) {
-            if($contact['is_primary'] ?? false) {
+        foreach ($contacts as $key => $contact) {
+            if ($contact['is_primary'] ?? false) {
                 $has_primary = true;
             }
         }
 
-        if(!$has_primary && isset($contacts[0])) {
+        if (! $has_primary && isset($contacts[0])) {
             $contacts[0]['is_primary'] = true;
         }
 
@@ -241,18 +249,19 @@ class MyShopForm extends Component
     /*
      * Saves all settings provided in $rules variable.
      */
-    protected function saveSettings($rules) {
+    protected function saveSettings($rules)
+    {
         // Save data in settings table
         $old_settings = $this->shop->settings()->get()->keyBy('setting'); // Get ShopSetting models and key them by their name (aka. `setting` column)
 
-        foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
+        foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1];
 
-            if(!empty($setting_key) && $setting_key !== '*') {
+            if (! empty($setting_key) && $setting_key !== '*') {
                 $setting = $old_settings->get($setting_key);
 
                 // If $setting does not exist in old_settings, create it and save it!!!
-                if(empty($setting)) {
+                if (empty($setting)) {
                     $setting = new ShopSetting();
                     $setting->shop_id = $this->shop->id;
                     $setting->setting = $setting_key;

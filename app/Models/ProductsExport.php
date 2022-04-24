@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Models\Product;
 use Illuminate\Support\Facades\Date;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
 class ProductsExport implements FromCollection, WithMapping, WithHeadings
 {
@@ -30,8 +30,8 @@ class ProductsExport implements FromCollection, WithMapping, WithHeadings
     }
 
     /**
-    * @var Product $product
-    */
+     * @var Product
+     */
     public function map($product): array
     {
         return [

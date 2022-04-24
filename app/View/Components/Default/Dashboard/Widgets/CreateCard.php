@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class CreateCard extends Component
 {
     public $title;
+
     public $description;
+
     /**
      * Create a new component instance.
      *
@@ -19,7 +21,6 @@ class CreateCard extends Component
         //
         $this->title = $title;
         $this->description = $description;
-
     }
 
     /**

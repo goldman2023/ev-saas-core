@@ -23,7 +23,6 @@ class Kernel extends ConsoleKernel
         \Stancl\Tenancy\Commands\Seed::class,
         \Qirolab\Theme\Commands\MakeThemeCommand::class,
 
-
         // For some very weird reason some commands from few packages are not added to artisan even though there is no error in code nor in logs
         // They also seem properly resolved through package ServiceProviders, but still...they are not visible when running: php artisan list
         // Examples: php artisan octane:{start:install:stop...etc} or php artisan sail:{install, publish} are returning following error pattern:
@@ -32,23 +31,23 @@ class Kernel extends ConsoleKernel
         // I'm adding these commands manually here because they are not added to artisan for whatever reason...
 
         // Octane
-//        \Laravel\Octane\Commands\InstallCommand::class,
-//        \Laravel\Octane\Commands\ReloadCommand::class,
-//        \Laravel\Octane\Commands\StartCommand::class,
-//        \Laravel\Octane\Commands\StartRoadRunnerCommand::class,
-//        \Laravel\Octane\Commands\StartSwooleCommand::class,
-//        \Laravel\Octane\Commands\StatusCommand::class,
-//        \Laravel\Octane\Commands\StopCommand::class,
+        //        \Laravel\Octane\Commands\InstallCommand::class,
+        //        \Laravel\Octane\Commands\ReloadCommand::class,
+        //        \Laravel\Octane\Commands\StartCommand::class,
+        //        \Laravel\Octane\Commands\StartRoadRunnerCommand::class,
+        //        \Laravel\Octane\Commands\StartSwooleCommand::class,
+        //        \Laravel\Octane\Commands\StatusCommand::class,
+        //        \Laravel\Octane\Commands\StopCommand::class,
 
         // Sail
-//        \Laravel\Sail\Console\InstallCommand::class,
-//        \Laravel\Sail\Console\PublishCommand::class,
+        //        \Laravel\Sail\Console\InstallCommand::class,
+        //        \Laravel\Sail\Console\PublishCommand::class,
 
-//        \Laravel\Nova\Console\InstallCommand::class,
-//        \Laravel\Nova\Console\PublishCommand::class,
-//        \Laravel\Nova\Console\ResourceCommand::class,
-//        \Laravel\Nova\Console\BaseResourceCommand::class,
-//        \Laravel\Nova\Console\UserCommand::class
+        //        \Laravel\Nova\Console\InstallCommand::class,
+        //        \Laravel\Nova\Console\PublishCommand::class,
+        //        \Laravel\Nova\Console\ResourceCommand::class,
+        //        \Laravel\Nova\Console\BaseResourceCommand::class,
+        //        \Laravel\Nova\Console\UserCommand::class
     ];
 
     /**
@@ -71,7 +70,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }

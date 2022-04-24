@@ -74,3 +74,4 @@ themes/features/we-edit/node_modules/*
 .env.backup
 
 !public/images
+vendor-d/*

@@ -4,13 +4,13 @@ namespace App\Nova\Tenant;
 
 use App\Nova\Resource;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Wishlist extends Resource
@@ -35,7 +35,7 @@ class Wishlist extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
     ];
 
     /**
@@ -56,8 +56,8 @@ class Wishlist extends Resource
             // Text::make('User ID', 'user_id')
             // ->sortable(),
 
-            BelongsTo::make('User'),
-            MorphTo::make('Subject'),
+            // BelongsTo::make('User'),
+            // MorphTo::make('Subject'),
 
         ];
     }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Utility;
 
 use App\Models\Translation;
@@ -9,6 +8,7 @@ class TranslationUtility
 {
     // Hold the class instance.
     private static $instance = null;
+
     private $translations;
 
     // The db connection is established in the private constructor.
@@ -21,8 +21,8 @@ class TranslationUtility
 
     public static function getInstance()
     {
-        if (!self::$instance) {
-            self::$instance = new TranslationUtility();
+        if (! self::$instance) {
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -30,7 +30,7 @@ class TranslationUtility
 
     public static function reInstantiate()
     {
-        self::$instance = new TranslationUtility();
+        self::$instance = new self();
     }
 
     public function cached_translation_row($lang_key, $lang)
@@ -39,7 +39,6 @@ class TranslationUtility
         if (empty($this->translations)) {
             return $row;
         }
-
 
         foreach ($this->translations as $item) {
             if ($item['lang_key'] == $lang_key && $item['lang'] == $lang) {
@@ -63,6 +62,4 @@ class TranslationUtility
     {
         return $this->translations;
     }
-
-
 }

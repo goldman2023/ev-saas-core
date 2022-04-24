@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeyConstraintToProductsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,7 +13,7 @@ class AddForeignKeyConstraintToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('shop_id')->after('name')->nullable(true);//->default(5);
+            $table->integer('shop_id')->after('name')->nullable(true); //->default(5);
             $table->foreign('shop_id')
                 ->references('id')
                 ->on('shops')
@@ -42,4 +41,4 @@ class AddForeignKeyConstraintToProductsTable extends Migration
             $table->dropColumn('shop_id');
         });
     }
-}
+};

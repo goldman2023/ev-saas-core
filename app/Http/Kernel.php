@@ -2,11 +2,11 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckoutMiddleware;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsSeller;
-use App\Http\Middleware\IsUser;
-use App\Http\Middleware\CheckoutMiddleware;
 use App\Http\Middleware\IsUnbanned;
+use App\Http\Middleware\IsUser;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomainOrSubdomain;
 
@@ -43,7 +43,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\Language::class,
             \App\Http\Middleware\ThemeMiddleware::class,
             \App\Http\Middleware\HttpsProtocol::class,
-            \App\Http\Middleware\CheckForMaintenanceMode::class
+            \App\Http\Middleware\CheckForMaintenanceMode::class,
         ],
 
         'api' => [

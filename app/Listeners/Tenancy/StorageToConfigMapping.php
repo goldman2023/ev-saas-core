@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Listeners\Tenancy;
 
 use App\Facades\TenantSettings;
@@ -13,6 +14,4 @@ class StorageToConfigMapping
     {
         tenant()->setSocialServiceMappings();
     }
-
-
 }

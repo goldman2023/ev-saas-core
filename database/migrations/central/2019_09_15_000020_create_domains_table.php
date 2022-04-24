@@ -6,8 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDomainsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -24,7 +23,7 @@ class CreateDomainsTable extends Migration
             $table->string('certificate_status', 64)->nullable();
 
             $table->timestamps();
-           // $table->foreign('tenant_id')->references('id')->on('tenants')->onUpdate('cascade')->onDelete('cascade');
+            // $table->foreign('tenant_id')->references('id')->on('tenants')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -37,4 +36,4 @@ class CreateDomainsTable extends Migration
     {
         Schema::dropIfExists('domains');
     }
-}
+};
