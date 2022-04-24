@@ -2,56 +2,59 @@
 
 namespace App\Models;
 
-use App;
+use App\Traits\BrandTrait;
+use App\Traits\CategoryTrait;
+use App\Traits\GalleryTrait;
+use App\Traits\Purchasable;
+use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
+use App\Traits\VariationTrait;
+use Cache;
 use App\Builders\ProductsBuilder;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 use App\Models\FlashDealProduct;
 use App\Models\ProductTax;
 use App\Models\User;
 use App\Models\Wishlist;
 use App\Traits\AttributeTrait;
-use App\Traits\BrandTrait;
-use App\Traits\Caching\RegeneratesCache;
-use App\Traits\CategoryTrait;
-use App\Traits\CoreMetaTrait;
-use App\Traits\GalleryTrait;
-use App\Traits\HasStatus;
-use App\Traits\LikesTrait;
-use App\Traits\PermalinkTrait;
-use App\Traits\PriceTrait;
-use App\Traits\Purchasable;
-use App\Traits\ReviewTrait;
-use App\Traits\StockManagementTrait;
-use App\Traits\TranslationTrait;
-use App\Traits\UploadTrait;
-use App\Traits\VariationTrait;
 use Auth;
-use Cache;
 use DB;
+use IMG;
+use Vendor;
 use FX;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use IMG;
+use App\Traits\ReviewTrait;
+use App;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use App\Traits\PermalinkTrait;
+use App\Traits\PriceTrait;
+use App\Traits\StockManagementTrait;
+use App\Traits\Caching\RegeneratesCache;
+use App\Traits\HasStatus;
+use App\Traits\CoreMetaTrait;
+use App\Traits\LikesTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-use Vendor;
 
 /**
  * App\Models\Product
  */
-class Product extends EVBaseModel
+
+class Product extends WeBaseModel
 {
     use \Bkwld\Cloner\Cloneable;
     use HasSlug;
     use SoftDeletes;
     use RegeneratesCache;
+
     use TranslationTrait;
     use PermalinkTrait;
     use AttributeTrait;
     use CategoryTrait;
     use HasStatus;
+
     use UploadTrait;
     use GalleryTrait;
     use BrandTrait;
@@ -59,13 +62,16 @@ class Product extends EVBaseModel
     use PriceTrait;
     use Purchasable;
     use CoreMetaTrait;
+
     use ReviewTrait;
+
     use VariationTrait;
+
     use LogsActivity;
     use LikesTrait;
 
-    public const ROUTING_SINGULAR_NAME_PREFIX = 'product';
 
+    public const ROUTING_SINGULAR_NAME_PREFIX = 'product';
     public const ROUTING_PLURAL_NAME_PREFIX = 'products';
 
     protected $table = 'products';
@@ -77,25 +83,25 @@ class Product extends EVBaseModel
      * @var array
      */
     protected $with = ['variations'];
-
     protected $cloneable_relations = ['translations', 'variations', 'categories', 'uploads', 'brand', 'stock', 'flash_deals']; // TODO: Which core_met to clone???
     //public static $defaultEagerLoads = ['variations', 'categories', 'uploads', 'brand', 'stock', 'serial_numbers', 'flash_deals' ];
 
     protected $fillable = [
         'name', 'description', 'excerpt', 'added_by', 'user_id', 'brand_id', 'video_provider', 'video_link', 'unit_price',
-        'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description', 'shop_id',
+        'purchase_price', 'base_currency', 'unit', 'slug', 'num_of_sales', 'meta_title', 'meta_description', 'shop_id'
     ];
+
 
     protected $casts = [
         'digital' => 'boolean',
         'use_serial' => 'boolean',
-        'tags' => 'array',
+        'tags' => 'array'
     ];
 
     public function getBaseCurrencyAttribute($value)
     {
         if (empty($value)) {
-            $value = get_setting('system_default_currency')->code;
+            $value =  get_setting('system_default_currency')->code;
         }
 
         return $value;
@@ -149,9 +155,9 @@ class Product extends EVBaseModel
     {
         return $query->where(
             fn ($query) =>  $query
-                ->where('name', 'like', '%'.$term.'%')
-                ->orWhere('excerpt', 'like', '%'.$term.'%')
-                ->orWhere('description', 'like', '%'.$term.'%')
+                ->where('name', 'like', '%' . $term . '%')
+                ->orWhere('excerpt', 'like', '%' . $term . '%')
+                ->orWhere('description', 'like', '%' . $term . '%')
         );
     }
 
@@ -159,17 +165,14 @@ class Product extends EVBaseModel
     {
         $query->orderBy('created_at', 'DESC');
     }
-
     public function scopePriceAsc($query)
     {
         $query->orderBy('unit_price', 'ASC');
     }
-
     public function scopeDiscountDesc($query)
     {
         $query->orderBy('discount', 'DESC');
     }
-
     public function scopeMostPopular($query)
     {
         return $query; // TODO: Ask Eim about views
@@ -180,7 +183,7 @@ class Product extends EVBaseModel
      */
     public function activityExtraData()
     {
-        return ['name' => '$this->name', 'display_name' => ' $this->display_name'];
+        return array('name' => '$this->name', 'display_name' => ' $this->display_name');
     }
 
     /**
@@ -219,8 +222,9 @@ class Product extends EVBaseModel
     /* TODO: Implement product condition in backend: new/used/refurbished */
     public function getCondition()
     {
-        return translate('New');
+        return translate("New");
     }
+
 
     protected function asJson($value)
     {
@@ -237,6 +241,7 @@ class Product extends EVBaseModel
         return $this->likes()->count();
     }
 
+
     public function getTranslationModel(): ?string
     {
         return ProductTranslation::class;
@@ -248,23 +253,23 @@ class Product extends EVBaseModel
             [
                 'property_name' => 'pdf', // This is the property name which we can use as $model->{property_name} to access desired Upload of the current Model
                 'relation_type' => 'pdf', // This is an identificator which determines the relation between Upload and Model (e.g. Products have `thumbnail`, `cover`, `gallery`, `meta_img`, `pdf`, `documents` etc.; Blog posts have `thumbnail`, `cover`, `gallery`, `meta_img`, `documents` etc.).
-                'multiple' => false, // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
-            ],
+                'multiple' => false // Property getter function logic and return type (Upload or (Collection/array)) depend on this parameter. Default: false!
+            ]
         ];
     }
 
     /* TODO: @vukasin Implement checkbox in product.create for enabling units display, by default it's disabled */
-    public function showUnits($show = false)
-    {
+    function showUnits($show = false) {
         return $show;
     }
 
-    public function public_view_count($period = 'all')
+    function public_view_count($period = 'all')
     {
+
         $ttl = 600;
         $product = $this;
         if ($period == 'all') {
-            $view_count = Cache::remember('product_view_count_'.$this->id.'_'.$period, $ttl, function () use ($product) {
+            $view_count = Cache::remember('product_view_count_' . $this->id . '_' . $period, $ttl, function () use ($product) {
                 return \Spatie\Activitylog\Models\Activity::where('subject_id', $product->id)
                     ->whereJsonContains('properties->action', 'viewed')
                     ->orderBy(
@@ -277,11 +282,12 @@ class Product extends EVBaseModel
         return $view_count;
     }
 
+
     public function getVariationModelClass()
     {
         return [
             'class' => ProductVariation::class,
-            'foreign_key' => 'product_id',
+            'foreign_key' => 'product_id'
         ];
     }
 
@@ -290,38 +296,32 @@ class Product extends EVBaseModel
         return null;
     }
 
-    public function isBookableService()
-    {
-        return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && ! empty($this->getBookingLink());
+    public function isBookableService() {
+        return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
     }
 
-    public function isEvent()
-    {
+    public function isEvent() {
         return $this->type === \App\Enums\ProductTypeEnum::event()->value;
     }
 
-    public function isStandard()
-    {
+    public function isStandard() {
         return $this->type === \App\Enums\ProductTypeEnum::standard()->value;
     }
 
-    public function isSubscription()
-    {
+    public function isSubscription() {
         return $this->type === \App\Enums\ProductTypeEnum::subscription()->value;
     }
 
-    public function isPhysicalSubscription()
-    {
+    public function isPhysicalSubscription() {
         return $this->type === \App\Enums\ProductTypeEnum::physical_subscription()->value;
     }
 
-    public function getBookingLink()
-    {
+    public function getBookingLink() {
         return $this->core_meta?->where('key', 'calendly_link')->first()?->value ?? null;
     }
 
-    public function comments()
-    {
+    public function comments() {
         return $this->morphMany(SocialComment::class, 'subject');
     }
+
 }

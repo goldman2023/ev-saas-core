@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App;
 use App\Builders\BaseBuilder;
 use App\Builders\CteBuilder;
 use App\Facades\Categories;
@@ -10,10 +9,11 @@ use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
 use DateTimeInterface;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -24,24 +24,23 @@ use Vendor;
 /**
  * App\Models\Category
  */
-class Category extends EVBaseModel
+
+class Category extends WeBaseModel
 {
     //use Cachable;
     use HasSlug;
     use HasRecursiveRelationships;
     use \Staudenmeir\LaravelCte\Eloquent\QueriesExpressions;
+
     use TranslationTrait;
     use UploadTrait;
     use GalleryTrait;
 
     public $selected;
-
     public $title_path;
-
     public const PATH_SEPARATOR = '.';
 
     protected $fillable = ['id', 'parent_id', 'level', 'name', 'slug', 'description', 'featured', 'top', 'digital', 'meta_description', 'meta_title'];
-
     protected $appends = ['selected', 'title_path'];
 
     protected $casts = [
@@ -73,13 +72,11 @@ class Category extends EVBaseModel
         return new CteBuilder($query);
     }
 
-    public function getParentKeyName()
-    {
+    public function getParentKeyName() {
         return 'parent_id';
     }
 
-    public function getLocalKeyName()
-    {
+    public function getLocalKeyName() {
         return 'id';
     }
 
@@ -93,8 +90,7 @@ class Category extends EVBaseModel
         return '.';
     }
 
-    public function getCustomPaths()
-    {
+    public function getCustomPaths() {
         return [
             [
                 'name' => 'slug_path',
@@ -133,7 +129,7 @@ class Category extends EVBaseModel
         if (Vendor::isVendorSite()) {
             // If Vendor Site, add global scope to restrict categories by categories in which vendor actually has any models
             static::addGlobalScope('single_vendor', function (Builder $builder) {
-                if (! empty(Vendor::getVendorCategoriesIDs())) {
+                if(!empty(Vendor::getVendorCategoriesIDs())) {
                     $builder->whereIn('categories.id', Vendor::getVendorCategoriesIDs());
                 }
             });
@@ -176,22 +172,19 @@ class Category extends EVBaseModel
 //        return $this->belongsTo(Blog::class, 'category_id');
 //    }
 
-    public function setSelectedAttribute($value)
-    {
+    public function setSelectedAttribute($value) {
         $this->selected = $value;
     }
 
-    public function getSelectedAttribute()
-    {
+    public function getSelectedAttribute() {
         return $this->selected ?? false;
     }
 
-    public function getTitlePathAttribute($value)
-    {
+    public function getTitlePathAttribute($value) {
         $title_path = explode(self::PATH_SEPARATOR, $this->slug_path);
 
-        if (count($title_path) > 1) {
-            foreach ($title_path as $key => $title) {
+        if(count($title_path) > 1) {
+            foreach($title_path as $key => $title) {
                 $title_path[$key] = trim(Str::title(str_replace('-', ' ', $title)));
             }
         }
@@ -201,7 +194,7 @@ class Category extends EVBaseModel
 
     public function setTitlePathAttribute($value)
     {
-        $this->title_path = $value;
+        $this->title_path= $value;
     }
 
     public function getPermalink($content_type = null)
@@ -214,9 +207,8 @@ class Category extends EVBaseModel
         return CategoryTranslation::class;
     }
 
-    public function getFollowers()
-    {
-        return Activity::whereHas('subject')->where('subject_id', $this->id)->where('subject_type', self::class);
+    public function getFollowers() {
+        return Activity::whereHas('subject')->where('subject_id', $this->id)->where('subject_type', 'App\Models\Category');
     }
 
     public function getDynamicModelUploadProperties(): array
@@ -225,8 +217,8 @@ class Category extends EVBaseModel
             [
                 'property_name' => 'icon',
                 'relation_type' => 'icon',
-                'multiple' => false,
-            ],
+                'multiple' => false
+            ]
         ];
     }
 }

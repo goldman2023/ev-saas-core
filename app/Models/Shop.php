@@ -6,12 +6,11 @@ use App\Models\User;
 use App\Traits\AttributeTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\GalleryTrait;
-use App\Traits\PermalinkTrait;
 use App\Traits\ReviewTrait;
 use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\PermalinkTrait;
 use Spatie\Sluggable\HasSlug;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Sluggable\SlugOptions;
 
 /**
@@ -50,15 +49,16 @@ use Spatie\Sluggable\SlugOptions;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Shop whereYoutube($value)
  * @mixin \Eloquent
  */
-class Shop extends EVBaseModel
+
+class Shop extends WeBaseModel
 {
     use HasSlug;
     use RegeneratesCache;
+
     use AttributeTrait;
     use UploadTrait;
     use GalleryTrait;
     use ReviewTrait;
-    use LogsActivity;
     use PermalinkTrait;
 
     protected $table = 'shops';
@@ -80,8 +80,7 @@ class Shop extends EVBaseModel
      *
      * @return string
      */
-    public static function getRouteName()
-    {
+    public static function getRouteName() {
         return 'shop.single';
     }
 
@@ -125,8 +124,7 @@ class Shop extends EVBaseModel
         return $this->hasMany(Product::class);
     }
 
-    public function blog_posts()
-    {
+    public function blog_posts() {
         return $this->hasMany(BlogPost::class);
     }
 
@@ -156,21 +154,22 @@ class Shop extends EVBaseModel
         return $this->hasMany(Order::class, 'shop_id');
     }
 
-    public function getPhonesAttribute($value)
-    {
-        if (empty($value)) {
+    public function getPhonesAttribute($value) {
+        if(empty($value)) {
             return [''];
         }
 
         return is_array($value) ? $value : json_decode($value, true);
     }
 
+
     public function get_company_logo()
     {
+
         if ($this->logo) {
             $logo = uploaded_asset($this->logo);
         } else {
-            $logo = 'https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png';
+            $logo = "https://socialistmodernism.com/wp-content/uploads/2017/07/placeholder-image.png";
         }
 
         return $logo;
@@ -178,10 +177,11 @@ class Shop extends EVBaseModel
 
     public function get_company_cover()
     {
+
         if ($this->sliders) {
             $logo = uploaded_asset($this->sliders);
         } else {
-            $logo = 'https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80';
+            $logo = "https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=967&q=80";
         }
 
         return $logo;
@@ -209,6 +209,7 @@ class Shop extends EVBaseModel
         }
     }
 
+
     /* Function to return integer value for company public rating
     TODO: How this is calculated we will implement when we have reviewable trait
     */
@@ -226,8 +227,7 @@ class Shop extends EVBaseModel
         ];
     }
 
-    public function followers()
-    {
+    public function followers() {
         return $this->morphToMany(User::class, 'subject', 'wishlists');
         // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
     }

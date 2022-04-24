@@ -25,8 +25,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Wishlist whereUserId($value)
  * @mixin \Eloquent
  */
-class Wishlist extends EVBaseModel
+
+class Wishlist extends WeBaseModel
 {
+
     protected $guarded = [];
 
     protected $with = ['subject'];
@@ -43,6 +45,7 @@ class Wishlist extends EVBaseModel
     {
         return $this->belongsTo(User::class);
     }
+
 
     public function subject()
     {

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Page extends EVBaseModel
+class Page extends WeBaseModel
 {
     use HasSlug;
     use PermalinkTrait;

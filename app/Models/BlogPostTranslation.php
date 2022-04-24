@@ -15,7 +15,7 @@ use Spatie\Sluggable\SlugOptions;
 
 // use GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-class BlogPostTranslation extends EVBaseModel
+class BlogPostTranslation extends WeBaseModel
 {
     use HasSlug;
 

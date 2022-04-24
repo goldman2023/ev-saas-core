@@ -11,7 +11,7 @@ use MyShop;
 /**
  * App\Models\Invoice
  */
-class Invoice extends EVBaseModel
+class Invoice extends WeBaseModel
 {
     use SoftDeletes;
 
@@ -102,6 +102,18 @@ class Invoice extends EVBaseModel
         $company_name_char = strtoupper($company_name[0] ?? '');
 
         return $current_date.$first_name_char.$last_name_char.$company_name_char.$random_number;
+    }
+
+    public static function getDaysFromPeriod($period) {
+        if($period === 'year') {
+            return 365;
+        } else if($period === 'month') {
+            return 30;
+        } else if($period === 'week') {
+            return 7;
+        } else if($period === 'day') {
+            return 1;
+        }
     }
 
 //    TODO: ORDER TRACKING NUMBER!!!

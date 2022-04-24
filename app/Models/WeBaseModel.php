@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use App\Builders\BaseBuilder;
-use App\Traits\Eloquent\Base\Model\hasCoreProperties;
+use App\Traits\Eloquent\Base\Model\HasCoreProperties;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 use Spatie\Activitylog\LogOptions;
 
 
-class EVBaseModel extends Model
+class WeBaseModel extends Model
 {
-    use hasCoreProperties;
+    use HasCoreProperties;
 
 //    public ?array $eagerLoaded = [];
 

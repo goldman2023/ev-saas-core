@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Order
  */
-class Order extends EVBaseModel
+class Order extends WeBaseModel
 {
     use SoftDeletes;
     use PermalinkTrait;

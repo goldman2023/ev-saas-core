@@ -21,7 +21,7 @@ use MyShop;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Plan extends EVBaseModel
+class Plan extends WeBaseModel
 {
     use HasSlug;
     use SoftDeletes;

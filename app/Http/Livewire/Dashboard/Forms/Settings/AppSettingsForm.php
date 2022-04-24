@@ -10,18 +10,18 @@ use App\Models\ShopSetting;
 use App\Models\TenantSetting;
 use App\Rules\UniqueSKU;
 use App\Traits\Livewire\DispatchSupport;
-use App\Traits\Livewire\RulesSets;
-use Categories;
 use DB;
 use EVS;
+use MyShop;
+use Categories;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Livewire\Component;
-use MyShop;
-use Payments;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
+use Livewire\Component;
+use App\Traits\Livewire\RulesSets;
 use TenantSettings;
+use Payments;
 
 class AppSettingsForm extends Component
 {
@@ -29,17 +29,12 @@ class AppSettingsForm extends Component
     use DispatchSupport;
 
     public $shop;
-
     public $settings;
-
     public $addresses;
-
     public $domains;
-
     public $universal_payment_methods;
 
-    protected function getRuleSet($set = null, $with_wildcard = true)
-    {
+    protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
             'general' => [
                 // 'shop.*' => [],
@@ -47,7 +42,7 @@ class AppSettingsForm extends Component
                 'settings.site_logo.value' => ['required'],
                 'settings.site_logo_dark.value' => ['nullable'],
                 'settings.site_name.value' => ['required'],
-                'settings.site_motto.value' => ['required'],
+                'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
             ],
             'features' => [
@@ -86,7 +81,7 @@ class AppSettingsForm extends Component
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
                 'settings.google_login.value' => ['boolean'],
-                'settings.facebook_login.value' => ['boolean'],
+                'settings.facebook_login.value' => ['boolean', ],
                 'settings.linkedin_login.value' => ['boolean'],
                 'settings.facebook_app_id.value' => [''],
                 'settings.facebook_app_secret.value' => [''],
@@ -99,9 +94,9 @@ class AppSettingsForm extends Component
                 'settings.show_currency_switcher.value' => ['boolean'],
                 'settings.system_default_currency.value' => ['required'], // TODO: Put Rule:in(All enabled currencies codes)
                 'settings.no_of_decimals.value' => ['numeric', 'min:0', 'max:3'],
-                'settings.decimal_separator.value' => ['required', Rule::in([1, 2])],
-                'settings.currency_format.value' => ['required', Rule::in([1, 2])],
-                'settings.symbol_format.value' => ['required', Rule::in([1, 2])],
+                'settings.decimal_separator.value' => ['required', Rule::in([1,2])],
+                'settings.currency_format.value' => ['required', Rule::in([1,2])],
+                'settings.symbol_format.value' => ['required', Rule::in([1,2])],
             ],
             'payments' => [
                 'settings.stripe_pk_test_key.value' => [],
@@ -110,8 +105,11 @@ class AppSettingsForm extends Component
                 'settings.stripe_sk_live_key.value' => [],
             ],
             'design' => [
-                'settings.colors.value' => [''],
+                'settings.colors.value' => ['']
             ],
+            'user_meta_fields' => [
+                'settings.user_meta_fields_in_use.value' => ['']
+            ]
         ]);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
@@ -120,7 +118,7 @@ class AppSettingsForm extends Component
     protected function rules()
     {
         $rules = [];
-        foreach ($this->getRuleSet('all') as $key => $items) {
+        foreach($this->getRuleSet('all') as $key => $items) {
             $rules = array_merge($rules, $items);
         }
 
@@ -162,8 +160,33 @@ class AppSettingsForm extends Component
         return view('livewire.dashboard.forms.settings.app-settings-form');
     }
 
-    public function saveGeneral()
-    {
+    public function saveAdvanced($rule_set) {
+        $rules = $this->getRuleSet($rule_set);
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Advanced settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save advanced settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function saveGeneral() {
         $rules = $this->getRuleSet('general');
 
         try {
@@ -183,14 +206,13 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('General settings successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save general settings.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveDesign()
-    {
+    public function saveDesign() {
         $rules = $this->getRuleSet('design');
 
         try {
@@ -210,14 +232,13 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Design settings successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save design settings.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveCurrency()
-    {
+    public function saveCurrency() {
         $rules = $this->getRuleSet('currency');
 
         try {
@@ -237,14 +258,13 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Currency settings successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save currency settings.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function savePayments()
-    {
+    public function savePayments() {
         $rules = $this->getRuleSet('payments');
 
         try {
@@ -264,14 +284,13 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Payments settings successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save payments settings.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveFeatures()
-    {
+    public function saveFeatures() {
         $rules = $this->getRuleSet('features');
 
         try {
@@ -291,14 +310,13 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Features settings successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save features settings.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveSocial()
-    {
+    public function saveSocial() {
         $rules = $this->getRuleSet('social');
 
         try {
@@ -318,7 +336,7 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Social settings successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save social settings.'), $e->getMessage(), 'fail');
         }
@@ -326,7 +344,7 @@ class AppSettingsForm extends Component
 
     public function saveIntegrations() {
         $rules = $this->getRuleSet('integrations');
-
+        
         try {
             $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -378,14 +396,13 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Basic shop information successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save basic shop information.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveCompanyInfo()
-    {
+    public function saveCompanyInfo() {
         $rules = $this->getRuleSet('company_info');
 
         try {
@@ -401,29 +418,27 @@ class AppSettingsForm extends Component
             DB::commit();
 
             $this->inform(translate('Company information successfully saved.'), '', 'success');
-        } catch (\Exception $e) {
+        } catch(\Exception $e) {
             DB::rollback();
             $this->inform(translate('Could not save company information.'), $e->getMessage(), 'fail');
         }
     }
 
-    public function saveContactDetails($contacts, $current = null)
-    {
-        if ($current['is_primary'] ?? null) {
-            $contacts = collect($contacts)->map(function ($item) use ($current) {
-                if ($item['email'] == $current['email'] && $item['department_name'] == $current['department_name']) {
+    public function saveContactDetails($contacts, $current = null) {
+        if($current['is_primary'] ?? null) {
+            $contacts = collect($contacts)->map(function($item) use ($current) {
+                if($item['email'] == $current['email'] && $item['department_name'] == $current['department_name']) {
                     $item['is_primary'] = true;
                 } else {
                     $item['is_primary'] = false;
                 }
-
                 return $item;
             })->toArray();
         }
 
         $contact_details = $this->shop->settings()->get()->keyBy('setting')->get('contact_details');
 
-        if (empty($contact_details)) {
+        if(empty($contact_details)) {
             $contact_details = new ShopSetting();
             $contact_details->shop_id = $this->shop->id;
             $contact_details->setting = 'contact_details';
@@ -439,12 +454,11 @@ class AppSettingsForm extends Component
         $this->inform(translate('Contact details successfully updated.'), '', 'success');
     }
 
-    public function removeContactDetails($contacts, $current = null)
-    {
+    public function removeContactDetails($contacts, $current = null) {
         $contact_details = $this->shop->settings->keyBy('setting')->get('contact_details');
 
-        foreach ($contacts as $key => $contact) {
-            if ($contact == $current) {
+        foreach($contacts as $key => $contact) {
+            if($contact == $current) {
                 unset($contacts[$key]);
             }
         }
@@ -452,13 +466,13 @@ class AppSettingsForm extends Component
         $contacts = array_values($contacts);
 
         $has_primary = false;
-        foreach ($contacts as $key => $contact) {
-            if ($contact['is_primary'] ?? false) {
+        foreach($contacts as $key => $contact) {
+            if($contact['is_primary'] ?? false) {
                 $has_primary = true;
             }
         }
 
-        if (! $has_primary && isset($contacts[0])) {
+        if(!$has_primary && isset($contacts[0])) {
             $contacts[0]['is_primary'] = true;
         }
 
@@ -474,12 +488,11 @@ class AppSettingsForm extends Component
     /*
      * Saves all settings provided in $rules variable.
      */
-    protected function saveSettings($rules)
-    {
-        foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
+    protected function saveSettings($rules) {
+        foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
-
-            if (! empty($setting_key) && $setting_key !== '*') {
+            
+            if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);
             }

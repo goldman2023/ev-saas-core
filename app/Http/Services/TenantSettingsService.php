@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Http\Services;
-
 use App\Models\Central\CentralSetting;
-use App\Models\Currency;
 use App\Models\TenantSetting;
-use App\Models\Upload;
 use Cache;
+use App\Models\Currency;
+use App\Models\Upload;
 
 /**
  * We are getting all Tenant Settings from the cache, or DB.
@@ -21,43 +20,38 @@ use Cache;
 class TenantSettingsService
 {
     public $app;
-
     public $settings;
 
-    public function __construct($app)
-    {
+    public function __construct($app) {
         $this->app = $app;
 
         $this->setAll();
+        // dd($this->getAll()); // testing castValuesForGet
     }
 
-    public function get($name, $default = null)
-    {
+    public function get($name, $default = null) {
         return isset($this->settings[$name]) ? ($this->settings[$name]['value'] ?? $default) : $default;
     }
 
-    public function getModel($name)
-    {
+    public function getModel($name) {
         return TenantSetting::firstOrNew([
-            'type' => $name,
+            'type' => $name
         ]);
     }
 
-    public function getAll()
-    {
+    public function getAll() {
         return $this->settings;
     }
 
-    protected function createMissingSettings()
-    {
-        $settings = (! empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id', 'setting', 'value')->get()->keyBy('setting')->toArray();
+    protected function createMissingSettings() {
+        $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
         $data_types = $this->settingsDataTypes();
 
         $missing = array_diff_key($data_types, $settings);
-        if (! empty($missing)) {
+        if(!empty($missing)) {
             $this->clearCache();
 
-            foreach ($missing as $key => $type) {
+            foreach($missing as $key => $type) {
                 TenantSetting::updateOrCreate(
                     ['setting' => $key],
                     ['value' => $type === 'boolean' ? false : null]
@@ -66,39 +60,39 @@ class TenantSettingsService
         }
     }
 
-    protected function setAll()
-    {
+    protected function setAll() {
         $this->createMissingSettings(); // it'll clear the cache and add missing settings if there are missing settings
 
-        $cache_key = ! empty(tenant()) ? tenant('id').'_tenant_settings' : 'central_settings';
+        $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
         $settings = Cache::get($cache_key.'asdasd', null); // TODO: Remove 'asd'
         $default = [];
         $data_types = $this->settingsDataTypes();
 
-        if (empty($settings)) {
-            $settings = (! empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id', 'setting', 'value')->get()->keyBy('setting')->toArray();
 
+        if (empty($settings)) {
+            $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
+            
             castValuesForGet($settings, $data_types);
 
             // dd($settings);
             // Cache the settings if they are found in DB
-            if (! empty($settings)) {
+            if (!empty($settings)) {
                 Cache::forget($cache_key);
                 Cache::put($cache_key, $settings);
             }
         }
 
-        $this->settings = ! empty($settings) ? $settings : $default;
+        $this->settings = !empty($settings) ? $settings : $default;
     }
 
-    public function clearCache()
-    {
-        $cache_key = ! empty(tenant()) ? tenant('id').'_tenant_settings' : 'central_settings';
+
+
+    public function clearCache() {
+        $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
         Cache::forget($cache_key);
     }
 
-    public function settingsDataTypes()
-    {
+    public function settingsDataTypes() {
         return [
             'site_logo' => Upload::class,
             'site_logo_dark' => Upload::class,
@@ -166,7 +160,7 @@ class TenantSettingsService
 
             'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
-            'login_redirect_url' => 'string', //
+            'login_redirect_url' => 'string', // 
 
             // Integrations
             'mailerlite_api_token' => 'string',
@@ -185,6 +179,9 @@ class TenantSettingsService
             'mail_reply_to_address' => 'string',
             'mail_reply_to_name' => 'string',
 
+            // Advanced
+            'user_meta_fields_in_use' => 'array',
+            
         ];
     }
 }

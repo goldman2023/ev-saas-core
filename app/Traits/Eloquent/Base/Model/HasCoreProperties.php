@@ -2,7 +2,7 @@
 
 namespace App\Traits\Eloquent\Base\Model;
 
-trait hasCoreProperties
+trait HasCoreProperties
 {
     protected array $core_properties = [];
 

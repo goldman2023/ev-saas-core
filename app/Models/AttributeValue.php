@@ -7,7 +7,7 @@ use App\Traits\TranslationTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AttributeValue extends EVBaseModel
+class AttributeValue extends WeBaseModel
 {
     use HasFactory;
     use TranslationTrait;

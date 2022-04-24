@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Facade;
-
 return [
 
     /*
@@ -187,7 +185,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         App\Providers\SocialiteServiceProvider::class,
-        // niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         \Laravel\Passport\PassportServiceProvider::class,
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
@@ -205,13 +203,14 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\NovaServiceProvider::class,
         // App\Providers\SparkServiceProvider::class,
+       // App\Providers\NovaServiceProvider::class,
+       App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
         Laravel\Passport\PassportServiceProvider::class,
-        // Barryvdh\Snappy\ServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
 
         Mews\Purifier\PurifierServiceProvider::class,
 
@@ -223,7 +222,7 @@ return [
 
         // Overriden Vendor providers
         App\Providers\MailerSendServiceProvider::class,
-
+        
     ],
 
     /*
@@ -237,35 +236,70 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        'AttributesService' => App\Facades\AttributesService::class,
-        'Carbon' => Illuminate\Support\Carbon::class,
-        'CartService' => App\Facades\CartService::class,
-        'Categories' => App\Facades\Categories::class,
-        'Countries' => App\Facades\Countries::class,
-        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'EVBaseModel' => App\Models\EVBaseModel::class,
-        'EVS' => App\Facades\EVS::class,
+    'aliases' => [
+
+        'App' => Illuminate\Support\Facades\App::class,
+        'Artisan' => Illuminate\Support\Facades\Artisan::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
+        'Blade' => Illuminate\Support\Facades\Blade::class,
+        'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
+        'Bus' => Illuminate\Support\Facades\Bus::class,
+        'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Config' => Illuminate\Support\Facades\Config::class,
+        'Cookie' => Illuminate\Support\Facades\Cookie::class,
+        'Crypt' => Illuminate\Support\Facades\Crypt::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
+        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
+        'WeBaseModel' => App\Models\WeBaseModel::class,
+        'Event' => Illuminate\Support\Facades\Event::class,
+        'File' => Illuminate\Support\Facades\File::class,
+        'Gate' => Illuminate\Support\Facades\Gate::class,
+        'Hash' => Illuminate\Support\Facades\Hash::class,
+        'Lang' => Illuminate\Support\Facades\Lang::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'Mail' => Illuminate\Support\Facades\Mail::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
+        'Password' => Illuminate\Support\Facades\Password::class,
+        'Queue' => Illuminate\Support\Facades\Queue::class,
+        'Redirect' => Illuminate\Support\Facades\Redirect::class,
+        'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Request' => Illuminate\Support\Facades\Request::class,
+        'Response' => Illuminate\Support\Facades\Response::class,
+        'Route' => Illuminate\Support\Facades\Route::class,
+        'Schema' => Illuminate\Support\Facades\Schema::class,
+        'Session' => Illuminate\Support\Facades\Session::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
+        'URL' => Illuminate\Support\Facades\URL::class,
+        'Validator' => Illuminate\Support\Facades\Validator::class,
+        'View' => Illuminate\Support\Facades\View::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Str' => Illuminate\Support\Str::class,
+        'Stringy' => App\Support\Stringy::class,
+        'Arr' => Illuminate\Support\Arr::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'WeBuilder' => App\Facades\WeBuilder::class,
+        'Permissions' => App\Facades\Permissions::class,
+        'MyShop' => App\Facades\MyShop::class,
+        'Vendor' => App\Facades\Vendor::class,
+        'MediaService' => App\Facades\Media::class,
+        'EVS' => App\Facades\EVS::class,
+        'CartService' => App\Facades\CartService::class,
+        'TenantSettings' => App\Facades\TenantSettings::class,
+        'Payments' => App\Facades\Payments::class,
         'FX' => App\Facades\FX::class,
         'IMG' => App\Facades\IMG::class,
-        'Image' => Intervention\Image\Facades\Image::class,
-        'MediaService' => App\Facades\Media::class,
-        'MyShop' => App\Facades\MyShop::class,
-        'Payments' => App\Facades\Payments::class,
-        'Permissions' => App\Facades\Permissions::class,
+        'Countries' => App\Facades\Countries::class,
+        'Categories' => App\Facades\Categories::class,
+        'AttributesService' => App\Facades\AttributesService::class,
+        'Theme' => Qirolab\Theme\Theme::class,
         'Purifier' => Mews\Purifier\Facades\Purifier::class,
-        'Redis' => Illuminate\Support\Facades\Redis::class,
-        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
-        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Stringy' => App\Support\Stringy::class,
+        'Carbon' => Illuminate\Support\Carbon::class,
+        'UUID' => Webpatser\Uuid\Uuid::class,
         'StripeService' => App\Facades\StripeService::class,
         'MailerService' => App\Facades\MailerService::class,
-        'TenantSettings' => App\Facades\TenantSettings::class,
-        'Theme' => Qirolab\Theme\Theme::class,
-        'UUID' => Webpatser\Uuid\Uuid::class,
-        'Vendor' => App\Facades\Vendor::class,
-        'WeBuilder' => App\Facades\WeBuilder::class,
-    ])->toArray(),
+    ],
 
 ];
