@@ -1203,6 +1203,8 @@
                                         settings.user_meta_fields_in_use.value[key] = {
                                             'required': false,
                                             'onboarding': false,
+                                            'registration': false,
+                                            'type': this.all_user_meta[key]
                                         };
                                     }
                                 },
@@ -1243,6 +1245,7 @@
                                                     <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Use') }}</th>
                                                     <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Required') }}</th>
                                                     <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Onboarding') }}</th>
+                                                    <th scope="col" class="px-1 py-1 text-center text-sm font-semibold text-gray-900">{{ translate('Registration') }}</th>
                                                   </tr>
                                                 </thead>
                                                 <tbody class="divide-y divide-gray-200 bg-white">
@@ -1268,6 +1271,13 @@
                                                                             :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) === false}"
                                                                             class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
                                                                         <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                </button>
+                                                            </td>
+                                                            <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
+                                                                <button type="button" @click="toggleProperty(key, 'registration')" x-show="_.get(settings.user_meta_fields_in_use.value, key, null) !== null"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.registration', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.registration', false) === false}"
+                                                                            class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.registration', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.registration', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                                 </button>
                                                             </td>
                                                         </tr>

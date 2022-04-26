@@ -149,15 +149,21 @@ class WeMediaLibrary extends Component
                     }
 
                     // Check if tenant uploads folder exists an create it if not
-                    if (! Storage::exists($tenant_path)) {
+                    // dd(Storage::disk('do')->exists($tenant_path));
+                    if (! Storage::disk('do')->exists($tenant_path)) { 
                         // Create Tenant folder on DO if it doesn't exist
                         Storage::makeDirectory($tenant_path, 0775, true, true);
                     }
 
+                    try {
+                        Storage::makeDirectory($tenant_path, 0775, true, true);
+                    } catch(\Exception $e) {
+
+                    }
+
                     $new_filename = time().'_'.$media->getClientOriginalName();
 
-                    $media->storePubliclyAs($tenant_path, $new_filename, 's3');
-
+                    $wtf = $media->storeAs($tenant_path, $new_filename, 'do');
                     $upload->extension = $extension;
                     $upload->file_name = $tenant_path.'/'.$new_filename;
                     $upload->user_id = auth()->user()->id;

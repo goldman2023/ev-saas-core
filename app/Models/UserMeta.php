@@ -26,6 +26,7 @@ class UserMeta extends WeBaseModel
             'industry' => Category::class,
             'bio' => 'string',
             'calendly_link' => 'string',
+            'company_name' => 'string',
             'company_vat' => 'string',
             'company_registration_number' => 'string',
             

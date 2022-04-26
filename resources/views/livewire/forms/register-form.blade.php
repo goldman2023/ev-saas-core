@@ -60,6 +60,22 @@
         </div>
         {{-- END Email --}}
 
+        <div class="mb-3">
+            <fieldset class="mt-4">
+              <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                <div class="flex items-center">
+                  <input id="entity_individual" name="entity_field" type="radio" wire:model.defer="entity" value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                  <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
+                </div>
+          
+                <div class="flex items-center">
+                  <input id="entity_company" name="entity_field" type="radio" wire:model.defer="entity" value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                  <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
+                </div>
+              </div>
+            </fieldset>
+        </div>
+
         {{-- Password --}}
         <div class="mb-3">
             <label class="block text-16 font-medium text-gray-700">{{ translate('Password') }}</label>
@@ -89,6 +105,12 @@
             <x-system.invalid-msg field="password_confirmation" />
         </div>
         {{-- END Password Confirmation --}}
+        
+        @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
+            @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
+                {{ $key }}
+            @endforeach
+        @endif
 
         {{-- Consent Terms and Conditions --}}
         <div class="mb-2 flex items-center justify-between">

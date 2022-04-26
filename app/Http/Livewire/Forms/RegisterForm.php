@@ -32,6 +32,7 @@ class RegisterForm extends Component
     use DispatchSupport;
 
     protected $user;
+    public $entity = 'individual';
     public $name;
     public $surname;
     public $email;
@@ -42,6 +43,7 @@ class RegisterForm extends Component
     protected function rules()
     {
         return [
+            'entity' => 'required|in:individual,company',
             'name' => 'required|min:2',
             'surname' => 'required|min:2',
             'email' => 'required|unique:App\Models\User,email',
@@ -53,6 +55,8 @@ class RegisterForm extends Component
     protected function messages()
     {
         return [
+            'entity.required' => translate('User type is required'),
+            'entity.in' => translate('User type can be either individual or company'),
             'email.required' => translate('Email is required'),
             'email.unique' => translate('Email already in use'),
             'password.required' => translate('Password is required'),
@@ -72,7 +76,7 @@ class RegisterForm extends Component
      */
     public function mount()
     {
- 
+        
     }
 
     public function render()
@@ -119,6 +123,7 @@ class RegisterForm extends Component
     protected function createUser()
     {
         $this->user = User::create([
+            'entity' => $this->entity,
             'name' => $this->name,
             'surname' => $this->surname,
             'email' => $this->email,

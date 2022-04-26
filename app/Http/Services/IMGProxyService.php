@@ -133,7 +133,7 @@ class IMGProxyService
                     return $this->getPlaceholder(false);
                 }
             }
-            
+            // dd(Storage::disk($this->filesystem)->url($data->file_name));
             $url = Storage::disk($this->filesystem)->url($data instanceof Upload ? ($data->file_name ?? null) : $data);
         } else {
             $url = app('url')->asset($data, $this->secure);
