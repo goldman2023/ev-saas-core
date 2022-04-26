@@ -17,6 +17,7 @@ use Cookie;
 use Auth;
 use Log;
 use App\Models\User;
+USE App\Models\UserMeta;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\DispatchSupport;
 use MailerService;
@@ -32,27 +33,49 @@ class RegisterForm extends Component
     use DispatchSupport;
 
     protected $user;
+    public $entity = 'individual';
     public $name;
     public $surname;
     public $email;
     public $password;
     public $password_confirmation;
     public $terms_consent;
+    public $available_meta;
+    public $user_meta = [];
 
     protected function rules()
     {
-        return [
+        $rules = [
+            'entity' => 'required|in:individual,company',
             'name' => 'required|min:2',
             'surname' => 'required|min:2',
             'email' => 'required|unique:App\Models\User,email',
             'password' => ['required', 'min:8', 'regex:/^.*(?=.{1,})(?=.*[a-zA-Z])(?=.*[0-9]).*$/', 'confirmed'],
             'terms_consent' => ['required', 'boolean', 'is_true']
         ];
+
+        if($this->available_meta->count() > 0) {
+            foreach($this->available_meta as $key => $options) {
+                $rules['user_meta.'.$key] = [];
+
+                if(in_array($key, UserMeta::metaForCompanyEntity())) {
+                    $rules['user_meta.'.$key][] = 'exclude_if:entity,individual';
+                }
+
+                if($options['required'] ?? false) {
+                    $rules['user_meta.'.$key][] = 'required';
+                }
+            }
+        }
+
+        return $rules;
     }
 
     protected function messages()
     {
         return [
+            'entity.required' => translate('User type is required'),
+            'entity.in' => translate('User type can be either individual or company'),
             'email.required' => translate('Email is required'),
             'email.unique' => translate('Email already in use'),
             'password.required' => translate('Password is required'),
@@ -72,7 +95,13 @@ class RegisterForm extends Component
      */
     public function mount()
     {
- 
+        $this->available_meta = collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true);
+
+        if($this->available_meta->count() > 0) {
+            foreach($this->available_meta as $key => $options) {
+                $this->user_meta[$key] = '';
+            }
+        }
     }
 
     public function render()
@@ -89,6 +118,17 @@ class RegisterForm extends Component
         try {
             // Register new User here!
             $this->createUser();
+
+            // Create UserMeta if any is allowed in registration process
+            if(!empty($this->user_meta)) {
+                foreach($this->user_meta as $key => $value) {
+                    UserMeta::create([
+                        'user_id' => $this->user->id,
+                        'key' => $key,
+                        'value' => $value,
+                    ]);
+                }
+            }
 
             DB::commit();
 
@@ -112,13 +152,12 @@ class RegisterForm extends Component
             DB::rollback();
             $this->inform(translate('Error: Could not create a new account!'), $e->getMessage(), 'fail');
         }
-
-        
     }
 
     protected function createUser()
     {
         $this->user = User::create([
+            'entity' => $this->entity,
             'name' => $this->name,
             'surname' => $this->surname,
             'email' => $this->email,
@@ -141,7 +180,15 @@ class RegisterForm extends Component
         
         try {
             // Adding User to MailerLite 'All Users' group
-            MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
+            $subscriber = MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
+
+            // Set the core_meta 'in_mailerlite' flag to 1!
+            if(!empty($subscriber)) {
+                $this->user->core_meta()->insert([
+                    'key' => 'in_mailerlite',
+                    'value' => 1
+                ]);
+            }
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         } 

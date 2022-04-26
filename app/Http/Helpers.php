@@ -1005,8 +1005,8 @@ if (!function_exists('my_asset')) {
      */
     function my_asset($path, $secure = null)
     {
-        if (config('filesystems.default') === 's3') {
-            return Storage::disk('s3')->url($path);
+        if (config('filesystems.default') === 'do') {
+            return Storage::disk('do')->url($path);
         } else {
             return app('url')->asset($path, $secure);
         }
@@ -1084,8 +1084,8 @@ if (!function_exists('getBaseURL')) {
 if (!function_exists('getStorageBaseURL')) {
     function getStorageBaseURL()
     {
-        if (config('filesystems.default') === 's3') {
-            return config('filesystems.disks.s3.subdomain_endpoint') . '/';
+        if (config('filesystems.default') === 'do') {
+            return config('filesystems.disks.do.subdomain_endpoint') . '/';
         } else {
             return getBaseURL();
         }
@@ -1095,8 +1095,8 @@ if (!function_exists('getStorageBaseURL')) {
 if (!function_exists('getBucketBaseURL')) {
     function getBucketBaseURL()
     {
-        if (config('filesystems.default') === 's3') {
-            return config('filesystems.disks.s3.subdomain_endpoint') . '/';
+        if (config('filesystems.default') === 'do') {
+            return config('filesystems.disks.do.subdomain_endpoint') . '/';
         } else {
             return getBaseURL();
         }

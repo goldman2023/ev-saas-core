@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 's3'),
+    'default' => env('FILESYSTEM_DISK', 'do'),
 
-    'cloud' => env('FILESYSTEM_CLOUD', 's3'),
+    'cloud' => env('FILESYSTEM_CLOUD', 'do'),
 
     /*
     |--------------------------------------------------------------------------
@@ -72,11 +72,24 @@ return [
             'throw' => false,
         ],
 
+        'do' => [
+            'driver' => 's3',
+            'key' => env('DIGITALOCEAN_SPACES_KEY'),
+            'secret' => env('DIGITALOCEAN_SPACES_SECRET'),
+            'region' => env('DIGITALOCEAN_SPACES_REGION'),
+            'bucket' => env('DIGITALOCEAN_SPACES_BUCKET'),
+            'url' => env('DIGITALOCEAN_SPACES_URL'),
+            'endpoint' => env('DIGITALOCEAN_SPACES_ENDPOINT'),
+            'subdomain_endpoint' => env('DIGITALOCEAN_SPACES_SUBDOMAIN_ENDPOINT'),
+            'use_path_style_endpoint' => env('DIGITALOCEAN_USE_PATH_STYLE_ENDPOINT', false),
+            'bucket_endpoint' => true,
+            'visibility' => 'public',
+        ],
     ],
 
     'disk_types' => [
         'local' => ['local', 'public', 'backup-local'],
-        'cloud' => ['s3', 'google'],
+        'cloud' => ['s3', 'do', 'google'],
         'remote_plain' => [], // This is for 'sftp', 'ftp' etc.
     ],
 

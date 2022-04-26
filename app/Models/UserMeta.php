@@ -26,6 +26,7 @@ class UserMeta extends WeBaseModel
             'industry' => Category::class,
             'bio' => 'string',
             'calendly_link' => 'string',
+            'company_name' => 'string',
             'company_vat' => 'string',
             'company_registration_number' => 'string',
             
@@ -49,6 +50,22 @@ class UserMeta extends WeBaseModel
                 'certificates' => 'uploads',
             ],
         ];
+    }
+
+    public static function metaForCompanyEntity() {
+        return ['company_name', 'company_vat', 'company_registration_number'];
+    }
+
+    public static function metaSelectValues($key) {
+        $data = [
+            'gender' => [
+                'male' => 'Male',
+                'female' => 'Female',
+                'other' => 'Other'
+            ]
+        ];
+
+        return $data[$key] ?? [];
     }
 
     public static function createMissingMeta($user_id)

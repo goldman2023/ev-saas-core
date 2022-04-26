@@ -86,5 +86,10 @@ class AppServiceProvider extends ServiceProvider
                     && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['onboarding'])
                     && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['onboarding'];
         });
+        Blade::if('usermeta_registration', function ($meta_key) {
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]) 
+                    && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['regstration'])
+                    && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['regstration'];
+        });
     }
 }
