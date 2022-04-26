@@ -171,6 +171,83 @@
                             </div>
                             {{-- END Maintenance mode --}}
 
+
+                            {{-- POLICIES URLS --}}
+                            <div class="mt-7 text-20 font-semibold">
+                                {{ translate('Policies (GDPR, return/refund, shipping etc.)') }}
+                            </div>
+                            <!-- TOS Url -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-2 sm:mt-2" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Terms of service URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="settings.tos_url.value" />
+                                </div>
+                            </div>
+                            <!-- END TOS Url -->
+
+                            <!-- Cookies Url -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Cookies Policy URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="settings.cookies_url.value" />
+                                </div>
+                            </div>
+                            <!-- END Cookies Url -->
+
+                            <!-- EULA Url -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('EULA URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="settings.eula_url.value" />
+                                </div>
+                            </div>
+                            <!-- END EULA Url -->
+
+                            <!-- Shipping policy url -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Shipping Policy URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="settings.shipping_policy_url.value" />
+                                </div>
+                            </div>
+                            <!-- END Shipping policy url -->
+
+                            <!-- Retruns and Refunds url -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Retruns and Refunds URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="settings.returns_and_refunds_url.value" />
+                                </div>
+                            </div>
+                            <!-- END Retruns and Refunds url -->
+
+                            <!-- Documentaion url -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Documentaion URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="settings.documentation_url.value" />
+                                </div>
+                            </div>
+                            <!-- END Documentaion url -->
+
                             {{-- Save general information --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"

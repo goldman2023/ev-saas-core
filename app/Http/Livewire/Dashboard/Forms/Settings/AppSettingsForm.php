@@ -44,6 +44,12 @@ class AppSettingsForm extends Component
                 'settings.site_name.value' => ['required'],
                 'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
+                'settings.tos_url.value' => [''],
+                'settings.cookies_url.value' => [''],
+                'settings.eula_url.value' => [''],
+                'settings.shipping_policy_url.value' => [''],
+                'settings.returns_and_refunds_url.value' => [''],
+                'settings.documentation_url.value' => [''],
             ],
             'features' => [
                 /* Example field for creating new TenantSetting */
