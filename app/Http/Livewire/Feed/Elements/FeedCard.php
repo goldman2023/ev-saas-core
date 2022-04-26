@@ -52,6 +52,8 @@ class FeedCard extends Component
             }
         } elseif (($item->subject_type == \App\Models\SocialComment::class)) {
             $this->ignore = true;
+        } elseif (($item->subject_type == \App\Models\User::class)) {
+            $this->ignore = true;
         }
     }
 
