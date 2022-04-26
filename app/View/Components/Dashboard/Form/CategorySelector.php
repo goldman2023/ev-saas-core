@@ -6,8 +6,6 @@ use Illuminate\View\Component;
 
 class CategorySelector extends Component
 {
-    
-
     /**
      * Create a new component instance.
      *
@@ -15,7 +13,6 @@ class CategorySelector extends Component
      */
     public function __construct()
     {
-        
     }
 
     /**

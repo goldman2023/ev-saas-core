@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class ValidationErrorsToast extends Component
 {
     public $class;
+
     public $timeout;
 
     /**

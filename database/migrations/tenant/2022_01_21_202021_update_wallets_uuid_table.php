@@ -9,8 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateWalletsUuidTable extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         if (Schema::hasColumn($this->table(), 'uuid')) {
@@ -22,8 +21,7 @@ class UpdateWalletsUuidTable extends Migration
             $table->uuid('uuid')
                 ->after('slug')
                 ->nullable()
-                ->unique()
-            ;
+                ->unique();
         });
 
         Wallet::query()->chunk(10000, static function (Collection $wallets) {
@@ -47,4 +45,4 @@ class UpdateWalletsUuidTable extends Migration
     {
         return (new Wallet())->getTable();
     }
-}
+};

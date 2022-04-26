@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\TenantSetting;
 use App\Models\Seller;
+use App\Models\TenantSetting;
+use Illuminate\Http\Request;
 use Session;
 use Stripe\Stripe;
 use StripeService;
@@ -22,11 +22,13 @@ class StripePaymentController extends Controller
         return view('frontend.payment.stripe');
     }
 
-    public function webhooks(Request $request) {
+    public function webhooks(Request $request)
+    {
         return StripeService::processWebhooks($request);
     }
 
-    public function generateCheckoutSessionLink() {
+    public function generateCheckoutSessionLink()
+    {
         $data = json_decode(base64_decode(request()->data), true);
 
         $model = app($data['class'])->find($data['id']);
@@ -37,7 +39,8 @@ class StripePaymentController extends Controller
         return redirect($link);
     }
 
-    public function createPortalSession() {
+    public function createPortalSession()
+    {
         $link = \StripeService::createPortalSession();
 
         return redirect($link);

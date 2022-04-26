@@ -1,17 +1,22 @@
 <div class="fixed z-[9999] inset-0 overflow-y-auto" x-data="{
         show: false,
-        type: @js('type'),
+        type: @js($type),
         title: '',
         text: '',
-        id: 'info-modal-basic'
+        id: 'info-modal-basic',
+        timeout: @js($timeout),
     }"
-    x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, {{ $timeout }}) : ''; })"
+    x-init="$watch('show', function(value) { value ? setTimeout(() => show = false, timeout) : ''; })"
     @inform.window="
             if($event.detail.id === id) {
                 type = $event.detail.type;
                 title = $event.detail.title;
                 text = $event.detail.text;
                 show = true;
+
+                if($event.detail.timeout !== undefined) {
+                  timeout = $event.detail.timeout;
+                }
             }
         "
     x-show="show"

@@ -22,29 +22,33 @@ class SocialiteManagerExtended extends \Laravel\Socialite\SocialiteManager
 {
     protected string $type = 'login';
 
-    public function __construct(Closure|Container $container) {
+    public function __construct(Closure|Container $container)
+    {
         $this->container = $container instanceof Closure ? $container() : $container;
         $this->config = $this->container->make('config');
 
-        $social_template = collect($this->config['services'])->filter(fn($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
+        $social_template = collect($this->config['services'])->filter(fn ($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
 
-        foreach($social_template as $provider => $data) {
+        foreach ($social_template as $provider => $data) {
             $this->setLoginRedirectUri($provider);
             $this->setConnectRedirectUri($provider);
         }
     }
 
-    public function setConnectionType($type = 'login') {
+    public function setConnectionType($type = 'login')
+    {
         $this->type = $type;
 
         return $this;
     }
 
-    public function setLoginRedirectUri($provider) {
+    public function setLoginRedirectUri($provider)
+    {
         $this->config->set('services.'.$provider.'.redirect_login', route('social.login.callback', $provider));
     }
 
-    public function setConnectRedirectUri($provider) {
+    public function setConnectRedirectUri($provider)
+    {
         $this->config->set('services.'.$provider.'.redirect_connect', route('social.connect.callback', ['provider' => $provider]));
     }
 

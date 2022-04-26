@@ -26,6 +26,7 @@ class TenantSettingsService
         $this->app = $app;
 
         $this->setAll();
+        // dd($this->getAll()); // testing castValuesForGet
     }
 
     public function get($name, $default = null) {
@@ -70,7 +71,7 @@ class TenantSettingsService
 
         if (empty($settings)) {
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
-
+            
             castValuesForGet($settings, $data_types);
 
             // dd($settings);
@@ -93,6 +94,7 @@ class TenantSettingsService
 
     public function settingsDataTypes() {
         return [
+            // General
             'site_logo' => Upload::class,
             'site_logo_dark' => Upload::class,
             'site_icon' => Upload::class,
@@ -100,6 +102,14 @@ class TenantSettingsService
             'site_motto' => 'string',
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
+
+            'documentation_url' => 'string',
+            'tos_url' => 'string',
+            'cookies_url' => 'string',
+            'eula_url' => 'string',
+            'returns_and_refunds_url' => 'string',
+            'shipping_policy_url' => 'string',
+
 
             'colors' => [
                 'primary' => 'string',
@@ -154,11 +164,33 @@ class TenantSettingsService
             'weedit_feature' => 'boolean',
             'wishlist_feature' => 'boolean',
             'vendor_mode_feature' => 'boolean',
+            'plans_trial_mode' => 'boolean',
+            'plans_trial_duration' => 'integer',
 
-
+            'force_email_verification' => 'boolean',
             'register_redirect_url' => 'string',
             'login_redirect_url' => 'string', // 
 
+            // Integrations
+            'mailerlite_api_token' => 'string',
+            'mailersend_api_token' => 'string',
+            'google_analytics_enabled' => 'boolean',
+            'gtag_id' => 'string',
+            'google_recaptcha_enabled' => 'boolean',
+            'google_recaptcha_site_key' => 'string',
+            'google_recaptcha_secret_key' => 'string',
+
+
+
+            // Mail
+            'mail_from_address' => 'string',
+            'mail_from_name' => 'string',
+            'mail_reply_to_address' => 'string',
+            'mail_reply_to_name' => 'string',
+
+            // Advanced
+            'user_meta_fields_in_use' => 'array',
+            
         ];
     }
 }

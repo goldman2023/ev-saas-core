@@ -12,10 +12,9 @@ use App\Models\ProductStock;
 use App\Models\Upload;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Newsletter\NewsletterFacade as Newsletter;
 use MyShop;
+use Spatie\Newsletter\NewsletterFacade as Newsletter;
 use Str;
-
 
 class IntegrationsController extends Controller
 {
@@ -29,9 +28,4 @@ class IntegrationsController extends Controller
         $this->woocommerce_category_import();
         $this->woocommerce_product_import();
     }
-
-
-
-
-
 }

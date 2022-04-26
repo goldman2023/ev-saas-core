@@ -1,14 +1,13 @@
 <?php
 
 use App\Models\Shop;
-use App\Models\TenantSetting;
 use App\Models\ShopSetting;
+use App\Models\TenantSetting;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameBusinessSettingsToTenantSettingsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -49,7 +48,7 @@ class RenameBusinessSettingsToTenantSettingsTable extends Migration
         /* TODO: Properly define which settings are for tenant and which are for vendor!!! Also, when new tenant is created add tenant-settings, do the same when shop is created but with shop-settings */
         $settings = TenantSetting::all();
         $shops = Shop::all();
-        foreach($shops as $shop) {
+        foreach ($shops as $shop) {
             foreach ($settings as $setting) {
                 try {
                     $shop_settings = new ShopSetting();
@@ -57,7 +56,8 @@ class RenameBusinessSettingsToTenantSettingsTable extends Migration
                     $shop_settings->setting = $setting->setting;
                     $shop_settings->value = is_array($setting->value) ? json_encode($setting->value) : $setting->value;
                     $shop_settings->save();
-                } catch (\Exception $e) { }
+                } catch (\Exception $e) {
+                }
             }
         }
     }
@@ -71,4 +71,4 @@ class RenameBusinessSettingsToTenantSettingsTable extends Migration
     {
         Schema::rename('tenant_settings', 'business_settings');
     }
-}
+};

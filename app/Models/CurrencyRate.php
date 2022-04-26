@@ -21,7 +21,8 @@ class CurrencyRate extends Model
         'status' => 'boolean',
     ];
 
-    public function base_currency() {
+    public function base_currency()
+    {
         return $this->belongsTo(Currency::class, 'base_currency_id');
     }
 }

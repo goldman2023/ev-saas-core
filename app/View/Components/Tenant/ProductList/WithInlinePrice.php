@@ -7,7 +7,6 @@ use Illuminate\View\Component;
 
 class WithInlinePrice extends ProductList
 {
-
     /**
      * Create a new component instance.
      *

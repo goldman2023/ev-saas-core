@@ -9,13 +9,13 @@ class WalletCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'amount' => $data->amount,
                     'payment_method' => $data->payment_method,
-                    'approval' => $data->offline_payment ? ($data->approval == 1 ? "Approved" : "Decliend") : "N/A"
+                    'approval' => $data->offline_payment ? ($data->approval == 1 ? 'Approved' : 'Decliend') : 'N/A',
                 ];
-            })
+            }),
         ];
     }
 
@@ -23,7 +23,7 @@ class WalletCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

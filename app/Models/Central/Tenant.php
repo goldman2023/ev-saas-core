@@ -4,11 +4,11 @@ namespace App\Models\Central;
 
 use App\Exceptions\NoPrimaryDomainException;
 use App\Models\SocialAccount;
-use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
+use Illuminate\Database\Eloquent\Collection;
 use Stancl\Tenancy\Contracts\TenantWithDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDatabase;
 use Stancl\Tenancy\Database\Concerns\HasDomains;
-use Illuminate\Database\Eloquent\Collection;
+use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
 /**
  * @property-read string $plan_name The tenant's subscription plan name
@@ -99,23 +99,21 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     /**
      * Can the tenant use the application (is on trial or subscription).
      *
-     * @return boolean
+     * @return bool
      */
     public function getCanUseAppAttribute(): bool
     {
         return $this->onTrial() || $this->subscribed('default');
     }
 
-    public function setSocialServiceMappings() {
-        $social_template = collect(config('services'))->filter(fn($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
+    public function setSocialServiceMappings()
+    {
+        $social_template = collect(config('services'))->filter(fn ($item, $key) => array_key_exists($key, SocialAccount::$available_providers))->toArray();
 
-        foreach($social_template as $provider => $data) {
-            foreach($data as $key => $value) {
-                $this->{$provider.'_'.$key} =  \TenantSettings::get($provider.'_'.$key);
+        foreach ($social_template as $provider => $data) {
+            foreach ($data as $key => $value) {
+                $this->{$provider.'_'.$key} = \TenantSettings::get($provider.'_'.$key);
             }
         }
-
     }
-
-
 }

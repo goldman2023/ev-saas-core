@@ -90,6 +90,6 @@ class SellerDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Seller_' . date('YmdHis');
+        return 'Seller_'.date('YmdHis');
     }
 }

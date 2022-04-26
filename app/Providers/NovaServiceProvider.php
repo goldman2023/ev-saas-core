@@ -7,14 +7,18 @@ use App\Nova\Central\Tenant as TenantResource;
 use App\Nova\Tenant\User;
 use App\Models\Tenant;
 use App\Nova\Central\Section;
+use App\Nova\Dashboards\Main;
+use App\Nova\Tenant\Order;
 use App\Nova\Tenant\Blog;
 use App\Nova\Tenant\Shop;
 use App\Nova\Tenant\Wishlist;
-use App\Nova\Tenant\Product;
 use App\Nova\Tenant\Activity;
 use App\Nova\Tenant\Category;
 use App\Nova\Tenant\PaymentMethodUniversal;
 use App\Nova\Tenant\Plan;
+use App\Nova\Tenant\Product;
+use App\Nova\Tenant\ProductVariation;
+use App\Nova\Tenant\ProductVariations;
 use App\Nova\Tenant\ShopSetting;
 use App\Nova\Tenant\Translation;
 use Illuminate\Support\Facades\Gate;
@@ -97,7 +101,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     protected function dashboards()
     {
-        return [];
+        return [
+            new Main,
+        ];
     }
 
     /**
@@ -109,13 +115,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         if (tenancy()->initialized) {
             return [
-                new \OptimistDigital\MenuBuilder\MenuBuilder,
 
                 // new \Bolechen\NovaActivitylog\NovaActivitylog(),
             ];
         } else {
             return [
-                new \OptimistDigital\MenuBuilder\MenuBuilder,
                 // new \Tighten\NovaStripe\NovaStripe,
             ];
         }
@@ -137,15 +141,17 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             Nova::resources([
                 Blog::class,
                 User::class,
-                Product::class,
                 Activity::class,
                 Wishlist::class,
                 ShopSetting::class,
                 PaymentMethodUniversal::class,
-                Shop::class,
                 Category::class,
                 Plan::class,
                 Translation::class,
+                ProductVariation::class,
+                Product::class,
+                Shop::class,
+                Order::class,
             ]);
         } else {
             Nova::resources([

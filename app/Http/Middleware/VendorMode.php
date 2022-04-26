@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Models\Shop;
-use Closure;
 use Auth;
-use Vendor;
+use Closure;
 use Illuminate\Support\Facades\View;
+use Vendor;
 
 class VendorMode
 {
@@ -19,7 +19,7 @@ class VendorMode
      */
     public function handle($request, Closure $next)
     {
-        if(Vendor::isVendorSite()) {
+        if (Vendor::isVendorSite()) {
             $globalShop = Vendor::getVendorShop();
             $globalLayout = 'white-label';
         } else {
@@ -28,13 +28,12 @@ class VendorMode
         }
 
         // If request is for dashboard, always use dashboard layout!
-        if($request->is_dashboard) {
+        if ($request->is_dashboard) {
             $globalLayout = 'dashboard';
         }
 
-        if($request->is('wishlist') || $request->is('chat')) {
+        if ($request->is('wishlist') || $request->is('chat')) {
             $globalLayout = 'dashboard';
-
         }
 
         View::share('globalShop', $globalShop);

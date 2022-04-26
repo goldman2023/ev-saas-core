@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class ShopArchiveFilters extends Component
 {
     public $hide_filters = false;
+
     /**
      * Create a new component instance.
      *

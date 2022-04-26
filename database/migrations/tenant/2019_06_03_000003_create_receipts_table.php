@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReceiptsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +12,7 @@ class CreateReceiptsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('receipts')) {
+        if (! Schema::hasTable('receipts')) {
             Schema::create('receipts', function (Blueprint $table) {
                 $table->id();
                 $table->foreignId('user_id')->index();
@@ -35,4 +34,4 @@ class CreateReceiptsTable extends Migration
     {
         Schema::dropIfExists('receipts');
     }
-}
+};

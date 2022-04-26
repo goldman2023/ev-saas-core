@@ -25,11 +25,12 @@ class DocumentGalleryRequest extends FormRequest
     {
         if ($this->group_type == 'gallery') {
             return [
-                'photos' => 'required|string|min:1'
-            ];    
+                'photos' => 'required|string|min:1',
+            ];
         }
+
         return [
-            'document_file' => 'required|string|min:1'
+            'document_file' => 'required|string|min:1',
         ];
     }
 
@@ -42,9 +43,10 @@ class DocumentGalleryRequest extends FormRequest
     {
         if ($this->group_type == 'gallery') {
             return [
-                'photos.required' => 'Please add at least 1 gallery image.'
+                'photos.required' => 'Please add at least 1 gallery image.',
             ];
         }
+
         return [
             'document_file.required' => 'Please add document file.',
         ];

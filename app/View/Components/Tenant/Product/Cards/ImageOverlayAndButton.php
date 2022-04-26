@@ -7,8 +7,8 @@ use Illuminate\View\Component;
 
 class ImageOverlayAndButton extends Component
 {
-
     public Product $product;
+
     /**
      * Create a new component instance.
      *

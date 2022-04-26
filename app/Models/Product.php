@@ -42,7 +42,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * App\Models\Product
  */
 
-class Product extends EVBaseModel
+class Product extends WeBaseModel
 {
     use \Bkwld\Cloner\Cloneable;
     use HasSlug;

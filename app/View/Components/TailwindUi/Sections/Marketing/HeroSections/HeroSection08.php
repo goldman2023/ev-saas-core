@@ -12,7 +12,7 @@ class HeroSection08 extends HeroSection
      * @return \Illuminate\Contracts\View\View|\Closure|string
      */
     public function render()
-    {   
+    {
         return view('components.tailwind-ui.sections.marketing.hero-sections.hero-section_08');
     }
 }

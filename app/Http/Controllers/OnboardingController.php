@@ -22,7 +22,6 @@ class OnboardingController extends Controller
 
     public function profile_store()
     {
-
         return redirect()->route('onboarding.step4');
     }
 
@@ -41,8 +40,6 @@ class OnboardingController extends Controller
             $shop->name = 'Your Shop';
         }
 
-
-
         /* @vukasin TODO: Replace this with new way of adding address */
         // $shop->address = $request->address;
 
@@ -58,11 +55,10 @@ class OnboardingController extends Controller
                 /* IMPORTANT These are for the refference what should be generated on a global level */
                 // \Artisan::call('tenants:migrate --tenants=' . tenant()->id);
                 // \Artisan::call('tenants:seed --tenants=' . tenant()->id);
-                \Artisan::call('permissions:populate --tenant_id=' . tenant()->id);
+                \Artisan::call('permissions:populate --tenant_id='.tenant()->id);
                 $user->syncPermissions($permissions);
                 $user->syncRoles(['Owner']);
             }
-
 
             if (get_setting('email_verification') != 1) {
 
@@ -79,7 +75,6 @@ class OnboardingController extends Controller
 
         return view('frontend.onboarding.step3');
     }
-
 
     public function step4()
     {

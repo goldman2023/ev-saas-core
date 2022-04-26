@@ -9,14 +9,14 @@ class SubSubCategoryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
                     'links' => [
-                        'products' => route('products.subSubCategory', $data->id)
-                    ]
+                        'products' => route('products.subSubCategory', $data->id),
+                    ],
                 ];
-            })
+            }),
         ];
     }
 
@@ -24,7 +24,7 @@ class SubSubCategoryCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

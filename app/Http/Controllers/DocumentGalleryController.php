@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Auth;
-use App\Models\UploadsGroup;
-use App\Models\UploadsContentRelationship;
-use App\Models\Seller;
-use App\Models\User;
 use App\Http\Requests\DocumentGalleryRequest;
+use App\Models\Seller;
+use App\Models\UploadsContentRelationship;
+use App\Models\UploadsGroup;
+use App\Models\User;
+use Auth;
+use Illuminate\Http\Request;
 
 class DocumentGalleryController extends Controller
 {
@@ -20,6 +20,7 @@ class DocumentGalleryController extends Controller
     public function index()
     {
         $seller = auth()->user()->seller;
+
         return view('frontend.document_gallery.index', compact(['seller']));
     }
 
@@ -54,30 +55,31 @@ class DocumentGalleryController extends Controller
 
         //Create upload group contents
         if ($request->thumbnail_img != null) {
-            $ids = explode(",", $request->thumbnail_img);
+            $ids = explode(',', $request->thumbnail_img);
             foreach ($ids as $key => $id) {
-                $this->createUploadContent($subject_type, $subject_id, $id, "thumbnail", $uploads_group->id);
+                $this->createUploadContent($subject_type, $subject_id, $id, 'thumbnail', $uploads_group->id);
             }
         }
 
         if ($request->photos != null) {
-            $ids = explode(",", $request->photos);
+            $ids = explode(',', $request->photos);
             foreach ($ids as $key => $id) {
-                $this->createUploadContent($subject_type, $subject_id, $id, "image", $uploads_group->id);
+                $this->createUploadContent($subject_type, $subject_id, $id, 'image', $uploads_group->id);
             }
         }
 
         if ($request->document_file != null) {
-            $ids = explode(",", $request->document_file);
+            $ids = explode(',', $request->document_file);
             foreach ($ids as $key => $id) {
-                $this->createUploadContent($subject_type, $subject_id, $id, "document", $uploads_group->id);
+                $this->createUploadContent($subject_type, $subject_id, $id, 'document', $uploads_group->id);
             }
         }
 
         return back();
     }
 
-    function createUploadContent($subject_type, $subject_id, $upload_id, $type, $group_id) {
+    public function createUploadContent($subject_type, $subject_id, $upload_id, $type, $group_id)
+    {
         $uploads_content_relationship = new UploadsContentRelationship;
         $uploads_content_relationship->subject_type = $subject_type;
         $uploads_content_relationship->subject_id = $subject_id;
@@ -109,18 +111,19 @@ class DocumentGalleryController extends Controller
         $upload_group = UploadsGroup::findOrFail($id);
         $group_type = 'document';
         $document = $upload_group->uploads_content_relations->where('type', 'document')->first();
-        if (!$document) {
+        if (! $document) {
             $group_type = 'gallery';
         }
 
         return view('frontend.document_gallery.edit', compact(['upload_group', 'group_type']));
     }
 
-    public function seller_document_gallery_edit($id) {
+    public function seller_document_gallery_edit($id)
+    {
         $upload_group = UploadsGroup::findOrFail($id);
         $group_type = 'document';
         $document = $upload_group->uploads_content_relations->where('type', 'document')->first();
-        if (!$document) {
+        if (! $document) {
             $group_type = 'gallery';
         }
 
@@ -149,18 +152,18 @@ class DocumentGalleryController extends Controller
 
         //Update upload group contents
         if ($request->thumbnail_img != null) {
-            $this->createUploadContent($subject_type, $subject_id, $request->thumbnail_img, "thumbnail", $uploads_group->id);
+            $this->createUploadContent($subject_type, $subject_id, $request->thumbnail_img, 'thumbnail', $uploads_group->id);
         }
 
         if ($request->photos != null) {
-            $ids = explode(",", $request->photos);
+            $ids = explode(',', $request->photos);
             foreach ($ids as $key => $id) {
-                $this->createUploadContent($subject_type, $subject_id, $id, "image", $uploads_group->id);
+                $this->createUploadContent($subject_type, $subject_id, $id, 'image', $uploads_group->id);
             }
         }
 
         if ($request->document_file != null) {
-            $this->createUploadContent($subject_type, $subject_id, $request->document_file, "document", $uploads_group->id);
+            $this->createUploadContent($subject_type, $subject_id, $request->document_file, 'document', $uploads_group->id);
         }
 
         flash(translate('Updated successfully'))->success();
@@ -177,13 +180,18 @@ class DocumentGalleryController extends Controller
     public function destroy($id)
     {
         $upload_group = UploadsGroup::where('id', $id)->first();
-        if($upload_group) $upload_group->delete();
+        if ($upload_group) {
+            $upload_group->delete();
+        }
         flash(translate('Deleted successfully'))->success();
+
         return back();
     }
 
-    public function seller_document_gallery($id) {
+    public function seller_document_gallery($id)
+    {
         $seller = Seller::findOrFail($id);
+
         return view('backend.sellers.document_gallery.index', compact(['seller']));
     }
 }

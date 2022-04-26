@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDashboardTilesTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('dashboard_tiles', function (Blueprint $table) {
@@ -15,4 +14,4 @@ class CreateDashboardTilesTable extends Migration
             $table->timestamps();
         });
     }
-}
+};

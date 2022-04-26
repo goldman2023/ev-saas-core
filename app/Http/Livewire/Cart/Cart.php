@@ -2,19 +2,26 @@
 
 namespace App\Http\Livewire\Cart;
 
+use CartService;
 use Livewire\Component;
 use Session;
-use CartService;
 
 class Cart extends Component
 {
     public string $class;
+
     public string $template; // flyout-cart
+
     public $items;
+
     public $totalItemsCount;
+
     public $originalPrice;
+
     public $discountAmount;
+
     public $subtotalPrice;
+
     public $processing;
 
     protected $listeners = ['refreshCart', 'addToCart'];
@@ -34,7 +41,8 @@ class Cart extends Component
         $this->refreshCart();
     }
 
-    public function startCartProcessing() {
+    public function startCartProcessing()
+    {
         $this->processing = true;
     }
 
@@ -49,29 +57,29 @@ class Cart extends Component
 
         // Event to refresh cart items count (all over the page, where needed)
         $this->dispatchBrowserEvent('refresh-cart-items-count', ['count' => $this->totalItemsCount]);
-
     }
 
-    public function addToCart($model, $model_type, $qty, $append_qty = true) {
-
-        if($this->processing) {
+    public function addToCart($model, $model_type, $qty, $append_qty = true)
+    {
+        if ($this->processing) {
             return;
         }
 
         $qty = (float) $qty;
 
-        if($append_qty && $qty <= 0) {
+        if ($append_qty && $qty <= 0) {
             // Reset qty data of the btn
 
             // If QTY is 0, remove item from the Cart!
             $this->processing = false;
+
             return;
         }
 
         $this->processing = true;
 
         // If passed $model is actually $model_id => Find the desired model
-        if(is_numeric($model)) {
+        if (is_numeric($model)) {
             $model = app($model_type)::find($model);
         }
 
@@ -98,7 +106,8 @@ class Cart extends Component
         $this->dispatchBrowserEvent('cart-processing-ending', ['id' => $model->id, 'model_type' => $model_type, 'qty' => $new_data['qty']]);
     }
 
-    public function removeFromCart($model, $model_type) {
+    public function removeFromCart($model, $model_type)
+    {
         $this->processing = true;
 
         $data = \App\Facades\CartService::removeFromCart($model, $model_type);
@@ -109,10 +118,9 @@ class Cart extends Component
         $this->processing = false;
     }
 
-
     public function render()
     {
-        if(session('style_framework') === 'tailwind') {
+        if (session('style_framework') === 'tailwind') {
             return view('livewire.tailwind.cart.'.$this->template);
         }
 

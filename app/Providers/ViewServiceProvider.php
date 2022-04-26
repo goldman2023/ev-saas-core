@@ -3,14 +3,14 @@
 namespace App\Providers;
 
 use App\Models\Shop;
+use Categories;
 use DebugBar\DebugBar;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use Qirolab\Theme\Theme;
-use Categories;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
+use Qirolab\Theme\Theme;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -21,7 +21,6 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         View::composer('*', function ($view) {
             /* Check if it's not central app */
             if (tenant() != null) {

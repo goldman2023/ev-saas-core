@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Base extends Component
 {
     public $weEditData;
+
     /**
      * Create a new component instance.
      *

@@ -7,10 +7,11 @@ use App\Models\Page;
 trait HasPages
 {
     public $current_page;
+
     public $all_pages;
 
     protected $currentPageRules = [
-        
+
     ];
 
     public function initializeHasPages()
@@ -20,13 +21,15 @@ trait HasPages
         ]);
     }
 
-    public function mountHasPages($page = null) {
+    public function mountHasPages($page = null)
+    {
         $this->current_page = $page;
 
         $this->all_pages = Page::all();
     }
 
-    public function changeCurrentPage($page) {
+    public function changeCurrentPage($page)
+    {
         $this->current_page = $page;
     }
 }

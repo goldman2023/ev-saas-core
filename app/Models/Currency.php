@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Currency extends Model
 {
-    use Cachable;
+    // use Cachable;
 
     protected $fillable = ['name', 'symbol', 'status', 'code', 'created_at', 'updated_at'];
 
@@ -37,7 +37,8 @@ class Currency extends Model
         // }
     }
 
-    public function fx_rates() {
+    public function fx_rates()
+    {
         return $this->hasMany(CurrencyRate::class, 'base_currency_id');
     }
 }

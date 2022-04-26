@@ -52,7 +52,6 @@ class PaymentMethodUniversal extends Resource
             Text::make('Instructions'),
             Code::make(__('Data'), 'data')->json(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
 
-
             // BelongsTo::make('Author', 'author', User::class),
         ];
     }

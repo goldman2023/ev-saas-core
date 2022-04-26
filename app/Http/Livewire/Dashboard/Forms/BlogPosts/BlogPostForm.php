@@ -7,20 +7,20 @@ use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\BlogPost;
 use App\Models\Category;
+use App\Models\Plan;
 use App\Models\ShopAddress;
 use App\Models\User;
-use App\Models\Plan;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use Illuminate\Validation\Rule;
-use Purifier;
-use Permissions;
-use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\HasCategories;
+use Permissions;
+use Purifier;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class BlogPostForm extends Component
 {
@@ -29,7 +29,9 @@ class BlogPostForm extends Component
     use HasCategories;
 
     public $blogPost;
+
     public $selectedPlans;
+
     public $is_update;
 
     /**
@@ -40,15 +42,15 @@ class BlogPostForm extends Component
     public function mount($blogPost = null)
     {
         $this->blogPost = empty($blogPost) ? new BlogPost() : $blogPost;
-        $this->is_update = isset($this->blogPost->id) && !empty($this->blogPost->id);
+        $this->is_update = isset($this->blogPost->id) && ! empty($this->blogPost->id);
 
-        if(!$this->is_update) {
+        if (! $this->is_update) {
             $this->blogPost->status = StatusEnum::draft()->value;
         }
-        
+
         $this->initCategories($this->blogPost);
 
-        $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn($item) => $item->title);
+        $this->selectedPlans = $this->blogPost->plans->keyBy('id')->map(fn ($item) => $item->title);
     }
 
     protected function rules()
@@ -71,7 +73,6 @@ class BlogPostForm extends Component
         ];
     }
 
-
     protected function messages()
     {
         return [
@@ -88,7 +89,7 @@ class BlogPostForm extends Component
             'blogPost.content.required' => translate('Content is required'),
             'blogPost.content.min' => translate('Minimum content length is :min'),
 
-            'blogPost.status.in' => translate('Status must be one of the following:').' '.implode(', ',StatusEnum::toLabels('archived')),
+            'blogPost.status.in' => translate('Status must be one of the following:').' '.implode(', ', StatusEnum::toLabels('archived')),
             'blogPost.subscription_only' => translate('Subscription only must be either true or false'),
         ];
     }
@@ -103,9 +104,10 @@ class BlogPostForm extends Component
     //     dd($this->blogPost);
     // }
 
-    public function saveBlogPost() {
+    public function saveBlogPost()
+    {
         $msg = '';
-        
+
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -119,9 +121,9 @@ class BlogPostForm extends Component
             // Insert or Update BlogPost
             $this->blogPost->subscription_only = (bool) $this->blogPost->subscription_only;
             $this->blogPost->shop_id = MyShop::getShopID();
-            
+
             // If user has no permissions to publish the post, change the status to Pending (all pending blog posts will be visible to users who can publish the Blog Post)
-            if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_post'], false)) {
+            if (! Permissions::canAccess(User::$non_customer_user_types, ['publish_post'], false)) {
                 $this->blogPost->status = StatusEnum::pending();
                 $msg = translate('Blog post status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
@@ -143,26 +145,26 @@ class BlogPostForm extends Component
 //
             DB::commit();
 
-            if($this->is_update) {
+            if ($this->is_update) {
                 $this->inform(translate('Blog post successfully updated!'), $msg, 'success');
             } else {
                 $this->inform(translate('Blog post successfully created!'), $msg, 'success');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
 
-            if($this->is_update) {
+            if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a blog post...Please try again.'));
                 $this->inform(translate('There was an error while updating a blog post...Please try again.'), $e->getMessage(), 'fail');
             } else {
                 $this->dispatchGeneralError(translate('There was an error while creating a blog post...Please try again.'));
                 $this->inform(translate('There was an error while creating a blog post...Please try again.'), $e->getMessage(), 'fail');
             }
-
         }
     }
 
-    public function removeBlogPost() {
+    public function removeBlogPost()
+    {
 //        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
 //        $address->remove();
     }

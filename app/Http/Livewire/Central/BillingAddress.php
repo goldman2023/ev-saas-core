@@ -7,10 +7,15 @@ use Livewire\Component;
 class BillingAddress extends Component
 {
     public $line1;
+
     public $city;
+
     public $country;
+
     public $line2;
+
     public $postal_code;
+
     public $state;
 
     public $success;

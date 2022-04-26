@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateWishlistsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +12,7 @@ class CreateWishlistsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('wishlists')) {
+        if (! Schema::hasTable('wishlists')) {
             Schema::create('wishlists', function (Blueprint $table) {
                 $table->integer('id', true);
                 $table->integer('user_id');
@@ -33,4 +32,4 @@ class CreateWishlistsTable extends Migration
     {
         Schema::dropIfExists('wishlists');
     }
-}
+};

@@ -23,7 +23,6 @@ class UpdateShopRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
             'name' => 'min:10',
             'logo' => 'nullable',
@@ -36,5 +35,4 @@ class UpdateShopRequest extends FormRequest
             'linkedin' => 'nullable|url',
         ];
     }
-
 }

@@ -4,6 +4,8 @@
     cover: @js(['id' => $plan->cover->id ?? null, 'file_name' => $plan->cover->file_name ?? '']),
     meta_img: @js(['id' => $plan->meta_img->id ?? null, 'file_name' => $plan->meta_img->file_name ?? '']),
     base_currency: @js($plan->base_currency),
+    primary: @js($plan->primary),
+    featured: @js($plan->featured),
     discount_type: @js($plan->discount_type),
     yearly_discount_type: @js($plan->yearly_discount_type),
     tax_type: @js($plan->tax_type),
@@ -247,6 +249,30 @@
                     </div>
                     <!-- END Status -->
 
+                    <!-- Primary -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                        <label class="flex items-center text-sm font-medium text-gray-700 ">
+                            <span class="mr-2">{{ translate('Primary') }}</span>
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="primary" />
+                        </div>
+                    </div>
+                    <!-- END Primary -->
+
+                    <!-- Featured -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                        <label class="flex items-center text-sm font-medium text-gray-700 ">
+                            <span class="mr-2">{{ translate('Featured') }}</span>
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.toggle field="featured" />
+                        </div>
+                    </div>
+                    <!-- END Featured -->
+
                     <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                     
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
@@ -262,6 +288,8 @@
                                 $wire.set('plan.cover', cover.id, true);
                                 $wire.set('plan.meta_img', meta_img.id, true);
                                 $wire.set('plan.features', features, true);
+                                $wire.set('plan.primary', primary, true);
+                                $wire.set('plan.featured', featured, true);
                             "
                             wire:click="savePlan()">
                         {{ translate('Save') }}

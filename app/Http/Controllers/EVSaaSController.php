@@ -11,10 +11,11 @@ class EVSaaSController extends Controller
     {
         return view('core.index');
     }
+
     // Funtion to display tenant info
     public function info()
     {
-        return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
+        return 'This is your multi-tenant application. The id of the current tenant is '.tenant('id');
     }
 
     public function create()
@@ -27,6 +28,7 @@ class EVSaaSController extends Controller
         $tenant1->save();
 
         dd($tenant1);
+
         return view('core.tenants.create');
     }
 

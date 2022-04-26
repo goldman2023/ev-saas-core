@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class ProductStocksTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,14 +13,10 @@ class ProductStocksTableSeeder extends Seeder
      */
     public function run()
     {
-
-
         \DB::table('product_stocks')->delete();
 
-        \DB::table('product_stocks')->insert(array (
-                // TODO : DO we need any demo data for this?
-        ));
-
-
+        \DB::table('product_stocks')->insert([
+            // TODO : DO we need any demo data for this?
+        ]);
     }
 }

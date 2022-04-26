@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 
 class BlogsTableSeeder extends Seeder
 {
-
     /**
      * Auto generated seed file
      *
@@ -14,7 +13,6 @@ class BlogsTableSeeder extends Seeder
      */
     public function run()
     {
-
         if (\DB::table('blog_posts')->count() == 0) {
             \DB::table('blog_posts')->delete();
 
@@ -42,6 +40,5 @@ class BlogsTableSeeder extends Seeder
             //         ),
             // ));
         }
-
     }
 }

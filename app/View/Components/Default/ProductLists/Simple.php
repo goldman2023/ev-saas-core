@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Simple extends Component
 {
     public $products;
+
     /**
      * Create a new component instance.
      *
@@ -15,7 +16,7 @@ class Simple extends Component
     public function __construct($products = null)
     {
         //
-        if($products) {
+        if ($products) {
             $this->products = $products;
         } else {
             $this->products = Product::orderBy('created_at')->take(10)->get();

@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  */
 
-class Wishlist extends EVBaseModel
+class Wishlist extends WeBaseModel
 {
 
     protected $guarded = [];

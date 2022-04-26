@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\SocialAccount;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Laravel\Socialite\Facades\Socialite;
-use App\Models\User;
 use App\Models\Customer;
+use App\Models\SocialAccount;
+use App\Models\User;
+use App\Support\WeSocialite;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use MehediIitdu\CoreComponentRepository\CoreComponentRepository;
 use Illuminate\Support\Str;
-use \App\Support\WeSocialite;
+use Laravel\Socialite\Facades\Socialite;
+use MehediIitdu\CoreComponentRepository\CoreComponentRepository;
 
 class SocialController extends Controller
 {
-
     use AuthenticatesUsers;
 
     /**
@@ -39,23 +38,24 @@ class SocialController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function handleProviderLoginCallback(Request $request, $provider)
-    { 
+    {
         try {
-            if($provider === 'twitter') {
+            if ($provider === 'twitter') {
                 // Stateless authentication is not available for the Twitter driver, which uses OAuth 1.0 for authentication.
                 $user = Socialite::driver('twitter')->user();
-            } else{
+            } else {
                 $user = WeSocialite::configDriver($request, $provider)->stateless()->user();
             }
         } catch (\Exception $e) {
-            flash("Something Went wrong. Please try again.")->error();
+            flash('Something Went wrong. Please try again.')->error();
+
             return redirect()->route('home');
         }
 
         // Check if they're an existing user
         $existingUser = User::where('email', $user->email)->first();
-        
-        if($existingUser){
+
+        if ($existingUser) {
             // Log them in
             auth()->login($existingUser, true);
         } else {
@@ -69,11 +69,11 @@ class SocialController extends Controller
             $newUser->save();
 
             // TODO: Add avatar to uploads -> uplaod it to Cloud and link user to it
-            
+
             auth()->login($newUser, true);
         }
 
-        if(session('link') != null){
+        if (session('link') != null) {
             return redirect(session('link'));
         } else {
             return redirect()->route('dashboard');
@@ -83,20 +83,21 @@ class SocialController extends Controller
     public function handleProviderConnectCallback(Request $request, $provider)
     {
         try {
-            if($provider === 'twitter') {
+            if ($provider === 'twitter') {
                 // Stateless authentication is not available for the Twitter driver, which uses OAuth 1.0 for authentication.
                 $user = Socialite::setConnectionType('connect')->driver('twitter')->user();
             } else {
                 $user = Socialite::setConnectionType('connect')->driver($provider)->user();
             }
         } catch (\Exception $e) {
-            flash("Something Went wrong. Please try again.")->error();
+            flash('Something Went wrong. Please try again.')->error();
+
             return redirect()->route('business.login');
         }
 
         $existingUser = User::where('email', $user->email)->first();
 
-        if($existingUser) {
+        if ($existingUser) {
             $social_account = SocialAccount::where([
                 ['user_id', '=', auth()->user()->id],
                 ['provider', '=', $provider],
@@ -105,7 +106,7 @@ class SocialController extends Controller
             $social_account = auth()->user()->social_accounts()->where('provider', $provider)->first();
         }
 
-        if(!empty($social_account)) {
+        if (! empty($social_account)) {
             $social_account->connected = true;
             $social_account->save();
         } else {

@@ -8,25 +8,30 @@ use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\SerialNumber;
 use App\Models\User;
-use Permissions;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use Illuminate\Validation\Rule;
+use Livewire\Component;
+use Permissions;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
 
 class StaffSettingsCard extends Component
 {
     use RulesSets;
 
     public $user;
+
     public $role;
+
     public $all_roles;
+
     public $permissions;
+
     public $class;
+
     public $show_permissions_panel;
 
     protected function rules()
@@ -34,7 +39,7 @@ class StaffSettingsCard extends Component
         $rules = [
             'user.id' => [],
             'user.user_type' => [Rule::in(User::$user_types)],
-            'user.name' => ['required','min:3'],
+            'user.name' => ['required', 'min:3'],
             'user.email' => ['required', 'email:rfc,dns'],
             'permissions.*' => [],
             'all_roles.*' => [],
@@ -52,7 +57,7 @@ class StaffSettingsCard extends Component
             'user.email.required' => translate('User email is required'),
             'user.email.email' => translate('User email must be a valid email address'),
             'user.user_type.in' => translate('Only available user types for now are: '.implode(', ', User::$user_types)),
-            'role.in' => translate('Only available roles for now, are: '.Permissions::getRoles(only_role_names: true)->join(','))
+            'role.in' => translate('Only available roles for now, are: '.Permissions::getRoles(only_role_names: true)->join(',')),
         ];
 
         return $messages;
@@ -67,7 +72,6 @@ class StaffSettingsCard extends Component
      */
     public function mount(mixed &$user = null, $all_roles = null, string $class = '')
     {
-
         $this->user = $user;
         $this->class = $class;
         $this->role = $user->roles->first()->id ?? null;
@@ -81,17 +85,19 @@ class StaffSettingsCard extends Component
         $this->dispatchBrowserEvent('initUserSettingsForm');
     }
 
-    public function bulkAction($action) {
-        if($action === 'select_all' || $action === 'deselect_all') {
-            foreach($this->permissions as $key => $permission) {
+    public function bulkAction($action)
+    {
+        if ($action === 'select_all' || $action === 'deselect_all') {
+            foreach ($this->permissions as $key => $permission) {
                 $this->permissions[$key]['selected'] = $action === 'select_all';
             }
         }
     }
 
-    public function selectSpecificPermissions($items = []) {
-        foreach($this->permissions as $key => $value) {
-            if(in_array($key, $items)) {
+    public function selectSpecificPermissions($items = [])
+    {
+        foreach ($this->permissions as $key => $value) {
+            if (in_array($key, $items)) {
                 $this->permissions[$key]['selected'] = true;
             } else {
                 $this->permissions[$key]['selected'] = false;
@@ -99,7 +105,8 @@ class StaffSettingsCard extends Component
         }
     }
 
-    public function save() {
+    public function save()
+    {
         $this->validate();
 
         // Save user data
@@ -113,12 +120,11 @@ class StaffSettingsCard extends Component
         // Sync roles
         $this->user->syncRoles([$this->role]);
 
-        $this->dispatchBrowserEvent('toast', ['id' => 'user-updated-toast', 'content' => $this->user->name.' ('.$this->user->email.') '.translate('updated successfully!'), 'type' => 'success' ]);
+        $this->dispatchBrowserEvent('toast', ['id' => 'user-updated-toast', 'content' => $this->user->name.' ('.$this->user->email.') '.translate('updated successfully!'), 'type' => 'success']);
     }
 
     public function render()
     {
         return view('livewire.dashboard.forms.users.staff-settings-card');
     }
-
 }

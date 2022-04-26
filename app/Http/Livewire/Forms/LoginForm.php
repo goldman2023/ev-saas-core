@@ -2,32 +2,34 @@
 
 namespace App\Http\Livewire\Forms;
 
-use DB;
-use EVS;
-use Categories;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
-use Spatie\ValidationRules\Rules\ModelsExist;
-use Livewire\Component;
-use Str;
-use Auth;
-use App\Models\User;
-use App\Models\OrderItem;
+use App\Models\Address;
 use App\Models\Invoice;
 use App\Models\Order;
-use App\Models\Address;
-use App\Traits\Livewire\RulesSets;
+use App\Models\OrderItem;
+use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\RulesSets;
+use Auth;
 use Carbon;
+use Categories;
+use DB;
+use EVS;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Livewire\Component;
+use Spatie\ValidationRules\Rules\ModelsExist;
+use Str;
 
 class LoginForm extends Component
 {
     use DispatchSupport;
 
     public $email;
+
     public $password;
+
     public $remember;
 
     protected function rules()
@@ -55,7 +57,6 @@ class LoginForm extends Component
      */
     public function mount()
     {
-
     }
 
     public function render()
@@ -63,7 +64,8 @@ class LoginForm extends Component
         return view('livewire.forms.login-form');
     }
 
-    public function login() {
+    public function login()
+    {
         try {
             $this->validate();
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -74,7 +76,7 @@ class LoginForm extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             request()->session()->regenerate();
 
-            if(!empty(get_tenant_setting('login_redirect_url'))) {
+            if (! empty(get_tenant_setting('login_redirect_url'))) {
                 return redirect(get_tenant_setting('login_redirect_url'));
             } else {
                 return redirect()->route('home');

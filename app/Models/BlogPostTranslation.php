@@ -15,7 +15,7 @@ use Spatie\Sluggable\SlugOptions;
 
 // use GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-class BlogPostTranslation extends EVBaseModel
+class BlogPostTranslation extends WeBaseModel
 {
     use HasSlug;
 
@@ -30,8 +30,8 @@ class BlogPostTranslation extends EVBaseModel
             ->saveSlugsTo('slug');
     }
 
-    public function blog_post() {
+    public function blog_post()
+    {
         return $this->belongsTo(BlogPost::class, 'blog_post_id');
     }
-
 }

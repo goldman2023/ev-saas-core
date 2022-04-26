@@ -14,7 +14,6 @@ class FlyoutDashboardSidebar extends Component
      */
     public function __construct()
     {
-       
     }
 
     /**

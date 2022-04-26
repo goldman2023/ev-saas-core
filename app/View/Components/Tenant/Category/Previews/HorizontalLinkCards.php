@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class HorizontalLinkCards extends Component
 {
     public $categories;
+
     /**
      * Create a new component instance.
      *
@@ -16,7 +17,6 @@ class HorizontalLinkCards extends Component
     {
         //
         $this->categories = \App\Models\Category::where('level', 0)->get();
-
     }
 
     /**

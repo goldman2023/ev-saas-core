@@ -7,10 +7,15 @@ use Illuminate\View\Component;
 class ReviewSummary extends Component
 {
     public $reviews;
+
     public $total_rating = 0;
+
     public $average_rating = 0;
+
     public $count = 0;
-    public $each_stars = array();
+
+    public $each_stars = [];
+
     /**
      * Create a new component instance.
      *
@@ -19,7 +24,7 @@ class ReviewSummary extends Component
     public function __construct($reviews)
     {
         $this->reviews = $reviews;
-        for($i = 1; $i< 6 ; $i ++){
+        for ($i = 1; $i < 6; $i++) {
             $this->each_stars[$i] = 0;
         }
         foreach ($reviews as $review) {
@@ -29,7 +34,7 @@ class ReviewSummary extends Component
         }
         if ($this->count > 0) {
             $this->average_rating = round($this->total_rating / $this->count);
-        }else {
+        } else {
             $this->average_rating = 0;
         }
     }

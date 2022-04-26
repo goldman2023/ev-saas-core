@@ -1,24 +1,25 @@
 <?php
 
 namespace App\Http\Controllers\Integrations;
-use App\Models\CoreMeta;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Codexshaper\WooCommerce\Facades\Product as WooProduct;
-use Codexshaper\WooCommerce\Facades\Coupon as WooCoupon;
-use Codexshaper\WooCommerce\Facades\Order as WooOrder;
-use Codexshaper\WooCommerce\Facades\Category as WooCategory;
-use Exception;
-use Illuminate\Support\Facades\Storage;
+
 use App\Exports\ProductsExport;
+use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\CoreMeta;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductStock;
 use App\Models\Upload;
+use Codexshaper\WooCommerce\Facades\Category as WooCategory;
+use Codexshaper\WooCommerce\Facades\Coupon as WooCoupon;
+use Codexshaper\WooCommerce\Facades\Order as WooOrder;
+use Codexshaper\WooCommerce\Facades\Product as WooProduct;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
-use Spatie\Newsletter\NewsletterFacade as Newsletter;
 use MyShop;
+use Spatie\Newsletter\NewsletterFacade as Newsletter;
 use Str;
 
 class WooCommerceController extends Controller
@@ -26,8 +27,9 @@ class WooCommerceController extends Controller
     // Get all products from woocommerce
     public $request_options = [
         'per_page' => 50, // By default 10
-        'page' => 1 // This is will return 51 to 100 products. By default 1 that returns the 1 to 50 for this example because we add per_page 50
+        'page' => 1, // This is will return 51 to 100 products. By default 1 that returns the 1 to 50 for this example because we add per_page 50
     ];
+
     //
     public function index()
     {
@@ -52,7 +54,7 @@ class WooCommerceController extends Controller
                 $this->woocommerce_orders_import();
                 break;
             default:
-                # code...
+                // code...
                 break;
         }
 
@@ -61,24 +63,22 @@ class WooCommerceController extends Controller
 
     public function woocommerce_products_import()
     {
-
         $products = WooProduct::all($this->request_options);
-
 
         /* Import all products as models */
         foreach ($products as $product) {
             /* Check if this external product is already added */
-            if (!CoreMeta::where('key', 'wc_id')->where('value', $product->id)->first()) {
+            if (! CoreMeta::where('key', 'wc_id')->where('value', $product->id)->first()) {
                 $new_product = Product::create([
                     'shop_id' => MyShop::getShopID(),
                     'user_id' => auth()->user()->id,
                     'name' => $product->name,
                     'unit_price' => $product->price,
-                    'description' => $product->description
+                    'description' => $product->description,
                 ]);
             } else {
                 $new_product = CoreMeta::where('key', 'wc_id')->where('value', $product->id)->first()->subject;
-                echo "Updating product with ID" . $new_product->id . "...";
+                echo 'Updating product with ID'.$new_product->id.'...';
             }
 
             /* Handle images */
@@ -86,20 +86,18 @@ class WooCommerceController extends Controller
             $tenant_path = 'uploads/all';
 
             if (tenant('id')) {
-                $tenant_path = 'uploads/' . tenant('id');
+                $tenant_path = 'uploads/'.tenant('id');
             }
 
             try {
-                $featured_image = Storage::disk('s3')->put($tenant_path . '/' . $product->images[0]->name, file_get_contents($product->images[0]->src), 'public');
+                $featured_image = Storage::disk('s3')->put($tenant_path.'/'.$product->images[0]->name, file_get_contents($product->images[0]->src), 'public');
                 $upload = new Upload();
 
                 $upload->file_original_name = 'labas.png';
 
-
-
                 $upload->extension = '.png';
                 /* TODO: Fix extension */
-                $upload->file_name = $tenant_path . '/' . $product->images[0]->name;
+                $upload->file_name = $tenant_path.'/'.$product->images[0]->name;
                 $upload->user_id = auth()->user()->id;
                 $upload->shop_id = empty(MyShop::getShopID()) ? null : MyShop::getShopID();
                 $upload->type = 'image';
@@ -108,7 +106,7 @@ class WooCommerceController extends Controller
 
                 $new_product->thumbnail = $upload->id;
                 $new_product->syncUploads();
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 return $e;
             }
 
@@ -117,14 +115,14 @@ class WooCommerceController extends Controller
             /* Add import meta  */
             try {
                 $meta_row = new CoreMeta();
-                $meta_row->key = "sales_channel";
-                $meta_row->value = "wc";
+                $meta_row->key = 'sales_channel';
+                $meta_row->value = 'wc';
                 $meta_row->subject_id = $new_product->id;
                 $meta_row->subject_type = Product::class;
                 $meta_row->save();
 
                 $meta_row = new CoreMeta();
-                $meta_row->key = "wc_id";
+                $meta_row->key = 'wc_id';
                 $meta_row->value = $product->id;
                 $meta_row->subject_id = $new_product->id;
                 $meta_row->subject_type = Product::class;
@@ -146,7 +144,7 @@ class WooCommerceController extends Controller
         /* Category Importing */
         $categories = WooCategory::all($this->request_options);
         foreach ($categories as $category) {
-            if (!Category::where('name', $category->name)->first()) {
+            if (! Category::where('name', $category->name)->first()) {
                 $new_category = new Category();
             } else {
                 $new_category = Category::where('name', $category->name)->first();
@@ -163,18 +161,17 @@ class WooCommerceController extends Controller
             $new_category->description = $category->description;
             $new_category->save();
 
-
             /* Add import meta  */
             try {
                 $meta_row = new CoreMeta();
-                $meta_row->key = "sales_channel";
-                $meta_row->value = "wc";
+                $meta_row->key = 'sales_channel';
+                $meta_row->value = 'wc';
                 $meta_row->subject_id = $new_category->id;
                 $meta_row->subject_type = Category::class;
                 $meta_row->save();
 
                 $meta_row = new CoreMeta();
-                $meta_row->key = "wc_id";
+                $meta_row->key = 'wc_id';
                 $meta_row->value = $new_category->id;
                 $meta_row->subject_id = $new_category->id;
                 $meta_row->subject_type = Category::class;
@@ -184,7 +181,6 @@ class WooCommerceController extends Controller
             }
         }
     }
-
 
     protected function woocommerce_single_order_import($wc_order)
     {
@@ -208,7 +204,7 @@ class WooCommerceController extends Controller
             /* Check if this external product is already added */
             if (CoreMeta::where('key', 'wc_id')->where('value', $order->id)->first()) {
                 $order = CoreMeta::where('key', 'wc_id')->where('value', $order->id)->first()->subject;
-                echo "Updating order with ID" . $order->id . "...";
+                echo 'Updating order with ID'.$order->id.'...';
             } else {
             }
             $this->woocommerce_single_order_import($order);
@@ -218,7 +214,6 @@ class WooCommerceController extends Controller
     /* TODO: Update this to check if stock is not created on a global scope, not only in product form */
     protected function setProductStocks($product, $wc_product)
     {
-
         if (empty($wc_product->sku)) {
             $sku = $wc_product->slug;
         } else {

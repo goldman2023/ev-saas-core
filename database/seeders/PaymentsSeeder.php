@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\PaymentMethodUniversal;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\PaymentMethodUniversal;
 
 class PaymentsSeeder extends Seeder
 {
@@ -21,9 +21,9 @@ class PaymentsSeeder extends Seeder
 
             $gateways = \App\Enums\PaymentGatewaysEnum::labels();
 
-            if(!empty($gateways)) {
-                foreach($gateways as $gateway => $label) {
-                    if(!PaymentMethodUniversal::where('gateway', $gateway)->exists()) {
+            if (! empty($gateways)) {
+                foreach ($gateways as $gateway => $label) {
+                    if (! PaymentMethodUniversal::where('gateway', $gateway)->exists()) {
                         DB::table('payment_methods_universal')->insert([
                             'enabled' => 0,
                             'name' => $label,

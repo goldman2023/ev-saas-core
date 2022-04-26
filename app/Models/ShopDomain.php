@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class ShopDomain extends Model
 {
-    use Cachable;
+    // use Cachable;
     use Notifiable;
 
     protected $table = 'shop_domains';
@@ -17,5 +17,4 @@ class ShopDomain extends Model
     {
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
-
 }

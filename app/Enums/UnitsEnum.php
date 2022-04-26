@@ -20,7 +20,7 @@ class UnitsEnum extends EVBaseEnum
             'l' => 'litre',
             'oz' => 'oz',
             'm' => 'meter(s)',
-            's' => 'second(s)'
+            's' => 'second(s)',
         ];
     }
 
@@ -32,7 +32,7 @@ class UnitsEnum extends EVBaseEnum
             'l' => 'litre',
             'oz' => 'oz',
             'm' => 'meter(s)',
-            's' => 'second(s)'
+            's' => 'second(s)',
         ];
     }
 }

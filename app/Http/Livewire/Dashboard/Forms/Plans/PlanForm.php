@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Dashboard\Forms\Plans;
 
-use App\Enums\StatusEnum;
 use App\Enums\AmountPercentTypeEnum;
+use App\Enums\StatusEnum;
 use App\Facades\MyShop;
 use App\Models\Address;
 use App\Models\Category;
@@ -11,17 +11,17 @@ use App\Models\Plan;
 use App\Models\ShopAddress;
 use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
+use App\Traits\Livewire\HasCategories;
+use App\Traits\Livewire\RulesSets;
+use Categories;
 use DB;
 use EVS;
-use Categories;
 use FX;
 use Illuminate\Validation\Rule;
-use Purifier;
-use Permissions;
-use Spatie\ValidationRules\Rules\ModelsExist;
 use Livewire\Component;
-use App\Traits\Livewire\RulesSets;
-use App\Traits\Livewire\HasCategories;
+use Permissions;
+use Purifier;
+use Spatie\ValidationRules\Rules\ModelsExist;
 
 class PlanForm extends Component
 {
@@ -30,6 +30,7 @@ class PlanForm extends Component
     use HasCategories;
 
     public $plan;
+
     public $is_update;
 
     /**
@@ -38,13 +39,13 @@ class PlanForm extends Component
      * @return void
      */
     public function mount($plan = null)
-    { 
-        
+    {
+
         // dd(Categories::getAllFormatted());
         $this->plan = empty($plan) ? new Plan() : $plan;
-        $this->is_update = isset($this->plan->id) && !empty($this->plan->id);
-        
-        if(!$this->is_update) {
+        $this->is_update = isset($this->plan->id) && ! empty($this->plan->id);
+
+        if (! $this->is_update) {
             // If insert
             $this->plan->status = StatusEnum::draft()->value;
             $this->plan->base_currency = FX::getCurrency()->code;
@@ -60,6 +61,8 @@ class PlanForm extends Component
     {
         return [
             'selected_categories' => 'required',
+            'plan.featured' => ['boolean'],
+            'plan.primary' => ['boolean'],
             'plan.thumbnail' => ['if_id_exists:App\Models\Upload,id'],
             'plan.cover' => ['if_id_exists:App\Models\Upload,id,true'],
             'plan.name' => 'required|min:2',
@@ -67,7 +70,7 @@ class PlanForm extends Component
             'plan.excerpt' => 'required|min:10',
             'plan.content' => 'nullable', //'required|min:10',
             'plan.features' => 'required|array',
-            'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn($item) => $item->code)->toArray())],
+            'plan.base_currency' => [Rule::in(FX::getAllCurrencies()->map(fn ($item) => $item->code)->toArray())],
             'plan.price' => 'required|numeric',
             'plan.discount' => 'nullable|numeric',
             'plan.discount_type' => [Rule::in(AmountPercentTypeEnum::toValues())],
@@ -82,7 +85,6 @@ class PlanForm extends Component
             'plan.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
     }
-
 
     protected function messages()
     {
@@ -103,8 +105,8 @@ class PlanForm extends Component
             'plan.content.min' => translate('Minimum content length is :min'),
 
             'plan.status.in' => translate('Status must be one of the following:').' '.StatusEnum::implodedLabels('archived'),
-            
-            'plan.base_currency' => translate('Base currency must be one of the following: ').FX::getAllCurrencies()->map(fn($item) => $item->code)->join(', '),
+
+            'plan.base_currency' => translate('Base currency must be one of the following: ').FX::getAllCurrencies()->map(fn ($item) => $item->code)->join(', '),
             'plan.price.required' => translate('Price is required'),
             'plan.price.numeric' => translate('Price must be a valid number'),
             'plan.discount.numeric' => translate('Discount must be a valid number'),
@@ -120,7 +122,8 @@ class PlanForm extends Component
         $this->dispatchBrowserEvent('init-form');
     }
 
-    public function savePlan() {
+    public function savePlan()
+    {
         $msg = '';
 
         try {
@@ -138,11 +141,16 @@ class PlanForm extends Component
             $this->plan->shop_id = MyShop::getShopID();
 
             // If user has no permissions to publish the post, change the status to Pending (all plans with pending will be visible to users who can publish the plan)
-            if(!Permissions::canAccess(User::$non_customer_user_types, ['publish_plan'], false)) {
+            if (! Permissions::canAccess(User::$non_customer_user_types, ['publish_plan'], false)) {
                 $this->plan->status = StatusEnum::pending()->value;
                 $msg = translate('Plan status is set to '.(StatusEnum::pending()->value).' because you don\'t have enough Permissions to publish it right away.');
             }
-            
+
+            // If current Plan is set to primary, all other plans must NOT BE primary
+            if($this->plan->primary) {
+                Plan::where('primary', 1)->update(['primary' => 0]);
+            }
+
             $this->plan->save();
             $this->plan->syncUploads();
 
@@ -153,15 +161,15 @@ class PlanForm extends Component
 
             DB::commit();
 
-            if($this->is_update) {
+            if ($this->is_update) {
                 $this->inform(translate('Subscription plan successfully updated!').' '.$msg, '', 'success');
             } else {
                 $this->inform(translate('Subscription plan successfully created!').' '.$msg, '', 'success');
             }
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            
-            if($this->is_update) {
+
+            if ($this->is_update) {
                 $this->dispatchGeneralError(translate('There was an error while updating a subscription plan...Please try again.'));
                 $this->inform(translate('There was an error while updating a subscription plan...Please try again.'), '', 'fail');
             } else {
@@ -171,7 +179,8 @@ class PlanForm extends Component
         }
     }
 
-    public function removePlan() {
+    public function removePlan()
+    {
 //        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
 //        $address->remove();
     }

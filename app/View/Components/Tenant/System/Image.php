@@ -6,18 +6,20 @@ use Illuminate\View\Component;
 
 class Image extends Component
 {
-
     public $image;
+
     public $dataSrcSet;
+
     public $fit;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($image, $fit = 'inherit', $dataSrcSet= null)
+    public function __construct($image, $fit = 'inherit', $dataSrcSet = null)
     {
-        $this->image = is_numeric($image) ?  uploaded_asset($image) : $image;
+        $this->image = is_numeric($image) ? uploaded_asset($image) : $image;
         $this->dataSrcSet = $dataSrcSet;
         $this->fit = $fit;
     }

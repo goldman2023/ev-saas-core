@@ -3,19 +3,20 @@
 namespace App\Http\Services;
 
 use App\Facades\MyShop;
-use App\Models\Currency;
-use App\Models\Product;
-use App\Models\ProductVariation;
-use App\Models\User;
-use Cache;
-use Illuminate\Support\Collection;
-use Qirolab\Theme\Theme;
-use EVS;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Currency;
+use App\Models\Product;
+use App\Models\ProductVariation;
+use App\Models\User;
+use App\Models\Plan;
+use Cache;
+use EVS;
+use Illuminate\Support\Collection;
 use Illuminate\View\ComponentAttributeBag;
+use Qirolab\Theme\Theme;
 use Session;
 
 class EVService
@@ -24,23 +25,23 @@ class EVService
 
     public function __construct($app)
     {
-        $tenant_css_path = public_path('themes/' . Theme::parent() . '/css/' . tenant('id') . '.css');
-        $default_css_path = public_path('themes/' . Theme::parent() . '/css/app.css');
+        $tenant_css_path = public_path('themes/'.Theme::parent().'/css/'.tenant('id').'.css');
+        $default_css_path = public_path('themes/'.Theme::parent().'/css/app.css');
         $styling_url = '';
 
         if (file_exists($tenant_css_path)) {
-            $url = asset('themes/' . Theme::parent() . '/css/' . tenant('id') . '.css?ver=' . filemtime($tenant_css_path));
+            $url = asset('themes/'.Theme::parent().'/css/'.tenant('id').'.css?ver='.filemtime($tenant_css_path));
         } else {
             try {
-                $url = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
+                $url = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path));
             } catch (\Exception $e) {
             }
         }
 
         try {
             // TODO: Think of a way to implement better vendor design pattern!
-            $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path)); //$url;
-            $this->tenantStylePath = asset('themes/' . Theme::parent() . '/css/app.css?ver=' . filemtime($default_css_path));
+            $this->tenantStylePath = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path)); //$url;
+            $this->tenantStylePath = asset('themes/'.Theme::parent().'/css/app.css?ver='.filemtime($default_css_path));
         } catch (\Exception $e) {
         }
     }
@@ -50,6 +51,7 @@ class EVService
         return $this->tenantStylePath;
     }
 
+    // This one is just a supplement (currently not used...)
     public function getDashboardMenuByRole($role = 'customer')
     {
         return collect($this->getDashboardMenuTemplate())->map(fn ($item) => collect($item['items'])->filter(function ($child) use ($role, $item) {
@@ -61,14 +63,20 @@ class EVService
         })->count() > 0 ? $item : null)->filter()->values()->toArray();
     }
 
+    // This one is used!
     public function getDashboardMenu()
     {
         return collect($this->getDashboardMenuTemplate())->map(function ($group) {
             $group['items'] = collect($group['items'])->filter(function ($child) use ($group) {
+                // Check if enabled exists and is false - hide menu item
+                if(isset($child['enabled']) && !$child['enabled']) return false;
+
+                // Check if user has enough permissions to access the page
                 return \Permissions::canAccess($child['user_types'], $child['permissions'], false);
             })->toArray();
+
             return  $group;
-        })->filter(fn ($group) => !empty($group['items']))->values()->toArray();
+        })->filter(fn ($group) => ! empty($group['items']))->values()->toArray();
     }
 
     protected function getDashboardMenuTemplate(): array
@@ -84,7 +92,7 @@ class EVService
                         'route' => route('dashboard'),
                         'is_active' => areActiveRoutes(['dashboard']),
                         'user_types' => User::$user_types,
-                        'permissions' => [] // always show, independent of permissions
+                        'permissions' => [], // always show, independent of permissions
                     ],
                     [
                         'label' => translate('Chat'),
@@ -93,7 +101,7 @@ class EVService
                         'is_active' => areActiveRoutes(['chat']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
-                        'enabled' => get_tenant_setting('chat_enabled', true),
+                        'enabled' => get_tenant_setting('chat_feature', true),
                     ],
                     [
                         'label' => translate('Pages'),
@@ -101,9 +109,10 @@ class EVService
                         'route' => route('pages.index'),
                         'is_active' => areActiveRoutes(['pages.index']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => [] // TODO: Add App Pages Permissions
+                        'permissions' => [], // TODO: Add App Pages Permissions
+                        'enabled' => true,
                     ],
-                ]
+                ],
             ],
             [
                 'label' => translate('Business'),
@@ -122,7 +131,7 @@ class EVService
                                 'route' => route('products.index'),
                                 'is_active' => areActiveRoutes(['products.index']),
                                 'user_types' => User::$non_customer_user_types,
-                                'permissions' => ['browse_products']
+                                'permissions' => ['browse_products'],
                             ],
                             [
                                 'label' => translate('Attributes'),
@@ -130,9 +139,9 @@ class EVService
                                 'route' => route('attributes.index', base64_encode(Product::class)),
                                 'is_active' => areActiveRoutes(['attributes.index']),
                                 'user_types' => User::$non_customer_user_types,
-                                'permissions' => ['view_product_attributes']
+                                'permissions' => ['view_product_attributes'],
                             ],
-                        ]
+                        ],
                     ],
                     [
                         'label' => translate('Plans'),
@@ -140,7 +149,25 @@ class EVService
                         'route' => route('plans.index'),
                         'is_active' => areActiveRoutes(['plans.index']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['all_plans', 'browse_plans']
+                        'permissions' => ['all_plans', 'browse_plans'],
+                        'children' => [
+                            [
+                                'label' => translate('All Plans'),
+                                'icon' => 'heroicon-o-archive',
+                                'route' => route('plans.index'),
+                                'is_active' => areActiveRoutes(['plans.index']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['browse_plans'],
+                            ],
+                            [
+                                'label' => translate('Attributes'),
+                                'icon' => 'heroicon-o-view-list',
+                                'route' => route('attributes.index', base64_encode(Plan::class)),
+                                'is_active' => areActiveRoutes(['attributes.index']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['view_plan_attributes'],
+                            ],
+                        ],
                     ],
                     [
                         'label' => translate('Categories'),
@@ -148,7 +175,7 @@ class EVService
                         'route' => route('categories.index'),
                         'is_active' => areActiveRoutes(['categories.index']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => []
+                        'permissions' => [],
                     ],
                     /* [
                         'label' => translate('Courses'),
@@ -169,9 +196,10 @@ class EVService
                             'class' => 'badge-danger',
                             'content' => function () {
                                 return 0;
+
                                 return MyShop::getShop()->orders()->where('viewed', 0)->count();
-                            }
-                        ]
+                            },
+                        ],
                     ],
                     /* [
                         'label' => translate('Leads'),
@@ -196,7 +224,7 @@ class EVService
                     //     'user_types' => ['admin','seller'],
                     // ],
 
-                ]
+                ],
             ],
             [
                 'label' => translate('Marketing'),
@@ -207,7 +235,7 @@ class EVService
                         'route' => route('blog.posts.index'),
                         'is_active' => areActiveRoutes(['blog.posts.index']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['all_posts', 'browse_posts']
+                        'permissions' => ['all_posts', 'browse_posts'],
                     ],
                     //                    [
                     //                        'label' => translate('Website'),
@@ -232,7 +260,7 @@ class EVService
                     //     'is_active' => areActiveRoutes(['']),
                     //     'user_types' => ['admin','seller'],
                     // ],
-                ]
+                ],
             ],
 
             [
@@ -258,7 +286,7 @@ class EVService
                     ], */
 
                     // TODO: Do we need another route/menu-item for admin/moderator/support Support page? We should have to support panels: one for customers/vendors and one for admin/moderator/support
-                ]
+                ],
             ],
             [
                 'label' => translate('Customer zone'),
@@ -269,7 +297,7 @@ class EVService
                         'route' => route('my.account.settings'),
                         'is_active' => areActiveRoutes(['my.account.settings']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
                     ],
                     [
                         'label' => translate('My Purchases'),
@@ -277,7 +305,7 @@ class EVService
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
                     ],
                     [
                         'label' => translate('Downloads'),
@@ -285,7 +313,7 @@ class EVService
                         'route' => route('my.purchases.all'),
                         'is_active' => areActiveRoutes(['my.purchases.all']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
                     ],
                     [
                         'label' => translate('Plans Management'),
@@ -293,9 +321,9 @@ class EVService
                         'route' => route('my.plans.management'),
                         'is_active' => areActiveRoutes(['my.plans.management']),
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
                     ],
-                  /*   [
+                    /*   [
                         'label' => translate('My Wishlist'),
                         'icon' => 'heroicon-o-heart',
                         'route' => route('wishlist'),
@@ -304,7 +332,7 @@ class EVService
                         'permissions' => [],
                         'enabled' => get_tenant_setting('wishlist_enabled', true),
                     ], */
-                /*     [
+                    /*     [
                         'label' => translate('My Viewed Items'),
                         'icon' => 'heroicon-o-eye',
                         'route' => route('wishlist.views'),
@@ -313,7 +341,7 @@ class EVService
                         'permissions' => [],
                         'enabled' => get_tenant_setting('viewed_products_enabled', true),
                     ] */
-                ]
+                ],
             ],
             [
                 'label' => translate('Settings'),
@@ -324,7 +352,7 @@ class EVService
                         'route' => route('settings.shop_settings'),
                         'is_active' => areActiveRoutes(['settings.shop_settings']),
                         'user_types' => User::$non_customer_user_types,
-                        'permissions' => ['view_shop_data', 'view_shop_settings']
+                        'permissions' => ['view_shop_data', 'view_shop_settings'],
                     ],
                     [
                         'label' => translate('App settings'),
@@ -332,7 +360,7 @@ class EVService
                         'route' => route('settings.app_settings'),
                         'is_active' => areActiveRoutes(['settings.app_settings']),
                         'user_types' => User::$tenant_user_types,
-                        'permissions' => ['browse_designs']
+                        'permissions' => ['browse_designs'],
                     ],
                     [
                         'label' => translate('Page builder - We Edit'),
@@ -341,7 +369,7 @@ class EVService
                         'is_active' => areActiveRoutes(['we-edit.index']),
                         'user_types' => User::$tenant_user_types,
                         'permissions' => ['browse_designs'],
-                        'enabled' => get_tenant_setting('we_edit_enabled', true),
+                        'enabled' => get_tenant_setting('weedit_feature', true),
                     ],
                     // [
                     //     'label' => translate('Payment settings'),
@@ -383,7 +411,7 @@ class EVService
                     //     'is_active' => areActiveRoutes(['']),
                     //     'user_types' => ['admin','seller'],
                     // ],
-                ]
+                ],
             ],
             [
                 'label' => translate('Other'),
@@ -402,7 +430,7 @@ class EVService
                     //     'is_active' => areActiveRoutes(['']),
                     //     'user_types' => ['admin','seller'],
                     // ],
-                ]
+                ],
             ],
             [
                 'label' => 'hr',
@@ -413,10 +441,10 @@ class EVService
                         'route' => route('user.logout'),
                         'is_active' => false,
                         'user_types' => User::$user_types,
-                        'permissions' => []
+                        'permissions' => [],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 
@@ -434,7 +462,7 @@ class EVService
         $recursion = function ($child_category) use (&$recursion, &$mapped) {
             $value = str_repeat('--', $child_category['level']);
 
-            $mapped[$child_category['id']] = $value . " " . $child_category['name'];
+            $mapped[$child_category['id']] = $value.' '.$child_category['name'];
 
             if (isset($child_category['children'])) {
                 foreach ($child_category['children'] as $childCategory) {
@@ -478,7 +506,7 @@ class EVService
             'pc' => 'Pc',
             'kg' => 'kg',
             'l' => 'litre',
-            'oz' => 'oz'
+            'oz' => 'oz',
         ];
     }
 

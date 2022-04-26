@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class CompanyCard extends Component
 {
     public Shop $company;
+
     /**
      * Create a new component instance.
      *

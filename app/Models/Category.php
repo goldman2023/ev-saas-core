@@ -25,7 +25,7 @@ use Vendor;
  * App\Models\Category
  */
 
-class Category extends EVBaseModel
+class Category extends WeBaseModel
 {
     //use Cachable;
     use HasSlug;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
@@ -16,6 +16,7 @@ class NotificationController extends Controller
     {
         $user = auth()->user();
         $notifications = $user->notifications;
+
         return view('frontend.notification.index', compact(['notifications']));
     }
 
@@ -90,10 +91,11 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function markAllAsRead() {
+    public function markAllAsRead()
+    {
         $user = auth()->user();
         $user->unreadNotifications->markAsRead();
 
-        return array('success' => true);
+        return ['success' => true];
     }
 }

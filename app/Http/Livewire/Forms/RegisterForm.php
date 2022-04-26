@@ -15,9 +15,12 @@ use Livewire\Component;
 use Str;
 use Cookie;
 use Auth;
+use Log;
 use App\Models\User;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\DispatchSupport;
+use MailerService;
+use App\Enums\WeMailingListsEnum;
 
 use Illuminate\Auth\Events\Registered;
 
@@ -93,9 +96,11 @@ class RegisterForm extends Component
             if (Auth::attempt(['email' => $this->user->email, 'password' => $this->password], true)) {
                 request()->session()->regenerate();
 
-                // event(new Registered($this->user));
-                // TODO: Account Verification link and system must WORK!!!!
-                $this->user->email_verified_at = date('Y-m-d H:m:s');
+                // Automatically verify newly created user email if onboarding flow is disabled AND email verification is not forced!
+                if(!get_tenant_setting('onboarding_flow') && !get_tenant_setting('force_email_verification')) {
+                    $this->user->email_verified_at = date('Y-m-d H:m:s');
+                }
+                
                 $this->user->save();
                 flash(translate('Registration successfull. Please verify your email.'))->success();
 
@@ -108,13 +113,7 @@ class RegisterForm extends Component
             $this->inform(translate('Error: Could not create a new account!'), $e->getMessage(), 'fail');
         }
 
-        try {
-            Mail::to($this->user->email)
-                ->cc('eim@we-saas.com')
-                ->send(new WelcomeEmail($this->user));
-        } catch (\Throwable $e) {
-
-        }
+        
     }
 
     protected function createUser()
@@ -139,15 +138,36 @@ class RegisterForm extends Component
 
     protected function registered()
     {
+        
+        try {
+            // Adding User to MailerLite 'All Users' group
+            MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        } 
+
+        try {
+            // Send welcome email to the user
+            Mail::to($this->user->email)
+                ->send(new WelcomeEmail($this->user));
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        
         if(get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
         }
 
         if(!get_tenant_setting('onboarding_flow')) {
-            if(!empty(get_tenant_setting('register_redirect_url'))) {
+            if(get_tenant_setting('force_email_verification')) {
+                // Registered event will trigger SendEmailVerificationNotification listener which will send EmailVerificationNotification through User model
+                event(new Registered($this->user));
+
+                return redirect()->route('user.email.verification.page');
+            } else if(!empty(get_tenant_setting('register_redirect_url', null))) {
                 return redirect(get_tenant_setting('register_redirect_url'));
             } else {
-                return redirect()->route('verification');
+                return redirect()->route('dashboard');
             } 
         }
     }

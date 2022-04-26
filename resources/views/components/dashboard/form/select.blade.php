@@ -1,5 +1,6 @@
 <div x-data="{
     open_dropdown: false,
+    multiple: @js($multiple),
     items: @js($items),
     displayed_items: @js($items),
     placeholder: '{{ $placeholder }}',

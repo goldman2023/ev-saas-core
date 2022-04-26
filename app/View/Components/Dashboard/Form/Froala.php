@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class Froala extends Component
 {
     public $field;
+
     public $id;
 
     /**

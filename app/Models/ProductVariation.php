@@ -36,7 +36,7 @@ use Str;
  * @mixin \Eloquentf
  */
 
-class ProductVariation extends EVBaseModel
+class ProductVariation extends WeBaseModel
 {
     use Notifiable;
     use SoftDeletes;

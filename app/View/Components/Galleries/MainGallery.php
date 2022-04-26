@@ -2,19 +2,24 @@
 
 namespace App\View\Components\Galleries;
 
+use App\Facades\CartService;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use Illuminate\View\Component;
-use App\Facades\CartService;
 use Session;
 
 class MainGallery extends Component
 {
     public $model;
+
     public $class;
+
     public $template;
+
     public $thumbnail;
+
     public $cover;
+
     public $gallery;
 
     /**
@@ -37,7 +42,8 @@ class MainGallery extends Component
      *
      * @return \Illuminate\Contracts\View\View|\Closure|string
      */
-    public function render() {
-        return view('components.tailwind-ui.galleries.' . $this->template);
+    public function render()
+    {
+        return view('components.tailwind-ui.galleries.'.$this->template);
     }
 }

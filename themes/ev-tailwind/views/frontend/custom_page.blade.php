@@ -7,8 +7,11 @@
         @if($section['id'] === 'html' && !empty($section['html'] ?? null))
             {!! $section['html'] !!}
         @else
-            <x-dynamic-component :component="$section['id'] ?? ''" :we-data="$section['data'] ?? []"
-                :settings="$section['settings'] ?? []" class="mt-4" />
+            <x-dynamic-component :component="$section['id'] ?? ''" 
+                :we-data="$section['data'] ?? []"
+                :settings="$section['settings'] ?? []" 
+                {{-- :uuid="$section['uuid'] ?? ''" --}}
+                class="mt-4" />
         @endif
         
     @endforeach

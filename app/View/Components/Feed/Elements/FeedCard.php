@@ -8,9 +8,13 @@ use Spatie\Activitylog\Models\Activity;
 class FeedCard extends Component
 {
     public $item;
+
     public $product;
+
     private $ignore = true;
+
     public $likes = 0;
+
     /**
      * Create a new component instance.
      *
@@ -23,16 +27,16 @@ class FeedCard extends Component
 
         $this->item = $item;
         $this->likes = Activity::where('subject_type', 'Spatie\Activitylog\Models\Activity')
-        ->where('description','liked')
+        ->where('description', 'liked')
         ->where('subject_id', $item->id)
         ->count();
 
-        if(empty($item->causer)){
+        if (empty($item->causer)) {
             $this->ignore = true;
         }
-        if ($item->subject_type == 'App\Models\Product') {
+        if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
-        } elseif ($item->subject_type == 'App\Models\Wishlist') {
+        } elseif ($item->subject_type == \App\Models\Wishlist::class) {
             if (empty($item->subject->subject)) {
                 $this->ignore = true;
             } else {
@@ -48,10 +52,8 @@ class FeedCard extends Component
      */
     public function render()
     {
-        if (!$this->ignore) {
+        if (! $this->ignore) {
             return view('components.feed.elements.feed-card');
         }
     }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
@@ -10,5 +11,8 @@ class EVS extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'ev'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'ev';
+    }
 }

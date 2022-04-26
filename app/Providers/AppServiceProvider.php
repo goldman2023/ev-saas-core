@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Qirolab\Theme\Theme;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->registerCustomValidaionRules();
+        $this->registerCustomBladeExtensions();
     }
 
     /**
@@ -66,6 +68,23 @@ class AppServiceProvider extends ServiceProvider
             return count(array_filter($value, function ($var) use ($parameters) {
                 return ($var && $var >= $parameters[0] && strlen($var) >= $parameters[1]);
             }));
+        });
+    }
+
+    public function registerCustomBladeExtensions() {
+        // Define 'UserMeta in use' blade extensions
+        Blade::if('usermeta', function ($meta_key) {
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]);
+        });
+        Blade::if('usermeta_required', function ($meta_key) {
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]) 
+                    && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['required'])
+                    && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['required'];
+        });
+        Blade::if('usermeta_onboarding', function ($meta_key) {
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]) 
+                    && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['onboarding'])
+                    && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['onboarding'];
         });
     }
 }

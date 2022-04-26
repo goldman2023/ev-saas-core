@@ -13,12 +13,14 @@ use Illuminate\Support\Facades\Hash;
 
 class MatchPassword implements Rule, ValidatorAwareRule, DataAwareRule
 {
-
     protected $parameters;
+
     protected $validator;
+
     protected $data = [];
 
-    public function __construct($parameters, $validator) {
+    public function __construct($parameters, $validator)
+    {
         $this->parameters = $parameters;
 
         $this->setValidator($validator);
@@ -33,13 +35,14 @@ class MatchPassword implements Rule, ValidatorAwareRule, DataAwareRule
         $data_key = $this->parameters[2] ?? null;
 
         // Check if user with email is not already registered.
-        $model = app($model_type)::where($model_identificator, (!empty($data_key)) ? $this->data->pull($data_key) : $this->data->pull($model_identificator))->first();
+        $model = app($model_type)::where($model_identificator, (! empty($data_key)) ? $this->data->pull($data_key) : $this->data->pull($model_identificator))->first();
 
         // If user already exists, check if provided password is the password for that user
-        return $model instanceof User && !empty($model->id ?? null) && Hash::check($value, $model->password);
+        return $model instanceof User && ! empty($model->id ?? null) && Hash::check($value, $model->password);
     }
 
-    public function validate($attribute, $value) {
+    public function validate($attribute, $value)
+    {
         return $this->passes($attribute, $value);
     }
 

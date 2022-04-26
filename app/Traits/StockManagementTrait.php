@@ -13,11 +13,17 @@ use Illuminate\Support\Facades\Log;
 trait StockManagementTrait
 {
     public $track_inventory;
+
     public $sku;
+
     public $barcode;
+
     public $current_stock;
+
     public $low_stock_qty;
+
     public $use_serial;
+
     public $allow_out_of_stock_purchases;
 
     /**
@@ -27,7 +33,7 @@ trait StockManagementTrait
      */
     protected static function bootStockManagementTrait()
     {
-        static::addGlobalScope('withStockAndSerialNumbers', function(mixed $builder) {
+        static::addGlobalScope('withStockAndSerialNumbers', function (mixed $builder) {
             // Eager Load Stock and Serial Numbers
             $builder->with(['stock']);
             $builder->with(['serial_numbers']);
@@ -35,13 +41,12 @@ trait StockManagementTrait
 
         // When model data is retrieved, populate model stock data!
         static::relationsRetrieved(function ($model) {
-            if(!$model->relationLoaded('stock')) {
+            if (! $model->relationLoaded('stock')) {
                 $model->load('stock');
             }
-            if(!$model->relationLoaded('serial_numbers')) {
+            if (! $model->relationLoaded('serial_numbers')) {
                 $model->load('serial_numbers');
             }
-
 
 //            if(empty($model->stock)) {
 //                $product_stock = ProductStock::firstOrNew(['subject_id' => $model->id, 'subject_type' => $model::class]);
@@ -90,8 +95,9 @@ trait StockManagementTrait
     /************************************
      * Stock Attributes Getters/Setters *
      ************************************/
-    public function getUseSerialAttribute() {
-        if(!isset($this->use_serial)) {
+    public function getUseSerialAttribute()
+    {
+        if (! isset($this->use_serial)) {
             $this->use_serial = (bool) (empty($this->stock) ? false : ($this->stock->use_serial ?? false));
         }
 
@@ -113,9 +119,10 @@ trait StockManagementTrait
         $this->sku = $value;
     }
 
-    public function getSkuAttribute() {
+    public function getSkuAttribute()
+    {
         // Set sku only on first model hydration!
-        if(!isset($this->sku)) {
+        if (! isset($this->sku)) {
             $this->sku = (string) (empty($this->stock) ? null : ($this->stock->sku ?? ''));
         }
 
@@ -127,23 +134,25 @@ trait StockManagementTrait
         $this->barcode = $value;
     }
 
-    public function getBarcodeAttribute() {
+    public function getBarcodeAttribute()
+    {
         // Set bracode only on first model hydration!
-        if(!isset($this->barcode)) {
+        if (! isset($this->barcode)) {
             $this->barcode = (string) (empty($this->stock) ? null : ($this->stock->barcode ?? ''));
         }
 
         return $this->barcode ?? '';
     }
 
-
-    public function setCurrentStockAttribute($value) {
+    public function setCurrentStockAttribute($value)
+    {
         $this->current_stock = $value;
     }
 
-    public function getCurrentStockAttribute() {
-        if(!isset($this->current_stock)) {
-            if($this->getUseSerialAttribute()) {
+    public function getCurrentStockAttribute()
+    {
+        if (! isset($this->current_stock)) {
+            if ($this->getUseSerialAttribute()) {
                 $this->current_stock = (int) $this->serial_numbers()->where('status', 'in_stock')->count(); // Get the count of all IN_STOCK serial_numbers of the targeted model
             } else {
                 $this->current_stock = (float) (empty($this->stock) ? null : ($this->stock->qty ?? 0));
@@ -153,12 +162,14 @@ trait StockManagementTrait
         return $this->current_stock;
     }
 
-    public function setLowStockQtyAttribute($value) {
+    public function setLowStockQtyAttribute($value)
+    {
         $this->low_stock_qty = $value;
     }
 
-    public function getLowStockQtyAttribute() {
-        if(!isset($this->low_stock_qty)) {
+    public function getLowStockQtyAttribute()
+    {
+        if (! isset($this->low_stock_qty)) {
             $this->low_stock_qty = (float) (empty($this->stock) ? null : ($this->stock->low_stock_qty ?? 0));
         }
 
@@ -170,44 +181,48 @@ trait StockManagementTrait
         $this->allow_out_of_stock_purchases = (bool) $value;
     }
 
-    public function getAllowOutOfStockPurchasesAttribute() {
-        if(!isset($this->allow_out_of_stock_purchases)) {
+    public function getAllowOutOfStockPurchasesAttribute()
+    {
+        if (! isset($this->allow_out_of_stock_purchases)) {
             $this->allow_out_of_stock_purchases = (bool) (empty($this->stock) ? false : ($this->stock->allow_out_of_stock_purchases ?? false));
         }
 
         return $this->allow_out_of_stock_purchases;
     }
 
-    public function getTrackInventoryAttribute() {
-        if(!isset($this->track_inventory)) {
+    public function getTrackInventoryAttribute()
+    {
+        if (! isset($this->track_inventory)) {
             $this->track_inventory = (bool) (empty($this->stock) ? false : ($this->stock->track_inventory ?? false));
         }
 
         return $this->track_inventory;
     }
 
-
     /**********************************
      * Stock Management Functions *
      **********************************/
-    public function isInStock() {
+    public function isInStock()
+    {
         return $this->getCurrentStockAttribute() > 0;
     }
 
-    public function isLowStock() {
+    public function isLowStock()
+    {
         return $this->getCurrentStockAttribute() <= $this->getLowStockQtyAttribute();
     }
 
-    public function reduceStock($quantity = null) {
-        $quantity = (!empty($quantity) && $quantity > 0) ? $quantity : $this->purchase_quantity;
+    public function reduceStock($quantity = null)
+    {
+        $quantity = (! empty($quantity) && $quantity > 0) ? $quantity : $this->purchase_quantity;
 
-        if($this->current_stock >= $quantity) {
-            if($this->use_serial) {
+        if ($this->current_stock >= $quantity) {
+            if ($this->use_serial) {
                 // If item uses serial numbers, assign X available serial numbers to the Order item and change their status to reserved
                 $in_stock_serial_numbers = $this->getInStockSerials()->slice(0, $quantity); // get first X in_stock serial numbers
 
                 // Change selected serial numbers statuses to reserved
-                $in_stock_serial_numbers->each(function($item, $key) {
+                $in_stock_serial_numbers->each(function ($item, $key) {
                     $item->status = 'reserved';
                     $item->save();
                 });
@@ -226,7 +241,8 @@ trait StockManagementTrait
     /**********************************
      * Serial Numbers Stock Functions *
      **********************************/
-    public function getSerialNumbersStockStats() {
+    public function getSerialNumbersStockStats()
+    {
         $all_serials = $this->serial_numbers()->orderBy('status', 'ASC')->withTrashed();
 
         $stats = [
@@ -235,39 +251,42 @@ trait StockManagementTrait
             'reserved' => 0,
             'trashed' => 0,
             'total' => 0,
-            'total_with_trashed' => 0
+            'total_with_trashed' => 0,
         ];
 
         $all_serials->each(function ($model, $key) use (&$stats) {
-            if($model->trashed()) {
-                ++$stats['trashed'];
-            } else if($model->status === 'in_stock') {
-                ++$stats['in_stock'];
-            } else if($model->status === 'out_of_stock') {
-                ++$stats['out_of_stock'];
-            } else if($model->status === 'reserved') {
-                ++$stats['reserved'];
+            if ($model->trashed()) {
+                $stats['trashed']++;
+            } elseif ($model->status === 'in_stock') {
+                $stats['in_stock']++;
+            } elseif ($model->status === 'out_of_stock') {
+                $stats['out_of_stock']++;
+            } elseif ($model->status === 'reserved') {
+                $stats['reserved']++;
             }
 
-            if(!$model->trashed()) {
-                ++$stats['total'];
+            if (! $model->trashed()) {
+                $stats['total']++;
             }
 
-            ++$stats['total_with_trashed'];
+            $stats['total_with_trashed']++;
         });
 
         return $stats;
     }
 
-    public function getInStockSerials($count = false) {
+    public function getInStockSerials($count = false)
+    {
         return $count ? $this->serial_numbers->where('status', 'in_stock')->count() : $this->serial_numbers->where('status', 'in_stock');
     }
 
-    public function getOutOfStockSerials($count = false) {
+    public function getOutOfStockSerials($count = false)
+    {
         return $count ? $this->serial_numbers->where('status', 'out_of_stock')->count() : $this->serial_numbers->where('status', 'out_of_stock');
     }
 
-    public function getReservedSerials($count = false) {
+    public function getReservedSerials($count = false)
+    {
         return $count ? $this->serial_numbers->where('status', 'reserved')->count() : $this->serial_numbers->where('status', 'reserved');
     }
 }

@@ -30,7 +30,7 @@ class AttributeTypeEnum extends EVBaseEnum
             'image' => 'image',
             'gallery' => 'gallery',
             'text_list' => 'text_list',
-            'wysiwyg' => 'wysiwyg'
+            'wysiwyg' => 'wysiwyg',
         ];
     }
 
@@ -51,7 +51,8 @@ class AttributeTypeEnum extends EVBaseEnum
         ];
     }
 
-    public static function getPredefined() {
+    public static function getPredefined()
+    {
         return ['checkbox', 'dropdown', 'radio'];
     }
 }

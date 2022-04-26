@@ -4,15 +4,15 @@ namespace App\Providers;
 
 use App\Builders\ProductsBuilder;
 use App\Models\Product;
+use App\Support\MacroableModels;
+use Categories;
 use Illuminate\Cache\Repository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Builder;
-use App\Support\MacroableModels;
-use Categories;
 
 class MacrosServiceProvider extends ServiceProvider
 {
@@ -36,16 +36,14 @@ class MacrosServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
     }
 
-
-
-    protected function setCacheRepositoryMacros(): void {
+    protected function setCacheRepositoryMacros(): void
+    {
         // These macros are used like this: Cache::store()->{macro()}; (NOT like this: Cache::{macro()})
         // Reason for that is: We cannot register macros to CacheManager class (Cache facade), only Cache\Repository class (Cache::store() object/class) - #justLaravelThings
 
-        Repository::macro('getModelCacheKey', function($model_class, $model_id) {
+        Repository::macro('getModelCacheKey', function ($model_class, $model_id) {
             return tenant('id').'-'.($model_class).'-'.$model_id;
             // e.g. 5469dff5-3707-417d-b152-d9950de45daf-App\Models\Product-7
         });
@@ -56,17 +54,16 @@ class MacrosServiceProvider extends ServiceProvider
         /* Add Collection RecursiveApply marco function */
         Collection::macro('recursiveApply', function ($property_name, ...$method) {
             return $this->whenNotEmpty($recursive = function (&$items) use (&$recursive, $property_name, $method) {
-
-                if($items->isEmpty()) {
+                if ($items->isEmpty()) {
                     return collect([]);
                 }
 
-                foreach($method as $m) {
+                foreach ($method as $m) {
                     $items = $items->{$m['fn']}(...$m['params']);
                 }
-                
-                foreach($items as $key => &$item) {
-                    if($item->relationLoaded($property_name)) {
+
+                foreach ($items as $key => &$item) {
+                    if ($item->relationLoaded($property_name)) {
                         // if relation
                         $item->setRelation($property_name, $recursive($item->{$property_name}));
                     } else {
@@ -82,29 +79,29 @@ class MacrosServiceProvider extends ServiceProvider
         // Static version of `recursiveApply` function. Models, Collections, arrays and objects can be used as $items!
         Collection::macro('recursiveApplyStatic', function ($items, $property_name, ...$method) {
             // If given $items are Collection type, call `recursiveApply` macro
-            if($items instanceof Collection) {
+            if ($items instanceof Collection) {
                 return $items->recursiveApply($property_name, $method);
             }
 
             $recursive = function (&$items, $property_name, $methods) use (&$recursive) {
-                if(empty($items)) {
+                if (empty($items)) {
                     return [];
                 }
-                
-                foreach($methods as $m) {
+
+                foreach ($methods as $m) {
                     $items = collect($items)->{$m['fn']}(...$m['params'])->all();
                 }
 
-                foreach($items as &$item) {
-                    if($item instanceof Model) {
-                        if($item->relationLoaded($property_name)) {
+                foreach ($items as &$item) {
+                    if ($item instanceof Model) {
+                        if ($item->relationLoaded($property_name)) {
                             $item->setRelation($property_name, $recursive($item->{$property_name}, $property_name, $methods));
                         } else {
                             $item->{$property_name} = $recursive($item->{$property_name}, $property_name, $methods);
                         }
-                    } else if(is_object($item)) {
+                    } elseif (is_object($item)) {
                         $item->$property_name = $recursive($item->$property_name, $property_name, $methods);
-                    } else if(is_array($item)) {
+                    } elseif (is_array($item)) {
                         $item[$property_name] = $recursive($item[$property_name], $property_name, $methods);
                     }
                 }
@@ -118,20 +115,20 @@ class MacrosServiceProvider extends ServiceProvider
         /* Add Collection RecursiveFind marco function */
         Collection::macro('recursiveFind', function ($property_name, $key, $value) {
             return $this->whenNotEmpty($recursive = function (&$items) use (&$recursive, $property_name, $key, $value) {
-
-                if(empty($items) || @$items->isEmpty()) {
+                if (empty($items) || @$items->isEmpty()) {
                     return null;
                 }
 
                 $target = $items->where($key, $value)->first();
 
-                if(empty($target)) {
-                    foreach($items as &$item) {
+                if (empty($target)) {
+                    foreach ($items as &$item) {
                         $new_items = $item->{$property_name};
                         $obj = $recursive($new_items);
-                        if(empty($obj)) {
+                        if (empty($obj)) {
                             continue;
                         }
+
                         return $obj;
                     }
                 }
@@ -156,8 +153,8 @@ class MacrosServiceProvider extends ServiceProvider
         });
 
         // Change all Models `connection` property (usually needed for Livewire collections manipulations)
-        \Illuminate\Database\Eloquent\Collection::macro('setConnection', function() {
-            return $this->map(function($item, $key) {
+        \Illuminate\Database\Eloquent\Collection::macro('setConnection', function () {
+            return $this->map(function ($item, $key) {
                 return $item->setConnection(config('tenancy.database.tenant_connection'));
             });
         });
@@ -165,22 +162,22 @@ class MacrosServiceProvider extends ServiceProvider
 
     protected function setEloquentBuilderMacros(): void
     {
-        Builder::macro('restrictByCategories', function($categories) {
+        Builder::macro('restrictByCategories', function ($categories) {
             // Pass categories_ids to Eloquent Builder by pointer!
             Categories::restrictByCategories($categories, $this);
         });
 
         // For Builders which use Cacher Trait
-        Builder::macro('noCache', function() {
-            if(method_exists($this, 'disableCacher')) {
+        Builder::macro('noCache', function () {
+            if (method_exists($this, 'disableCacher')) {
                 $this->disableCacher();
             }
 
             return $this;
         });
 
-        Builder::macro('fromCache', function() {
-            if(method_exists($this, 'enableCacher')) {
+        Builder::macro('fromCache', function () {
+            if (method_exists($this, 'enableCacher')) {
                 $this->enableCacher();
             }
 
@@ -188,14 +185,15 @@ class MacrosServiceProvider extends ServiceProvider
         });
     }
 
-    protected function setEloquentRelationMacros(): void {
-        Relation::macro('noCache', function() {
+    protected function setEloquentRelationMacros(): void
+    {
+        Relation::macro('noCache', function () {
             // Changes here are done by pointer, not by reference!
             $this->getQuery()->noCache();
             // ^^^ IMPORTANT: It looks like applying functions to the Builder with getQuery()->{chained fs), actually changes Builder used for relation by reference!
             return $this;
         });
-        Relation::macro('fromCache', function() {
+        Relation::macro('fromCache', function () {
             // Changes here are done by pointer, not by reference!
             $this->getQuery()->fromCache();
             // ^^^ IMPORTANT: It looks like applying functions to the Builder with getQuery()->{chained fs), actually changes Builder used for relation by reference!

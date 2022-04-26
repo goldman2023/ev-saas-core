@@ -26,23 +26,24 @@ use Illuminate\Notifications\Notifiable;
  */
 class CentralSetting extends Model
 {
-    use Cachable;
+    // use Cachable;
     use Notifiable;
 
     protected $table = 'central_settings';
 
-    public function getValueAttribute($value) {
+    public function getValueAttribute($value)
+    {
         $decoded = json_decode($value, true);
 
-        if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
             return $decoded;
         }
 
-        if(ctype_digit($value)) {
+        if (ctype_digit($value)) {
             $int = (int) $value;
             $float = (float) $value;
 
-            if($int == $float) {
+            if ($int == $float) {
                 return $int;
             }
 

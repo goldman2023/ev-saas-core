@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class EventCard extends Component
 {
     public $event;
+
     public $items;
+
     public $new = false;
+
     /**
      * Create a new component instance.
      *

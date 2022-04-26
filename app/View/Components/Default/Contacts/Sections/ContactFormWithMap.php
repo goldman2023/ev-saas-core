@@ -11,11 +11,13 @@ class ContactFormWithMap extends Component
      *
      * @return void
      */
+    public $map = false;
 
-     public $map = false;
-     public $address = '';
-     public $form = 'email-form';
-    public function __construct($address="", $map = false, $form = 'email-form')
+    public $address = '';
+
+    public $form = 'email-form';
+
+    public function __construct($address = '', $map = false, $form = 'email-form')
     {
         //
         $this->map = $map;

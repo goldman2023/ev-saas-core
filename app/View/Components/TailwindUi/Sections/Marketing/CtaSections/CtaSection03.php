@@ -6,7 +6,6 @@ use Illuminate\View\Component;
 
 class CtaSection03 extends Component
 {
-
     /**
      * Get the view / contents that represent the component.
      *

@@ -2,23 +2,22 @@
 
 namespace App\Models;
 
+use App;
+use App\Traits\GalleryTrait;
+use App\Traits\PermalinkTrait;
+use App\Traits\TranslationTrait;
+use App\Traits\UploadTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use App;
-use App\Traits\TranslationTrait;
-use App\Traits\PermalinkTrait;
-use App\Traits\UploadTrait;
-use App\Traits\GalleryTrait;
 
-
-class Page extends EVBaseModel
+class Page extends WeBaseModel
 {
     use HasSlug;
     use PermalinkTrait;
     use UploadTrait;
     use GalleryTrait;
-    
+
     protected $table = 'pages';
 
     protected $fillable = ['name', 'type', 'status', 'content', 'meta_title', 'meta_description', 'created_at', 'updated_at'];
@@ -41,7 +40,8 @@ class Page extends EVBaseModel
         return 'slug';
     }
 
-    public static function getRouteName() {
+    public static function getRouteName()
+    {
         return 'custom-pages.show_custom_page';
     }
 
@@ -58,23 +58,27 @@ class Page extends EVBaseModel
     //     );
     // }
 
-    public function page_previews() {
+    public function page_previews()
+    {
         return $this->hasMany(PagePreview::class, 'page_id');
     }
 
-    public function getContentAttribute($value) {
-        if(empty($value)) {
+    public function getContentAttribute($value)
+    {
+        if (empty($value)) {
             return array_values(json_decode('[]', true));
         } else {
             return array_values(json_decode($value, true));
         }
     }
 
-    public function setContentAttribute($value) {
+    public function setContentAttribute($value)
+    {
         $this->attributes['content'] = json_encode(array_values($value));
     }
 
-    public function getTranslation($field = '', $lang = false){
+    public function getTranslation($field = '', $lang = false)
+    {
         return $this->name;
     }
 

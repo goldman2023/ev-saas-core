@@ -44,20 +44,49 @@ class AppSettingsForm extends Component
                 'settings.site_name.value' => ['required'],
                 'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
+                'settings.tos_url.value' => [''],
+                'settings.cookies_url.value' => [''],
+                'settings.eula_url.value' => [''],
+                'settings.shipping_policy_url.value' => [''],
+                'settings.returns_and_refunds_url.value' => [''],
+                'settings.documentation_url.value' => [''],
             ],
             'features' => [
                 /* Example field for creating new TenantSetting */
                 'settings.feed_enabled.value' => ['boolean'],
                 'settings.multiplan_purchase.value' => ['boolean'],
                 'settings.onboarding_flow.value' => ['boolean'],
-                'settings.register_redirect_url.value' => ['nullable', 'url'],
-                'settings.login_redirect_url.value' => ['nullable', 'url'],
+                'settings.force_email_verification.value' => ['boolean'],
+                'settings.register_redirect_url.value' => ['nullable'],
+                'settings.login_redirect_url.value' => ['nullable'],
 
                 'settings.chat_feature.value' => ['boolean'],
                 'settings.weedit_feature.value' => ['boolean'],
                 'settings.wishlist_feature.value' => ['boolean'],
                 'settings.vendor_mode_feature.value' => ['boolean'],
+                'settings.plans_trial_mode.value' => ['boolean'],
+                'settings.plans_trial_duration.value' => ['exclude_if:settings.plans_trial_mode.value,false', 'required', 'numeric', 'gt:0'],
 
+            ],
+            'integrations.mailerlite' => [
+                'settings.mailerlite_api_token.value' => [''],
+            ],
+            'integrations.mailersend' => [
+                'settings.mailerlite_api_token.value' => [''],
+                'settings.mail_from_address.value' => ['required'],
+                'settings.mail_from_name.value' => ['nullable'],
+                'settings.mail_reply_to_address.value' => ['required'],
+                'settings.mail_reply_to_name.value' => ['nullable'],
+            ],
+            'integrations.google_analytics' => [
+                'settings.google_analytics_enabled.value' => ['boolean'],
+                'settings.gtag_id.value' => ['exclude_if:settings.google_analytics_enabled.value,false', 'required'],
+
+            ],
+            'integrations.google_recaptcha' => [
+                'settings.google_recaptcha_enabled.value' => ['boolean'],
+                'settings.google_recaptcha_site_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required' ],
+                'settings.google_recaptcha_secret_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required'],
             ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
@@ -87,6 +116,9 @@ class AppSettingsForm extends Component
             ],
             'design' => [
                 'settings.colors.value' => ['']
+            ],
+            'user_meta_fields' => [
+                'settings.user_meta_fields_in_use.value' => ['']
             ]
         ]);
 
@@ -136,6 +168,32 @@ class AppSettingsForm extends Component
     public function render()
     {
         return view('livewire.dashboard.forms.settings.app-settings-form');
+    }
+
+    public function saveAdvanced($rule_set) {
+        $rules = $this->getRuleSet($rule_set);
+
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            $this->inform(translate('Advanced settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save advanced settings.'), $e->getMessage(), 'fail');
+        }
     }
 
     public function saveGeneral() {
@@ -294,6 +352,35 @@ class AppSettingsForm extends Component
         }
     }
 
+    public function saveIntegrations($rule_set) {
+        $rules = $this->getRuleSet($rule_set);
+     
+        try {
+            $this->validate($rules);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatchValidationErrors($e);
+            $this->validate($rules);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $this->saveSettings($rules);
+
+            TenantSettings::clearCache();
+
+            DB::commit();
+
+            // TODO: Move this somewhere else, to be MailerLite specific!!!
+            \MailerService::mailerlite()->addDefaultFields();
+
+            $this->inform(translate('Integrations settings successfully saved.'), '', 'success');
+        } catch(\Exception $e) {
+            DB::rollback();
+            $this->inform(translate('Could not save integrations settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
     public function saveBasicInformation() {
         $rules = $this->getRuleSet('basic');
 
@@ -324,8 +411,6 @@ class AppSettingsForm extends Component
             $this->inform(translate('Could not save basic shop information.'), $e->getMessage(), 'fail');
         }
     }
-
-
 
     public function saveCompanyInfo() {
         $rules = $this->getRuleSet('company_info');

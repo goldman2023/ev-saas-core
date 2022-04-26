@@ -13,7 +13,6 @@ return [
     'engine' => 'eloquent',
     'connection' => 'laravel-visits',
 
-
     /*
     |--------------------------------------------------------------------------
     | Counters periods
@@ -53,7 +52,6 @@ return [
     */
     'always_fresh' => false,
 
-
     /*
     |--------------------------------------------------------------------------
     | Ignore Crawlers
@@ -75,4 +73,3 @@ return [
     'global_ignore' => [''],
 
 ];
-

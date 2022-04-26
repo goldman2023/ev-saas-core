@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
-use App\Facades\MyShop;
-use App\Models\Order;
-use App\Models\Orders;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
+use App\Facades\MyShop;
+use App\Models\Order;
+use App\Models\Orders;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -19,11 +19,17 @@ class OrdersTable extends DataTableComponent
     use DispatchSupport;
 
     public $for = 'me';
+
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 25;
+
     public array $perPageAccepted = [10, 25, 50, 100];
 
     public array $sortNames = [
@@ -41,18 +47,22 @@ class OrdersTable extends DataTableComponent
     ];
 
     protected string $pageName = 'orders';
+
     protected string $tableName = 'orders';
 
-    public function mount($for = 'me') {
+    public function mount($for = 'me')
+    {
         $this->for = $for;
 
         parent::mount();
     }
+
     public function exportSelected()
     {
         if ($this->selectedRowsQuery->count() > 0) {
             //return (new UserExport($this->selectedRowsQuery))->download($this->tableName.'.xlsx');
             $this->toastify(translate('Your export will start soon...'), 'info');
+
             return true;
         }
 
@@ -89,11 +99,11 @@ class OrdersTable extends DataTableComponent
                 ->select([
                     '' => translate('All'),
                     'new' => translate('New'),
-                    'viewed' => translate('Viewed')
+                    'viewed' => translate('Viewed'),
                 ]),
             'date_created' => Filter::make('Date created')
                 ->date([
-                    'max' => now()->format('Y-m-d') // Optional
+                    'max' => now()->format('Y-m-d'), // Optional
                 ]),
         ];
     }
@@ -131,22 +141,23 @@ class OrdersTable extends DataTableComponent
     public function query(): Builder
     {
         return Order::query()->where('is_temp', 0)
-            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
-            ->when($this->for === 'shop', fn($query, $value) => $query->where('shop_id', MyShop::getShopID()))
+            ->when($this->for === 'me', fn ($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
+            ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('payment_status'), fn ($query, $status) => $query->where('payment_status', $status))
             ->when($this->getFilter('shipping_status'), fn ($query, $status) => $query->where('shipping_status', $status))
             ->when($this->getFilter('viewed'), function ($query, $status) {
-                if($status === 'new')
+                if ($status === 'new') {
                     return $query->where('viewed', 0);
-                else if($status === 'viewed')
+                } elseif ($status === 'viewed') {
                     return $query->where('viewed', 1);
-                else
+                } else {
                     return $query;
+                }
             })
             ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
-      }
+    }
 
     public function rowView(): string
     {

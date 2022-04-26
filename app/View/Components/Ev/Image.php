@@ -4,17 +4,24 @@ namespace App\View\Components\Ev;
 
 use Illuminate\View\Component;
 use IMG;
+
 // TODO: Check wtf is wrong with extending WeEditableComponent in resolving he component with app()!
 
 // class Label extends WeEditableComponent
 class Image extends Component
 {
     public $src;
+
     public $href;
+
     public $target;
+
     public $altText;
+
     public $class;
+
     public $id;
+
     public $options;
 
     /**
@@ -44,7 +51,8 @@ class Image extends Component
     }
 
     // WeEdit Builder
-    public function getEditableData() {
+    public function getEditableData()
+    {
         return [
             'src' => $this->src,
             'class' => $this->class,
@@ -56,17 +64,19 @@ class Image extends Component
         ];
     }
 
-    public function setEditableData($data) {
+    public function setEditableData($data)
+    {
         $this->src = $data['src'] ?? '';
         $this->class = $data['class'] ?? '';
         $this->href = $data['href'] ?? null;
         $this->target = $data['target'] ?? '_self';
         $this->altText = $data['alt_text'] ?? '';
-        $this->options = !isset($data['options']) || empty($data['options'] ?? null) ? IMG::mergeWithDefaultOptions([], 'original') : $data['options'];
+        $this->options = ! isset($data['options']) || empty($data['options'] ?? null) ? IMG::mergeWithDefaultOptions([], 'original') : $data['options'];
         $this->id = $data['id'] ?? '';
     }
 
-    public function renderFieldComponent($slot_name, $component_name) {
+    public function renderFieldComponent($slot_name, $component_name)
+    {
         return view('components.we-edit.field-components.image', ['slot_name' => $slot_name, 'component_name' => $component_name, 'component_data' => $this->getEditableData()]);
     }
 }

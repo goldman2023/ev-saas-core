@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits\Eloquent;
 
 use App\Builders\ProductsBuilder;
@@ -13,7 +14,9 @@ use Str;
 trait Cacher
 {
     public string $cacher_scope_identifier = 'force_cached_data';
+
     public bool $from_cache = false;
+
     public array $applied_named_scopes = [];
 
     /**
@@ -82,14 +85,14 @@ trait Cacher
     {
 
         // $items are sorted based on SQL query. $items may be just IDs
-        if($this->from_cache) {
+        if ($this->from_cache) {
             $instance = $this->newModelInstance();
 
             // $items are only Model IDs in this case, because the 'force_cached_data' scope is active($cacher_scope_identifier).
             // We'll
             $cache_keys = [];
-            foreach($items as $item) {
-                if(!empty($item->id)) {
+            foreach ($items as $item) {
+                if (! empty($item->id)) {
                     $cache_keys[] = $this->generateModelCacheKey($item->id ?? null);
                 }
             }
@@ -103,9 +106,9 @@ trait Cacher
             });
 
             //If there are missing models from the Cache, get them directly from the DB and save them to Cache!
-            if($missing_models->isNotEmpty()) {
+            if ($missing_models->isNotEmpty()) {
                 $missing_ids = [];
-                foreach($missing_models as $key => $value) {
+                foreach ($missing_models as $key => $value) {
                     $missing_ids[] = $this->generateModelCacheKey($key, true);
                 }
 
@@ -131,7 +134,7 @@ trait Cacher
 
     public function generateModelCacheKey($model_id, bool $reverse = false, $cast_to = 'int'): mixed
     {
-        if($reverse) {
+        if ($reverse) {
             $id = Str::replace(tenant('id').'-'.($this->getModel()::class).'-', '', $model_id);
             settype($id, $cast_to);
 

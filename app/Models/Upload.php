@@ -6,19 +6,19 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use IMG;
-use Storage;
 use MyShop;
+use Storage;
 
-class Upload extends EVBaseModel
+class Upload extends WeBaseModel
 {
     use SoftDeletes;
     // use Cachable;
 
     /**
-    * The attributes that are mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'file_original_name', 'file_name', 'user_id', 'shop_id', 'extension', 'type', 'file_size',
     ];
@@ -42,17 +42,16 @@ class Upload extends EVBaseModel
         );
     }
 
-
     public function user()
     {
-    	return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function uploads() {
+    public function uploads()
+    {
         return $this->morphedByMany(Product::class, 'subject', 'uploads_content_relationships', 'subject_id', 'upload_id')
             ->withPivot('relation_type, group_id');
     }
-
 
     /**
      * Generates URL for the Upload model.
@@ -62,8 +61,9 @@ class Upload extends EVBaseModel
      * @param array $options
      * @return string
      */
-    public function url(array $options = []): string {
-        if(($this->attributes['type'] ?? null) === 'image') {
+    public function url(array $options = []): string
+    {
+        if (($this->attributes['type'] ?? null) === 'image') {
             return IMG::get($this, IMG::mergeWithDefaultOptions($options, 'thumbnail'));
         }
 
@@ -73,19 +73,23 @@ class Upload extends EVBaseModel
     /**
      * Local Scopes
      */
-    public function scopeNewest($query) {
+    public function scopeNewest($query)
+    {
         return $query->orderBy('created_at', 'desc');
     }
 
-    public function scopeOldest($query) {
+    public function scopeOldest($query)
+    {
         return $query->orderBy('created_at', 'asc');
     }
 
-    public function scopeSmallest($query) {
+    public function scopeSmallest($query)
+    {
         return $query->orderBy('file_size', 'asc');
     }
 
-    public function scopeLargest($query) {
+    public function scopeLargest($query)
+    {
         return $query->orderBy('file_size', 'desc');
     }
 }

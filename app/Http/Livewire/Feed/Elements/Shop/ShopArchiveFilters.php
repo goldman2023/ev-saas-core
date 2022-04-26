@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Feed\Elements\Shop;
 
-use Livewire\Component;
 use App\Traits\Livewire\DispatchSupport;
+use Livewire\Component;
 
 class ShopArchiveFilters extends Component
 {
@@ -11,9 +11,11 @@ class ShopArchiveFilters extends Component
 
     public $hide_filters;
 
-    public function mount($hide = false) {
+    public function mount($hide = false)
+    {
         $this->hide_filters = $hide;
     }
+
     /**
      * Get the view / contents that represent the component.
      *
@@ -22,6 +24,7 @@ class ShopArchiveFilters extends Component
     public function render()
     {
         $this->hide_filters = false;
+
         return view('livewire.feed.elements.shop.shop-archive-filters');
     }
 }

@@ -6,10 +6,12 @@ use Illuminate\View\Component;
 
 class DynamicAttributeValue extends Component
 {
-
     public $data;
+
     public $attribute;
+
     public $attribute_value;
+
     /**
      * Create a new component instance.
      *

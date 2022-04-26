@@ -7,7 +7,9 @@ use Illuminate\View\Component;
 class TextRepeater extends Component
 {
     public $placeholder;
+
     public $field;
+
     public $limit;
 
     /**

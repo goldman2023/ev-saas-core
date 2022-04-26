@@ -10,19 +10,23 @@ use Spatie\Activitylog\Models\Activity;
 class FeedController extends Controller
 {
     //
-    public function index() {
+    public function index()
+    {
         return view('frontend.feed.index');
     }
 
-    public function shops() {
+    public function shops()
+    {
         $shops = Shop::whereHas('products')->paginate(50);
         // $users = Users::all();
 
         return view('frontend.feed.shops', compact(['shops']));
     }
 
-    public function products() {
+    public function products()
+    {
         $products = Product::where('status', 'published')->paginate(50);
+
         return view('frontend.feed.products', compact('products'));
     }
 }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSocialCommentsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,7 +12,7 @@ class CreateSocialCommentsTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('social_comments')) {
+        if (! Schema::hasTable('social_comments')) {
             Schema::create('social_comments', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedInteger('user_id');
@@ -39,4 +38,4 @@ class CreateSocialCommentsTable extends Migration
     {
         Schema::dropIfExists('social_comments');
     }
-}
+};

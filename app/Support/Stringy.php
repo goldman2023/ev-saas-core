@@ -9,13 +9,14 @@
 namespace App\Support;
 
 /** Convenient object-oriented operations on strings */
-final class Stringy implements \Countable {
-
+final class Stringy implements \Countable
+{
     /** The default charset to use if no explicit charset has been provided */
     const CHARSET_DEFAULT = 'UTF-8';
 
     /** @var string the raw string backing this instance */
     private $rawString;
+
     /** @var string the charset of the raw string (one of the values listed by `mb_list_encodings`) */
     private $charset;
 
@@ -25,7 +26,8 @@ final class Stringy implements \Countable {
      * @param string $rawString the string to create an instance from
      * @param string|null $charset the charset to use (one of the values listed by `mb_list_encodings`) or `null`
      */
-    public function __construct($rawString, $charset = null) {
+    public function __construct($rawString, $charset = null)
+    {
         $this->rawString = (string) $rawString;
         $this->charset = (isset($charset) ? $charset : self::CHARSET_DEFAULT);
     }
@@ -37,7 +39,8 @@ final class Stringy implements \Countable {
      * @param string|null $charset the charset to use (one of the values listed by `mb_list_encodings`) (optional)
      * @return static the new instance
      */
-    public static function from($rawString, $charset = null) {
+    public static function from($rawString, $charset = null)
+    {
         return new static($rawString, $charset);
     }
 
@@ -48,7 +51,8 @@ final class Stringy implements \Countable {
      * @param string|null $charset the charset to use (one of the values listed by `mb_list_encodings`) (optional)
      * @return static[] the new instances of this class
      */
-    public static function fromArray($rawArray, $charset = null) {
+    public static function fromArray($rawArray, $charset = null)
+    {
         $output = [];
 
         foreach ($rawArray as $rawEntry) {
@@ -68,7 +72,8 @@ final class Stringy implements \Countable {
      * @param string $prefix the other string to search for
      * @return bool whether the supplied other string can be found at the beginning of this string
      */
-    public function startsWith($prefix) {
+    public function startsWith($prefix)
+    {
         if (\PHP_VERSION_ID >= 80000) {
             return $prefix !== '' && \str_starts_with($this->rawString, $prefix);
         }
@@ -86,7 +91,8 @@ final class Stringy implements \Countable {
      * @param string $prefix the other string to search for
      * @return bool whether the supplied other string can be found at the beginning of this string
      */
-    public function startsWithIgnoreCase($prefix) {
+    public function startsWithIgnoreCase($prefix)
+    {
         return $prefix !== '' && \strncasecmp($this->rawString, $prefix, \strlen($prefix)) === 0;
     }
 
@@ -100,7 +106,8 @@ final class Stringy implements \Countable {
      * @param string $infix the other string to search for
      * @return bool whether the supplied other string is contained in this string
      */
-    public function contains($infix) {
+    public function contains($infix)
+    {
         if (\PHP_VERSION_ID >= 80000) {
             return $infix !== '' && \str_contains($this->rawString, $infix);
         }
@@ -118,7 +125,8 @@ final class Stringy implements \Countable {
      * @param string $infix the other string to search for
      * @return bool whether the supplied other string is contained in this string
      */
-    public function containsIgnoreCase($infix) {
+    public function containsIgnoreCase($infix)
+    {
         return $infix !== '' && \mb_stripos($this->rawString, $infix, 0, $this->charset) !== false;
     }
 
@@ -132,7 +140,8 @@ final class Stringy implements \Countable {
      * @param string $suffix the other string to search for
      * @return bool whether the supplied other string can be found at the end of this string
      */
-    public function endsWith($suffix) {
+    public function endsWith($suffix)
+    {
         if (\PHP_VERSION_ID >= 80000) {
             return $suffix !== '' && \str_ends_with($this->rawString, $suffix);
         }
@@ -152,7 +161,8 @@ final class Stringy implements \Countable {
      * @param string $suffix the other string to search for
      * @return bool whether the supplied other string can be found at the end of this string
      */
-    public function endsWithIgnoreCase($suffix) {
+    public function endsWithIgnoreCase($suffix)
+    {
         $suffixLength = \strlen($suffix);
 
         return $suffix !== '' && \substr_compare($this->rawString, $suffix, -$suffixLength, $suffixLength, true) === 0;
@@ -165,7 +175,8 @@ final class Stringy implements \Countable {
      * @param bool $alwaysRemoveWhitespace whether to remove whitespace even if a custom list of characters is provided (optional)
      * @return static a new instance of this class
      */
-    public function trim($charactersToRemove = null, $alwaysRemoveWhitespace = null) {
+    public function trim($charactersToRemove = null, $alwaysRemoveWhitespace = null)
+    {
         return $this->trimInternal('trim', $charactersToRemove, $alwaysRemoveWhitespace);
     }
 
@@ -176,7 +187,8 @@ final class Stringy implements \Countable {
      * @param bool $alwaysRemoveWhitespace whether to remove whitespace even if a custom list of characters is provided (optional)
      * @return static a new instance of this class
      */
-    public function trimStart($charactersToRemove = null, $alwaysRemoveWhitespace = null) {
+    public function trimStart($charactersToRemove = null, $alwaysRemoveWhitespace = null)
+    {
         return $this->trimInternal('ltrim', $charactersToRemove, $alwaysRemoveWhitespace);
     }
 
@@ -187,7 +199,8 @@ final class Stringy implements \Countable {
      * @param bool $alwaysRemoveWhitespace whether to remove whitespace even if a custom list of characters is provided (optional)
      * @return static a new instance of this class
      */
-    public function trimEnd($charactersToRemove = null, $alwaysRemoveWhitespace = null) {
+    public function trimEnd($charactersToRemove = null, $alwaysRemoveWhitespace = null)
+    {
         return $this->trimInternal('rtrim', $charactersToRemove, $alwaysRemoveWhitespace);
     }
 
@@ -198,7 +211,8 @@ final class Stringy implements \Countable {
      * @return static a new instance of this class
      * @deprecated use `first` instead
      */
-    public function start($length = null) {
+    public function start($length = null)
+    {
         return $this->first($length);
     }
 
@@ -208,7 +222,8 @@ final class Stringy implements \Countable {
      * @param int|null $length the number of characters to return from the start (optional)
      * @return static a new instance of this class
      */
-    public function first($length = null) {
+    public function first($length = null)
+    {
         if ($length === null) {
             $length = 1;
         }
@@ -225,7 +240,8 @@ final class Stringy implements \Countable {
      * @return static a new instance of this class
      * @deprecated use `last` instead
      */
-    public function end($length = null) {
+    public function end($length = null)
+    {
         return $this->last($length);
     }
 
@@ -235,7 +251,8 @@ final class Stringy implements \Countable {
      * @param int|null $length the number of characters to return from the end (optional)
      * @return static a new instance of this class
      */
-    public function last($length = null) {
+    public function last($length = null)
+    {
         if ($length === null) {
             $length = 1;
         }
@@ -253,7 +270,8 @@ final class Stringy implements \Countable {
      * @param int $index the zero-based position of the byte to return
      * @return string the byte at the specified position
      */
-    public function byteAt($index) {
+    public function byteAt($index)
+    {
         return isset($this->rawString[$index]) ? $this->rawString[$index] : '';
     }
 
@@ -263,7 +281,8 @@ final class Stringy implements \Countable {
      * @param int $index the zero-based position of the code point to return
      * @return string the code point at the specified position
      */
-    public function codePointAt($index) {
+    public function codePointAt($index)
+    {
         return \mb_substr($this->rawString, $index, 1, $this->charset);
     }
 
@@ -272,7 +291,8 @@ final class Stringy implements \Countable {
      *
      * @return static a new instance of this class
      */
-    public function toLowerCase() {
+    public function toLowerCase()
+    {
         $rawString = \mb_strtolower($this->rawString, $this->charset);
 
         return new static($rawString, $this->charset);
@@ -283,7 +303,8 @@ final class Stringy implements \Countable {
      *
      * @return bool
      */
-    public function isLowerCase() {
+    public function isLowerCase()
+    {
         return $this->equals($this->toLowerCase());
     }
 
@@ -292,7 +313,8 @@ final class Stringy implements \Countable {
      *
      * @return static a new instance of this class
      */
-    public function toUpperCase() {
+    public function toUpperCase()
+    {
         $rawString = \mb_strtoupper($this->rawString, $this->charset);
 
         return new static($rawString, $this->charset);
@@ -303,7 +325,8 @@ final class Stringy implements \Countable {
      *
      * @return bool
      */
-    public function isUpperCase() {
+    public function isUpperCase()
+    {
         return $this->equals($this->toUpperCase());
     }
 
@@ -312,7 +335,8 @@ final class Stringy implements \Countable {
      *
      * @return bool
      */
-    public function isCapitalized() {
+    public function isCapitalized()
+    {
         return $this->first()->isUpperCase();
     }
 
@@ -323,7 +347,8 @@ final class Stringy implements \Countable {
      * @param string|null $ellipsis the string to use as the ellipsis (optional)
      * @return static a new instance of this class
      */
-    public function truncate($maxLength, $ellipsis = null) {
+    public function truncate($maxLength, $ellipsis = null)
+    {
         return $this->truncateInternal($maxLength, $ellipsis, false);
     }
 
@@ -336,7 +361,8 @@ final class Stringy implements \Countable {
      * @param string|null $ellipsis the string to use as the ellipsis (optional)
      * @return static a new instance of this class
      */
-    public function truncateSafely($maxLength, $ellipsis = null) {
+    public function truncateSafely($maxLength, $ellipsis = null)
+    {
         return $this->truncateInternal($maxLength, $ellipsis, true);
     }
 
@@ -350,11 +376,11 @@ final class Stringy implements \Countable {
      * @param string $substring the substring whose occurrences to count
      * @return int the number of occurrences
      */
-    public function count($substring = null) {
+    public function count($substring = null)
+    {
         if ($substring === null) {
             return \mb_strlen($this->rawString, $this->charset);
-        }
-        else {
+        } else {
             if ($substring === '') {
                 return 0;
             }
@@ -368,7 +394,8 @@ final class Stringy implements \Countable {
      *
      * @return int the number of characters
      */
-    public function length() {
+    public function length()
+    {
         return $this->count();
     }
 
@@ -377,7 +404,8 @@ final class Stringy implements \Countable {
      *
      * @return int the number of bytes
      */
-    public function lengthInBytes() {
+    public function lengthInBytes()
+    {
         return \strlen($this->rawString);
     }
 
@@ -386,7 +414,8 @@ final class Stringy implements \Countable {
      *
      * @return int the number of code points
      */
-    public function lengthInCodePoints() {
+    public function lengthInCodePoints()
+    {
         return $this->count();
     }
 
@@ -396,7 +425,8 @@ final class Stringy implements \Countable {
      * @param int $length the number of characters to remove
      * @return static a new instance of this class
      */
-    public function cutStart($length) {
+    public function cutStart($length)
+    {
         $rawString = \mb_substr($this->rawString, $length, null, $this->charset);
 
         return new static($rawString, $this->charset);
@@ -408,7 +438,8 @@ final class Stringy implements \Countable {
      * @param int $length the number of characters to remove
      * @return static a new instance of this class
      */
-    public function cutEnd($length) {
+    public function cutEnd($length)
+    {
         $rawString = \mb_substr($this->rawString, 0, $this->length() - $length, $this->charset);
 
         return new static($rawString, $this->charset);
@@ -425,7 +456,8 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replace($searchFor, $replaceWith = null) {
+    public function replace($searchFor, $replaceWith = null)
+    {
         return $this->replaceInternal('str_replace', $searchFor, $replaceWith);
     }
 
@@ -440,7 +472,8 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replaceIgnoreCase($searchFor, $replaceWith = null) {
+    public function replaceIgnoreCase($searchFor, $replaceWith = null)
+    {
         return $this->replaceInternal('str_ireplace', $searchFor, $replaceWith);
     }
 
@@ -455,7 +488,8 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replaceFirst($searchFor, $replaceWith = null) {
+    public function replaceFirst($searchFor, $replaceWith = null)
+    {
         return $this->replaceOneInternal('mb_strpos', $searchFor, $replaceWith);
     }
 
@@ -470,7 +504,8 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replaceFirstIgnoreCase($searchFor, $replaceWith = null) {
+    public function replaceFirstIgnoreCase($searchFor, $replaceWith = null)
+    {
         return $this->replaceOneInternal('mb_stripos', $searchFor, $replaceWith);
     }
 
@@ -485,11 +520,11 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replacePrefix($searchFor, $replaceWith = null) {
+    public function replacePrefix($searchFor, $replaceWith = null)
+    {
         if ($this->startsWith($searchFor)) {
             return $this->replaceFirst($searchFor, $replaceWith);
-        }
-        else {
+        } else {
             return $this;
         }
     }
@@ -505,7 +540,8 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replaceLast($searchFor, $replaceWith = null) {
+    public function replaceLast($searchFor, $replaceWith = null)
+    {
         return $this->replaceOneInternal('mb_strrpos', $searchFor, $replaceWith);
     }
 
@@ -520,7 +556,8 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replaceLastIgnoreCase($searchFor, $replaceWith = null) {
+    public function replaceLastIgnoreCase($searchFor, $replaceWith = null)
+    {
         return $this->replaceOneInternal('mb_strripos', $searchFor, $replaceWith);
     }
 
@@ -535,11 +572,11 @@ final class Stringy implements \Countable {
      * @param string $replaceWith the string to use as the replacement (optional)
      * @return static a new instance of this class
      */
-    public function replaceSuffix($searchFor, $replaceWith = null) {
+    public function replaceSuffix($searchFor, $replaceWith = null)
+    {
         if ($this->endsWith($searchFor)) {
             return $this->replaceLast($searchFor, $replaceWith);
-        }
-        else {
+        } else {
             return $this;
         }
     }
@@ -555,9 +592,10 @@ final class Stringy implements \Countable {
      * @param int|null $limit the maximum number of substrings to return (optional)
      * @return static[] the new instances of this class
      */
-    public function split($delimiter, $limit = null) {
+    public function split($delimiter, $limit = null)
+    {
         if ($delimiter === '') {
-            return [ $this ];
+            return [$this];
         }
 
         if ($limit === null) {
@@ -575,7 +613,8 @@ final class Stringy implements \Countable {
      * @param int|null $flags any combination (bit-wise ORed) of PHP's `PREG_SPLIT_*` flags
      * @return static[] the new instances of this class
      */
-    public function splitByRegex($delimiterPattern, $limit = null, $flags = null) {
+    public function splitByRegex($delimiterPattern, $limit = null, $flags = null)
+    {
         if ($limit === null) {
             $limit = -1;
         }
@@ -593,7 +632,8 @@ final class Stringy implements \Countable {
      * @param int|null the maximum number of words to return from the start (optional)
      * @return static[] the new instances of this class
      */
-    public function words($limit = null) {
+    public function words($limit = null)
+    {
         // if a limit has been specified
         if ($limit !== null) {
             // get one entry more than requested
@@ -625,7 +665,8 @@ final class Stringy implements \Countable {
      * @param string $search the search string that should delimit the end
      * @return static a new instance of this class
      */
-    public function beforeFirst($search) {
+    public function beforeFirst($search)
+    {
         return $this->sideInternal('mb_strpos', $search, -1);
     }
 
@@ -641,7 +682,8 @@ final class Stringy implements \Countable {
      * @param string $search the search string that should delimit the end
      * @return static a new instance of this class
      */
-    public function beforeLast($search) {
+    public function beforeLast($search)
+    {
         return $this->sideInternal('mb_strrpos', $search, -1);
     }
 
@@ -660,7 +702,8 @@ final class Stringy implements \Countable {
      * @param string $end the substring whose last occurrence should delimit the end
      * @return static a new instance of this class
      */
-    public function between($start, $end) {
+    public function between($start, $end)
+    {
         if ($start === '' || $end === '') {
             return new static('', $this->charset);
         }
@@ -693,7 +736,8 @@ final class Stringy implements \Countable {
      * @param string $search the search string that should delimit the start
      * @return static a new instance of this class
      */
-    public function afterFirst($search) {
+    public function afterFirst($search)
+    {
         return $this->sideInternal('mb_strpos', $search, 1);
     }
 
@@ -709,7 +753,8 @@ final class Stringy implements \Countable {
      * @param string $search the search string that should delimit the start
      * @return static a new instance of this class
      */
-    public function afterLast($search) {
+    public function afterLast($search)
+    {
         return $this->sideInternal('mb_strrpos', $search, 1);
     }
 
@@ -721,11 +766,11 @@ final class Stringy implements \Countable {
      * @param bool|null $returnAll whether to return all matches and not only the first one (optional)
      * @return bool whether this string matches the regular expression
      */
-    public function matches($regex, &$matches = null, $returnAll = null) {
+    public function matches($regex, &$matches = null, $returnAll = null)
+    {
         if ($returnAll) {
             return \preg_match_all($regex, $this->rawString, $matches) > 0;
-        }
-        else {
+        } else {
             return \preg_match($regex, $this->rawString, $matches) === 1;
         }
     }
@@ -738,7 +783,8 @@ final class Stringy implements \Countable {
      * @param string $other the other string to compare with
      * @return bool whether the two strings are equal
      */
-    public function equals($other) {
+    public function equals($other)
+    {
         return $this->compareTo($other) === 0;
     }
 
@@ -750,7 +796,8 @@ final class Stringy implements \Countable {
      * @param string $other the other string to compare with
      * @return bool whether the two strings are equal
      */
-    public function equalsIgnoreCase($other) {
+    public function equalsIgnoreCase($other)
+    {
         return $this->compareToIgnoreCase($other) === 0;
     }
 
@@ -763,15 +810,14 @@ final class Stringy implements \Countable {
      * @param bool|null $human whether to use human sorting for numbers (e.g. `2` before `10`) (optional)
      * @return int an indication whether this string is less than (< 0), equal (= 0) or greater (> 0)
      */
-    public function compareTo($other, $human = null) {
+    public function compareTo($other, $human = null)
+    {
         if ($human) {
             return \strnatcmp($this->rawString, $other);
-        }
-        else {
+        } else {
             return \strcmp($this->rawString, $other);
         }
     }
-
 
     /**
      * Compares this string to another string lexicographically
@@ -782,11 +828,11 @@ final class Stringy implements \Countable {
      * @param bool|null $human whether to use human sorting for numbers (e.g. `2` before `10`) (optional)
      * @return int an indication whether this string is less than (< 0), equal (= 0) or greater (> 0)
      */
-    public function compareToIgnoreCase($other, $human = null) {
+    public function compareToIgnoreCase($other, $human = null)
+    {
         if ($human) {
             return \strnatcasecmp($this->rawString, $other);
-        }
-        else {
+        } else {
             return \strcasecmp($this->rawString, $other);
         }
     }
@@ -796,7 +842,8 @@ final class Stringy implements \Countable {
      *
      * @return static a new instance of this class
      */
-    public function escapeForHtml() {
+    public function escapeForHtml()
+    {
         $rawString = \htmlspecialchars($this->rawString, \ENT_QUOTES, $this->charset);
 
         return new static($rawString, $this->charset);
@@ -808,7 +855,8 @@ final class Stringy implements \Countable {
      * @param string|null $newlineSequence the target newline sequence to use (optional)
      * @return static a new instance of this class
      */
-    public function normalizeLineEndings($newlineSequence = null) {
+    public function normalizeLineEndings($newlineSequence = null)
+    {
         if ($newlineSequence === null) {
             $newlineSequence = "\n";
         }
@@ -823,13 +871,13 @@ final class Stringy implements \Countable {
      *
      * @return static a new instance of this class
      */
-    public function reverse() {
+    public function reverse()
+    {
         if (\preg_match_all('/./us', $this->rawString, $matches)) {
-            $rawString = \join('', \array_reverse($matches[0]));
+            $rawString = \implode('', \array_reverse($matches[0]));
 
             return new static($rawString, $this->charset);
-        }
-        else {
+        } else {
             return $this;
         }
     }
@@ -840,13 +888,14 @@ final class Stringy implements \Countable {
      * @param bool|null $excludeLowerCase whether to exclude lowercase letters from the result (optional)
      * @return static a new instance of this class
      */
-    public function acronym($excludeLowerCase = null) {
+    public function acronym($excludeLowerCase = null)
+    {
         $words = $this->words();
 
         $rawString = '';
 
         foreach ($words as $word) {
-            if (!$excludeLowerCase || $word->isCapitalized()) {
+            if (! $excludeLowerCase || $word->isCapitalized()) {
                 $rawString .= $word->first();
             }
         }
@@ -854,11 +903,13 @@ final class Stringy implements \Countable {
         return new static($rawString, $this->charset);
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->rawString;
     }
 
-    private function trimInternal(callable $func, $charactersToRemove = null, $alwaysRemoveWhitespace = null) {
+    private function trimInternal(callable $func, $charactersToRemove = null, $alwaysRemoveWhitespace = null)
+    {
         if ($alwaysRemoveWhitespace === null) {
             $alwaysRemoveWhitespace = false;
         }
@@ -874,7 +925,8 @@ final class Stringy implements \Countable {
         return $func($this->rawString, $charactersToRemove);
     }
 
-    private function truncateInternal($maxLength, $ellipsis, $safe) {
+    private function truncateInternal($maxLength, $ellipsis, $safe)
+    {
         // if the string doesn't actually need to be truncated for the desired maximum length
         if ($this->length() <= $maxLength) {
             // return it unchanged
@@ -897,7 +949,7 @@ final class Stringy implements \Countable {
             // if we don't want to break words
             if ($safe) {
                 // if the truncated string *does* end *within* a word
-                if (!\preg_match('/\\W/u', \mb_substr($this->rawString, $maxLength - 1, 2, $this->charset))) {
+                if (! \preg_match('/\\W/u', \mb_substr($this->rawString, $maxLength - 1, 2, $this->charset))) {
                     // if there's some word boundary before
                     if (\preg_match('/.*\\W/u', $rawString, $matches)) {
                         // truncate there instead
@@ -907,11 +959,12 @@ final class Stringy implements \Countable {
             }
 
             // return the correctly truncated string together with the ellipsis
-            return new static($rawString . $ellipsis, $this->charset);
+            return new static($rawString.$ellipsis, $this->charset);
         }
     }
 
-    private function replaceInternal(callable $func, $searchFor, $replaceWith) {
+    private function replaceInternal(callable $func, $searchFor, $replaceWith)
+    {
         if ($replaceWith === null) {
             $replaceWith = '';
         }
@@ -921,7 +974,8 @@ final class Stringy implements \Countable {
         return new static($rawString, $this->charset);
     }
 
-    private function replaceOneInternal(callable $func, $searchFor, $replaceWith) {
+    private function replaceOneInternal(callable $func, $searchFor, $replaceWith)
+    {
         if ($searchFor === '') {
             return $this;
         }
@@ -930,19 +984,19 @@ final class Stringy implements \Countable {
 
         if ($pos === false) {
             return $this;
-        }
-        else {
+        } else {
             if ($replaceWith === null) {
                 $replaceWith = '';
             }
 
-            $rawString = \mb_substr($this->rawString, 0, $pos, $this->charset) . $replaceWith . \mb_substr($this->rawString, $pos + \mb_strlen($searchFor, $this->charset), null, $this->charset);
+            $rawString = \mb_substr($this->rawString, 0, $pos, $this->charset).$replaceWith.\mb_substr($this->rawString, $pos + \mb_strlen($searchFor, $this->charset), null, $this->charset);
 
             return new static($rawString, $this->charset);
         }
     }
 
-    private function sideInternal(callable $func, $substr, $direction) {
+    private function sideInternal(callable $func, $substr, $direction)
+    {
         if ($substr === '') {
             return new static('', $this->charset);
         }
@@ -953,19 +1007,16 @@ final class Stringy implements \Countable {
             if ($direction === -1) {
                 $offset = 0;
                 $length = $startPos;
-            }
-            else {
+            } else {
                 $offset = $startPos + \mb_strlen($substr, $this->charset);
                 $length = null;
             }
 
             $rawString = \mb_substr($this->rawString, $offset, $length, $this->charset);
-        }
-        else {
+        } else {
             $rawString = '';
         }
 
         return new static($rawString, $this->charset);
     }
-
 }

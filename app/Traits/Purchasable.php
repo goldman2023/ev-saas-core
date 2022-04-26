@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\Plan;
+use App\Models\Product;
+
 trait Purchasable
 {
     public bool $is_purchasable = true;
@@ -35,6 +38,14 @@ trait Purchasable
         return $this->purchase_quantity;
     }
 
+    public function isSubscribable() {
+        return $this instanceof Plan || ($this instanceof Product && (($this?->isSubscription() ?? false) || ($this->isPhysicalSubscription() ?? false)));
+    }
+
+    public function isShippable() {
+        return $this instanceof Product && (($this?->isStandard() ?? false) || ($this?->isPhysicalSubscription() ?? false));
+    }
+
     public function getSingleCheckoutPermalink() {
         $data = base64_encode(json_encode([
             'id' => $this->id,
@@ -55,5 +66,4 @@ trait Purchasable
 
         return route('stripe.checkout_redirect').'?data='.$data;
     }
-
 }

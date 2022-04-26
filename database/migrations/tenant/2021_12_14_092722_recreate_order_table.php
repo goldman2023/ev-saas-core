@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RecreateOrderTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -94,7 +93,6 @@ class RecreateOrderTable extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade')->onUpdate('cascade'); // When order is removed, its items are removed too!
             $table->index(['subject_type', 'subject_id']);
         });
-
     }
 
     /**
@@ -107,4 +105,4 @@ class RecreateOrderTable extends Migration
         Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
     }
-}
+};

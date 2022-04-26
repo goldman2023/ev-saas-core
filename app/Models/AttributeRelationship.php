@@ -6,25 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable;
 
-class AttributeRelationship extends EVBaseModel //implements \OwenIt\Auditing\Contracts\Auditable
+class AttributeRelationship extends WeBaseModel //implements \OwenIt\Auditing\Contracts\Auditable
 {
     use HasFactory;
 
-    protected $fillable = ['subject_type','subject_id','attribute_id','attribute_value_id'];
+    protected $fillable = ['subject_type', 'subject_id', 'attribute_id', 'attribute_value_id'];
 
     protected $casts = [
-        'for_variations' => 'boolean'
+        'for_variations' => 'boolean',
     ];
 
     public function attributable()
     {
-        return $this->morphTo("subject");
+        return $this->morphTo('subject');
     }
+
     public function attribute_value()
     {
         return $this->belongsTo(AttributeValue::class, 'attribute_value_id', 'id');
     }
-    public function attributes(){
+
+    public function attributes()
+    {
         return $this->belongsTo(Attribute::class, 'attribute_id', 'id');
     }
 }

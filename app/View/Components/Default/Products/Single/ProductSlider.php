@@ -7,9 +7,10 @@ use Illuminate\View\Component;
 
 class ProductSlider extends Component
 {
-
     public Product $product;
+
     public $images;
+
     /**
      * Create a new component instance.
      *

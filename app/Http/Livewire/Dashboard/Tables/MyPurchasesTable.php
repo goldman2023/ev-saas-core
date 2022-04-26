@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire\Dashboard\Tables;
 
-use App\Facades\MyShop;
-use App\Models\Order;
-use App\Models\Orders;
 use App\Enums\OrderTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Enums\ShippingStatusEnum;
+use App\Facades\MyShop;
+use App\Models\Order;
+use App\Models\Orders;
 use App\Traits\Livewire\DispatchSupport;
 use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\DataTableComponent;
@@ -19,10 +19,15 @@ class MyPurchasesTable extends DataTableComponent
     use DispatchSupport;
 
     public ?int $searchFilterDebounce = 800;
+
     public string $defaultSortColumn = 'created_at';
+
     public string $defaultSortDirection = 'desc';
+
     public bool $columnSelect = true;
+
     public int $perPage = 25;
+
     public array $perPageAccepted = [10, 25, 50, 100];
 
     public array $sortNames = [
@@ -38,12 +43,13 @@ class MyPurchasesTable extends DataTableComponent
     public array $bulkActions = [
         // 'exportSelected' => 'Export',
     ];
-    
+
     public array $filters = [
         'abandoned' => 'realized',
     ];
 
     protected string $pageName = 'orders';
+
     protected string $tableName = 'orders';
 
     public function exportSelected()
@@ -51,6 +57,7 @@ class MyPurchasesTable extends DataTableComponent
         if ($this->selectedRowsQuery->count() > 0) {
             //return (new UserExport($this->selectedRowsQuery))->download($this->tableName.'.xlsx');
             $this->toastify(translate('Your export will start soon...'), 'info');
+
             return true;
         }
 
@@ -85,7 +92,7 @@ class MyPurchasesTable extends DataTableComponent
                 ]),
             'date_created' => Filter::make('Date created')
                 ->date([
-                    'max' => now()->format('Y-m-d') // Optional
+                    'max' => now()->format('Y-m-d'), // Optional
                 ]),
             'abandoned' => Filter::make('Realized/Abandoned')
                 ->select([
@@ -134,7 +141,7 @@ class MyPurchasesTable extends DataTableComponent
             ->when($this->getFilter('shipping_status'), fn ($query, $status) => $query->where('shipping_status', $status))
             ->when($this->getFilter('abandoned'), fn ($query, $temp_status) => $query->where('is_temp', $temp_status === 'abandoned' ? 1 : 0))
             ->when($this->getFilter('date_created'), fn ($query, $date) => $query->whereDate('created_at', '=', $date));
-      }
+    }
 
     public function rowView(): string
     {

@@ -1,13 +1,13 @@
 <?php
 
 use App\Models\Category;
-use App\Models\User;
-use App\Models\Shop;
-use App\Support\Stringy;
-use Qirolab\Theme\Theme;
 use App\Models\Models\EVLabel;
+use App\Models\Shop;
+use App\Models\User;
+use App\Support\Stringy;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
+use Qirolab\Theme\Theme;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
 function s($str, $charset = 'UTF-8')
@@ -17,19 +17,19 @@ function s($str, $charset = 'UTF-8')
 
 function castCollectionItemsTo($data = null, $dataType = 'object', $casts = null)
 {
-    if (!empty($data)) {
-        if (!$data instanceof \Illuminate\Support\Collection) {
+    if (! empty($data)) {
+        if (! $data instanceof \Illuminate\Support\Collection) {
             $data = collect($data);
         }
 
         $data = $data->map(function ($item, $index) use ($dataType, $casts) {
             settype($item, $dataType);
 
-            if (!empty($casts) && (is_object($item) || is_array($item))) {
+            if (! empty($casts) && (is_object($item) || is_array($item))) {
                 foreach ($casts as $key => $cast) {
                     if (is_object($item)) {
                         settype($item->{$key}, $cast);
-                    } else if (is_array($item)) {
+                    } elseif (is_array($item)) {
                         settype($item[$key], $cast);
                     }
                 }
@@ -46,14 +46,15 @@ function shorten_string($string, $wordsreturned)
 {
     $retval = $string;
     $string = preg_replace('/(?<=\S,)(?=\S)/', ' ', $string);
-    $string = str_replace("\n", " ", $string);
-    $array = explode(" ", $string);
+    $string = str_replace("\n", ' ', $string);
+    $array = explode(' ', $string);
     if (count($array) <= $wordsreturned) {
         $retval = $string;
     } else {
         array_splice($array, $wordsreturned);
-        $retval = implode(" ", $array) . " ...";
+        $retval = implode(' ', $array).' ...';
     }
+
     return $retval;
 }
 
@@ -66,15 +67,15 @@ function get_system_name()
 }
 function get_site_name()
 {
-    $site_name =  get_setting('site_name');
+    $site_name = get_setting('site_name');
 
     return $site_name;
 }
 
 /* TODO: Make this tenant aware and also an option for single vendor */
-function get_site_logo($mode = 'default')
+function get_site_logo($mode = 'default', $options = null)
 {
-    $logo = IMG::get(get_setting('site_logo'));
+    $logo = IMG::get(get_setting('site_logo'), $options);
 
     // dd($logo);
 
@@ -100,7 +101,7 @@ function get_site_colors()
 
 function get_site_product_scope()
 {
-    $scope = "all";
+    $scope = 'all';
 
     return $scope;
 }
@@ -124,7 +125,7 @@ function get_vendor_mode()
 {
     $options = [
         'single',
-        'multi'
+        'multi',
     ];
     if (request()->getHost() === 'gunob.com') {
         $option = $options[0];
@@ -149,20 +150,20 @@ function get_vendor_mode()
 function get_theme_cart_templates($type = 'full')
 {
     if (in_array($type, ['full', 'adhoc', 'mini'])) {
-        $carts_path = Theme::path('views/components/tenant/cart/' . $type);
+        $carts_path = Theme::path('views/components/tenant/cart/'.$type);
     } else {
         return [];
     }
 
     $cart_templates = [];
-    $files = array_diff(scandir($carts_path), array('.', '..'));
+    $files = array_diff(scandir($carts_path), ['.', '..']);
 
     if (empty($files)) {
         // TODO: Get global carts if no carts are present in chosen tenant theme
     }
 
     foreach ($files as $filename) {
-        $path = $carts_path . '/' . $filename;
+        $path = $carts_path.'/'.$filename;
 
         $base_filename = str_replace('.blade.php', '', $filename);
         if ($base_filename === 'mini-cart') {
@@ -173,7 +174,6 @@ function get_theme_cart_templates($type = 'full')
         $file_comments = [];
 
         foreach ($tokens as $token) {
-
             if (isset($token[0]) && isset($token[1])) {
                 if ($token[0] == T_COMMENT || $token[0] == T_DOC_COMMENT) {
                     $file_comments[] = $token[1];
@@ -185,7 +185,7 @@ function get_theme_cart_templates($type = 'full')
         if ($file_comments) {
             $_to_string = trim(current($file_comments), "\**/");
             foreach (explode(PHP_EOL, $_to_string) as $item) {
-                $itemData = explode(":", $item);
+                $itemData = explode(':', $item);
 
                 if (count($itemData) === 2 && (trim($itemData[0]) == 'Title' || trim($itemData[0]) == '* Title')) {
                     $cart_templates[$base_filename] = trim($itemData[1]);
@@ -197,7 +197,6 @@ function get_theme_cart_templates($type = 'full')
     return $cart_templates;
 }
 
-
 function ev_dynamic_translate($key, $global = false, $lang = null)
 {
     $ttl = 60;
@@ -205,8 +204,6 @@ function ev_dynamic_translate($key, $global = false, $lang = null)
     $dynamic_label = Cache::remember($stringKey, $ttl, function () use ($stringKey) {
         return EVLabel::where('key', $stringKey)->get();
     });
-
-
 
     /*  TODO: Make sure to upgrade this for multilanguage support */
     if (count($dynamic_label)) {
@@ -246,20 +243,19 @@ function ev_dynamic_attribute($key, $attribute = 1, $global = true, $lang = null
 
 function ev_dynamic_translate_key($key, $global = false, $lang = null)
 {
-    $label_prefix =  Route::currentRouteName();
+    $label_prefix = Route::currentRouteName();
 
     if (Route::current()->parameters()) {
-        $label_prefix .= '.' . implode(Route::current()->parameters());
+        $label_prefix .= '.'.implode(Route::current()->parameters());
     }
 
     if ($global) {
         $label_prefix = 'global';
     }
 
-
     $excluded_prefixes = [
         'admin',
-        'stancl.tenancy'
+        'stancl.tenancy',
     ];
 
     foreach ($excluded_prefixes as $excluded) {
@@ -268,7 +264,7 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
         }
     }
 
-    $stringKey = $label_prefix . '.' . $key;
+    $stringKey = $label_prefix.'.'.$key;
 
     return $stringKey;
 }
@@ -276,5 +272,6 @@ function ev_dynamic_translate_key($key, $global = false, $lang = null)
 function get_public_user_count()
 {
     $users = 50 + User::count();
-    return ($users);
+
+    return $users;
 }

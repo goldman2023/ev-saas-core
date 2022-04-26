@@ -11,8 +11,8 @@ class CategoriesSidebar extends Component
      *
      * @return void
      */
-
     public $category_id;
+
     public $type;
 
     public function __construct($categoryId, $type)

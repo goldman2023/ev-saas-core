@@ -9,14 +9,14 @@ class CurrencyCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection->map(function($data) {
+            'data' => $this->collection->map(function ($data) {
                 return [
                     'name' => $data->name,
                     'code' => $data->code,
                     'symbol' => $data->symbol,
-                    'exchange_rate' => (double) $data->exchange_rate
+                    'exchange_rate' => (float) $data->exchange_rate,
                 ];
-            })
+            }),
         ];
     }
 
@@ -24,7 +24,7 @@ class CurrencyCollection extends ResourceCollection
     {
         return [
             'success' => true,
-            'status' => 200
+            'status' => 200,
         ];
     }
 }

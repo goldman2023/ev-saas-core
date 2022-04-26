@@ -5,6 +5,7 @@ namespace App\Models;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use TenantSettings;
 
 /**
  * App\Models\TenantSetting
@@ -33,26 +34,27 @@ class TenantSetting extends Model
 
     protected $fillable = ['setting', 'value'];
 
-    public function getValueAttribute($value) {
-        if(is_array($value)) {
-            return $value;
-        } else if(is_string($value)) {
-            $decoded = json_decode($value, true);
+    // public function getValueAttribute($value) {
+        
+    //     if(is_array($value)) {
+    //         return $value;
+    //     } else if(is_string($value)) {
+    //         $decoded = json_decode($value, true);
 
-            if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                return $decoded;
-            }
-        } else if(ctype_digit($value)) {
-            $int = (int) $value;
-            $float = (float) $value;
+    //         if(json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+    //             return $decoded;
+    //         }
+    //     } else if(ctype_digit($value)) {
+    //         $int = (int) $value;
+    //         $float = (float) $value;
 
-            if($int == $float) {
-                return $int;
-            }
+    //         if($int == $float) {
+    //             return $int;
+    //         }
 
-            return $float;
-        }
+    //         return $float;
+    //     }
 
-        return $value;
-    }
+    //     return $value;
+    // }
 }

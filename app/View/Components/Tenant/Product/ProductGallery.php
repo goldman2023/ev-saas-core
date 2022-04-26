@@ -7,8 +7,8 @@ use Illuminate\View\Component;
 
 class ProductGallery extends Component
 {
-
     public Product $product;
+
     /**
      * Create a new component instance.
      *

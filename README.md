@@ -89,7 +89,7 @@ All tenant routes should be located in `routes/tenant.php`
 All Central app routes should be located in `routes/web.php`
 
 # Filesystem
-In config you need to define `FILESYSTEM_DRIVER` to `s3` , but it's actually using DigitalOcean Spaces
+In config you need to define `FILESYSTEM_DISK` to `s3` , but it's actually using DigitalOcean Spaces
 Access Details can be found in `.env.example` file
 
 # User Permissions

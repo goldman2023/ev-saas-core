@@ -21,12 +21,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Customer whereUserId($value)
  * @mixin \Eloquent
  */
-
 class Customer extends Model
 {
     protected $guarded = [];
+
     protected $fillable = [
-      'user_id',
+        'user_id',
     ];
 
     public function user()

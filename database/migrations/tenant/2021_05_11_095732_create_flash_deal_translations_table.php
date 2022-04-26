@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFlashDealTranslationsTable extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -32,4 +31,4 @@ class CreateFlashDealTranslationsTable extends Migration
     {
         Schema::dropIfExists('flash_deal_translations');
     }
-}
+};

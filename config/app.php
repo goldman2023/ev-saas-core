@@ -185,7 +185,6 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         App\Providers\SocialiteServiceProvider::class,
-        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         \Laravel\Passport\PassportServiceProvider::class,
         \Spatie\Activitylog\ActivitylogServiceProvider::class,
@@ -210,7 +209,6 @@ return [
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
         Laravel\Passport\PassportServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
 
         Mews\Purifier\PurifierServiceProvider::class,
 
@@ -219,6 +217,10 @@ return [
         App\Providers\MacrosServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         App\Providers\PaymentsProvider::class,
+
+        // Overriden Vendor providers
+        App\Providers\MailerSendServiceProvider::class,
+
     ],
 
     /*
@@ -246,7 +248,7 @@ return [
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'DB' => Illuminate\Support\Facades\DB::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
-        'EVBaseModel' => App\Models\EVBaseModel::class,
+        'WeBaseModel' => App\Models\WeBaseModel::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
@@ -295,6 +297,7 @@ return [
         'Carbon' => Illuminate\Support\Carbon::class,
         'UUID' => Webpatser\Uuid\Uuid::class,
         'StripeService' => App\Facades\StripeService::class,
+        'MailerService' => App\Facades\MailerService::class,
     ],
 
 ];

@@ -52,7 +52,7 @@ class User extends Authenticatable
     /**
      * Is this user the "organization" owner.
      *
-     * @return boolean
+     * @return bool
      */
     public function isOwner()
     {
@@ -68,6 +68,6 @@ class User extends Authenticatable
 
     public function getGravatarUrlAttribute()
     {
-        return "https://www.gravatar.com/avatar/" . md5(strtolower(trim($this->email)));
+        return 'https://www.gravatar.com/avatar/'.md5(strtolower(trim($this->email)));
     }
 }

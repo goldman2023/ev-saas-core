@@ -28,14 +28,11 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-
     'central_domains' => $central_domains,
     'primary_central_domain' => env('CENTRAL_DOMAIN', 'ev-saas.com'),
     'parent_domain' => env('PARENT_DOMAIN', 'ev-saas.com'),
 
     'parent_domain' =>  env('PARENT_DOMAIN', 'ev-saas.com'),
-
-
 
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
@@ -79,13 +76,13 @@ return [
             'mysql' => Stancl\Tenancy\TenantDatabaseManagers\MySQLDatabaseManager::class,
             'pgsql' => Stancl\Tenancy\TenantDatabaseManagers\PostgreSQLDatabaseManager::class,
 
-            /**
+        /**
          * Use this database manager for MySQL to have a DB user created for each tenant database.
          * You can customize the grants given to these users by changing the $grants property.
          */
             // 'mysql' => Stancl\Tenancy\TenantDatabaseManagers\PermissionControlledMySQLDatabaseManager::class,
 
-            /**
+        /**
          * Disable the pgsql manager above, and enable the one below if you
          * want to separate tenant DBs by schemas rather than databases.
          */

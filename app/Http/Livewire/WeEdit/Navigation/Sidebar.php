@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\WeEdit\Navigation;
 
-use Livewire\Component;
 use App\Enums\WeEditLayoutEnum;
+use Livewire\Component;
 
 class Sidebar extends Component
 {
@@ -19,7 +19,8 @@ class Sidebar extends Component
         return view('livewire.we-edit.navigation.sidebar');
     }
 
-    public function changePage($container_slug) { 
-        $this->emit( 'changePageEvent', $container_slug);
+    public function changePage($container_slug)
+    {
+        $this->emit('changePageEvent', $container_slug);
     }
 }

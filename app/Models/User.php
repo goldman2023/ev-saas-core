@@ -2,23 +2,23 @@
 
 namespace App\Models;
 
-use App\Traits\GalleryTrait;
-use App\Traits\UploadTrait;
-use App\Traits\SocialAccounts;
-use App\Traits\CoreMetaTrait;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
-use Laravel\Passport\HasApiTokens;
 use App\Notifications\EmailVerificationNotification;
+use App\Traits\CoreMetaTrait;
+use App\Traits\GalleryTrait;
 use App\Traits\PermalinkTrait;
+use App\Traits\SocialAccounts;
+use App\Traits\UploadTrait;
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Traits\HasWalletFloat;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
 
-use Bavix\Wallet\Traits\HasWalletFloat;
-use Bavix\Wallet\Interfaces\WalletFloat;
-use Bavix\Wallet\Interfaces\Wallet;
 
 class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
@@ -33,16 +33,19 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use HasWalletFloat;
     use PermalinkTrait;
     use CoreMetaTrait;
-
     protected $casts = [
         'trial_ends_at' => 'datetime',
-        'banned' => 'boolean'
+        'banned' => 'boolean',
     ];
 
     public static array $user_types = ['admin', 'moderator', 'seller', 'staff', 'customer'];
+
     public static array $tenant_user_types = ['admin', 'moderator'];
+
     public static array $vendor_user_types = ['seller', 'staff'];
+
     public static array $non_customer_user_types = ['admin', 'moderator', 'seller', 'staff'];
+
     public static string $customer_type = 'customer';
 
     public function sendEmailVerificationNotification()
@@ -67,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code'
+        'name', 'surname', 'email', 'password', 'address', 'city', 'postal_code', 'phone', 'country', 'provider_id', 'email_verified_at', 'verification_code',
     ];
 
     /**
@@ -78,6 +81,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function isEmailVerified() {
+        return !empty($this->email_verified_at);
+    }
 
     public function isAdmin()
     {
@@ -128,7 +135,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         return $this->hasMany(AffiliateWithdrawRequest::class);
     }
-
 
     public function products()
     {
@@ -182,9 +188,19 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function plans()
     {
-        return $this->morphedByMany(Plan::class, 'subject', 'user_relationships');
+        return $this->morphedByMany(Plan::class, 'subject', 'user_subscriptions')->withPivot('start_date', 'end_date', 'qty', 'data');
     }
 
+    public function plan_subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class)->where('subject_type', Plan::class);
+    }
+
+    /**
+     * Check if user is subscribed to a specific plan
+     *
+     * @param int|string $plan_slug - can be both slug or ID
+     */
     public function subscribedTo($plan_slug)
     {
         if (is_numeric($plan_slug)) {
@@ -198,7 +214,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     {
         return $this->plans->count() > 0;
     }
-
 
     public function getDynamicModelUploadProperties(): array
     {
@@ -219,12 +234,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->toArray();
     }
 
-
     // OLD
     public function recently_viewed_products()
     {
         $data = Activity::whereHas('subject')
-            ->where('subject_type', 'App\Models\Product')
+            ->where('subject_type', \App\Models\Product::class)
             ->where('description', 'viewed')
             ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
             ->groupBy('subject_id')
@@ -236,7 +250,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function recently_viewed_shops()
     {
-        $data = Activity::where('subject_type', 'App\Models\Shop')
+        $data = Activity::where('subject_type', \App\Models\Shop::class)
             ->where('causer_id', $this->id)->orderBy('created_at', 'desc')
             ->groupBy('subject_id')
             ->paginate(18);
@@ -250,15 +264,14 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function followers()
     {
-        return $this->morphToMany(User::class, 'subject', 'wishlists');
+        return $this->morphToMany(self::class, 'subject', 'wishlists');
         // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
     }
 
     public function following()
     {
         return Wishlist::where('user_id', $this->id)
-            ->where('subject_type', "App\Models\Shop");
-
+            ->where('subject_type', \App\Models\Shop::class);
 
         // return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
     }
@@ -283,7 +296,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             return false;
         }
     }
-
 
     /**
      * Get the route name for the model.

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class SocialComment extends Model
+class SocialComment extends WEBaseModel
 {
     use HasFactory;
     use LogsActivity;
@@ -15,10 +15,11 @@ class SocialComment extends Model
 
     public function replies()
     {
-        return $this->hasMany(SocialComment::class, 'parent_id')->latest();
+        return $this->hasMany(self::class, 'parent_id')->latest();
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

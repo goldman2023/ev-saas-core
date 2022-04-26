@@ -9,7 +9,6 @@ use Livewire\Component;
 
 class AddPost extends Component
 {
-
     use DispatchSupport;
 
     public $content;
@@ -21,9 +20,9 @@ class AddPost extends Component
 
     public function addFeedPost()
     {
-        if(!empty($this->content)) {
+        if (! empty($this->content)) {
             $post = new BlogPost();
-            $post->name = 'Feed Post Post by ' . auth()->user()->name;
+            $post->name = 'Feed Post Post by '.auth()->user()->name;
             $post->excerpt = $this->content;
             $post->content = $this->content;
             if (MyShop::getShop()) {
@@ -41,7 +40,6 @@ class AddPost extends Component
         } else {
             $this->toastify(translate('Your post is empty!'), 'danger');
         }
-
     }
 
     public function resetForm()

@@ -7,8 +7,11 @@ use Illuminate\View\Component;
 class Spinner extends Component
 {
     public $class;
+
     public $title;
+
     public $style;
+
     public $spinnerClass;
 
     /**
@@ -16,7 +19,7 @@ class Spinner extends Component
      *
      * @return void
      */
-    public function __construct($class = '', $style= '', $spinnerClass = '', $title = 'Loading...')
+    public function __construct($class = '', $style = '', $spinnerClass = '', $title = 'Loading...')
     {
         $this->class = $class;
         $this->title = $title;

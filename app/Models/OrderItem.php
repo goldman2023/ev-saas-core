@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\OrderItem
  */
-class OrderItem extends EVBaseModel
+class OrderItem extends WeBaseModel
 {
     protected $table = 'order_items';
 
     protected $fillable = ['subject_id', 'subject_type', 'title', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'created_at', 'updated_at'];
+
     protected $visible = ['id', 'subject_id', 'subject_type', 'title', 'excerpt', 'base_price', 'discount_amount', 'subtotal_price', 'total_price', 'tax', 'created_at', 'updated_at'];
+
     protected $guarded = [];
 
     protected $casts = [

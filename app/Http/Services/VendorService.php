@@ -2,6 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Models\Attribute;
+use App\Models\AttributeValue;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\CategoryRelationship;
 use App\Models\Currency;
 use App\Models\Product;
@@ -9,10 +13,6 @@ use App\Models\Shop;
 use App\Models\ShopDomain;
 use Cache;
 use EVS;
-use App\Models\Attribute;
-use App\Models\AttributeValue;
-use App\Models\Brand;
-use App\Models\Category;
 use Illuminate\Support\Facades\Request;
 use Illuminate\View\ComponentAttributeBag;
 use Session;
@@ -20,7 +20,9 @@ use Session;
 class VendorService
 {
     protected $vendor_shop;
+
     protected $is_vendor_site;
+
     protected $vendor_categories_ids;
 
     public function __construct($app)
@@ -33,7 +35,7 @@ class VendorService
     public function isVendorSite(): bool
     {
         /* Check if it's not central app */
-        if (!$this->is_vendor_site && tenant() != null) {
+        if (! $this->is_vendor_site && tenant() != null) {
             $domain = parse_url(Request::root())['host'] ?? null;
             //$tenant_domains = tenant()->domains()->get()->pluck('domain')->toArray();
             $vendor_domains = tenant()->vendor_domains->pluck('domain')->toArray();
@@ -60,7 +62,7 @@ class VendorService
 
     public function getVendorCategoriesIDs()
     {
-        if (!empty($this->vendor_shop) && empty($this->vendor_categories_ids)) {
+        if (! empty($this->vendor_shop) && empty($this->vendor_categories_ids)) {
             // TODO: ID list array with products only by single vendor
             // TODO: Check Models CRUD PAGES!
             // TODO: Remove stock/variations $with and use them only when necessary

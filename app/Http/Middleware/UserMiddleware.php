@@ -15,11 +15,11 @@ class UserMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && (isClient() || isFreelancer()) && !auth()->user()->banned) {
+        if (Auth::check() && (isClient() || isFreelancer()) && ! auth()->user()->banned) {
             return $next($request);
-        }
-        else{
+        } else {
             session(['link' => url()->current()]);
+
             return redirect()->route('business.login');
         }
     }
