@@ -11,6 +11,7 @@ use App\Http\Controllers\EVOrderController;
 use App\Http\Controllers\EVPageController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\WeMediaController;
@@ -193,9 +194,9 @@ Route::middleware([
 
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */
-    Route::get('/feed', [App\Http\Controllers\FeedController::class, 'index'])->name('feed.index')->middleware('auth');
-    Route::get('/feed/shops', [App\Http\Controllers\FeedController::class, 'shops'])->name('feed.shops');
-    Route::get('/feed/products', [App\Http\Controllers\FeedController::class, 'products'])->name('feed.products');
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.index')->middleware('auth');
+    Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
+    Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
 });
