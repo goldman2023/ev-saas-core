@@ -22,6 +22,8 @@ class AttributesTable extends DataTableComponent
     use DispatchSupport;
 
     // public $for = 'me';
+    public bool $reordering = false;
+
     public ?int $searchFilterDebounce = 800;
 
     public string $defaultSortColumn = 'created_at';

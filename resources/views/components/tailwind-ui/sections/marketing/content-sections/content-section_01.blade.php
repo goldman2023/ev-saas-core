@@ -32,7 +32,7 @@
                     <x-ev.wysiwyg
                         we-name="wysiwyg"
                         we-title="Content"
-                        class="w-full {{ $weData['wysiwyg_slot']['components']['wysiwyg']['data']['class'] ?? '' }}"
+                        class="w-full text-left {{ $weData['wysiwyg_slot']['components']['wysiwyg']['data']['class'] ?? '' }}"
                         :content="$weData['wysiwyg_slot']['components']['wysiwyg']['data']['content'] ?? ''">
                     </x-ev.wysiwyg>
                 </div>

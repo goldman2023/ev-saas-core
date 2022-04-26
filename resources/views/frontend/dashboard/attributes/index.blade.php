@@ -7,6 +7,7 @@
 @endpush
 
 @section('panel_content')
+
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('All Attributes') }}" text="Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.">
             <x-slot name="content">

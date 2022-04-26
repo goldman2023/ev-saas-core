@@ -11,6 +11,7 @@ use App\Models\Currency;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\User;
+use App\Models\Plan;
 use Cache;
 use EVS;
 use Illuminate\Support\Collection;
@@ -149,6 +150,24 @@ class EVService
                         'is_active' => areActiveRoutes(['plans.index']),
                         'user_types' => User::$non_customer_user_types,
                         'permissions' => ['all_plans', 'browse_plans'],
+                        'children' => [
+                            [
+                                'label' => translate('All Plans'),
+                                'icon' => 'heroicon-o-archive',
+                                'route' => route('plans.index'),
+                                'is_active' => areActiveRoutes(['plans.index']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['browse_plans'],
+                            ],
+                            [
+                                'label' => translate('Attributes'),
+                                'icon' => 'heroicon-o-view-list',
+                                'route' => route('attributes.index', base64_encode(Plan::class)),
+                                'is_active' => areActiveRoutes(['attributes.index']),
+                                'user_types' => User::$non_customer_user_types,
+                                'permissions' => ['view_plan_attributes'],
+                            ],
+                        ],
                     ],
                     [
                         'label' => translate('Categories'),
