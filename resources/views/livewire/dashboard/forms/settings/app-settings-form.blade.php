@@ -395,22 +395,22 @@
                                     <x-dashboard.form.toggle field="settings.onboarding_flow.value" />
                                 </div>
 
-                                <div class="col-span-3" x-show="!settings.onboarding_flow.value">
-                                    {{-- Force email verification --}}
-                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3" x-data="{}">
-                                        <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
-                                            <span class="text-sm font-medium text-gray-900">{{ translate('Force email verification') }}:</span>
-                                            <p class="text-gray-500 text-sm">
-                                                {{ translate('Enable/Disable if users must verify their email address in order to preform some actions') }}
-                                            </p>
-                                        </div>
-        
-                                        <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.toggle field="settings.force_email_verification.value" />
-                                        </div>
+                                {{-- Force email verification --}}
+                                <div class="col-span-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-3" x-data="{}">
+                                    <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                        <span class="text-sm font-medium text-gray-900">{{ translate('Force email verification') }}:</span>
+                                        <p class="text-gray-500 text-sm">
+                                            {{ translate('Enable/Disable if users must verify their email address in order to preform some actions') }}
+                                        </p>
                                     </div>
-                                    {{-- END Force email verification --}}
+    
+                                    <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                        <x-dashboard.form.toggle field="settings.force_email_verification.value" />
+                                    </div>
+                                </div>
+                                {{-- END Force email verification --}}
 
+                                <div class="col-span-3" x-show="!settings.onboarding_flow.value">
                                     {{-- Register Redirect URL --}}
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  mb-3" x-data="{}">
                                         <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">

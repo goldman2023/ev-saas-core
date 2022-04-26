@@ -138,13 +138,18 @@ class RegisterForm extends Component
 
     protected function registered()
     {
-        // Send welcome email to the user
+        
         try {
-            Mail::to($this->user->email)
-                ->send(new WelcomeEmail($this->user));
-
             // Adding User to MailerLite 'All Users' group
             MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        try {
+            // Send welcome email to the user
+            Mail::to($this->user->email)
+                ->send(new WelcomeEmail($this->user));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
