@@ -6,6 +6,7 @@ use App\Models\Auth\User as Authenticatable;
 use App\Notifications\EmailVerificationNotification;
 use App\Traits\CoreMetaTrait;
 use App\Traits\GalleryTrait;
+use App\Traits\LikesTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\UploadTrait;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialAccounts;
     use HasWalletFloat;
     use PermalinkTrait;
+    use LikesTrait;
     use CoreMetaTrait;
     protected $casts = [
         'trial_ends_at' => 'datetime',
