@@ -1204,7 +1204,8 @@
                                             'required': false,
                                             'onboarding': false,
                                             'registration': false,
-                                            'type': this.all_user_meta[key]
+                                            'type': this.all_user_meta[key],
+                                            'entity': 'individual'
                                         };
                                     }
                                 },

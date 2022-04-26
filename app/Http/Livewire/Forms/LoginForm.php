@@ -14,6 +14,8 @@ use Carbon;
 use Categories;
 use DB;
 use EVS;
+use MailerService;
+use App\Enums\WeMailingListsEnum;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -76,7 +78,19 @@ class LoginForm extends Component
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             request()->session()->regenerate();
 
-            if (! empty(get_tenant_setting('login_redirect_url'))) {
+            // Add to mailerlite if user's 'in_mailerlite' core_meta is null or non existent (must be loose comparison)
+            if(auth()->user()->getCoreMeta('in_mailerlite') != 1) {
+                $subscriber = MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, auth()->user());
+
+                if(!empty($subscriber)) {
+                    auth()->user()->core_meta()->updateOrCreate(
+                        ['key' => 'in_mailerlite'],
+                        ['value' => 1]
+                    );
+                }  
+            }
+
+            if (!empty(get_tenant_setting('login_redirect_url'))) {
                 return redirect(get_tenant_setting('login_redirect_url'));
             } else {
                 return redirect()->route('home');

@@ -52,6 +52,22 @@ class UserMeta extends WeBaseModel
         ];
     }
 
+    public static function metaForCompanyEntity() {
+        return ['company_name', 'company_vat', 'company_registration_number'];
+    }
+
+    public static function metaSelectValues($key) {
+        $data = [
+            'gender' => [
+                'male' => 'Male',
+                'female' => 'Female',
+                'other' => 'Other'
+            ]
+        ];
+
+        return $data[$key] ?? [];
+    }
+
     public static function createMissingMeta($user_id)
     {
         if ($user_id instanceof User) {
