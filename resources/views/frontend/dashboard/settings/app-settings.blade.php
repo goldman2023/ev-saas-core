@@ -10,9 +10,9 @@
   <section>
     <x-dashboard.section-headers.section-header title="{{ translate('App settings') }}" text="">
         <x-slot name="content">
-            <a href="#" class="btn-primary">
-                @svg('heroicon-o-user', ['class' => 'h-4 h-4 mr-2'])
-                <span>{{ translate('My shop') }}</span>
+            <a href="/" target="_blank" class="btn-primary">
+                @svg('heroicon-o-eye', ['class' => 'h-4 h-4 mr-2'])
+                <span>{{ translate('Preview website') }}</span>
             </a>
         </x-slot>
     </x-dashboard.section-headers.section-header>
@@ -108,5 +108,5 @@
         {{-- @livewire('payment-method') --}}
       {{-- </div>
     </div>
-  </div> --}} 
+  </div> --}}
 @endsection
