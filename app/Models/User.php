@@ -18,10 +18,9 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
-use OwenIt\Auditing\Contracts\Auditable;
 
 
-class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat, Auditable
+class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFloat
 {
     use Notifiable, HasApiTokens;
     use HasRoles;
@@ -34,7 +33,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use HasWalletFloat;
     use PermalinkTrait;
     use CoreMetaTrait;
-    use \OwenIt\Auditing\Auditable;
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean',
@@ -200,7 +198,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     /**
      * Check if user is subscribed to a specific plan
-     * 
+     *
      * @param int|string $plan_slug - can be both slug or ID
      */
     public function subscribedTo($plan_slug)
