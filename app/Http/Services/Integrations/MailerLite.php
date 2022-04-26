@@ -78,7 +78,7 @@ class MailerLite
 
     public function addSubscriberToGroup($group_identifier, $user) {
         $group = $this->getGroup($group_identifier);
-        
+
         try {
             $fields = [
                 'company' => '',
