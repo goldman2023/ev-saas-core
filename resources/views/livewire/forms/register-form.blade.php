@@ -1,4 +1,15 @@
-<div class="w-full relative">
+<div class="w-full relative" x-data="{
+        entity: @js($entity),
+        @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
+            user_meta: {
+                @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
+                    @if($options['type'] == 'select' || $options['type'] == 'date')
+                        {{ $key }}: '',
+                    @endif
+                @endforeach
+            }
+        @endif
+    }">
     <x-ev.loaders.spinner class="absolute-center z-10 hidden" wire:loading.class.remove="hidden"></x-ev.loaders.spinner>
 
     <div class="w-full" wire:loading.class="opacity-30 pointer-events-none">
@@ -60,6 +71,22 @@
         </div>
         {{-- END Email --}}
 
+        <div class="mb-3">
+            <fieldset class="mt-4">
+              <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                <div class="flex items-center">
+                  <input id="entity_individual" name="entity_field" type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                  <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
+                </div>
+          
+                <div class="flex items-center">
+                  <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                  <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
+                </div>
+              </div>
+            </fieldset>
+        </div>
+
         {{-- Password --}}
         <div class="mb-3">
             <label class="block text-16 font-medium text-gray-700">{{ translate('Password') }}</label>
@@ -89,6 +116,24 @@
             <x-system.invalid-msg field="password_confirmation" />
         </div>
         {{-- END Password Confirmation --}}
+        
+        @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
+            @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
+                <div class="mb-4" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif >
+                    <label class="block text-16 font-medium text-gray-700">{{  Str::title(str_replace('_', ' ', $key)) }}</label>
+
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        @if($options['type'] == 'string')
+                            <x-dashboard.form.input field="user_meta.{{ $key }}" />
+                        @elseif($options['type'] == 'date')
+                            <x-dashboard.form.date field="user_meta.{{ $key }}" />
+                        @elseif($options['type'] == 'select')
+                            <x-dashboard.form.select field="user_meta.{{ $key }}" selected="user_meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        @endif
 
         {{-- Consent Terms and Conditions --}}
         <div class="mb-2 flex items-center justify-between">
@@ -114,7 +159,18 @@
 
         {{-- Register Action --}}
         <div class="mb-3">
-            <button type="button" class="btn bg-primary text-white w-full mt-2" wire:click="register()"
+            <button type="button" class="btn bg-primary text-white w-full mt-2" 
+                @click="
+                    $wire.set('entity', entity, true);
+                    @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
+                        @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
+                            @if($options['type'] == 'select' || $options['type'] == 'date')
+                                $wire.set('user_meta.{{ $key }}', user_meta.{{ $key }}, true);
+                            @endif
+                        @endforeach
+                    @endif
+                "
+                wire:click="register()"
                 data-test="we-register-submit">
                 {{ translate('Register')}}
             </button>
@@ -135,3 +191,9 @@
         </div>
     </div>
 </div>
+
+@push('head_scripts')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.11/themes/airbnb.min.css">
+{{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> --}}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
