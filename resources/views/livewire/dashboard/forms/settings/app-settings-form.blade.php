@@ -176,6 +176,7 @@
                             <div class="mt-7 text-20 font-semibold">
                                 {{ translate('Policies (GDPR, return/refund, shipping etc.)') }}
                             </div>
+
                             <!-- TOS Url -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-2 sm:mt-2" x-data="{}">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
@@ -974,14 +975,14 @@
                                     <!-- END MailerLite API Token -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
-                                        <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveIntegrations()">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveIntegrations('integrations.mailerlite')">
                                             {{ translate('Save') }}
                                         </button>
                                     </div>
                                 </x-system.form-modal>
                                 {{-- END MailerLite --}}
 
-                                {{-- MailSend --}}
+                                {{-- MailerSend --}}
                                 <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
                                     <div class="flex-1 flex flex-col p-8">
                                         <img src="https://app.mailersend.com/images/logo/mailersend.svg"  class="h-8 logo-light">
@@ -1060,7 +1061,7 @@
                                     <!-- END Mail ReplyTo Name -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
-                                        <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveIntegrations()">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveIntegrations('integrations.mailersend')">
                                             {{ translate('Save') }}
                                         </button>
                                     </div>
@@ -1112,7 +1113,7 @@
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
                                             $wire.set('settings.google_analytics_enabled.value', settings.google_analytics_enabled.value, true);
-                                        "  wire:click="saveIntegrations()">
+                                        "  wire:click="saveIntegrations('integrations.google_analytics')">
                                             {{ translate('Save') }}
                                         </button>
                                     </div>
@@ -1176,7 +1177,7 @@
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
                                             $wire.set('settings.google_recaptcha_enabled.value', settings.google_recaptcha_enabled.value, true);
-                                        "  wire:click="saveIntegrations()">
+                                        "  wire:click="saveIntegrations('integrations.google_recaptcha')">
                                             {{ translate('Save') }}
                                         </button>
                                     </div>

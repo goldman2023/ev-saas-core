@@ -68,18 +68,22 @@ class AppSettingsForm extends Component
                 'settings.plans_trial_duration.value' => ['exclude_if:settings.plans_trial_mode.value,false', 'required', 'numeric', 'gt:0'],
 
             ],
-            'integrations' => [
+            'integrations.mailerlite' => [
                 'settings.mailerlite_api_token.value' => [''],
-                'settings.mailersend_api_token.value' => [''],
-
+            ],
+            'integrations.mailersend' => [
+                'settings.mailerlite_api_token.value' => [''],
                 'settings.mail_from_address.value' => ['required'],
                 'settings.mail_from_name.value' => ['nullable'],
                 'settings.mail_reply_to_address.value' => ['required'],
                 'settings.mail_reply_to_name.value' => ['nullable'],
-
+            ],
+            'integrations.google_analytics' => [
                 'settings.google_analytics_enabled.value' => ['boolean'],
                 'settings.gtag_id.value' => ['exclude_if:settings.google_analytics_enabled.value,false', 'required'],
 
+            ],
+            'integrations.google_recaptcha' => [
                 'settings.google_recaptcha_enabled.value' => ['boolean'],
                 'settings.google_recaptcha_site_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required' ],
                 'settings.google_recaptcha_secret_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required'],
@@ -348,9 +352,9 @@ class AppSettingsForm extends Component
         }
     }
 
-    public function saveIntegrations() {
-        $rules = $this->getRuleSet('integrations');
-        
+    public function saveIntegrations($rule_set) {
+        $rules = $this->getRuleSet($rule_set);
+     
         try {
             $this->validate($rules);
         } catch (\Illuminate\Validation\ValidationException $e) {
