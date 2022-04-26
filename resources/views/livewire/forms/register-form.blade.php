@@ -3,7 +3,7 @@
         @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
             user_meta: {
                 @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
-                    @if($options['type'] == 'select' || $options['type'] == 'date')
+                    @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date')
                         {{ $key }}: '',
                     @endif
                 @endforeach
@@ -123,11 +123,11 @@
                     <label class="block text-16 font-medium text-gray-700">{{  Str::title(str_replace('_', ' ', $key)) }}</label>
 
                     <div class="mt-1 relative rounded-md shadow-sm">
-                        @if($options['type'] == 'string')
+                        @if(($options['type']??'string') == 'string')
                             <x-dashboard.form.input field="user_meta.{{ $key }}" />
-                        @elseif($options['type'] == 'date')
+                        @elseif(($options['type']??'string') == 'date')
                             <x-dashboard.form.date field="user_meta.{{ $key }}" />
-                        @elseif($options['type'] == 'select')
+                        @elseif(($options['type']??'string') == 'select')
                             <x-dashboard.form.select field="user_meta.{{ $key }}" selected="user_meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />
                         @endif
                     </div>
@@ -164,7 +164,7 @@
                     $wire.set('entity', entity, true);
                     @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true)->count() > 0)
                         @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true) as $key => $options)
-                            @if($options['type'] == 'select' || $options['type'] == 'date')
+                            @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date')
                                 $wire.set('user_meta.{{ $key }}', user_meta.{{ $key }}, true);
                             @endif
                         @endforeach

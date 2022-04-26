@@ -42,6 +42,9 @@
 
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}"
     @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
+    
+    @include('frontend.layouts.global-partials.global-integrations-body')
+
     <div class="min-h-screen">
         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
 

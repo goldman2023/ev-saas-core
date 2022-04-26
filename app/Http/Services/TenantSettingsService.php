@@ -179,7 +179,12 @@ class TenantSettingsService
             'google_recaptcha_enabled' => 'boolean',
             'google_recaptcha_site_key' => 'string',
             'google_recaptcha_secret_key' => 'string',
+            
+            'facebook_pixel_enabled' => 'string',
+            'facebook_pixel_id' => 'string',
 
+            'google_tag_manager_enabled' => 'boolean',
+            'google_tag_manager_id' => 'string',
 
 
             // Mail

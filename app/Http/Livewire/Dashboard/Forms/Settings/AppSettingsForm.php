@@ -81,12 +81,19 @@ class AppSettingsForm extends Component
             'integrations.google_analytics' => [
                 'settings.google_analytics_enabled.value' => ['boolean'],
                 'settings.gtag_id.value' => ['exclude_if:settings.google_analytics_enabled.value,false', 'required'],
-
             ],
             'integrations.google_recaptcha' => [
                 'settings.google_recaptcha_enabled.value' => ['boolean'],
                 'settings.google_recaptcha_site_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required' ],
                 'settings.google_recaptcha_secret_key.value' => ['exclude_if:settings.google_recaptcha_enabled.value,false', 'required'],
+            ],
+            'integrations.google_tag_manager' => [
+                'settings.google_tag_manager_enabled.value' => ['boolean'],
+                'settings.google_tag_manager_id.value' => ['exclude_if:settings.google_tag_manager_enabled.value,false', 'required'],
+            ],
+            'integrations.facebook_pixel' => [
+                'settings.facebook_pixel_enabled.value' => ['boolean'],
+                'settings.facebook_pixel_id.value' => ['exclude_if:settings.facebook_pixel_enabled.value,false', 'required'],
             ],
             'social' => [
                 'settings.enable_social_logins.value' => ['boolean'],
