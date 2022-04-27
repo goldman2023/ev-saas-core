@@ -204,12 +204,13 @@ trait StockManagementTrait
      **********************************/
     public function isInStock()
     {
-        return $this->getCurrentStockAttribute() > 0;
+        // Products for which inventory is not tracked, they are considered inStock always!
+        return ($this->getCurrentStockAttribute() > 0 && $this->getTrackInventoryAttribute()) || !$this->getTrackInventoryAttribute();
     }
 
     public function isLowStock()
     {
-        return $this->getCurrentStockAttribute() <= $this->getLowStockQtyAttribute();
+        return $this->getTrackInventoryAttribute() && $this->getCurrentStockAttribute() <= $this->getLowStockQtyAttribute();
     }
 
     public function reduceStock($quantity = null)

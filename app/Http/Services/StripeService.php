@@ -595,7 +595,7 @@ class StripeService
             $order_item = $order->order_items->first();
             $model = $order_item->subject;
 
-            if (method_exists($model, 'stock')) {
+            if (method_exists($model, 'stock') && $model->track_inventory) {
                 // Reduce the stock quantity of an $model
                 $serial_numbers = $model->reduceStock();
 
