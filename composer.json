@@ -22,6 +22,7 @@
         "devpartners/auditable-log": "^1.0",
         "diglactic/laravel-breadcrumbs": "^7.1",
         "doctrine/dbal": "^3.3",
+        "froala/wysiwyg-editor-php-sdk": "^4.0",
         "google/apiclient": "^2.12.1",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
@@ -88,7 +89,8 @@
         },
         "files": [
             "app/Http/Helpers.php",
-            "vendor/webtopay/libwebtopay/WebToPay.php"
+            "vendor/webtopay/libwebtopay/WebToPay.php",
+            "vendor/froala/wysiwyg-editor-php-sdk/lib/FroalaEditor.php"
         ]
     },
     "autoload-dev": {
