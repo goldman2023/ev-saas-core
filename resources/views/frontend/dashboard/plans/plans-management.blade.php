@@ -12,7 +12,7 @@
         text="{{ translate('Manage your subscription and billind details') }}">
         <x-slot name="content">
             @if(auth()->user()->isSubscribed())
-                <a href="{{ route('stripe.portal_session') }}">
+                <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
                         {{ translate('Biling Portal') }}
                 </a>
             @endif

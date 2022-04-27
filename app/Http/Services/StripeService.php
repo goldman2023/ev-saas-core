@@ -69,7 +69,7 @@ class StripeService
     public function saveStripeProduct($model)
     {
         // Find model's stripe ID in CoreMeta and based on it decide wheter to create OR update Stripe Product
-        $stripe_id = $model->core_meta->where('key', '=', 'stripe_product_id')->first();
+        $stripe_id = $model->core_meta->where('key', '=', $this->mode_prefix.'stripe_product_id')->first();
 
         if (empty($stripe_id)) {
             //Insert Stripe product
@@ -244,7 +244,6 @@ class StripeService
 
     public function createCheckoutLink($model, $qty = 1, $preview = false, $abandoned_order_id = null)
     {
-
         // Check if Stripe Product actually exists
         $order = null;
         $stripe_product_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_product_id')->first()?->value ?? null;
@@ -343,8 +342,8 @@ class StripeService
         if (!$is_preview) {
             // Save payment intent inside Order meta
             $meta = $order->meta;
-            $meta['stripe_payment_intent_id'] = $checkout_link['payment_intent'] ?? null; // store payment intent id
-            $meta['stripe_checkout_session_id'] = $checkout_link['id'] ?? null; // store chekout session id
+            $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $checkout_link['payment_intent'] ?? null; // store payment intent id
+            $meta[$this->mode_prefix .'stripe_checkout_session_id'] = $checkout_link['id'] ?? null; // store chekout session id
             $order->meta = $meta;
         }
 
@@ -353,6 +352,23 @@ class StripeService
         return $checkout_link['url'] ?? null;
     }
 
+    public function createPortalSession()
+    {
+        if (auth()->user()) {
+            // Create Stripe customer if it doesn't exist
+            $stripe_customer = $this->createStripeCustomer();
+            $stripe_args['customer'] = $stripe_customer->id;
+
+            $billing_session = $this->stripe->billingPortal->sessions->create([
+                'customer' => $stripe_customer->id,
+                'return_url' => back()->getRequest()->url(),
+            ]);
+
+            return $billing_session['url'] ?? null;
+        }
+
+        return false;
+    }
 
     protected function createTempOrder($model, $qty)
     {
@@ -570,8 +586,8 @@ class StripeService
             $order->shipping_zip = !empty($session?->shipping->address?->postal_code ?? '') ? $session->shipping->address->postal_code : '';
 
             $meta = $order->meta;
-            $meta['stripe_payment_mode'] = $session->mode ?? null; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
-            $meta['stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
+            $meta[$this->mode_prefix .'stripe_payment_mode'] = $session->mode ?? null; // IMPORTANT: when mode is `subscription`, stripe_payment_intent_id is NOT SENT, because payment intent is related to future INVOICE not one time session checkout!
+            $meta[$this->mode_prefix .'stripe_subscription_id'] = $session->subscription ?? null; // store payment intent id
             $order->meta = $meta;
             $order->save();
 
@@ -604,7 +620,7 @@ class StripeService
                             'payment_status' => PaymentStatusEnum::pending()->value, // set payment_status to `pending` because only when invoice.paid, we are sure that payment is 100% successful
                             'status' => UserSubscriptionStatusEnum::inactive()->value, // User subscription is still not active because we need to wait for invoice.paid!
                             'data' => json_encode([
-                                'stripe_subscription_id' => $session->subscription ?? null // store stripe_subscription_id
+                                $this->mode_prefix.'stripe_subscription_id' => $session->subscription ?? null // store stripe_subscription_id
                             ])
                         ]
                     ]);
@@ -662,14 +678,14 @@ class StripeService
                 $invoice->grace_period = null;
 
                 $meta = $invoice->meta;
-                $meta['stripe_invoice_id'] = null;
-                $meta['stripe_hosted_invoice_url'] = null;
-                $meta['stripe_invoice_pdf_url'] = null;
-                $meta['stripe_invoice_number'] = null;
-                $meta['stripe_customer_id'] = $session->customer ?? '';
-                $meta['stripe_payment_intent_id'] = $session->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-                $meta['stripe_subscription_id'] = null; // store subscription ID in invoice meta
-                $meta['stripe_currency'] = $session->currency ?? null;
+                $meta[$this->mode_prefix .'stripe_invoice_id'] = null;
+                $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = null;
+                $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = null;
+                $meta[$this->mode_prefix .'stripe_invoice_number'] = null;
+                $meta[$this->mode_prefix .'stripe_customer_id'] = $session->customer ?? '';
+                $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $session->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
+                $meta[$this->mode_prefix .'stripe_subscription_id'] = null; // store subscription ID in invoice meta
+                $meta[$this->mode_prefix .'stripe_currency'] = $session->currency ?? null;
 
                 // Append receipt_url to order and invoice (and get it through payment_intent)
                 $pi = $this->stripe->paymentIntents->retrieve(
@@ -677,12 +693,12 @@ class StripeService
                     []
                 );
 
-                $meta['stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
                 $invoice->meta = $meta;
                 $invoice->save();
 
                 $meta = $order->meta;
-                $meta['stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
+                $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;
                 $order->meta = $meta;
                 $order->save();
             }
@@ -788,7 +804,7 @@ class StripeService
 
         try {
             // We need our order here, because we need to link new invoice to it! Find order in our DB based on stripe_subscription this invoice is related to
-            $order = Order::withoutGlobalScopes()->whereJsonContains('meta->stripe_subscription_id', $stripe_subscription_id)->first();
+            $order = Order::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix .'stripe_subscription_id', $stripe_subscription_id)->first();
 
             if (!empty($order)) {
                 // Get order item(s)
@@ -847,14 +863,14 @@ class StripeService
                 $invoice->grace_period = $order->invoice_grace_period ?? ''; // NULL; or 5 days grace_period by default
 
                 $meta = $invoice->meta;
-                $meta['stripe_invoice_id'] = $stripe_invoice->id ?? '';
-                $meta['stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-                $meta['stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-                $meta['stripe_invoice_number'] = $stripe_invoice->number ?? '';
-                $meta['stripe_customer_id'] = $stripe_invoice->customer ?? '';
-                $meta['stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-                $meta['stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
-                $meta['stripe_currency'] = $stripe_invoice->currency ?? null;
+                $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
+                $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
+                $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
+                $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
+                $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
+                $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
+                $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
+                $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
                 $invoice->meta = $meta;
 
                 $invoice->save();
@@ -884,29 +900,29 @@ class StripeService
         $stripe_subscription_id = $stripe_invoice->subscription;
 
         try {
-            $invoice = Invoice::withoutGlobalScopes()->whereJsonContains('meta->stripe_invoice_id', $stripe_invoice->id)->first();
-            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
+            $invoice = Invoice::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix.'stripe_invoice_id', $stripe_invoice->id)->first();
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->first();
 
             if (!empty($invoice)) {
                 $invoice->invoice_number = $stripe_invoice->number;
                 $invoice->payment_status = \App\Enums\PaymentStatusEnum::paid()->value;
 
                 $meta = $invoice->meta;
-                $meta['stripe_invoice_id'] = $stripe_invoice->id ?? '';
-                $meta['stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-                $meta['stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-                $meta['stripe_invoice_number'] = $stripe_invoice->number ?? '';
-                $meta['stripe_customer_id'] = $stripe_invoice->customer ?? '';
-                $meta['stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-                $meta['stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
-                $meta['stripe_currency'] = $stripe_invoice->currency ?? null;
+                $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
+                $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
+                $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
+                $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
+                $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
+                $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
+                $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
+                $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
 
                 // Append receipt_url to invoice (and get it through charge)
                 $ch = $this->stripe->charges->retrieve(
                     $stripe_invoice->charge,
                     []
                 );
-                $meta['stripe_receipt_url'] = $ch->receipt_url;
+                $meta[$this->mode_prefix .'stripe_receipt_url'] = $ch->receipt_url;
 
                 $invoice->meta = $meta;
                 $invoice->save();
@@ -930,27 +946,27 @@ class StripeService
 
         // TODO: What to do if payment is failed
         try {
-            $invoice = Invoice::withoutGlobalScopes()->whereJsonContains('meta->stripe_invoice_id', $stripe_invoice->id)->first();
-            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_latest_invoice_id', $stripe_invoice->id)->first();
+            $invoice = Invoice::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix.'stripe_invoice_id', $stripe_invoice->id)->first();
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_latest_invoice_id', $stripe_invoice->id)->first();
 
             $invoice->invoice_number = $stripe_invoice->number;
             $invoice->payment_status = PaymentStatusEnum::unpaid()->value;
 
             $meta = $invoice->meta;
-            $meta['stripe_invoice_id'] = $stripe_invoice->id ?? '';
-            $meta['stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-            $meta['stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-            $meta['stripe_invoice_number'] = $stripe_invoice->number ?? '';
-            $meta['stripe_customer_id'] = $stripe_invoice->customer ?? '';
-            $meta['stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-            $meta['stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
-            $meta['stripe_currency'] = $stripe_invoice->currency ?? null;
+            $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
+            $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
+            $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
+            $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
+            $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
+            $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
+            $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
+            $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
             $invoice->meta = $meta;
 
             $invoice->save();
 
             // Because payment failed, we should disable all user_subscriptions related to current stripe_subscription_id
-            UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->update([
+            UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->update([
                 'payment_status' => PaymentStatusEnum::unpaid()->value,
                 'status' => UserSubscriptionStatusEnum::inactive()->value,
             ]);
@@ -965,14 +981,14 @@ class StripeService
         $stripe_subscription_id = $stripe_subscription->id;
 
         try {
-            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->first();
 
             if (!empty($user_subscription)) {
                 $user_subscription->start_date = $stripe_subscription->current_period_start ?? now();
                 $user_subscription->end_date = $stripe_subscription->current_period_end;
 
                 $data = $user_subscription->data;
-                $data['stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice ?? null;
+                $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice ?? null;
                 $user_subscription->data = $data;
 
                 $user_subscription->save();
@@ -989,7 +1005,7 @@ class StripeService
         // Check if hook should do any action
         $this->shouldProcess($event);
 
-
+        $previous_attributes = $event->data->previous_attributes ?? (object) [];
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;
 
@@ -997,20 +1013,35 @@ class StripeService
             // if we update start/end date for subscription in our DB here,
             // we still don't know if payment is successfull or not, because invoice.paid hook is not yet sent -_-!!!!
 
-            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->first();
 
             if (!empty($user_subscription)) {
-                $user_subscription->payment_status = PaymentStatusEnum::pending()->value; // Set to pending because only on 'invoice.paid' we are sure that subscription is 100% paid!
-                $user_subscription->status = UserSubscriptionStatusEnum::active_until_end()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
+                if($stripe_subscription->cancel_at_period_end ?? false) {
+                    // Cancel
+                    $user_subscriptison->status = UserSubscriptionStatusEnum::active_until_end()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
+                    $user_subscription->end_date = $stripe_subscription->cancel_at ?? '';
 
-                $user_subscription->start_date = $stripe_subscription->current_period_start ?? '';
-                $user_subscription->end_date = $stripe_subscription->current_period_end ?? '';
+                    $user_subscription->save();
+                } else if($previous_attributes->cancel_at_period_end ?? false) {
+                    // CHeck if previous state was canceled subscription, if it is, then revive back to 'paid', and 'active'
+                    $user_subscription->status = UserSubscriptionStatusEnum::active()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
 
-                $data = $user_subscription->data;
-                $data['stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice ?? null;
-                $user_subscription->data = $data;
+                    $user_subscription->save();
+                } else {
+                    // Here, the subscription is updated, but that happens before invoice.paid - so let's put payment to 'pending' and status 'active_until_end'
+                    $user_subscription->payment_status = PaymentStatusEnum::pending()->value; // Set to pending because only on 'invoice.paid' we are sure that subscription is 100% paid!
+                    $user_subscription->status = UserSubscriptionStatusEnum::active_until_end()->value; // Set to active_until_end because only on 'invoice.paid' we are sure that subscription is 100% paid!
 
-                $user_subscription->save();
+                    $user_subscription->start_date = $stripe_subscription->current_period_start ?? '';
+                    $user_subscription->end_date = $stripe_subscription->current_period_end ?? '';
+
+                    $data = $user_subscription->data;
+                    $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $stripe_subscription->latest_invoice ?? null;
+                    $user_subscription->data = $data;
+
+                    $user_subscription->save();
+                }
+                
             }
         } catch (\Exception $e) {
             http_response_code(400);
@@ -1026,7 +1057,7 @@ class StripeService
 
         try {
             // This means that subscription is finally canceled (no revive is possible and it's final, so we should disable subscription on our end!)
-            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->stripe_subscription_id', $stripe_subscription_id)->first();
+            $user_subscription = UserSubscription::withoutGlobalScopes()->whereJsonContains('data->'.$this->mode_prefix.'stripe_subscription_id', $stripe_subscription_id)->first();
 
             if (!empty($user_subscription)) {
                 // Delete subscription on our end! User will have to go through standard process again!
@@ -1051,15 +1082,5 @@ class StripeService
         }
     }
 
-    public function createPortalSession()
-    {
-        // Authenticate your user.
-        $session = \Stripe\BillingPortal\Session::create([
-            'customer' => auth()->user()->,
-            'return_url' => 'https://example.com/account',
-        ]);
-
-        // Redirect to the customer portal.
-        return $session->url;
-    }
+    
 }
