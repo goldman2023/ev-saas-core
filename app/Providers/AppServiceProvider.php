@@ -43,11 +43,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (config('app.debug_bar')) {
-            \Debugbar::enable();
-        } else {
-            \Debugbar::disable();
-        }
+
     }
 
     public function registerCustomValidaionRules()
@@ -77,17 +73,17 @@ class AppServiceProvider extends ServiceProvider
             return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]);
         });
         Blade::if('usermeta_required', function ($meta_key) {
-            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]) 
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key])
                     && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['required'])
                     && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['required'];
         });
         Blade::if('usermeta_onboarding', function ($meta_key) {
-            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]) 
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key])
                     && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['onboarding'])
                     && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['onboarding'];
         });
         Blade::if('usermeta_registration', function ($meta_key) {
-            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]) 
+            return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key])
                     && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['regstration'])
                     && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['regstration'];
         });
