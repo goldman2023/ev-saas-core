@@ -26,13 +26,13 @@
                     @elseif($item->subject_type == 'App\Models\Product' && $item->subject)
                     <a href="{{ $product->getPermalink() }}">
                         @if($item->description == 'created')
-                        {{ translate('Added new product') }}
+                            {{ translate('Added new product') }}
                         @elseif($item->description == 'viewed')
-                        {{ $item->properties['action_title'] }} <span class="emoji ml-2">👁️‍🗨️</span>
+                            {{ $item->properties['action_title'] }} <span class="emoji ml-2">👁️‍🗨️</span>
                         @elseif($item->description == 'liked')
-                        {{ $item->properties['action_title'] }} <span class="emoji ml-2">❤️</span>
+                            {{ $item->properties['action_title'] }} <span class="emoji ml-2">❤️</span>
                         @else
-                        {{ $item->description }}
+                            {{ $item->description }}
                         @endif
                     </a>
                     @elseif($item->subject_type == 'App\Models\BlogPost' && $item->subject)

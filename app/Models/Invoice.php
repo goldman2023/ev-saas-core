@@ -57,6 +57,16 @@ class Invoice extends WeBaseModel
         return $this->morphTo('payment_method');
     }
 
+    public function scopeMy($query)
+    {
+        return $query->where('user_id', '=', auth()->user()?->id ?? null);
+    }
+
+    public function scopeShopOrders()
+    {
+        return $query->where('shop_id', '=', MyShop::getShop()?->id ?? -1);
+    }
+    
     /*
      * Scope searchable parameters
      */

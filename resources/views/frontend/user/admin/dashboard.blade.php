@@ -10,7 +10,6 @@
 
         <div class="col-span-1">
             {{-- <x-default.promo.shop-subscribe></x-default.promo.shop-subscribe> --}}
-
         </div>
     </div>
 </section>
@@ -27,21 +26,21 @@
             </div> --}}
 
             <div>
-            <x-dashboard.elements.card>
-                <x-slot name="cardHeader" class="flow-root mt-6">
-                    <div class="h5 fw-600">{{ translate('Products') }} </div>
-                </x-slot>
-                <x-slot name="cardBody" class="">
-                    {{-- TODO : make this company name dynamic --}}
-                    <p>{{ translate('Manage & organize your inventory and products') }}</p>
+                <x-dashboard.elements.card>
+                    <x-slot name="cardHeader" class="flow-root mt-6">
+                        <div class="h5 fw-600">{{ translate('Products') }} </div>
+                    </x-slot>
+                    <x-slot name="cardBody" class="">
+                        {{-- TODO : make this company name dynamic --}}
+                        <p>{{ translate('Manage & organize your inventory and products') }}</p>
 
-                </x-slot>
-                <x-slot name="cardFooter">
-                    <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
-                        {{ translate('Manage Products') }}
-                    </a>
-                </x-slot>
-            </x-dashboard.elements.card>
+                    </x-slot>
+                    <x-slot name="cardFooter">
+                        <a href="{{ route('products.index') }}" class="btn btn-soft-primary">
+                            {{ translate('Manage Products') }}
+                        </a>
+                    </x-slot>
+                </x-dashboard.elements.card>
             </div>
             <div>
 
@@ -58,7 +57,6 @@
                     <x-slot name="cardBody" class="">
                         {{-- TODO : make this company name dynamic --}}
                         <p>{{ translate('') }}</p>
-
                     </x-slot>
                     <x-slot name="cardFooter">
                         <div class="overflow-x-auto sm:flex lg:block">
@@ -80,6 +78,10 @@
                         </div>
                     </x-slot>
                 </x-dashboard.elements.card>
+            </div>
+
+            <div class="w-full col-span-3">
+                <livewire:dashboard.tables.recent-invoices-widget-table for="me" :show-per-page="false" :show-search="false" :column-select="false" />
             </div>
 
         </div>
