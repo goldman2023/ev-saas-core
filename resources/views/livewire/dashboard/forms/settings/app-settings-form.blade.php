@@ -1183,6 +1183,110 @@
                                     </div>
                                 </x-system.form-modal>
                                 {{-- END Google ReCaptcha --}}
+
+                                {{-- Facebook Pixel --}}
+                                <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
+                                    <div class="flex-1 flex flex-col p-8">
+                                        <img class="mx-auto h-[32px]" alt="Facebook Pixel" src="https://integrations.clickmeeting.com/wp-content/uploads/2018/03/facebook-pixel-logotyp.png" loading="lazy">
+                                        <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('Facebook Pixel') }}</h3>
+                                    </div>
+                                    <div>
+                                      <div class="-mt-px flex divide-x divide-gray-200">
+                                        <div class="w-0 flex-1 flex">
+                                          <div @click="$dispatch('display-modal', {'id': 'app-settings-facebook-pixel'})" class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                            @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                            <span class="ml-2">{{ translate('Edit') }}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </li>
+                                <x-system.form-modal id="app-settings-facebook-pixel" title="Facebook Pixel">
+                                    <!-- Facebook Pixel Facebook PixelEnabled-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Enable Facebook Pixel') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.toggle field="settings.facebook_pixel_enabled.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Facebook Pixel Enabled -->
+
+                                    <!-- Facebook Pixel ID-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Pixel ID') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.facebook_pixel_id.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Facebook Pixel ID -->
+
+                                    <div class="w-full flex justify-end mt-4" x-data="{}">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                            $wire.set('settings.facebook_pixel_enabled.value', settings.facebook_pixel_enabled.value, true);
+                                        "  wire:click="saveIntegrations('integrations.facebook_pixel')">
+                                            {{ translate('Save') }}
+                                        </button>
+                                    </div>
+                                </x-system.form-modal>
+                                {{-- END Facebook Pixel --}}
+
+                                {{-- Google Tag Manager --}}
+                                <li class="col-span-1 flex flex-col text-center bg-white rounded-lg shadow divide-y divide-gray-200 border border-gray-200">
+                                    <div class="flex-1 flex flex-col p-8">
+                                        <img class="mx-auto h-[32px]" src="https://www.gstatic.com/analytics-suite/header/suite/v2/ic_tag_manager.svg" loading="lazy">
+                                        <h3 class="mt-6 text-gray-900 text-sm font-medium">{{ translate('Google Tag Manager') }}</h3>
+                                    </div>
+                                    <div>
+                                      <div class="-mt-px flex divide-x divide-gray-200">
+                                        <div class="w-0 flex-1 flex">
+                                          <div @click="$dispatch('display-modal', {'id': 'app-settings-google_tag_manager'})" class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
+                                            @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                            <span class="ml-2">{{ translate('Edit') }}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </li>
+                                <x-system.form-modal id="app-settings-google_tag_manager" title="Google Tag Manager">
+                                    <!-- Google Tag Manager Pixel Enabled-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Enable Google Tag Manager') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.toggle field="settings.google_tag_manager_enabled.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END Google Tag Manager Enabled -->
+
+                                    <!-- Google tags manager ID-->
+                                    <div class="flex flex-col mb-3" x-data="{}">
+                                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                                            {{ translate('Google Tag Manager ID') }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="settings.google_tag_manager_id.value" />
+                                        </div>
+                                    </div>
+                                    <!-- END  Google tags manager ID -->
+
+                                    <div class="w-full flex justify-end mt-4" x-data="{}">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
+                                            $wire.set('settings.google_tag_manager_enabled.value', settings.google_tag_manager_enabled.value, true);
+                                        "  wire:click="saveIntegrations('integrations.google_tag_manager')">
+                                            {{ translate('Save') }}
+                                        </button>
+                                    </div>
+                                </x-system.form-modal>
+                                {{-- END Google Tag Manager  --}}
                             </ul>
                         </div>
                         {{-- END Integrations --}}
@@ -1220,7 +1324,14 @@
                                         _.set(settings.user_meta_fields_in_use.value, key+'.'+property, false);
                                     }
                                 },
-                            }">
+                                initFields() {
+                                    if(settings.user_meta_fields_in_use.value != null && typeof settings.user_meta_fields_in_use.value === 'object') {
+                                        for (const key in settings.user_meta_fields_in_use.value) {
+                                            settings.user_meta_fields_in_use.value[key]['type'] = this.all_user_meta[key];
+                                        }
+                                    }
+                                }
+                            }" x-init="initFields()">
                                 <div class="flex flex-col mb-3">
                                     <span class="text-sm font-medium text-gray-900">{{ translate('User meta fields in use') }}</span>
                                     <p class="text-gray-500 text-sm">{{ translate('Here you can enable/disable which metadata should be visible and editable for all user accounts. You can also set if specific meta is required or not.') }}</p>

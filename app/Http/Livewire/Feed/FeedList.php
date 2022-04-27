@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Activitylog\Models\Activity;
+use App\Models\BlogPost;
 
 class FeedList extends Component
 {
@@ -23,8 +24,15 @@ class FeedList extends Component
 
     public $type = 'recent';
 
+    public $my_new_post;
+
+    protected $listeners = [
+        'newPostAdded' => 'prependMyNewPost'
+    ];
+
     public function mount()
     {
+        $this->my_new_post = null;
         $this->perPage = 10;
     }
 
@@ -47,6 +55,7 @@ class FeedList extends Component
         return view('livewire.feed.feed-list', [
             'activities' => $data,
             'hasMorePages' => $this->hasMorePages,
+            'my_new_post' => $this->my_new_post,
         ]);
     }
 
@@ -76,5 +85,17 @@ class FeedList extends Component
     public function loadType($type)
     {
         $this->type = $type;
+    }
+
+    public function prependMyNewPost($post_id) {
+        
+        $my_post_activity = Activity::where([
+            'subject_type' => BlogPost::class,
+            'subject_id' => $post_id,
+            'causer_type' => auth()->user()::class,
+            'causer_id' => auth()->user()->id,
+        ])->first();
+        
+        $this->my_new_post = $my_post_activity;
     }
 }

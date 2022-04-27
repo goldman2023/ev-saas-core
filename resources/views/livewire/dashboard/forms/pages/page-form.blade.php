@@ -1,6 +1,8 @@
 <div class="w-full" x-data="{
     status: @js($page->status ?? App\Enums\StatusEnum::draft()->value),
+    type: @js($page->type ?? 'wysiwyg'),
     meta_img: @js(['id' => $page->meta_img->id ?? null, 'file_name' => $page->meta_img->file_name ?? '']),
+    content: @entangle('page.content').defer,
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
@@ -35,6 +37,22 @@
                         </div>
                         <!-- END Title -->
 
+                        @if($page->type === \App\Enums\PageTypeEnum::wysiwyg()->value)
+                            <!-- Content -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
+                
+                                <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Content') }}
+                                </label>
+                
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <x-dashboard.form.froala field="content" id="plan-content-wysiwyg"></x-dashboard.form.froala>
+                                
+                                    <x-system.invalid-msg class="w-full" field="plan.content"></x-system.invalid-msg>
+                                </div>
+                            </div>
+                            <!-- END Content -->
+                        @endif
                     </div>
                 </div>
             </div>
@@ -67,11 +85,25 @@
                     </div>
                     <!-- END Status -->
 
+                    <!-- Type -->
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                        <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                            <span class="mr-2">{{ translate('Type') }}</span>
+                        </label>
+
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <x-dashboard.form.select :items="\App\Enums\PageTypeEnum::toArray()" selected="type" :nullable="false"></x-dashboard.form.select>
+                        </div>
+                    </div>
+                    <!-- END Type -->
+
                     <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                     
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
                                 $wire.set('page.status', status, true);
+                                $wire.set('page.type', type, true);
+                                $wire.set('page.content', content, true);
                                 {{-- $wire.set('page.meta_img', meta_img.id, true); --}}
                             "
                             wire:click="savePage()">

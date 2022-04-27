@@ -25,14 +25,16 @@ use Illuminate\Support\Facades\Route;
 
 
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
-
 include('Helpers/EIMHelpers.php');
+
+/* IMPORTANT: Child functions helper files include here also, based on selected theme */
+include('Helpers/Functions/WePixPro.Helpers.php');
 
 if (!function_exists('castValueForSave')) {
     function castValueForSave($key, $setting, $data_types) {
         $data_type = $data_types[$key] ?? null;
         $value = $setting['value'] ?? null;
-        
+
         if($data_type === Upload::class || $data_type === Category::class) {
             $value = ctype_digit($value)|| is_numeric($value) ? $value : null;
         } else if($data_type === Currency::class) {
@@ -46,7 +48,7 @@ if (!function_exists('castValueForSave')) {
         } else if($data_type === 'array' && $data_type === 'uploads' && is_array($data_type)) {
             $value = json_encode($value);
         }
-    
+
         return $value;
     }
 }
@@ -54,13 +56,13 @@ if (!function_exists('castValueForSave')) {
 if (!function_exists('castValuesForGet')) {
     function castValuesForGet(&$settings, $data_types) {
         if(!empty($settings)) {
-            
+
             foreach($settings as $key => $setting) {
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
-                
+
                 try {
-                    
+
                     // This means that there are more sub items inside
                     if(is_array($data_type)) {
                         // If data type is ARRAY, it means that JSON is stored in setting value!
@@ -69,16 +71,16 @@ if (!function_exists('castValuesForGet')) {
 
                         // Check if there are missing sub fields and create them
                         $missing_sub_fields = array_diff_key($data_type, !empty($settings[$key]['value']) ? $settings[$key]['value'] : []);
-                        
+
                         if(!empty($missing_sub_fields)) {
                             foreach($missing_sub_fields as $subkey => $subvalue) {
                                 $missing_sub_fields[$subkey] = ''; // reset values to ''
                             }
                         }
- 
+
                         // Merge missing sub fields and existing sub fields (this is imporatant if we add any new tenant setting field!)
                         $settings[$key]['value'] = array_merge(!empty($settings[$key]['value']) ? $settings[$key]['value'] : [], $missing_sub_fields);
-                        
+
                         // Convert Sub Fields values to proper data type
                         castValuesForGet($settings[$key]['value'], $data_type);
                         continue;
@@ -110,6 +112,8 @@ if (!function_exists('castValuesForGet')) {
                             $settings[$key]['value'] = collect($uploads);
                         } else if($data_type === 'string') {
                             $settings[$key]['value'] = $value;
+                        } else if($data_type === 'wysiwyg') {
+                            $settings[$key]['value'] = $value;
                         } else if($data_type === 'int') {
                             $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
                         } else if($data_type === 'boolean') {
@@ -120,8 +124,10 @@ if (!function_exists('castValuesForGet')) {
                             $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
                         } else if($data_type === 'datetime') {
                             $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
+                        } else {
+                            $settings[$key]['value'] = $value;
                         }
-                    }       
+                    }
                 } catch(\Throwable $e) {
                     // Set default value is value cannot be parsed due to wrong data type in DB!!!
                     if($data_type === 'boolean') {
@@ -132,12 +138,12 @@ if (!function_exists('castValuesForGet')) {
                         $settings[$key]['value'] = null;
                     }
                 }
-                
+
             }
 
-            
+
         }
-        
+
         return $settings;
     }
 }

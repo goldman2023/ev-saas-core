@@ -34,7 +34,7 @@ ecommerce.zip
 install.zip
 /nbproject/private/
 /nbproject
-
+/public/vendor/nova/fonts
 
 #Eim Solutions Updates
 /public/js/app.js
@@ -75,3 +75,4 @@ themes/features/we-edit/node_modules/*
 
 !public/images
 vendor-d/*
+public/vendor/nova/vendor.js.LICENSE.txt

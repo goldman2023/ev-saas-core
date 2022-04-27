@@ -48,22 +48,24 @@
             </livewire:tenant.product.product-variations-selector>
             @endif
 
-            <p class="py-2 mb-0">
-                <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
-                @if($product->showUnits())
-                    <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
-                @else
-                    <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
-                @endif
+            @if($product->track_iventory)
+                <p class="py-2 mb-0">
+                    <span class="text-18 text-body font-semibold">{{ translate('Stock:') }}</span>
+                    @if($product->showUnits())
+                        <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
+                    @else
+                        <strong x-text="current_stock + ' {{ $product->unit }}'"></strong>
+                    @endif
 
-                @if($product->isInStock())
-                <span class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('In
-                    Stock') }}</span>
-                @else
-                <span class="badge-danger px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('Not In
-                    Stock') }}</span>
-                @endif
-            </p>
+                    @if($product->isInStock())
+                    <span class="badge-success px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('In
+                        Stock') }}</span>
+                    @else
+                    <span class="badge-danger px-2 py-2 ml-2 !text-14 items-center !font-semibold">{{ translate('Not In
+                        Stock') }}</span>
+                    @endif
+                </p>
+            @endif
 
             {{-- Out of stock / Low stock notifications --}}
             {{-- <template x-if="current_stock <= 0">

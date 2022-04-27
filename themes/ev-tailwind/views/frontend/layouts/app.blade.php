@@ -20,6 +20,9 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
+    <!-- Scripts -->
+    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
+
     {{-- TailwindCSS --}}
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 
@@ -42,6 +45,9 @@
 
 <body class="font-sans antialiased {{ Route::currentRouteName() }}" x-data="{}"
     @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
+    
+    @include('frontend.layouts.global-partials.global-integrations-body')
+
     <div class="min-h-screen">
         <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header>
 
@@ -103,7 +109,7 @@
     </script>
     @auth
     <script>
-        window.H.identify(auth()->user()->email, {id: auth()->user()->id,});
+        window.H.identify('{{ auth()->user()->email }}', {id: {{ auth()->user()->id }} });
     </script>
     @endauth
 

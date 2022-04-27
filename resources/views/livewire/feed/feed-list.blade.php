@@ -58,11 +58,16 @@
 
     </div>
     <div wire:init="loadInit">
+        @if(!empty($my_new_post))
+            <livewire:feed.elements.feed-card wire:key="activity_{{ $my_new_post->id }}" :item="$my_new_post">
+            </livewire:feed.elements.feed-card>
+        @endif
+
         @if($readyToLoad)
-        @foreach($activities as $item)
-        <livewire:feed.elements.feed-card wire:key="activity_{{ $item->id }}" :item="$item">
-        </livewire:feed.elements.feed-card>
-        @endforeach
+            @foreach($activities as $item)
+                <livewire:feed.elements.feed-card wire:key="activity_{{ $item->id }}" :item="$item">
+                </livewire:feed.elements.feed-card>
+            @endforeach
         @endif
     </div>
     @if($readyToLoad)

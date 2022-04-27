@@ -23,6 +23,7 @@ use App\Traits\Livewire\CanDelete;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\HasCategories;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasAttributes;
 use Categories;
 use DB;
 use EVS;
@@ -42,16 +43,13 @@ class ProductForm2 extends Component
     use RulesSets;
     use HasCategories;
     use CanDelete;
+    use HasAttributes;
 
     public $product;
 
     public $core_meta;
 
     public $is_update;
-
-    public $attributes;
-
-    public $selected_predefined_attribute_values;
 
     protected $listeners = [];
 
@@ -114,7 +112,7 @@ class ProductForm2 extends Component
                 // 'product.est_shipping_days' => 'nullable|numeric'
             ],
             'attributes' => [
-                'attributes.*' => 'required',
+                'custom_attributes.*' => 'required',
                 'selected_predefined_attribute_values.*' => '',
             ],
             'seo' => [
@@ -158,28 +156,6 @@ class ProductForm2 extends Component
             'product.pdf.if_id_exists' => translate('Please select a valid specification document from the media library'),
             'selected_categories.required' => translate('You must select at least 1 category'),
         ];
-    }
-
-    protected function setPredefinedAttributeValues($model)
-    {
-        // Set predefined attribute values AND select specific values if it's necessary
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->is_predefined) {
-                if (isset($model->id) && ! empty($model->id)) {
-                    // edit product
-                    $product_attribute = $model->custom_attributes->firstWhere('id', $attribute->id);
-
-                    if ($product_attribute instanceof \App\Models\Attribute) {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = $product_attribute->attribute_values->pluck('id');
-                    } else {
-                        $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
-                    }
-                } else {
-                    // insert product
-                    $this->selected_predefined_attribute_values['attribute.'.$attribute->id] = [];
-                }
-            }
-        }
     }
 
     /**
@@ -227,7 +203,7 @@ class ProductForm2 extends Component
             $this->product->tax_type = AmountPercentTypeEnum::amount()->value;
         }
 
-        $this->refreshAttributes();
+        $this->refreshAttributes($this->product);
 
         $this->initCategories($this->product);
 
@@ -345,7 +321,7 @@ class ProductForm2 extends Component
             $this->setCategories($this->product);
 
             // Set Attributes
-            $this->setAttributes();
+            $this->setAttributes($this->product);
 
             // Save CoreMeta
             $this->saveCoreMeta();
@@ -353,7 +329,7 @@ class ProductForm2 extends Component
             DB::commit();
 
             // Refresh Attributes
-            $this->refreshAttributes();
+            $this->refreshAttributes($this->product);
 
             $this->inform(translate('Product successfully saved!'), '', 'success');
 
@@ -366,152 +342,9 @@ class ProductForm2 extends Component
         }
     }
 
-    public function refreshAttributes()
-    {
-        $this->attributes = $this->product->getMappedAttributes();
+    
 
-        // Set default attributes
-        foreach ($this->attributes as $key => $attribute) {
-            if ($attribute->is_predefined) {
-                $attribute->selcted_values = '';
-            }
-
-            if (empty($this->attributes[$key]->attribute_values)) {
-                if (! $attribute->is_predefined) {
-                    $this->attributes[$key]->attribute_values[] = [
-                        'id' => null,
-                        'attribute_id' => $attribute->id,
-                        'values' => '',
-                        'selected' => true,
-                    ];
-                } else {
-                    $this->attributes[$key]->attribute_values = [];
-                }
-            }
-        }
-
-        $this->setPredefinedAttributeValues($this->product);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected function setAttributes()
-    {
-        $selected_attributes = collect($this->attributes)->filter(function ($att, $key) {
-            $att = (object) $att;
-
-            return $att->selected === true;
-        });
-
-        if ($selected_attributes) {
-            foreach ($selected_attributes as $att) {
-                $attribute = new Attribute();
-
-                $att = (object) $att;
-                $att_values = $att->attribute_values;
-
-                if (! empty($att_values)) {
-
-                    // Is-predefined attributes are dropdown/radio/checkbox and they have predefined values
-                    // while other types have only one item in values array - with an ID (existing value) or without ID (not yet added value, just default template)
-                    if (! $att->is_predefined) {
-                        foreach ($att_values as $key => $att_value) {
-                            if (empty($att_value['values'] ?? null)) {
-                                // If value is empty, unset it and later on reset array_values
-                                unset($att_values[$key]);
-                                continue;
-                            }
-
-                            $attribute_value_row = (! empty($att_value['id'])) ? AttributeValue::find($att_value['id']) : new AttributeValue();
-
-                            // Create the value first
-                            $attribute_value_row->attribute_id = (! empty($att_value['id'])) ? $attribute_value_row->attribute_id : $att->id;
-                            $attribute_value_row->values = $att_value['values'] ?? null;
-                            $attribute_value_row->selected = true;
-                            $attribute_value_row->save();
-
-                            // Set attribute value translations for non-predefined attributes
-                            $attribute_value_translation = AttributeValueTranslation::firstOrNew(['lang' => config('app.locale'), 'attribute_value_id' => $attribute_value_row->id]);
-                            $attribute_value_translation->name = $att_value['values'] ?? null;
-                            $attribute_value_translation->save();
-
-                            $att_values[$key] = $attribute_value_row;
-                        }
-                    } else {
-                        $selected_attribute_values = $this->selected_predefined_attribute_values['attribute.'.$att->id] ?? [];
-
-                        foreach ($att_values as $key => $att_value) {
-                            $attribute_value_row = AttributeValue::find($att_value['id']);
-
-                            if (is_array($selected_attribute_values) && in_array($attribute_value_row->id, $selected_attribute_values)) {
-                                $attribute_value_row->selected = true;
-                            } elseif (is_numeric($selected_attribute_values) && ((int) $selected_attribute_values) == $att_value['id']) {
-                                $attribute_value_row->selected = true;
-                            } else {
-                                $attribute_value_row->selected = false;
-                            }
-
-                            $att_values[$key] = $attribute_value_row;
-                        }
-                    }
-
-                    $att_values = array_values($att_values);
-
-                    if ($att->id === 27) {
-                        // dd($att_values);
-                    }
-
-                    foreach ($att_values as $key => $att_value) {
-                        if ($att_value->id ?? null) {
-                            if ($att_value->selected ?? null) {
-                                // Create or find product-attribute relationship, but don't yet persist anything to DB
-                                $att_rel = AttributeRelationship::firstOrNew([
-                                    'subject_type' => Product::class,
-                                    'subject_id' => $this->product->id,
-                                    'attribute_id' => $att->id,
-                                    'attribute_value_id' => $att_value->id,
-                                ]);
-                                $att_rel->for_variations = $att->type === 'dropdown' ? $att->for_variations : false;
-
-                                if ($att->type === 'text_list') {
-                                    $att_rel->order = $key; // respect order for the text_list
-                                }
-
-                                $att_rel->save();
-                            } else {
-                                // Remove attribute relationship if "selected" is false/null
-                                AttributeRelationship::where([
-                                    'subject_type' => Product::class,
-                                    'subject_id' => $this->product->id,
-                                    'attribute_id' => $att->id,
-                                    'attribute_value_id' => $att_value->id,
-                                ])->delete();
-                            }
-                        }
-                    }
-
-                    // if($att->type === 'text_list') {
-                    //     $vals = AttributeValue::where('attribute_id', $att->id)->get();
-                    //     dd($vals);
-                    //     foreach($att_values as $key => $att_value) {
-                    //         if(empty($vals->firstWhere('id', $att_value->id))) {
-                    //             dd($att_value);
-                    //         }
-                    //     }
-
-                    //     // remove missing attribute relationships and values
-                    //     $rels = AttributeRelationship::where([
-                    //         'subject_type' => Product::class,
-                    //         'subject_id' => $this->product->id,
-                    //         'attribute_id' => $att->id,
-                    //         ''
-                    //     ]);
-                    // }
-                }
-            }
-        }
-    }
+    
 
     protected function saveCoreMeta()
     {
@@ -798,29 +631,10 @@ class ProductForm2 extends Component
         }
     }
 
-    public function saveAttributes()
-    {
-        // Validate minimum required fields and insert/update row
-        $this->validateData('minimum_required');
-
-        $this->validateData('attributes');
-
-        DB::beginTransaction();
-
-        try {
-            $this->setAttributes();
-
-            $this->toastify(translate('Product successfully saved!'), 'success');
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            $this->dispatchGeneralError(translate('There was an error while saving a product.'));
-            $this->toastify(translate('There was an error while saving a product. ').$e->getMessage(), 'danger');
-        }
-    }
+    
 
     // public function updateAttributeValuesForVariations() {
-    //     $atts = collect($this->attributes)->filter(function($att, $key) {
+    //     $atts = collect($this->product_attributes)->filter(function($att, $key) {
     //         $att = (object) $att;
     //         return $att->selected === true && $att->for_variations === true;
     //     });
@@ -844,7 +658,7 @@ class ProductForm2 extends Component
     // }
 
     // public function getVariationsAttributesProperty() {
-    //     $atts_for_variations = collect($this->attributes)->filter(function($att, $key) {
+    //     $atts_for_variations = collect($this->product_attributes)->filter(function($att, $key) {
     //         return ((object) $att)->for_variations === true;
     //     });
 

@@ -1,4 +1,9 @@
-<div class="bg-gray-50 px-4 py-6 sm:px-6 rounded-md shadow" x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
+<div class="bg-gray-50 px-4 py-6 sm:px-6 rounded-md shadow" x-data="{
+    'isModalOpen': false,
+    thumbnail: @js(['id' => $post->thumbnail->id ?? null, 'file_name' => $post->thumbnail->file_name ?? '']),
+}" 
+x-on:reset-image-selector.window="thumbnail = @js(['id' => null, 'file_name' => ''])" 
+x-on:keydown.escape="isModalOpen=false">
     <div class="flex space-x-3">
         <div class="flex-shrink-0">
             <div class="flex-shrink-0 ">
@@ -9,21 +14,20 @@
 
         </div>
         <div class="min-w-0 flex-1">
-            <div>
+            <div class="flex flex-col overflow-hidden rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300">
                 <label for="content" class="sr-only">About</label>
-                <textarea id="content" name="content" rows="3" wire:model.lazy="content"
-                    class="shadow-sm block w-full focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300 rounded-md"
+                <textarea id="content" name="content" rows="3" wire:model.lazy="post.content"
+                    class="shadow-sm block w-full border-0"
                     placeholder="{{ translate('What\'s on your mind?') }}"></textarea>
+
+                    <div class="text-14 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
+                        <x-dashboard.form.image-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.image-selector>
+                    </div>
+                                    
             </div>
             <div class="mt-3 flex items-center justify-between">
-                <a href="#" class="group inline-flex items-start text-sm space-x-2 text-gray-500 hover:text-gray-900">
-                    <svg class="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                        x-description="Heroicon name: solid/question-mark-circle" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
-                            clip-rule="evenodd"></path>
-                    </svg>
+                <a href="#" class="group inline-flex items-start text-sm space-x-2 text-gray-500 hover:text-gray-900">                    
+                    @svg('heroicon-s-question-mark-circle', ['class' => 'flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500'])
                     <span>
                         {{ translate('Post will be visible publicly') }}
                     </span>
@@ -32,13 +36,18 @@
                    {{ translate('Advanced editor') }}
                 </button>
 
-                <button wire:click="addFeedPost" type="submit"
+                <button @click="
+                        $wire.set('post.thumbnail', thumbnail.id, true);
+                    "   
+                    wire:click="addFeedPost" 
+                    type="submit"
                     class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     {{ translate('Add a post') }}
                 </button>
             </div>
         </div>
     </div>
+
     <!-- This example requires Tailwind CSS v2.0+ -->
     <div x-show="isModalOpen" x-on:click.away="isModalOpen = false" x-cloak x-transition
         class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">

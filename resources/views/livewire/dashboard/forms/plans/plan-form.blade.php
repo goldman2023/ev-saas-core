@@ -11,7 +11,9 @@
     tax_type: @js($plan->tax_type),
     features: @js($plan->features),
     content: @entangle('plan.content').defer,
-    selected_categories: @js($selected_categories)
+    selected_categories: @js($selected_categories),
+    attributes: @js($custom_attributes),
+    selected_attribute_values: @js($selected_predefined_attribute_values),
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
@@ -290,6 +292,8 @@
                                 $wire.set('plan.features', features, true);
                                 $wire.set('plan.primary', primary, true);
                                 $wire.set('plan.featured', featured, true);
+                                $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
+                                $wire.set('custom_attributes', this.attributes, true);
                             "
                             wire:click="savePlan()">
                         {{ translate('Save') }}

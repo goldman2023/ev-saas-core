@@ -9,9 +9,13 @@
 @section('panel_content')
 <section>
     <x-dashboard.section-headers.section-header title="{{ translate('Plans Management') }}"
-        text="Workcation is a property rental website. Etiam ullamcorper massa viverra consequat, consectetur id nulla tempus. Fringilla egestas justo massa purus sagittis malesuada.">
+        text="{{ translate('Manage your subscription and billind details') }}">
         <x-slot name="content">
-
+            @if(auth()->user()->isSubscribed())
+                <a href="{{ route('stripe.portal_session') }}" class="btn-primary" target="_blank">
+                        {{ translate('Biling Portal') }}
+                </a>
+            @endif
         </x-slot>
     </x-dashboard.section-headers.section-header>
 
@@ -75,10 +79,10 @@
 
                                     {{-- We should support following scenarios:
                                         1. *If trial mode is disabled and no plan is purchased: Buy now
-                                        2. *If trial mode is enabled and no plan is purchased: Try for free 
+                                        2. *If trial mode is enabled and no plan is purchased: Try for free
                                         3. *If trial mode is disabled and plan is purchased: Upgrade plan
                                         4. If trial mode is enabled(for all plans) and plan is purchased: Upgrade plan (cuz once you pay for subscription you shouldn't be allowed to use trial mode anywhere)--}}
-                                    @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed()) 
+                                    @if(!get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
                                         <span>{{ translate('Buy now') }}</span>
                                     @elseif(get_tenant_setting('plans_trial_mode') && !auth()->user()->isSubscribed())
                                         <span>{{ translate('Try for free') }}</span>

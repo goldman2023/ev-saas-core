@@ -109,6 +109,10 @@ trait GalleryTrait
         return IMG::get($this->thumbnail, IMG::mergeWithDefaultOptions($options, 'thumbnail'));
     }
 
+    public function hasThumbnail() {
+        return !empty($this->thumbnail);
+    }
+
     /******* START COVER *******/
     public function getCoverAttribute()
     {
@@ -130,6 +134,10 @@ trait GalleryTrait
     public function getCover(array $options = []): mixed
     {
         return IMG::get($this->cover, IMG::mergeWithDefaultOptions($options, 'cover'));
+    }
+
+    public function hasCover() {
+        return !empty($this->cover);
     }
 
     /******* START GALLERY *******/
@@ -162,6 +170,10 @@ trait GalleryTrait
         }
 
         return $cast_to === 'collection' ? collect($gallery) : $gallery;
+    }
+
+    public function hasGallery() {
+        return !empty($this->gallery);
     }
 
     /******* START THUMBNAIL *******/

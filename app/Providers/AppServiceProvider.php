@@ -91,5 +91,10 @@ class AppServiceProvider extends ServiceProvider
                     && isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['regstration'])
                     && get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]['regstration'];
         });
+
+        // Facebook Pixel
+        Blade::if('fbpix', function () {
+            return !empty(get_tenant_setting('facebook_pixel_enabled')) && get_tenant_setting('facebook_pixel_enabled') && !empty(get_tenant_setting('facebook_pixel_id'));
+        });
     }
 }

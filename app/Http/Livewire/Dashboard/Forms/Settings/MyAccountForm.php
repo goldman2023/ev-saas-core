@@ -32,26 +32,42 @@ class MyAccountForm extends Component
     public $newPassword_confirmation = '';
 
     public $onboarding = false;
+    
 
     protected function getRuleSet($set = null)
     {
+        if($this->onboarding) {
+            $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true);
+        } else {
+            $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'));
+        }
+        
+
+        $basic = [
+            'me.name' => ['required', 'min:2'],
+            'me.surname' => ['required', 'min:2'],
+            'me.entity' => ['required'],
+            //                'me.email' => ['required', 'email:rfs,dns'],
+            'me.phone' => [''],
+            'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
+            'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
+        ];
+
+        $meta = [];
+
+        if($user_meta_fields_in_use->count() > 0) {
+            foreach($user_meta_fields_in_use as $key => $options) {
+                if(in_array($key, UserMeta::metaForCompanyEntity())) {
+                    $meta['meta.'.$key.'.value'] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
+                } else {
+                    $meta['meta.'.$key.'.value'] = ($options['required'] ?? false) ? ['required'] : [];
+                }
+            }
+        }
+        
         $rulesSets = collect([
             // Basic information rules
-            'basic' => [
-                //'me' => [],
-                'me.name' => ['required', 'min:2'],
-                'me.surname' => ['required', 'min:2'],
-                //                'me.email' => ['required', 'email:rfs,dns'],
-                'me.phone' => [''],
-                'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
-                'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
-                'meta.birthday.value' => [''],
-                'meta.gender.value' => [''],
-                'meta.industry.value' => [''],
-                'meta.headline.value' => [''],
-                'meta.bio.value' => [''],
-                'meta.calendly_link.value' => ['nullable', 'url'],
-            ],
+            'basic' => array_merge($basic, $meta),
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],
             ],
@@ -185,7 +201,7 @@ class MyAccountForm extends Component
     {
         foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'meta')) as $key => $value) {
             $meta_key = explode('.', $key)[1]; // get the part after `settings.`
-
+            
             if (! empty($meta_key) && $meta_key !== '*') {
                 UserMeta::where([
                     ['key', $meta_key],

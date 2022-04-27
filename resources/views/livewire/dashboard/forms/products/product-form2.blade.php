@@ -25,7 +25,8 @@
         discount_type: @js($product->discount_type),
         tax_type: @js($product->tax_type),
         description: @entangle('product.description').defer,
-        attributes: @js($attributes),
+        {{--  TODO:  Attributes - `for_variations` is not being saved!!! --}}
+        attributes: @js($custom_attributes),
         selected_attribute_values: @js($selected_predefined_attribute_values),
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
@@ -33,6 +34,7 @@
         track_inventory: @js($product->track_inventory),
 
         onSave() {
+            console.log( this.attributes);
             $wire.set('product.description', this.description, true);
             $wire.set('product.thumbnail', this.thumbnail.id, true);
             $wire.set('product.cover', this.cover.id, true);
@@ -46,14 +48,15 @@
             $wire.set('product.use_serial', this.use_serial, true);
             $wire.set('product.allow_out_of_stock_purchases', this.allow_out_of_stock_purchases, true);
             $wire.set('product.digital', this.is_digital, true);
-            $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
-            $wire.set('attributes', this.attributes, true);
             $wire.set('product.meta_img', this.meta_img.id, true);
             $wire.set('product.status', this.status, true);
             $wire.set('product.type', this.type, true);
             $wire.set('product.tags', this.tags, true);
-            $wire.set('selected_categories', this.selected_categories, true);
             $wire.set('product.brand_id', this.brand_id, true);
+
+            $wire.set('selected_categories', this.selected_categories, true);
+            $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
+            $wire.set('custom_attributes', this.attributes, true);
 
             // CoreMeta
             $wire.set('core_meta.date_type.value', this.core_meta.date_type.value, true);
