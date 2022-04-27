@@ -42,7 +42,7 @@ class BlogPost extends WeBaseModel
 
     public const ROUTING_PLURAL_NAME_PREFIX = 'posts';
 
-    protected $fillable = ['shop_id', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
+    protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
 
     protected $casts = [
         'subscription_only' => 'boolean',
