@@ -21,6 +21,7 @@ use Livewire\Component;
 use Permissions;
 use Purifier;
 use Spatie\ValidationRules\Rules\ModelsExist;
+use App\Enums\PageTypeEnum;
 
 class PageForm extends Component
 {
@@ -50,6 +51,7 @@ class PageForm extends Component
     protected function rules()
     {
         return [
+            'page.type' => [ 'required' ], //  Rule::in(PageTypeEnum::implodedValues())
             'page.name' => 'required|min:2',
             'page.status' => [Rule::in(StatusEnum::toValues('archived'))],
             'page.meta_title' => [''],

@@ -48,9 +48,9 @@ class AttributesTable extends DataTableComponent
 
     ];
 
-    protected string $pageName = 'attributes';
+    protected string $pageName = 'custom_attributes';
 
-    protected string $tableName = 'attributes';
+    protected string $tableName = 'custom_attributes';
 
     public function mount()
     {

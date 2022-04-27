@@ -11,18 +11,28 @@
         current: 'basicInformation',
         thumbnail: @js(['id' => $me->thumbnail->id ?? null, 'file_name' => $me->thumbnail->file_name ?? '']),
         cover: @js(['id' => $me->cover->id ?? null, 'file_name' => $me->cover->file_name ?? '']),
-        meta: @entangle('meta').defer,
+        meta: @js($meta),
+        entity: @js($me->entity),
+        onSave() {
+            $wire.set('me.thumbnail', this.thumbnail.id, true);
+            $wire.set('me.cover', this.cover.id, true);
+            $wire.set('me.entity', this.entity, true);
+
+            @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true)->count() > 0)
+                @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true) as $key => $options)
+                    @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date' || ($options['type']??'string') == 'wysiwyg')
+                        $wire.set('meta.{{ $key }}.value', this.meta.{{ $key }}.value, true);
+                    @endif
+                @endforeach
+            @endif
+        },
     }" x-init="$watch('current', function(value) {
         $([document.documentElement, document.body]).animate({
             scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
         }, 500);
     })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
         @submit-form.window="
-            $wire.set('me.thumbnail', thumbnail.id, true);
-            $wire.set('me.cover', cover.id, true);
-            $wire.set('meta.bio.value', meta.bio.value, true);
-            {{-- $wire.set('meta.industry.value', meta.industry.value.id, true); --}}
-            $wire.set('meta.birthday.value', meta.birthday.value, true);
+            onSave();
             $wire.saveBasicInformation();
         "
         x-cloak>
@@ -128,6 +138,23 @@
                         </div>
 
                         <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                                <fieldset class="mt-4">
+                                  <div class="space-y-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-10">
+                                    <div class="flex items-center">
+                                      <input id="entity_individual" name="entity_field" type="radio" x-model="entity"  value="individual" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                      <label for="entity_individual" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Individual') }} </label>
+                                    </div>
+                              
+                                    <div class="flex items-center">
+                                      <input id="entity_company" name="entity_field" type="radio" x-model="entity"  value="company" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                      <label for="entity_company" class="ml-3 block text-sm font-medium text-gray-700"> {{ translate('Company') }} </label>
+                                    </div>
+                                  </div>
+                                </fieldset>
+                            </div>
+
                             <!-- First name -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                 x-data="{}">
@@ -162,24 +189,6 @@
                                 </div>
                             </div>
                             <!-- END Last name -->
-
-                            <!-- Headline -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
-
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Headline') }}
-                                    <span class="text-danger relative top-[-2px]">*</span>
-                                </label>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <input type="text" class="form-standard @error('meta.headline.value') is-invalid @enderror"
-                                        placeholder="{{ translate('My unique headline') }}" wire:model.defer="meta.headline.value" />
-
-                                    <x-system.invalid-msg field="meta.headline.value"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                            <!-- END Headline -->
 
                             <!-- Email -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -216,71 +225,45 @@
                             </div>
                             <!-- END Phone -->
 
-                            @if(!$onboarding)
-                            <!-- Birthday -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                            @php 
+                                if($onboarding) {
+                                    $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true);
+                                } else {
+                                    $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'));
+                                }
+                            @endphp
+                            @if($user_meta_fields_in_use->count() > 0)
+                                @foreach($user_meta_fields_in_use as $key => $options)
+                                    @if($onboarding && ($options['onboarding'] ?? null) != 1)
+                                        @continue
+                                    @endif
 
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Birthday') }}
-                                </label>
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                        x-data="{}" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif>
 
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="meta.birthday.value"></x-dashboard.form.date>
-                                </div>
-                            </div>
-                            <!-- END Birthday -->
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{  Str::title(str_replace('_', ' ', $key)) }}
+                                            @if($options['required'] ?? false) <span class="text-danger">*</span>@endif
+                                        </label>
 
-                            <!-- Gender -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            @if(($options['type']??'string') == 'string')
+                                                <x-dashboard.form.input field="meta.{{ $key }}.value" />
+                                            @elseif(($options['type']??'string') == 'date')
+                                                <x-dashboard.form.date field="meta.{{ $key }}.value" />
+                                            @elseif(($options['type']??'string') == 'select')
+                                                <x-dashboard.form.select field="meta.{{ $key }}.value" selected="meta.{{ $key }}.value" :items="\App\Models\UserMeta::metaSelectValues($key)" />
+                                            @elseif(($options['type']??'string') == 'wysiwyg')
+                                                <x-dashboard.form.froala field="meta.{{ $key }}.value" id="wysiwyg-{{ $key }}"  />
+                                            @endif
 
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Gender') }}
-                                    <span class="text-danger relative top-[-2px]">*</span>
-                                </label>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="['male' => 'Male', 'female' => 'Female', 'other' => 'Other']" selected="meta.gender.value" :nullable="false"></x-dashboard.form.select>
-
-                                    <x-system.invalid-msg field="meta.gender.value"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                            <!-- END Gender -->
-                            
-
-                            <!-- Calendly Link -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
-
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Calendly link') }}
-                                </label>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="meta.calendly_link.value" />
-                                </div>
-                            </div>
-                            <!-- END Calendly Link -->
+                                            <x-system.invalid-msg field="me.phone"></x-system.invalid-msg>
+                                        </div>
+                                    </div>
+                                @endforeach
                             @endif
 
-                            {{-- <!-- Industry -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
-                                x-data="{}">
-
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Industry') }}
-                                    <span class="text-danger relative top-[-2px]">*</span>
-                                </label>
-
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="\Categories::getAll(true)->keyBy('id')->map(fn($item) => $item->name)->toArray()" selected="meta.industry.value.id"></x-dashboard.form.select>
-
-                                    <x-system.invalid-msg field="meta.industry.value"></x-system.invalid-msg>
-                                </div>
-                            </div>
-                            <!-- END Industry --> --}}
-
-                            <!-- Bio -->
+                            {{-- <!-- Bio -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
 
                                 <label class="col-span-3 block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
@@ -293,17 +276,11 @@
                                     <x-system.invalid-msg class="w-full" field="meta.bio.value"></x-system.invalid-msg>
                                 </div>
                             </div>
-                            <!-- END Bio -->
+                            <!-- END Bio --> --}}
 
                             {{-- Save basic information --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
-                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
-                                    $wire.set('me.thumbnail', thumbnail.id, true);
-                                    $wire.set('me.cover', cover.id, true);
-                                    $wire.set('meta.bio.value', meta.bio.value, true);
-                                    {{-- $wire.set('meta.industry.value', meta.industry.value.id, true); --}}
-                                    $wire.set('meta.birthday.value', meta.birthday.value, true);
-                                " wire:click="saveBasicInformation()">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="onSave()" wire:click="saveBasicInformation()">
                                     {{ translate('Save') }}
                                 </button>
                             </div>

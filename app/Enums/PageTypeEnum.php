@@ -6,6 +6,7 @@ namespace App\Enums;
  * @method static self system()
  * @method static self builder()
  * @method static self html()
+ * @method static self wysiwyg()
  */
 class PageTypeEnum extends EVBaseEnum
 {
@@ -15,6 +16,7 @@ class PageTypeEnum extends EVBaseEnum
             'system' => 'system',
             'builder' => 'builder',
             'html' => 'html',
+            'wysiwyg' => 'wysiwyg',
         ];
     }
 
@@ -24,6 +26,7 @@ class PageTypeEnum extends EVBaseEnum
             'system' => 'System',
             'builder' => 'Builder',
             'html' => 'Html',
+            'wysiwyg' => 'Wysiwyg',
         ];
     }
 }

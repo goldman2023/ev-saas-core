@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\HasCategories;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasAttributes;
 use Categories;
 use DB;
 use EVS;
@@ -28,6 +29,7 @@ class PlanForm extends Component
     use RulesSets;
     use DispatchSupport;
     use HasCategories;
+    use HasAttributes;
 
     public $plan;
 
@@ -55,6 +57,8 @@ class PlanForm extends Component
         }
 
         $this->initCategories($this->plan);
+
+        $this->refreshAttributes($this->plan);
     }
 
     protected function rules()
@@ -83,6 +87,8 @@ class PlanForm extends Component
             'plan.meta_keywords' => [''],
             'plan.meta_description' => [''],
             'plan.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
+            'custom_attributes.*' => 'required',
+            'selected_predefined_attribute_values.*' => '',
         ];
     }
 
@@ -156,6 +162,7 @@ class PlanForm extends Component
 
             // Set Categories
             $this->setCategories($this->plan);
+            $this->refreshAttributes($this->plan);
 
             // TODO: Determine which package to use for Translations! Set Translations...
 

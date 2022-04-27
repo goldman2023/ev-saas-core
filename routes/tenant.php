@@ -87,7 +87,7 @@ Route::middleware([
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
 
-    Route::get('/welcome', [OnboardingController::class, 'welcome'])->name('onboarding.step1')->middleware(['auth']);
+    Route::get('/welcome', [OnboardingController::class, 'step2'])->name('onboarding.step1')->middleware(['auth']);
     Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
     Route::post('/welcome/profile/store', [OnboardingController::class, 'profile_store'])->name('onboarding.profile.store')->middleware(['auth']);
     Route::get('/welcome/step3', [OnboardingController::class, 'step3'])->name('onboarding.step3')->middleware(['auth']);

@@ -24,7 +24,6 @@ class UserMeta extends WeBaseModel
             'gender' => 'select',
             'headline' => 'string',
             'industry' => Category::class,
-            'bio' => 'string',
             'calendly_link' => 'string',
             'company_name' => 'string',
             'company_vat' => 'string',
@@ -49,6 +48,7 @@ class UserMeta extends WeBaseModel
                 'description' => 'string',
                 'certificates' => 'uploads',
             ],
+            'bio' => 'wysiwyg',
         ];
     }
 

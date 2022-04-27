@@ -110,6 +110,8 @@ if (!function_exists('castValuesForGet')) {
                             $settings[$key]['value'] = collect($uploads);
                         } else if($data_type === 'string') {
                             $settings[$key]['value'] = $value;
+                        } else if($data_type === 'wysiwyg') {
+                            $settings[$key]['value'] = $value;
                         } else if($data_type === 'int') {
                             $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
                         } else if($data_type === 'boolean') {
@@ -120,6 +122,8 @@ if (!function_exists('castValuesForGet')) {
                             $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
                         } else if($data_type === 'datetime') {
                             $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
+                        } else {
+                            $settings[$key]['value'] = $value;
                         }
                     }       
                 } catch(\Throwable $e) {

@@ -133,7 +133,7 @@
                     </div>
                 </div>
             @endforeach
-        @endif
+        @endif        
 
         {{-- Consent Terms and Conditions --}}
         <div class="mb-2 flex items-center justify-between">
