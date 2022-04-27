@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompareController;
@@ -212,7 +213,7 @@ Route::middleware([
     Route::get('/news/category/{slug}', [BlogController::class, 'blog_category'])->name('news.category');
 
     // Chat
-    Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 
     /* Customer Management - BY EIM */
     Route::resource('customers', 'CustomerController');
