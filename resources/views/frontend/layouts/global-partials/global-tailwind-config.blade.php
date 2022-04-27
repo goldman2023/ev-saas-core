@@ -66,7 +66,7 @@ TODO: you can overide it with data from a database a sa setting --}}
                     'secondary-dark': '{{ $colors['secondary-dark'] ?: '#657934' }}',
                     'info': '{{ $colors['info'] ?: '#219FFF' }}',
                     'info-light': '{{ $colors['info-light'] ?: '#E9F6FF' }}',
-                    'success': '{{ $colors['success'] ?: '#657917BD8D34' }}',
+                    'success': '{{ $colors['success'] ?: '#657917' }}',
                     'success-light': '{{ $colors['success-light'] ?: '#E9FBF6' }}',
                     'warning': '{{ $colors['warning'] ?: '#FFA114' }}',
                     'warning-light': '{{ $colors['warning-light'] ?: '#FFF7EB' }}',

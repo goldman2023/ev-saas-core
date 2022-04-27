@@ -12,9 +12,9 @@
         text="{{ translate('Manage your subscription and billind details') }}">
         <x-slot name="content">
             @if(auth()->user()->isSubscribed())
-            <a href="{{ route('stripe.portal_session') }}">
-                    {{ translate('Biling Portal') }}
-            </a>
+                <a href="{{ route('stripe.portal_session') }}">
+                        {{ translate('Biling Portal') }}
+                </a>
             @endif
         </x-slot>
     </x-dashboard.section-headers.section-header>

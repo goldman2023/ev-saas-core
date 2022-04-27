@@ -10,6 +10,7 @@ use App\Traits\LikesTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\UploadTrait;
+use App\Traits\SocialFollowingTrait;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -35,6 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use PermalinkTrait;
     use LikesTrait;
     use CoreMetaTrait;
+    use SocialFollowingTrait;
+
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean',
