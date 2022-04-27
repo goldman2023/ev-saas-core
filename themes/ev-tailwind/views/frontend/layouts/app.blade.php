@@ -20,8 +20,7 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
-    <!-- Scripts -->
-    <script src="/public/themes/ev-tailwind/app.js" defer></script>
+
 
     {{-- TailwindCSS --}}
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
@@ -94,19 +93,18 @@
 
     <x-ev.toast id="global-toast" position="bottom-center" class="text-white text-18" :timeout="4000"></x-ev.toast>
 
-    <script defer src="https://unpkg.com/@alpinejs/intersect@3.9.3/dist/cdn.min.js"></script>
 
-    <script defer src="https://unpkg.com/alpinejs@3.9.3/dist/cdn.min.js"></script>
+    <script src="{{ mix('js/app.js', 'themes/ev-tailwind') }}" defer></script>
+    <script src="{{ mix('js/alpine.js', 'themes/ev-tailwind') }}" defer></script>
 
     <!-- Scripts -->
     @livewireScripts
+    <!-- Scripts -->
 
     @yield('script')
+
     @stack('footer_scripts')
     @auth
-    <script>
-        window.H.identify('{{ auth()->user()->email }}', {id: {{ auth()->user()->id }} });
-    </script>
     @endauth
 
 </body>
