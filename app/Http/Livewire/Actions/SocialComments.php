@@ -35,8 +35,8 @@ class SocialComments extends Component
         $comments = SocialComment::whereNull('parent_id')
             ->with('replies')
             ->with('user')
-            ->where('subject_id', $this->item->id)
-            ->where('subject_type', $this->item::class)
+            ->where('subject_id', $this->item->subject->id)
+            ->where('subject_type', $this->item->subject::class)
             ->take(5)
             ->latest();
 
@@ -56,8 +56,8 @@ class SocialComments extends Component
         $this->validate();
 
         SocialComment::create([
-            'subject_id' => $this->item->id,
-            'subject_type' => $this->item::class,
+            'subject_id' => $this->item->subject->id,
+            'subject_type' => $this->item->subject::class,
             'user_id' => auth()->user()->id,
             'comment_text' => $this->comment_text,
             'parent_id' => $this->replyCommentId,
@@ -65,6 +65,8 @@ class SocialComments extends Component
 
         $this->comment_text = '';
         $this->replyCommentId = null;
+
+        $this->dispatchBrowserEvent('change-activity-comment-count', ['item_id' => $this->item->id]);
     }
 
     public function reply($commentId)

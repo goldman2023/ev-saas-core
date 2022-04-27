@@ -1,7 +1,18 @@
-<div x-data="{'isModalOpen': false}" x-on:keydown.escape="isModalOpen=false">
+<div x-data="{
+    'isModalOpen': false,
+}" x-on:keydown.escape="isModalOpen=false">
     @if(!$ignore)
     <div>
-        <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg'>
+        <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg' x-data="{
+            id: 'feed-activity-{{ $item->id }}',
+            comment_count: {{ $item->subject->comments()->count() }},
+        }"
+        @change-activity-comment-count.window="
+            if(id == 'feed-activity-'+$event.detail.item_id) {
+                comment_count = Number(comment_count) + 1;
+            }
+        "
+        >
             {{-- x-intersect:visible="$wire.track_impression({{ $item->id }})" --}}
             <div>
                 <x-feed.elements.card-header-user-info :item="$item">
@@ -118,10 +129,10 @@
                                     d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
                                     clip-rule="evenodd" />
                             </svg>
-                            @if($item->subject->comments())
-                                <span class="font-medium text-gray-900">{{ $item->subject()->comments()->count() }}</span>
+                            {{-- @if($item->subject->comments->count)  --}}
+                                <span class="font-medium text-gray-900" x-text="comment_count"></span>
                                 <span class="sr-only">replies</span>
-                            @endif
+                            {{-- @endif --}}
                         </button>
                     </span>
                     <span class="inline-flex items-center text-sm">
