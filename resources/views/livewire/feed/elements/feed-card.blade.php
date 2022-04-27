@@ -36,6 +36,13 @@
                     <p class="text-md font-gray-600 mt-3 font-normal">
                         {{ $item->subject->excerpt}}
                     </p>
+
+                    @if(!empty($item->subject->hasThumbnail()))
+                        <div class="w-full mt-4">
+                            <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" class="w-full border border-gray-200 rounded shadow-md"/>
+                        </div>
+                    @endif
+
                     @else
                     @if(class_exists($item->subject_type) && $item->subject)
                     {{ $item->description }}
