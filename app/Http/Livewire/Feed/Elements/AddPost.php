@@ -23,7 +23,7 @@ class AddPost extends Component
             'post.type' => '',
             'post.excerpt' => '',
             'post.content' => 'required',
-            'post.thumbnail' => 'if_id_exists:App\Models\Upload,id',
+            'post.thumbnail' => 'if_id_exists:App\Models\Upload,id,true',
         ];
     }
 
@@ -70,11 +70,12 @@ class AddPost extends Component
 
             DB::commit();
 
-            $this->resetForm();
+            $this->emit('newPostAdded', $this->post->id);
 
             $this->inform(translate('Shared sucesfully!'), '', 'success');
-            $this->emit('newPostAdded');
             $this->dispatchBrowserEvent('reset-image-selector');
+
+            $this->resetForm();
         } catch(\Exception $e) {
             DB::rollBack();
 
