@@ -345,9 +345,11 @@ class StripeService
             $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $checkout_link['payment_intent'] ?? null; // store payment intent id
             $meta[$this->mode_prefix .'stripe_checkout_session_id'] = $checkout_link['id'] ?? null; // store chekout session id
             $order->meta = $meta;
+
+            $order->save();
         }
 
-        $order->save();
+        
 
         return $checkout_link['url'] ?? null;
     }
