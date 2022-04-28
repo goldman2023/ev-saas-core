@@ -12,7 +12,7 @@
 {{-- Google Analytics Integration --}}
 
 {{-- Google Tags Manager Integration --}}
-@if(get_tenant_setting('google_tags_manager_enabled') && !empty($gtm = get_tenant_setting('google_tags_manager_id')))
+@if(get_tenant_setting('google_tag_manager_enabled') && !empty($gtm = get_tenant_setting('google_tag_manager_id')))
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=

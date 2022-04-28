@@ -1,5 +1,5 @@
 {{-- Google Tags Manager Integration --}}
-@if(get_tenant_setting('google_tags_manager_enabled') && !empty($gtm = get_tenant_setting('google_tags_manager_id')))
+@if(get_tenant_setting('google_tag_manager_enabled') && !empty($gtm = get_tenant_setting('google_tag_manager_id')))
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtm }}"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

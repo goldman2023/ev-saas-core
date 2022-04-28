@@ -380,7 +380,6 @@ class AppSettingsForm extends Component
 
             // TODO: Move this somewhere else, to be MailerLite specific!!!
             \MailerService::mailerlite()->addDefaultFields();
-
             $this->inform(translate('Integrations settings successfully saved.'), '', 'success');
         } catch(\Exception $e) {
             DB::rollback();

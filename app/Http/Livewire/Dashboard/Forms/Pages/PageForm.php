@@ -54,6 +54,7 @@ class PageForm extends Component
             'page.type' => [ 'required' ], //  Rule::in(PageTypeEnum::implodedValues())
             'page.name' => 'required|min:2',
             'page.status' => [Rule::in(StatusEnum::toValues('archived'))],
+            'page.content' => [''],
             'page.meta_title' => [''],
             'page.meta_img' => ['if_id_exists:App\Models\Upload,id,true'],
         ];
@@ -83,8 +84,7 @@ class PageForm extends Component
             $this->page->save();
 
             $this->inform(translate('Page saved successfully!'), '', 'success');
-
-            $this->emit('refreshPagesAndOpenNewPage', $this->page->id); //
+            // $this->emit('refreshPagesAndOpenNewPage', $this->page->id); //
         } catch (\Exception $e) {
             $this->inform(translate('There was an error while saving a page...Please try again.'), $e->getMessage(), 'fail');
         }

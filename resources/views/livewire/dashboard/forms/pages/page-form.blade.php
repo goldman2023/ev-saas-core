@@ -3,7 +3,9 @@
     type: @js($page->type ?? 'wysiwyg'),
     meta_img: @js(['id' => $page->meta_img->id ?? null, 'file_name' => $page->meta_img->file_name ?? '']),
     content: @entangle('page.content').defer,
-}"
+}" x-init="$watch('type', () => {
+    $wire.set('page.type', type);
+})"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
     <div class="w-full relative">

@@ -68,13 +68,22 @@ class Page extends WeBaseModel
         if (empty($value)) {
             return array_values(json_decode('[]', true));
         } else {
-            return array_values(json_decode($value, true));
+            $decoded_json = json_decode($value, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                return $decoded_json;
+            }
+
+            return $value;
         }
     }
 
     public function setContentAttribute($value)
     {
-        $this->attributes['content'] = json_encode(array_values($value));
+        if(is_array($value)) {
+            $this->attributes['content'] = json_encode(array_values($value));
+        } else if(is_string($value)) {
+            $this->attributes['content'] = $value;
+        }
     }
 
     public function getTranslation($field = '', $lang = false)

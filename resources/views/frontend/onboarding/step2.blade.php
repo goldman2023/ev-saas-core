@@ -9,15 +9,15 @@
     </div>
 </div>
 <section class="container py-10">
-    <!-- Features Section -->
-    <div class="grid grid-cols-3 space-2 gap-10">
 
-        <div class="col-span-2">
+    <div class="grid grid-cols-1 md:grid-cols-3 space-2 gap-10">
+
+        <div class="col-span-1 md:col-span-2">
             <livewire:dashboard.forms.settings.my-account-form :onboarding="true">
             </livewire:dashboard.forms.settings.my-account-form>
         </div>
 
-        <div class="col-span-1">
+        <div class="col-span-1 md:col-span-1">
             {{-- <livewire:onboarding.elements.steps-progress step="2">
             </livewire:onboarding.elements.steps-progress> --}}
             <x-default.elements.support-card></x-default.elements.support-card>

@@ -162,9 +162,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .container {
-            max-width: 100%;
-            width: 1140px;
-            margin: 0 auto;
+            @apply w-[1140px] max-w-[100%] px-5 lg:px-0 my-0 mx-auto;
         }
 
         [data-f-id] {

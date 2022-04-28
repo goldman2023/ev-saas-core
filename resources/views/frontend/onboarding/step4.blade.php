@@ -9,11 +9,9 @@
 
 </div>
 <section class="container py-10">
-    <!-- Features Section -->
-    <div class="grid grid-cols-3 space-2 gap-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 space-2 gap-10">
 
-        <div class="col-span-2">
-            <!-- This example requires Tailwind CSS v2.0+ -->
+        <div class="col-span-1 md:col-span-2">
             <div class="bg-white">
                 <div class="max-w-3xl mx-auto">
                     <div class="max-w-xl">
@@ -24,12 +22,10 @@
                             <span class="emoji ml-2">🎉</span>
                         </p>
                         <p class="mt-6 text-base text-gray-500">{{ translate('Your profile sucesfully created') }}</p>
-
-
                     </div>
-                    <div class="grid grid-cols-2 gap-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div class="">
-                            <dl class="mt-12 mb-6 text-sm font-medium  ">
+                            <dl class="mt-6 md:mt-12 mb-6 text-sm font-medium">
                                 <h2 class="text-lg font-medium text-gray-900">
                                     {{ translate('Personal Profile Preview') }}
                                 </h2>
@@ -51,8 +47,7 @@
                         </div>
 
                         <div class="">
-                            <!-- This example requires Tailwind CSS v2.0+ -->
-                            <div class="max-w-lg mx-auto mt-12">
+                            <div class="max-w-full md:max-w-lg mx-auto mt-0 md:mt-12">
                                 <h2 class="text-lg font-medium text-gray-900">
                                     {{ translate('Get started on ') }} {{ get_site_name() }}
                                 </h2>
@@ -241,7 +236,7 @@
 
         </div>
 
-        <div class="col-span-1">
+        <div class="col-span-1 md:col-span-1 mb-1 h-[450px] md:h-auto">
             {{-- Interested in --}}
             <livewire:onboarding.elements.categories-of-interest />
             
