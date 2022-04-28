@@ -40,7 +40,8 @@
 </head>
 
 <body class="font-sans antialiased bg-gray-100 {{ Route::currentRouteName() }}" x-data="{
-    all_categories: @js(Categories::getAllFormatted(true))
+    all_categories: @js(Categories::getAllFormatted(true)),
+    all_categories_flat: @js(Categories::getAllFormatted(true, true)),
 }" @keydown.escape="$dispatch('main-navigation-dropdown-hide');">
     <div class="min-h-screen">
         {{-- <x-tailwind-ui.headers.header></x-tailwind-ui.headers.header> --}}

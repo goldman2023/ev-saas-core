@@ -2,6 +2,11 @@
         x-data="selector()" 
         x-init="initSelector()"
         @init-form.window="initSelector()">
+
+    {{-- <div class="w-full border-b border-gray-200 py-2 mb-0 px-2">
+        <input type="text" class="form-standard w-full focus:ring-0 " placeholder="{{ translate('Search categories') }}" x-model.debounce.500ms="search_query" />
+    </div> --}}
+
     <fieldset class="space-y-1">
         <ul>
             <template x-for="(category, slug) in all_categories">
@@ -16,8 +21,26 @@
 <script>
     function selector() {
         return {
+            // items: all_categories_flat,
+            // displayed_items: all_categories,
+            search_query: '',
             initSelector() {
-                
+                // $watch('search_query', (value) => {
+                //     if(value == '') {
+                //         this.displayed_items = all_categories;
+                //         return;
+                //     }
+
+                //     let newItems = {};
+                //     Object.entries(this.items).filter(entry => {
+                //         if (entry['name'].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+                //             newItems[entry['slug']] = entry;
+                //             return true;
+                //         }
+                //     });
+
+                //     this.displayed_items = newItems;
+                // })
             },
             renderCategory(category, slug) {
                 let hasChildren = category.children !== null && category.children !== undefined && Object.keys(category.children).length > 0;
