@@ -474,7 +474,7 @@ class StripeService
     public function processWebhooks(Request $request)
     {
         // This is your Stripe CLI webhook secret for testing your endpoint locally.
-        $endpoint_secret = Payments::stripe()->stripe_webhook_secret;
+        $endpoint_secret = Payments::isStripeLiveMode() ? Payments::stripe()->stripe_webhook_live_secret : Payments::stripe()->stripe_webhook_test_secret;
 
         // TODO:
         $payload = @file_get_contents('php://input');

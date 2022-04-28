@@ -2,6 +2,7 @@
 
 namespace App\Nova\Tenant;
 
+use App\Nova\Filters\Language;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Gravatar;
@@ -79,7 +80,9 @@ class Translation extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new Language('lang'),
+        ];
     }
 
     /**

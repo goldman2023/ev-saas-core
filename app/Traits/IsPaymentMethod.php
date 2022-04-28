@@ -264,11 +264,19 @@ trait IsPaymentMethod
                     ],
                 ],
                 [
-                    'property_name' => 'stripe_webhook_secret',
-                    'value' => $this->data->stripe_webhook_secret ?? '',
+                    'property_name' => 'stripe_webhook_live_secret',
+                    'value' => $this->data->stripe_webhook_live_secret ?? '',
                     'rules' => ['required'],
                     'messages' => [
-                        'required' => translate('Stripe webhook endpoint secret key is required in order to use Stripe Webhooks'),
+                        'required' => translate('Stripe webhook endpoint secret key is required in order to use Stripe Webhooks (LIVE)'),
+                    ],
+                ],
+                [
+                    'property_name' => 'stripe_webhook_test_secret',
+                    'value' => $this->data->stripe_webhook_test_secret ?? '',
+                    'rules' => ['required'],
+                    'messages' => [
+                        'required' => translate('Stripe webhook endpoint secret key is required in order to use Stripe Webhooks (TEST)'),
                     ],
                 ],
                 [
