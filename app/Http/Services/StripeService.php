@@ -709,6 +709,7 @@ class StripeService
             http_response_code(400);
             die($e->getMessage());
         }
+        die();
     }
 
     // checkout.session.expired

@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Order;
 use App\Mail\OrderReceivedEmail;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class OrdersObserver
 {
