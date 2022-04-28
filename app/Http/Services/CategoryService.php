@@ -167,13 +167,13 @@ class CategoryService
      * If $for_js is set to true, it means that data should be used in JS and alpineJS and should be reduced in size, so we need to apply mapping too.
      * When $for_js is set to true, two functions are applied to collection: keyBy() and map(). Former to map indexes to slugs and latter to reduce size of category array.
      **/
-    public function getAllFormatted($for_js = false)
+    public function getAllFormatted($for_js = false, $flat = false)
     {
         if ($for_js) {
-            return Collection::recursiveApplyStatic($this->categories->toArray(), 'children',
+            return Collection::recursiveApplyStatic($flat ? $this->categories_flat->toArray() : $this->categories->toArray(), 'children',
             ['fn' => 'keyBy', 'params' => ['slug']],
             ['fn' => 'map', 'params' => [
-                function ($item) {
+                function ($item) use($flat) {
                     return [
                         'id' => $item['id'],
                         'parent_id' => $item['parent_id'],
@@ -181,7 +181,7 @@ class CategoryService
                         'slug' => $item['slug'],
                         'slug_path' => $item['slug_path'],
                         'path' => $item['path'],
-                        'children' => $item['children'],
+                        'children' => $flat ? [] : $item['children'],
                         'descendants_count' => $item['descendants_count'],
                     ];
                 },
