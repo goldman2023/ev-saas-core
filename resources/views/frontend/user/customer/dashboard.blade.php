@@ -13,7 +13,15 @@
                 </x-dashboard.elements.support-card>
             </div>
 
+            <div class="w-full col-span-3">
+                <div class="text-18 text-gray-900 font-semibold">
+                    {{ translate('Invoices') }}
+                </div>
+                <livewire:dashboard.tables.recent-invoices-widget-table for="me" :show-per-page="false" :show-search="false" :column-select="false" />
+            </div>
+
             <div>
+                
                 {{-- TODO: Add something to this column based on child theme --}}
             </div>
 

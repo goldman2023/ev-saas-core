@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Order;
 use App\Mail\OrderReceivedEmail;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class OrdersObserver
 {
@@ -41,7 +43,7 @@ class OrdersObserver
     public function updated(Order $order)
     {
         // If order is not temp AND email is not yet sent, send it
-        if(!$order->is_temp && !$order->meta['email_sent']) {
+        if(!$order->is_temp && !($order->meta['email_sent']??null)) {
             try {
                 // Send order in email to user
                 Mail::to($order->user->email)

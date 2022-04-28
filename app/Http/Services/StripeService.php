@@ -303,10 +303,10 @@ class StripeService
             ],
             'mode' => $model->isSubscribable() ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
-            'client_reference_id' => !empty($order) ? $order->id : '',
+            'client_reference_id' => $is_preview ? 'preview' : $order->id,
             /* TODO: Create dynamic order on the fly when generating checkout link  */
-            'success_url' => !empty($order) ? route('checkout.order.received', ['id' => $order->id]) : '',
-            'cancel_url' => !empty($order) ? route('checkout.order.canceled', ['id' => $order->id]) : '',
+            'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
+            'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'automatic_tax' => [
                 'enabled' => false,
             ],
@@ -345,9 +345,11 @@ class StripeService
             $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $checkout_link['payment_intent'] ?? null; // store payment intent id
             $meta[$this->mode_prefix .'stripe_checkout_session_id'] = $checkout_link['id'] ?? null; // store chekout session id
             $order->meta = $meta;
+
+            $order->save();
         }
 
-        $order->save();
+        
 
         return $checkout_link['url'] ?? null;
     }
@@ -709,6 +711,7 @@ class StripeService
             http_response_code(400);
             die($e->getMessage());
         }
+        die();
     }
 
     // checkout.session.expired
