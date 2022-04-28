@@ -16,7 +16,7 @@ class CategoriesOfInterest extends Component
 
     public function render()
     {
-        return view('livewire.onboarding.elements.catgories-of-interest');
+        return view('livewire.onboarding.elements.categories-of-interest');
     }
 
     public function followCategory($category_id)
