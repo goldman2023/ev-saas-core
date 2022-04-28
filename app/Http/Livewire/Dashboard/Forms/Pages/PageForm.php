@@ -84,7 +84,6 @@ class PageForm extends Component
             $this->page->save();
 
             $this->inform(translate('Page saved successfully!'), '', 'success');
-
             // $this->emit('refreshPagesAndOpenNewPage', $this->page->id); //
         } catch (\Exception $e) {
             $this->inform(translate('There was an error while saving a page...Please try again.'), $e->getMessage(), 'fail');
