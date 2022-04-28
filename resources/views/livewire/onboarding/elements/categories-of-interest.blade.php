@@ -1,4 +1,4 @@
-<div class="flow-root h-full mt-6">
+<div class="flow-root h-full mt-0 md:mt-6">
     <h4 class="text-lg font-medium text-gray-900 mb-5">{{ translate('I\'m interested in') }}:</h4>
     <div class="w-full h-[90%] relative overflow-y-auto">
         <ul role="list" class="absolute w-full h-full top-0 -my-5 divide-y divide-gray-200 pr-3">

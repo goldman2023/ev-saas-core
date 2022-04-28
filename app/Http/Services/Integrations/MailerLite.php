@@ -11,12 +11,20 @@ class MailerLite
 
     public function __construct()
     {
-        $mailerlite_api_key = get_tenant_setting('mailerlite_api_token', null);
-        // $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
+        try {
+            $mailerlite_api_key = get_tenant_setting('mailerlite_api_token', null);
+            $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     public function fetch() {
-        $this->mailerlite;
+        try {
+            return $this->mailerlite;
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        } 
     }
 
     public function hasToken() {
@@ -69,17 +77,21 @@ class MailerLite
     }
 
     public function getSubscriber($user) {
-        if(is_string($user)) {
-            return $this->mailerlite->subscribers()->search($user)[0] ?? null;
-        } else {
-            return $this->mailerlite->subscribers()->search($user->email ?? '')[0] ?? null;
+        try {
+            if(is_string($user)) {
+                return $this->mailerlite->subscribers()->search($user)[0] ?? null;
+            } else {
+                return $this->mailerlite->subscribers()->search($user->email ?? '')[0] ?? null;
+            }
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
         }
     }
 
     public function addSubscriberToGroup($group_identifier, $user) {
-        $group = $this->getGroup($group_identifier);
-
         try {
+            $group = $this->getGroup($group_identifier);
+
             $fields = [
                 'company' => '',
                 'city' => '',
@@ -114,22 +126,30 @@ class MailerLite
     }
 
     public function getFields() {
-        return collect($this->mailerlite->fields()->get()->toArray());
+        try {
+            return collect($this->mailerlite->fields()->get()->toArray());
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     public function addDefaultFields() {
-        $we_mailing_fields = \App\Enums\WeMailingSubsribersFieldsEnum::values();
-        $mailerlite_fields = $this->getFields();
-
-        foreach($we_mailing_fields as $title => $type) {
-            if($mailerlite_fields->where('title', $title)->count() <= 0) {
-                $this->mailerlite->fields()->create([
-                    'title' => $title,
-                    'type' => $type
-                ]);
+        try {
+            $we_mailing_fields = \App\Enums\WeMailingSubsribersFieldsEnum::values();
+            $mailerlite_fields = $this->getFields();
+            
+            foreach($we_mailing_fields as $title => $type) {
+                if($mailerlite_fields->where('title', $title)->count() <= 0) {
+                    $this->mailerlite->fields()->create([
+                        'title' => $title,
+                        'type' => $type
+                    ]);
+                }
             }
-        }
 
-        return true;
+            return true;
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 }

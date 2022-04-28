@@ -6,7 +6,7 @@
         addresses: @entangle('addresses'),
         available_features: @js(\App\Models\ShopAddress::getAvailableFeatures()),
     }" @display-address-panel.window="setTimeout(() => {$dispatch('display-flyout-panel', {'id': 'address-panel'})}, 150);">
-    <div class="w-full flex justify-between items-center border-b border-gray-200 mb-3 pb-3">
+    <div class="w-full flex flex-wrap justify-between items-center border-b border-gray-200 mb-3 pb-3">
         <div class="shrink-0">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Addresses') }}</h3>
             <p class="flex items-center-1 max-w-2xl text-sm text-gray-500"> {{ translate('Add one or multiple addresses to your account') }}</p>
@@ -21,7 +21,7 @@
 
     <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5 pb-2">
         @if($addresses->isNotEmpty())
-            <ul role="list" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ul role="list" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
                 @foreach($addresses as $key => $address)
                     <li class="col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200  border border-gray-200">
                         <div class="w-full flex items-center justify-between p-6 space-x-6">
@@ -45,14 +45,14 @@
                         <div>
                             <div class="-mt-px flex divide-x divide-gray-200">
                                 <div class="w-0 flex-1 flex">
-                                    <button wire:click="removeAddress({{ $address->id }})" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm bg-danger text-white font-medium border border-transparent rounded-bl-lg">
-                                        @svg('heroicon-o-trash', ['class' => 'w-5 h-5 text-white'])
+                                    <button wire:click="removeAddress({{ $address->id }})" class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-3 text-sm bg-danger text-white font-medium border border-transparent rounded-bl-lg">
+                                        @svg('heroicon-o-trash', ['class' => 'w-4 h-4 text-white'])
                                         <span class="ml-3">{{ translate('Remove') }}</span>
                                     </button>
                                 </div>
                                 <div class="-ml-px w-0 flex-1 flex">
-                                    <button wire:click="changeCurrentAddress({{ $key }})" class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
-                                        @svg('heroicon-o-pencil', ['class' => 'w-5 h-5'])
+                                    <button wire:click="changeCurrentAddress({{ $key }})" class="relative w-0 flex-1 inline-flex items-center justify-center py-3 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+                                        @svg('heroicon-o-pencil', ['class' => 'w-4 h-4'])
                                         <span class="ml-3">{{ translate('Edit') }}</span>
                                     </button>
                                 </div>
