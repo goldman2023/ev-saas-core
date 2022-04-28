@@ -31,7 +31,7 @@ Route::middleware([
     VendorMode::class,
 ])->group(function () {
     Route::middleware('auth')->prefix('previews')->group(function () {
-        Route::get('/show', [App\Http\Controllers\EVPreviewController::class, 'show'])->name('show');
+        Route::get('/show', [\App\Http\Controllers\EVPreviewController::class, 'show'])->name('show');
     });
 
     /* TODO: Admin only */
