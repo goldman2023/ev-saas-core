@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Invoice;
 use App\Mail\NewInvoiceEmail;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class InvoicesObserver
 {
