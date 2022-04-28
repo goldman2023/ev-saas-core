@@ -14,6 +14,9 @@
             </div>
 
             <div>
+                <div class="w-full col-span-3">
+                    <livewire:dashboard.tables.recent-invoices-widget-table for="me" :show-per-page="false" :show-search="false" :column-select="false" />
+                </div>
                 {{-- TODO: Add something to this column based on child theme --}}
             </div>
 
