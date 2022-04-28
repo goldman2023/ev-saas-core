@@ -33,8 +33,8 @@ class MailerLite
 
     /**
      * This function returns all MailerLite groups as a laravel Collection.
-     * 
-     * Also, it creates Default WeSaas Mailing Lists defined inside `\App\Enums\WeMailingListsEnum` class, 
+     *
+     * Also, it creates Default WeSaas Mailing Lists defined inside `\App\Enums\WeMailingListsEnum` class,
      * as Mailerlite groups (if these groups don't exists already)
      */
     public function getGroups() {
@@ -58,7 +58,7 @@ class MailerLite
 
     /**
      * This function returns a specific MailerLite group by name or ID.
-     * 
+     *
      * @param mixed $identifier - can be group name or ID
      */
     public function getGroup($identifier) {
@@ -121,7 +121,7 @@ class MailerLite
             // TODO: Discern between different Response error codes...
             Log::error($e->getMessage());
         }
-        
+
         return false;
     }
 
