@@ -12,7 +12,7 @@ class MailerLite
     public function __construct()
     {
         $mailerlite_api_key = get_tenant_setting('mailerlite_api_token', null);
-        $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
+        // $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
     }
 
     public function fetch() {
@@ -25,8 +25,8 @@ class MailerLite
 
     /**
      * This function returns all MailerLite groups as a laravel Collection.
-     * 
-     * Also, it creates Default WeSaas Mailing Lists defined inside `\App\Enums\WeMailingListsEnum` class, 
+     *
+     * Also, it creates Default WeSaas Mailing Lists defined inside `\App\Enums\WeMailingListsEnum` class,
      * as Mailerlite groups (if these groups don't exists already)
      */
     public function getGroups() {
@@ -50,7 +50,7 @@ class MailerLite
 
     /**
      * This function returns a specific MailerLite group by name or ID.
-     * 
+     *
      * @param mixed $identifier - can be group name or ID
      */
     public function getGroup($identifier) {
@@ -109,7 +109,7 @@ class MailerLite
             // TODO: Discern between different Response error codes...
             Log::error($e->getMessage());
         }
-        
+
         return false;
     }
 
@@ -120,7 +120,7 @@ class MailerLite
     public function addDefaultFields() {
         $we_mailing_fields = \App\Enums\WeMailingSubsribersFieldsEnum::values();
         $mailerlite_fields = $this->getFields();
-        
+
         foreach($we_mailing_fields as $title => $type) {
             if($mailerlite_fields->where('title', $title)->count() <= 0) {
                 $this->mailerlite->fields()->create([
