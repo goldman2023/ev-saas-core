@@ -14,6 +14,7 @@ use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
+use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\SetDashboard;
@@ -185,12 +186,11 @@ Route::middleware([
     });
 
     // Integrations
-    Route::get('/integrations', [App\Http\Controllers\Integrations\IntegrationsController::class, 'index'])->name('integrations.index');
-
-    Route::get('/integrations/facebook-business-export', [App\Http\Controllers\Integrations\FacebookBusinessController::class, 'export'])->name('integrations.facebook-business.export');
-    Route::get('/integrations/woocommerce', [App\Http\Controllers\Integrations\WooCommerceController::class, 'index'])->name('integrations.woocommerce');
-    Route::get('/integrations/woocommerce/import/{type}', [App\Http\Controllers\Integrations\WooCommerceController::class, 'import'])->name('integrations.woocommerce.import');
-    Route::get('/integrations/woocommerce/import-results/{type}', [App\Http\Controllers\Integrations\WooCommerceController::class, 'import_results'])->name('integrations.woocommerce.import-results');
+    Route::get('/integrations', [IntegrationsController::class, 'index'])->name('integrations.index');
+    Route::get('/integrations/facebook-business-export', [FacebookBusinessController::class, 'export'])->name('integrations.facebook-business.export');
+    Route::get('/integrations/woocommerce', [WooCommerceController::class, 'index'])->name('integrations.woocommerce');
+    Route::get('/integrations/woocommerce/import/{type}', [WooCommerceController::class, 'import'])->name('integrations.woocommerce.import');
+    Route::get('/integrations/woocommerce/import-results/{type}', [WooCommerceController::class, 'import_results'])->name('integrations.woocommerce.import-results');
 
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */
