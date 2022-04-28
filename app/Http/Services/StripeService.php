@@ -303,7 +303,7 @@ class StripeService
             ],
             'mode' => $model->isSubscribable() ? 'subscription' : 'payment',
             'billing_address_collection' => 'required',
-            'client_reference_id' => !empty($order) ? $order->id : '',
+            'client_reference_id' => $is_preview ? 'preview' : $order->id,
             /* TODO: Create dynamic order on the fly when generating checkout link  */
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
