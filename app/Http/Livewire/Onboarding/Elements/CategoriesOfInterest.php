@@ -32,10 +32,11 @@ class CategoriesOfInterest extends Component
                 ]
             ]);
         }
+
+        $this->refreshFollowedCategories();
     }
 
     protected function refreshFollowedCategories() {
         $this->followed_categories_ids = auth()->user()->follows_categories()->select('categories.id')->get()->pluck('id')->toArray();
-
     }
 }
