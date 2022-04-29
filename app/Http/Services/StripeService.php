@@ -834,6 +834,11 @@ class StripeService
             // We need our order here, because we need to link new invoice to it! Find order in our DB based on stripe_subscription this invoice is related to
             $order = Order::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix .'stripe_subscription_id', $stripe_subscription_id)->first();
 
+            if (empty($order)) {
+                // If order cannot be found with subscriptionid, try with request_id
+                $order = Order::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix .'stripe_request_id', $stripe_request_id)->first();
+            }
+
             if (!empty($order)) {
                 // Get order item(s)
                 $order_item = $order->order_items->first();
