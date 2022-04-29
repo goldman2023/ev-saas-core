@@ -95,6 +95,10 @@ class RegisterForm extends Component
      */
     public function mount()
     {
+        // $user = User::find(1);
+        // Mail::to($user)
+        //         ->send(new WelcomeEmail($user));
+
         $this->available_meta = collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true);
 
         if($this->available_meta->count() > 0) {
@@ -193,8 +197,8 @@ class RegisterForm extends Component
             Log::error($e->getMessage());
         } 
 
+        // Send welcome email to the user
         try {
-            // Send welcome email to the user
             Mail::to($this->user->email)
                 ->send(new WelcomeEmail($this->user));
         } catch(\Exception $e) {
