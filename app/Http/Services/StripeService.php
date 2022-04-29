@@ -910,11 +910,9 @@ class StripeService
             $invoice->meta = $meta;
             
             $invoice->save();
-            
-            DB::commit();            
 
-            http_response_code(200);
-            die(print_r($invoice));
+            DB::commit();
+            
             // print_r('Our latest Invoice related to subscription with stripe ID: ' . $stripe_subscription_id . ', could not be found in our DB.');
             // http_response_code(400);
             // die();

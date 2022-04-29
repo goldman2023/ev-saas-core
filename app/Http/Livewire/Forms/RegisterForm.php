@@ -180,31 +180,7 @@ class RegisterForm extends Component
     }
 
     protected function registered()
-    {
-        
-        try {
-            // Adding User to MailerLite 'All Users' group
-            $subscriber = MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
-
-            // Set the core_meta 'in_mailerlite' flag to 1!
-            if(!empty($subscriber)) {
-                $this->user->core_meta()->insert([
-                    'key' => 'in_mailerlite',
-                    'value' => 1
-                ]);
-            }
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
-        } 
-
-        // Send welcome email to the user
-        try {
-            Mail::to($this->user->email)
-                ->send(new WelcomeEmail($this->user));
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
-        }
-        
+    {   
         if(get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
         }
