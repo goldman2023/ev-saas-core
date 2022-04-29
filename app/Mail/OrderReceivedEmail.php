@@ -31,6 +31,7 @@ class OrderReceivedEmail extends WeEmail
         
         return $this
             ->view('emails.orders.order-received')
+            ->text('emails.orders.order-received')
             ->mailersend();
         
     }

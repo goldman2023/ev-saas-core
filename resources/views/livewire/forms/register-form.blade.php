@@ -144,10 +144,12 @@
                 </div>
                 <div class="ml-3 text-sm">
                     <label for="register-form-terms-consent"
-                        class="cursor-pointer font-medium text-gray-700 @error('terms_consent') text-danger @enderror">
-                        <a href="{{ get_tenant_setting('tos_url', '#')  }}" target="_blank">
-                            {{ translate('By Registering I agree to ') }} {{ get_site_name() }} {{ translate('Terms of
-                            Service') }}
+                        class=font-medium text-gray-700 inline @error('terms_consent') text-danger @enderror">
+                        <span>
+                            {{ translate('By Registering I agree to ') }} {{ get_site_name() }} 
+                        </span>
+                        <a href="{{ get_tenant_setting('tos_url', '#')  }}" target="_blank" class="text-primary">
+                            {{ translate('Terms of Service') }}
                         </a>
                     </label>
 

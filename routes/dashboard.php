@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\App;
+use App\Http\Controllers\DocumentGalleryController;
 use App\Http\Controllers\EVAccountController;
 use App\Http\Controllers\EVAttributesController;
 use App\Http\Controllers\EVBlogPostController;
@@ -14,6 +15,10 @@ use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
+use App\Http\Controllers\Integrations\IntegrationsController;
+use App\Http\Controllers\LeadController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\SetDashboard;
@@ -53,10 +58,9 @@ Route::middleware([
         Route::get('/', [HomeController::class, 'dashboard'])->name('dashboard');
 
         /* Leads Management - BY EIM */
-        Route::get('leads/success', [\App\Http\Controllers\LeadController::class, 'success'])->name('leads.success');
+        Route::get('leads/success', [LeadController::class, 'success'])->name('leads.success');
         Route::resource('leads', 'LeadController');
 
-        Route::get('/ev-activity', [ActivityController::class, 'index_frontend'])->name('activity.index');
 
         /* TODO: Admin and seller only */
 
@@ -99,10 +103,10 @@ Route::middleware([
         //        Route::resource('orders', 'EVOrderController')->parameters([
         //            'orders' => 'id',
         //        ])->except(['destroy']);
-        Route::get('/orders/destroy/{id}', [App\Http\Controllers\OrderController::class, 'destroy'])->name('orders.destroy');
-        Route::post('/orders/details', [App\Http\Controllers\OrderController::class, 'order_details'])->name('orders.details');
-        Route::post('/orders/update_delivery_status', [App\Http\Controllers\OrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
-        Route::post('/orders/update_payment_status', [App\Http\Controllers\OrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
+        Route::get('/orders/destroy/{id}', [EVOrderController::class, 'destroy'])->name('orders.destroy');
+        Route::post('/orders/details', [EVOrderController::class, 'order_details'])->name('orders.details');
+        Route::post('/orders/update_delivery_status', [EVOrderController::class, 'update_delivery_status'])->name('orders.update_delivery_status');
+        Route::post('/orders/update_payment_status', [EVOrderController::class, 'update_payment_status'])->name('orders.update_payment_status');
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
@@ -133,37 +137,18 @@ Route::middleware([
 
         // ---------------------------------------------------- //
 
-        Route::get('/reviews', [App\Http\Controllers\ReviewController::class, 'index'])->name('reviews.index');
+        Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
         /* TODO: Create new route for adding reviews for products, now this route is reviews for companies */
         Route::get('/shop/{company_name}/review/create', [App\Http\Controllers\ReviewController::class, 'create'])->name('reviews.create');
         Route::post('/review/store', [App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
         Route::post('/review/published', [App\Http\Controllers\ReviewController::class, 'updatePublished'])->name('reviews.published');
 
-        Route::resource('/withdraw_requests', 'SellerWithdrawRequestController');
-        Route::get('/withdraw_requests_all', [App\Http\Controllers\SellerWithdrawRequestController::class, 'request_index'])->name('withdraw_requests_all');
-        Route::post('/withdraw_request/payment_modal', [App\Http\Controllers\SellerWithdrawRequestController::class, 'payment_modal'])->name('withdraw_request.payment_modal');
-        Route::post('/withdraw_request/message_modal', [App\Http\Controllers\SellerWithdrawRequestController::class, 'message_modal'])->name('withdraw_request.message_modal');
 
-        //Product Bulk Upload
-        Route::get('/product-bulk-upload/index', [App\Http\Controllers\ProductBulkUploadController::class, 'index'])->name('product_bulk_upload.index');
-        Route::post('/bulk-product-upload', [App\Http\Controllers\ProductBulkUploadController::class, 'bulk_upload'])->name('bulk_product_upload');
-        Route::get('/product-csv-download/{type}', [App\Http\Controllers\ProductBulkUploadController::class, 'import_product'])->name('product_csv.download');
-        Route::get('/vendor-product-csv-download/{id}', [App\Http\Controllers\ProductBulkUploadController::class, 'import_vendor_product'])->name('import_vendor_product.download');
-        Route::prefix('bulk-upload/download')->group(function () {
-            Route::get('/category', [App\Http\Controllers\ProductBulkUploadController::class, 'pdf_download_category'])->name('pdf.download_category');
-            Route::get('/brand', [App\Http\Controllers\ProductBulkUploadController::class, 'pdf_download_brand'])->name('pdf.download_brand');
-            Route::get('/seller', [App\Http\Controllers\ProductBulkUploadController::class, 'pdf_download_seller'])->name('pdf.download_seller');
-        });
+
 
         //Product Export
         Route::get('/product-bulk-export', [App\Http\Controllers\ProductBulkUploadController::class, 'export'])->name('product_bulk_export.index');
 
-        Route::resource('digitalproducts', 'DigitalProductController')->parameters([
-            'digitalproducts' => 'id',
-        ])->except(['destroy']);
-        //    Route::get('/digitalproducts/edit/{id}', [App\Http\Controllers\DigitalProductController::class, 'edit'])->name('digitalproduct.edit');
-        Route::get('/digitalproducts/destroy/{id}', [App\Http\Controllers\DigitalProductController::class, 'destroy'])->name('digitalproducts.destroy');
-        Route::get('/digitalproducts/download/{id}', [App\Http\Controllers\DigitalProductController::class, 'download'])->name('digitalproducts.download');
 
         //Reports
         Route::get('/commission-log', [App\Http\Controllers\ReportController::class, 'commission_history'])->name('commission-log.index');
@@ -174,23 +159,22 @@ Route::middleware([
         ])->except(['destroy']);
         //    Route::get('/documentgallery/edit/{id}', [App\Http\Controllers\DocumentGalleryController::class, 'edit'])->name('documentgallery.edit');
         //    Route::post('/documentgallery/update/{id}', [App\Http\Controllers\DocumentGalleryController::class, 'update'])->name('documentgallery.update');
-        Route::get('/documentgallery/destroy/{id}', [App\Http\Controllers\DocumentGalleryController::class, 'destroy'])->name('documentgallery.destroy');
+        Route::get('/documentgallery/destroy/{id}', [DocumentGalleryController::class, 'destroy'])->name('documentgallery.destroy');
 
         //Notifications
         Route::resource('notifications', 'NotificationController');
-        Route::post('/notifications/mark-all-as-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.mark_all_as_read');
+        Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark_all_as_read');
 
         /* Document (eSignatures and SmartID)  Roiutes */
-        Route::get('/documents', [App\Http\Controllers\DocumentsController::class, 'index'])->name('documents.index');
+        Route::get('/documents', [DocumentsController::class, 'index'])->name('documents.index');
     });
 
     // Integrations
-    Route::get('/integrations', [App\Http\Controllers\Integrations\IntegrationsController::class, 'index'])->name('integrations.index');
-
-    Route::get('/integrations/facebook-business-export', [App\Http\Controllers\Integrations\FacebookBusinessController::class, 'export'])->name('integrations.facebook-business.export');
-    Route::get('/integrations/woocommerce', [App\Http\Controllers\Integrations\WooCommerceController::class, 'index'])->name('integrations.woocommerce');
-    Route::get('/integrations/woocommerce/import/{type}', [App\Http\Controllers\Integrations\WooCommerceController::class, 'import'])->name('integrations.woocommerce.import');
-    Route::get('/integrations/woocommerce/import-results/{type}', [App\Http\Controllers\Integrations\WooCommerceController::class, 'import_results'])->name('integrations.woocommerce.import-results');
+    Route::get('/integrations', [IntegrationsController::class, 'index'])->name('integrations.index');
+    Route::get('/integrations/facebook-business-export', [FacebookBusinessController::class, 'export'])->name('integrations.facebook-business.export');
+    Route::get('/integrations/woocommerce', [WooCommerceController::class, 'index'])->name('integrations.woocommerce');
+    Route::get('/integrations/woocommerce/import/{type}', [WooCommerceController::class, 'import'])->name('integrations.woocommerce.import');
+    Route::get('/integrations/woocommerce/import-results/{type}', [WooCommerceController::class, 'import_results'])->name('integrations.woocommerce.import-results');
 
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */
@@ -199,4 +183,8 @@ Route::middleware([
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
+
+    /* IMPORTANT: Last set of routes! To define missing pages and routes */
+    Route::get('/{data1}', [PageController::class, 'show_custom_page']);
+    Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 });

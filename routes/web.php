@@ -3,6 +3,7 @@
 use App\Http\Controllers\Central\CentralController;
 use App\Http\Controllers\Central\LoginTenantController;
 use App\Http\Controllers\Central\RegisterTenantController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/refresh-csrf', function () {
@@ -25,3 +26,5 @@ Route::middleware([
     Route::get('/central/login', [LoginTenantController::class, 'show'])->name('central.tenants.login');
     Route::post('/central/login/submit', [LoginTenantController::class, 'submit'])->name('central.tenants.login.submit');
 });
+
+

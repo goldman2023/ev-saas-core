@@ -72,7 +72,7 @@ class AppSettingsForm extends Component
                 'settings.mailerlite_api_token.value' => [''],
             ],
             'integrations.mailersend' => [
-                'settings.mailerlite_api_token.value' => [''],
+                'settings.mailersend_api_token.value' => [''],
                 'settings.mail_from_address.value' => ['required'],
                 'settings.mail_from_name.value' => ['nullable'],
                 'settings.mail_reply_to_address.value' => ['required'],
