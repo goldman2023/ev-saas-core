@@ -33,6 +33,7 @@ use App\Http\Controllers\Integrations\PixProLicenseController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\WeEditController;
 use App\Http\Controllers\WeAnalyticsController;
@@ -70,6 +71,9 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
     VendorMode::class,
 ])->group(function () {
+
+
+
     Route::middleware('auth')->group(function () {
         Route::get('/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
@@ -239,4 +243,6 @@ Route::middleware([
     // Route::get('/page/privacy-policy', [\App\Http\Controllers\PageController::class, 'privacy_policy_page'])->name('custom-pages.privacy-policy');
     Route::get('/page/{slug}', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.show_custom_page');
     Route::get('/shop/create', [\App\Http\Controllers\PageController::class, 'show_custom_page'])->name('shop.create');
+
+
 });

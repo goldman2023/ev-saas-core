@@ -18,6 +18,7 @@ use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\WeMediaController;
 use App\Http\Middleware\InitializeTenancyByDomainAndVendorDomains;
 use App\Http\Middleware\SetDashboard;
@@ -182,4 +183,8 @@ Route::middleware([
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
     /* This is general route to catch all requests to /* */
     // Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show_custom_page'])->name('custom-pages.index');
+
+    /* IMPORTANT: Last set of routes! To define missing pages and routes */
+    Route::get('/{data1}', [PageController::class, 'show_custom_page']);
+    Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 });
