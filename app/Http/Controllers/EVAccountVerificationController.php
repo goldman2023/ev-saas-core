@@ -49,6 +49,9 @@ class EVAccountVerificationController extends Controller
     public function verify(EmailVerificationRequest $request) {
         $request->fulfill();
 
+        auth()->user()->verification_code = $request->hash;
+        auth()->user()->save();
+
         if(!empty(get_tenant_setting('register_redirect_url', null))) {
             return redirect(get_tenant_setting('register_redirect_url')); 
         }

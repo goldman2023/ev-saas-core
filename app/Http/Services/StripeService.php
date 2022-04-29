@@ -24,6 +24,7 @@ use DB;
 use Stripe;
 use Payments;
 use Carbon;
+use Log;
 use App\Models\CoreMeta;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
@@ -819,8 +820,6 @@ class StripeService
     // invoice.created
     public function whInvoiceCreated($event)
     {
-        
-
         DB::beginTransaction();
 
         try {
@@ -910,6 +909,7 @@ class StripeService
             $invoice->meta = $meta;
             
             $invoice->save();
+            
 
             DB::commit();
             
@@ -919,9 +919,9 @@ class StripeService
             // Get our invoice through stripe_subscription_id
 
         } catch (\Throwable $e) {
+            Log::error($e);
             DB::rollBack();
             http_response_code(400);
-            die($e->getMessage());
         }
 
         http_response_code(200);

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Log;
 use MailerService;
 use App\Enums\WeMailingListsEnum;
+use App\Mail\EmailVerification;
 
 class UserObserver
 {
@@ -22,25 +23,42 @@ class UserObserver
     {
         try {
             // Adding User to MailerLite 'All Users' group
-            $subscriber = MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $this->user);
+            $subscriber = MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, $user);
 
-            // Set the core_meta 'in_mailerlite' flag to 1!
+            // Set the core_meta 'mailerlite_subscriber_id' flag to 1!
             if(!empty($subscriber)) {
-                $this->user->core_meta()->insert([
-                    'key' => 'in_mailerlite',
-                    'value' => 1
-                ]);
+                $user->core_meta()->updateOrCreate(
+                    ['key' => 'mailerlite_subscriber_id'],
+                    ['value' => $subscriber->id]
+                );
             }
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         } 
 
         try {
-            Mail::to($this->user->email)
-                ->send(new WelcomeEmail($this->user));
+            Mail::to($user->email)
+                ->send(new WelcomeEmail($user));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
+
+        if(get_tenant_setting('force_email_verification')) {
+            $data= [];
+
+            $data['view'] = 'emails.users.email-verification'; 
+            $data['subject'] = translate('Email Verification').' | '.get_tenant_setting('site_name');
+            $data['preheader'] = translate('Please verify your email address');
+            $data['content'] = translate('Please click the button below to verify your email address.');
+            $data['link'] = route('user.email.verification.verify', ['id' => $user->id, 'hash' => sha1($user->email)]);
+
+            try {
+                Mail::to($user->email)
+                    ->send(new EmailVerification($user, $data));
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+            }
+        } 
     }
 
     /**
