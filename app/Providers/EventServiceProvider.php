@@ -14,6 +14,7 @@ use App\Models\SerialNumber;
 use App\Models\TenantSetting;
 use App\Models\Order;
 use App\Models\Invoice;
+use App\Models\User;
 use App\Observers\CategoryRelationshipsObserver;
 use App\Observers\ProductsObserver;
 use App\Observers\ProductStocksObserver;
@@ -24,6 +25,7 @@ use App\Observers\AttributeObserver;
 use App\Observers\AttributeValuesObserver;
 use App\Observers\OrdersObserver;
 use App\Observers\InvoicesObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -84,6 +86,7 @@ class EventServiceProvider extends ServiceProvider
             AttributeValue::class => [AttributeValuesObserver::class],
             Order::class => [OrdersObserver::class],
             Invoice::class => [InvoicesObserver::class],
+            User::class => [UserObserver::class],
         ];
 
 

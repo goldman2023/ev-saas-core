@@ -18,10 +18,10 @@ class EmailVerification extends WeEmail
     public $user;
     public $data;
 
-    public function __construct($user, $data)
+    public function __construct($user, $data) 
     {
         parent::__construct();
-
+        
         $this->user = $user;
         $this->data = $data;
     }
@@ -33,8 +33,10 @@ class EmailVerification extends WeEmail
      */
     public function build()
     {
+        
         return $this
             ->view('emails.users.email-verification', ['data' => $this->data])
+            ->text('emails.users.email-verification')
             ->subject($this->data['subject'])
             ->mailersend();
     }

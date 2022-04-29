@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Follow extends EVBaseModel
+class Follow extends WeBaseModel
 {
     protected $table = 'follows';
 

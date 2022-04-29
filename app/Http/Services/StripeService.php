@@ -24,6 +24,7 @@ use DB;
 use Stripe;
 use Payments;
 use Carbon;
+use Log;
 use App\Models\CoreMeta;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
@@ -819,8 +820,6 @@ class StripeService
     // invoice.created
     public function whInvoiceCreated($event)
     {
-        
-
         DB::beginTransaction();
 
         try {
@@ -911,19 +910,18 @@ class StripeService
             
             $invoice->save();
             
-            DB::commit();            
 
-            http_response_code(200);
-            die(print_r($invoice));
+            DB::commit();
+            
             // print_r('Our latest Invoice related to subscription with stripe ID: ' . $stripe_subscription_id . ', could not be found in our DB.');
             // http_response_code(400);
             // die();
             // Get our invoice through stripe_subscription_id
 
         } catch (\Throwable $e) {
+            Log::error($e);
             DB::rollBack();
             http_response_code(400);
-            die($e->getMessage());
         }
 
         http_response_code(200);
