@@ -9,7 +9,7 @@ use MailerSend\Helpers\Builder\Variable;
 use MailerSend\Helpers\Builder\Personalization;
 use Carbon;
 
-class NewInvoiceEmail extends WeEmail
+class InvoiceCreatedEmail extends WeEmail
 {
 
     public $invoice;
@@ -30,7 +30,8 @@ class NewInvoiceEmail extends WeEmail
         $to = Arr::get($this->to, '0.address');
         
         return $this
-            ->view('emails.invoices.new-invoice')
+            ->view('emails.invoices.invoice-created')
+            ->text('emails.invoices.invoice-created')
             ->mailersend();
         
     }

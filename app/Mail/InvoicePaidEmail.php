@@ -9,16 +9,16 @@ use MailerSend\Helpers\Builder\Variable;
 use MailerSend\Helpers\Builder\Personalization;
 use Carbon;
 
-class WelcomeEmail extends WeEmail
+class InvoicePaidEmail extends WeEmail
 {
 
-    public $user;
+    public $invoice;
 
-    public function __construct($user)
+    public function __construct($invoice)
     {
         parent::__construct();
 
-        $this->user = $user;
+        $this->invoice = $invoice;
     }
     /**
      * Build the message.
@@ -27,10 +27,11 @@ class WelcomeEmail extends WeEmail
      */
      public function build()
      {
-        return $this
-            ->view('emails.users.welcome')
-            ->text('emails.users.welcome')
-            ->mailersend();
+        $to = Arr::get($this->to, '0.address');
         
+        return $this
+            ->view('emails.orders.invoice-paid')
+            ->text('emails.orders.invoice-paid')
+            ->mailersend();
     }
 }

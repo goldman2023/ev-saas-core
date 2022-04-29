@@ -192,6 +192,27 @@ class TenantSettingsService
             'mail_from_name' => 'string',
             'mail_reply_to_address' => 'string',
             'mail_reply_to_name' => 'string',
+            'transactional_email_templates_list' => [
+                // TODO: Generate possible fields here based on amount of Languages enabled on site - each language can have it's own email template in MailerSend!!!
+                'user_welcome_email' => [
+                    'en' => 'string'
+                ],
+                'user_verification_email' => [
+                    'en' => 'string'
+                ],
+                'order_received_email' => [
+                    'en' => 'string'
+                ],
+                'invoice_created_email' => [
+                    'en' => 'string'
+                ],
+                'invoice_paid_email' => [
+                    'en' => 'string'
+                ],
+                'invoice_payment_failed_email' => [
+                    'en' => 'string'
+                ],
+            ],
 
             // Advanced
             'user_meta_fields_in_use' => 'array',

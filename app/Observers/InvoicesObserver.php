@@ -3,8 +3,9 @@
 namespace App\Observers;
 
 use App\Models\Invoice;
-use App\Mail\NewInvoiceEmail;
+use App\Mail\InvoiceCreatedEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Enums\PaymentStatusEnum;
 use Log;
 
 class InvoicesObserver
@@ -18,12 +19,11 @@ class InvoicesObserver
     public function created(Invoice $invoice)
     {
         try {
-            // Send order in email to user
             Mail::to($invoice->user->email)
-                ->send(new NewInvoiceEmail($invoice));
+                    ->send(new InvoiceCreatedEmail($invoice));
 
             $meta = $invoice->meta;
-            $meta['email_sent'] = true;
+            $meta['invoice_created_email_sent'] = true;
             $invoice->meta = $meta;
             $invoice->save();
         } catch(\Exception $e) {
@@ -39,7 +39,19 @@ class InvoicesObserver
      */
     public function updated(Invoice $invoice)
     {
-        //
+        try {
+            if($invoice->payment_status === PaymentStatusEnum::paid()->value) {
+                Mail::to($invoice->user->email)
+                        ->send(new InvoicePaidEmail($invoice));
+            }
+            
+            $meta = $invoice->meta;
+            $meta['invoice_paid_email_sent'] = true;
+            $invoice->meta = $meta;
+            $invoice->save();
+        } catch(\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
