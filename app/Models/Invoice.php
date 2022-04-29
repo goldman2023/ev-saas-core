@@ -19,6 +19,10 @@ class Invoice extends WeBaseModel
 
     protected $guarded = ['id'];
 
+    protected $fillables = ['order_id', 'shop_id', 'user_id', 'payment_method_type', 'payment_method_id', 'invoice_number', 'email', 'billing_first_name','billing_last_name','billing_company', 'billing_address', 'billing_country',
+                'billing_state', 'billing_city', 'billing_zip', 'base_price', 'discount_amount', 'subtotal_price', 'total_price','shipping_cost', 'tax', 'payment_status',
+                'start_date', 'end_date', 'due_date', 'grace_period', 'viewed_by_customer', 'meta', 'note', 'created_at', 'updated_at'];
+
     protected $casts = [
         'viewed_by_customer' => 'boolean',
         'meta' => 'array',
