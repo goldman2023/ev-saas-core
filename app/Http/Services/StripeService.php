@@ -24,6 +24,7 @@ use DB;
 use Stripe;
 use Payments;
 use Carbon;
+use Log;
 use App\Models\CoreMeta;
 use Stancl\Tenancy\Resolvers\DomainTenantResolver;
 
@@ -819,8 +820,6 @@ class StripeService
     // invoice.created
     public function whInvoiceCreated($event)
     {
-        
-
         DB::beginTransaction();
 
         try {
@@ -834,6 +833,11 @@ class StripeService
 
             // We need our order here, because we need to link new invoice to it! Find order in our DB based on stripe_subscription this invoice is related to
             $order = Order::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix .'stripe_subscription_id', $stripe_subscription_id)->first();
+
+            if (empty($order)) {
+                // If order cannot be found with subscriptionid, try with request_id
+                $order = Order::withoutGlobalScopes()->whereJsonContains('meta->'.$this->mode_prefix .'stripe_request_id', $stripe_request_id)->first();
+            }
 
             if (!empty($order)) {
                 // Get order item(s)
@@ -910,6 +914,7 @@ class StripeService
             $invoice->meta = $meta;
             
             $invoice->save();
+            
 
             DB::commit();
             
@@ -919,9 +924,9 @@ class StripeService
             // Get our invoice through stripe_subscription_id
 
         } catch (\Throwable $e) {
+            Log::error($e);
             DB::rollBack();
             http_response_code(400);
-            die($e->getMessage());
         }
 
         http_response_code(200);

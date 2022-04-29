@@ -95,10 +95,6 @@ class RegisterForm extends Component
      */
     public function mount()
     {
-        // $user = User::find(1);
-        // Mail::to($user)
-        //         ->send(new WelcomeEmail($user));
-
         $this->available_meta = collect(get_tenant_setting('user_meta_fields_in_use'))->where('registration', true);
 
         if($this->available_meta->count() > 0) {
@@ -116,13 +112,13 @@ class RegisterForm extends Component
     public function register()
     {
         $this->validate();
-
+        
         DB::beginTransaction();
-
+        
         try {
             // Register new User here!
             $this->createUser();
-
+            
             // Create UserMeta if any is allowed in registration process
             if(!empty($this->user_meta)) {
                 foreach($this->user_meta as $key => $value) {
@@ -133,7 +129,6 @@ class RegisterForm extends Component
                     ]);
                 }
             }
-
             DB::commit();
 
             // Login user and start display `verification` or `onboarding` flow
@@ -186,12 +181,7 @@ class RegisterForm extends Component
         }
 
         if(!get_tenant_setting('onboarding_flow')) {
-            if(get_tenant_setting('force_email_verification')) {
-                // Registered event will trigger SendEmailVerificationNotification listener which will send EmailVerificationNotification through User model
-                event(new Registered($this->user));
-
-                return redirect()->route('user.email.verification.page');
-            } else if(!empty(get_tenant_setting('register_redirect_url', null))) {
+            if(!empty(get_tenant_setting('register_redirect_url', null))) {
                 return redirect(get_tenant_setting('register_redirect_url'));
             } else {
                 return redirect()->route('dashboard');

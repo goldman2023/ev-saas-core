@@ -27,6 +27,7 @@ class WelcomeEmail extends WeEmail
      */
      public function build()
      {
+         
         return $this
             ->view('emails.users.welcome')
             ->text('emails.users.welcome')
