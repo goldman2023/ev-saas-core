@@ -75,6 +75,11 @@ class Order extends WeBaseModel
         return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
+    public function user_subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class, 'order_id', 'id');
+    }
+
     public function invoices()
     {
         return $this->hasMany(Invoice::class, 'order_id', 'id');

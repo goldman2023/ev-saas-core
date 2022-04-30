@@ -19,12 +19,15 @@ class Invoice extends WeBaseModel
 
     protected $guarded = ['id'];
 
-    protected $fillables = ['order_id', 'shop_id', 'user_id', 'payment_method_type', 'payment_method_id', 'invoice_number', 'email', 'billing_first_name','billing_last_name','billing_company', 'billing_address', 'billing_country',
+    protected $connection = 'tenant'; // Don't understand why this is necessary but it is! It should pick up tenant connection from Builder, but that's not working for Invoice model o_0
+
+    protected $fillables = ['is_temp', 'order_id', 'shop_id', 'user_id', 'payment_method_type', 'payment_method_id', 'invoice_number', 'email', 'billing_first_name','billing_last_name','billing_company', 'billing_address', 'billing_country',
                 'billing_state', 'billing_city', 'billing_zip', 'base_price', 'discount_amount', 'subtotal_price', 'total_price','shipping_cost', 'tax', 'payment_status',
                 'start_date', 'end_date', 'due_date', 'grace_period', 'viewed_by_customer', 'meta', 'note', 'created_at', 'updated_at'];
 
     protected $casts = [
         'viewed_by_customer' => 'boolean',
+        'is_temp' => 'boolean',
         'meta' => 'array',
         'created_at' => 'datetime:d.m.Y H:i',
         'updated_at' => 'datetime:d.m.Y H:i',
@@ -35,9 +38,14 @@ class Invoice extends WeBaseModel
 
     protected static function booted()
     {
+        // Display only real invoices (is_temp = 0)
+        static::addGlobalScope('real_invoices', function (BaseBuilder $builder) {
+            $builder->real();
+        });
+
         // Restrict to MyShop and My invoices
         static::addGlobalScope('from_my_shop_or_me', function (BaseBuilder $builder) {
-            $builder->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
+            $builder->real()->where('shop_id', '=', MyShop::getShop()?->id ?? -1)->orWhere('user_id', '=', auth()->user()?->id ?? null);
         });
     }
 
@@ -66,9 +74,14 @@ class Invoice extends WeBaseModel
         return $query->where('user_id', '=', auth()->user()?->id ?? null);
     }
 
-    public function scopeShopOrders()
+    public function scopeShopInvoices($query)
     {
         return $query->where('shop_id', '=', MyShop::getShop()?->id ?? -1);
+    }
+
+    public function scopeReal($query) {
+        // Invoices are real if is_temp is 0/false
+        return $query->where('is_temp', '=', 0);
     }
     
     /*
