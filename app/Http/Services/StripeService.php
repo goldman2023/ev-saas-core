@@ -1048,8 +1048,6 @@ class StripeService
                     $invoice->meta = $meta;
                     
                     $invoice->save();
-
-                    DB::commit();
                 }
 
             } else if($stripe_billing_reason === 'subscription_cycle') {
@@ -1130,23 +1128,30 @@ class StripeService
                 $invoice->meta = $meta;
 
                 $invoice->save();
-
-
-                // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
-                if ($user_subscriptions->isNotEmpty()) {
-                    foreach($user_subscriptions as $subscription) {
-                        $subscription->status = UserSubscriptionStatusEnum::active()->value;
-                        $subscription->payment_status = PaymentStatusEnum::paid()->value;
-
-                        $subscription->save();
-                    }
-                }
-
-                DB::commit();
+                
             } else {
                 // No idea...
             }
 
+            // We are sure that invoice is paid so we make user_subscription(s) active and paid too (even though they may already be active and paid as a result of subscription.updated webhook)!
+            if ($user_subscriptions->isNotEmpty()) {
+                foreach($user_subscriptions as $subscription) {
+                    $subscription->status = UserSubscriptionStatusEnum::active()->value;
+                    $subscription->payment_status = PaymentStatusEnum::paid()->value;
+
+                    if(empty($subscription->start_date)) {
+                        $subscription->start_date = $stripe_subscription->current_period_start;
+                    }
+
+                    if(empty($subscription->end_date)) {
+                        $subscription->end_date = $stripe_subscription->current_period_end;
+                    }
+
+                    $subscription->save();
+                }
+            }
+
+            DB::commit();
         } catch (\Throwable $e) {
             Log::error($e);
             DB::rollBack();
