@@ -1046,6 +1046,7 @@ class StripeService
                         $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
                     }
                     $invoice->meta = $meta;
+                    
                     $invoice->save();
 
                     DB::commit();

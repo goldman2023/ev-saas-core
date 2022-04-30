@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Invoice;
 use App\Mail\InvoiceCreatedEmail;
+use App\Mail\InvoicePaidEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Enums\PaymentStatusEnum;
 use Log;
@@ -19,18 +20,18 @@ class InvoicesObserver
     public function created(Invoice $invoice)
     {
         // Fire only if Invoice is not temporary!
-        if(!$invoice->is_temp) {
-            try {
-                Mail::to($invoice->user->email)
-                        ->send(new InvoiceCreatedEmail($invoice));
+        if(!$invoice->is_temp && !($invoice->meta['invoice_created_email_sent'] ?? false)) {
+            // try {
+            //     Mail::to($invoice->user->email)
+            //             ->send(new InvoiceCreatedEmail($invoice));
     
-                $meta = $invoice->meta;
-                $meta['invoice_created_email_sent'] = true;
-                $invoice->meta = $meta;
-                $invoice->save();
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
-            }
+            //     $meta = $invoice->meta;
+            //     $meta['invoice_created_email_sent'] = true;
+            //     $invoice->meta = $meta;
+            //     $invoice->save();
+            // } catch(\Exception $e) {
+            //     Log::error($e->getMessage());
+            // }
         }
     }
 
@@ -44,15 +45,15 @@ class InvoicesObserver
     {
         if(!$invoice->is_temp) {
             try {
-                if($invoice->payment_status === PaymentStatusEnum::paid()->value) {
+                if($invoice->payment_status === PaymentStatusEnum::paid()->value && !($invoice->meta['invoice_paid_email_sent'] ?? false)) {
                     Mail::to($invoice->user->email)
                             ->send(new InvoicePaidEmail($invoice));
+                    
+                    $meta = $invoice->meta;
+                    $meta['invoice_paid_email_sent'] = true;
+                    $invoice->meta = $meta;
+                    $invoice->save();
                 }
-                
-                $meta = $invoice->meta;
-                $meta['invoice_paid_email_sent'] = true;
-                $invoice->meta = $meta;
-                $invoice->save();
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }

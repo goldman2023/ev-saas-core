@@ -85,7 +85,7 @@ class EventServiceProvider extends ServiceProvider
             Attribute::class => [AttributeObserver::class],
             AttributeValue::class => [AttributeValuesObserver::class],
             Order::class => [OrdersObserver::class],
-            // Invoice::class => [InvoicesObserver::class],
+            Invoice::class => [InvoicesObserver::class],
             User::class => [UserObserver::class],
         ];
 

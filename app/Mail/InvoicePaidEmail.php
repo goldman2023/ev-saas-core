@@ -30,8 +30,8 @@ class InvoicePaidEmail extends WeEmail
         $to = Arr::get($this->to, '0.address');
         
         return $this
-            ->view('emails.orders.invoice-paid')
-            ->text('emails.orders.invoice-paid')
+            ->view('emails.invoices.invoice-paid')
+            ->text('emails.invoices.invoice-paid')
             ->mailersend();
     }
 }
