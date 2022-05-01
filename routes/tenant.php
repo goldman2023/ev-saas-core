@@ -27,6 +27,7 @@ use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\EVSaaSController;
 use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\EVWishlistController;
+use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Integrations\PixProLicenseController;
