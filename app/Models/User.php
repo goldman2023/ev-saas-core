@@ -217,7 +217,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function isSubscribed()
     {
-        return $this->plans->count() > 0;
+        return $this->plan_subscriptions->count() > 0;
     }
 
     public function getDynamicModelUploadProperties(): array
@@ -237,6 +237,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->keyBy(fn ($item, $key) => $item)
             ->map(fn ($item) => ucfirst($item))
             ->toArray();
+    }
+
+    public function userTypeAttribute() {
+        return $this->type;
     }
 
     // OLD

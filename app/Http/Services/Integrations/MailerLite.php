@@ -11,12 +11,17 @@ class MailerLite
 
     public function __construct()
     {
-        try {
-            $mailerlite_api_key = get_tenant_setting('mailerlite_api_token', null);
-            $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
-        }
+        $mailerlite_api_key = get_tenant_setting('mailerlite_api_token', null);
+
+        if(!empty($mailerlite_api_key)) {
+            try {
+                $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
+            } catch(\Exception $e) {
+                Log::error($e->getMessage());
+            }
+        } else {
+            $this->mailerlite = null;
+        } 
     }
 
     public function fetch() {

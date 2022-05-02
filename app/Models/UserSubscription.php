@@ -37,7 +37,11 @@ class UserSubscription extends WeBaseModel
     }
 
     public function plan() {
-        return $this->morphTo(Plan::class, 'subject');
+        return $this->morphTo('subject')->withoutGlobalScopes();
+    }
+
+    public function order() {
+        return $this->belongsTo(Order::class, 'order_id')->withoutGlobalScopes();
     }
 
     // public static function getSubscriptionsAmount($subscriptions) {

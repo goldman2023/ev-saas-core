@@ -27,7 +27,7 @@
 
                             <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                                 <span class="emoji">👋</span>
-                                {{ translate('Good morning') }}, {{ Auth::user()->name }}
+                                {{ translate('Welcome') }}, {{ Auth::user()->name }}
                             </h1>
                         </div>
                         <dl class="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -71,7 +71,7 @@
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                         clip-rule="evenodd"></path>
                                 </svg>
-                                Verified account
+                                {{ auth()->user()->type }} {{ translate('account') }}
                             </dd>
                         </dl>
                     </div>
@@ -97,7 +97,7 @@
                 <a
                 href="https://buy.stripe.com/eVacMRd2x7UB3jW288"
                 target="_blank"
-                type="button" href=" {{ route('custom-pages.show_custom_page', ['pricing']) }}"
+                type="button" href="{{ route('my.plans.management') }}"
                     class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                     {{ translate('Join') }} {{ get_site_name() }} {{ translate('PRO') }}
                 </a>

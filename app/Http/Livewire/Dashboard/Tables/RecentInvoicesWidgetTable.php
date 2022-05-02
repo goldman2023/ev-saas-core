@@ -28,13 +28,13 @@ class RecentInvoicesWidgetTable extends DataTableComponent
 
     public bool $columnSelect = true;
 
-    public int $perPage = 10;
+    public int $perPage = 3;
 
-    public array $perPageAccepted = [10, 25, 50, 100];
+    public array $perPageAccepted = [3, 10, 25, 50, 100];
 
-    protected string $pageName = 'orders';
+    protected string $pageName = 'invoices';
 
-    protected string $tableName = 'orders';
+    protected string $tableName = 'invoices';
 
     public function mount($for = 'me')
     {
