@@ -46,7 +46,7 @@
                     </div>
                 </div>
 
-                <x-dashboard.elements.support-card class="card bg-white p-4 mt-6 lg:mt-8">
+                <x-dashboard.elements.support-card class="mt-6 lg:mt-8">
                 </x-dashboard.elements.support-card>
             </div>
 

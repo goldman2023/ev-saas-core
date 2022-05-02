@@ -1,5 +1,5 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
-<div {{ $attributes->merge(['class' => 'relative card p-4']) }}>
+<div {{ $attributes->merge(['class' => 'relative bg-white border border-gray-200 rounded-lg py-5 px-4 lg:px-6']) }}>
     @if(!get_tenant_setting('support_phone'))
     {{-- Empty state, ask user to fill out the details --}}
     <div class="hidden absolute bottom-0 right-0 block h-full w-full bg-white/90 z-10">
@@ -32,7 +32,7 @@
             </div>
 
         </div>
-        <div class="ml-3 flex-0 w-full">
+        <div class="flex-0 w-full">
             <p class="text-sm font-medium text-gray-900">{{ get_site_name() }} {{ translate('Customer Care') }}</p>
             <p class="mt-1 text-sm text-gray-500">{{ translate('Have questions? We are available') }}</p>
             <div class="mt-4 flex">
