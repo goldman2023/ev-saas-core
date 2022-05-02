@@ -14,7 +14,7 @@
                     @can_access(['admin'], [])
                         {{ translate("Enter your support contacts and working hours")}}
                     @else
-                        {{ translate("Sorry, support contacts and working hours are not set yet...")}}
+                        {{ translate("Sorry, support contact and working hours are not set yet...")}}
                     @endcan_access
                 </span>
 

@@ -14,13 +14,16 @@ class Date extends Component
 
     public $dateFormat;
 
+    public $id;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($field = '', $mode = 'single', $enableTime = false, $dateFormat = 'd.m.Y.')
+    public function __construct($id= '', $field = '', $mode = 'single', $enableTime = false, $dateFormat = 'd.m.Y.')
     {
+        $this->id = $id;
         $this->field = $field;
         $this->mode = $mode;
         $this->enableTime = $enableTime;

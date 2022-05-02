@@ -113,7 +113,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         }
 
         .btn-ghost {
-            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
+            @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
         }
         
 

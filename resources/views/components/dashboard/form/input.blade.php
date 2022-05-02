@@ -11,7 +11,13 @@
             @if(!empty($max) || $max === 0) max="{{ $max }}" @endif
             @if($step) step="{{ $step }}" @endif
           @endif
-          wire:model.defer="{{ $field }}" />
+
+          @if($x)
+            x-model="{{ $field }}"
+          @else
+            wire:model.defer="{{ $field }}"
+          @endif
+  />
 
   @if(!empty($field))
     <x-system.invalid-msg field="{{ $field }}"></x-system.invalid-msg>
