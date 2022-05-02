@@ -239,6 +239,10 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->toArray();
     }
 
+    public function userTypeAttribute() {
+        return $this->type;
+    }
+
     // OLD
     public function recently_viewed_products()
     {
