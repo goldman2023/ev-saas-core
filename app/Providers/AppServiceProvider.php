@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Qirolab\Theme\Theme;
+use Permissions;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -68,6 +69,10 @@ class AppServiceProvider extends ServiceProvider
     }
 
     public function registerCustomBladeExtensions() {
+        Blade::if('can_access', function ($types, $permissions) {
+            return Permissions::canAccess($types, $permissions, false);
+        });
+
         // Define 'UserMeta in use' blade extensions
         Blade::if('usermeta', function ($meta_key) {
             return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]);

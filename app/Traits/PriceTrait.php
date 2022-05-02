@@ -318,7 +318,7 @@ trait PriceTrait
     }
     // END PRICES
 
-    public function getTotalAnnualPrice()
+    public function getTotalAnnualPrice(bool $display = false, bool $both_formats = false)
     {
         $total_annual_price = $this->attributes[$this->getPriceColumn()] * 12;
 
@@ -340,6 +340,13 @@ trait PriceTrait
             // TODO: Then add global Tax (like VAT)
         }
 
-        return $total_annual_price;
+        if ($both_formats) {
+            return [
+                'raw' => $total_annual_price,
+                'display' => FX::formatPrice($total_annual_price),
+            ];
+        }
+
+        return $display ? FX::formatPrice($total_annual_price) : $total_annual_price;
     }
 }
