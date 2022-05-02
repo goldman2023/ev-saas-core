@@ -1036,6 +1036,16 @@ class StripeService
                     $invoice->payment_status = PaymentStatusEnum::paid()->value;
                     $meta = $invoice->meta;
                     $meta[$this->mode_prefix .'stripe_invoice_paid'] = $stripe_invoice->paid ?? true;
+                    $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
+                    $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
+                    $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
+                    $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
+                    $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
+                    $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
+                    $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
+                    $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
+                    $meta[$this->mode_prefix .'stripe_request_id'] = $stripe_request_id;
+                    $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
 
                     $pi = $this->stripe->paymentIntents->retrieve(
                         $stripe_invoice->payment_intent,
