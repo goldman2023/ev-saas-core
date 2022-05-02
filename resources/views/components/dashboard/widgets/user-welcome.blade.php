@@ -27,7 +27,7 @@
 
                             <h1 class="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:leading-9 sm:truncate">
                                 <span class="emoji">👋</span>
-                                {{ translate('Good morning') }}, {{ Auth::user()->name }}
+                                {{ translate('Welcome') }}, {{ Auth::user()->name }}
                             </h1>
                         </div>
                         <dl class="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
