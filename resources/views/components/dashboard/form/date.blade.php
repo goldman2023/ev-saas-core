@@ -6,10 +6,10 @@
                 dateFormat: @js($dateFormat ?? 'd.m.Y.'),
             };
         },
-    }" x-init="$nextTick(() => { flatpickr('#{{ str_replace('.', '_', $field) }}', getDateOptions()); });">
+    }" x-init="$nextTick(() => { flatpickr('#{{ !empty($id) ? $id : str_replace('.', '_', $field) }}', getDateOptions()); });">
     <input x-model="{{ $field }}"
             type="text"
-            id="{{ str_replace('.', '_', $field) }}"
+            id="{{ !empty($id) ? $id : str_replace('.', '_', $field) }}"
             class="js-flatpickr flatpickr-custom form-standard @error($field) is-invalid @enderror"
             placeholder="{{ translate('Pick a date(s)') }}"
             data-input />

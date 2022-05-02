@@ -169,6 +169,21 @@ class MyAccountForm extends Component
         }
     }
 
+    public function saveWorkExperience() {
+        $meta_key = 'work_experience';
+
+        try {
+            UserMeta::where([
+                ['key', 'work_experience'],
+                ['user_id', $this->me->id],
+            ])->update(['value' => castValueForSave($meta_key, $this->meta[$meta_key], UserMeta::metaDataTypes())]);
+
+            // $this->inform(translate('Work experience successfully saved.'), '', 'success');
+        } catch (\Exception $e) {
+            // $this->inform(translate('Could not save basic information settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
     public function saveEmail()
     {
         // TODO: Validation does not work for some reason. Check the error and fix it!
