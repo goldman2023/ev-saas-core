@@ -521,6 +521,97 @@ class StripeService
         ];
     }
 
+    public function createInvoice($order, $stripe_invoice, $stripe_subscription) {
+        if($stripe_invoice->billing_reason === 'subscription_cycle') {
+            $invoice = $order->invoices()->withoutGlobalScopes()->where([
+                ['start_date', $stripe_subscription->current_period_start],
+                ['end_date', $stripe_subscription->current_period_end],
+            ])->first();
+        } else if($stripe_invoice->billing_reason === 'subscription_update') {
+            $invoice = $order->invoices()->withoutGlobalScopes()->where([
+                ['start_date', $stripe_subscription->current_period_start],
+                ['end_date', $stripe_subscription->current_period_end],
+                ['meta->'.$this->mode_prefix.'stripe_invoice_id', $stripe_invoice->id]
+            ])->first();
+        } else {
+            die();
+        }
+
+        // if new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
+        if(empty($invoice)) {
+            /*
+            * Create Invoice
+            */
+            $invoice = new Invoice();
+            $invoice->is_temp = false;
+            $invoice->payment_method_type = (Payments::stripe())::class;
+            $invoice->payment_method_id = Payments::stripe()->id;
+
+            // Change invoice status to paid if mode is 'payment', but if it's a subscription, change status to 'pending' because status will truly change on 'invoice.paid' webhook
+            $invoice->order_id = $order->id;
+            $invoice->shop_id = $order->shop_id;
+            $invoice->user_id = $order->user_id;
+            $invoice->payment_status = $stripe_invoice->paid ? PaymentStatusEnum::paid()->value : PaymentStatusEnum::pending()->value;
+            $invoice->invoice_number = !empty($stripe_invoice->number) ? $stripe_invoice->number : 'invoice-draft-'.Uuid::generate(4)->string;
+
+            // Take period start and end from subscription!
+            $invoice->start_date = $stripe_subscription->current_period_start;
+            $invoice->end_date = $stripe_subscription->current_period_end;
+
+            $invoice->due_date = $stripe_invoice->due_date ?? null;
+
+            $invoice->base_price = $order->base_price;
+            $invoice->discount_amount = $order->discount_amount;
+            $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
+            $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
+            // TODO: What happens when you downgrade???? Total/Subtotal are prorated BUT the proration is in user favor! 
+            // NOTE: When user downgrade, stripe invoice creates proration in user's favor, and the amount in invoice is the difference between two plans.
+            // TODO: How to display this?
+            
+            $invoice->email = $order->email;
+            $invoice->billing_first_name = $order->billing_first_name;
+            $invoice->billing_last_name = $order->billing_last_name;
+            $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
+            $invoice->billing_address = $order->billing_address;
+            $invoice->billing_country = $order->billing_country;
+            $invoice->billing_state = $order->billing_state;
+            $invoice->billing_city = $order->billing_city;
+            $invoice->billing_zip = $order->billing_zip;
+        } else {
+            $invoice->payment_status = $stripe_invoice->paid ? PaymentStatusEnum::paid()->value : PaymentStatusEnum::pending()->value;;
+            $invoice->invoice_number = $stripe_invoice->number ?? '';
+        }
+
+        $meta = $invoice->meta;
+        $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
+        $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
+        $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
+        $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
+        $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
+        $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
+        $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription->id; // store subscription ID in invoice meta
+        $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
+        $meta[$this->mode_prefix .'stripe_request_id'] = null;
+        $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
+        $meta[$this->mode_prefix .'stripe_billing_reason'] = $stripe_invoice->billing_reason ?? '';
+        
+        // On subscription_cycle, this is probably empty, but let it be just in case
+        if(!empty($stripe_invoice->payment_intent ?? null)) {
+            $pi = $this->stripe->paymentIntents->retrieve(
+                $stripe_invoice->payment_intent,
+                []
+            );
+            
+            if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
+                $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
+            }
+        }
+        
+        $invoice->meta = $meta;
+
+        $invoice->save();
+    }
+
     // WEBHOOKS
     public function processWebhooks(Request $request)
     {
@@ -916,85 +1007,16 @@ class StripeService
                 }
 
             } else if($stripe_billing_reason === 'subscription_cycle') {                
-                // This means that subscription is cycled
-                $invoice = $order->invoices()->withoutGlobalScopes()->where([
-                    ['start_date', $stripe_subscription->current_period_start],
-                    ['end_date', $stripe_subscription->current_period_end],
-                ])->first();
+                // Subscription is cycled
+                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
-                
-                // if new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
-                if(empty($invoice)) { 
-                    
-                    /*
-                    * Create Invoice
-                    */
-                    $invoice = new Invoice();
-                    $invoice->is_temp = false;
-                    $invoice->payment_method_type = (Payments::stripe())::class;
-                    $invoice->payment_method_id = Payments::stripe()->id;
+                DB::commit();
+            } else if($stripe_billing_reason === 'subscription_update') {
+                // Subscription is updated (downgraded, upgraded etc.)
+                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
 
-                    // Change invoice status to paid if mode is 'payment', but if it's a subscription, change status to 'pending' because status will truly change on 'invoice.paid' webhook
-                    $invoice->order_id = $order->id;
-                    $invoice->shop_id = $order->shop_id;
-                    $invoice->user_id = $order->user_id;
-                    $invoice->payment_status = PaymentStatusEnum::pending()->value;
-                    $invoice->invoice_number = 'invoice-draft-'.Uuid::generate(4)->string;
-
-                    // Take period start and end from subscription!
-                    $invoice->start_date = $stripe_subscription->current_period_start;
-                    $invoice->end_date = $stripe_subscription->current_period_end;
-
-                    $invoice->due_date = $stripe_invoice->due_date ?? null;
-
-                    $invoice->base_price = $order->base_price;
-                    $invoice->discount_amount = $order->discount_amount;
-                    $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
-                    $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
-                    
-                    $invoice->email = $order->email;
-                    $invoice->billing_first_name = $order->billing_first_name;
-                    $invoice->billing_last_name = $order->billing_last_name;
-                    $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
-                    $invoice->billing_address = $order->billing_address;
-                    $invoice->billing_country = $order->billing_country;
-                    $invoice->billing_state = $order->billing_state;
-                    $invoice->billing_city = $order->billing_city;
-                    $invoice->billing_zip = $order->billing_zip;
-                    
-                    $meta = $invoice->meta;
-                    $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
-                    $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-                    $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-                    $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
-                    $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
-                    $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-                    $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
-                    $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-                    $meta[$this->mode_prefix .'stripe_request_id'] = $stripe_request_id;
-                    $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-                    
-                    // On subscription_cycle, this is probably empty, but let it be just in case
-                    if(!empty($stripe_invoice->payment_intent)) {
-                        $pi = $this->stripe->paymentIntents->retrieve(
-                            $stripe_invoice->payment_intent,
-                            []
-                        );
-                        
-                        if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                            $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
-                        }
-                    }
-                    
-                    $invoice->meta = $meta;
-                    $invoice->save();
-
-                    DB::commit();
-                }
-            } else {
-                // No idea...
+                DB::commit();
             }
-
         } catch (\Throwable $e) {
             Log::error($e);
             DB::rollBack();
@@ -1004,6 +1026,8 @@ class StripeService
         http_response_code(200);
         die();
     }
+
+    
 
     // invoice.paid
     public function whInvoicePaid($event)
@@ -1062,83 +1086,11 @@ class StripeService
 
             } else if($stripe_billing_reason === 'subscription_cycle') {
                 // This means that subscription is cycled
+                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
                 
-                $invoice = $order->invoices()->withoutGlobalScopes()->where([
-                    ['start_date', $stripe_subscription->current_period_start],
-                    ['end_date', $stripe_subscription->current_period_end],
-                ])->first();
-
-                // if new invoice is already created at this moment, it means that invoice.paid already happened, so skip creation cuz invoice already exists and is paid
-                if(empty($invoice)) {
-                    /*
-                    * Create Invoice
-                    */
-                    $invoice = new Invoice();
-                    $invoice->is_temp = false;
-                    $invoice->payment_method_type = (Payments::stripe())::class;
-                    $invoice->payment_method_id = Payments::stripe()->id;
-
-                    // Change invoice status to paid if mode is 'payment', but if it's a subscription, change status to 'pending' because status will truly change on 'invoice.paid' webhook
-                    $invoice->order_id = $order->id;
-                    $invoice->shop_id = $order->shop_id;
-                    $invoice->user_id = $order->user_id;
-                    $invoice->payment_status = PaymentStatusEnum::paid()->value;
-                    $invoice->invoice_number = $stripe_invoice->number ?? '';
-
-                    // Take period start and end from subscription!
-                    $invoice->start_date = $stripe_subscription->current_period_start;
-                    $invoice->end_date = $stripe_subscription->current_period_end;
-
-                    $invoice->due_date = $stripe_invoice->due_date ?? null;
-
-                    $invoice->base_price = $order->base_price;
-                    $invoice->discount_amount = $order->discount_amount;
-                    $invoice->subtotal_price = $stripe_invoice->subtotal / 100; // take from stripe and divide by 100
-                    $invoice->total_price = $stripe_invoice->total / 100; // take from stripe and divide by 100
-                    
-                    $invoice->email = $order->email;
-                    $invoice->billing_first_name = $order->billing_first_name;
-                    $invoice->billing_last_name = $order->billing_last_name;
-                    $invoice->billing_company = ''; // TODO: Get company name from invoice somehow...
-                    $invoice->billing_address = $order->billing_address;
-                    $invoice->billing_country = $order->billing_country;
-                    $invoice->billing_state = $order->billing_state;
-                    $invoice->billing_city = $order->billing_city;
-                    $invoice->billing_zip = $order->billing_zip;
-                } else {
-                    // this means that invoice was created on invoice.create properly
-                    $invoice->payment_status = PaymentStatusEnum::paid()->value;
-                    $invoice->invoice_number = $stripe_invoice->number ?? '';
-                }
-
-                $meta = $invoice->meta;
-                $meta[$this->mode_prefix .'stripe_invoice_id'] = $stripe_invoice->id ?? '';
-                $meta[$this->mode_prefix .'stripe_hosted_invoice_url'] = $stripe_invoice->hosted_invoice_url ?? '';
-                $meta[$this->mode_prefix .'stripe_invoice_pdf_url'] = $stripe_invoice->invoice_pdf ?? '';
-                $meta[$this->mode_prefix .'stripe_invoice_number'] = $stripe_invoice->number ?? '';
-                $meta[$this->mode_prefix .'stripe_customer_id'] = $stripe_invoice->customer ?? '';
-                $meta[$this->mode_prefix .'stripe_payment_intent_id'] = $stripe_invoice->payment_intent ?? ''; // this will be null on all future automatic reccuring payments
-                $meta[$this->mode_prefix .'stripe_subscription_id'] = $stripe_subscription_id; // store subscription ID in invoice meta
-                $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-                $meta[$this->mode_prefix .'stripe_request_id'] = $stripe_request_id;
-                $meta[$this->mode_prefix .'stripe_currency'] = $stripe_invoice->currency ?? null;
-                $meta[$this->mode_prefix .'stripe_invoice_paid'] = $stripe_invoice->paid ?? true;
-
-                if(!empty($stripe_invoice->payment_intent)) {
-                    $pi = $this->stripe->paymentIntents->retrieve(
-                        $stripe_invoice->payment_intent,
-                        []
-                    );
-                    
-                    if(!empty($pi?->charges?->data[0]?->receipt_url ?? null)) {
-                        $meta[$this->mode_prefix .'stripe_receipt_url'] = $pi->charges->data[0]?->receipt_url;   
-                    }
-                }
-                
-                $invoice->meta = $meta;
-
-                $invoice->save();
-                
+            } else if($stripe_billing_reason === 'subscription_update') {
+                // Subscription is updated (downgraded, upgraded etc.)
+                $this->createInvoice(order: $order, stripe_invoice: $stripe_invoice, stripe_subscription: $stripe_subscription);
             } else {
                 // No idea...
             }
@@ -1250,6 +1202,7 @@ class StripeService
     // customer.subscription.updated
     public function whCustomerSubscriptionUpdated($event)
     {
+        die();
         $previous_attributes = $event->data->previous_attributes ?? (object) [];
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;
