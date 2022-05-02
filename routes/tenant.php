@@ -29,6 +29,7 @@ use App\Http\Controllers\EVShopController;
 use App\Http\Controllers\EVWishlistController;
 use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\FeedController;
+use App\Http\Controllers\GrapeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Integrations\PixProLicenseController;
 use App\Http\Controllers\LanguageController;
@@ -82,6 +83,10 @@ Route::middleware([
         Route::get('/we-edit', [WeEditController::class, 'index'])->name('we-edit.index');
         Route::get('/we-edit/flow', [WeEditController::class, 'flow'])->name('we-edit.flow.pages');
         Route::get('/we-edit/flow/menu', [WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
+
+        Route::get('/we-grape', [GrapeController::class, 'index'])->name('grape.index');
+
+
     });
 
     // Webhooks
