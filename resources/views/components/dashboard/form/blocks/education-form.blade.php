@@ -2,8 +2,8 @@
     current: 0,
     educations: {{ $field }},
     item_template: {
-        'school': 'Example',
-        'degree_title': 'Example',
+        'school': 'School/Institution...',
+        'degree_title': 'Degree title...',
         'field_of_study': '',
         'certificates': '',
         'start_date': '',
@@ -16,6 +16,9 @@
         } else {
             this.educations.push({...this.item_template});
         }
+
+        this.current = this.educations.length - 1;
+        $dispatch('display-modal', {'id': 'work-education-modal'});
     },
     remove(index) {
         this.current = 0;

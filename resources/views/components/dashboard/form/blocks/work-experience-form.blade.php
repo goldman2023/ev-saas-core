@@ -2,8 +2,8 @@
     current: 0,
     experiences: {{ $field }},
     item_template: {
-        'title': 'Example',
-        'company_name': 'Example',
+        'title': 'Position...',
+        'company_name': 'Company name...',
         'employment_type': '',
         'location': '',
         'currently_working_there': '',
@@ -17,6 +17,9 @@
         } else {
             this.experiences.push({...this.item_template});
         }
+
+        this.current = this.experiences.length - 1;
+        $dispatch('display-modal', {'id': 'work-experience-modal'});
     },
     remove(index) {
         this.current = 0;
