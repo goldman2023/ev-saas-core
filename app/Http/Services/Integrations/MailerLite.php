@@ -16,8 +16,8 @@ class MailerLite
         if(!empty($mailerlite_api_key)) {
             try {
                 $this->mailerlite = new \MailerLiteApi\MailerLite($mailerlite_api_key); // init mailerlite client
-            } catch(\Exception $e) {
-                Log::error($e->getMessage());
+            } catch(\Throwable $e) {
+                Log::warning($e->getMessage());
             }
         } else {
             $this->mailerlite = null;
@@ -27,8 +27,8 @@ class MailerLite
     public function fetch() {
         try {
             return $this->mailerlite;
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
+        } catch(\Throwable $e) {
+            Log::warning($e->getMessage());
         } 
     }
 
@@ -56,8 +56,8 @@ class MailerLite
             }
 
             return collect($mailerlite_groups_api->get()->toArray());
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
+        } catch(\Throwable $e) {
+            Log::warning($e->getMessage());
         }
     }
 
@@ -76,8 +76,8 @@ class MailerLite
             }
 
             return $group;
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
+        } catch(\Throwable $e) {
+            Log::warning($e->getMessage());
         }
     }
 
@@ -88,8 +88,8 @@ class MailerLite
             } else {
                 return $this->mailerlite->subscribers()->search($user->email ?? '')[0] ?? null;
             }
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
+        } catch(\Throwable $e) {
+            Log::warning($e->getMessage());
         }
     }
 
@@ -122,9 +122,9 @@ class MailerLite
             ]);
 
             return $subscriber;
-        } catch(\Exception $e) {
+        } catch(\Throwable $e) {
             // TODO: Discern between different Response error codes...
-            Log::error($e->getMessage());
+            Log::warning($e->getMessage());
         }
 
         return false;
@@ -133,8 +133,8 @@ class MailerLite
     public function getFields() {
         try {
             return collect($this->mailerlite->fields()->get()->toArray());
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
+        } catch(\Throwable $e) {
+            Log::warning($e->getMessage());
         }
     }
 
@@ -153,8 +153,8 @@ class MailerLite
             }
 
             return true;
-        } catch(\Exception $e) {
-            Log::error($e->getMessage());
+        } catch(\Throwable $e) {
+            Log::warning($e->getMessage());
         }
     }
 }
