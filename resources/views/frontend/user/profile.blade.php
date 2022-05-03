@@ -33,9 +33,13 @@
                 </div>
                 <div>
                     <h1 class="text-2xl font-bold text-gray-200">{{ $user->name }}</h1>
-                    <p class="text-sm font-medium text-gray-300">{{ translate('Last active') }} <a href="#"
-                            class="text-gray-500">Front End Developer</a> on <time datetime="2020-08-25">August 25,
-                            2020</time></p>
+                    <p class="text-sm font-medium text-gray-300">{{ translate('Last active') }}
+                        <a href="#" class="text-gray-500"></a>
+                        <time datetime="2020-08-25">{{ $user->updated_at->diffForHumans() }}</time>
+                        @if($user->isVerified())
+                        <span>{{ translate('Verified FoxAsk Member') }}</span>
+                        @endif
+                    </p>
                 </div>
             </div>
             <div
@@ -131,6 +135,7 @@
                         {{ translate('About') }}
                     </h2>
 
+
                     <!-- Activity Feed -->
                     <div class="mt-6 flow-root">
                         <ul role="list" class="mb-0">
@@ -150,6 +155,11 @@
                                                 <p class="text-md font-semibold text-gray-700">
                                                     {{ $user->name }}
                                                 </p>
+                                                @if($user->isVerified())
+                                                    <x-feed.elements.verified-badge :item="$user">
+                                                    </x-feed.elements.verified-badge>
+                                                @endif
+
                                                 @if($user->created_at)
                                                 <div class="text-sm whitespace-nowrap text-gray-500">
                                                     <time datetime="{{ $user->created_at }}">
@@ -189,10 +199,10 @@
                         </div>
                     </div>
                     <div class="mt-6 flex flex-col justify-stretch">
-                        <button type="button"
+                        <a href="#" type="button"
                             class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            {{ translate('View full bio') }}
-                        </button>
+                            {{ translate('View full profile') }}
+                        </a>
                     </div>
                 </div>
             </section>
