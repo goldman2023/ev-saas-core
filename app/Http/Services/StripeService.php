@@ -807,6 +807,11 @@ class StripeService
             */
             $invoice = Invoice::withoutGlobalScopes()->findOrFail($session->metadata->invoice_id ?? -1);;
 
+            if($session->mode === 'payment') {
+                // One-time payments do no t send invoice.created/paid hook, so we must change 
+                $invoice->is_temp = false;
+            }
+
             // Change invoice status to paid if mode is 'payment', but if it's a subscription, change status to 'pending' because status will truly change on 'invoice.paid' webhook
             $invoice->payment_status = $session->mode === 'payment' ? PaymentStatusEnum::paid()->value : PaymentStatusEnum::pending()->value;
 
