@@ -22,15 +22,18 @@
             <div class="flex sm:items-baseline sm:space-x-4">
                 <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">{{ translate('Order') }}:
                     #{{ $order->id }}</h1>
-                <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
-                    invoice<span aria-hidden="true"> &rarr;</span></a>
+
+                {{-- <a href="#" class="hidden text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:block">View
+                    invoice<span aria-hidden="true"> &rarr;</span></a> --}}
             </div>
             <p class="text-sm text-gray-600">Order placed
                 <time datetime="2021-03-22" class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y
                     H:i') }}</time>
             </p>
-            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:hidden">View invoice<span
-                    aria-hidden="true"> &rarr;</span></a>
+            <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 sm:hidden">
+                View invoice
+                <span aria-hidden="true"> &rarr;</span>
+            </a>
         </div>
 
         {{-- Actions --}}
@@ -80,24 +83,18 @@
                     {{ translate('Print order') }}
                 </a>
 
-                <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center">
+                {{-- <button @click="isOpen = !isOpen" @keydown.escape="isOpen = false" class="flex items-center">
                     @svg('heroicon-o-chevron-down', ['class' => 'ml-2 w-[18px] h-[18px]'])
                 </button>
                 <ul x-show="isOpen" @click.outside="isOpen = false"
                     class="absolute bg-white z-10 list-none p-0 border rounded top-[30px] right-0 shadow min-w-[150px]">
-                    <li>
-                        <a class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14" href="#" target="_blank">
-                            @svg('heroicon-o-document-duplicate', ['class' => 'w-[18px] h-[18px] mr-2'])
-                            <span class="ml-2">{{ translate('Duplicate') }}</span>
-                        </a>
-                    </li>
                     <li>
                         <a href="#" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
                             @svg('heroicon-o-trash', ['class' => 'w-[18px] h-[18px]'])
                             <span class="ml-2">{{ translate('Cacnel order') }}</span>
                         </a>
                     </li>
-                </ul>
+                </ul> --}}
             </div>
         </div>
 
@@ -105,65 +102,65 @@
         <div class="mt-6">
             <div class="space-y-8">
                 @if($order_items->isNotEmpty())
-                @foreach($order_items as $item)
-                <div class="bg-white border-t border-b border-gray-200 shadow-sm sm:border sm:rounded-lg">
-                    <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
-                        <div class="sm:flex lg:col-span-7">
-                            <div
-                                class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
-                                <img src="{{ $item->subject->getTHumbnail(['w' => 600]) }}" alt=""
-                                    class="w-full h-full object-center object-cover sm:w-full sm:h-full">
-                            </div>
-
-                            <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
-                                <h3 class="text-base font-medium text-gray-900">
-                                    <a href="#">{{ $item->name }}</a>
-                                </h3>
-
-                                <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
-
-                                <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
-                                    <div class="flex">
-                                        <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
-                                        <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
+                    @foreach($order_items as $item)
+                        <div class="bg-white border-t border-b border-gray-200 shadow-sm sm:border sm:rounded-lg">
+                            <div class="py-6 px-4 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
+                                <div class="sm:flex lg:col-span-7">
+                                    <div
+                                        class="flex-shrink-0 w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden sm:aspect-none sm:w-40 sm:h-40 border border-gray-200 shadow">
+                                        <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" alt=""
+                                            class="w-full h-full object-center object-cover sm:w-full sm:h-full">
                                     </div>
-                                    <div class="pl-4 flex sm:pl-6">
-                                        <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
-                                        <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price *
-                                            $item->quantity) }}</dd>
+
+                                    <div class="flex flex-col mt-6 sm:mt-0 sm:ml-6">
+                                        <h3 class="text-base font-medium text-gray-900">
+                                            <a href="#">{{ $item->name }}</a>
+                                        </h3>
+
+                                        <p class="mt-3 text-sm text-gray-500">{{ $item->excerpt }}</p>
+
+                                        <dl class="flex text-sm divide-x divide-gray-200 space-x-4 sm:space-x-6 mt-5">
+                                            <div class="flex">
+                                                <dt class="font-semibold text-gray-900">{{ translate('Quantity') }}</dt>
+                                                <dd class="ml-2 text-gray-700">{{ $item->quantity }}</dd>
+                                            </div>
+                                            <div class="pl-4 flex sm:pl-6">
+                                                <dt class="font-semibold text-gray-900">{{ translate('Price') }}</dt>
+                                                <dd class="ml-2 text-gray-700">{{ FX::formatPrice($item->total_price *
+                                                    $item->quantity) }}</dd>
+                                            </div>
+                                        </dl>
                                     </div>
-                                </dl>
+                                </div>
+
+                                {{-- <div class="mt-6 lg:mt-0 lg:col-span-5">
+                                    <dl class="grid grid-cols-2 gap-x-6 text-sm">
+                                        <div>
+                                            <dt class="font-medium text-gray-900">Delivery address</dt>
+                                            <dd class="mt-3 text-gray-500">
+                                                <span class="block">Floyd Miles</span>
+                                                <span class="block">7363 Cynthia Pass</span>
+                                                <span class="block">Toronto, ON N3Y 4H8</span>
+                                            </dd>
+                                        </div>
+                                        <div>
+                                            <dt class="font-medium text-gray-900">Shipping updates</dt>
+                                            <dd class="mt-3 text-gray-500 space-y-3">
+                                                <p>f•••@example.com</p>
+                                                <p>1•••••••••40</p>
+                                                <button type="button"
+                                                    class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div> --}}
                             </div>
                         </div>
-
-                        {{-- <div class="mt-6 lg:mt-0 lg:col-span-5">
-                            <dl class="grid grid-cols-2 gap-x-6 text-sm">
-                                <div>
-                                    <dt class="font-medium text-gray-900">Delivery address</dt>
-                                    <dd class="mt-3 text-gray-500">
-                                        <span class="block">Floyd Miles</span>
-                                        <span class="block">7363 Cynthia Pass</span>
-                                        <span class="block">Toronto, ON N3Y 4H8</span>
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt class="font-medium text-gray-900">Shipping updates</dt>
-                                    <dd class="mt-3 text-gray-500 space-y-3">
-                                        <p>f•••@example.com</p>
-                                        <p>1•••••••••40</p>
-                                        <button type="button"
-                                            class="font-medium text-indigo-600 hover:text-indigo-500">Edit</button>
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div> --}}
-                    </div>
-                </div>
-                @endforeach
+                    @endforeach
                 @endif
 
                 {{-- TODO: for digital products skip shipping --}}
-                <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
+                {{-- <div class="border-t border-gray-200 py-6 px-4 sm:px-6 lg:p-8">
                     @php
                     $progress_i = 0;
 
@@ -193,15 +190,17 @@
                                 translate('Delivered') }}</div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
             </div>
         </div>
 
+        <div class="mt-6">
+            <livewire:dashboard.tables.recent-invoices-widget-table for="order" :order="$order"></livewire:dashboard.tables.recent-invoices-widget-table>
+        </div>
+
         <!-- Billing -->
         <div class="mt-16">
-            <h2 class="sr-only">Billing Summary</h2>
-
             <div class="bg-gray-100 py-6 px-4 sm:px-6 sm:rounded-lg lg:px-8 lg:py-8 lg:grid lg:grid-cols-12 lg:gap-x-8">
                 <dl class="grid grid-cols-2 gap-6 text-sm sm:grid-cols-2 md:gap-x-8 lg:col-span-7">
                     <div>
@@ -245,25 +244,25 @@
                                     <p class="text-gray-900">Ending with ****</p>
                                     <p class="text-gray-600">Expires ** / **</p>
                                 </div>
-                                @if(auth()->user()->isAdmin())
-                                @if(\StripeService::getStripeMode() === 'live')
-                                <a target="_blank" class="btn btn-primary"
-                                    href="https://dashboard.stripe.com/live/payments/{{ $order->meta['stripe_payment_intent_id'] }}">
-                                    {{ translate('View transaction details on Stripe') }}
-                                </a>
-                                @else
-                                <a target="_blank" class="btn btn-primary"
-                                    href="https://dashboard.stripe.com/test/payments/{{ $order->meta['stripe_payment_intent_id'] }}">
-                                    {{ translate('View transaction details on Stripe') }}
-                                </a>
-                                @endif
+                                @if(auth()->user()->isAdmin() && !empty($order->meta['stripe_payment_intent_id'] ?? null))
+                                    @if(\StripeService::getStripeMode() === 'live')
+                                        <a target="_blank" class="btn btn-primary"
+                                            href="https://dashboard.stripe.com/live/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">
+                                            {{ translate('View transaction details on Stripe') }}
+                                        </a>
+                                    @else
+                                        <a target="_blank" class="btn btn-primary"
+                                            href="https://dashboard.stripe.com/test/payments/{{ $order->meta['stripe_payment_intent_id'] ?? null }}">
+                                            {{ translate('View transaction details on Stripe') }}
+                                        </a>
+                                    @endif
                                 @endif
                             </dd>
                         </div>
                     </div>
                 </dl>
 
-                <dl class="mt-8 divide-y divide-gray-200 text-sm lg:mt-0 lg:col-span-5">
+                {{-- <dl class="mt-8 divide-y divide-gray-200 text-sm lg:mt-0 lg:col-span-5">
                     <div class="pb-4 flex items-center justify-between">
                         <dt class="text-gray-600">{{ translate('Subtotal') }}</dt>
                         <dd class="font-medium text-gray-900">{{ \FX::formatPrice($order->total_price) }}</dd>
@@ -280,7 +279,7 @@
                         <dt class="font-medium text-gray-900">{{ translate('Order total') }}</dt>
                         <dd class="font-medium text-indigo-600">{{ \FX::formatPrice($order->total_price) }}</dd>
                     </div>
-                </dl>
+                </dl> --}}
             </div>
         </div>
     </div>
