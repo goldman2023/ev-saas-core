@@ -74,7 +74,7 @@
                                 </div>
                                 @endif --}}
 
-                                <a href="{{ $plan->getStripeCheckoutPermalink() }}" target="_blank"
+                                <a href="{{ auth()->user()->isSubscribed() ? route('stripe.portal_session') : $plan->getStripeCheckoutPermalink() }}" target="_blank"
                                     class="bg-transparent transition-all duration-300 mx-auto block text-center hover:border-none  hover:bg-primary hover:text-white  border border-gray-200  text-gray-500 text-lg font-bold py-2 px-14 rounded-lg">
 
                                     {{-- We should support following scenarios:
