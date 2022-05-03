@@ -238,6 +238,12 @@
                                         @continue
                                     @endif
 
+                                    @if($key === 'work_experience' && $onboarding) 
+                                        @continue 
+                                    @elseif($key === 'education' && $onboarding)
+                                        @continue
+                                    @endif
+
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                         x-data="{}" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif>
 
@@ -253,7 +259,6 @@
                                                 <x-dashboard.form.date field="meta.{{ $key }}.value" />
                                             @elseif(($options['type']??'string') == 'select')
                                                 <x-dashboard.form.select field="meta.{{ $key }}.value" selected="meta.{{ $key }}.value" :items="\App\Models\UserMeta::metaSelectValues($key)" />
-                                                <x-system.invalid-msg field="meta.{{ $key }}.value"></x-system.invalid-msg>
                                             @elseif(($options['type']??'string') == 'wysiwyg')
                                                 <x-dashboard.form.froala field="meta.{{ $key }}.value" id="wysiwyg-{{ $key }}"  />
                                             @elseif($key === 'work_experience')

@@ -2,8 +2,8 @@
     current: 0,
     experiences: {{ $field }},
     item_template: {
-        'title': 'Example',
-        'company_name': 'Example',
+        'title': 'Position...',
+        'company_name': 'Company name...',
         'employment_type': '',
         'location': '',
         'currently_working_there': '',
@@ -17,6 +17,9 @@
         } else {
             this.experiences.push({...this.item_template});
         }
+
+        this.current = this.experiences.length - 1;
+        $dispatch('display-modal', {'id': 'work-experience-modal'});
     },
     remove(index) {
         this.current = 0;
@@ -25,32 +28,32 @@
         $wire.set('{{ $field }}', this.experiences.filter(function(x){return x}), true);
         $wire.saveWorkExperience();
     }
-}" x-init="if(experiences === undefined || experiences === null) { 
-    experiences = [  ]; 
-}">
-    {{-- <template x-if="_.get('{{ $field }}', []) != null && _.get('{{ $field }}', []).length > 0"> --}}
-        <ul class="mt-4 border-b border-gray-200 divide-y divide-gray-200">
-            <template x-for="(item, index) in experiences">
-                <li class="py-4 flex items-center justify-between space-x-3">
-                    <div class="min-w-0 flex-1 flex items-center space-x-3">
-                      {{-- <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-                      </div> --}}
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900 truncate" x-text="item.company_name+' ('+item.location+')'"></p>
-                        <p class="text-sm font-medium text-gray-500 truncate" x-text="item.title"></p>
-                      </div>
+}" 
+    x-init="if(experiences === undefined || experiences === null) { 
+        experiences = [  ]; 
+    }"
+>
+    <ul class="border-b border-gray-200 divide-y divide-gray-200" x-show="experiences != null && experiences.length > 0">
+        <template x-for="(item, index) in experiences">
+            <li class="py-4 flex items-center justify-between space-x-3" >
+                <div class="min-w-0 flex-1 flex items-center space-x-3">
+                    {{-- <div class="flex-shrink-0">
+                    <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                    </div> --}}
+                    <div class="min-w-0 flex-1">
+                    <p class="text-sm font-medium text-gray-900 truncate" x-text="item.company_name+' ('+item.location+')'"></p>
+                    <p class="text-sm font-medium text-gray-500 truncate" x-text="item.title"></p>
                     </div>
-                    <div class="flex-shrink-0">
-                      <button type="button" @click="current = index; $dispatch('display-modal', {'id': 'work-experience-modal'})" class="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                        @svg('heroicon-s-pencil', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-gray-400'])
-                        <span class="text-sm font-medium text-gray-900">{{ translate('Edit') }}</span>
-                      </button>
-                    </div>
-                </li>
-            </template>
-        </ul>
-    {{-- </template> --}}
+                </div>
+                <div class="flex-shrink-0">
+                    <button type="button" @click="current = index; $dispatch('display-modal', {'id': 'work-experience-modal'})" class="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    @svg('heroicon-s-pencil', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-gray-400'])
+                    <span class="text-sm font-medium text-gray-900">{{ translate('Edit') }}</span>
+                    </button>
+                </div>
+            </li>
+        </template>
+    </ul>
 
     <div class="btn-ghost !pl-0 !text-14 mt-1" @click="add()">
         @svg('heroicon-o-plus', ['class' => 'h-3 w-3 mr-2'])

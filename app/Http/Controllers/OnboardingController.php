@@ -25,6 +25,18 @@ class OnboardingController extends Controller
         return redirect()->route('onboarding.step4');
     }
 
+    public function work_and_education() {
+        $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true);
+
+        if($user_meta_fields_in_use->has('education') || $user_meta_fields_in_use->has('work_experience')) {
+            // If any of those two are enabled for onboarding - go to work-and-education page!
+            return view('frontend.onboarding.work-and-education');
+        } else {
+            // If none of the education or work_experience is not enabled, go straight to step4
+            return redirect()->route('onboarding.step4');
+        }
+    }
+
     public function step3()
     {
         $user = auth()->user();

@@ -2,8 +2,8 @@
     current: 0,
     educations: {{ $field }},
     item_template: {
-        'school': 'Example',
-        'degree_title': 'Example',
+        'school': 'School/Institution...',
+        'degree_title': 'Degree title...',
         'field_of_study': '',
         'certificates': '',
         'start_date': '',
@@ -16,6 +16,9 @@
         } else {
             this.educations.push({...this.item_template});
         }
+
+        this.current = this.educations.length - 1;
+        $dispatch('display-modal', {'id': 'work-education-modal'});
     },
     remove(index) {
         this.current = 0;
@@ -24,27 +27,28 @@
         $wire.set('{{ $field }}', this.educations.filter(function(x){return x}), true);
         $wire.saveEducation();
     }
-}" x-init="if(educations === undefined || educations === null) { 
+}" 
+    x-init="if(educations === undefined || educations === null) { 
     educations = []; 
 }">
-        <ul class="mt-4 border-b border-gray-200 divide-y divide-gray-200" x-show="educations != null && educations.length > 0">
-            <template x-for="(item, index) in educations">
-                <li class="py-4 flex items-center justify-between space-x-3">
-                    <div class="min-w-0 flex-1 flex items-center space-x-3">
-                        <div class="min-w-0 flex-1">
-                            <p class="text-sm font-medium text-gray-900 truncate" x-text="item.school+' ('+item.field_of_study+')'"></p>
-                            <p class="text-sm font-medium text-gray-500 truncate" x-text="item.degree_title"></p>
-                        </div>
+    <ul class="border-b border-gray-200 divide-y divide-gray-200" x-show="educations != null && educations.length > 0">
+        <template x-for="(item, index) in educations">
+            <li class="py-4 flex items-center justify-between space-x-3">
+                <div class="min-w-0 flex-1 flex items-center space-x-3">
+                    <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-900 truncate" x-text="item.school+' ('+item.field_of_study+')'"></p>
+                        <p class="text-sm font-medium text-gray-500 truncate" x-text="item.degree_title"></p>
                     </div>
-                    <div class="flex-shrink-0">
-                        <button type="button" @click="current = index; $dispatch('display-modal', {'id': 'work-education-modal'})" class="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                            @svg('heroicon-s-pencil', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-gray-400'])
-                            <span class="text-sm font-medium text-gray-900">{{ translate('Edit') }}</span>
-                        </button>
-                    </div>
-                </li>
-            </template>
-        </ul>
+                </div>
+                <div class="flex-shrink-0">
+                    <button type="button" @click="current = index; $dispatch('display-modal', {'id': 'work-education-modal'})" class="inline-flex items-center py-2 px-3 border border-transparent rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        @svg('heroicon-s-pencil', ['class' => '-ml-1 mr-0.5 h-5 w-5 text-gray-400'])
+                        <span class="text-sm font-medium text-gray-900">{{ translate('Edit') }}</span>
+                    </button>
+                </div>
+            </li>
+        </template>
+    </ul>
 
     <div class="btn-ghost !pl-0 !text-14 mt-1" @click="add()">
         @svg('heroicon-o-plus', ['class' => 'h-3 w-3 mr-2'])
