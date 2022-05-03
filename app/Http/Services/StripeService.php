@@ -314,12 +314,6 @@ class StripeService
                 'order_id' => $is_preview ? 'preview' : $order->id,
                 'invoice_id' => $is_preview ? 'preview' : $invoice->id,
             ],
-            'subscription_data' => [
-                'metadata' => [
-                    'order_id' => $is_preview ? 'preview' : $order->id,
-                    'invoice_id' => $is_preview ? 'preview' : $invoice->id,
-                ],
-            ],
             'success_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'cancel_url' => route('checkout.order.received', ['id' => $is_preview ? 'preview' : $order->id]),
             'automatic_tax' => [
@@ -335,9 +329,19 @@ class StripeService
             ],
         ];
 
-        // If plans trial mode is enabled
-        if(get_tenant_setting('plans_trial_mode') && !empty(get_tenant_setting('plans_trial_duration'))) {
-            $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
+        // Check whether mode is 'subscription' or 'payment'
+        if($model->isSubscribable()) {
+            $stripe_args['subscription_data'] = [
+                'metadata' => [
+                    'order_id' => $is_preview ? 'preview' : $order->id,
+                    'invoice_id' => $is_preview ? 'preview' : $invoice->id,
+                ],
+            ];
+
+            // If plans trial mode is enabled
+            if(get_tenant_setting('plans_trial_mode') && !empty(get_tenant_setting('plans_trial_duration'))) {
+                $stripe_args['subscription_data']['trial_period_days'] = get_tenant_setting('plans_trial_duration');
+            }
         }
 
         // Check if Modal is digital or not, and based on that display or hide Stripe shipping options
