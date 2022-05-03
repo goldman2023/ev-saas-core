@@ -23,6 +23,7 @@ use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Spatie\ValidationRules\Rules\ModelsExist;
 use Str;
+use Log;
 
 class LoginForm extends Component
 {
@@ -80,14 +81,14 @@ class LoginForm extends Component
 
             // Add to mailerlite if user's 'in_mailerlite' core_meta is null or non existent (must be loose comparison)
             if(auth()->user()->getCoreMeta('in_mailerlite') != 1) {
-                $subscriber = MailerService::mailerlite()->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, auth()->user());
-
+                $subscriber = MailerService::mailerlite()?->addSubscriberToGroup(WeMailingListsEnum::all_users()->label, auth()->user()) ?? null;
+                
                 if(!empty($subscriber)) {
                     auth()->user()->core_meta()->updateOrCreate(
                         ['key' => 'in_mailerlite'],
                         ['value' => 1]
                     );
-                }  
+                }
             }
 
             if (!empty(get_tenant_setting('login_redirect_url'))) {

@@ -253,11 +253,14 @@
                                                 <x-dashboard.form.date field="meta.{{ $key }}.value" />
                                             @elseif(($options['type']??'string') == 'select')
                                                 <x-dashboard.form.select field="meta.{{ $key }}.value" selected="meta.{{ $key }}.value" :items="\App\Models\UserMeta::metaSelectValues($key)" />
+                                                <x-system.invalid-msg field="meta.{{ $key }}.value"></x-system.invalid-msg>
                                             @elseif(($options['type']??'string') == 'wysiwyg')
                                                 <x-dashboard.form.froala field="meta.{{ $key }}.value" id="wysiwyg-{{ $key }}"  />
+                                            @elseif($key === 'work_experience')
+                                                <x-dashboard.form.blocks.work-experience-form field="meta.{{ $key }}.value"></x-dashboard.form.blocks.work-experience-form>
+                                            @elseif($key === 'education')
+                                                <x-dashboard.form.blocks.education-form field="meta.{{ $key }}.value"></x-dashboard.form.blocks.education-form>
                                             @endif
-
-                                            <x-system.invalid-msg field="me.phone"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                 @endforeach

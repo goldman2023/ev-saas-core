@@ -1202,7 +1202,6 @@ class StripeService
     // customer.subscription.updated
     public function whCustomerSubscriptionUpdated($event)
     {
-        die();
         $previous_attributes = $event->data->previous_attributes ?? (object) [];
         $stripe_subscription = $event->data->object;
         $stripe_subscription_id = $stripe_subscription->id;
@@ -1248,6 +1247,28 @@ class StripeService
                         $data = $subscription->data;
                         $data[$this->mode_prefix .'stripe_latest_invoice_id'] = $latest_invoice_id;
                         $subscription->data = $data;
+
+                        // Check if subscription was upgraded/downgraded
+                        if(count($previous_attributes?->items?->data ?? null) > 0) {
+                            if(get_tenant_setting('multiplan_purchase')) {
+                                // Upgrade/Downgrade when multiple subsriptions feature is enabled
+                            } else {
+                                $stripe_new_plan = $stripe_subscription?->items?->data[0];
+                                $new_plan = CoreMeta::where([
+                                    ['key', $this->mode_prefix.'stripe_product_id'],
+                                    ['value', $stripe_new_plan->plan->product]
+                                ])->first();
+
+                                if(!empty($new_plan)) {
+                                    $new_plan = $new_plan->subject;
+                                    $subscription->subject_id = $new_plan->id;
+                                    $subscription->subject_type = $new_plan::class;
+                                } else {
+                                    // Raise error here
+                                }
+                                // $subscription->
+                            }
+                        }
                     }
 
                     $subscription->save();

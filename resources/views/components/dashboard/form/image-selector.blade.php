@@ -48,22 +48,27 @@
                     </div>
                 </template>
             @else
-            <div class="flex flex-col">
-                <template x-if="hasImage()">
-                    <div class="w-full rounded cursor-pointer mb-3">
-                        <p class="font-semibold truncate" x-text="{{ $field }}.file_name"></p>
+                <div class="flex flex-col">
+                    <template x-if="hasImage()">
+                        <div class="w-full cursor-default mb-4 flex justify-between items-center">
+                            <p class="font-semibold truncate pr-3" x-text="{{ $field }}.file_name.split(/[\\/]/).pop()"></p>
+                            
+                            <a class="p-1 rounded border border-gray-200" @click="event.stopPropagation();" :href="'{{ Storage::url('') }}'+{{ $field }}.file_name" target="_blank">
+                                @svg('heroicon-o-eye', ['class' => 'h-4 w-4 text-gray-700'])
+                            </a>
+                            
+                        </div>
+                    </template>
+                    <div class="flex flex-row justify-between">
+                        <button type="button" class="-ml-2 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
+                            @svg('heroicon-s-paper-clip', ['class' => '-ml-1 h-5 w-5 mr-2 group-hover:text-gray-500'])
+                            <span class="text-sm text-gray-500 group-hover:text-gray-600 italic">{{ translate('Attach a file') }}</span>
+                        </button>
+                        <button @click="event.preventDefault(); event.stopPropagation(); removeImage()" x-cloak x-show="hasImage()" type="button" class="relative z-10 -mr-3 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
+                            @svg('heroicon-o-x', ['class' => 'h-5 w-5 text-danger'])
+                        </button>
                     </div>
-                </template>
-                <div class="flex flex-row justify-between">
-                    <button type="button" class="-ml-2 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
-                        @svg('heroicon-s-paper-clip', ['class' => '-ml-1 h-5 w-5 mr-2 group-hover:text-gray-500'])
-                        <span class="text-sm text-gray-500 group-hover:text-gray-600 italic">{{ translate('Attach a file') }}</span>
-                    </button>
-                    <button @click="event.preventDefault(); event.stopPropagation(); removeImage()" x-cloak x-show="hasImage()" type="button" class="relative z-10 -mr-3 -my-2 rounded-full px-3 py-2 inline-flex items-center text-left text-gray-400 group">
-                        @svg('heroicon-o-x', ['class' => 'h-5 w-5 text-danger'])
-                    </button>
                 </div>
-            </div>
             @endif
         {{-- <x-system.invalid-msg field="{{  }}"></x-system.invalid-msg> --}}
     </div>

@@ -28,27 +28,29 @@ class UserMeta extends WeBaseModel
             'company_name' => 'string',
             'company_vat' => 'string',
             'company_registration_number' => 'string',
-            
-            'work_experience' => [
-                'title' => 'string',
-                'company_name' => 'string',
-                'employment_type' => 'string',
-                'location' => 'string',
-                'currently_working_there' => 'boolean',
-                'start_date' => 'date',
-                'end_date' => 'date',
-                'description' => 'string',
-            ],
-            'education' => [
-                'school' => 'string',
-                'degree_title' => 'string',
-                'field_of_study' => 'string',
-                'start_date' => 'date',
-                'end_date' => 'date',
-                'description' => 'string',
-                'certificates' => 'uploads',
-            ],
+            'work_experience' => 'array',
+            'education' => 'array',
             'bio' => 'wysiwyg',
+
+            // 'work_experience' => [
+            //     'title' => 'string',
+            //     'company_name' => 'string',
+            //     'employment_type' => 'string',
+            //     'location' => 'string',
+            //     'currently_working_there' => 'boolean',
+            //     'start_date' => 'date',
+            //     'end_date' => 'date',
+            //     'description' => 'string',
+            // ],
+            // 'education' => [
+            //     'school' => 'string',
+            //     'degree_title' => 'string',
+            //     'field_of_study' => 'string',
+            //     'start_date' => 'date',
+            //     'end_date' => 'date',
+            //     'description' => 'string',
+            //     'certificates' => 'uploads',
+            // ],
         ];
     }
 

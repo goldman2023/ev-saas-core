@@ -66,7 +66,7 @@
             @svg('heroicon-o-eye', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('View') }}
         </a>
 
-        @if(!get_tenant_setting('multiplan_purchase'))
+        {{-- @if(!get_tenant_setting('multiplan_purchase'))
             <button 
                 @click="isOpen = !isOpen" 
                 @keydown.escape="isOpen = false" 
@@ -79,7 +79,7 @@
                 class="absolute bg-white z-10 list-none p-0 border rounded mt-10 shadow"
             >
                 @if($row->status === \App\Enums\UserSubscriptionStatusEnum::active()->value)
-                    {{-- Only if subscription plan is active, user can upgrade/downgrade or cancel it! --}}
+                    <!-- Only if subscription plan is active, user can upgrade/downgrade or cancel it! -->
 
                     <li>
                         <a href="{{ $row?->getSingleCheckoutPermalink() ?? '#' }}" target="_blank" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14">
@@ -102,7 +102,7 @@
                         </div>
                     </li>
                 @elseif($row->status === \App\Enums\UserSubscriptionStatusEnum::active_until_end()->value && $row->payment_status === \App\Enums\PaymentStatusEnum::paid()->value && $row->end_date > time())
-                    {{-- If there's still time left before 'end_date', subscription payment is 'paid' and status is 'active_until_end', you can revive subscription cuz it's not fully canceled in Stripe (cancel_at_period_end is just set to true)  --}}
+                    <!-- If there's still time left before 'end_date', subscription payment is 'paid' and status is 'active_until_end', you can revive subscription cuz it's not fully canceled in Stripe (cancel_at_period_end is just set to true)  -->
                     <li>
                         <div wire:click="revivePlan({{ $row->id }})" class="flex items-center px-3 py-3 pr-4 text-gray-900 text-14  border-t cursor-pointer">
                             @svg('heroicon-o-refresh', ['class' => 'text-info w-[18px] h-[18px]'])
@@ -111,7 +111,7 @@
                     </li>
                 @endif
             </ul>
-        @endif
+        @endif --}}
         
     </div>
 </x-livewire-tables::table.cell>

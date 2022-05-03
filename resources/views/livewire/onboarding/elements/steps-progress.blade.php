@@ -7,17 +7,21 @@
             <div class="bg-gray-200 rounded-full overflow-hidden">
                 <div class="h-2 bg-indigo-400 rounded-full" style="width: {{ $progress_percentage }}%"></div>
             </div>
-            <div class="hidden sm:grid grid-cols-3 text-sm font-medium text-gray-600 mt-3">
+            <div class="hidden sm:grid @if($include_work_and_education) grid-cols-3 @else grid-cols-2 @endif text-sm font-medium text-gray-600 mt-3">
                 <div class="text-indigo">
-                    <a href="{{ route('onboarding.step1') }}">
-                        {{ translate('Select your interests') }}
-                    </a>
-                </div>
-                <div class="text-center text-indigo">
                     <a href="{{ route('onboarding.step2') }}">
                         {{ translate('Profile information') }}
                     </a>
                 </div>
+
+                @if($include_work_and_education) 
+                    <div class="text-center text-indigo">
+                        <a href="{{ route('onboarding.work-and-education') }}">
+                            {{ translate('Work and Education') }}
+                        </a>
+                    </div>
+                @endif
+                
                 {{-- <div class="text-center">
                     {{ translate('Store Setup') }}
                 </div> --}}

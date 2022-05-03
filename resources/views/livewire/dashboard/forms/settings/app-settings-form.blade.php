@@ -171,6 +171,20 @@
                             </div>
                             {{-- END Maintenance mode --}}
 
+                            {{-- TODO: Move this to dedicated tab --}}
+                            {{-- Enable/Disable Brands --}}
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 mt-4" x-data="{}">
+                                <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
+                                    <span class="text-sm font-medium text-gray-900">{{ translate('Enable Brands') }}</span>
+                                    <p class="text-gray-500 text-sm">{{ translate('Enable/Disable Brands content type') }}</p>
+                                </div>
+
+                                <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
+                                    <x-dashboard.form.toggle field="settings.brands_ct_enabled.value" />
+                                </div>
+                            </div>
+                            {{-- END Enable/Disable Brands --}}
+
 
                             {{-- POLICIES URLS --}}
                             <div class="mt-7 text-20 font-semibold">
@@ -256,6 +270,7 @@
                                         $wire.set('settings.site_logo.value', settings.site_logo.value?.id, true);
                                         $wire.set('settings.site_logo_dark.value', settings.site_logo_dark.value?.id, true);
                                         $wire.set('settings.maintenance_mode.value', settings.maintenance_mode.value, true);
+                                        $wire.set('settings.brands_ct_enabled.value', settings.brands_ct_enabled.value, true);
                                     "
                                     wire:click="saveGeneral()">
                                 {{ translate('Save') }}

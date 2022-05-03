@@ -165,7 +165,37 @@ class MyAccountForm extends Component
         }
 
         if ($this->onboarding) {
-            return redirect()->route('onboarding.step4');
+            return redirect()->route('onboarding.work-and-education');
+        }
+    }
+
+    public function saveWorkExperience() {
+        $meta_key = 'work_experience';
+
+        try {
+            UserMeta::where([
+                ['key', $meta_key],
+                ['user_id', $this->me->id],
+            ])->update(['value' => castValueForSave($meta_key, $this->meta[$meta_key], UserMeta::metaDataTypes())]);
+
+            // $this->inform(translate('Work experience successfully saved.'), '', 'success');
+        } catch (\Exception $e) {
+            // $this->inform(translate('Could not save basic information settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function saveEducation() {
+        $meta_key = 'education';
+
+        try {
+            UserMeta::where([
+                ['key', $meta_key],
+                ['user_id', $this->me->id],
+            ])->update(['value' => castValueForSave($meta_key, $this->meta[$meta_key], UserMeta::metaDataTypes())]);
+
+            // $this->inform(translate('Work experience successfully saved.'), '', 'success');
+        } catch (\Exception $e) {
+            // $this->inform(translate('Could not save basic information settings.'), $e->getMessage(), 'fail');
         }
     }
 

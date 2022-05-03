@@ -16,7 +16,7 @@
           @foreach($models as $model)
             <div class="w-full" x-data="{
                 month_price: @js($model->getTotalPrice(true)),
-                annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice(true) / 12)),
+                annual_price: @js(\FX::formatPrice($model->getTotalAnnualPrice() / 12)),
                 {{-- discount_percent: @js(abs($model->getTotalAnnualPrice() - ($model->getTotalPrice() * 12))), --}}
             }">
               <div class="relative flex flex-col justify-between px-4 py-4 border-gray-300 hover:border-primary border rounded transition-all duration-300 hover:shadow-green" style="height: 505px;">
