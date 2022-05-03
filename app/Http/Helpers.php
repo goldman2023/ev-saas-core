@@ -55,87 +55,95 @@ if (!function_exists('castValueForSave')) {
 
 if (!function_exists('castValuesForGet')) {
     function castValuesForGet(&$settings, $data_types) {
-        if(!empty($settings)) {
-
-            foreach($settings as $key => $setting) {
+        if(!empty($settings) && is_array($settings)) {
+            
+            foreach($settings as $key => &$setting) {
+                
                 $data_type = $data_types[$key] ?? null;
                 $value = $settings[$key]['value'] ?? null;
 
+                if(is_array($setting) && array_key_exists('value', $setting)) {
+                    $setting = $setting['value'];
+                } 
+                
                 try {
 
                     // This means that there are more sub items inside
                     if(is_array($data_type)) {
                         // If data type is ARRAY, it means that JSON is stored in setting value!
                         // In order to recursively go through it's properties and cast data types, we need to decode it with json_decode first!
-                        $settings[$key]['value'] = json_decode($settings[$key]['value'], true);
+                        
+                        $setting = json_decode($setting, true);
 
                         // Check if there are missing sub fields and create them
-                        $missing_sub_fields = array_diff_key($data_type, !empty($settings[$key]['value']) ? $settings[$key]['value'] : []);
-
+                        $missing_sub_fields = array_diff_key($data_type, !empty($setting) ? $setting : []);
+                        
                         if(!empty($missing_sub_fields)) {
                             foreach($missing_sub_fields as $subkey => $subvalue) {
-                                $missing_sub_fields[$subkey] = ''; // reset values to ''
+                                $missing_sub_fields[$subkey] = '';
                             }
                         }
 
                         // Merge missing sub fields and existing sub fields (this is imporatant if we add any new tenant setting field!)
-                        $settings[$key]['value'] = array_merge(!empty($settings[$key]['value']) ? $settings[$key]['value'] : [], $missing_sub_fields);
-
+                        $setting = array_merge(!empty($setting) ? $setting : [], $missing_sub_fields);
+ 
                         // Convert Sub Fields values to proper data type
-                        castValuesForGet($settings[$key]['value'], $data_type);
+                        castValuesForGet($setting, $data_type);
                         continue;
                     }
-
-                    if(empty($value)) {
+                    
+                    if(empty($setting)) {
                         if($data_type === 'boolean') {
-                            $settings[$key]['value'] = false;
+                            $setting = false;
                         } else if($data_type === Currency::class) {
-                            $settings[$key]['value'] = Currency::where('code', 'EUR')?->first();
+                            $setting = Currency::where('code', 'EUR')?->first();
+                        } else if($data_type === 'string') {
+                            $setting = '';
                         }
                         continue;
                     }
-
-                    if(isset($settings[$key]) && !empty($value)) {
+                    
+                    if(isset($settings[$key]) && !empty($setting)) {
                         if($data_type === Upload::class) {
-                            $settings[$key]['value'] = Upload::find($value);
+                            $setting = Upload::find($setting);
                         } else if($data_type === Currency::class) {
-                            $settings[$key]['value'] = Currency::where('code', $value)?->first() ?? Currency::where('code', 'EUR')?->first();
+                            $setting = Currency::where('code', $setting)?->first() ?? Currency::where('code', 'EUR')?->first();
                         } else if($data_type === Category::class) {
-                            $settings[$key]['value'] = Category::find($value);
+                            $setting = Category::find($setting);
                         } else if($data_type === 'uploads') {
                             $uploads = [];
-                            if(is_array($value) && !empty($value)) {
-                                foreach($value as $upload_id) {
-                                    $uploads[] = Upload::find($value);
+                            if(is_array($setting) && !empty($setting)) {
+                                foreach($setting as $upload_id) {
+                                    $uploads[] = Upload::find($upload_id);
                                 }
                             }
-                            $settings[$key]['value'] = collect($uploads);
+                            $setting = collect($uploads);
                         } else if($data_type === 'string') {
-                            $settings[$key]['value'] = $value;
+                            $setting = $setting;
                         } else if($data_type === 'wysiwyg') {
-                            $settings[$key]['value'] = $value;
+                            $setting = $setting;
                         } else if($data_type === 'int') {
-                            $settings[$key]['value'] = ctype_digit($value) ? ((int) $value) : $value;
+                            $setting = ctype_digit($setting) ? ((int) $setting) : $setting;
                         } else if($data_type === 'boolean') {
-                            $settings[$key]['value'] = ($value == 0 || $value == "0") ? false : true;
+                            $setting = ($setting == 0 || $setting == "0") ? false : true;
                         } else if($data_type === 'array') {
-                            $settings[$key]['value'] = json_decode($value, true);
+                            $setting = json_decode($setting, true);
                         } else if($data_type === 'date') {
-                            $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y.');
+                            $setting = \Carbon::parse($setting)->format('d.m.Y.');
                         } else if($data_type === 'datetime') {
-                            $settings[$key]['value'] = \Carbon::parse($value)->format('d.m.Y. H:i');
+                            $setting = \Carbon::parse($setting)->format('d.m.Y. H:i');
                         } else {
-                            $settings[$key]['value'] = $value;
+                            $setting = $setting;
                         }
                     }
                 } catch(\Throwable $e) {
                     // Set default value is value cannot be parsed due to wrong data type in DB!!!
                     if($data_type === 'boolean') {
-                        $settings[$key]['value'] = false;
+                        $setting = false;
                     } else if($data_type === Currency::class) {
-                        $settings[$key]['value'] = Currency::where('code', 'EUR')?->first();
+                        $setting = Currency::where('code', 'EUR')?->first();
                     } else {
-                        $settings[$key]['value'] = null;
+                        $setting = null;
                     }
                 }
 

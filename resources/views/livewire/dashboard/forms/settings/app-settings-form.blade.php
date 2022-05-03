@@ -104,9 +104,9 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.image-selector field="settings.site_logo.value" id="site-logo" :selected-image="$settings['site_logo']['value']"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.image-selector field="settings.site_logo" id="site-logo" :selected-image="$settings['site_logo']"></x-dashboard.form.image-selector>
 
-                                    <x-system.invalid-msg field="settings.site_logo.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="settings.site_logo"></x-system.invalid-msg>
                                 </div>
                             </div>
                             {{-- END Site logo --}}
@@ -118,9 +118,9 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.image-selector field="settings.site_logo_dark.value" id="site-logo-dark" :selected-image="$settings['site_logo_dark']['value']"></x-dashboard.form.image-selector>
+                                    <x-dashboard.form.image-selector field="settings.site_logo_dark" id="site-logo-dark" :selected-image="$settings['site_logo_dark']"></x-dashboard.form.image-selector>
 
-                                    <x-system.invalid-msg field="settings.site_logo_dark.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="settings.site_logo_dark"></x-system.invalid-msg>
                                 </div>
                             </div>
                             {{-- END Site logo Dark--}}
@@ -134,9 +134,9 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text" class="form-standard @error('settings.site_name') is-invalid @enderror"
                                             placeholder="{{ translate('Site name') }}"
-                                            wire:model.defer="settings.site_name.value" />
+                                            wire:model.defer="settings.site_name" />
 
-                                    <x-system.invalid-msg field="settings.site_name.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="settings.site_name"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Site Name -->
@@ -151,9 +151,9 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="text" class="form-standard @error('settings.site_motto') is-invalid @enderror"
                                             placeholder="{{ translate('Site motto') }}"
-                                            wire:model.defer="settings.site_motto.value" />
+                                            wire:model.defer="settings.site_motto" />
 
-                                    <x-system.invalid-msg field="settings.site_motto.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="settings.site_motto"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Site motto -->
@@ -166,7 +166,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.maintenance_mode.value" />
+                                    <x-dashboard.form.toggle field="settings.maintenance_mode" />
                                 </div>
                             </div>
                             {{-- END Maintenance mode --}}
@@ -180,7 +180,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.brands_ct_enabled.value" />
+                                    <x-dashboard.form.toggle field="settings.brands_ct_enabled" />
                                 </div>
                             </div>
                             {{-- END Enable/Disable Brands --}}
@@ -198,7 +198,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="settings.tos_url.value" />
+                                    <x-dashboard.form.input field="settings.tos_url" />
                                 </div>
                             </div>
                             <!-- END TOS Url -->
@@ -210,7 +210,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="settings.cookies_url.value" />
+                                    <x-dashboard.form.input field="settings.cookies_url" />
                                 </div>
                             </div>
                             <!-- END Cookies Url -->
@@ -222,7 +222,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="settings.eula_url.value" />
+                                    <x-dashboard.form.input field="settings.eula_url" />
                                 </div>
                             </div>
                             <!-- END EULA Url -->
@@ -234,7 +234,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="settings.shipping_policy_url.value" />
+                                    <x-dashboard.form.input field="settings.shipping_policy_url" />
                                 </div>
                             </div>
                             <!-- END Shipping policy url -->
@@ -246,7 +246,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="settings.returns_and_refunds_url.value" />
+                                    <x-dashboard.form.input field="settings.returns_and_refunds_url" />
                                 </div>
                             </div>
                             <!-- END Retruns and Refunds url -->
@@ -258,7 +258,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="settings.documentation_url.value" />
+                                    <x-dashboard.form.input field="settings.documentation_url" />
                                 </div>
                             </div>
                             <!-- END Documentaion url -->
@@ -267,10 +267,10 @@
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
-                                        $wire.set('settings.site_logo.value', settings.site_logo.value?.id, true);
-                                        $wire.set('settings.site_logo_dark.value', settings.site_logo_dark.value?.id, true);
-                                        $wire.set('settings.maintenance_mode.value', settings.maintenance_mode.value, true);
-                                        $wire.set('settings.brands_ct_enabled.value', settings.brands_ct_enabled.value, true);
+                                        $wire.set('settings.site_logo', settings.site_logo?.id, true);
+                                        $wire.set('settings.site_logo_dark', settings.site_logo_dark?.id, true);
+                                        $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
+                                        $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
                                     "
                                     wire:click="saveGeneral()">
                                 {{ translate('Save') }}
@@ -311,7 +311,7 @@
                                     </label>
 
                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                        <x-dashboard.form.input field="settings.colors.value.{{ $color_key }}" />
+                                        <x-dashboard.form.input field="settings.colors.{{ $color_key }}" />
                                     </div>
                                 </div>
                                 @php $i++; @endphp
@@ -321,7 +321,7 @@
                             @endforeach
                             {{-- END Colors --}}
 
-                            {{-- <x-dashboard.form.color-picker field="settings.colors.value.primary"></x-dashboard.form.color-picker> --}}
+                            {{-- <x-dashboard.form.color-picker field="settings.colors.primary"></x-dashboard.form.color-picker> --}}
 
                             {{-- Save design --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
@@ -347,7 +347,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.feed_enabled.value" />
+                                    <x-dashboard.form.toggle field="settings.feed_enabled" />
                                 </div>
                             </div>
                             {{-- END Feed Feature --}}
@@ -362,7 +362,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.chat_feature.value" />
+                                    <x-dashboard.form.toggle field="settings.chat_feature" />
                                 </div>
                             </div>
                             {{-- END Chat Feature --}}
@@ -377,7 +377,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.weedit_feature.value" />
+                                    <x-dashboard.form.toggle field="settings.weedit_feature" />
                                 </div>
                             </div>
                             {{-- END WeEdit Feature --}}
@@ -392,7 +392,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.multiplan_purchase.value" />
+                                    <x-dashboard.form.toggle field="settings.multiplan_purchase" />
                                 </div>
                             </div>
                             {{-- END Multiplan Purchase Feature --}}
@@ -407,7 +407,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.onboarding_flow.value" />
+                                    <x-dashboard.form.toggle field="settings.onboarding_flow" />
                                 </div>
 
                                 {{-- Force email verification --}}
@@ -420,12 +420,12 @@
                                     </div>
     
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <x-dashboard.form.toggle field="settings.force_email_verification.value" />
+                                        <x-dashboard.form.toggle field="settings.force_email_verification" />
                                     </div>
                                 </div>
                                 {{-- END Force email verification --}}
 
-                                <div class="col-span-3" x-show="!settings.onboarding_flow.value">
+                                <div class="col-span-3" x-show="!settings.onboarding_flow">
                                     {{-- Register Redirect URL --}}
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  mb-3" x-data="{}">
                                         <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
@@ -436,7 +436,7 @@
                                         </div>
         
                                         <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.input field="settings.register_redirect_url.value" placeholder="{{ translate('Leave empty for email verification page') }}" />
+                                            <x-dashboard.form.input field="settings.register_redirect_url" placeholder="{{ translate('Leave empty for email verification page') }}" />
                                         </div>
                                     </div>
                                     {{-- END Register Redirect URL --}}
@@ -451,7 +451,7 @@
                                         </div>
         
                                         <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.input field="settings.login_redirect_url.value" placeholder="{{ translate('Leave empty for dashboard') }}"/>
+                                            <x-dashboard.form.input field="settings.login_redirect_url" placeholder="{{ translate('Leave empty for dashboard') }}"/>
                                         </div>
                                     </div>
                                     {{-- END Login Redirect URL --}}
@@ -470,7 +470,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.wishlist_feature.value" />
+                                    <x-dashboard.form.toggle field="settings.wishlist_feature" />
                                 </div>
                             </div>
                             {{-- END Wishlist Feature --}}
@@ -485,7 +485,7 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.vendor_mode_feature.value" />
+                                    <x-dashboard.form.toggle field="settings.vendor_mode_feature" />
                                 </div>
                             </div>
                             {{-- END Vendor Mode Feature --}}
@@ -500,10 +500,10 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <x-dashboard.form.toggle field="settings.plans_trial_mode.value" />
+                                    <x-dashboard.form.toggle field="settings.plans_trial_mode" />
                                 </div>
 
-                                <div class="col-span-3" x-show="settings.plans_trial_mode.value">
+                                <div class="col-span-3" x-show="settings.plans_trial_mode">
                                     {{-- Trial duration --}}
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
                                         <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
@@ -514,7 +514,7 @@
                                         </div>
         
                                         <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                            <x-dashboard.form.input field="settings.plans_trial_duration.value" min="1" type="number" placeholder="{{ translate('Number of trial days') }}" />
+                                            <x-dashboard.form.input field="settings.plans_trial_duration" min="1" type="number" placeholder="{{ translate('Number of trial days') }}" />
                                         </div>
                                     </div>
                                     {{-- END Trial duration --}}
@@ -528,15 +528,15 @@
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
-                                        $wire.set('settings.feed_enabled.value', settings.feed_enabled.value, true);
-                                        $wire.set('settings.multiplan_purchase.value', settings.multiplan_purchase.value, true);
-                                        $wire.set('settings.onboarding_flow.value', settings.onboarding_flow.value, true);
-                                        $wire.set('settings.force_email_verification.value', settings.force_email_verification.value, true);
-                                        $wire.set('settings.chat_feature.value', settings.chat_feature.value, true);
-                                        $wire.set('settings.weedit_feature.value', settings.weedit_feature.value, true);
-                                        $wire.set('settings.wishlist_feature.value', settings.wishlist_feature.value, true);
-                                        $wire.set('settings.vendor_mode_feature.value', settings.vendor_mode_feature.value, true);
-                                        $wire.set('settings.plans_trial_mode.value', settings.plans_trial_mode.value, true);
+                                        $wire.set('settings.feed_enabled', settings.feed_enabled, true);
+                                        $wire.set('settings.multiplan_purchase', settings.multiplan_purchase, true);
+                                        $wire.set('settings.onboarding_flow', settings.onboarding_flow, true);
+                                        $wire.set('settings.force_email_verification', settings.force_email_verification, true);
+                                        $wire.set('settings.chat_feature', settings.chat_feature, true);
+                                        $wire.set('settings.weedit_feature', settings.weedit_feature, true);
+                                        $wire.set('settings.wishlist_feature', settings.wishlist_feature, true);
+                                        $wire.set('settings.vendor_mode_feature', settings.vendor_mode_feature, true);
+                                        $wire.set('settings.plans_trial_mode', settings.plans_trial_mode, true);
                                     "
                                     wire:click="saveFeatures()">
                                 {{ translate('Save') }}
@@ -556,10 +556,10 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="settings.show_currency_switcher.value = !settings.show_currency_switcher.value"
-                                                :class="{'bg-primary':settings.show_currency_switcher.value , 'bg-gray-200':!settings.show_currency_switcher.value}"
+                                    <button type="button" @click="settings.show_currency_switcher = !settings.show_currency_switcher"
+                                                :class="{'bg-primary':settings.show_currency_switcher , 'bg-gray-200':!settings.show_currency_switcher}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.show_currency_switcher.value, 'translate-x-0':!settings.show_currency_switcher.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                            <span :class="{'translate-x-5':settings.show_currency_switcher, 'translate-x-0':!settings.show_currency_switcher}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
                                 </div>
                             </div>
@@ -572,8 +572,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select field="settings.system_default_currency.value" :items="\FX::getAllCurrencies(true, true)" selected="settings.system_default_currency.value.code" :nullable="false"></x-dashboard.form.select>
-                                    <x-system.invalid-msg field="settings.system_default_currency.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.select field="settings.system_default_currency" :items="\FX::getAllCurrencies(true, true)" selected="settings.system_default_currency.code" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.system_default_currency"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- System Default currency -->
@@ -587,9 +587,9 @@
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <input type="number" min="0" max="3" class="form-standard @error('settings.no_of_decimals') is-invalid @enderror"
                                             placeholder="{{ translate('Decimal numbers') }}"
-                                            wire:model.defer="settings.no_of_decimals.value" />
+                                            wire:model.defer="settings.no_of_decimals" />
 
-                                    <x-system.invalid-msg field="settings.no_of_decimals.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="settings.no_of_decimals"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Number of decimals -->
@@ -601,8 +601,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select field="settings.decimal_separator.value" :items="['1' => 'Comma', '2' => 'Dot']" selected="settings.decimal_separator.value" :nullable="false"></x-dashboard.form.select>
-                                    <x-system.invalid-msg field="settings.decimal_separator.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.select field="settings.decimal_separator" :items="['1' => 'Comma', '2' => 'Dot']" selected="settings.decimal_separator" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.decimal_separator"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Decimal separator -->
@@ -614,8 +614,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select field="settings.currency_format.value" :items="['1' => translate('Symbol'), '2' => translate('Code')]" selected="settings.currency_format.value" :nullable="false"></x-dashboard.form.select>
-                                    <x-system.invalid-msg field="settings.currency_format.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.select field="settings.currency_format" :items="['1' => translate('Symbol'), '2' => translate('Code')]" selected="settings.currency_format" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.currency_format"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Currency format -->
@@ -627,8 +627,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select field="settings.symbol_format.value" :items="['1' => translate('Symbol before price'), '2' => translate('Symbol after price')]" selected="settings.symbol_format.value" :nullable="false"></x-dashboard.form.select>
-                                    <x-system.invalid-msg field="settings.symbol_format.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.select field="settings.symbol_format" :items="['1' => translate('Symbol before price'), '2' => translate('Symbol after price')]" selected="settings.symbol_format" :nullable="false"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="settings.symbol_format"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Symbol format -->
@@ -637,11 +637,11 @@
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
-                                        $wire.set('settings.symbol_format.value', settings.symbol_format.value, true);
-                                        $wire.set('settings.currency_format.value', settings.currency_format.value, true);
-                                        $wire.set('settings.decimal_separator.value', settings.decimal_separator.value, true);
-                                        $wire.set('settings.system_default_currency.value', settings.system_default_currency.value.code, true);
-                                        $wire.set('settings.show_currency_switcher.value', settings.show_currency_switcher.value, true);
+                                        $wire.set('settings.symbol_format', settings.symbol_format, true);
+                                        $wire.set('settings.currency_format', settings.currency_format, true);
+                                        $wire.set('settings.decimal_separator', settings.decimal_separator, true);
+                                        $wire.set('settings.system_default_currency', settings.system_default_currency.code, true);
+                                        $wire.set('settings.show_currency_switcher', settings.show_currency_switcher, true);
                                     "
                                     wire:click="saveCurrency()">
                                 {{ translate('Save') }}
@@ -662,17 +662,17 @@
                                 </div>
 
                                 <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                    <button type="button" @click="settings.enable_social_logins.value = !settings.enable_social_logins.value"
-                                                :class="{'bg-primary':settings.enable_social_logins.value , 'bg-gray-200':!settings.enable_social_logins.value}"
+                                    <button type="button" @click="settings.enable_social_logins = !settings.enable_social_logins"
+                                                :class="{'bg-primary':settings.enable_social_logins , 'bg-gray-200':!settings.enable_social_logins}"
                                                 class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                            <span :class="{'translate-x-5':settings.enable_social_logins.value, 'translate-x-0':!settings.enable_social_logins.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                            <span :class="{'translate-x-5':settings.enable_social_logins, 'translate-x-0':!settings.enable_social_logins}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                     </button>
                                 </div>
                             </div>
                             {{-- END Enable social logins --}}
 
                             {{-- Login settings --}}
-                            <div class="w-full " x-show="settings.enable_social_logins.value">
+                            <div class="w-full " x-show="settings.enable_social_logins">
                                 {{-- Google login --}}
                                 <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-4 sm:mt-5">
                                     <div class="col-span-3 md:col-span-1 grow-0 flex flex-col mr-3">
@@ -681,10 +681,10 @@
                                     </div>
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <button type="button" @click="settings.google_login.value = !settings.google_login.value"
-                                                    :class="{'bg-primary':settings.google_login.value , 'bg-gray-200':!settings.google_login.value}"
+                                        <button type="button" @click="settings.google_login = !settings.google_login"
+                                                    :class="{'bg-primary':settings.google_login , 'bg-gray-200':!settings.google_login}"
                                                     class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                <span :class="{'translate-x-5':settings.google_login.value, 'translate-x-0':!settings.google_login.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                <span :class="{'translate-x-5':settings.google_login, 'translate-x-0':!settings.google_login}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -698,10 +698,10 @@
                                     </div>
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <button type="button" @click="settings.facebook_login.value = !settings.facebook_login.value"
-                                                    :class="{'bg-primary':settings.facebook_login.value , 'bg-gray-200':!settings.facebook_login.value}"
+                                        <button type="button" @click="settings.facebook_login = !settings.facebook_login"
+                                                    :class="{'bg-primary':settings.facebook_login , 'bg-gray-200':!settings.facebook_login}"
                                                     class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                <span :class="{'translate-x-5':settings.facebook_login.value, 'translate-x-0':!settings.facebook_login.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                <span :class="{'translate-x-5':settings.facebook_login, 'translate-x-0':!settings.facebook_login}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -715,10 +715,10 @@
                                     </div>
 
                                     <div class="col-span-3 md:col-span-2 mt-1 sm:mt-0 h-full flex items-center">
-                                        <button type="button" @click="settings.linkedin_login.value = !settings.linkedin_login.value"
-                                                    :class="{'bg-primary':settings.linkedin_login.value , 'bg-gray-200':!settings.linkedin_login.value}"
+                                        <button type="button" @click="settings.linkedin_login = !settings.linkedin_login"
+                                                    :class="{'bg-primary':settings.linkedin_login , 'bg-gray-200':!settings.linkedin_login}"
                                                     class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                <span :class="{'translate-x-5':settings.linkedin_login.value, 'translate-x-0':!settings.linkedin_login.value}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                <span :class="{'translate-x-5':settings.linkedin_login, 'translate-x-0':!settings.linkedin_login}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -739,9 +739,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.facebook_app_id') is-invalid @enderror"
                                                     placeholder="{{ translate('APP ID') }}"
-                                                    wire:model.defer="settings.facebook_app_id.value" />
+                                                    wire:model.defer="settings.facebook_app_id" />
 
-                                            <x-system.invalid-msg field="settings.facebook_app_id.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.facebook_app_id"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Facebook APP ID -->
@@ -755,9 +755,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.facebook_app_secret') is-invalid @enderror"
                                                     placeholder="{{ translate('APP Secret') }}"
-                                                    wire:model.defer="settings.facebook_app_secret.value" />
+                                                    wire:model.defer="settings.facebook_app_secret" />
 
-                                            <x-system.invalid-msg field="settings.facebook_app_secret.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.facebook_app_secret"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Facebook APP Secret -->
@@ -778,9 +778,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.google_oauth_client_id') is-invalid @enderror"
                                                     placeholder="{{ translate('Client ID') }}"
-                                                    wire:model.defer="settings.google_oauth_client_id.value" />
+                                                    wire:model.defer="settings.google_oauth_client_id" />
 
-                                            <x-system.invalid-msg field="settings.google_oauth_client_id.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.google_oauth_client_id"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Google OAuth Client ID -->
@@ -794,9 +794,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.google_oauth_client_secret') is-invalid @enderror"
                                                     placeholder="{{ translate('Client Secret') }}"
-                                                    wire:model.defer="settings.google_oauth_client_secret.value" />
+                                                    wire:model.defer="settings.google_oauth_client_secret" />
 
-                                            <x-system.invalid-msg field="settings.google_oauth_client_secret.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.google_oauth_client_secret"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Google OAuth Client Secret -->
@@ -817,9 +817,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.linkedin_client_id') is-invalid @enderror"
                                                     placeholder="{{ translate('Client ID') }}"
-                                                    wire:model.defer="settings.linkedin_client_id.value" />
+                                                    wire:model.defer="settings.linkedin_client_id" />
 
-                                            <x-system.invalid-msg field="settings.linkedin_client_id.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.linkedin_client_id"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END LinkedIn Client ID -->
@@ -833,9 +833,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.linkedin_client_secret') is-invalid @enderror"
                                                     placeholder="{{ translate('Client Secret') }}"
-                                                    wire:model.defer="settings.linkedin_client_secret.value" />
+                                                    wire:model.defer="settings.linkedin_client_secret" />
 
-                                            <x-system.invalid-msg field="settings.linkedin_client_secret.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.linkedin_client_secret"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END LinkedIn Client Secret -->
@@ -848,10 +848,10 @@
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
                                     @click="
-                                        $wire.set('settings.enable_social_logins.value', settings.enable_social_logins.value, true);
-                                        $wire.set('settings.google_login.value', settings.google_login.value, true);
-                                        $wire.set('settings.facebook_login.value', settings.facebook_login.value, true);
-                                        $wire.set('settings.linkedin_login.value', settings.linkedin_login.value, true);
+                                        $wire.set('settings.enable_social_logins', settings.enable_social_logins, true);
+                                        $wire.set('settings.google_login', settings.google_login, true);
+                                        $wire.set('settings.facebook_login', settings.facebook_login, true);
+                                        $wire.set('settings.linkedin_login', settings.linkedin_login, true);
                                     "
                                     wire:click="saveSocial()">
                                 {{ translate('Save') }}
@@ -886,9 +886,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.stripe_pk_test_key') is-invalid @enderror"
                                                     placeholder="{{ translate('PK Test') }}"
-                                                    wire:model.defer="settings.stripe_pk_test_key.value" />
+                                                    wire:model.defer="settings.stripe_pk_test_key" />
 
-                                            <x-system.invalid-msg field="settings.stripe_pk_test_key.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.stripe_pk_test_key"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Stripe Publishable Test Key -->
@@ -902,9 +902,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.stripe_sk_test_key') is-invalid @enderror"
                                                     placeholder="{{ translate('SK Test') }}"
-                                                    wire:model.defer="settings.stripe_sk_test_key.value" />
+                                                    wire:model.defer="settings.stripe_sk_test_key" />
 
-                                            <x-system.invalid-msg field="settings.stripe_sk_test_key.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.stripe_sk_test_key"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Stripe Secrets Test Key -->
@@ -918,9 +918,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.stripe_pk_live_key') is-invalid @enderror"
                                                     placeholder="{{ translate('PK Live') }}"
-                                                    wire:model.defer="settings.stripe_pk_live_key.value" />
+                                                    wire:model.defer="settings.stripe_pk_live_key" />
 
-                                            <x-system.invalid-msg field="settings.stripe_pk_live_key.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.stripe_pk_live_key"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Stripe Publishable Live Key -->
@@ -934,9 +934,9 @@
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             <input type="text" class="form-standard @error('settings.stripe_sk_live_key') is-invalid @enderror"
                                                     placeholder="{{ translate('SK Live') }}"
-                                                    wire:model.defer="settings.stripe_sk_live_key.value" />
+                                                    wire:model.defer="settings.stripe_sk_live_key" />
 
-                                            <x-system.invalid-msg field="settings.stripe_sk_live_key.value"></x-system.invalid-msg>
+                                            <x-system.invalid-msg field="settings.stripe_sk_live_key"></x-system.invalid-msg>
                                         </div>
                                     </div>
                                     <!-- END Stripe Secrets Live Key -->
@@ -984,7 +984,7 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.mailerlite_api_token.value" />
+                                            <x-dashboard.form.input field="settings.mailerlite_api_token" />
                                         </div>
                                     </div>
                                     <!-- END MailerLite API Token -->
@@ -1014,69 +1014,106 @@
                                       </div>
                                     </div>
                                 </li>
-                                <x-system.form-modal id="app-settings-mailersend" title="MailerSend">
-                                    <!-- MailerSend API Token-->
-                                    <div class="flex flex-col mb-3" x-data="{}">
-                                        <label class="block text-sm font-medium text-gray-900 mb-2">
-                                            {{ translate('MailerSend API Token') }}
-                                        </label>
+                                <x-system.form-modal id="app-settings-mailersend" title="MailerSend" class="!max-w-3xl">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:divide-x">
+                                        <div class="col-span-1">
+                                            <!-- MailerSend API Token-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('MailerSend API Token') }}
+                                                </label>
 
-                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.mailersend_api_token.value" />
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mailersend_api_token" />
+                                                </div>
+                                            </div>
+                                            <!-- END MailerSend API Token -->
+
+                                            <!-- Mail From Address-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('From Address') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_from_address" />
+                                                </div>
+                                            </div>
+                                            <!-- END Mail From Address -->
+
+                                            <!-- Mail From Name-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('From Name') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_from_name" placeholder="{{ translate('Site name is used by default') }}"/>
+                                                </div>
+                                            </div>
+                                            <!-- END Mail From Name -->
+
+                                            <!-- Mail ReplyTo Address-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('Reply to Address') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_reply_to_address" />
+                                                </div>
+                                            </div>
+                                            <!-- END Mail ReplyTo Address -->
+
+                                            <!-- Mail ReplyTo Name-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('Reply to Name') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.mail_reply_to_name" placeholder="{{ translate('Site name is used by default') }}"/>
+                                                </div>
+                                            </div>
+                                            <!-- END Mail ReplyTo Name -->
+                                        </div>
+                                        <div class="col-span-1 md:pl-5">
+                                            {{-- Transactional Emails Templates IDs --}}
+
+                                            {{-- <!-- User Welcome Email-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('User Welcome Email ') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.transactional_email_templates_list.user_welcome_email.en" />
+                                                </div>
+                                            </div>
+                                            <!-- END User Welcome Email- -->
+
+                                            <!-- User Verification Email-->
+                                            <div class="flex flex-col mb-3" x-data="{}">
+                                                <label class="block text-sm font-medium text-gray-900 mb-2">
+                                                    {{ translate('User Verification Email') }}
+                                                </label>
+
+                                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                                    <x-dashboard.form.input field="settings.transactional_email_templates_list.user_welcome_email.en" />
+                                                </div>
+                                            </div>
+                                            <!-- END User Verification Email- --> --}}
                                         </div>
                                     </div>
-                                    <!-- END MailerSend API Token -->
 
-                                    <!-- Mail From Address-->
-                                    <div class="flex flex-col mb-3" x-data="{}">
-                                        <label class="block text-sm font-medium text-gray-900 mb-2">
-                                            {{ translate('From Address') }}
-                                        </label>
-
-                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.mail_from_address.value" />
-                                        </div>
-                                    </div>
-                                    <!-- END Mail From Address -->
-
-                                    <!-- Mail From Name-->
-                                    <div class="flex flex-col mb-3" x-data="{}">
-                                        <label class="block text-sm font-medium text-gray-900 mb-2">
-                                            {{ translate('From Name') }}
-                                        </label>
-
-                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.mail_from_name.value" placeholder="{{ translate('Site name is used by default') }}"/>
-                                        </div>
-                                    </div>
-                                    <!-- END Mail From Name -->
-
-                                    <!-- Mail ReplyTo Address-->
-                                    <div class="flex flex-col mb-3" x-data="{}">
-                                        <label class="block text-sm font-medium text-gray-900 mb-2">
-                                            {{ translate('Reply to Address') }}
-                                        </label>
-
-                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.mail_reply_to_address.value" />
-                                        </div>
-                                    </div>
-                                    <!-- END Mail ReplyTo Address -->
-
-                                    <!-- Mail ReplyTo Name-->
-                                    <div class="flex flex-col mb-3" x-data="{}">
-                                        <label class="block text-sm font-medium text-gray-900 mb-2">
-                                            {{ translate('Reply to Name') }}
-                                        </label>
-
-                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.mail_reply_to_name.value" placeholder="{{ translate('Site name is used by default') }}"/>
-                                        </div>
-                                    </div>
-                                    <!-- END Mail ReplyTo Name -->
+                                    
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
-                                        <button type="button" class="btn btn-primary ml-auto btn-sm" wire:click="saveIntegrations('integrations.mailersend')">
+                                        <button type="button" class="btn btn-primary ml-auto btn-sm" 
+                                            @click="
+                                                $wire.set('settings.transactional_email_templates_list', settings.transactional_email_templates_list, true);
+                                            "
+                                            wire:click="saveIntegrations('integrations.mailersend')">
                                             {{ translate('Save') }}
                                         </button>
                                     </div>
@@ -1108,7 +1145,7 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.toggle field="settings.google_analytics_enabled.value" />
+                                            <x-dashboard.form.toggle field="settings.google_analytics_enabled" />
                                         </div>
                                     </div>
                                     <!-- END Google Analytics Enabled -->
@@ -1120,14 +1157,14 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.gtag_id.value" />
+                                            <x-dashboard.form.input field="settings.gtag_id" />
                                         </div>
                                     </div>
                                     <!-- END Gtag ID -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
-                                            $wire.set('settings.google_analytics_enabled.value', settings.google_analytics_enabled.value, true);
+                                            $wire.set('settings.google_analytics_enabled', settings.google_analytics_enabled, true);
                                         "  wire:click="saveIntegrations('integrations.google_analytics')">
                                             {{ translate('Save') }}
                                         </button>
@@ -1160,7 +1197,7 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.toggle field="settings.google_recaptcha_enabled.value" />
+                                            <x-dashboard.form.toggle field="settings.google_recaptcha_enabled" />
                                         </div>
                                     </div>
                                     <!-- END Google Recaptcha Enabled -->
@@ -1172,7 +1209,7 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.google_recaptcha_site_key.value" />
+                                            <x-dashboard.form.input field="settings.google_recaptcha_site_key" />
                                         </div>
                                     </div>
                                     <!-- END Google Recaptcha Site Key -->
@@ -1184,14 +1221,14 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.google_recaptcha_secret_key.value" />
+                                            <x-dashboard.form.input field="settings.google_recaptcha_secret_key" />
                                         </div>
                                     </div>
                                     <!-- END Google Recaptcha Secret Key -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
-                                            $wire.set('settings.google_recaptcha_enabled.value', settings.google_recaptcha_enabled.value, true);
+                                            $wire.set('settings.google_recaptcha_enabled', settings.google_recaptcha_enabled, true);
                                         "  wire:click="saveIntegrations('integrations.google_recaptcha')">
                                             {{ translate('Save') }}
                                         </button>
@@ -1224,7 +1261,7 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.toggle field="settings.facebook_pixel_enabled.value" />
+                                            <x-dashboard.form.toggle field="settings.facebook_pixel_enabled" />
                                         </div>
                                     </div>
                                     <!-- END Facebook Pixel Enabled -->
@@ -1236,14 +1273,14 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.facebook_pixel_id.value" />
+                                            <x-dashboard.form.input field="settings.facebook_pixel_id" />
                                         </div>
                                     </div>
                                     <!-- END Facebook Pixel ID -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
-                                            $wire.set('settings.facebook_pixel_enabled.value', settings.facebook_pixel_enabled.value, true);
+                                            $wire.set('settings.facebook_pixel_enabled', settings.facebook_pixel_enabled, true);
                                         "  wire:click="saveIntegrations('integrations.facebook_pixel')">
                                             {{ translate('Save') }}
                                         </button>
@@ -1276,7 +1313,7 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.toggle field="settings.google_tag_manager_enabled.value" />
+                                            <x-dashboard.form.toggle field="settings.google_tag_manager_enabled" />
                                         </div>
                                     </div>
                                     <!-- END Google Tag Manager Enabled -->
@@ -1288,14 +1325,14 @@
                                         </label>
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                            <x-dashboard.form.input field="settings.google_tag_manager_id.value" />
+                                            <x-dashboard.form.input field="settings.google_tag_manager_id" />
                                         </div>
                                     </div>
                                     <!-- END  Google tags manager ID -->
 
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" @click="
-                                            $wire.set('settings.google_tag_manager_enabled.value', settings.google_tag_manager_enabled.value, true);
+                                            $wire.set('settings.google_tag_manager_enabled', settings.google_tag_manager_enabled, true);
                                         "  wire:click="saveIntegrations('integrations.google_tag_manager')">
                                             {{ translate('Save') }}
                                         </button>
@@ -1312,14 +1349,14 @@
                             <div class="flex flex-col" x-data="{
                                 all_user_meta: @js(\App\Models\UserMeta::metaDataTypes()),
                                 toggleField(key) {
-                                    if(settings.user_meta_fields_in_use.value == null || settings.user_meta_fields_in_use.value == undefined) {
-                                        settings.user_meta_fields_in_use.value = {};
+                                    if(settings.user_meta_fields_in_use == null || settings.user_meta_fields_in_use == undefined) {
+                                        settings.user_meta_fields_in_use = {};
                                     }
 
-                                    if(settings.user_meta_fields_in_use.value.hasOwnProperty(key)) {
-                                        delete settings.user_meta_fields_in_use.value[key];
+                                    if(settings.user_meta_fields_in_use.hasOwnProperty(key)) {
+                                        delete settings.user_meta_fields_in_use[key];
                                     } else {
-                                        settings.user_meta_fields_in_use.value[key] = {
+                                        settings.user_meta_fields_in_use[key] = {
                                             'required': false,
                                             'onboarding': false,
                                             'registration': false,
@@ -1329,20 +1366,20 @@
                                     }
                                 },
                                 toggleProperty(key, property) {
-                                    if(_.get(settings.user_meta_fields_in_use.value, key+'.'+property, null) === null) {
-                                        _.set(settings.user_meta_fields_in_use.value, key+'.'+property, false); // if it doesn't exist, set it!
+                                    if(_.get(settings.user_meta_fields_in_use, key+'.'+property, null) === null) {
+                                        _.set(settings.user_meta_fields_in_use, key+'.'+property, false); // if it doesn't exist, set it!
                                     }
 
-                                    if(_.get(settings.user_meta_fields_in_use.value, key+'.'+property, null) === false) {
-                                        _.set(settings.user_meta_fields_in_use.value, key+'.'+property, true);
+                                    if(_.get(settings.user_meta_fields_in_use, key+'.'+property, null) === false) {
+                                        _.set(settings.user_meta_fields_in_use, key+'.'+property, true);
                                     } else {
-                                        _.set(settings.user_meta_fields_in_use.value, key+'.'+property, false);
+                                        _.set(settings.user_meta_fields_in_use, key+'.'+property, false);
                                     }
                                 },
                                 initFields() {
-                                    if(settings.user_meta_fields_in_use.value != null && typeof settings.user_meta_fields_in_use.value === 'object') {
-                                        for (const key in settings.user_meta_fields_in_use.value) {
-                                            settings.user_meta_fields_in_use.value[key]['type'] = this.all_user_meta[key];
+                                    if(settings.user_meta_fields_in_use != null && typeof settings.user_meta_fields_in_use === 'object') {
+                                        for (const key in settings.user_meta_fields_in_use) {
+                                            settings.user_meta_fields_in_use[key]['type'] = this.all_user_meta[key];
                                         }
                                     }
                                 }
@@ -1381,30 +1418,30 @@
                                                             <td class="whitespace-nowrap py-2 px-3 text-14 font-medium text-gray-900 " x-text="key"></td>
                                                             <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
                                                                 <button type="button" @click="toggleField(key)"
-                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key, null) !== null , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key, null) === null}"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use, key, null) !== null , 'bg-gray-200':_.get(settings.user_meta_fields_in_use, key, null) === null}"
                                                                             class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key, null) !== null, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key, null) === null}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use, key, null) !== null, 'translate-x-0':_.get(settings.user_meta_fields_in_use, key, null) === null}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                                 </button>
                                                             </td>
                                                             <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
-                                                                <button type="button" @click="toggleProperty(key, 'required')" x-show="_.get(settings.user_meta_fields_in_use.value, key, null) !== null"
-                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.required', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.required', false) === false}"
+                                                                <button type="button" @click="toggleProperty(key, 'required')" x-show="_.get(settings.user_meta_fields_in_use, key, null) !== null"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use, key+'.required', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use, key+'.required', false) === false}"
                                                                             class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.required', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.required', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use, key+'.required', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use, key+'.required', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                                 </button>
                                                             </td>
                                                             <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
-                                                                <button type="button" @click="toggleProperty(key, 'onboarding')" x-show="_.get(settings.user_meta_fields_in_use.value, key, null) !== null"
-                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) === false}"
+                                                                <button type="button" @click="toggleProperty(key, 'onboarding')" x-show="_.get(settings.user_meta_fields_in_use, key, null) !== null"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use, key+'.onboarding', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use, key+'.onboarding', false) === false}"
                                                                             class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.onboarding', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use, key+'.onboarding', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use, key+'.onboarding', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                                 </button>
                                                             </td>
                                                             <td class="whitespace-nowrap px-1 py-2 text-sm text-gray-500 text-center">
-                                                                <button type="button" @click="toggleProperty(key, 'registration')" x-show="_.get(settings.user_meta_fields_in_use.value, key, null) !== null"
-                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use.value, key+'.registration', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use.value, key+'.registration', false) === false}"
+                                                                <button type="button" @click="toggleProperty(key, 'registration')" x-show="_.get(settings.user_meta_fields_in_use, key, null) !== null"
+                                                                            :class="{'bg-primary': _.get(settings.user_meta_fields_in_use, key+'.registration', false) !== false , 'bg-gray-200':_.get(settings.user_meta_fields_in_use, key+'.registration', false) === false}"
                                                                             class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" role="switch" >
-                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use.value, key+'.registration', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use.value, key+'.registration', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
+                                                                        <span :class="{'translate-x-5':_.get(settings.user_meta_fields_in_use, key+'.registration', false) !== false, 'translate-x-0':_.get(settings.user_meta_fields_in_use, key+'.registration', false) === false}" class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -1420,7 +1457,7 @@
                                     <div class="w-full flex justify-end mt-4" x-data="{}">
                                         <button type="button" class="btn btn-primary ml-auto btn-sm" 
                                             @click="
-                                                $wire.set('settings.user_meta_fields_in_use.value', settings.user_meta_fields_in_use.value, true);
+                                                $wire.set('settings.user_meta_fields_in_use', settings.user_meta_fields_in_use, true);
                                             "
                                             wire:click="saveAdvanced('user_meta_fields')">
                                             {{ translate('Save') }}
