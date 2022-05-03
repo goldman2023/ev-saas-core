@@ -18,6 +18,9 @@
 
     <title>@yield('meta_title', get_site_name() .' | '.get_setting('site_motto'))</title>
 
+    <script id="img-proxy-data" type="application/json">
+        @json(\IMG::getIMGProxyData())
+    </script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ mix('css/app.css', 'themes/ev-tailwind') }}">
