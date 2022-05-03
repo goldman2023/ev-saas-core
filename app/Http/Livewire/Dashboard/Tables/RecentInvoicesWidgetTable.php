@@ -36,9 +36,10 @@ class RecentInvoicesWidgetTable extends DataTableComponent
 
     protected string $tableName = 'invoices';
 
-    public function mount($for = 'me')
+    public function mount($for = 'me', $order = null)
     {
         $this->for = $for;
+        $this->order = $order;
 
         parent::mount();
     }
@@ -69,7 +70,8 @@ class RecentInvoicesWidgetTable extends DataTableComponent
         return Invoice::query()
             ->when($this->for === 'me', fn ($query, $value) => $query->my())
             ->when($this->for === 'shop', fn ($query, $value) => $query->shopOrders())
-            ->when($this->for === 'all', fn ($query, $value) => $query);
+            ->when($this->for === 'all', fn ($query, $value) => $query)
+            ->when($this->for === 'order', fn ($query, $value)  => $query->where('order_id', $this->order->id));
 
             // ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             // ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))

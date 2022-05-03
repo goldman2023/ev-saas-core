@@ -30,7 +30,7 @@ class TenantSettingsService
     }
 
     public function get($name, $default = null) {
-        return isset($this->settings[$name]) ? ($this->settings[$name]['value'] ?? $default) : $default;
+        return isset($this->settings[$name]) ? ($this->settings[$name] ?? $default) : $default;
     }
 
     public function getModel($name) {
@@ -200,6 +200,9 @@ class TenantSettingsService
                 'user_welcome_email' => [
                     'en' => 'string'
                 ],
+                'user_forgot_your_password_email' => [
+                    'en' => 'string'
+                ],
                 'user_verification_email' => [
                     'en' => 'string'
                 ],
@@ -213,6 +216,12 @@ class TenantSettingsService
                     'en' => 'string'
                 ],
                 'invoice_payment_failed_email' => [
+                    'en' => 'string'
+                ],
+                'new_follower_email' => [
+                    'en' => 'string'
+                ],
+                'new_message_email' => [
                     'en' => 'string'
                 ],
             ],
