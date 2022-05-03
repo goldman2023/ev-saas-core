@@ -165,7 +165,7 @@ class MyAccountForm extends Component
         }
 
         if ($this->onboarding) {
-            return redirect()->route('onboarding.step4');
+            return redirect()->route('onboarding.work-and-education');
         }
     }
 

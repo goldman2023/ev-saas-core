@@ -10,7 +10,7 @@
 </div>
 <section class="container py-10">
     <div class="grid grid-cols-1 md:grid-cols-3 space-2 gap-10">
-
+        
         <div class="col-span-1 md:col-span-2">
             <div class="bg-white">
                 <div class="max-w-3xl mx-auto">
