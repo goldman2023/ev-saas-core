@@ -1,15 +1,35 @@
-<div class="w-full max-h-[802px] overflow-y-auto" 
+<div class="w-full  " 
         x-data="selector()" 
-        x-init="initSelector()"
+        x-init="
+            displayed_items = all_categories; 
+            items = all_categories_flat; 
+            $watch('search_query', (value) => {
+                if(value == '') {
+                    displayed_items = all_categories;
+                    return;
+                }
+
+                let newItems = {};
+                
+                Object.values(items).filter(entry => {
+                    if (entry['name'].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+                        newItems[entry['slug']] = entry;
+                        return true;
+                    }
+                });
+
+                displayed_items = newItems;
+            })
+        "
         @init-form.window="initSelector()">
 
-    {{-- <div class="w-full border-b border-gray-200 py-2 mb-0 px-2">
+    <div class="w-full border-b border-gray-200 pb-4 mb-0 px-2">
         <input type="text" class="form-standard w-full focus:ring-0 " placeholder="{{ translate('Search categories') }}" x-model.debounce.500ms="search_query" />
-    </div> --}}
+    </div>
 
-    <fieldset class="space-y-1">
+    <fieldset class="space-y-1 max-h-[790px] overflow-y-auto">
         <ul>
-            <template x-for="(category, slug) in all_categories">
+            <template x-for="(category, slug) in displayed_items">
                 <li class="block" x-effect="$nextTick(() => { $el.innerHTML = renderCategory(category, slug); })"></li>
             </template>
         </ul>
@@ -21,27 +41,9 @@
 <script>
     function selector() {
         return {
-            // items: all_categories_flat,
-            // displayed_items: all_categories,
+            items: [],
+            displayed_items: [],
             search_query: '',
-            initSelector() {
-                // $watch('search_query', (value) => {
-                //     if(value == '') {
-                //         this.displayed_items = all_categories;
-                //         return;
-                //     }
-
-                //     let newItems = {};
-                //     Object.entries(this.items).filter(entry => {
-                //         if (entry['name'].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
-                //             newItems[entry['slug']] = entry;
-                //             return true;
-                //         }
-                //     });
-
-                //     this.displayed_items = newItems;
-                // })
-            },
             renderCategory(category, slug) {
                 let hasChildren = category.children !== null && category.children !== undefined && Object.keys(category.children).length > 0;
                 // let show_children = ;

@@ -44,6 +44,7 @@ class AppSettingsForm extends Component
                 'settings.site_name.value' => ['required'],
                 'settings.site_motto.value' => ['required', ],
                 'settings.maintenance_mode.value' => ['required'],
+                'settings.brands_ct_enabled.value' => ['required'],
                 'settings.tos_url.value' => [''],
                 'settings.cookies_url.value' => [''],
                 'settings.eula_url.value' => [''],

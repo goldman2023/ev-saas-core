@@ -1384,34 +1384,36 @@
                     {{-- END Tags --}}
 
                     {{-- Brand --}}
-                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
-                            open: false,
-                        }" :class="{'p-4': open}">
-                        <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Brand') }}</h3>
-                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
-                        </div>
+                    @if(get_tenant_setting('brands_ct_enabled'))
+                        <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                                open: false,
+                            }" :class="{'p-4': open}">
+                            <div class="w-full flex items-center justify-between cursor-pointer " @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Brand') }}</h3>
+                                @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                            </div>
 
-                        <div class="w-full" x-show="open">
-                            <!-- Brand -->
-                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-startsm:pt-5">
-                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                                    {{ translate('Brand') }}
-                                </label>
+                            <div class="w-full" x-show="open">
+                                <!-- Brand -->
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-startsm:pt-5">
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{ translate('Brand') }}
+                                    </label>
 
-                                <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <div class="grid grid-cols-10 gap-3">
-                                        <div class="col-span-10">
-                                            <x-dashboard.form.select :items="EVS::getMappedBrands()" selected="brand_id"></x-dashboard.form.select>
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <div class="grid grid-cols-10 gap-3">
+                                            <div class="col-span-10">
+                                                <x-dashboard.form.select :items="EVS::getMappedBrands()" selected="brand_id"></x-dashboard.form.select>
+                                            </div>
+
+                                            <x-system.invalid-msg class="col-span-10" field="product.brand_id"></x-system.invalid-msg>
                                         </div>
-
-                                        <x-system.invalid-msg class="col-span-10" field="product.brand_id"></x-system.invalid-msg>
                                     </div>
                                 </div>
+                                <!-- END Brand -->
                             </div>
-                            <!-- END Brand -->
                         </div>
-                    </div>
+                    @endif
                     {{-- END Brand --}}
 
 

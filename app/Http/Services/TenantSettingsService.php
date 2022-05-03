@@ -103,6 +103,9 @@ class TenantSettingsService
             'maintenance_mode' => 'boolean',
             'contact_details' => 'array',
 
+            // Content Types
+            'brands_ct_enabled' => 'boolean', 
+
             'documentation_url' => 'string',
             'tos_url' => 'string',
             'cookies_url' => 'string',

@@ -1,4 +1,4 @@
-<div class="fixed z-50 inset-0 overflow-y-auto" x-data="{
+<div class="fixed z-[10000] inset-0 overflow-y-auto" x-data="{
     displayModal: false,
     for_id: @entangle('for_id'),
     media: @entangle('media'),
