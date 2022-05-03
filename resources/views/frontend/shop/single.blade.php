@@ -100,6 +100,7 @@
                                {{ $shop->name }} {{ translate('Activity') }}
                             </h2>
 
+                            @if($shop->isVerified())
                             <p class="mt-1 max-w-2xl text-sm text-gray-500 flex items-center">
                                 <span
                                     class="h-4 w-4 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white mr-3">
@@ -115,6 +116,7 @@
                                     {{ translate('Verified profile') }}
                                 </span>
                             </p>
+                            @endif
                         </div>
                         <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
                             <dl class="grid grid-cols-1 gap-10 sm:grid-cols-2">
@@ -144,7 +146,9 @@
                             {{ translate('Profile information') }}
                         </h2>
                         <div class="text-right ml-auto">
+                            @if($shop->isVerified())
                             <x-feed.elements.verified-badge :item="$shop"></x-feed.elements.verified-badge>
+                            @endif
                         </div>
                     </div>
 
@@ -160,9 +164,8 @@
                         <div>
                             @if($shop->addresses()->first())
                             <span class="inline text-sm font-semibold">
-                                <img class="inline-block mr-2" src="{{ static_asset('assets/img/flags/' . $shop->addresses()->first()->country ) }}.png" >
+                                <img class="inline-block mr-2" src="{{ static_asset('assets/img/flags/' . strtolower($shop->addresses()->first()->country) ) }}.png" >
                                 {{ country_name_by_code($shop->addresses()->first()->country) }}
-
                             </span>
                             @endif
                         </div>
@@ -299,9 +302,11 @@
                                             </span>
                                         </div>
                                         <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                            @if($shop->isVerified())
                                             <div>
                                                 <p class="text-sm text-gray-500">{{ translate('Verified Profile') }}</p>
                                             </div>
+                                            @endif
                                             <div class="text-right text-sm whitespace-nowrap text-gray-500">
                                                 <time datetime="{{ $shop->updated_at }}">{{ $shop->updated_at->diffForHumans() }}</time>
                                             </div>
@@ -314,9 +319,10 @@
                         </ul>
                     </div>
                     <div class="mt-6 flex flex-col justify-stretch">
-                        <button type="button"
-                            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Advance
-                            to offer</button>
+                        <a type="button"
+                            class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            {{ translate('View full profile') }}
+                    </a>
                     </div>
                 </div>
             </section>
