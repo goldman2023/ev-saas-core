@@ -15,7 +15,7 @@ class GrapeController extends Controller
 
         $page = null;
 
-        $sections = File::allFiles(public_path() . '/tailwindui/components/ecommerce/');
+        $sections = File::allFiles(public_path() . '/tailwindui/components/');
         $content = "";
 
         foreach($sections as $section) {
