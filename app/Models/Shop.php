@@ -65,6 +65,10 @@ class Shop extends WeBaseModel
 
     protected $fillable = ['name', 'slug', 'excerpt', 'content', 'meta_title', 'meta_description'];
 
+    protected $casts = [
+        'verified' => 'boolean',
+    ];
+
     /**
      * Get the options for generating the slug.
      */

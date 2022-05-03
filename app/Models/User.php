@@ -41,6 +41,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'banned' => 'boolean',
+        'verified' => 'boolean',
     ];
 
     public static array $user_types = ['admin', 'moderator', 'seller', 'staff', 'customer'];
