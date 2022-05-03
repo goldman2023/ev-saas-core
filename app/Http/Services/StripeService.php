@@ -810,6 +810,10 @@ class StripeService
             if($session->mode === 'payment') {
                 // One-time payments do no t send invoice.created/paid hook, so we must change 
                 $invoice->is_temp = false;
+                $invoice->base_price = $order->base_price;
+                $invoice->discount_amount = $order->discount_amount;
+                $invoice->subtotal_price = $session->amount_subtotal / 100;
+                $invoice->total_price = $session->amount_total / 100; // should be TotalPrice in future...
             }
 
             // Change invoice status to paid if mode is 'payment', but if it's a subscription, change status to 'pending' because status will truly change on 'invoice.paid' webhook
@@ -830,11 +834,7 @@ class StripeService
             $invoice->billing_zip = $order->billing_zip;
 
             // Take invoice totals from $order itself
-            // $invoice->base_price = $order->base_price;
-            // $invoice->discount_amount = $order->discount_amount;
-            // $invoice->subtotal_price = $order->subtotal_price;
-            // $invoice->total_price = $order->total_price; // should be TotalPrice in future...
-            // $invoice->grace_period = $order->invoice_grace_period ?? '';
+            
 
             // Take the info from stripe...
             $meta = $invoice->meta;
