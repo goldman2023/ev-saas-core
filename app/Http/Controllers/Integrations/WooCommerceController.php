@@ -237,4 +237,74 @@ class WooCommerceController extends Controller
     {
         return view('frontend.dashboard.integrations.woocommerce.import-results');
     }
+
+
+    public function transfer_woocommerce_produts($all = true) {
+
+        $data = [
+            'name' => 'Variable Product',
+            'type' => 'variable',
+            'description' => 'Variable product full description.',
+            'short_description' => 'Variable product short description.',
+            'categories' => [
+                [
+                  'id' => 1
+                ],
+                [
+                  'id' => 3
+                ],
+                [
+                  'id' => 5
+                ]
+            ],
+            'images' => [
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_4_front.jpg'
+                ],
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_4_back.jpg'
+                ],
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_3_front.jpg'
+                ],
+                [
+                    'src' => 'http://demo.woothemes.com/woocommerce/wp-content/uploads/sites/56/2013/06/T_3_back.jpg'
+                ]
+            ],
+            'attributes' => [
+                [
+                    'id' => 6,
+                    'position' => 0,
+                    'visible' => false,
+                    'variation' => true,
+                    'options' => [
+                        'Black',
+                        'Green'
+                    ]
+                ],
+                [
+                    'name' => 'Size',
+                    'position' => 0,
+                    'visible' => true,
+                    'variation' => true,
+                    'options' => [
+                        'S',
+                        'M'
+                    ]
+                ]
+            ],
+            'default_attributes' => [
+                [
+                    'id' => 6,
+                    'option' => 'Black'
+                ],
+                [
+                    'name' => 'Size',
+                    'option' => 'S'
+                ]
+            ]
+        ];
+
+        $product = Product::create($data);
+    }
 }

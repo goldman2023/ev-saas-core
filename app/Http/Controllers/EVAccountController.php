@@ -21,6 +21,7 @@ class EVAccountController extends Controller
             $data = Activity::whereNotIn('description', ['viewed', 'deleted', 'updated', 'liked', 'add_to_cart'])
                 ->whereNotIn('subject_type', ['Spatie\Activitylog\Models\Activity', 'App/Models/User'])
                 ->whereHas('subject')
+                ->where('causer_id', $id)
                 ->get();
 
             return view('frontend.user.profile', compact(['user', 'data']));
