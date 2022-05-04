@@ -71,7 +71,7 @@ class StripeService
     public function saveStripeProduct($model)
     {
         // Find model's stripe ID in CoreMeta and based on it decide wheter to create OR update Stripe Product
-        $stripe_product_id = $model->core_meta->where('key', '=', $this->mode_prefix.'stripe_product_id')->first();
+        $stripe_product_id = $model->core_meta->where('key', '=', $this->mode_prefix.'stripe_product_id')->first()?->value ?? '';
 
         if (empty($stripe_product_id)) {
             //Insert Stripe product
@@ -147,7 +147,7 @@ class StripeService
                 $description = $model->name;
             }
         }
-
+        
         try {
             // Update Stripe Product
             $stripe_product = $this->stripe->products->update(
@@ -167,6 +167,7 @@ class StripeService
         } catch (\Exception $e) {
             // Cannot update product with ID: $stripe_product_id,
             // TODO: Should we create another product and assign new stripe_product_id to our product in DB?
+            Log::error($e);
             Log::error('stripe_product_id in our core_meta for product ('.$model->id.') is obsolete, should we create a new stripe product for this product?');
             return;
         }
@@ -182,7 +183,7 @@ class StripeService
             $stripe_price = $this->createStripePrice($model, $stripe_product_id);
         }
 
-
+        
         // Compare current model price and Last Stripe Price and if it does not match, create a new price
         if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
             // There is a difference between stripe price and our local price of the product
