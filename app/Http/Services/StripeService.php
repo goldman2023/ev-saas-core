@@ -71,14 +71,14 @@ class StripeService
     public function saveStripeProduct($model)
     {
         // Find model's stripe ID in CoreMeta and based on it decide wheter to create OR update Stripe Product
-        $stripe_id = $model->core_meta->where('key', '=', $this->mode_prefix.'stripe_product_id')->first();
+        $stripe_product_id = $model->core_meta->where('key', '=', $this->mode_prefix.'stripe_product_id')->first();
 
-        if (empty($stripe_id)) {
+        if (empty($stripe_product_id)) {
             //Insert Stripe product
             $this->createStripeProduct($model);
         } else {
             // Update Stripe product
-            $this->updateStripeProduct($model, $stripe_id);
+            $this->updateStripeProduct($model, $stripe_product_id);
         }
     }
 
@@ -137,9 +137,61 @@ class StripeService
         return $stripe_product;
     }
 
-    protected function updateStripeProduct($model, $stripe_id)
+    protected function updateStripeProduct($model, $stripe_product_id)
     {
-        return null;
+        // Reminder: Stripe price must be in cents!!!
+        $description = $model->excerpt;
+        if (empty($description)) {
+            $description = $model->description;
+            if (empty($description)) {
+                $description = $model->name;
+            }
+        }
+
+        try {
+            // Update Stripe Product
+            $stripe_product = $this->stripe->products->update(
+                $stripe_product_id,
+                [
+                    'name' => $model->name,
+                    'active' => true,
+                    'description' => $description,
+                    'images' => [$model->getThumbnail(['w' => 500])],
+                    'shippable' => $model->isShippable(),
+                    // 'tax_code' => '',
+                    'url' => $model->getPermalink(),
+                    'unit_label' => substr($model?->unit ?? 'pc', 0, 12),
+                    'metadata' => []
+                ]
+            );
+        } catch (\Exception $e) {
+            // Cannot update product with ID: $stripe_product_id,
+            // TODO: Should we create another product and assign new stripe_product_id to our product in DB?
+            Log::error('stripe_product_id in our core_meta for product ('.$model->id.') is obsolete, should we create a new stripe product for this product?');
+            return;
+        }
+
+        // Create Stripe Price
+        $stripe_price_id = $model->core_meta()->where('key', '=', $this->mode_prefix . 'stripe_price_id')->first()?->value ?? null;
+
+        try {
+            $stripe_price = $this->stripe->prices->retrieve($stripe_price_id, []);
+        } catch (\Exception $e) {
+            // What if there is no price in stripe under given ID OR if old Stripe price doesn't equal to curret product price?
+            // 1. Create a new stripe price if price is missing in Stripe
+            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+        }
+
+
+        // Compare current model price and Last Stripe Price and if it does not match, create a new price
+        if ((float) $stripe_price->unit_amount !== (float) $model->getTotalPrice() * 100) {
+            // There is a difference between stripe price and our local price of the product
+
+            // Create new Stripe Price
+            $stripe_price = $this->createStripePrice($model, $stripe_product_id);
+        }
+
+        return $stripe_product;
     }
 
     protected function createStripePrice($model, $stripe_product_id = null)
@@ -305,9 +357,18 @@ class StripeService
                     # Provide the exact Price ID (e.g. pr_1234) of the model you want to sell
                     'price' => $stripe_price->id,
                     'quantity' => $qty,
+                    'adjustable_quantity' => [
+                        'enabled' => true,
+                        // 'minimum' => 0,
+                        // 'maximum' => 99
+                    ]
                 ]
             ],
             'mode' => $model->isSubscribable() ? 'subscription' : 'payment',
+            'allow_promotion_codes' => true,
+            'tax_id_collection' => [
+                'enabled' => true,
+            ],
             'billing_address_collection' => 'required',
             'client_reference_id' => $is_preview ? 'preview' : $order->id,
             'metadata' => [
@@ -353,10 +414,13 @@ class StripeService
             ];
         }
 
-        if (auth()->user()) {
+        if (!empty(auth()->user())) {
             // Create Stripe customer if it doesn't exist
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
+            $stripe_args['payment_intent_data'] = [
+                'receipt_email' => auth()->user()->email,
+            ];
         }
 
         // Create a Stripe Checkout Link
@@ -808,7 +872,7 @@ class StripeService
             $invoice = Invoice::withoutGlobalScopes()->findOrFail($session->metadata->invoice_id ?? -1);;
 
             if($session->mode === 'payment') {
-                // One-time payments do no t send invoice.created/paid hook, so we must change 
+                // One-time payments do not send invoice.created/paid hook, so we must change some invoice properties here!
                 $invoice->is_temp = false;
                 $invoice->base_price = $order->base_price;
                 $invoice->discount_amount = $order->discount_amount;

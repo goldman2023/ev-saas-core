@@ -5,6 +5,8 @@ namespace App\Observers;
 use App\Models\Product;
 use App\Models\TenantSetting;
 use Cache;
+use Payments;
+use StripeService;
 
 class ProductsObserver
 {
@@ -25,6 +27,11 @@ class ProductsObserver
     {
         // When product is saved - invalidate the cache!
         $product->cache()->invalidate(true);
+
+        if(Payments::isStripeEnabled()) {
+            // Update Stripe product
+            StripeService::saveStripeProduct($product);
+        }
     }
 
     /**
