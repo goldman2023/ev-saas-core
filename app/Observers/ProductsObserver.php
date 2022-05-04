@@ -26,6 +26,7 @@ class ProductsObserver
     public function saved(Product $product)
     {
         // When product is saved - invalidate the cache!
+        $product = Product::find($product->id); // For some reason, prices are not correct and show previous prices (if they are changed) if used product is $product given as parameter
         $product->cache()->invalidate(true);
 
         if(Payments::isStripeEnabled()) {
