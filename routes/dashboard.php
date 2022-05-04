@@ -70,11 +70,11 @@ Route::middleware([
         Route::get('/products', [EVProductController::class, 'index'])->name('products.index');
         Route::get('/products/create', [EVProductController::class, 'create2'])->name('product.create');
         // Route::get('/ev-products/create', [EVProductController::class, 'create'])->name('product.create');
-        Route::get('/products/edit/{slug}', [EVProductController::class, 'edit'])->name('product.edit');
-        Route::get('/products/edit/{slug}/details', [EVProductController::class, 'product_details'])->name('product.details');
-        Route::get('/products/edit/{slug}/details/activity', [EVProductController::class, 'product_activity'])->name('product.activity');
-        Route::get('/products/edit/{slug}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
-        Route::get('/products/edit/{slug}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
+        Route::get('/products/edit/{id}', [EVProductController::class, 'edit'])->name('product.edit');
+        Route::get('/products/edit/{id}/details', [EVProductController::class, 'product_details'])->name('product.details');
+        Route::get('/products/edit/{id}/details/activity', [EVProductController::class, 'product_activity'])->name('product.activity');
+        Route::get('/products/edit/{id}/variations', [EVProductController::class, 'edit_variations'])->name('product.edit.variations');
+        Route::get('/products/edit/{id}/stock-management', [EVProductController::class, 'edit_stocks'])->name('product.edit.stocks');
 
         /* Pages */
         Route::get('/pages', [EVPageController::class, 'index'])->name('pages.index');

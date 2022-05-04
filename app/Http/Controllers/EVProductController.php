@@ -45,20 +45,16 @@ class EVProductController extends Controller
     }
 
     /* TODO: Add middleware for owner */
-    public function edit(Request $request, $slug)
+    public function edit(Request $request, $id)
     {
-        $product = Product::where('slug', $slug)->first();
-
-        if ($product) {
-            // $product->convertUploadModelsToIDs(); // DEPRECATED, since we use livewire and alpinejs combo instead of shitty Front JS
-        }
+        $product = Product::findOrFail($id);
 
         return view('frontend.dashboard.products.edit')->with('product', $product);
     }
 
-    public function edit_stocks(Request $request, $slug)
+    public function edit_stocks(Request $request, $id)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::findOrFail($id);
 
         if ($product) {
             $product->convertUploadModelsToIDs();
@@ -69,9 +65,9 @@ class EVProductController extends Controller
             ->with('variations_attributes', $product->variant_attributes());
     }
 
-    public function edit_variations(Request $request, $slug)
+    public function edit_variations(Request $request, $id)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::findOrFail($id);
 
         if ($product) {
             $product->convertUploadModelsToIDs();
@@ -82,16 +78,16 @@ class EVProductController extends Controller
             ->with('variations_attributes', $product->variant_attributes());
     }
 
-    public function product_details(Request $request, $slug)
+    public function product_details(Request $request, $id)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::findOrFail($id);
 
         return view('frontend.dashboard.products.details')->with('product', $product);
     }
 
-    public function product_activity(Request $request, $slug)
+    public function product_activity(Request $request, $id)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::findOrFail($id);
 
         $activity = Activity::all();
 
