@@ -24,7 +24,7 @@
                             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Main Stock Management') }}</h3>
                             <p class="flex items-center-1 max-w-2xl text-sm text-gray-500">
                                 {{ translate('You are currently editing').' ' }}
-                                <a href="{{ route('product.details', ['slug' => $product->slug]) }}" target="_blank" class="badge-info mx-1">{{ $product->name }}</a>
+                                <a href="{{ route('product.details', ['id' => $product->id]) }}" target="_blank" class="badge-info mx-1">{{ $product->name }}</a>
                                 {{ translate('main stock options') }}
                             </p>
                         </div>
@@ -200,13 +200,13 @@
                     {{-- END Main Stock Management --}}
 
                     {{-- Main stock Serial Numbers --}}
-                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-show="!use_serial">
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-show="use_serial" x-cloak>
                         <div class="w-full flex justify-between items-center">
                             <div class="shrink-0">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Serial numbers') }}</h3>
                                 <p class="flex items-center-1 max-w-2xl text-sm text-gray-500">
                                     {{ translate('You are currently editing').' ' }}
-                                    <a href="{{ route('product.details', ['slug' => $product->slug]) }}" target="_blank" class="badge-info mx-1">{{ $product->name }}</a>
+                                    <a href="{{ route('product.details', ['id' => $product->id]) }}" target="_blank" class="badge-info mx-1">{{ $product->name }}</a>
                                     {{ translate('main product serial numbers') }}
                                 </p>
                             </div>
@@ -292,71 +292,7 @@
 
     <livewire:dashboard.forms.serial-numbers.serial-number-form-modal :product="$product"></livewire:dashboard.forms.serial-numbers.serial-number-form-modal>
 
-    <!-- Main Product CARD -->
-    <div class="card container-fluid py-3 mt-3">
-        <div id="main-product-stock-form">
-            <form wire:submit.prevent="updateMainStock" class="row">
-                <div class="col-md-6 mb-1">
-                    <x-ev.form.input name="product.sku" type="text" label="{{ translate('SKU') }}" :required="true" placeholder="{{ translate('SKU of the main product.') }}" >
-                        <small class="text-muted">{{ translate('Leave empty if you want to add only SKU of the variations.') }}</small>
-                    </x-ev.form.input>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <x-ev.form.input name="product.current_stock" :quantity_counter="true" type="number" label="{{ translate('Stock quantity') }}" :required="true" min="0" step="1" :disabled="$product->use_serial">
-                                <small class="text-muted">{{ translate('This is the current stock quantity.') }}</small>
-                            </x-ev.form.input>
-                        </div>
-                        <div class="col-md-6">
-                            <x-ev.form.input name="product.low_stock_qty" :quantity_counter="true" type="number" label="{{ translate('Low stock quantity warning') }}" :required="true"  min="0" step="1">
-                            </x-ev.form.input>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center fw-600 opacity-10">
-                        <label class="toggle-switch mr-2" >
-                            <input type="checkbox" name="product.use_serial" wire:model.defer="product.use_serial"
-                                   class="js-toggle-switch toggle-switch-input"
-                                   data-hs-toggle-switch-options="[]"
-                                   x-ref="product_use_serial"
-                                   x-on:click="
-                                       if(!$($el).is(':checked')) {
-                                            $($refs.serial_numbers_forms).addClass('d-none');
-                                            $('input[name=\'product.current_stock\']').prop('disabled', false)
-                                            .parent().find('.input-group-quantity-counter-btn').removeClass('d-none');
-                                       } else {
-                                            $($refs.serial_numbers_forms).removeClass('d-none');
-                                            $('input[name=\'product.current_stock\']').prop('disabled', true)
-                                            .parent().find('.input-group-quantity-counter-btn').addClass('d-none');
-                                       }
-                                   ">
-                            <span class="toggle-switch-label">
-                                <span class="toggle-switch-indicator"></span>
-                            </span>
-                        </label>
-                        <span class="font-size-1 text-muted">{{ translate('Use serial') }}</span>
-                    </div>
-
-                </div>
-                <div class="col-md-6 d-flex flex-column">
-                    <x-ev.form.radio name="product.stock_visibility_state" :required="true"
-                                     :items="\EVS::getMappedStockVisibilityOptions()"
-                                     label="{{ translate('Stock visibility state') }}"
-                                     value="{{ $product->stock_visibility_state ?: '' }}"></x-ev.form.radio>
-                    <button
-                        type="submit"
-                        class="btn btn-sm btn-no-focus btn-primary align-items-center ml-auto mt-3 save-btn">
-                        <span>{{ translate('Save') }}</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        
-
-    </div>
-    <!-- END: Main Product CARD -->
-
+    
     <!-- Product Variations CARD -->
     @if($product->useVariations() && $product->hasVariations())
     <div class="card container-fluid py-3 mt-3">

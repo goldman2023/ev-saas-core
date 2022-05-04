@@ -9,12 +9,12 @@
     <section>
         <x-dashboard.section-headers.section-header title="{{ translate('Variations Management') }}" text="">
             <x-slot name="content">
-                <a href="{{ route('product.details', $product->slug) }}" class="btn-standard mr-2">
+                <a href="{{ route('product.details', $product->id) }}" class="btn-standard mr-2">
                     @svg('heroicon-o-chevron-left', ['class' => 'h-4 h-4 mr-2'])
                     <span>{{ translate('Details') }}</span>
                 </a>
 
-                <a href="{{ route('product.edit.stocks', $product->slug) }}" class="btn-standard" >
+                <a href="{{ route('product.edit.stocks', $product->id) }}" class="btn-standard" >
                     @svg('heroicon-o-archive', ['class' => 'h-4 h-4'])
                     {{ translate('Stock management') }}
                 </a>
@@ -43,13 +43,13 @@
 
     <div class="ml-auto d-flex align-items-center pr-3">
         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center mr-2"
-           href="{{ route('product.details', $product->slug) }}" target="_blank">
+           href="{{ route('product.details', $product->id) }}" target="_blank">
             @svg('heroicon-o-eye', ['class' => 'square-16 mr-2'])
             {{ translate('Details') }}
         </a>
 
         <a class="btn btn-soft-dark btn-circle btn-xs d-inline-flex align-items-center"
-           href="{{ route('product.edit.stocks', $product->slug) }}">
+           href="{{ route('product.edit.stocks', $product->id) }}">
             @svg('heroicon-o-archive', ['class' => 'square-16 mr-2'])
             {{ translate('Stock Management') }}
         </a>

@@ -1,11 +1,11 @@
 <x-livewire-tables::table.cell class="align-middle p-0">
-    <a class="media align-items-center text-14" href="{{ route('product.details', $row->slug) }}">
+    <a class="media align-items-center text-14" href="{{ route('product.details', $row->id) }}">
         #{{ $row->id }}
     </a>
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle" style="width: 150px; box-sizing: content-box;">
-    <a class="media flex justify-center items-center text-14" href="{{ route('product.details', $row->slug) }}">
+    <a class="media flex justify-center items-center text-14" href="{{ route('product.details', $row->id) }}">
         <x-tenant.system.image alt="{{ $row->name }}" class="w-[80px] h-[60px] object-contain"
             fit="contain" :image="$row->getThumbnail()">
         </x-tenant.system.image>
@@ -13,7 +13,7 @@
 </x-livewire-tables::table.cell>
 
 <x-livewire-tables::table.cell class="align-middle text-center" style="min-width: 200px;">
-    <a href="{{ route('product.details', $row->slug) }}" class="">
+    <a href="{{ route('product.details', $row->id) }}" class="">
         {{ $row->getTranslation('name') }}
     </a>
 </x-livewire-tables::table.cell>
@@ -63,7 +63,7 @@
 
 <x-livewire-tables::table.cell class="align-middle static">
     <div class="flex static justify-center" role="group" x-data="{ isOpen: false }" x-cloak>
-        <a class="btn btn-white flex items-center mr-2" href="{{ route('product.edit', ['slug' => $row->slug]) }}">
+        <a class="btn btn-white flex items-center mr-2" href="{{ route('product.edit', ['id' => $row->id]) }}">
             @svg('heroicon-o-pencil', ['class' => 'w-[18px] h-[18px] mr-2']) {{ translate('Edit') }}
         </a>
 

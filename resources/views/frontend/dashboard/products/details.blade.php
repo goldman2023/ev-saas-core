@@ -157,27 +157,27 @@
                                 </a>
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                    href="{{ route('product.edit.stocks', $product->slug) }}">
+                                    href="{{ route('product.edit.stocks', $product->id) }}">
                                     @svg('heroicon-o-archive', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Stock Management') }}
                                 </a>
 
                                 @if($product->useVariations())
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                    href="{{ route('product.edit.variations', $product->slug) }}">
+                                    href="{{ route('product.edit.variations', $product->id) }}">
                                     @svg('heroicon-o-variable', ['style' => 'height: 16px;', 'class' => 'mr-2'])
                                     {{ translate('Variations') }}
                                 </a>
                                 @endif
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                    href="{{ route('product.edit', $product->slug) }}">
+                                    href="{{ route('product.edit', $product->id) }}">
                                     {{ translate('Edit') }} @svg('heroicon-o-pencil-alt', ['style' => 'height: 16px;',
                                     'class' => 'ml-2'])
                                 </a>
 
                                 <a class="btn btn-soft-info btn-circle btn-xs d-inline-flex align-items-center"
-                                    href="{{ route('product.activity', $product->slug) }}">
+                                    href="{{ route('product.activity', $product->id) }}">
                                     {{ translate('Activity') }} @svg('heroicon-o-pencil-alt', ['style' => 'height:
                                     16px;', 'class' => 'ml-2'])
                                 </a>
@@ -435,7 +435,7 @@
                     {{-- Assign Categories button --}}
                     <div class="mt-3">
                         <small>
-                            <a href="{{ route('product.edit', $product->slug) }}" target="_blank">
+                            <a href="{{ route('product.edit', $product->id) }}" target="_blank">
                                 {{ translate('+ Assign Categories') }} </a>
                         </small>
                     </div>
