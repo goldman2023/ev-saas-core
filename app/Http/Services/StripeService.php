@@ -419,9 +419,12 @@ class StripeService
             // Create Stripe customer if it doesn't exist
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
-            $stripe_args['payment_intent_data'] = [
-                'receipt_email' => auth()->user()->email,
-            ];
+
+            if (!$model->isShippable()) {
+                $stripe_args['payment_intent_data'] = [
+                    'receipt_email' => auth()->user()->email,
+                ];
+            }
         }
 
         // Create a Stripe Checkout Link
