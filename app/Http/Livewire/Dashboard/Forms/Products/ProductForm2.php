@@ -23,6 +23,7 @@ use App\Traits\Livewire\CanDelete;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\HasCategories;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasCoreMeta;
 use App\Traits\Livewire\HasAttributes;
 use Categories;
 use DB;
@@ -43,6 +44,7 @@ class ProductForm2 extends Component
     use RulesSets;
     use HasCategories;
     use CanDelete;
+    use HasCoreMeta;
     use HasAttributes;
 
     public $product;
@@ -122,17 +124,20 @@ class ProductForm2 extends Component
             ],
             'meta' => [
                 // TODO: Add proper conditional validation!
-                'core_meta.date_type.value' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
-                'core_meta.start_date.value' => ['exclude_unless:product.type,event', 'required_if:product.type,event', 'date'], //'required_if:product.type,event|date',
-                'core_meta.end_date.value' => 'nullable|date',
-                'core_meta.location_type.value' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
-                'core_meta.location_address.value' => 'nullable',
-                'core_meta.location_address_coordinates.value' => 'nullable',
-                'core_meta.location_link.value' => 'nullable',
-                'core_meta.unlockables.value' => 'nullable',
-                'core_meta.calendly_link.value' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
+                'product_core_meta.date_type.value' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
+                'product_core_meta.start_date.value' => ['exclude_unless:product.type,event', 'required_if:product.type,event', 'date'], //'required_if:product.type,event|date',
+                'product_core_meta.end_date.value' => 'nullable|date',
+                'product_core_meta.location_type.value' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
+                'product_core_meta.location_address.value' => 'nullable',
+                'product_core_meta.location_address_coordinates.value' => 'nullable',
+                'product_core_meta.location_link.value' => 'nullable',
+                'product_core_meta.unlockables.value' => 'nullable',
+                'product_core_meta.calendly_link.value' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
 
             ],
+            'core_meta' => [
+                'core_meta' => '',
+            ]
         ]);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
@@ -207,8 +212,10 @@ class ProductForm2 extends Component
 
         $this->initCategories($this->product);
 
-        /* Check if product object exits, if doesn't exit do not try to fetch meta */
-        $this->core_meta = CoreMeta::getMeta($product?->core_meta ?? []);
+        $this->initCoreMeta($this->product);
+
+        /* Check if product object exits, if it doesn't exit do not try to fetch meta */
+        $this->product_core_meta = CoreMeta::getMeta($product?->core_meta ?? [], Product::class, true);
     }
 
     public function dehydrate()
@@ -323,8 +330,11 @@ class ProductForm2 extends Component
             // Set Attributes
             $this->setAttributes($this->product);
 
-            // Save CoreMeta
-            $this->saveCoreMeta();
+            // Save ProductCoreMeta
+            $this->saveProductCoreMeta();
+
+            // Save Other Product Core Meta
+            $this->setCoreMeta($this->product);
 
             DB::commit();
 
@@ -343,16 +353,13 @@ class ProductForm2 extends Component
     }
 
     
-
-    
-
-    protected function saveCoreMeta()
+    protected function saveProductCoreMeta()
     {
-        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'core_meta')) as $key => $value) {
+        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'product_core_meta')) as $key => $value) {
             $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
 
             if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                $new_value = castValueForSave($core_meta_key, $this->core_meta[$core_meta_key], CoreMeta::metaDataTypes());
+                $new_value = castValueForSave($core_meta_key, $this->product_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
 
                 CoreMeta::updateOrCreate(
                     ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],

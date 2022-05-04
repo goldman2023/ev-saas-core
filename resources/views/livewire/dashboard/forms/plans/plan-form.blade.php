@@ -14,6 +14,7 @@
     selected_categories: @js($selected_categories),
     attributes: @js($custom_attributes),
     selected_attribute_values: @js($selected_predefined_attribute_values),
+    core_meta: @js($core_meta),
 }"
      @validation-errors.window="$scrollToErrors($event.detail.errors, 700);"
      x-cloak>
@@ -279,6 +280,7 @@
                     
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
+                                $wire.set('core_meta', core_meta, true);
                                 $wire.set('selected_categories', selected_categories, true);
                                 $wire.set('plan.content', content, true);
                                 $wire.set('plan.status', status, true);
@@ -301,7 +303,6 @@
                     </div>
                 </div>
                 {{-- END Actions --}}
-
 
                 {{-- Media --}}
                 <div class="mt-8 p-4 border bg-white border-gray-200 rounded-lg shadow">
@@ -364,6 +365,10 @@
                     </div>
                 </div>
                 {{-- END Category Selector --}}
+
+                {{-- Core Meta --}}
+                <x-dashboard.form.blocks.core-meta-form></x-dashboard.form.blocks.core-meta-form>
+                {{-- Core Meta --}}
 
                 {{-- SEO --}}
                 <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{

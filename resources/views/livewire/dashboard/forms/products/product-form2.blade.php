@@ -31,10 +31,11 @@
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         core_meta: @js($core_meta),
+        product_core_meta: @js($product_core_meta),
+
         track_inventory: @js($product->track_inventory),
 
         onSave() {
-            console.log( this.attributes);
             $wire.set('product.description', this.description, true);
             $wire.set('product.thumbnail', this.thumbnail.id, true);
             $wire.set('product.cover', this.cover.id, true);
@@ -54,19 +55,21 @@
             $wire.set('product.tags', this.tags, true);
             $wire.set('product.brand_id', this.brand_id, true);
 
+            $wire.set('core_meta', this.core_meta, true);
+
             $wire.set('selected_categories', this.selected_categories, true);
             $wire.set('selected_predefined_attribute_values', this.selected_attribute_values, true);
             $wire.set('custom_attributes', this.attributes, true);
 
             // CoreMeta
-            $wire.set('core_meta.date_type.value', this.core_meta.date_type.value, true);
-            $wire.set('core_meta.start_date.value', this.core_meta.start_date.value, true);
-            $wire.set('core_meta.end_date.value', this.core_meta.end_date.value, true);
-            $wire.set('core_meta.location_type.value', this.core_meta.location_type.value, true);
-            $wire.set('core_meta.location_address.value', this.core_meta.location_address.value, true);
-            $wire.set('core_meta.location_address_coordinates.value', this.core_meta.location_address_coordinates.value, true);
-            $wire.set('core_meta.location_link.value', this.core_meta.location_link.value, true);
-            $wire.set('core_meta.unlockables.value', this.core_meta.unlockables.value, true);
+            $wire.set('product_core_meta.date_type.value', this.product_core_meta.date_type.value, true);
+            $wire.set('product_core_meta.start_date.value', this.product_core_meta.start_date.value, true);
+            $wire.set('product_core_meta.end_date.value', this.product_core_meta.end_date.value, true);
+            $wire.set('product_core_meta.location_type.value', this.product_core_meta.location_type.value, true);
+            $wire.set('product_core_meta.location_address.value', this.product_core_meta.location_address.value, true);
+            $wire.set('product_core_meta.location_address_coordinates.value', this.product_core_meta.location_address_coordinates.value, true);
+            $wire.set('product_core_meta.location_link.value', this.product_core_meta.location_link.value, true);
+            $wire.set('product_core_meta.unlockables.value', this.product_core_meta.unlockables.value, true);
 
         }
     }"
@@ -160,8 +163,8 @@
                         </div>
 
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
-                            <template x-if="core_meta.unlocakbles.value != null && core_meta.unlocakbles.value.length > 0">
-                                <template x-for="item in core_meta.unlocakbles.value">
+                            <template x-if="product_core_meta.unlocakbles.value != null && product_core_meta.unlocakbles.value.length > 0">
+                                <template x-for="item in product_core_meta.unlocakbles.value">
                                     <!-- Title -->
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
 
@@ -1085,35 +1088,35 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="['remote' => 'Remote', 'offline' => 'Offline']" selected="core_meta.location_type.value"></x-dashboard.form.select>
+                                    <x-dashboard.form.select :items="['remote' => 'Remote', 'offline' => 'Offline']" selected="product_core_meta.location_type.value"></x-dashboard.form.select>
 
-                                    <x-system.invalid-msg field="core_meta.location_type.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="product_core_meta.location_type.value"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Location Type -->
 
                             <!-- Location Address-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="core_meta.location_type.value === 'offline'">
+                                x-show="product_core_meta.location_type.value === 'offline'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Location Address') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="core_meta.location_address.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="product_core_meta.location_address.value"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Location Address -->
 
                             <!-- Location Link-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="core_meta.location_type.value === 'remote'">
+                                x-show="product_core_meta.location_type.value === 'remote'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Meet Link') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="core_meta.location_link.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="product_core_meta.location_link.value"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Location Link -->
@@ -1126,8 +1129,8 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="core_meta.date_type.value"></x-dashboard.form.select>
-                                    <x-system.invalid-msg field="core_meta.date_type.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="product_core_meta.date_type.value"></x-dashboard.form.select>
+                                    <x-system.invalid-msg field="product_core_meta.date_type.value"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Date Type -->
@@ -1139,21 +1142,21 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="core_meta.start_date.value"></x-dashboard.form.date>
+                                    <x-dashboard.form.date field="product_core_meta.start_date.value"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Date Start -->
 
                             <!-- Date End-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="core_meta.date_type.value === 'range'">
+                                x-show="product_core_meta.date_type.value === 'range'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('End') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="core_meta.end_date.value"></x-dashboard.form.date>
-                                    {{-- <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="core_meta.date_type.value"></x-dashboard.form.select> --}}
+                                    <x-dashboard.form.date field="product_core_meta.end_date.value"></x-dashboard.form.date>
+                                    {{-- <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="product_core_meta.date_type.value"></x-dashboard.form.select> --}}
                                 </div>
                             </div>
                             <!-- END Date End -->
@@ -1171,7 +1174,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="core_meta.calendly_link.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="product_core_meta.calendly_link.value"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Calendly link -->
@@ -1382,6 +1385,10 @@
                         </div>
                     </div>
                     {{-- END Tags --}}
+
+                    {{-- Core Meta --}}
+                    <x-dashboard.form.blocks.core-meta-form></x-dashboard.form.blocks.core-meta-form>
+                    {{-- Core Meta --}}
 
                     {{-- Brand --}}
                     @if(get_tenant_setting('brands_ct_enabled'))
