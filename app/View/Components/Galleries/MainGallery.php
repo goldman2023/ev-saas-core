@@ -14,6 +14,8 @@ class MainGallery extends Component
 
     public $class;
 
+    public $imgClass;
+
     public $template;
 
     public $thumbnail;
@@ -22,19 +24,23 @@ class MainGallery extends Component
 
     public $gallery;
 
+    public $showGallery;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($model = null, $class = '', $template = 'product-gallery')
+    public function __construct($model = null, $class = '', $imgClass = '', $template = 'product-gallery', $showGallery = false)
     {
         $this->model = $model;
         $this->class = $class;
+        $this->imgClass = $imgClass;
         $this->template = $template;
         $this->thumbnail = $model->getThumbnail(['w' => 600]);
         $this->cover = $model->getCover(['w' => 600]);
         $this->gallery = $model->getGallery(['w' => 600]);
+        $this->showGallery = $showGallery;
     }
 
     /**

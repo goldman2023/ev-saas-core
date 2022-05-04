@@ -4,7 +4,7 @@
     {{-- @dd($model->getThumbnail(['w'=>600]))
     @dd($model->getGallery(['w' => 700, 'h' => 0])) --}}
 
-    @if(!empty($gallery))
+    @if(!empty($gallery) && $showGallery)
         <div class="col-span-2 ">
             <div class="max-h-[480px] overflow-hidden">
                 <div class="w-full mb-5 aspect-[1/1] border border-gray-200 shadow cursor-pointer" @click="current = @js(!empty($thumbnail) ? $thumbnail : $cover)">
@@ -25,7 +25,7 @@
         </div>
     @endif
     <div class="col-span-{{ !empty($gallery) ? '8':'10' }}">
-        <img class="w-full h-full object-contain" :src="current" alt="" />
+        <img class="w-full h-full object-contain {{ $imgClass }}" :src="current" alt="" />
     </div>
 {{-- 
     <x-tenant.system.image class="object-center object-cover w-full"
