@@ -1230,6 +1230,19 @@ class StripeService
             http_response_code(400);
         }
 
+        // Fire Subscription(s) is created and paid Event
+        if($stripe_billing_reason === 'subscription_create') {
+            do_action('invoice.paid.subscription_create', $user_subscriptions);
+        } 
+        // Fire Subscription(s) is updated and paid Event
+        else if($stripe_billing_reason === 'subscription_update') {
+            do_action('invoice.paid.subscription_update', $user_subscriptions);
+        } 
+        // Fire Subscription(s) is cycled and paid Event
+        else if($stripe_billing_reason === 'subscription_cycle') {
+            do_action('invoice.paid.subscription_cycle', $user_subscriptions);
+        }
+
         http_response_code(200);
         die();
     }

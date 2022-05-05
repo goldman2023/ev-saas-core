@@ -97,6 +97,12 @@ class AppSettingsForm extends Component
                 'settings.facebook_pixel_enabled' => ['boolean'],
                 'settings.facebook_pixel_id' => ['exclude_if:settings.facebook_pixel_enabled,false', 'required'],
             ],
+            'integrations.pix_pro_api' => [
+                'settings.pix_pro_api_enabled' => ['boolean'],
+                'settings.pix_pro_api_endpoint' => ['exclude_if:settings.pix_pro_api_enabled,false', 'required'],
+                'settings.pix_pro_api_username' => ['exclude_if:settings.pix_pro_api_enabled,false', 'required'],
+                'settings.pix_pro_api_password' => ['exclude_if:settings.pix_pro_api_enabled,false', 'required'],
+            ],
             'social' => [
                 'settings.enable_social_logins' => ['boolean'],
                 'settings.google_login' => ['boolean'],
@@ -509,7 +515,7 @@ class AppSettingsForm extends Component
     protected function saveSettings($rules) {
         foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
-            
+
             if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);

@@ -189,6 +189,11 @@ class TenantSettingsService
             'google_tag_manager_enabled' => 'boolean',
             'google_tag_manager_id' => 'string',
 
+            // Pix-Pro integration (this should be only on pix-pro tenant!)
+            'pix_pro_api_enabled' => 'boolean',
+            'pix_pro_api_endpoint' => 'string',
+            'pix_pro_api_username' => 'string',
+            'pix_pro_api_password' => 'string',
 
             // Mail
             'mail_from_address' => 'string',

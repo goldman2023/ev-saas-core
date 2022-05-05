@@ -22,6 +22,7 @@ use App\Http\Services\FXService;
 use App\Http\Services\WeBuilderService;
 use App\Http\Services\StripeService;
 
+
 class EVServiceProvider extends ServiceProvider
 {
     /**
