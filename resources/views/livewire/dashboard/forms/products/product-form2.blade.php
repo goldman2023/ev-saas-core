@@ -66,9 +66,9 @@
             $wire.set('product_core_meta.start_date.value', this.product_core_meta.start_date.value, true);
             $wire.set('product_core_meta.end_date.value', this.product_core_meta.end_date.value, true);
             $wire.set('product_core_meta.location_type.value', this.product_core_meta.location_type.value, true);
-            $wire.set('product_core_meta.location_address.value', this.product_core_meta.location_address.value, true);
-            $wire.set('product_core_meta.location_address_coordinates.value', this.product_core_meta.location_address_coordinates.value, true);
-            $wire.set('product_core_meta.location_link.value', this.product_core_meta.location_link.value, true);
+            {{-- $wire.set('product_core_meta.location_address.value', this.product_core_meta.location_address.value, true); --}}
+            {{-- $wire.set('product_core_meta.location_address_coordinates.value', this.product_core_meta.location_address_coordinates.value, true); --}}
+            {{-- $wire.set('product_core_meta.location_link.value', this.product_core_meta.location_link.value, true); --}}
             $wire.set('product_core_meta.unlockables.value', this.product_core_meta.unlockables.value, true);
 
         }

@@ -420,7 +420,8 @@ class StripeService
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
 
-            if (!$model->isShippable()) {
+            if (!$model->isSubscribable()) {
+                // Payment intent data is only available to one-time payments
                 $stripe_args['payment_intent_data'] = [
                     'receipt_email' => auth()->user()->email,
                 ];

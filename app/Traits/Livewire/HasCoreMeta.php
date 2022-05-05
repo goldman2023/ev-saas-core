@@ -19,7 +19,7 @@ trait HasCoreMeta
             } else {
                 return true;
             }
-        })->toArray());
+        })->map(fn($item) => ['key' => $item->key, 'value' => $item->value])->toArray());
     }
 
     protected function setCoreMeta(&$model = null)
@@ -27,7 +27,7 @@ trait HasCoreMeta
         if (collect($this->core_meta)->isNotEmpty() && !empty($model)) {
             $old_core_meta_keys = $model->core_meta()->select('key')->get()->pluck('key');
             $missing_core_meta_keys = $old_core_meta_keys->diff(collect($this->core_meta)->pluck('key'));
-
+            
             foreach ($this->core_meta as $meta) {
                 // Skip predefined CoreMeta keys
                 if($model instanceof Product && array_key_exists($meta['key'], CoreMeta::metaProductDataTypes()) ) {
@@ -48,9 +48,14 @@ trait HasCoreMeta
                 }
             }
 
-            // Delete missing core_meta
+            // Delete missing core_meta (skip predefined keys for various content types)
             if($missing_core_meta_keys->isNotEmpty()) {
-                $model->core_meta()->whereIn('key', $missing_core_meta_keys->toArray())->delete();
+                if($model instanceof Product) {
+                    $keys_to_delete = array_keys(array_diff_key(array_flip($missing_core_meta_keys->toArray()), CoreMeta::metaProductDataTypes()));
+                    $model->core_meta()->whereIn('key', $keys_to_delete)->delete();
+                } else {
+                    $model->core_meta()->whereIn('key', $missing_core_meta_keys->toArray())->delete();
+                }
             }
 
         }

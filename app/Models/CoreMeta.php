@@ -50,7 +50,6 @@ class CoreMeta extends Model
         }
 
         castValuesForGet($core_meta, $data_types);
-
         
         $missing = array_diff_key($data_types, $core_meta);
         $missing_clone = $missing;
@@ -66,7 +65,7 @@ class CoreMeta extends Model
 
         // If strict is true, get only core_meta from $data_types, remove other meta
         if($strict) {
-            return array_intersect_key(array_merge($core_meta, $missing), $data_types);
+            return collect(array_intersect_key(array_merge($core_meta, $missing), $data_types))->map(fn($item, $key) => ['key'=>$key, 'value'=>$item]);
         }
 
         return array_merge($core_meta, $missing);
