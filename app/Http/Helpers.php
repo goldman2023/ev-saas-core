@@ -861,7 +861,8 @@ function translate($key, $lang = null)
      * TODO: Refactor this function to get translation for the $key from assoc array in singleton
      * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
      */
-    $translation_def = Cache::remember($key . $lang, 60, function () use ($key) {
+    
+    $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
         return Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
     });
 
@@ -873,12 +874,13 @@ function translate($key, $lang = null)
         $translation_def->save();
     }
 
-    //Check for session lang
-    $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
+    // Check for session lang
+    // $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
 
-    if ($translation_locale != null && $translation_locale->lang_value != null) {
-        return $translation_locale->lang_value;
-    } elseif ($translation_def->lang_value != null) {
+    // if ($translation_locale != null && $translation_locale->lang_value != null) {
+    //     return $translation_locale->lang_value;
+    // } else
+    if (!empty($translation_def->lang_value)) {
         return $translation_def->lang_value;
     } else {
         return $key;

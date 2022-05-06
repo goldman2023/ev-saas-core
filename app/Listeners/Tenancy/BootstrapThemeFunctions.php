@@ -15,8 +15,8 @@ class BootstrapThemeFunctions
          * Point of this listener is to register theme specific functions service provider.
          * If a theme requires specific hooks/filters/actions etc. they should be registered inside `themes/{theme_name}/app/Providers/ThemeFunctionsServiceProvider.php`
          */
-        if(tenant()->domains()->first()) {
-            $theme_folder = tenant()->domains()->first()->theme;
+        if(!empty(tenant()->domains->first())) {
+            $theme_folder = tenant()->domains->first()->theme;
             $theme_functions_file_path = base_path().'/themes/'.$theme_folder.'/app/Providers/ThemeFunctionsServiceProvider.php';
 
             // Check if ThemeFunctionsServiceProvider exists in `themes/{theme_name}/app/Providers/` and boot it
