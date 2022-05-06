@@ -1,7 +1,8 @@
 <?php
 use Illuminate\Support\Facades\Http;
-use Log;
-use StripeService;
+use Illuminate\Support\Facades\Log as FacadesLog;
+
+use App\Facades\StripeService;
 
 if (!function_exists('pix_pro_register_user')) {
     function pix_pro_register_user($user) {
@@ -18,11 +19,11 @@ if (!function_exists('pix_pro_register_user')) {
 
         $response = Http::post($route, $body);
         $response_json = $response->json();
-        
+
         if(!empty($response_json['status'] ?? null)) {
             // If status is not success for any reason, throw an error
             if($response_json['status'] !== 'success') {
-                Log::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
+                FacadesLog::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
             }
         }
 
@@ -70,7 +71,7 @@ if (!function_exists('pix_pro_create_license')) {
 
                 $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
                 $response_json = $response->json();
-                
+
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, throw an error
                     Log::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
