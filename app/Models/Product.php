@@ -95,7 +95,9 @@ class Product extends WeBaseModel
     protected $casts = [
         'digital' => 'boolean',
         'use_serial' => 'boolean',
-        'tags' => 'array'
+        'tags' => 'array',
+        'unit_price' => 'float',
+        'discount' => 'float',
     ];
 
     public function getBaseCurrencyAttribute($value)

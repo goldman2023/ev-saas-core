@@ -26,7 +26,7 @@ class CoreMeta extends Model
             'end_date' => 'date',
             'location_type' => 'string',
             'location_address' => 'string',
-            'location_address_coordinates' => 'array',
+            'location_address_map_link' => 'string',
             'location_link' => 'string',
             'unlockables' => 'array',
             'calendly_link' => 'string',

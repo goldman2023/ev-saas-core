@@ -129,7 +129,7 @@ class ProductForm2 extends Component
                 'product_core_meta.end_date.value' => 'nullable|date',
                 'product_core_meta.location_type.value' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
                 'product_core_meta.location_address.value' => 'nullable',
-                'product_core_meta.location_address_coordinates.value' => 'nullable',
+                'product_core_meta.location_address_map_link.value' => 'nullable',
                 'product_core_meta.location_link.value' => 'nullable',
                 'product_core_meta.unlockables.value' => 'nullable',
                 'product_core_meta.calendly_link.value' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
@@ -280,7 +280,7 @@ class ProductForm2 extends Component
             $this->product->unit_price = $this->product->unit_price;
             $this->product->save();
 
-            $this->is_update = true; // Change is_update flag to true! From now on, product is being only updated!
+            // $this->is_update = true; // Change is_update flag to true! From now on, product is being only updated!
         } else {
             // Update
             $this->product->update([
@@ -344,10 +344,14 @@ class ProductForm2 extends Component
 
             $this->inform(translate('Product successfully saved!'), '', 'success');
 
+            if (! $this->is_update) {
+                return redirect()->route('product.edit', $this->product->id);
+            }
+
             // $this->dispatchBrowserEvent('init-product-form', []);
         } catch (\Exception $e) {
             DB::rollBack();
-
+ 
             $this->dispatchGeneralError(translate('There was an error while saving a product.'));
             $this->inform(translate('There was an error while saving a product.'), $e->getMessage(), 'fail');
         }
@@ -360,12 +364,21 @@ class ProductForm2 extends Component
             $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
 
             if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                $new_value = castValueForSave($core_meta_key, $this->product_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
+                if(array_key_exists('value', $this->product_core_meta[$core_meta_key])) {
+                    $new_value = castValueForSave($core_meta_key, $this->product_core_meta[$core_meta_key]['value'], CoreMeta::metaProductDataTypes());
+                } else if(is_string($this->product_core_meta[$core_meta_key])) {
+                    $new_value = castValueForSave($core_meta_key, $this->product_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
+                }
 
-                CoreMeta::updateOrCreate(
-                    ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
-                    ['value' => $new_value]
-                );
+                try {
+                    CoreMeta::updateOrCreate(
+                        ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
+                        ['value' => $new_value]
+                    );
+                } catch(\Exception $e) {
+                    dd($this->product_core_meta[$core_meta_key]);
+                }
+                
             }
         }
     }
