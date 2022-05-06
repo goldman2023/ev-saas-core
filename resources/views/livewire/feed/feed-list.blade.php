@@ -11,7 +11,7 @@
                 <option>Most Answers</option>
             </select>
         </div>
-        <div class="hidden sm:block">
+        <div class="hidden">
             <nav class="relative z-0 rounded-lg shadow flex divide-x divide-gray-200 mb-3" aria-label="Tabs">
                 <!-- Current: "text-gray-900", Default: "text-gray-500 hover:text-gray-700" -->
                 <button aria-current="page" wire:click="loadType('recent')"

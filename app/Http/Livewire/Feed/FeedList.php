@@ -46,6 +46,8 @@ class FeedList extends Component
             $data = $data->orderBy('id', 'desc');
         } elseif ($this->type == 'trending') {
             $data = $data->orderBy('impressions', 'desc');
+        }  elseif ($this->type == 'discussions') {
+            $data = $data->orderBy('social_comments', 'desc');
         }
         $data = $data->paginate($this->perPage);
         $this->loading = false;
@@ -88,14 +90,14 @@ class FeedList extends Component
     }
 
     public function prependMyNewPost($post_id) {
-        
+
         $my_post_activity = Activity::where([
             'subject_type' => BlogPost::class,
             'subject_id' => $post_id,
             'causer_type' => auth()->user()::class,
             'causer_id' => auth()->user()->id,
         ])->first();
-        
+
         $this->my_new_post = $my_post_activity;
     }
 }
