@@ -179,6 +179,11 @@ Route::middleware([
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index')->middleware('auth');
+    Route::get('/feed/trending', [FeedController::class, 'trending'])->name('feed.trending')->middleware('auth');
+    Route::get('/feed/trending', [FeedController::class, 'trending'])->name('feed.trending')->middleware('auth');
+    Route::get('/feed/discussions', [FeedController::class, 'discussions'])->name('feed.discussions')->middleware('auth');
+    Route::get('/feed/tags', [FeedController::class, 'tags'])->name('feed.tags');
+    Route::get('/feed/bookmarks', [FeedController::class, 'bookmarks'])->name('feed.bookmarks');
     Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
     /* This is general route to catch all requests to /* */
