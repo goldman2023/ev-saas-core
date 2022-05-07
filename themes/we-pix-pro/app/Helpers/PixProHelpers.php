@@ -74,7 +74,7 @@ if (!function_exists('pix_pro_create_license')) {
 
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, throw an error
-                    Log::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
+                    FacadesLog::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
                 }
             }
         }

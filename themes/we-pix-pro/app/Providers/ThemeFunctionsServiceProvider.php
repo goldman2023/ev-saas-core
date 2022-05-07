@@ -1,19 +1,52 @@
 <?php
 
-use Illuminate\Support\ServiceProvider;
+use App\Providers\WeThemeFunctionsServiceProvider;
 use App\Support\Hooks;
+use Illuminate\Support\Facades\View;
 
-class ThemeFunctionsServiceProvider extends ServiceProvider
+class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
 {
-    protected $theme_root;
-    protected $theme_helpers;
+    protected function getTenantAppSettings(): array {
+        return [
+            'pix_pro_software_download_url' => 'string',
+            'pix_pro_api_enabled' => 'boolean',
+            'pix_pro_api_endpoint' => 'string',
+            'pix_pro_api_username' => 'string',
+            'pix_pro_api_password' => 'string',
+        ];
+    }
 
     /**
      * Bootstrap the theme function services.
      */
     public function boot()
     {
+        parent::boot();
+
+        if (function_exists('add_filter')) {
+            // Filter
+            add_filter('app-settings-rules', function($rulesSets) {
+                // Add pix-pro integration
+                $rulesSets->put('integrations.pix_pro_api', [
+                    'settings.pix_pro_api_enabled' => ['boolean'],
+                    'settings.pix_pro_api_endpoint' => ['exclude_if:settings.pix_pro_api_enabled,false', 'required'],
+                    'settings.pix_pro_api_username' => ['exclude_if:settings.pix_pro_api_enabled,false', 'required'],
+                    'settings.pix_pro_api_password' => ['exclude_if:settings.pix_pro_api_enabled,false', 'required'],
+                ]);
+                return $rulesSets;
+            }, 10, 1);
+
+            // Add pix-pro general rules
+            add_filter('app-settings-general-rules', function($rules_array) {
+                return array_merge($rules_array, [
+                    'settings.pix_pro_software_download_url' => 'nullable',
+                ]);
+            }, 10, 1);
+        }
+        
         if (function_exists('add_action')) {
+            // Actions
+
             // Register PixPro User
             add_action('user.registered', function ($user) {
                 pix_pro_register_user($user);
@@ -23,6 +56,28 @@ class ThemeFunctionsServiceProvider extends ServiceProvider
             add_action('invoice.paid.subscription_create', function ($user_subscriptions) {
                 pix_pro_create_license($user_subscriptions);
             }, 20, 1);
+
+
+            // View actions
+            add_action('view.order-received.items.end', function($order) {
+                if (View::exists('frontend.partials.order-received-download-cta')) {
+                    echo View::make('frontend.partials.order-received-download-cta', compact('order'));
+                }
+            });
+
+            // Add Pix-Pro API Integration Form
+            add_action('view.integrations.end', function() {
+                if (View::exists('frontend.partials.pix-pro-api-integration-form')) {
+                    echo View::make('frontend.partials.pix-pro-api-integration-form');
+                }
+            });
+
+            
+            add_action('view.app-settings-form.general.end', function() {
+                if (View::exists('frontend.partials.pix-pro-general-settings')) {
+                    echo View::make('frontend.partials.pix-pro-general-settings');
+                }
+            });
         }
     }
 
@@ -33,15 +88,6 @@ class ThemeFunctionsServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (tenant()->domains()->first()) {
-            // Set `theme_root` and `theme_helpers` paths
-            $this->theme_root = base_path() . '/themes/' . tenant()->domains()->first()->theme;
-            $this->theme_helpers = $this->theme_root . '/app/Helpers/*.php';
-
-            // Loop through all helper functions in the theme, and require each php file laoded with functions!
-            foreach (glob($this->theme_helpers) as $filename) {
-                require_once($filename);
-            }
-        }
+        parent::register();
     }
 }

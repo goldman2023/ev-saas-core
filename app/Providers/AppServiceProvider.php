@@ -73,6 +73,11 @@ class AppServiceProvider extends ServiceProvider
             return Permissions::canAccess($types, $permissions, false);
         });
 
+        // Hooks system
+        Blade::directive('do_action', function ($name, $arg = '') {
+            return "<?php do_action($name, $arg); ?>";
+        });
+
         // Define 'UserMeta in use' blade extensions
         Blade::if('usermeta', function ($meta_key) {
             return isset(get_tenant_setting('user_meta_fields_in_use', [])[$meta_key]);
@@ -97,5 +102,6 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('fbpix', function () {
             return !empty(get_tenant_setting('facebook_pixel_enabled')) && get_tenant_setting('facebook_pixel_enabled') && !empty(get_tenant_setting('facebook_pixel_id'));
         });
+        
     }
 }

@@ -43,11 +43,12 @@ class TenantSettingsService
         return $this->settings;
     }
 
-    protected function createMissingSettings() {
+    public function createMissingSettings() {
         $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
         $data_types = $this->settingsDataTypes();
 
         $missing = array_diff_key($data_types, $settings);
+
         if(!empty($missing)) {
             $this->clearCache();
 
@@ -60,15 +61,14 @@ class TenantSettingsService
         }
     }
 
-    protected function setAll() {
+    public function setAll($test = false) {
         $this->createMissingSettings(); // it'll clear the cache and add missing settings if there are missing settings
 
         $cache_key = !empty(tenant()) ? tenant('id') . '_tenant_settings' : 'central_settings';
-        $settings = Cache::get($cache_key.'asdasd', null); // TODO: Remove 'asd'
+        $settings = Cache::get($cache_key.'a', null);
         $default = [];
         $data_types = $this->settingsDataTypes();
-
-
+        
         if (empty($settings)) {
             $settings  = (!empty(tenant()) ? app(TenantSetting::class) : app(CentralSetting::class))->select('id','setting','value')->get()->keyBy('setting')->toArray();
             
@@ -93,7 +93,7 @@ class TenantSettingsService
     }
 
     public function settingsDataTypes() {
-        return [
+        $app_settings = [
             // General
             'site_logo' => Upload::class,
             'site_logo_dark' => Upload::class,
@@ -190,10 +190,7 @@ class TenantSettingsService
             'google_tag_manager_id' => 'string',
 
             // Pix-Pro integration (this should be only on pix-pro tenant!)
-            'pix_pro_api_enabled' => 'boolean',
-            'pix_pro_api_endpoint' => 'string',
-            'pix_pro_api_username' => 'string',
-            'pix_pro_api_password' => 'string',
+            
 
             // Mail
             'mail_from_address' => 'string',
@@ -235,5 +232,7 @@ class TenantSettingsService
             'user_meta_fields_in_use' => 'array',
             
         ];
+
+        return apply_filters( 'app-settings-definition', $app_settings );
     }
 }

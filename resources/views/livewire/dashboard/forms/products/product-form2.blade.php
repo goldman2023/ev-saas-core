@@ -66,11 +66,7 @@
             $wire.set('product_core_meta.start_date.value', this.product_core_meta.start_date.value, true);
             $wire.set('product_core_meta.end_date.value', this.product_core_meta.end_date.value, true);
             $wire.set('product_core_meta.location_type.value', this.product_core_meta.location_type.value, true);
-            {{-- $wire.set('product_core_meta.location_address.value', this.product_core_meta.location_address.value, true); --}}
-            {{-- $wire.set('product_core_meta.location_address_coordinates.value', this.product_core_meta.location_address_coordinates.value, true); --}}
-            {{-- $wire.set('product_core_meta.location_link.value', this.product_core_meta.location_link.value, true); --}}
             $wire.set('product_core_meta.unlockables.value', this.product_core_meta.unlockables.value, true);
-
         }
     }"
      class="lw-form container-fluid"
@@ -1108,6 +1104,19 @@
                             </div>
                             <!-- END Location Address -->
 
+                            <!-- Location Address-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
+                                x-show="product_core_meta.location_type.value === 'offline'">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Location Address Map (URL)') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="product_core_meta.location_address_map_link.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END Location Address -->
+
                             <!-- Location Link-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
                                 x-show="product_core_meta.location_type.value === 'remote'">
@@ -1130,7 +1139,6 @@
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
                                     <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="product_core_meta.date_type.value"></x-dashboard.form.select>
-                                    <x-system.invalid-msg field="product_core_meta.date_type.value"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Date Type -->
@@ -1142,7 +1150,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="product_core_meta.start_date.value"></x-dashboard.form.date>
+                                    <x-dashboard.form.date field="product_core_meta.start_date.value" :enable-time="true" date-format="d.m.Y H:i"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Date Start -->
@@ -1155,8 +1163,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="product_core_meta.end_date.value"></x-dashboard.form.date>
-                                    {{-- <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="product_core_meta.date_type.value"></x-dashboard.form.select> --}}
+                                    <x-dashboard.form.date field="product_core_meta.end_date.value" :enable-time="true" date-format="d.m.Y H:i"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Date End -->
