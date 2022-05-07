@@ -21,7 +21,7 @@ class UserOnboardingFlow extends Component
             'route' => route('feed.shops'),
             'title' => translate('Follow 5 users'),
         ];
-        if (auth()->user()->following()->count() > 5) {
+        if (auth()->user()->follows_users()->count() > 5) {
             $step['completed'] = true;
         }
 

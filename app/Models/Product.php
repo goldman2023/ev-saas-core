@@ -35,7 +35,7 @@ use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\HasStatus;
 use App\Traits\CoreMetaTrait;
-use App\Traits\LikesTrait;
+use App\Traits\SocialReactionsTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
@@ -68,7 +68,7 @@ class Product extends WeBaseModel
     use VariationTrait;
 
     use LogsActivity;
-    use LikesTrait;
+    use SocialReactionsTrait;
 
 
     public const ROUTING_SINGULAR_NAME_PREFIX = 'product';

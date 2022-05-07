@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Follow extends WeBaseModel
+class SocialReaction extends WeBaseModel
 {
-    protected $table = 'follows';
+    protected $table = 'social_reactions';
 
-    protected $fillable = ['id', 'user_id', 'subject_id', 'subject_type'];
+    protected $fillable = ['id', 'user_id', 'subject_id', 'subject_type', 'type', 'created_at'];
 
     protected $casts = [
         

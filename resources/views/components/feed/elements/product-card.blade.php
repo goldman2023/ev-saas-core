@@ -39,7 +39,7 @@
                 {{-- Popular bade --}}
                 @if($product->public_view_count() > 20)
                 <div class="px-2 py-2 text-gray-100 text-sm font-semibold bg-green-700 rounded-full">
-                    {{ translate('Tending!') }} 🔥
+                    {{ translate('Trending!') }} 🔥
                 </div>
                 @endif
     </div>
@@ -63,8 +63,8 @@
             <div
                 class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500">
                 <span class="ml-3">
-                    <livewire:actions.wishlist-button wire:key="product_{{ $product->id }}" :object="$product">
-                    </livewire:actions.wishlist-button>
+                    <livewire:actions.social-action-button wire:key="product_{{ $product->id }}" :object="$product" action="reaction" type="like">
+                    </livewire:actions.social-action-button>
                 </span>
             </div>
 

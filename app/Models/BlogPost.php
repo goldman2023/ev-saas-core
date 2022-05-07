@@ -7,7 +7,7 @@ use App\Facades\MyShop;
 use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\HasStatus;
-use App\Traits\LikesTrait;
+use App\Traits\SocialReactionsTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
@@ -33,7 +33,7 @@ class BlogPost extends WeBaseModel
 //    use ReactionsTrait;
 //    use CommentsTrait;
     use PermalinkTrait;
-    use LikesTrait;
+    use SocialReactionsTrait;
     use HasStatus;
 
     protected $table = 'blog_posts';

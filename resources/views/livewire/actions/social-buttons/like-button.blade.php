@@ -1,4 +1,4 @@
-<div wire:click="addToWishlist()" class="inline-flex items-center text-sm">
+<div wire:click="fireSocialAction()" class="inline-flex items-center text-sm">
     @if($added)
     <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 hover:bg-gray-300 p-1.5 rounded">
         <svg class="h-5 w-5 text-indigo-600" x-description="Heroicon name: solid/thumb-up" xmlns="http://www.w3.org/2000/svg"
@@ -8,7 +8,7 @@
             </path>
         </svg>
 
-        <span class="font-medium text-indigo-900"> {{ $action['action_success'] }} {{ $count }}</span>
+        <span class="font-medium text-indigo-900"> {{ translate('Liked') }} {{ $count }}</span>
         <span class="sr-only">likes</span>
     </button>
 
@@ -22,7 +22,7 @@
             </path>
         </svg>
 
-        <span class="font-medium text-gray-900"> {{ $action['action'] }} {{ $count }}</span>
+        <span class="font-medium text-gray-900"> {{ translate('Like') }} {{ $count }}</span>
 
         <span class="sr-only">likes</span>
     </button>

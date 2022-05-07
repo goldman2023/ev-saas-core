@@ -49,9 +49,9 @@
                                     </x-feed.elements.card-header-user-info>
                                 </div>
                                 <div class="flex items-center justify-end">
-                                    @livewire('actions.wishlist-button', [
+                                    @livewire('actions.social-action-button', [
                                     'object' => $item->causer,
-                                    'action' => 'Follow'
+                                    'action' => 'follow'
                                     ])
                                 </div>
                             </div>
@@ -70,10 +70,10 @@
 
                             <div class="w-full">
 
-                                <livewire:actions.wishlist-button
+                                <livewire:actions.social-action-button
                                     class="w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
-                                    wire:key="post_{{ $item->id }}" action="Like" :object="$item->subject">
-                                </livewire:actions.wishlist-button>
+                                    wire:key="post_{{ $item->id }}" action="reaction" type="like" :object="$item->subject">
+                                </livewire:actions.social-action-button>
 
 
                             </div>

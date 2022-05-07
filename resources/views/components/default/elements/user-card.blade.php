@@ -41,10 +41,10 @@
                 </div>
                 <div class="-ml-px w-0 flex-1 flex">
                     <div class="flex-1 flex items-center justify-center">
-                        @livewire('actions.wishlist-button', [
+                        @livewire('actions.social-action-button', [
                             'object' => $user,
-                            'action' => 'Follow',
-                            ])
+                            'action' => 'follow',
+                        ])
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@
     <div>
         <article class='mb-6 bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg' x-data="{
             id: 'feed-activity-{{ $item->id }}',
-            comment_count: {{ $item->subject->comments()->count() }},
+            comment_count: {{ $item->subject?->comments()?->count() ?? 0 }},
         }"
         @change-activity-comment-count.window="
             if(id == 'feed-activity-'+$event.detail.item_id) {
@@ -110,14 +110,10 @@
             <div class="mt-6 flex justify-between space-x-8 mb-3">
                 <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
-
-                        @if($item->description != 'liked' && $item->description != 'User liked a product')
-
-                        <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item->subject">
-                        </livewire:actions.wishlist-button>
+                        @if(method_exists($item->subject, 'likes'))
+                            <livewire:actions.social-action-button wire:key="post_{{ $item->id }}" :object="$item->subject" action="reaction" type="like">
+                            </livewire:actions.social-action-button>
                         @endif
-
-
                     </span>
                     <span class="inline-flex items-center text-sm cursor-pointer">
                         <button wire:click="toggle_comments()" type="button"

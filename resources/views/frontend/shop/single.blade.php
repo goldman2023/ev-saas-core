@@ -43,9 +43,9 @@
 
                 <div
                     class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-                    @livewire('actions.wishlist-button', [
+                    @livewire('actions.social-action-button', [
                     'object' => $shop,
-                    'action' => 'Follow'
+                    'action' => 'follow'
                     ])
                 </div>
                 <button type="button"
@@ -208,9 +208,9 @@
                                                 </p>
                                             </div>
                                             <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                                                @livewire('actions.wishlist-button', [
+                                                @livewire('actions.social-action-button', [
                                                 'object' => $shop,
-                                                'action' => 'Follow'
+                                                'action' => 'follow'
                                                 ])
                                             </div>
                                         </div>

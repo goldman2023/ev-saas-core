@@ -93,8 +93,8 @@
         </div>
 
         <div class="w-full">
-            <livewire:actions.wishlist-button action="Wishlist" template="wishlist-button-detailed" :object="$product">
-            </livewire:actions.wishlist-button>
+            <livewire:actions.social-action-button action="wishlist" template="wishlist-button-detailed" :object="$product">
+            </livewire:actions.social-action-button>
         </div>
     </div>
 
