@@ -98,6 +98,12 @@
                         </a>
 
                     </nav>
+
+                    <div class="mb-6">
+
+                    <livewire:feed.elements.add-post></livewire:feed.elements.add-post>
+                    </div>
+
                     <div class="bg-white shadow sm:rounded-lg">
                         <div class="px-4 py-5 sm:px-6">
                             <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
