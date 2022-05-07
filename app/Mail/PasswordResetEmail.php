@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class EmailVerification extends WeEmail
+class PasswordResetEmail extends WeEmail
 {
     /**
      * Create a new message instance.
@@ -18,7 +18,7 @@ class EmailVerification extends WeEmail
     public $user;
     public $data;
 
-    public function __construct($user, $data) 
+    public function __construct($user, $data = []) 
     {
         parent::__construct();
         
@@ -34,9 +34,9 @@ class EmailVerification extends WeEmail
     public function build()
     {
         return $this
-            ->view('emails.users.email-verification', ['data' => $this->data])
-            ->text('emails.users.email-verification')
-            ->subject($this->data['subject'])
+            ->view('emails.users.reset-password-email', ['user' => $this->user])
+            ->text('emails.users.reset-password-email')
+            ->subject(translate('Reset Your Password').' | '.get_tenant_setting('site_name'))
             ->mailersend();
     }
 }

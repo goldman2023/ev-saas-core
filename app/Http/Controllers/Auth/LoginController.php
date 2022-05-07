@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\User;
@@ -33,6 +34,31 @@ class LoginController extends Controller
      */
     /*protected $redirectTo = '/';*/
 
+    /**
+     * Display users login page
+     */
+    public function user_login()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+
+        return view('auth.login');
+    }
+
+    /**
+     * Display users login page
+     */
+    public function business_login()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+
+        return view('auth.login');
+    }
+
+    // -------------------------------------------- //
     /**
      * Redirect the user to the Google authentication page.
      *
@@ -147,8 +173,6 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        flash()->info('Bye', 'You have been successfully logged out!');
-
         if (auth()->user() != null && (auth()->user()->isAdmin() || auth()->user()->isStaff())) {
             $redirect_route = 'login';
         } else {
@@ -158,8 +182,6 @@ class LoginController extends Controller
         $this->guard()->logout();
 
         $request->session()->invalidate();
-
-        session()->flash('message', '🔓 You have sucefully logged out!');
 
         return $this->loggedOut($request) ?: redirect()->route($redirect_route);
     }

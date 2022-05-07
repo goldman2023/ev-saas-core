@@ -10,6 +10,8 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Mail;
+use Auth;
+use Carbon;
 
 class ForgotPasswordController extends Controller
 {
@@ -34,6 +36,47 @@ class ForgotPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    /**
+     * Display forgot password page
+     */
+    public function forgot_password()
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+
+        return view('auth.forgot-password');
+    }
+
+    /**
+     * Display reset password page
+     */
+    public function reset_password(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect()->route('home');
+        }
+
+        $code = $request->code;
+        $email = $request->email;
+
+        $valid = false;
+
+        if(!empty($code) && !empty($email)) {
+            $user = User::where([
+                ['email', $email],
+                ['verification_code', $code]
+            ])->first();
+
+            // If email and verification code are correct, and if last time user was updated was max 1hrs ago (means that reset pass was initiated maximally 1h ago)
+            if(!empty($user) && $user->updated_at->diffInHours(Carbon::now(), false) < 1) {
+                $valid = true;
+            }
+        }
+
+        return view('auth.reset-password', compact('user', 'valid'));
     }
 
     /**

@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="text-right">
-                <a href="{{ route('password.request') }}" class="text-12 underline" data-test="we-login-forgot-password-link">
+                <a href="{{ route('user.forgot-password') }}" class="text-12 underline" data-test="we-login-forgot-password-link">
                     {{ translate('Forgot password?') }}
                 </a>
             </div>

@@ -17,7 +17,7 @@
             wire:model.defer="{{ $field }}"
           @endif
   />
-
+  {{ $slot }}
   @if(!empty($field))
     <x-system.invalid-msg field="{{ $field }}"></x-system.invalid-msg>
   @endif
