@@ -73,6 +73,14 @@ TODO: you can overide it with data from a database a sa setting --}}
                     'danger': '{{ $colors['danger'] ?: '#FF4E3E' }}',
                     'danger-light': '{{ $colors['danger-light'] ?: '#FFEDEC' }}',
                     'sidebar-bg': '{{ $colors['sidebar-bg'] ?: '#000000' }}',
+                    'typ-1': '{{ $colors['typography-1'] ?: '#323B4B' }}',
+                    'typ-2': '{{ $colors['typography-2'] ?: '#4E5D78' }}',
+                    'typ-3': '{{ $colors['typography-3'] ?: '#8A94A6' }}',
+                    'typ-4': '{{ $colors['typography-4'] ?: '#B0B7C3' }}',
+                    'bg-1': '{{ $colors['background-1'] ?: '#C1C7D0' }}',
+                    'bg-2': '{{ $colors['background-2'] ?: '#EBECF0' }}',
+                    'bg-3': '{{ $colors['background-3'] ?: '#FAFBFC' }}',
+                    'bg-4': '{{ $colors['background-4'] ?: '#FFFFFF' }}',
                 }
             }
           }

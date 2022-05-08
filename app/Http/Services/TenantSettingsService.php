@@ -131,7 +131,15 @@ class TenantSettingsService
                 'warning-light' => 'string',
                 'danger' => 'string',
                 'danger-light' => 'string',
-                'sidebar-bg' => 'string',
+                'typography-1' => 'string',
+                'typography-2' => 'string',
+                'typography-3' => 'string',
+                'typography-4' => 'string',
+                'background-1' => 'string',
+                'background-2' => 'string',
+                'background-3' => 'string',
+                'background-4' => 'string',
+
             ],
 
             'header' => 'array',

@@ -28,6 +28,10 @@ class FeedCard extends Component
             return false;
         }
 
+        if (!empty($item->properties['action'] ?? null) ) {
+            $this->ignore = true;
+        }
+
         $this->item = $item;
         // $this->likes = Activity::where('subject_type', 'Spatie\Activitylog\Models\Activity')
         //     ->where('description', 'liked')

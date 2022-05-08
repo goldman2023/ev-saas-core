@@ -31,7 +31,7 @@ class BlogPost extends WeBaseModel
     use CategoryTrait;
 
 //    use ReactionsTrait;
-//    use CommentsTrait;
+    // use CommentsTrait;
     use PermalinkTrait;
     use SocialReactionsTrait;
     use HasStatus;
