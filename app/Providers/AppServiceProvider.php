@@ -103,5 +103,9 @@ class AppServiceProvider extends ServiceProvider
             return !empty(get_tenant_setting('facebook_pixel_enabled')) && get_tenant_setting('facebook_pixel_enabled') && !empty(get_tenant_setting('facebook_pixel_id'));
         });
         
+        // Google Recaptcha Enabled
+        Blade::if('recaptcha', function () {
+            return get_tenant_setting('google_recaptcha_enabled') && !empty(get_tenant_setting('google_recaptcha_site_key')) && !empty(get_tenant_setting('google_recaptcha_secret_key'));
+        });
     }
 }

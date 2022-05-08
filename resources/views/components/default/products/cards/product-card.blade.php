@@ -48,8 +48,7 @@
             </p>
         </div>
         <div class="grid grid-cols-2 gap-3">
-                <livewire:actions.wishlist-button :object="$product"></livewire:actions.wishlist-button>
-
+            <livewire:actions.social-action-button :object="$product" action="wishlist"></livewire:actions.social-action-button>
 
             <a href="{{ $product->getPermalink() }}" type="button" class="btn btn-primary text-xs">
                 {{ translate('View') }}

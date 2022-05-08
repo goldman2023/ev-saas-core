@@ -72,7 +72,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
                 }
             });
 
-            
+            // Add Pix-Pro General Settings
             add_action('view.app-settings-form.general.end', function() {
                 if (View::exists('frontend.partials.pix-pro-general-settings')) {
                     echo View::make('frontend.partials.pix-pro-general-settings');

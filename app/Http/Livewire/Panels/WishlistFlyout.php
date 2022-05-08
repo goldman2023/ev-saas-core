@@ -17,8 +17,8 @@ class WishlistFlyout extends Component
     public $page = 1;
 
     protected $listeners = [
-        'addedToWishlist' => 'resetAfterAdded',
-        'removedFromWishlist' => 'resetAfterRemoved',
+        'addedSocialAction' => 'resetAfterAdded',
+        'removedSocialAction' => 'resetAfterRemoved',
     ];
 
     public function mount($class = ''): void
@@ -41,18 +41,24 @@ class WishlistFlyout extends Component
         }
     }
 
-    public function resetAfterAdded()
+    public function resetAfterAdded($event_data)
     {
-        $this->page = 1;
-        $this->wishlists = $this->getData();
+        if($event_data['action'] === 'wishlist') {
+            $this->page = 1;
+            $this->wishlists = $this->getData();
+        }
     }
 
-    public function resetAfterRemoved($model_id = null)
+    public function resetAfterRemoved($event_data)
     {
-        if ($this->wishlists->filter(fn ($item) => $item->id === $model_id)->first()->id ?? null) {
-            // Removed element is currently in Wishlist frontend => reset the wishlist!
-            $this->resetAfterAdded();
+        if($event_data['action'] === 'wishlist') {
+            if ($this->wishlists->filter(fn ($item) => $item->id === $event_data['model_id'] && $item::class === $event_data['model_class'])
+                ->first()->id ?? null) {
+                // Removed element is currently in Wishlist frontend => reset the wishlist!
+                $this->resetAfterAdded();
+            }
         }
+        
     }
 
     public function render()

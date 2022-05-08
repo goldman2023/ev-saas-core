@@ -8,6 +8,7 @@ use App\Facades\Categories;
 use App\Traits\GalleryTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
+use App\Traits\SocialFollowingTrait;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,7 @@ class Category extends WeBaseModel
     use TranslationTrait;
     use UploadTrait;
     use GalleryTrait;
+    use SocialFollowingTrait;
 
     public $selected;
     public $title_path;

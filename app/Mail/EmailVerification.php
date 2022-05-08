@@ -33,7 +33,6 @@ class EmailVerification extends WeEmail
      */
     public function build()
     {
-        
         return $this
             ->view('emails.users.email-verification', ['data' => $this->data])
             ->text('emails.users.email-verification')

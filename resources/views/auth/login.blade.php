@@ -1,82 +1,80 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.' . $globalLayout)
 
 @section('content')
 
-<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background')) }})">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-xl-4 mx-auto">
-                <div class="card text-left">
-                    <div class="card-body">
-                        <div class="mb-5 text-center">
-                            <img src="{{ uploaded_asset(get_site_logo()) }}" class="mw-100 mb-4" height="40">
-                            <h1 class="h3 text-primary mb-0">{{ translate('Welcome to') }} {{ get_site_name() }}</h1>
-                            <p>{{ translate('Login to your account.') }}</p>
-                        </div>
-                        <form class="pad-hor" method="POST" role="form" action="{{ route('business.login') }}">
-                            @csrf
-                            <div class="form-group">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus placeholder="{{ translate('Email') }}" data-test="email">
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="{{ translate('Password') }}" data-test="password">
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-sm-6">
-                                    <div class="text-left">
-                                        <label class="aiz-checkbox">
-                                            <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                            <span>{{ translate('Remember Me') }}</span>
-                                            <span class="aiz-square-check"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                                @if(env('MAIL_USERNAME') != null && env('MAIL_PASSWORD') != null)
-                                    <div class="col-sm-6">
-                                        <div class="text-right">
-                                            <a href="{{ route('password.request') }}" class="text-reset fs-14">{{translate('Forgot password ?')}}</a>
-                                        </div>
-                                    </div>
-                                @endif
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg btn-block" data-test="submit">
-                                {{ translate('Login') }}
-                            </button>
-                        </form>
+<div class="bg-gray-100 pt-10 pb-10">
+<div
+    class="min-h-full flex md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow overflow-hidden sm:bg-card mx-auto bg-white">
+    <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div class="mx-auto w-full max-w-sm lg:w-96">
+            <div>
+                <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-12 w-auto"
+                    :image="get_site_logo()">
+                </x-tenant.system.image>
+                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ translate('Login') }}</h2>
+                <p class=" mt-2 text-sm text-gray-600">
+                    {{ translate('Or') }}
+                    <a href="{{ route('user.registration') }}" class="font-medium text-indigo-600 hover:text-indigo-500"> {{ translate('Not a member yet? Sign up to ') }}  {{ get_site_name() }}</a>
+                </p>
+            </div>
 
-                        <div class="text-center mt-3">
-                            <span class="small text-muted">Do not have an account?</span>
-                            <a class="js-animation-link small font-weight-bold"
-                                href="{{ route('user.registration') }}" data-hs-show-animation-options='{
-                                         "targetSelector": "#signup",
-                                         "groupName": "idForm",
-                                         "animationType": "css-animation",
-                                         "animationIn": "slideInUp",
-                                         "duration": 400
-                                       }'>
-                                {{ translate('Sign Up') }}
-                            </a>
-
-                            {{-- <a class="js-animation-link small font-weight-bold"
-                                href="{{ route('business.register') }}">
-                                {{ translate('Business Sign Up') }}
-                            </a> --}}
-                        </div>
-
-                    </div>
-                </div>
+            <div class="mt-2">
+                <livewire:forms.login-form></livewire:forms.login-form>
             </div>
         </div>
     </div>
+    <div class="hidden lg:block relative w-0 flex-1">
+        <div
+            class="relative hidden md:flex flex-auto items-center justify-center h-full p-16 lg:px-20 overflow-hidden bg-gray-800 dark:border-l ">
+            <svg viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice"
+                xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 pointer-events-none ">
+                <g fill="none" stroke="currentColor" stroke-width="100" class="text-gray-700 opacity-25 ">
+                    <circle r="234" cx="196" cy="23" class=""></circle>
+                    <circle r="234" cx="790" cy="491" class=""></circle>
+                </g>
+            </svg><svg viewBox="0 0 220 192" width="220" height="192" fill="none"
+                class="absolute -top-16 -right-16 text-gray-700 ">
+                <defs class="">
+                    <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
+                        patternUnits="userSpaceOnUse" class="">
+                        <rect x="0" y="0" width="4" height="4" fill="currentColor" class=""></rect>
+                    </pattern>
+                </defs>
+                <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" class="">
+                </rect>
+            </svg>
+            <div class="z-10 relative w-full max-w-2xl">
+                <div class="text-5xl font-bold leading-none text-gray-100 ">
+                    <div class="">Welcome to</div>
+                    <div class="">our community</div>
+                </div>
+                <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ">
+                    {{ get_tenant_setting('registration_text', 'Join the global community of likeminded people') }}
+                </div>
+                <div class="flex items-center mt-8 ">
+                    <div class="flex flex-0 items-center -space-x-1.5 ">
+                        @for($i = 0; $i < 4; $i++) <img
+                            src="/images/male-09.jpeg"
+                            class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ">
+                            @endfor
+                    </div>
+                    <div class="ml-4 font-medium tracking-tight text-gray-400 ">
+                        {{ translate('More than') }} {{ get_public_user_count() }}
+                        {{ translate('people joined us, it\'s your turn') }}</div>
+                </div>
+            </div>
+        </div>
+        {{-- <img class="absolute inset-0 h-full w-full object-cover"
+            src="https://images.unsplash.com/photo-1505904267569-f02eaeb45a4c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
+            alt=""> --}}
+    </div>
 </div>
+</div>
+@endsection
+
+
+@section('script')
+@if(get_setting( 'google_recaptcha') == 1)
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+@endif
 @endsection

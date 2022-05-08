@@ -6,7 +6,7 @@ use App\Models\Auth\User as Authenticatable;
 use App\Notifications\EmailVerificationNotification;
 use App\Traits\CoreMetaTrait;
 use App\Traits\GalleryTrait;
-use App\Traits\LikesTrait;
+use App\Traits\SocialReactionsTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\SocialAccounts;
 use App\Traits\UploadTrait;
@@ -34,7 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialAccounts;
     use HasWalletFloat;
     use PermalinkTrait;
-    use LikesTrait;
+    use SocialReactionsTrait;
     use CoreMetaTrait;
     use SocialFollowingTrait;
 
@@ -266,24 +266,6 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
             ->paginate(18);
 
         return $data;
-    }
-
-    public function getFollowersCount()
-    {
-    }
-
-    public function followers()
-    {
-        return $this->morphToMany(self::class, 'subject', 'wishlists');
-        // return Wishlist::where('subject_type', 'App\Models\User')->where('subject_id', $this->id);
-    }
-
-    public function following()
-    {
-        return Wishlist::where('user_id', $this->id)
-            ->where('subject_type', \App\Models\Shop::class);
-
-        // return $this->morphedByMany(Shop::class, 'subject', 'wishlists');
     }
 
     public function getVerifiedAttribute()

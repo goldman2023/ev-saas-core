@@ -9,6 +9,11 @@ use Route;
 
 trait SocialFollowingTrait
 {
+    public function followers()
+    {
+        return $this->morphToMany(User::class, 'subject', 'follows');
+    }
+    
     public function follows_users()
     {
         return $this->morphedByMany(User::class, 'subject', 'follows');

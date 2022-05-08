@@ -76,8 +76,8 @@
                                 <div class="mt-2 text-sm text-yellow-700">
                                     <p>{{ translate('Product is currently unavailable. Get notified when this product
                                         stock is added.') }}</p>
-                                    <livewire:actions.wishlist-button action="Notify" :object="$product">
-                                    </livewire:actions.wishlist-button>
+                                    <livewire:actions.social-action-button action="notify" :object="$product">
+                                    </livewire:actions.social-action-button>
                                 </div>
                             </div>
                         </div>

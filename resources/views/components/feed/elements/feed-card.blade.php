@@ -104,9 +104,9 @@
                         {!! $product->description !!}
                     </div>
                     <div>
-                        <livewire:actions.wishlist-button :key="$item->id" template="wishlist-button-detailed"
+                        <livewire:actions.social-action-button :key="$item->id" action="wishlist" template="wishlist-button-detailed"
                             :object="$product">
-                        </livewire:actions.wishlist-button>
+                        </livewire:actions.social-action-button>
                     </div>
                     <a href="{{ $product->getPermalink() }}" class="btn btn-primary mt-4">
                         {{ translate('View product') }}
@@ -132,8 +132,8 @@
                         <span class="sr-only">likes</span>
 
                     </button>
-                    <livewire:actions.wishlist-button wire:key="post_{{ $item->id }}" :object="$item">
-                    </livewire:actions.wishlist-button>
+                    <livewire:actions.social-action-button wire:key="post_{{ $item->id }}" :object="$item" action="reaction" type="like">
+                    </livewire:actions.social-action-button>
                 </span>
                 <span class="inline-flex items-center text-sm">
                     <button type="button" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
