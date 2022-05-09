@@ -9,6 +9,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
     protected function getTenantAppSettings(): array {
         return [
             'pix_pro_software_download_url' => 'string',
+            'pix_pro_downloads' => 'array',
             'pix_pro_api_enabled' => 'boolean',
             'pix_pro_api_endpoint' => 'string',
             'pix_pro_api_username' => 'string',
@@ -40,6 +41,7 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             add_filter('app-settings-general-rules', function($rules_array) {
                 return array_merge($rules_array, [
                     'settings.pix_pro_software_download_url' => 'nullable',
+                    'settings.pix_pro_downloads' => 'nullable',
                 ]);
             }, 10, 1);
         }
@@ -61,21 +63,36 @@ class ThemeFunctionsServiceProvider extends WeThemeFunctionsServiceProvider
             // View actions
             add_action('view.order-received.items.end', function($order) {
                 if (View::exists('frontend.partials.order-received-download-cta')) {
-                    echo View::make('frontend.partials.order-received-download-cta', compact('order'));
+                    echo view('frontend.partials.order-received-download-cta', compact('order'));
                 }
             });
 
             // Add Pix-Pro API Integration Form
             add_action('view.integrations.end', function() {
                 if (View::exists('frontend.partials.pix-pro-api-integration-form')) {
-                    echo View::make('frontend.partials.pix-pro-api-integration-form');
+                    echo view('frontend.partials.pix-pro-api-integration-form');
                 }
             });
 
             // Add Pix-Pro General Settings
             add_action('view.app-settings-form.general.end', function() {
                 if (View::exists('frontend.partials.pix-pro-general-settings')) {
-                    echo View::make('frontend.partials.pix-pro-general-settings');
+                    echo view('frontend.partials.pix-pro-general-settings');
+                }
+            });
+
+            // Add Pix-Pro General Settings - WireSET
+            add_action('view.app-settings-form.general.wire_set', function() {
+                ?>
+                    $wire.set('settings.pix_pro_downloads', settings.pix_pro_downloads, true);
+                <?php
+            });
+
+            add_action('view.dashboard.my-downloads.end', function() {
+                if (View::exists('frontend.partials.pix-pro-software-downloads-table')) {
+                    echo view('frontend.partials.pix-pro-software-downloads-table', [
+                        'downloads' => collect(TenantSettings::get('pix_pro_downloads'))
+                    ]);
                 }
             });
         }

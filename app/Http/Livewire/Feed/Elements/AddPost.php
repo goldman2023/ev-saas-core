@@ -3,7 +3,8 @@
 namespace App\Http\Livewire\Feed\Elements;
 
 use App\Facades\MyShop;
-use App\Models\BlogPost;
+use App\Models\SocialPost;
+use App\Enums\StatusEnum;
 use App\Traits\Livewire\RulesSets;
 use App\Traits\Livewire\DispatchSupport;
 use Livewire\Component;
@@ -19,9 +20,6 @@ class AddPost extends Component
     protected function rules()
     {
         return [
-            'post.name' => '',
-            'post.type' => '',
-            'post.excerpt' => '',
             'post.content' => 'required',
             'post.thumbnail' => 'if_id_exists:App\Models\Upload,id,true',
         ];
@@ -55,8 +53,9 @@ class AddPost extends Component
         DB::beginTransaction();
 
         try{
-            $this->post->name = 'Feed Post Post by '.auth()->user()->name;
-            $this->post->excerpt = $this->post->content;
+            $this->post->content = $this->post->content;
+            $this->post->meta_description = $this->post->content;
+            $this->post->status = StatusEnum::published()->value;
     
             if (MyShop::getShop()) {
                 $this->post->shop_id = MyShop::getShopID();
@@ -70,7 +69,7 @@ class AddPost extends Component
 
             DB::commit();
 
-            $this->emit('newPostAdded', $this->post->id);
+            $this->emit('newSocialPostAdded', $this->post->id);
 
             $this->inform(translate('Shared sucesfully!'), '', 'success');
             $this->dispatchBrowserEvent('reset-image-selector');
@@ -78,7 +77,7 @@ class AddPost extends Component
             $this->resetForm();
         } catch(\Exception $e) {
             DB::rollBack();
-
+            dd($e);
             $this->dispatchGeneralError(translate('Could not share a post...Please try again.'));
             $this->inform(translate('Could not share a post...Please try again.'), '', 'fail');
         }
@@ -87,7 +86,7 @@ class AddPost extends Component
 
     public function resetForm()
     {
-        $this->post = new BlogPost();
+        $this->post = new SocialPost();
         $this->post->type = 'post';
     }
 }

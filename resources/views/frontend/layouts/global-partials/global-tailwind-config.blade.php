@@ -124,6 +124,13 @@ TODO: you can overide it with data from a database a sa setting --}}
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
         }
         
+        .badge {
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+        }
+
+        .badge-primary {
+            @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-light text-primary;
+        }
 
         .badge-info {
             @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-light text-info;

@@ -2,11 +2,6 @@
 
 @section('content')
 <div class="min-h-full bg-gray-200">
-    {{-- 
-        When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars
-
-      Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: ""
-    --}}
     <div class="max-w-5xl mx-auto sm:px-6 lg:max-w-[1440px] lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8 py-10 pt-3">
         <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
             <x-feed.elements.feed-sidebar>
@@ -24,12 +19,13 @@
 
                     <div class="col-span-12 md:col-span-7 space-y-4 px-4 md:px-0">
                        {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
-                        <livewire:feed.elements.add-post></livewire:feed.elements.add-post>
-                        <livewire:feed.feed-list> </livewire:feed.feed-list>
+                        <livewire:feed.elements.add-post />
+                        <livewire:feed.feed-list />
                     </div>
 
                     <div class="col-span-12 md:col-span-5 px-4 md:px-0">
-
+                        {{-- Upcoming Events --}}
+                        <livewire:feed.blocks.upcoming-events />
                     </div>
                 </div>
             </div>

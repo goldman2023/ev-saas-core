@@ -3,10 +3,19 @@
             return {
                 mode: @js($mode ?? 'single'),
                 enableTime: @js($enableTime ?? false),
-                dateFormat: @js($dateFormat ?? 'd.m.Y.'),
+                altFormat: @js($dateFormat ?? 'd.m.Y.'),
+                dateFormat: 'U',
+                altInput: true,
             };
         },
-    }" x-init="$nextTick(() => { flatpickr('#{{ !empty($id) ? $id : str_replace('.', '_', $field) }}', getDateOptions()); });">
+        initDateForm() {
+            $nextTick(() => { 
+                flatpickr('#{{ !empty($id) ? $id : str_replace('.', '_', $field) }}', this.getDateOptions()); 
+            });
+        }
+    }" 
+    x-init="initDateForm()"
+    @init-form.window="initDateForm()">
     <input x-model="{{ $field }}"
             type="text"
             id="{{ !empty($id) ? $id : str_replace('.', '_', $field) }}"

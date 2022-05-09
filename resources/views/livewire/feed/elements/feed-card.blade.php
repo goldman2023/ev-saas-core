@@ -13,20 +13,44 @@
         <x-feed.elements.card-header-user-info :item="$item">
         </x-feed.elements.card-header-user-info>
 
-        <div class="w-full">
+        <div class="w-full flex flex-col">
             @if(!empty($item->subject->hasThumbnail()))
-                <a class="block w-full" href="{{ $item->subject?->getPermalink() ?? '#' }}">
+                <a class="block w-full mb-5" href="{{ $item->subject?->getPermalink() ?? '#' }}">
                     <img src="{{ $item->subject->getThumbnail(['w' => 600]) }}" class="w-full h-[205px] object-cover rounded-xl"/>
                 </a>
             @endif
 
-            <a href="{{ $item->subject?->getPermalink() ?? '#' }}" target="_blank" class="flex text-22 mt-5 mb-3 text-typ-2 leading-none font-semibold">
-                {{ $item->subject->name }}
-            </a>
+            @if($item->subject::class !== \App\Models\SocialPost::class)
+                <div class="w-full mb-3 flex">
+                    @if($item->subject::class === \App\Models\Product::class && $item->subject->isEvent())
+                        <span class="badge-success">{{ translate('Event') }}</span>
+                    @else
+                        <span class="badge-primary">{{ \App\Enums\ContentTypeEnum::class_to_label($item->subject::class) }}</span>
+                    @endif
+                </div>
+            @endif
 
-            <p class="text-14 text-typ-3 font-normal line-clamp-10">
-                {{ empty(trim($item->subject->excerpt)) ? $item->subject->excerpt : $item->subject->excerpt }}
+            @if(!empty($item->subject?->name ?? null))
+                <a href="{{ $item->subject?->getPermalink() ?? '#' }}" target="_blank" class="flex text-22 mb-3 text-typ-2 leading-none font-semibold">
+                    {{ $item->subject->name }}
+                </a>
+            @endif
+
+            <p class="text-14 text-typ-3 font-normal line-clamp-10 ">
+                @if(!empty($item->subject?->excerpt ?? null))
+                    {{ empty(trim($item->subject->excerpt)) ? strip_tags($item->subject->content) : $item->subject->excerpt }}
+                @else
+                    {{ $item->subject->content }}
+                @endif
             </p>
+
+            @if(!empty($item->subject?->tags ?? null))
+                <div class="w-full mt-3 flex flex-wrap space-x-2">
+                    @foreach($item->subject?->tags as $tag)
+                        <span class="text-12 text-typ-3 py-1 px-2 border border-gray-200 rounded-xl">#{{ $tag }}</span>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <div class="py-4 @if($showComments) my-4 @else mt-4 mb-0 @endif px-3 flex justify-between border-y border-gray-100">

@@ -30,6 +30,12 @@ class SocialComments extends Component
         'comment_text' => 'required',
     ];
 
+    protected function messages() { 
+        return [
+            'comment_text.required' => translate('Comment cannot be empty...'),
+        ];
+    }
+
     public function mount($item, $include_reviews = false)
     {
         $this->item = $item;

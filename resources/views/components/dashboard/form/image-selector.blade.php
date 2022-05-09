@@ -56,7 +56,6 @@
                             <a class="p-1 rounded border border-gray-200" @click="event.stopPropagation();" :href="'{{ Storage::url('') }}'+{{ $field }}.file_name" target="_blank">
                                 @svg('heroicon-o-eye', ['class' => 'h-4 w-4 text-gray-700'])
                             </a>
-                            
                         </div>
                     </template>
                     <div class="flex flex-row justify-between">

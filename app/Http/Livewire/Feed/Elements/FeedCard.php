@@ -42,6 +42,7 @@ class FeedCard extends Component
             $this->ignore = true;
         }
 
+        // Following chain is prevented in Activity query builder itself with proper query clauses
         if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
             

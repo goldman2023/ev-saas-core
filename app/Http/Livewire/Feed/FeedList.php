@@ -14,7 +14,7 @@ use App\Models\BlogPost;
 use App\Models\Plan;
 use App\Models\Shop;
 use App\Models\Product;
-
+use App\Models\SocialPost;
 use App\Models\User;
 use App\Models\SocialComment;
 
@@ -36,7 +36,7 @@ class FeedList extends Component
     public $my_new_post = null;
 
     protected $listeners = [
-        'newPostAdded' => 'prependMyNewPost'
+        'newSocialPostAdded' => 'prependNewSocialPost'
     ];
 
     public function mount()
@@ -77,12 +77,11 @@ class FeedList extends Component
             ->where(function($query) {
                 // Select only those Products/BlogPosts/Plans/Posts where status is published OR any Shop
                 $query
-                    ->whereHasMorph('subject', [Product::class, BlogPost::class, Plan::class], function($query) {
-                        $query->where('status', StatusEnum::published()->value);
+                    ->whereHasMorph('subject', [Product::class, BlogPost::class, Plan::class, SocialPost::class], function($query) {
+                        $query->published();
                     })
                     ->orWhereHasMorph('subject', [Shop::class]);
             });
-            
         if ($this->type == 'recent') {
             // Use Cursor Pagination for Recent
             $activities = $activities->orderBy('id', 'desc')->cursorPaginate($this->perPage, ['*'], 'cursor', Cursor::fromEncoded($this->nextCursor));
@@ -96,6 +95,7 @@ class FeedList extends Component
         // TODO: WTF???? ->withCount('comments') is not taken into account on data load!...da fuq?
         $this->activities->push(...$activities->items()); // Append paginated activities to `public $this->activities`
         $this->prepareNextPage($activities);
+
 
         /* $sync_impressions = Session::get('user.impressions_queue');
         foreach ($sync_impressions as $impression) {
@@ -120,15 +120,15 @@ class FeedList extends Component
         $this->loadActivities();
     }
 
-    public function prependMyNewPost($post_id) {
+    public function prependNewSocialPost($post_id) {
         
-        $my_post_activity = Activity::where([
-            'subject_type' => BlogPost::class,
+        $my_new_activity_post = Activity::where([
+            'subject_type' => SocialPost::class,
             'subject_id' => $post_id,
             'causer_type' => auth()->user()::class,
             'causer_id' => auth()->user()->id,
         ])->first();
         
-        $this->my_new_post = $my_post_activity;
+        $this->activities->prepend($my_new_activity_post);
     }
 }

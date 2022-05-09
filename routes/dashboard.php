@@ -14,6 +14,7 @@ use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\LeadController;
@@ -110,6 +111,10 @@ Route::middleware([
 
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
+
+        /* My Downloads (all) */
+        Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');
+
 
         /* My account */
         Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
