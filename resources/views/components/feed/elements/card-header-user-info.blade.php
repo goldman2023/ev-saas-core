@@ -12,7 +12,7 @@
                     :image="$user->getAvatar()">
                 </x-tenant.system.image>
             </a>
-            <span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-400"></span>
+            {{-- <span class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white bg-green-400"></span> --}}
         </div>
 
     </div>

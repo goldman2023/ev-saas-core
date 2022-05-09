@@ -126,9 +126,9 @@ if (!function_exists('castValuesForGet')) {
                         } else if($data_type === 'array') {
                             $setting = json_decode($setting, true);
                         } else if($data_type === 'date') {
-                            $setting = \Carbon::parse($setting)->format('d.m.Y.');
+                            //$setting = \Carbon::parse($setting)->format('d.m.Y.');
                         } else if($data_type === 'datetime') {
-                            $setting = \Carbon::parse($setting)->format('d.m.Y. H:i');
+                            //$setting = \Carbon::parse($setting)->format('d.m.Y. H:i');
                         } else {
                             $setting = $setting;
                         }

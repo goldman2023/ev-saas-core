@@ -8,6 +8,7 @@ use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
 use App\Traits\HasStatus;
 use App\Traits\SocialReactionsTrait;
+use App\Traits\SocialCommentsTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
@@ -33,14 +34,11 @@ class BlogPost extends WeBaseModel
 //    use ReactionsTrait;
     // use CommentsTrait;
     use PermalinkTrait;
+    use SocialCommentsTrait;
     use SocialReactionsTrait;
     use HasStatus;
 
     protected $table = 'blog_posts';
-
-    public const ROUTING_SINGULAR_NAME_PREFIX = 'post';
-
-    public const ROUTING_PLURAL_NAME_PREFIX = 'posts';
 
     protected $fillable = ['shop_id', 'type', 'name', 'excerpt', 'content', 'status', 'subscription_only', 'meta_title', 'meta_description', 'meta_keywords'];
 
@@ -118,10 +116,5 @@ class BlogPost extends WeBaseModel
     public function getTranslationModel(): ?string
     {
         return BlogPostTranslation::class;
-    }
-
-    public function comments()
-    {
-        return $this->morphMany(SocialComment::class, 'subject');
     }
 }

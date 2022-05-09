@@ -125,8 +125,8 @@ class ProductForm2 extends Component
             'meta' => [
                 // TODO: Add proper conditional validation!
                 'product_core_meta.date_type.value' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
-                'product_core_meta.start_date.value' => ['exclude_unless:product.type,event', 'required_if:product.type,event', 'date'], //'required_if:product.type,event|date',
-                'product_core_meta.end_date.value' => 'nullable|date',
+                'product_core_meta.start_date.value' => ['exclude_unless:product.type,event', 'required_if:product.type,event'], //'required_if:product.type,event|date',
+                'product_core_meta.end_date.value' => 'nullable',
                 'product_core_meta.location_type.value' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
                 'product_core_meta.location_address.value' => 'nullable',
                 'product_core_meta.location_address_map_link.value' => 'nullable',
@@ -221,7 +221,7 @@ class ProductForm2 extends Component
 
     public function dehydrate()
     {
-        $this->dispatchBrowserEvent('initProductForm');
+        $this->dispatchBrowserEvent('init-form');
     }
 
     public function render()

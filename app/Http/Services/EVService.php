@@ -290,7 +290,7 @@ class EVService
             ],
             [
                 'label' => translate('Customer zone'),
-                'items' => [
+                'items' => apply_filters('dashboard.sidebar.customer-zone.items', [
                     [
                         'label' => translate('Account'),
                         'icon' => 'heroicon-o-user',
@@ -309,9 +309,9 @@ class EVService
                     ],
                     [
                         'label' => translate('Downloads'),
-                        'icon' => 'heroicon-o-document-text',
-                        'route' => route('my.purchases.all'),
-                        'is_active' => areActiveRoutes(['my.purchases.all']),
+                        'icon' => 'heroicon-o-download',
+                        'route' => route('my.downloads.all'),
+                        'is_active' => areActiveRoutes(['my.downloads.all']),
                         'user_types' => User::$user_types,
                         'permissions' => [],
                     ],
@@ -341,7 +341,7 @@ class EVService
                         'permissions' => [],
                         'enabled' => get_tenant_setting('viewed_products_enabled', true),
                     ] */
-                ],
+                ]),
             ],
             [
                 'label' => translate('Settings'),

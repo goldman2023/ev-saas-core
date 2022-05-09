@@ -182,6 +182,9 @@ Route::middleware([
     Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
     Route::get('/blog/posts/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
 
+    // Social Posts
+    Route::get('/social/post/{id}', [EVBlogPostController::class, 'single'])->name('social.post.single');
+
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());
     Route::get('/shops', [MerchantController::class, 'index'])->name('shop.index');

@@ -1,37 +1,40 @@
-<div class="bg-gray-50 px-4 py-6 sm:px-6 rounded-md shadow" x-data="{
-    'isModalOpen': false,
+<div class="bg-white p-4 sm:p-5 rounded-md shadow" x-data="{
+    isModalOpen: false,
     thumbnail: @js(['id' => $post->thumbnail->id ?? null, 'file_name' => $post->thumbnail->file_name ?? '']),
-}" 
+}"
 x-on:reset-image-selector.window="thumbnail = @js(['id' => null, 'file_name' => ''])" 
 x-on:keydown.escape="isModalOpen=false">
     <div class="flex space-x-3">
         <div class="flex-shrink-0">
             <div class="flex-shrink-0 ">
-                <img class="object-contain h-20 w-20 rounded-full bg-white we-feed-avatar ring-indigo-600 ring-2 p-1"
+                <img class="h-11 w-11 rounded-full border-3 ring-2 ring-gray-200 object-cover"
                     src="{{ auth()->user()->getThumbnail() }}"
-                    alt="feed-avatar">
+                    alt="feed-avatar" />
             </div>
-
         </div>
         <div class="min-w-0 flex-1">
-            <div class="flex flex-col overflow-hidden rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm border border-gray-300">
-                <label for="content" class="sr-only">About</label>
-                <textarea id="content" name="content" rows="3" wire:model.lazy="post.content"
-                    class="shadow-sm block w-full border-0"
-                    placeholder="{{ translate('What\'s on your mind?') }}"></textarea>
+            <div class="flex flex-col">
+                <textarea rows="1" 
+                    wire:model.lazy="post.content"
+                    class="mb-2 w-full bg-bg-3 px-3 py-2 text-typ-2 rounded-xl border-0 border-none focus:ring-0 focus:border-0 focus:outline-0 outline-0 focus:shadow-none resize-none"
+                    placeholder="{{ translate('What\'s on your mind?') }}"
+                    x-data="{ resizeTextArea: () => { if($el.scrollHeight < 200) $el.style.height = $el.scrollHeight + 'px'; else $el.style.height = '200px'; } }"
+                    x-init="resizeTextArea()"
+                    @input="resizeTextArea()">
+                </textarea>
 
-                    <div class="text-14 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
-                        <x-dashboard.form.image-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.image-selector>
-                    </div>
-                                    
+                <div class="text-14 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
+                    <x-dashboard.form.image-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.image-selector>
+                </div>
             </div>
             <div class="mt-3 flex items-center justify-between">
-                <a href="#" class="group inline-flex items-start text-sm space-x-2 text-gray-500 hover:text-gray-900">                    
-                    @svg('heroicon-s-question-mark-circle', ['class' => 'flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500'])
-                    <span>
+                <p class="group inline-flex items-start text-sm space-x-2 mb-0">                    
+                    @svg('heroicon-s-question-mark-circle', ['class' => 'ftext-10 lex-shrink-0 h-5 w-5 text-typ-3 group-hover:text-typ-4'])
+                    <span class="text-10 text-typ-3 group-hover:text-typ-4">
                         {{ translate('Post will be visible publicly') }}
                     </span>
-                </a>
+                </p>
+
                 <button class="hidden text-xs text-gray-500" x-on:click="isModalOpen = true">
                    {{ translate('Advanced editor') }}
                 </button>
@@ -41,14 +44,14 @@ x-on:keydown.escape="isModalOpen=false">
                     "   
                     wire:click="addFeedPost" 
                     type="submit"
-                    class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    class="btn-primary">
                     {{ translate('Add a post') }}
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- This example requires Tailwind CSS v2.0+ -->
+    {{-- Advanced  --}}
     <div x-show="isModalOpen" x-on:click.away="isModalOpen = false" x-cloak x-transition
         class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">

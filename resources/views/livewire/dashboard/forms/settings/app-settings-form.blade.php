@@ -273,6 +273,7 @@
                                         $wire.set('settings.site_logo_dark', settings.site_logo_dark?.id, true);
                                         $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
                                         $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
+                                        @do_action('view.app-settings-form.general.wire_set')
                                     "
                                     wire:click="saveGeneral()">
                                 {{ translate('Save') }}
