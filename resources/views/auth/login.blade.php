@@ -45,8 +45,8 @@
             </svg>
             <div class="z-10 relative w-full max-w-2xl">
                 <div class="text-5xl font-bold leading-none text-gray-100 ">
-                    <div class="">Welcome to</div>
-                    <div class="">our community</div>
+                    <div class="">{{ translate('Welcome to')}} </div>
+                    <div class="">{{ translate('our community') }}</div>
                 </div>
                 <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ">
                     {{ get_tenant_setting('registration_text', 'Join the global community of likeminded people') }}
