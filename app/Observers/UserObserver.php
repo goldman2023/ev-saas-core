@@ -7,7 +7,9 @@ use App\Mail\UserReceivedEmail;
 use App\Mail\WelcomeEmail;
 use Illuminate\Support\Facades\Mail;
 use Log;
+use Payments;
 use MailerService;
+use StripeService;
 use App\Enums\WeMailingListsEnum;
 use App\Mail\EmailVerification;
 
@@ -58,7 +60,12 @@ class UserObserver
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
             }
-        } 
+        }
+
+        // Create Stripe Customer if stripe is enabled
+        if(Payments::isStripeEnabled()) {
+            StripeService::createStripeCustomer($user);
+        }
     }
 
     /**
