@@ -32,7 +32,7 @@ class UserMeta extends WeBaseModel
             'work_experience' => 'array',
             'education' => 'array',
             'bio' => 'wysiwyg',
-            'locale' => 'string',
+            'locale' => 'select',
 
             // 'work_experience' => [
             //     'title' => 'string',
