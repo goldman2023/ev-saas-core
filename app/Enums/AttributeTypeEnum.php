@@ -22,6 +22,7 @@ class AttributeTypeEnum extends EVBaseEnum
         return [
             'checkbox' => 'checkbox',
             'dropdown' => 'dropdown',
+            'toggle' => 'toggle',
             'radio' => 'radio',
             'plain_text' => 'plain_text',
             'country' => 'country',
@@ -39,6 +40,7 @@ class AttributeTypeEnum extends EVBaseEnum
         return [
             'checkbox' => 'Checkbox',
             'dropdown' => 'Dropdown',
+            'toggle' => 'Toggle',
             'radio' => 'Radio',
             'plain_text' => 'Plain text',
             'country' => 'Country',

@@ -788,9 +788,9 @@
 
                                                     if(this.hasCustomProperty('with_time') && this.attribute.custom_properties.with_time) {
                                                         options.enableTime = true;
-                                                        options.dateFormat = 'd.m.Y. H:i';
+                                                        options.dateFormat = 'd.m.Y H:i';
                                                     } else {
-                                                        options.dateFormat = 'd.m.Y.';
+                                                        options.dateFormat = 'd.m.Y';
                                                     }
 
                                                     if(this.hasCustomProperty('range') && this.attribute.custom_properties.range) {

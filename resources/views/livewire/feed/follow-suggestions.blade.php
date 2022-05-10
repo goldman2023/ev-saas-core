@@ -101,7 +101,7 @@
     </div>
 
     <div class="w-full py-3 border-t border-gray-200 flex justify-center">
-        <a href="#" class="text-typ-3 hover:underline w-full  text-14 text-center">
+        <a href="{{ route('feed.shops') }}" class="text-typ-3 hover:underline w-full  text-14 text-center">
             {{ translate('Explore more profiles...') }}
         </a>
     </div>

@@ -26,12 +26,14 @@
                         }}</a>
                     <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'plans-pricing']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Pricing')
                         }}</a>
-                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'blog']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Blog')
+                    <a href="{{ route('blog.archive') }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Blog')
                         }}</a>
                     <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Contact')
                         }}</a>
-                    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Support')
+                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'support']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Support')
                         }}</a>
+                    <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'download-pixpro-photogrammetry-software']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Download')
+                    }}</a>
                 </nav>
 
                 {{-- TODO: Create Dashboard button (similar to 'Try for free') if user is authenticated, otherwise
@@ -111,6 +113,11 @@
                             <a href="#" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
                                 <span class="text-base font-medium text-gray-900"> {{ translate('Contact') }} </span>
                             </a>
+
+                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'support']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Support')
+                            }}</a>
+                            <a href="{{ route('custom-pages.show_custom_page', ['slug' => 'download-pixpro-photogrammetry-software']) }}" class="text-base font-medium text-gray-500 hover:text-gray-900">{{ translate('Download')
+                            }}</a>
                         </nav>
                     </div>
                 </div>
