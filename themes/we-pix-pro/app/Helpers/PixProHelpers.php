@@ -13,7 +13,7 @@ if (!function_exists('pix_pro_register_user')) {
             "FirstName" => $user->name,
             "LastName" => $user->surname,
             "Company" => '', // TODO: add company
-            "UserPassword" => $user->getCoreMeta('password_md5'),
+            "UserPassword" => $user->getCoreMeta('password_md5', true),
             "UserEmail" => $user->email
         ];
 
@@ -46,7 +46,7 @@ if (!function_exists('pix_pro_create_license')) {
                   );
 
                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
-
+                
                 $body = [
                     "UserId" => $subscription->user_id,
                     "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
@@ -75,7 +75,7 @@ if (!function_exists('pix_pro_create_license')) {
 
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, throw an error
-                    FacadesLog::error(pix_pro_error($route, 'There was an error while trying to create user in pix-pro API DB, check the response below.', $response_json));
+                    FacadesLog::error(pix_pro_error($route, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
                 }
             }
         }
