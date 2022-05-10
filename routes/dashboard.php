@@ -14,6 +14,7 @@ use App\Http\Controllers\EVPlanController;
 use App\Http\Controllers\EVProductController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\EVDownloadsController;
 use App\Http\Controllers\Integrations\FacebookBusinessController;
 use App\Http\Controllers\Integrations\IntegrationsController;
 use App\Http\Controllers\LeadController;
@@ -111,6 +112,10 @@ Route::middleware([
         /* My Purchases/Wishlist/Viewed Items */
         Route::get('/purchases/all', [EVOrderController::class, 'my_purchases'])->name('my.purchases.all');
 
+        /* My Downloads (all) */
+        Route::get('/downloads/all', [EVDownloadsController::class, 'my_downloads'])->name('my.downloads.all');
+
+
         /* My account */
         Route::get('/account-settings', [EVAccountController::class, 'account_settings'])->name('my.account.settings');
         Route::get('/account-settings/shops', [EVAccountController::class, 'account_shops_settings'])->name('my.account.shops');
@@ -179,6 +184,11 @@ Route::middleware([
     /* FEED Routes */
     /* TODO: Add this to separate feed.php routes file */
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index')->middleware('auth');
+    Route::get('/feed/trending', [FeedController::class, 'trending'])->name('feed.trending')->middleware('auth');
+    Route::get('/feed/trending', [FeedController::class, 'trending'])->name('feed.trending')->middleware('auth');
+    Route::get('/feed/discussions', [FeedController::class, 'discussions'])->name('feed.discussions')->middleware('auth');
+    Route::get('/feed/tags', [FeedController::class, 'tags'])->name('feed.tags');
+    Route::get('/feed/bookmarks', [FeedController::class, 'bookmarks'])->name('feed.bookmarks');
     Route::get('/feed/shops', [FeedController::class, 'shops'])->name('feed.shops');
     Route::get('/feed/products', [FeedController::class, 'products'])->name('feed.products');
     /* This is general route to catch all requests to /* */

@@ -5,6 +5,8 @@ use App\Http\Controllers\AffiliateBannerController;
 use App\Http\Controllers\AizUploadController;
 use App\Http\Controllers\App;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\BlogController;
@@ -74,8 +76,6 @@ Route::middleware([
     VendorMode::class,
 ])->group(function () {
 
-
-
     Route::middleware('auth')->group(function () {
         Route::get('/we-analytics', [WeAnalyticsController::class, 'index'])->name('analytics.index');
         Route::get('/we-menu', [WeMenuController::class, 'index'])->name('menu.index');
@@ -85,18 +85,29 @@ Route::middleware([
         Route::get('/we-edit/flow/menu', [WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
 
         Route::get('/we-grape', [GrapeController::class, 'index'])->name('grape.index');
-
-
     });
 
     // Webhooks
     Route::post('/webhooks/stripe', [StripePaymentController::class, 'webhooks'])->name('webhooks.stripe');
     Route::get('/stripe/create-checkout-session', [StripePaymentController::class, 'generateCheckoutSessionLink'])->name('stripe.checkout_redirect');
 
+    
     // Route to show after creating new tenant:
     Auth::routes(['verify' => true]);
+
+    // User/Business/Admin login/register routes
+    Route::get('/admin/login', [LoginController::class, 'admin_login'])->name('admin.login');
+    Route::get('/business/login', [LoginController::class, 'business_login'])->name('business.login');
+    Route::get('/business/register', [RegisterController::class, 'business_registration'])->name('business.registration');
+    Route::get('/users/login', [LoginController::class, 'user_login'])->name('user.login');
+    Route::get('/users/register', [RegisterController::class, 'user_registration'])->name('user.registration');
+
     Route::get('/logout', [LoginController::class, 'logout'])->name('user.logout');
     Route::post('/password/reset/email/submit', [HomeController::class, 'reset_password_with_code'])->name('user.password.update');
+
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'forgot_password'])->name('user.forgot-password');
+    Route::get('/reset-password', [ForgotPasswordController::class, 'reset_password'])->name('user.reset-password');
+
 
     Route::get('/welcome', [OnboardingController::class, 'step2'])->name('onboarding.step1')->middleware(['auth']);
     Route::get('/welcome/step2', [OnboardingController::class, 'step2'])->name('onboarding.step2')->middleware(['auth']);
@@ -146,14 +157,6 @@ Route::middleware([
     Route::get('/social-connect/redirect/{provider}', [SocialController::class, 'redirectConnectToProvider'])->name('social.connect');
     Route::get('/social-connect/{provider}/callback', [SocialController::class, 'handleProviderConnectCallback'])->name('social.connect.callback');
 
-    Route::get('/business/login', [HomeController::class, 'login'])->name('business.login');
-    Route::post('/business/login', [HomeController::class, 'business_login'])->name('business.login.submit');
-    Route::get('/users/login', [HomeController::class, 'login_users'])->name('user.login');
-    Route::get('/users/register', [HomeController::class, 'registration'])->name('user.registration');
-    Route::post('/users/login/cart', [HomeController::class, 'cart_login'])->name('cart.login.submit');
-    Route::get('/admin/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/admin/login')->name('login.attempt')->uses([App\Http\Controllers\Auth\LoginController::class, 'login']);
-
     // Route::get('/search', [HomeController::class, 'search'])->name('products.index');
     Route::get('/search?q={search}', [HomeController::class, 'search'])->name('suggestion.search');
     Route::post('/ajax-search', [HomeController::class, 'ajax_search'])->name('search.ajax');
@@ -178,6 +181,9 @@ Route::middleware([
     // Blog Posts
     Route::get('/shop/{shop_slug}/blog/posts/{slug}', [EVCategoryController::class, 'archiveByCategory'])->name('shop.blog.post.index');
     Route::get('/blog/posts/{slug}', [EVBlogPostController::class, 'single'])->name('blog.post.single');
+
+    // Social Posts
+    Route::get('/social/post/{id}', [EVBlogPostController::class, 'single'])->name('social.post.single');
 
     // Shop pages
     Route::get('/shop/{slug}', [EVShopController::class, 'single'])->name(Shop::getRouteName());

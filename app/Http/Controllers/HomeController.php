@@ -46,14 +46,7 @@ class HomeController extends Controller
 {
     use LoggingTrait;
 
-    public function login()
-    {
-        if (Auth::check()) {
-            return redirect()->route('home');
-        }
-
-        return view('frontend.business_login');
-    }
+    
 
     public function login_users()
     {
@@ -76,52 +69,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function registration(Request $request)
-    {
-        if (Auth::check()) {
-            return redirect()->route('home');
-        }
-        if (
-            $request->has('referral_code') &&
-            \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first() != null &&
-            \App\Models\Addon::where('unique_identifier', 'affiliate_system')->first()->activated
-        ) {
-            try {
-                $affiliate_validation_time = \App\Models\AffiliateConfig::where('type', 'validation_time')->first();
-                $cookie_minute = 30 * 24;
-                if ($affiliate_validation_time) {
-                    $cookie_minute = $affiliate_validation_time->value * 60;
-                }
-
-                Cookie::queue('referral_code', $request->referral_code, $cookie_minute);
-                $referred_by_user = User::where('referral_code', $request->product_referral_code)->first();
-
-                $affiliateController = new AffiliateController;
-                $affiliateController->processAffiliateStats($referred_by_user->id, 1, 0, 0, 0);
-            } catch (\Exception $e) {
-            }
-        }
-
-        return view('frontend.user_registration');
-    }
-
-    public function cart_login(Request $request)
-    {
-        $user = User::whereIn('user_type', ['customer', 'seller'])->where('email', $request->email)->orWhere('phone', $request->email)->first();
-        if ($user != null) {
-            if (Hash::check($request->password, $user->password)) {
-                if ($request->has('remember')) {
-                    auth()->login($user, true);
-                } else {
-                    auth()->login($user, false);
-                }
-            } else {
-                flash(translate('Invalid email or password!'))->warning();
-            }
-        }
-
-        return back();
-    }
+    
 
     /**
      * Create a new controller instance.

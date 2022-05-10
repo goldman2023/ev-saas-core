@@ -18,7 +18,7 @@ class CoreMeta extends Model
         return $this->morphTo('subject');
     }
 
-    public static function metaDataTypes()
+    public static function metaProductDataTypes()
     {
         return [
             'date_type' => 'string',
@@ -26,14 +26,14 @@ class CoreMeta extends Model
             'end_date' => 'date',
             'location_type' => 'string',
             'location_address' => 'string',
-            'location_address_coordinates' => 'array',
+            'location_address_map_link' => 'string',
             'location_link' => 'string',
             'unlockables' => 'array',
             'calendly_link' => 'string',
         ];
     }
 
-    public static function getMeta($core_meta)
+    public static function getMeta($core_meta, $content_type, $strict = false)
     {
         if (is_array($core_meta)) {
             if (empty($core_meta)) {
@@ -45,13 +45,15 @@ class CoreMeta extends Model
             $core_meta = $core_meta->keyBy('key')->toArray();
         }
 
-        $data_types = self::metaDataTypes();
+        if($content_type === Product::class) {
+            $data_types = self::metaProductDataTypes();
+        }
 
         castValuesForGet($core_meta, $data_types);
-
+        
         $missing = array_diff_key($data_types, $core_meta);
         $missing_clone = $missing;
-
+        
         if (! empty($missing)) {
             foreach ($missing as $key => $type) {
                 $missing[$key] = [
@@ -59,6 +61,11 @@ class CoreMeta extends Model
                 ];
             }
             castValuesForGet($missing, $missing_clone);
+        }
+
+        // If strict is true, get only core_meta from $data_types, remove other meta
+        if($strict) {
+            return collect(array_intersect_key(array_merge($core_meta, $missing), $data_types))->map(fn($item, $key) => ['key'=>$key, 'value'=>$item]);
         }
 
         return array_merge($core_meta, $missing);

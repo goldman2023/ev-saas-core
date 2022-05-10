@@ -40,7 +40,7 @@
                             :image="get_site_logo()">
                         </x-tenant.system.image>
 
-                        <a href="#" class="w-full btn-primary mt-5 text-center justify-center">
+                        <a href="{{ get_tenant_setting('pix_pro_software_download_url') }}" class="w-full btn-primary mt-5 text-center justify-center">
                             {{ translate('Download') }}
                         </a>
                     </div>

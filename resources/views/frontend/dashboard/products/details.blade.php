@@ -233,13 +233,13 @@
                                 <div class="flow-root mt-6">
                                     <ul role="list" class="-my-5 divide-y divide-gray-200">
                                         <li class="py-5">
-                                            <div class="relative focus-within:ring-2 focus-within:ring-cyan-500">
+                                            <div class="relatives">
                                                 <h3 class="text-sm font-semibold text-gray-800">
-                                                    <a href="{{ $product->getStripeCheckoutPermalink(1, true) }}" class="hover:underline focus:outline-none">
+                                                    <div class="flex flex-col">
                                                         {{-- Stripe icon --}}
                                                         {{-- TODO: Create global components for icons like this custom
                                                         brand images mostly --}}
-                                                        <svg class="w-10" viewBox="0 0 452 188"
+                                                        <svg class="w-16" viewBox="0 0 452 188"
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             xmlns:xlink="http://www.w3.org/1999/xlink">
                                                             <title>Logo</title>
@@ -256,20 +256,31 @@
                                                             </g>
                                                         </svg>
                                                         <!-- Extend touch target to entire panel -->
-                                                        @if(!$product->isStripeProduct())
-                                                        <span
-                                                            class="mt-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                                            <svg class="-ml-1 mr-1.5 h-2 w-2 text-green-400"
-                                                                fill="currentColor" viewBox="0 0 8 8">
-                                                                <circle cx="4" cy="4" r="3" />
-                                                            </svg>
-                                                            {{ translate('Status live') }}
-                                                        </span>
+                                                        @if($product->isStripeProduct())
+                                                            <span
+                                                                class="mt-3 mr-auto mb-3 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                                <svg class="-ml-1 mr-1.5 h-2 w-2 text-green-400"
+                                                                    fill="currentColor" viewBox="0 0 8 8">
+                                                                    <circle cx="4" cy="4" r="3" />
+                                                                </svg>
+                                                                {{ translate('Status live') }}
+                                                            </span>
+
+                                                            @if(!empty($stripe_product_id = $product->getStripeProductID()))
+                                                                <div class="flex mb-1">
+                                                                    <span class="font-medium mr-1">{{ translate('Product ID') }}:</span>
+                                                                    <a href="{{ '#' }}" target="_blank" class="text-info">{{ $stripe_product_id }}</a>
+                                                                </div>
+                                                            @endif
+
+                                                            @if(!empty($stripe_price_id = $product->getStripePriceID()))
+                                                                <div class="flex">
+                                                                    <span class="font-medium mr-1">{{ translate('Price ID') }}:</span>
+                                                                    <a href="{{ '#' }}" target="_blank" class="text-info">{{ $stripe_price_id }}</a>
+                                                                </div>
+                                                            @endif
                                                         @endif
-                                                        <div class="hidden">
-                                                            Stripe
-                                                        </div>
-                                                    </a>
+                                                    </div>
                                                 </h3>
                                                 <p class="mt-1 text-sm text-gray-600 line-clamp-2 mb-2">
                                                     {{ translate('Use stripe checkout for all your product invoicing and
@@ -281,7 +292,6 @@
                                                     href="{{ $product->getStripeCheckoutPermalink(1, true) }}"
                                                     class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                     {{ translate('Peview checkout') }}
-                                                    <!-- Heroicon name: solid/mail -->
                                                     @svg('heroicon-s-mail', ['class' => 'w-6 h-6 ml-2'])
                                                 </a>
                                             </div>

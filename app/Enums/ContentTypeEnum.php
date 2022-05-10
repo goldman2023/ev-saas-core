@@ -74,4 +74,28 @@ class ContentTypeEnum extends EVBaseEnum
             'currency' => 'Currency',
         ];
     }
+
+    public static function class_to_label($class_name)
+    {
+        $data = array_flip([
+            'Product' => \App\Models\Product::class,
+            'Product Variation' => \App\Models\ProductVariation::class,
+            'Plan' => \App\Models\Plan::class,
+            'Shop' => \App\Models\Shop::class,
+            'User' => \App\Models\User::class,
+            'Category' => \App\Models\Category::class,
+            'Blog Post' => \App\Models\BlogPost::class,
+            'Brand' => \App\Models\Brand::class,
+            'Upload' => \App\Models\Upload::class,
+            'Wishlist' => \App\Models\Wishlist::class,
+            'Wallet' => \App\Models\Wallet::class,
+            'Review' => \App\Models\Review::class,
+            'Order' => \App\Models\Order::class,
+            'Invoice' => \App\Models\Invoice::class,
+            'Address' => \App\Models\Address::class,
+            'Currency' => \App\Models\Currency::class,
+        ]);
+
+        return $data[$class_name] ?? '';
+    }
 }

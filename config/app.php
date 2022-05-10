@@ -209,6 +209,7 @@ return [
         Stancl\Tenancy\TenancyServiceProvider::class,
         App\Providers\TenancyServiceProvider::class, // <-- here
         Laravel\Passport\PassportServiceProvider::class,
+        App\Providers\LaravelHooksServiceProvider::class,
 
         Mews\Purifier\PurifierServiceProvider::class,
 

@@ -21,7 +21,7 @@
                 displayed_items = newItems;
             })
         "
-        @init-form.window="initSelector()">
+        >
 
     <div class="w-full border-b border-gray-200 pb-4 mb-0 px-2">
         <input type="text" class="form-standard w-full focus:ring-0 " placeholder="{{ translate('Search categories') }}" x-model.debounce.500ms="search_query" />

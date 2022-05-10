@@ -66,3 +66,9 @@ src="https://www.facebook.com/tr?id={{ get_tenant_setting('facebook_pixel_id') }
 @endfbpix
 <!-- END Meta Pixel Code -->
 
+{{-- TODO: Move this only to public facing forms! --}}
+{{-- Google Recaptcha v3 --}}
+@recaptcha
+  <script src="https://www.google.com/recaptcha/api.js?render={{ get_tenant_setting('google_recaptcha_site_key') }}"></script>
+@endrecaptcha
+{{-- END Google Recaptcha v3 --}}

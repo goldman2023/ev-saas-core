@@ -44,6 +44,10 @@ class UserSubscription extends WeBaseModel
         return $this->belongsTo(Order::class, 'order_id')->withoutGlobalScopes();
     }
 
+    public function license() {
+        return $this->morphedByMany(License::class, 'subject', 'user_subscription_relationships');
+    }
+
     // public static function getSubscriptionsAmount($subscriptions) {
     //     return $subscriptions->where([])
     // }

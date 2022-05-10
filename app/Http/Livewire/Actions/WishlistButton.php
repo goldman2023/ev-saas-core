@@ -126,6 +126,7 @@ class WishlistButton extends Component
                 $item->guest_id = session()->getId();
             }
             $item->save();
+            
             activity()
                 ->performedOn($item->subject)
                 ->causedBy(auth()->user())

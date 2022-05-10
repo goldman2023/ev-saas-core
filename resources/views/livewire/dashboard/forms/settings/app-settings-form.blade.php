@@ -263,6 +263,8 @@
                             </div>
                             <!-- END Documentaion url -->
 
+                            @do_action('view.app-settings-form.general.end')
+
                             {{-- Save general information --}}
                             <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-4" x-data="{}">
                                 <button type="button" class="btn btn-primary ml-auto btn-sm"
@@ -271,6 +273,7 @@
                                         $wire.set('settings.site_logo_dark', settings.site_logo_dark?.id, true);
                                         $wire.set('settings.maintenance_mode', settings.maintenance_mode, true);
                                         $wire.set('settings.brands_ct_enabled', settings.brands_ct_enabled, true);
+                                        @do_action('view.app-settings-form.general.wire_set')
                                     "
                                     wire:click="saveGeneral()">
                                 {{ translate('Save') }}
@@ -1339,6 +1342,8 @@
                                     </div>
                                 </x-system.form-modal>
                                 {{-- END Google Tag Manager  --}}
+
+                                @do_action('view.integrations.end')
                             </ul>
                         </div>
                         {{-- END Integrations --}}

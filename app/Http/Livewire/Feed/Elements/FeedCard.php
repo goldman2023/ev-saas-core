@@ -28,20 +28,26 @@ class FeedCard extends Component
             return false;
         }
 
+        if (!empty($item->properties['action'] ?? null) ) {
+            $this->ignore = true;
+        }
+
         $this->item = $item;
-        $this->likes = Activity::where('subject_type', 'Spatie\Activitylog\Models\Activity')
-            ->where('description', 'liked')
-            ->where('subject_id', $item->id)
-            ->count();
+        // $this->likes = Activity::where('subject_type', 'Spatie\Activitylog\Models\Activity')
+        //     ->where('description', 'liked')
+        //     ->where('subject_id', $item->id)
+        //     ->count();
 
         if (empty($item->causer)) {
             $this->ignore = true;
         }
 
+        // Following chain is prevented in Activity query builder itself with proper query clauses
         if ($item->subject_type == \App\Models\Product::class) {
             $this->product = $item->subject;
+            
             if ($this->product->status == 'draft') {
-                // $this->ignore = true;
+                $this->ignore = true;
             }
         } elseif ($item->subject_type == \App\Models\Wishlist::class) {
             $this->ignore = true;
@@ -53,6 +59,8 @@ class FeedCard extends Component
         } elseif (($item->subject_type == \App\Models\SocialComment::class)) {
             $this->ignore = true;
         } elseif (($item->subject_type == \App\Models\User::class)) {
+            $this->ignore = true;
+        } elseif (($item->subject_type == \App\Models\Shop::class)) {
             $this->ignore = true;
         }
     }

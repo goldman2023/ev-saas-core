@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-
+asd
     <div class="py-6">
         <div class="container">
             <div class="row">

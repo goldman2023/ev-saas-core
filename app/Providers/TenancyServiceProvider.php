@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Listeners\Tenancy\StorageToConfigMapping;
+use App\Listeners\Tenancy\BootstrapThemeFunctions;
 use App\Models\Shop;
 use App\Models\SocialAccount;
 use Illuminate\Support\Facades\Event;
@@ -90,6 +91,7 @@ class TenancyServiceProvider extends ServiceProvider
             Events\BootstrappingTenancy::class => [],
             Events\TenancyBootstrapped::class => [
                 StorageToConfigMapping::class,
+                BootstrapThemeFunctions::class
             ],
             Events\RevertingToCentralContext::class => [],
             Events\RevertedToCentralContext::class => [],

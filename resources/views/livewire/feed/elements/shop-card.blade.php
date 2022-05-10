@@ -19,9 +19,9 @@
             </a>
         </h3>
         <div>
-            @livewire('actions.wishlist-button', [
+            @livewire('actions.social-action-button', [
             'object' => $shop,
-            'action' => 'Follow',
+            'action' => 'follow',
             ])
         </div>
         <dl class="mt-1 flex-grow flex flex-col justify-between">

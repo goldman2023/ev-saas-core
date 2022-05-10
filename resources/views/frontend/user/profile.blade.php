@@ -47,9 +47,9 @@
 
                 <div
                     class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-                    @livewire('actions.wishlist-button', [
+                    @livewire('actions.social-action-button', [
                     'object' => $user,
-                    'action' => 'Follow'
+                    'action' => 'follow'
                     ])
                 </div>
                 <button type="button"
@@ -98,6 +98,12 @@
                         </a>
 
                     </nav>
+
+                    <div class="mb-6">
+
+                    <livewire:feed.elements.add-post></livewire:feed.elements.add-post>
+                    </div>
+
                     <div class="bg-white shadow sm:rounded-lg">
                         <div class="px-4 py-5 sm:px-6">
                             <h2 id="applicant-information-title" class="text-lg leading-6 font-medium text-gray-900">
@@ -193,7 +199,7 @@
                                     <dt class="capitalize text-gray-500">
                                         {{ translate('Following') }}
                                     </dt>
-                                    <dd class="text-gray-900">{{ $user->following()->count() }}</dd>
+                                    <dd class="text-gray-900">{{ $user->follows_users()->count() }}</dd>
                                 </div>
                             </dl>
                         </div>

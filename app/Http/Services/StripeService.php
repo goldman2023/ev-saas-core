@@ -420,7 +420,8 @@ class StripeService
             $stripe_customer = $this->createStripeCustomer();
             $stripe_args['customer'] = $stripe_customer->id;
 
-            if (!$model->isShippable()) {
+            if (!$model->isSubscribable()) {
+                // Payment intent data is only available to one-time payments
                 $stripe_args['payment_intent_data'] = [
                     'receipt_email' => auth()->user()->email,
                 ];
@@ -1227,6 +1228,19 @@ class StripeService
             Log::error($e);
             DB::rollBack();
             http_response_code(400);
+        }
+
+        // Fire Subscription(s) is created and paid Event
+        if($stripe_billing_reason === 'subscription_create') {
+            do_action('invoice.paid.subscription_create', $user_subscriptions);
+        } 
+        // Fire Subscription(s) is updated and paid Event
+        else if($stripe_billing_reason === 'subscription_update') {
+            do_action('invoice.paid.subscription_update', $user_subscriptions);
+        } 
+        // Fire Subscription(s) is cycled and paid Event
+        else if($stripe_billing_reason === 'subscription_cycle') {
+            do_action('invoice.paid.subscription_cycle', $user_subscriptions);
         }
 
         http_response_code(200);

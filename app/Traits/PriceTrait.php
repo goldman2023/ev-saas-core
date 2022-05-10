@@ -96,7 +96,7 @@ trait PriceTrait
         if (empty($this->attributes[$this->getPriceColumn()])) {
             $this->total_price = 0;
         } elseif (empty($this->total_price)) {
-            $this->total_price = $this->attributes[$this->getPriceColumn()] ?? 0;
+            $this->total_price = (float) $this->attributes[$this->getPriceColumn()] ?? 0;
 
             if (method_exists($this, 'hasVariations') && $this->hasVariations()) {
                 // TODO: Display lowest/highest variant total price OR SOME COMBINATION

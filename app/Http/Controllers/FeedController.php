@@ -12,6 +12,26 @@ class FeedController extends Controller
     //
     public function index()
     {
+        $type = "index";
+
+        return view('frontend.feed.index');
+    }
+
+    public function trending()
+    {
+        $type = "trending";
+        return view('frontend.feed.index');
+    }
+
+    public function discussions()
+    {
+        $type = "discussions";
+        return view('frontend.feed.index');
+    }
+
+    public function bookmarks()
+    {
+        $type = "bookmarks";
         return view('frontend.feed.index');
     }
 

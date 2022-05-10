@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\CoreMeta;
 use Route;
+use StripeService;
 
 trait CoreMetaTrait
 {
@@ -49,5 +50,14 @@ trait CoreMetaTrait
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    // Specific CoreMeta
+    public function getStripeProductID() {
+        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_product_id');
+    }
+
+    public function getStripePriceID() {
+        return $this->getCoreMeta(StripeService::getStripeMode().'stripe_price_id');
     }
 }

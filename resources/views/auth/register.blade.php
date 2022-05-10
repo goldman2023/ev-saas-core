@@ -1,64 +1,69 @@
-@extends('backend.layouts.blank')
+@extends('frontend.layouts.' . $globalLayout)
 
 @section('content')
+<div class="bg-gray-100 pt-10 pb-10">
+    <div
+        class="min-h-full flex md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow overflow-hidden sm:bg-card mx-auto bg-white">
+        <div class="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+            <div class="mx-auto w-full max-w-sm lg:w-96">
+                <div>
+                    <x-tenant.system.image alt="{{ get_site_name() }} logo" class="h-12 w-auto"
+                        :image="get_site_logo()">
+                    </x-tenant.system.image>
+                    <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ translate('Sign up') }}</h2>
+                    <p class=" mt-2 text-sm text-gray-600">
+                        {{ translate('Or') }}
+                        <a href="{{ route('user.login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            {{ translate('Already a member? Sign In') }} </a>
+                    </p>
+                </div>
 
-
-<div class="h-100 bg-cover bg-center py-5 d-flex align-items-center" style="background-image: url({{ uploaded_asset(get_setting('admin_login_background')) }})">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-xl-4 mx-auto">
-                <div class="card text-left">
-                    <div class="card-header">{{ translate('Create a New Account') }}</div>
-                    <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
-                            @csrf
-
-                            <div class="form-group">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus placeholder="{{ translate('Full Name') }}">
-
-                                @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required placeholder="{{ translate('password') }}">
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required placeholder="{{ translate('Email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="{{ translate('Confrim Password') }}">
-                            </div>
-                            <div class="checkbox pad-btm text-left">
-                                <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox" required>
-                                <label for="demo-form-checkbox">{{translate('I agree with the Terms and Conditions')}}</label>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg btn-block">
-                                {{ translate('Register') }}
-                            </button>
-                        </form>
-                        <div class="mt-3">
-                            {{translate('Already have an account')}} ? <a href="{{route('user.login')}}" class="btn-link mar-rgt text-bold">{{translate('Sign In')}}</a>
+                <div class="mt-3">
+                    <livewire:forms.register-form />
+                </div>
+            </div>
+        </div>
+        <div class="hidden lg:block relative w-0 flex-1">
+            <div
+                class="relative hidden md:flex flex-auto items-center justify-center h-full p-16 lg:px-20 overflow-hidden bg-gray-800 dark:border-l ">
+                <svg viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice"
+                    xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 pointer-events-none ">
+                    <g fill="none" stroke="currentColor" stroke-width="100" class="text-gray-700 opacity-25 ">
+                        <circle r="234" cx="196" cy="23" class=""></circle>
+                        <circle r="234" cx="790" cy="491" class=""></circle>
+                    </g>
+                </svg><svg viewBox="0 0 220 192" width="220" height="192" fill="none"
+                    class="absolute -top-16 -right-16 text-gray-700 ">
+                    <defs class="">
+                        <pattern id="837c3e70-6c3a-44e6-8854-cc48c737b659" x="0" y="0" width="20" height="20"
+                            patternUnits="userSpaceOnUse" class="">
+                            <rect x="0" y="0" width="4" height="4" fill="currentColor" class=""></rect>
+                        </pattern>
+                    </defs>
+                    <rect width="220" height="192" fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)" class="">
+                    </rect>
+                </svg>
+                <div class="z-10 relative w-full max-w-2xl">
+                    <div class="text-5xl font-bold leading-none text-gray-100 ">
+                        <div class="">{{ translate('Welcome to') }}</div>
+                        <div class="">{{ translate('our community') }}</div>
+                    </div>
+                    <div class="mt-6 text-lg tracking-tight leading-6 text-gray-400 ">
+                        {{ get_tenant_setting('registration_text', 'Join the global community of likeminded people') }}
+                    </div>
+                    <div class="flex items-center mt-8 ">
+                        <div class="flex flex-0 items-center -space-x-1.5 ">
+                            @for($i = 0; $i < 4; $i++) <img src="/images/male-09.jpeg"
+                                class="flex-0 w-10 h-10 rounded-full ring-4 ring-offset-1 ring-gray-800 ring-offset-gray-800 object-cover ">
+                                @endfor
                         </div>
+                        <div class="ml-4 font-medium tracking-tight text-gray-400 ">
+                            {{ translate('More than') }} {{ get_public_user_count() }}
+                            {{ translate('people joined us, it\'s your turn') }}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 @endsection

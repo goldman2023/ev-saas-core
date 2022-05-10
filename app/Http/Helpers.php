@@ -27,29 +27,26 @@ use Illuminate\Support\Facades\Route;
 /* IMPORTANT: ALL Helper fuctions added by EIM solutions should be located in: app/Http/Helpers/EIMHelpers */
 include('Helpers/EIMHelpers.php');
 
-/* IMPORTANT: Child functions helper files include here also, based on selected theme */
-include('Helpers/Functions/WePixPro.Helpers.php');
 
 if (!function_exists('castValueForSave')) {
     function castValueForSave($key, $setting, $data_types) {
         $data_type = $data_types[$key] ?? null;
-        $value = $setting['value'] ?? null;
 
         if($data_type === Upload::class || $data_type === Category::class) {
-            $value = ctype_digit($value)|| is_numeric($value) ? $value : null;
+            $setting = ctype_digit($setting)|| is_numeric($setting) ? $setting : null;
         } else if($data_type === Currency::class) {
-            if(!Currency::where('code', $value)->exists()) {
-                $value = 'EUR'; // If currency with $value code does not exist in database, make EUR default
+            if(!Currency::where('code', $setting)->exists()) {
+                $setting = 'EUR'; // If currency with $setting code does not exist in database, make EUR default
             }
         } else if($data_type === 'int') {
-            $value = ctype_digit($value) || is_numeric($value) ? ((int) $value) : $value;
+            $setting = ctype_digit($setting) || is_numeric($setting) ? ((int) $setting) : $setting;
         } else if($data_type === 'boolean') {
-            $value = $value ? 1 : 0;
+            $setting = $setting ? 1 : 0;
         } else if($data_type === 'array' && $data_type === 'uploads' && is_array($data_type)) {
-            $value = json_encode($value);
+            $setting = json_encode($setting);
         }
 
-        return $value;
+        return $setting;
     }
 }
 
@@ -129,9 +126,9 @@ if (!function_exists('castValuesForGet')) {
                         } else if($data_type === 'array') {
                             $setting = json_decode($setting, true);
                         } else if($data_type === 'date') {
-                            $setting = \Carbon::parse($setting)->format('d.m.Y.');
+                            //$setting = \Carbon::parse($setting)->format('d.m.Y.');
                         } else if($data_type === 'datetime') {
-                            $setting = \Carbon::parse($setting)->format('d.m.Y. H:i');
+                            //$setting = \Carbon::parse($setting)->format('d.m.Y. H:i');
                         } else {
                             $setting = $setting;
                         }
@@ -864,7 +861,8 @@ function translate($key, $lang = null)
      * TODO: Refactor this function to get translation for the $key from assoc array in singleton
      * TODO: If there's none, create it in the DB and regenerate whole assoc array in Cache
      */
-    $translation_def = Cache::remember($key . $lang, 60, function () use ($key) {
+    
+    $translation_def = Cache::remember('translation_'.$key .'_'. $lang, 60, function () use ($key) {
         return Translation::where('lang', config('app.locale'))->where('lang_key', $key)->first();
     });
 
@@ -876,12 +874,13 @@ function translate($key, $lang = null)
         $translation_def->save();
     }
 
-    //Check for session lang
-    $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
+    // Check for session lang
+    // $translation_locale = Translation::where('lang_key', $key)->where('lang', $lang)->first();
 
-    if ($translation_locale != null && $translation_locale->lang_value != null) {
-        return $translation_locale->lang_value;
-    } elseif ($translation_def->lang_value != null) {
+    // if ($translation_locale != null && $translation_locale->lang_value != null) {
+    //     return $translation_locale->lang_value;
+    // } else
+    if (!empty($translation_def->lang_value)) {
         return $translation_def->lang_value;
     } else {
         return $key;

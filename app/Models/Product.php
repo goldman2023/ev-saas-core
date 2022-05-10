@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProductTypeEnum;
 use App\Traits\BrandTrait;
 use App\Traits\CategoryTrait;
 use App\Traits\GalleryTrait;
@@ -35,7 +36,7 @@ use App\Traits\StockManagementTrait;
 use App\Traits\Caching\RegeneratesCache;
 use App\Traits\HasStatus;
 use App\Traits\CoreMetaTrait;
-use App\Traits\LikesTrait;
+use App\Traits\SocialReactionsTrait;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
@@ -68,11 +69,7 @@ class Product extends WeBaseModel
     use VariationTrait;
 
     use LogsActivity;
-    use LikesTrait;
-
-
-    public const ROUTING_SINGULAR_NAME_PREFIX = 'product';
-    public const ROUTING_PLURAL_NAME_PREFIX = 'products';
+    use SocialReactionsTrait;
 
     protected $table = 'products';
 
@@ -95,7 +92,9 @@ class Product extends WeBaseModel
     protected $casts = [
         'digital' => 'boolean',
         'use_serial' => 'boolean',
-        'tags' => 'array'
+        'tags' => 'array',
+        'unit_price' => 'float',
+        'discount' => 'float',
     ];
 
     public function getBaseCurrencyAttribute($value)
@@ -176,6 +175,11 @@ class Product extends WeBaseModel
     public function scopeMostPopular($query)
     {
         return $query; // TODO: Ask Eim about views
+    }
+
+    public function scopeEvent($query)
+    {
+        $query->where('type', ProductTypeEnum::event()->value);
     }
 
     /**
@@ -297,23 +301,23 @@ class Product extends WeBaseModel
     }
 
     public function isBookableService() {
-        return $this->type === \App\Enums\ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
+        return $this->type === ProductTypeEnum::bookable_service()->value && !empty($this->getBookingLink());
     }
 
     public function isEvent() {
-        return $this->type === \App\Enums\ProductTypeEnum::event()->value;
+        return $this->type === ProductTypeEnum::event()->value;
     }
 
     public function isStandard() {
-        return $this->type === \App\Enums\ProductTypeEnum::standard()->value;
+        return $this->type === ProductTypeEnum::standard()->value;
     }
 
     public function isSubscription() {
-        return $this->type === \App\Enums\ProductTypeEnum::subscription()->value;
+        return $this->type === ProductTypeEnum::subscription()->value;
     }
 
     public function isPhysicalSubscription() {
-        return $this->type === \App\Enums\ProductTypeEnum::physical_subscription()->value;
+        return $this->type === ProductTypeEnum::physical_subscription()->value;
     }
 
     public function getBookingLink() {

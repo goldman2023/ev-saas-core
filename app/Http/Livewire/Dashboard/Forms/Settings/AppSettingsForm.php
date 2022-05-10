@@ -36,7 +36,7 @@ class AppSettingsForm extends Component
 
     protected function getRuleSet($set = null, $with_wildcard = true) {
         $rulesSets = collect([
-            'general' => [
+            'general' => apply_filters('app-settings-general-rules', [
                 // 'shop.*' => [],
                 // 'settings.*' => [],
                 'settings.site_logo' => ['required'],
@@ -51,8 +51,8 @@ class AppSettingsForm extends Component
                 'settings.shipping_policy_url' => [''],
                 'settings.returns_and_refunds_url' => [''],
                 'settings.documentation_url' => [''],
-            ],
-            'features' => [
+            ]),
+            'features' => apply_filters('app-settings-features-rules', [
                 /* Example field for creating new TenantSetting */
                 'settings.feed_enabled' => ['boolean'],
                 'settings.multiplan_purchase' => ['boolean'],
@@ -68,7 +68,7 @@ class AppSettingsForm extends Component
                 'settings.plans_trial_mode' => ['boolean'],
                 'settings.plans_trial_duration' => ['exclude_if:settings.plans_trial_mode,false', 'required', 'numeric', 'gt:0'],
 
-            ],
+            ]),
             'integrations.mailerlite' => [
                 'settings.mailerlite_api_token' => [''],
             ],
@@ -130,6 +130,8 @@ class AppSettingsForm extends Component
                 'settings.user_meta_fields_in_use' => ['']
             ],
         ]);
+
+        $rulesSets = apply_filters('app-settings-rules', $rulesSets);
 
         return empty($set) || $set === 'all' ? $rulesSets : $rulesSets->get($set);
     }
@@ -509,7 +511,7 @@ class AppSettingsForm extends Component
     protected function saveSettings($rules) {
         foreach(collect($rules)->filter(fn($item, $key) => str_starts_with($key, 'settings')) as $key => $value) {
             $setting_key = explode('.', $key)[1]; // get the part after `settings.`
-            
+
             if(!empty($setting_key) && $setting_key !== '*') {
                 TenantSetting::where('setting', $setting_key)
                     ->update(['value' => castValueForSave($setting_key, $this->settings[$setting_key], TenantSettings::settingsDataTypes())]);

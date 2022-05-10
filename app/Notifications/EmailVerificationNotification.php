@@ -48,7 +48,7 @@ class EmailVerificationNotification extends Notification
 
         try {
             Mail::to($notifiable->email)
-                ->send(new EmailVerification(data: $array));
+                ->send(new EmailVerification(user: $notifiable, data: $array));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }

@@ -110,8 +110,8 @@ class RegisterForm extends Component
     }
 
     public function register()
-    {
-        $this->validate();
+    {        
+        $this->validate(); 
         
         DB::beginTransaction();
         
@@ -164,6 +164,9 @@ class RegisterForm extends Component
             'password' => Hash::make($this->password),
         ]);
 
+        // Save md5 password in core_meta
+        $this->user->saveCoreMeta('password_md5', md5($this->password));
+
         if (Cookie::has('referral_code')) {
             $referral_code = Cookie::get('referral_code');
             $referred_by_user = User::where('referral_code', $referral_code)->first();
@@ -175,7 +178,9 @@ class RegisterForm extends Component
     }
 
     protected function registered()
-    {   
+    {
+        do_action('user.registered', $this->user); // If there's any hook attached to `user.registered` action, do it!   
+
         if(get_tenant_setting('onboarding_flow')) {
             return redirect()->route('onboarding.step1');
         }

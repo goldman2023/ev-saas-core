@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Traits\Livewire\DispatchSupport;
 use App\Traits\Livewire\HasCategories;
 use App\Traits\Livewire\RulesSets;
+use App\Traits\Livewire\HasCoreMeta;
 use App\Traits\Livewire\HasAttributes;
 use Categories;
 use DB;
@@ -30,6 +31,7 @@ class PlanForm extends Component
     use DispatchSupport;
     use HasCategories;
     use HasAttributes;
+    use HasCoreMeta;
 
     public $plan;
 
@@ -61,11 +63,14 @@ class PlanForm extends Component
         $this->initCategories($this->plan);
 
         $this->refreshAttributes($this->plan);
+
+        $this->initCoreMeta($this->plan);
     }
 
     protected function rules()
     {
         return [
+            'core_meta' => '',
             'selected_categories' => 'required',
             'plan.featured' => ['boolean'],
             'plan.primary' => ['boolean'],
@@ -165,6 +170,7 @@ class PlanForm extends Component
             // Set Categories
             $this->setCategories($this->plan);
             $this->refreshAttributes($this->plan);
+            $this->setCoreMeta($this->plan);
 
             // TODO: Determine which package to use for Translations! Set Translations...
 
