@@ -239,9 +239,9 @@ class StripeService
         return $stripe_product_price;
     }
 
-    protected function createStripeCustomer()
+    protected function createStripeCustomer($user = null)
     {
-        $me = auth()->user();
+        $me = !empty($user) && $user instanceof \App\Models\User ? $user : auth()->user();
         $stripe_customer_id_key = $this->mode_prefix . 'stripe_customer_id';
         $stripe_customer_id = $me->getCoreMeta($stripe_customer_id_key);
 

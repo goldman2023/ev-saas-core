@@ -55,6 +55,7 @@ if (!function_exists('pix_pro_create_license')) {
                     "LicenseOfflineService" => 1, // TODO: Take from plan attributes
                     "LicenseImageLimit" => 150, // TODO: Take from plan attributes
                     "PackageType" => 'mining', // TODO: Take from plan attributes
+                    "SubscriptionId" => $subscription->id
                 ];
 
                 if(!$is_trial) {
