@@ -9,7 +9,7 @@
         </div>
         <main class="lg:col-span-12 xl:col-span-10 grid grid-cols-12 gap-6">
 
-            <div class="col-span-12 xl:col-span-9 flex flex-col">
+            <div class="col-span-12 xl:col-span-7 flex flex-col">
                 <div class="mb-3">
                     <x-feed.elements.stories-global>
                     </x-feed.elements.stories-global>
@@ -17,21 +17,19 @@
     
                 <div class="grid grid-cols-12 gap-5 mt-4">
 
-                    <div class="col-span-12 md:col-span-7 space-y-4 px-4 md:px-0">
+                    <div class="col-span-12 space-y-4 px-4 md:px-0">
                        {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
                         <livewire:feed.elements.add-post />
-                        <livewire:feed.feed-list />
-                    </div>
-
-                    <div class="col-span-12 md:col-span-5 px-4 md:px-0">
-                        {{-- Upcoming Events --}}
-                        <livewire:feed.blocks.upcoming-events />
+                        <livewire:feed.feed-list :feed-type="$feed_type ?? 'recent'" />
                     </div>
                 </div>
             </div>
             
-            <aside class="hidden xl:block xl:col-span-3">
+            <aside class="hidden xl:block xl:col-span-5">
                 <div class="sticky top-4 space-y-4">
+                    {{-- Upcoming Events --}}
+                    <livewire:feed.blocks.upcoming-events />
+
                     <x-feed.elements.follow-suggestions>
                     </x-feed.elements.follow-suggestions>
     

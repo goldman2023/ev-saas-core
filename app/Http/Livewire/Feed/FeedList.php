@@ -39,11 +39,11 @@ class FeedList extends Component
         'newSocialPostAdded' => 'prependNewSocialPost'
     ];
 
-    public function mount()
+    public function mount($feedType = 'recent')
     {
         $this->perPage = 5;
         $this->activities = new \Illuminate\Database\Eloquent\Collection();
-
+        $this->type = $feedType;
         $this->loadActivities();
     }
 

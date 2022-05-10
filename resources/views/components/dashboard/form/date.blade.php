@@ -3,7 +3,7 @@
             return {
                 mode: @js($mode ?? 'single'),
                 enableTime: @js($enableTime ?? false),
-                altFormat: @js($dateFormat ?? 'd.m.Y.'),
+                altFormat: @js($dateFormat ?? 'd.m.Y'),
                 dateFormat: 'U',
                 altInput: true,
             };
