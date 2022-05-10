@@ -1212,6 +1212,68 @@
                     </div>
                     {{-- Bookable Service Meta --}}
 
+                    {{-- After purchase CTA Meta --}}
+                    <div class="mt-8 border bg-white border-gray-200 rounded-lg shadow select-none" x-data="{
+                        open: false,
+                    }" :class="{'p-4': open}">
+                        <div class="w-full flex items-center justify-between cursor-pointer" @click="open = !open" :class="{'border-b border-gray-200 pb-4 mb-4': open, 'p-4': !open}">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('After purchase CTA (Thank you page)') }}</h3>
+                            @svg('heroicon-o-chevron-down', ['class' => 'h-4 w-4', ':class' => "{'rotate-180':open}"])
+                        </div>
+
+                        <div class="w-100 mt-2" x-show="open">
+                            <!-- CTA Title (Thank you page) -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-4" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('CTA Title') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_title.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END CTA Title (Thank you page) -->
+
+                            <!-- CTA Text (Thank you page) -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-4" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('CTA Text') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_text.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END CTA Text (Thank you page) -->
+
+                            <!-- CTA URL (Thank you page) -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start mb-4" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('CTA Button URL') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_url.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END CTA URL (Thank you page) -->
+
+                            <!-- CTA URL (Thank you page) -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('CTA Button Title') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_button_title.value"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END CTA URL (Thank you page) -->
+                        </div>
+                    </div>
+                    {{-- After purchase CTA Meta --}}
+
+
                     {{-- Card Media --}}
                     <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow">
                         <div class="w-full flex items-center justify-between border-b border-gray-200 pb-3 mb-4">

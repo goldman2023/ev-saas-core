@@ -194,6 +194,7 @@ return [
          */
         \App\Providers\GoogleDriveServiceProvider::class,
         Bkwld\Cloner\ServiceProvider::class,
+        MikeMcLin\WpPassword\WpPasswordProvider::class,
 
         /*
          * Application Service Providers...
