@@ -63,10 +63,10 @@
             </div>
         </div>
         <div class="col-span-1 lg:col-span-2 mt-8 xl:mt-0">
-          <h3 class="text-sm font-semibold text-white tracking-wider uppercase">STAY UP TO DATE WITH {{ get_site_name() }}</h3>
-          <p class="mt-4 text-base text-gray-300">We promise, we will not use your contact information to send spam or share it with the third parties.</p>
+          <h3 class="text-sm font-semibold text-white tracking-wider uppercase">{{ translate('STAY UP TO DATE WITH') }} {{ get_site_name() }}</h3>
+          <p class="mt-4 text-base text-gray-300">{{ translate('We promise, we will not use your contact information to send spam or share it with the third parties.') }}</p>
           <form class="mt-4 sm:flex sm:max-w-md">
-            <label for="email-address" class="sr-only">Email address</label>
+            <label for="email-address" class="sr-only">{{ translate('Email address') }}</label>
             <input type="email" name="email-address" id="email-address" autocomplete="email" required class="appearance-none min-w-0 w-full bg-white border border-transparent rounded-md py-2 px-4 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white focus:border-white focus:placeholder-gray-400" placeholder="Enter your email">
             <div class="mt-3 rounded-md sm:mt-0 sm:ml-3 sm:flex-shrink-0">
               <button type="submit" class="w-full bg-indigo-900 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500">
@@ -84,7 +84,7 @@
               <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
             </svg>
           </a>
-
+          {{-- TODO: Let's add links in app settings --}}
           <a href="#" class="text-gray-400 hover:text-gray-300">
             <span class="sr-only">Instagram</span>
             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
