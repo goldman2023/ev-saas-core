@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -11,12 +12,22 @@ class GrapeController extends Controller
 {
     //
 
-    public function index() {
+    public function index($pageID = 7) {
 
-        $page = null;
+        if($pageID) {
+            $page_html =  Page::findOrFail($pageID)->content;
+        } else {
+            $page_html = "";
+        }
+
+        if(is_array($page_html)) {
+            $page_html = json_encode($page_html);
+        }
+
+
 
         $sections = File::allFiles(public_path() . '/tailwindui/components/');
-        $content = "";
+        $content = $page_html;
 
         foreach($sections as $section) {
             // dd(file_get_contents($section->getPathName()));
@@ -27,8 +38,20 @@ class GrapeController extends Controller
 
 
         return view('grape.index', [
+            'pageID' => $pageID,
             'content' => $content,
             'sections' => $sections,
         ]);
+    }
+
+    public function save_custom_html(Request $request, $pageID) {
+        $page =  Page::findOrFail($pageID);
+
+        $page->content = $request->custom_html;
+
+        $page->save();
+
+        return redirect()->back();
+
     }
 }
