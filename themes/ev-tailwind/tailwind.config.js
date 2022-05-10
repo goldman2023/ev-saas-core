@@ -2,6 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
+    darkMode: 'class',
     content: [
         `${__dirname}/views/**/*.blade.php`, // absolute path
         `./resources/views/components/**/*.blade.php`, // relative to root

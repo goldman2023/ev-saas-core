@@ -2,11 +2,12 @@
 Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
 TODO: you can overide it with data from a database a sa setting --}}
 @php
-    $colors = TenantSettings::get('colors');
+$colors = TenantSettings::get('colors');
 @endphp
 
 <script>
     tailwind.config = {
+          darkMode: 'class',
           theme: {
             screens: {
                 'mobile': {'min': '300px', 'max': '599px'},
@@ -123,7 +124,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         .btn-ghost {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
         }
-        
+
         .badge {
             @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
         }
