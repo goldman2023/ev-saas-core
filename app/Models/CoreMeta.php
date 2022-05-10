@@ -34,6 +34,7 @@ class CoreMeta extends Model
             'thank_you_cta_custom_title' => 'string',
             'thank_you_cta_custom_text' => 'string',
             'thank_you_cta_custom_url' => 'string',
+            'thank_you_cta_custom_button_title' => 'string'
         ];
     }
 

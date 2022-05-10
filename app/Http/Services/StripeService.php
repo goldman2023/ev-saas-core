@@ -92,11 +92,9 @@ class StripeService
         // Reminder: Stripe price must be in cents!!!
         $description = $model->excerpt;
         if (empty($description)) {
-            $description = $model->description;
-            if (empty($description)) {
-                $description = $model->name;
-            }
+            $description = strip_tags($model->description);
         }
+
 
         try {
             // Create Stripe Product
@@ -142,10 +140,7 @@ class StripeService
         // Reminder: Stripe price must be in cents!!!
         $description = $model->excerpt;
         if (empty($description)) {
-            $description = $model->description;
-            if (empty($description)) {
-                $description = $model->name;
-            }
+            $description = strip_tags($model->description);
         }
         
         try {
