@@ -48,14 +48,13 @@ if (!function_exists('pix_pro_create_license')) {
                 $is_trial = !empty($stripe_subscription->trial_start ?? null) && !empty($stripe_subscription->trial_end ?? null);
                 
                 $body = [
-                    "UserId" => $subscription->user_id,
+                    "UserID" => $subscription->user_id,
                     "Qty" => 1, // THIS IS NUMBER OF TRIAL LICENSES TO BE CREATED! - WE SHOULD ALWAYS PUT 1, since we loop it on our end!
                     "LicenseType" => $is_trial ? 'trial':'full', // TODO: Can be `manual` too
                     "LicenseCloudService" => 0, // TODO: Take from plan attributes
                     "LicenseOfflineService" => 1, // TODO: Take from plan attributes
                     "LicenseImageLimit" => 150, // TODO: Take from plan attributes
                     "PackageType" => 'mining', // TODO: Take from plan attributes
-                    "SubscriptionId" => $subscription->id
                 ];
 
                 if(!$is_trial) {
@@ -71,11 +70,12 @@ if (!function_exists('pix_pro_create_license')) {
                 }
 
                 $response = Http::post($is_trial ? $route_trial : $route_paid, $body);
+                
                 $response_json = $response->json();
 
                 if(empty($response_json['status'] ?? null) || $response_json['status'] !== 'success') {
                     // If status is not success for any reason, throw an error
-                    FacadesLog::error(pix_pro_error($route, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
+                    FacadesLog::error(pix_pro_error($is_trial ? $route_trial : $route_paid, 'There was an error while trying to create a license(order) in pix-pro API DB, check the response below.', $response_json));
                 }
             }
         }
