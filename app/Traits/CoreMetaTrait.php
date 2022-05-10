@@ -26,10 +26,15 @@ trait CoreMetaTrait
         return false;
     }
 
-    public function getCoreMeta($key)
+    public function getCoreMeta($key, $fresh = false)
     {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
-        return $this->core_meta->where('key', $key)?->first()?->value ?? null;
+
+        if($fresh) {
+            return $this->core_meta()->where('key', $key)?->first()?->value;
+        } else {
+            return $this->core_meta->where('key', $key)?->first()?->value ?? null;
+        }
     }
 
     public function saveCoreMeta($key, $value)
@@ -48,7 +53,7 @@ trait CoreMetaTrait
 
             return true;
         } catch (\Exception $e) {
-            return false;
+            return dd($e);
         }
     }
 
