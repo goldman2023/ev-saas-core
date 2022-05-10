@@ -193,10 +193,11 @@ $colors = TenantSettings::get('colors');
             @apply visible z-50;
         }
 
-
+        @if($colors['sidebar-bg'])
         .we-dashboard-sidebar-background {
-            background-color: {{ $colors['sidebar-bg'] }};
+            background-color: {{ $colors['sidebar-bg'] }} !important;
         }
+        @endif
 
         .we-sidebar-menu-item {
             @apply text-gray-600 !important;
