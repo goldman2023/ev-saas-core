@@ -18,7 +18,7 @@ class Language
      */
     public function handle($request, Closure $next)
     {
-        if(!empty(auth()->user()->getUserMeta('locale'))) {
+        if(!empty(auth()->user()?->getUserMeta('locale') ?? null)) {
             $locale = auth()->user()->getUserMeta('locale');
         } else if (Session::has('locale')) {
             $locale = Session::get('locale');
