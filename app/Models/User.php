@@ -280,13 +280,18 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     /* TODO: Move this to verification trait */
     public function isVerified()
     {
-
         /* TODO: Add dynamic verification column to shops table */
         if ($this->verification_code) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public function getUserMeta($key)
+    {
+        // TODO: Implement castValuesForGet($core_meta, $data_types); here
+        return $this->user_meta->where('key', $key)?->first()?->value ?? null;
     }
 
     /**

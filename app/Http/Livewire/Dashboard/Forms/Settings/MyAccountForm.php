@@ -58,9 +58,9 @@ class MyAccountForm extends Component
         if($user_meta_fields_in_use->count() > 0) {
             foreach($user_meta_fields_in_use as $key => $options) {
                 if(in_array($key, UserMeta::metaForCompanyEntity())) {
-                    $meta['meta.'.$key.'.value'] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
+                    $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['exclude_if:me.entity,individual', 'required'] : [];
                 } else {
-                    $meta['meta.'.$key.'.value'] = ($options['required'] ?? false) ? ['required'] : [];
+                    $meta['meta.'.$key.''] = ($options['required'] ?? false) ? ['required'] : [];
                 }
             }
         }
@@ -68,6 +68,9 @@ class MyAccountForm extends Component
         $rulesSets = collect([
             // Basic information rules
             'basic' => array_merge($basic, $meta),
+            'language' => [
+                'meta.locale' => ''
+            ],
             'email' => [
                 'me.email' => ['required', 'email:rfs,dns'],
             ],
@@ -124,7 +127,7 @@ class MyAccountForm extends Component
         UserMeta::createMissingMeta($this->me->id);
         $user_meta = $this->me->user_meta()->select('id', 'key', 'value')->get()->keyBy('key')->toArray();
         castValuesForGet($user_meta, UserMeta::metaDataTypes());
-
+        
         $this->meta = $user_meta;
     }
 
@@ -199,6 +202,21 @@ class MyAccountForm extends Component
         }
     }
 
+    public function saveLanguage()
+    {
+        $rules = $this->getRuleSet('language');
+
+        $this->validate($rules);
+
+        try {
+            $this->saveMeta($rules);
+
+            $this->inform(translate('Language settings successfully saved.'), '', 'success');
+        } catch (\Exception $e) {
+            $this->inform(translate('Could not save language settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
     public function saveEmail()
     {
         // TODO: Validation does not work for some reason. Check the error and fix it!
@@ -232,7 +250,7 @@ class MyAccountForm extends Component
         foreach (collect($rules)->filter(fn ($item, $key) => str_starts_with($key, 'meta')) as $key => $value) {
             $meta_key = explode('.', $key)[1]; // get the part after `settings.`
             
-            if (! empty($meta_key) && $meta_key !== '*') {
+            if (! empty($meta_key) && $meta_key !== '*') { 
                 UserMeta::where([
                     ['key', $meta_key],
                     ['user_id', $this->me->id],

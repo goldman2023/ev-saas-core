@@ -19,14 +19,14 @@ class FeedController extends Controller
 
     public function trending()
     {
-        $type = "trending";
-        return view('frontend.feed.index');
+        $feed_type = "trending";
+        return view('frontend.feed.index', compact('feed_type'));
     }
 
     public function discussions()
     {
-        $type = "discussions";
-        return view('frontend.feed.index');
+        $feed_type = "trending"; //"discussions";
+        return view('frontend.feed.index', compact('feed_type'));
     }
 
     public function bookmarks()

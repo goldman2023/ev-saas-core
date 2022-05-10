@@ -32,12 +32,28 @@ class EVBlogPostController extends Controller
     }
 
     // FRONTEND
+    public function blog_archive() {
+        $blog_posts = BlogPost::whereNull('shop_id')->orwhere('shop_id', '=', 1)->published()->latest()->with(['authors'])
+                        ->paginate(9)->withQueryString();
+
+        return view('frontend.blog.blog-archive', compact('blog_posts'));
+    }
+
     public function single(Request $request, $slug)
     {
-        $blog_post = BlogPost::where('slug', $slug)->first();
+        $blog_post = BlogPost::where('slug', $slug)->published()->with(['authors'])->first();
+        $categories_idx = $blog_post->categories->pluck('id')->toArray();
+        
+        $related_blog_posts = BlogPost::whereHas('categories', function ($query) use($categories_idx) { 
+            $query->whereIn('categories.id', $categories_idx);
+        })->where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
+
+        $latest_blog_posts = BlogPost::where('id', '!=', $blog_post->id)->published()->with(['authors'])->latest()->take(3)->get();
+        
+        $authors = $blog_post->authors;
 
         if (! empty($blog_post)) {
-            return view('frontend.blog.single.blog-post-single-1', compact('blog_post'));
+            return view('frontend.blog.single.blog-post-single-1', compact('blog_post', 'authors', 'related_blog_posts', 'latest_blog_posts'));
         }
 
         abort(404);

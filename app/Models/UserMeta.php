@@ -23,6 +23,7 @@ class UserMeta extends WeBaseModel
             'birthday' => 'date',
             'gender' => 'select',
             'headline' => 'string',
+            'short_about_me' => 'string',
             'industry' => Category::class,
             'calendly_link' => 'string',
             'company_name' => 'string',
@@ -31,6 +32,7 @@ class UserMeta extends WeBaseModel
             'work_experience' => 'array',
             'education' => 'array',
             'bio' => 'wysiwyg',
+            'locale' => 'select',
 
             // 'work_experience' => [
             //     'title' => 'string',

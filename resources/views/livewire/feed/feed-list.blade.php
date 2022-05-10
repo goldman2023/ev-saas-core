@@ -1,6 +1,6 @@
 <div>
     <div class="px-4 sm:px-0">
-        <div class="hidden sm:hidden">
+        {{-- <div class="hidden sm:hidden">
             <label for="question-tabs" class="sr-only">Select a tab</label>
             <select id="question-tabs"
                 class="block w-full rounded-md border-gray-300 text-base font-medium text-gray-900 shadow-sm focus:border-rose-500 focus:ring-rose-500">
@@ -8,12 +8,11 @@
                 <option selected>{{ translate('Recent') }}</option>
                 <option>{{ translate('Trending') }}</option>
 
-                {{-- <option>{{ translate('Most Answers') }}</option> --}}
+                <option>{{ translate('Most Answers') }}</option>
             </select>
-        </div>
+        </div> --}}
 
-        <div class="hidden sm:block">
-
+        {{-- <div class="hidden sm:block">
             <nav class="relative grid grid-cols-12 gap-3 mb-3">
                 <button wire:click="loadType('recent')"
                     class="@if($type == 'recent') text-primary @else text-gray-500 hover:text-gray-700 @endif 
@@ -47,10 +46,10 @@
                     <span class="text-14">{{ translate('Most Answers') }}</span>
 
                     {{-- <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                        {{ translate('Coming soon!') }} </span> --}}
+                        {{ translate('Coming soon!') }} </span> 
                 </button>
             </nav>
-        </div>
+        </div> --}}
     </div>
 
     @if(!$readyToLoad)

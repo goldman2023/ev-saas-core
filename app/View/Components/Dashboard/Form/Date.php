@@ -21,7 +21,7 @@ class Date extends Component
      *
      * @return void
      */
-    public function __construct($id= '', $field = '', $mode = 'single', $enableTime = false, $dateFormat = 'd.m.Y.')
+    public function __construct($id= '', $field = '', $mode = 'single', $enableTime = false, $dateFormat = 'd.m.Y')
     {
         $this->id = $id;
         $this->field = $field;

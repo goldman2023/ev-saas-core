@@ -18,10 +18,17 @@
             $wire.set('me.cover', this.cover.id, true);
             $wire.set('me.entity', this.entity, true);
 
-            @if(collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true)->count() > 0)
-                @foreach(collect(get_tenant_setting('user_meta_fields_in_use'))->where('onboarding', true) as $key => $options)
+            @php
+                $user_meta_fields_in_use = collect(get_tenant_setting('user_meta_fields_in_use'));
+                if($onboarding) {
+                    $user_meta_fields_in_use->where('onboarding', true);
+                }
+            @endphp
+
+            @if($user_meta_fields_in_use->count() > 0)
+                @foreach($user_meta_fields_in_use as $key => $options)
                     @if(($options['type']??'string') == 'select' || ($options['type']??'string') == 'date' || ($options['type']??'string') == 'wysiwyg')
-                        $wire.set('meta.{{ $key }}.value', this.meta.{{ $key }}.value, true);
+                        $wire.set('meta.{{ $key }}', this.meta.{{ $key }}, true);
                     @endif
                 @endforeach
             @endif
@@ -57,6 +64,15 @@
                         </a>
 
                         <a href="#"
+                            :class="{'text-primary': current === 'languageSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'languageSection'}"
+                            class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                            @click="current = 'languageSection'">
+
+                            @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                            <span class="truncate">{{ translate('Language') }}</span>
+                        </a>
+
+                        <a href="#"
                             :class="{'text-primary': current === 'passwordSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'passwordSection'}"
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
                             @click="current = 'passwordSection'">
@@ -74,14 +90,14 @@
                             <span class="truncate">{{ translate('Addresses') }}</span>
                         </a>
 
-                        <a href="#"
+                        {{-- <a href="#"
                             :class="{'text-primary': current === 'socialAccountsSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'socialAccountsSection'}"
                             class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
                             @click="current = 'socialAccountsSection'">
 
                             @svg('heroicon-o-share', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
                             <span class="truncate">{{ translate('Social accounts') }}</span>
-                        </a>
+                        </a> --}}
 
                         {{-- <a href="#"
                             :class="{'text-primary': current === 'socialAccountsSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'socialAccountsSection'}"
@@ -244,6 +260,10 @@
                                         @continue
                                     @endif
 
+                                    @if($key === 'locale')
+                                        @continue
+                                    @endif
+
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                         x-data="{}" @if(in_array($key, \App\Models\UserMeta::metaForCompanyEntity())) x-show="entity === 'company'" @endif>
 
@@ -254,17 +274,17 @@
 
                                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                                             @if(($options['type']??'string') == 'string')
-                                                <x-dashboard.form.input field="meta.{{ $key }}.value" />
+                                                <x-dashboard.form.input field="meta.{{ $key }}" />
                                             @elseif(($options['type']??'string') == 'date')
-                                                <x-dashboard.form.date field="meta.{{ $key }}.value" />
+                                                <x-dashboard.form.date field="meta.{{ $key }}" />
                                             @elseif(($options['type']??'string') == 'select')
-                                                <x-dashboard.form.select field="meta.{{ $key }}.value" selected="meta.{{ $key }}.value" :items="\App\Models\UserMeta::metaSelectValues($key)" />
+                                                <x-dashboard.form.select field="meta.{{ $key }}" selected="meta.{{ $key }}" :items="\App\Models\UserMeta::metaSelectValues($key)" />
                                             @elseif(($options['type']??'string') == 'wysiwyg')
-                                                <x-dashboard.form.froala field="meta.{{ $key }}.value" id="wysiwyg-{{ $key }}"  />
+                                                <x-dashboard.form.froala field="meta.{{ $key }}" id="wysiwyg-{{ $key }}"  />
                                             @elseif($key === 'work_experience')
-                                                <x-dashboard.form.blocks.work-experience-form field="meta.{{ $key }}.value"></x-dashboard.form.blocks.work-experience-form>
+                                                <x-dashboard.form.blocks.work-experience-form field="meta.{{ $key }}"></x-dashboard.form.blocks.work-experience-form>
                                             @elseif($key === 'education')
-                                                <x-dashboard.form.blocks.education-form field="meta.{{ $key }}.value"></x-dashboard.form.blocks.education-form>
+                                                <x-dashboard.form.blocks.education-form field="meta.{{ $key }}"></x-dashboard.form.blocks.education-form>
                                             @endif
                                         </div>
                                     </div>
@@ -280,8 +300,8 @@
                                 </label>
                 
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                    <x-dashboard.form.froala field="meta.bio.value" id="user-bio-wysiwyg"></x-dashboard.form.froala>
-                                    <x-system.invalid-msg class="w-full" field="meta.bio.value"></x-system.invalid-msg>
+                                    <x-dashboard.form.froala field="meta.bio" id="user-bio-wysiwyg"></x-dashboard.form.froala>
+                                    <x-system.invalid-msg class="w-full" field="meta.bio"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Bio --> --}}
@@ -299,6 +319,43 @@
                     {{-- END Basic Information --}}
 
                     @if(!$onboarding)
+
+                    @php
+                        $user_locale = $user_meta_fields_in_use->get('locale');
+                    @endphp
+                    @if(!empty($user_locale))
+                        {{-- Lanuguage --}}
+                        <div id="languageSection" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-data="{}" >
+                            <div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    {{ translate('Language') }}
+                                </h3>
+                            </div>
+
+                            <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                                <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+
+                                    <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                        {{  translate('Language') }}
+                                    </label>
+
+                                    <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                        <x-dashboard.form.select field="meta.locale" selected="meta.locale" :items="App\Models\Language::all()->keyBy('code')->map(fn($item) => $item->name ?? '')->toArray()" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Save basic information --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="onSave()" wire:click="saveLanguage()">
+                                    {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save basic information --}}
+                        </div>
+                        {{-- END Lanuguage --}}
+                    @endif
+
                     {{-- Change password --}}
                     <div id="passwordSection" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-data="{
                         currentPassword: '',
