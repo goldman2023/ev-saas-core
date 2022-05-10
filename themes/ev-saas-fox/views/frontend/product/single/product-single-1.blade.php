@@ -21,14 +21,20 @@
                     <div class="w-full flex space-x-3 ">
                         @foreach($product->categories as $category)
                         @if(empty($category->parent_id))
-                        <div class="badge-info !text-14 !py-1">{{ $category->name }}</div>
+                        <div class="badge-primary !text-14 !py-1">{{ $category->name }}</div>
                         @endif
                         @endforeach
                     </div>
-                    <div class="w-full mt-3">
-                        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+                    <div class="w-full mt-3 flex flex-col">
+                        <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl mb-3">
                             {{ $product->getTranslation('name') }}
                         </h1>
+
+                        @if($product->isEvent())
+                            <div class="w-full mb-3 flex">
+                                <span class="badge-success">{{ translate('Event') }}</span>
+                            </div>
+                        @endif
 
                         {{-- <h2 id="information-heading" class="sr-only">Product information</h2>
                         <p class="text-sm text-gray-500 mt-2"> {{ translate('Views: ') }} {{
@@ -36,7 +42,7 @@
                                 $product->updated_at->diffForHumans() }}</time>)</p> --}}
                     </div>
 
-                    <div class="w-full mt-3">
+                    {{-- <div class="w-full mt-3">
                         <div class="flex items-center">
                             {{-- TODO: FIX THIS TO USE REAL RATING --}}
                             {{-- @for($i = 0; $i < 4; $i++) @svg('heroicon-s-star', ['class'=> 'text-warning h-5 w-5
@@ -47,8 +53,8 @@
 
                                 {{-- <span class="ml-2 text-gray-500">{{ $product->rating }}</span> --}}
                                 {{-- <span class="ml-3 text-gray-500">{{ '(67 reviews)' }}</span> --}}
-                        </div>
-                    </div>
+                        {{-- </div>
+                    </div>  --}}
                 </div>
 
                 <p class="text-gray-500 mt-4">
@@ -57,41 +63,38 @@
                 <div class="w-full">
 
                     @if(!$product->isInStock())
-                    <!-- This example requires Tailwind CSS v2.0+ -->
-                    <div class="rounded-md bg-yellow-50 p-4 mb-6 mt-6">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <!-- Heroicon name: solid/exclamation -->
-                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd"
-                                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="ml-3">
-                                <h3 class="text-sm font-medium text-yellow-800">
-                                    {{ translate('Product is out of stock.') }}
-                                </h3>
-                                <div class="mt-2 text-sm text-yellow-700">
-                                    <p>{{ translate('Product is currently unavailable. Get notified when this product
-                                        stock is added.') }}</p>
-                                    <livewire:actions.social-action-button action="notify" :object="$product">
-                                    </livewire:actions.social-action-button>
+                        <!-- This example requires Tailwind CSS v2.0+ -->
+                        <div class="rounded-md bg-yellow-50 p-4 mb-6 mt-6">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <!-- Heroicon name: solid/exclamation -->
+                                    <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <h3 class="text-sm font-medium text-yellow-800">
+                                        {{ translate('Product is out of stock.') }}
+                                    </h3>
+                                    <div class="mt-2 text-sm text-yellow-700">
+                                        <p>{{ translate('Product is currently unavailable. Get notified when this product
+                                            stock is added.') }}</p>
+                                        <livewire:actions.social-action-button action="notify" :object="$product">
+                                        </livewire:actions.social-action-button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <h2 class="text-18 text-body font-semibold">
-                        {{ translate('') }}
-                    </h2>
-
+                        {{-- <h2 class="text-18 text-body font-semibold">
+                            {{ translate('') }}
+                        </h2> --}}
                     @endif
 
                     <x-default.products.single.product-checkout-card :product="$product">
                     </x-default.products.single.product-checkout-card>
-
-
                 </div>
 
                 <div class="w-full flex flex-col mt-4">

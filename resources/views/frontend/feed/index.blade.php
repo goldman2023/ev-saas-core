@@ -33,7 +33,7 @@
                     <x-feed.elements.follow-suggestions>
                     </x-feed.elements.follow-suggestions>
     
-                    @auth
+                    {{-- @auth
                         <section aria-labelledby="trending-heading">
                             <div class="bg-white rounded-lg shadow">
                                 <div class="p-6">
@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                         </section>
-                    @endauth
+                    @endauth --}}
                 </div>
             </aside>
         </main>
