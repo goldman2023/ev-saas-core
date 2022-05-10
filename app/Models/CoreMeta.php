@@ -28,8 +28,12 @@ class CoreMeta extends Model
             'location_address' => 'string',
             'location_address_map_link' => 'string',
             'location_link' => 'string',
-            'unlockables' => 'array',
+            'unlockables' => 'string', // for now it's a string/wysiwyg
             'calendly_link' => 'string',
+            // 'custom_cta_title' => 'string',
+            'thank_you_cta_custom_title' => 'string',
+            'thank_you_cta_custom_text' => 'string',
+            'thank_you_cta_custom_url' => 'string',
         ];
     }
 

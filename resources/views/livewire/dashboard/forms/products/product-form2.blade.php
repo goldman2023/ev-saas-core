@@ -1015,6 +1015,29 @@
                             </template>
                         </div>
                     </div>
+                    {{-- END Card Attributes --}}
+
+
+                    {{-- Card Unlockables --}}
+                    <div class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5 sm:mt-8" x-data="{}" wire:ignore>
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">{{ translate('Unlockables') }}</h3>
+                            <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ translate('Content which user unlock when product is purchased') }}</p>
+                        </div>
+
+                        <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
+                                <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                    <div class="mt-1 sm:mt-0 sm:col-span-3">
+                                        <x-dashboard.form.froala field="product_core_meta.unlockables.value" id="product-unlockables-wysiwyg"></x-dashboard.form.froala>
+        
+                                        <x-system.invalid-msg class="w-full" field="product_core_meta.unlockables.value"></x-system.invalid-msg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- END Card Unlockables --}}
                 </div>
                 {{-- END Left side --}}
 
