@@ -166,6 +166,7 @@ Route::middleware([
 
     // Products
     Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
+    Route::get('/product/{slug}/content', [EVProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
     Route::get('/product/{id}/checkout-link', [EVProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
 
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());

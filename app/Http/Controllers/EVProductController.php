@@ -36,7 +36,7 @@ class EVProductController extends Controller
     public function create2(Request $request)
     {
         /* Check if user has shop */
-        if (! MyShop::getShop()) {
+        if (!MyShop::getShop()) {
             /* If not, redirect to shop creation */
             return redirect()->route('onboarding.step3');
         }
@@ -133,7 +133,7 @@ class EVProductController extends Controller
         }
 
         /* TODO: add this eventually: && $product->published */
-        if (! empty($product)) {
+        if (!empty($product)) {
             if (auth()->check()) {
                 $user = auth()->user();
             } else {
@@ -153,13 +153,37 @@ class EVProductController extends Controller
 
         $template = 'product-single-1';
 
-        return view('frontend.product.single.'.$template, compact('product'));
+        return view('frontend.product.single.' . $template, compact('product'));
+    }
+
+
+    public function show_unlockable_content(Request $request, $slug)
+    {
+        /* TODO This is duplicate for consistent naming, let's refactor to better approach */
+        if (Product::where('slug', $slug)->first()) {
+            $product = Product::where('slug', $slug)->first()->load(['shop']);
+        } else {
+            return abort(404);
+        }
+        if(auth()->user()) {
+            activity()
+            ->performedOn($product)
+            ->causedBy(auth()->user())
+            ->withProperties([
+                'action' => 'viewed',
+                'action_title' => 'Viewed a purchased content',
+            ])
+            ->log('viewed');
+        }
+
+
+        return view('frontend.product.single.protected-content', compact('product'));
     }
 
     public function createProductCheckoutRedirect($id)
     {
         $product = Product::find($id);
-        $qty = ! empty(request()->qty ?? null) ? (int) request()->qty : 1;
+        $qty = !empty(request()->qty ?? null) ? (int) request()->qty : 1;
 
         $link = StripeService::createCheckoutLink($product, $qty);
 
