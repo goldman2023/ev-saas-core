@@ -6,6 +6,11 @@
     <div class="container py-10">
         {!! $page->content !!}
     </div>
+@elseif($page->type === 'html')
+    <div class="w-full">
+        {!! $page->content !!}
+    </div>
+@elseif($page->type === 'system')
 @else
     @if(!empty($sections))
         @foreach ($sections as $key => $section)
@@ -22,6 +27,5 @@
         @endforeach
     @endif
 @endif
-
 
 @endsection
