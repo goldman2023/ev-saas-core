@@ -100,7 +100,9 @@
                     <!-- END Type -->
 
                     <div class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
-                    
+                        <a href="{{ route('grape.index', ['pageID' => $page->id]) }}" class="btn-info">
+                            {{ translate('Open in builder') }}
+                        </a>
                         <button type="button" class="btn btn-primary ml-auto btn-sm"
                             @click="
                                 $wire.set('page.status', status, true);

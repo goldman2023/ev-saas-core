@@ -92,8 +92,8 @@ class PageForm extends Component
 
     public function removePage()
     {
-//        $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
-//        $address->remove();
+    //    $address = app($this->currentAddress::class)->find($this->currentAddress->id)->fill($this->currentAddress->toArray());
+    //    $address->remove();
     }
 
     public function render()
