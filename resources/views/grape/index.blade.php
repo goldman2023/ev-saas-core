@@ -11,7 +11,7 @@
     }
 </style>
 <link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css">
-<link href="path/to/grapesjs-preset-webpage.min.css" rel="stylesheet" />
+{{-- <link href="path/to/grapesjs-preset-webpage.min.css" rel="stylesheet" /> --}}
 
 <script src="//unpkg.com/grapesjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script>
@@ -87,7 +87,7 @@
                 }
               }
             });
-            
+
           },
           save() {
             document.getElementById('custom_html').value = this.getHTML();
