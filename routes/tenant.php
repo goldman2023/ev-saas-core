@@ -85,7 +85,7 @@ Route::middleware([
         Route::get('/we-edit/flow/menu', [WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
 
         Route::get('/we-grape/{pageID?}', [GrapeController::class, 'index'])->name('grape.index');
-        Route::post('/we-grape/{pageID}/save', [GrapeController::class, 'index'])->name('grape.save');
+        Route::post('/we-grape/{pageID}/save', [GrapeController::class, 'save_custom_html'])->name('grape.save');
     });
 
     // Webhooks
@@ -166,6 +166,7 @@ Route::middleware([
 
     // Products
     Route::get('/product/{slug}', [EVProductController::class, 'show'])->name(Product::getRouteName());
+    Route::get('/product/{slug}/content', [EVProductController::class, 'show_unlockable_content'])->name(Product::getRouteName() . '.unlockable_content')->middleware('purchased_or_owner');
     Route::get('/product/{id}/checkout-link', [EVProductController::class, 'createProductCheckoutRedirect'])->name('product.generate_checkout_link');
 
     Route::get('/plan/{slug}', [EVPlanController::class, 'show'])->name(Plan::getRouteName());

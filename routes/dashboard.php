@@ -197,4 +197,6 @@ Route::middleware([
     /* IMPORTANT: Last set of routes! To define missing pages and routes */
     Route::get('/{data1}', [PageController::class, 'show_custom_page']);
     Route::get('/{data1}/{data2}', [PageController::class, 'show_custom_page']);
+    Route::get('/assets/{data1}/{data2}', [PageController::class, 'show_custom_page']);
+    Route::get('/assets/{data1}/{data2}', [PageController::class, 'show_custom_page']);
 });

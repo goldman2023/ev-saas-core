@@ -13,6 +13,9 @@ use StripeService;
 use App\Enums\WeMailingListsEnum;
 use App\Mail\EmailVerification;
 
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\UserWelcomeNotification;
+
 class UserObserver
 {
     /**
@@ -39,8 +42,9 @@ class UserObserver
         } 
 
         try {
-            Mail::to($user->email)
-                ->send(new WelcomeEmail($user));
+            $user->notify(new UserWelcomeNotification());
+            // Mail::to($user->email)
+            //     ->send(new WelcomeEmail($user));
         } catch(\Exception $e) {
             Log::error($e->getMessage());
         }
