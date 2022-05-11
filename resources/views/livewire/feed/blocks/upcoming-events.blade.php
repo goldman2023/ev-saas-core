@@ -52,7 +52,7 @@
                                     </div>
                                    
                                     <time datetime="{{ $event->getCoreMeta('start_date') }}" class="pl-7 text-12">
-                                        -{{ \Carbon::createFromTimestamp($event->getCoreMeta('start_date'))->format('d.m.Y H:i')  }}
+                                        {{ \Carbon::createFromTimestamp($event->getCoreMeta('start_date'))->format('d.m.Y H:i')  }}
                                     </time>
                                 </div>
 
@@ -65,7 +65,7 @@
                                         </div>
                                     
                                         <time datetime="{{ $event->getCoreMeta('end_date') }}" class="pl-7 text-12">
-                                            -{{ \Carbon::createFromTimestamp($event->getCoreMeta('end_date'))->format('d.m.Y H:i')  }}
+                                            {{ \Carbon::createFromTimestamp($event->getCoreMeta('end_date'))->format('d.m.Y H:i')  }}
                                         </time>
                                     </div>
                                 @endif
