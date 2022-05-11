@@ -27,10 +27,14 @@ class WelcomeEmail extends WeEmail
      */
      public function build()
      {
-         
         return $this
-            ->view('emails.users.welcome')
-            ->text('emails.users.welcome')
+            ->view('vendor.notifications.email')
+            ->text('mail.text.message')
+            ->subject(translate('Welcome to '.get_tenant_setting('site_name')))
+            ->greeting(translate('Hello, ').$this->user->name)
+            ->line(translate('Welcome to our site. This is an example text :)'))
+            ->action('Go to dashboard', route('dashboard'))
+            ->line(translate('Thank you for using our application!'))
             ->mailersend();
         
     }

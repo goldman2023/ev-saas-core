@@ -3,9 +3,15 @@
 namespace App\Notifications\Messages;
 
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use MailerSend\LaravelDriver\MailerSendTrait;
 
 class WeMailMessage extends MailMessage
 {
+    use Queueable, SerializesModels, MailerSendTrait;
+
     public function __construct() {
         // IMPORTANT: Notifications use MailMessage, but we must define which MAILER is used alongside `from` and `replyTo` which are tenant related!
 
