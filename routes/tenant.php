@@ -85,7 +85,7 @@ Route::middleware([
         Route::get('/we-edit/flow/menu', [WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
 
         Route::get('/we-grape/{pageID?}', [GrapeController::class, 'index'])->name('grape.index');
-        Route::post('/we-grape/{pageID}/save', [GrapeController::class, 'index'])->name('grape.save');
+        Route::post('/we-grape/{pageID}/save', [GrapeController::class, 'save_custom_html'])->name('grape.save');
     });
 
     // Webhooks
