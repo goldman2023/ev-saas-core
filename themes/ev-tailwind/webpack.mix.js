@@ -41,4 +41,6 @@ mix.setPublicPath(`public/themes/${theme}`)
                 '@': path.resolve(`themes/${theme}`),
             },
         }
-    });
+    })
+    .minify([`public/themes/${theme}/js/app.js`, `public/themes/${theme}/js/alpine.js`])
+    .minify(`public/themes/${theme}/css/app.css`);

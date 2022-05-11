@@ -45,13 +45,5 @@
     @endsection
 
     @section('script')
-    <script type="text/javascript">
-        function show_chat_modal() {
-            @if (Auth::check())
-                $('#chat_modal').modal('show');
-            @else
-                $('#login_modal').modal('show');
-            @endif
-        }
-    </script>
+    
     @endsection

@@ -24,9 +24,7 @@
     @yield('meta')
 
     
-    <script id="img-proxy-data" type="application/json">
-        @json(\IMG::getIMGProxyData())
-    </script>
+    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
 
     @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
         <x-default.system.og-meta>

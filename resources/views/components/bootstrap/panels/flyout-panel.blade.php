@@ -14,7 +14,7 @@
             has_warnings: false,
             hideWarnings() {
                 this.has_warnings = false;
-                $($refs['c-flyout-panel__warnings-text']).html('');
+                {{-- $refs['c-flyout-panel__warnings-text'].innerHTML = ''; --}}
             }
         }"
         x-init="$watch('show', (value) => {

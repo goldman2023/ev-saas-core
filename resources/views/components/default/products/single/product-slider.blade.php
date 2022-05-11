@@ -50,17 +50,4 @@
 
 @push('footer_scripts')
 
-    <script src="{{ static_asset('vendor/hs-sticky-block/dist/hs-sticky-block.min.js', false, true) }}"></script>
-    <!-- JS Plugins Init. -->
-    <script>
-        $(function() {
-
-    // INITIALIZATION OF STICKY BLOCK
-    $('.js-sticky-block').each(function() {
-        var stickyBlock = new HSStickyBlock($(this)).init();
-    });
-
-});
-    </script>
-
-    @endpush
+@endpush

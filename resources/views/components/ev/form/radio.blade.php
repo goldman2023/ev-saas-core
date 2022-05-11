@@ -46,20 +46,4 @@
     @error($errorBagName)
         <div class="invalid-feedback d-block">{{ $message }}</div>
     @enderror
-
-    <script>
-        $(function() {
-            $('[data-component-name="{{ $name }}"] [type="radio"]').off().on('change', function(event) {
-                if($(this).is(':checked')) {
-                    // hide all other
-                    $('[data-component-name="{{ $name }}"] [type="radio"]').each(function(index, radio) {
-                        $('div[data-slot-name="'+$(radio).val()+'"]').children().first().addClass('d-none');
-                    });
-
-                    // Activate the selected
-                    $('div[data-slot-name="'+$(this).val()+'"]').children().first().removeClass('d-none');
-                }
-            });
-        });
-    </script>
 </div>
