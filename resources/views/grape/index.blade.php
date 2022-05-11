@@ -27,7 +27,9 @@
       </div>
   </div>
 
-  <div class="w-full flex justify-end">
+  <div class="w-full flex justify-between">
+    <a class="btn-info ml-5 my-3 " href="{{ route('page.edit', ['id' => $pageID]) }}">Go to Page</a>
+
     <button class="btn-primary mr-5 my-3 " @click="save()">Save</button>
   </div>
 </div>
