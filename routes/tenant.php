@@ -84,14 +84,15 @@ Route::middleware([
         Route::get('/we-edit/flow', [WeEditController::class, 'flow'])->name('we-edit.flow.pages');
         Route::get('/we-edit/flow/menu', [WeEditController::class, 'menuFlow'])->name('we-edit.flow.menu');
 
-        Route::get('/we-grape', [GrapeController::class, 'index'])->name('grape.index');
+        Route::get('/we-grape/{pageID?}', [GrapeController::class, 'index'])->name('grape.index');
+        Route::post('/we-grape/{pageID}/save', [GrapeController::class, 'index'])->name('grape.save');
     });
 
     // Webhooks
     Route::post('/webhooks/stripe', [StripePaymentController::class, 'webhooks'])->name('webhooks.stripe');
     Route::get('/stripe/create-checkout-session', [StripePaymentController::class, 'generateCheckoutSessionLink'])->name('stripe.checkout_redirect');
 
-    
+
     // Route to show after creating new tenant:
     Auth::routes(['verify' => true]);
 

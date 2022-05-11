@@ -26,6 +26,15 @@
 </div>
 
 <script>
+    var html = editor.getHtml();
+</script>
+<button x-on:click="">Save</button>
+<form action={{ route('grape.save', [$pageID]) }} method="POST" id="grape-form">
+    <input type="hidden" name="custom_html" id="custom_html" value="">
+    <button type="submit">{{ translate('Save') }}</button>
+</form>
+
+<script>
     const editor = grapesjs.init({
         canvas: {
     scripts: [

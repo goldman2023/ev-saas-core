@@ -24,6 +24,7 @@ use MailerService;
 use App\Enums\WeMailingListsEnum;
 
 use Illuminate\Auth\Events\Registered;
+use MikeMcLin\WpPassword\Facades\WpPassword;
 
 use Carbon;
 use Illuminate\Support\Facades\Mail;
@@ -165,7 +166,7 @@ class RegisterForm extends Component
         ]);
 
         // Save md5 password in core_meta
-        $this->user->saveCoreMeta('password_md5', md5($this->password));
+        $this->user->saveCoreMeta('password_md5', WpPassword::make($this->password));
 
         if (Cookie::has('referral_code')) {
             $referral_code = Cookie::get('referral_code');

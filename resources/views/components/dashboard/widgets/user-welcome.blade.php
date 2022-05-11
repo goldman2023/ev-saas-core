@@ -95,7 +95,7 @@
                 </a>
                 @endif
                 <a
-                href="https://buy.stripe.com/eVacMRd2x7UB3jW288"
+                href="{{ route('my.plans.management') }}"
                 target="_blank"
                 type="button" href=" {{ route('my.plans.management') }}"
                     class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">

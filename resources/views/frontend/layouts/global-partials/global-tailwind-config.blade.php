@@ -2,11 +2,12 @@
 Example in themes/ev-saas-fox/views/frontend/layouts/global-partials/global-tailwind-config.blade.php
 TODO: you can overide it with data from a database a sa setting --}}
 @php
-    $colors = TenantSettings::get('colors');
+$colors = TenantSettings::get('colors');
 @endphp
 
 <script>
     tailwind.config = {
+          darkMode: 'class',
           theme: {
             screens: {
                 'mobile': {'min': '300px', 'max': '599px'},
@@ -93,6 +94,10 @@ TODO: you can overide it with data from a database a sa setting --}}
             @apply hidden;
         }
 
+        *::-webkit-scrollbar { width: 0 !important }
+
+        body::-webkit-scrollbar { width: 5px !important }
+
         .btn-standard {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-500 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700;
         }
@@ -123,7 +128,7 @@ TODO: you can overide it with data from a database a sa setting --}}
         .btn-ghost {
             @apply cursor-pointer inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-primary bg-transparent hover:text-primary-dark;
         }
-        
+
         .badge {
             @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
         }
@@ -192,10 +197,11 @@ TODO: you can overide it with data from a database a sa setting --}}
             @apply visible z-50;
         }
 
-
+        @if($colors['sidebar-bg'])
         .we-dashboard-sidebar-background {
-            background-color: {{ $colors['sidebar-bg'] }};
+            background-color: {{ $colors['sidebar-bg'] }} !important;
         }
+        @endif
 
         .we-sidebar-menu-item {
             @apply text-gray-600 !important;

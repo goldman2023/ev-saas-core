@@ -3,18 +3,18 @@
 @section('content')
 <div class="min-h-full bg-gray-200">
     <div class="max-w-5xl mx-auto sm:px-6 lg:max-w-[1440px] lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8 py-10 pt-3">
-        <div class="hidden lg:block lg:col-span-2 xl:col-span-2">
+        <div class="hidden lg:block lg:col-span-2 sm:col-span-2">
             <x-feed.elements.feed-sidebar>
             </x-feed.elements.feed-sidebar>
         </div>
-        <main class="lg:col-span-12 xl:col-span-10 grid grid-cols-12 gap-6">
+        <main class="sm:col-span-10 grid grid-cols-12 gap-6">
 
-            <div class="col-span-12 xl:col-span-7 flex flex-col">
+            <div class="lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
                 <div class="mb-3">
                     <x-feed.elements.stories-global>
                     </x-feed.elements.stories-global>
                 </div>
-    
+
                 <div class="grid grid-cols-12 gap-5 mt-4">
 
                     <div class="col-span-12 space-y-4 px-4 md:px-0">
@@ -24,15 +24,15 @@
                     </div>
                 </div>
             </div>
-            
-            <aside class="hidden xl:block xl:col-span-5">
+
+            <aside class="hidden sm:block sm:col-span-4 md:col-span-4">
                 <div class="sticky top-4 space-y-4">
                     {{-- Upcoming Events --}}
                     <livewire:feed.blocks.upcoming-events />
 
                     <x-feed.elements.follow-suggestions>
                     </x-feed.elements.follow-suggestions>
-    
+
                     {{-- @auth
                         <section aria-labelledby="trending-heading">
                             <div class="bg-white rounded-lg shadow">
@@ -55,7 +55,7 @@
                 </div>
             </aside>
         </main>
-        
+
     </div>
 </div>
 
