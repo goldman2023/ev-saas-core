@@ -12,7 +12,7 @@
             <div class="d-md-flex align-items-center">
                 <div class="mb-3 mb-md-0 input-group">
                     <input placeholder="{{ translate('Search') }}" type="text" class="form-control"
-                           @input.debounce.700ms="$wire.set('search_query', $($el).val(), true); $wire.searchByQuery();" value="{{ request()->search_query }}">
+                           @input.debounce.700ms="$wire.set('search_query', $el.value, true); $wire.searchByQuery();" value="{{ request()->search_query }}">
                 </div>
                 <div class="ml-3 badge badge-info d-flex align-items-center">
                     <strong>{{ str_replace('%s%', $all_categories->count(), translate('Found %s% categories')) }}</strong>

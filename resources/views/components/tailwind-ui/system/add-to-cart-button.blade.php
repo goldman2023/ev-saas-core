@@ -7,7 +7,7 @@
     addToCart() {
         if(!processing && Number(qty) > 0) {
             processing = true; // start addToCart button processing
-            Livewire.find($('#cart-panel').attr('wire:id')).emit('addToCart', model_id, model_type, qty, true);
+            Livewire.find(document.getElementById('cart-panel').getAttribute('wire:id')).emit('addToCart', model_id, model_type, qty, true);
         }
     }
    }"

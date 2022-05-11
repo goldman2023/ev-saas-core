@@ -23,9 +23,11 @@
             @endif
         },
     }" x-init="$watch('current', function(value) {
-        $([document.documentElement, document.body]).animate({
-            scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
-        }, 500);
+        window.scroll({
+            behavior: 'smooth',
+            left: 0,
+            top: document.getElementById(value).offsetTop
+        });
     })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
         @submit-form.window="
             setTimeout(() => {

@@ -7,13 +7,13 @@
  */
 
 window._ = require('lodash');
-window.axios = require('axios');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.head.querySelector('meta[name="csrf-token"]').content;
+// window.axios = require('axios');
+// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+// window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.head.querySelector('meta[name="csrf-token"]').content;
 
-try {
-    window.$ = window.jQuery = require('jquery');
-} catch (e) {}
+// try {
+//     window.$ = window.jQuery = require('jquery');
+// } catch (e) {}
 
 /**
  * Require custom prototypes
@@ -26,7 +26,7 @@ window.WE = {};
 
 require('./IMG');
 require('./utils');
-require('./leaflet');
+// require('./leaflet');
 require('./sortable');
 
 // LUXON

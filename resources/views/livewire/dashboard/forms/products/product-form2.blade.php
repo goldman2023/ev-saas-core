@@ -1434,7 +1434,7 @@
 
                                 tags.push(value);
 
-                                $($refs['product_tags_input']).val('');
+                                $refs['product_tags_input'].value = '';
                             },
                             remove(index) {
                                 this.tags.splice(index, 1);
@@ -1453,9 +1453,9 @@
                                         <input type="text" class="form-standard @error('product.tags') is-invalid @enderror"
                                                 placeholder="{{ translate('Write desired tag and press "comma", "space" or "enter" to insert it') }}"
                                                 x-ref="product_tags_input"
-                                                @keyup.enter="add($($el).val())"
-                                                @keyup.space="add($($el).val())"
-                                                @keyup="if(event.keyCode == 188) { add($($el).val().replaceAll(',','')) };" />
+                                                @keyup.enter="add($el.value)"
+                                                @keyup.space="add($el.value)"
+                                                @keyup="if(event.keyCode == 188) { add($el.value.replaceAll(',','')) };" />
                                     </div>
 
 

@@ -1,25 +1,3 @@
-@push('head_scripts')
-<script>
-    // $(function() {
-    //     const sortable =  window.Sortable.create(document.querySelector('.p-pages-editor__sections-list'), {
-    //         sort: true,
-    //         draggable: ".p-pages-editor__sections-list__item",
-    //         chosenClass: 'sortable-chosen',
-    //         onSort: function (event) {
-    //             let list = document.querySelectorAll('.p-pages-editor__sections-list li');
-    //             // let keys = [];
-    //             let map = {};
-    //             list.forEach(function(section, order) {
-    //                 map[section.getAttribute('data-section-index')] = order; // order is basically a JS index
-    //             });
-                
-    //             @this.reorderCurrentPreviewSections(map);
-    //         },
-    //     });
-    // });
-</script>
-@endpush
-
 <div class="p-preview-editor min-h-full w-full flex flex-col bg-white px-4 py-3" x-data="{
     current_page: @js($current_page),
     current_preview: @js($current_preview),

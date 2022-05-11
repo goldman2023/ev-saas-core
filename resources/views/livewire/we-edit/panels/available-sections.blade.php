@@ -1,9 +1,5 @@
 @push('head_scripts')
-<script>
-    $(function() {
-        /* TODO: what should go here? */
-    });
-</script>
+
 @endpush
 <div class="p-available-sections min-h-full w-full flex flex-col h-[calc(100vh_-_64px)]" x-data="" x-init="" wire:ignore>
     <div class="w-full bg-white px-4 py-3">
