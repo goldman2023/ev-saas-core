@@ -106,21 +106,6 @@
 
 @include('frontend.layouts.partials.app-js')
 
-<script src="{{ static_asset('front/js/hs.slick-carousel.js') }}"></script>
-
-<!-- JS Plugins Init. -->
-<script>
-    $(function() {
-        // INITIALIZATION OF SLICK CAROUSEL
-        // =======================================================
-        $('.js-slick-carousel').each(function() {
-            var slickCarousel = $.HSCore.components.HSSlickCarousel.init($(this));
-        });
-    });
-</script>
-
-
-
 @php
     echo get_setting('footer_script');
 @endphp

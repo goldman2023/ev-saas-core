@@ -1,13 +1,13 @@
 window.WE.IMG = {
     getStorageBaseURL: function() {
-        return $('meta[name="storage-base-url"]').attr('content');
+        return document.querySelector('meta[name="storage-base-url"]').getAttribute('content');
     },
     isIMGProxyEnabled: function() {
         return window.WE.IMG.getIMGProxyData()['enabled'];
     },
     getIMGProxyData: function() {
         try {
-            return JSON.parse($('script#img-proxy-data').html());
+            return JSON.parse(document.querySelector('script#img-proxy-data').innerHTML);
         } catch(error) {
             return {};
         }

@@ -10,7 +10,6 @@
       });
       this.colorPicker.on('input:end', function(color) {
         {{ $field }} = color.hexString;
-        {{-- $('#section_settings_background_color_input').val(); --}}
       });
     }
   }

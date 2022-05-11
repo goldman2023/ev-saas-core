@@ -20,9 +20,7 @@
     <meta name="file-bucket-url" content="{{ getStorageBaseURL() }}">
     <meta name="storage-base-url" content="{{ getStorageBaseURL() }}">
 
-    <script id="img-proxy-data" type="application/json">
-        @json(\IMG::getIMGProxyData())
-    </script>
+    <script id="img-proxy-data" type="application/json">@json(\IMG::getIMGProxyData())</script>
 
     {{-- TailwindCSS --}}
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>

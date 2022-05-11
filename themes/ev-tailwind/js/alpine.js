@@ -20,13 +20,20 @@ try {
             Alpine.nextTick(() => {
                 try {
                     if(errors !== undefined && Object.keys(errors).length > 0)  {
-                        let $target_el = $('[name=\''+Object.keys(errors)[0]+'\']');
-                        $('html').animate({ // html,body - fires callback twice...
-                            scrollTop: $target_el.parent().offset().top
-                        }, duration, function() {
-                            if (callback instanceof Function)
-                                callback();
+                        let $target_el = document.querySelector('[name=\''+Object.keys(errors)[0]+'\']');
+                        
+                        window.scroll({
+                            behavior: 'smooth',
+                            left: 0,
+                            top: $target_el.parentNod.offsetTop
                         });
+
+                        // $('html').animate({ // html,body - fires callback twice...
+                        //     scrollTop: $target_el.parent().offset().top
+                        // }, duration, function() {
+                        //     if (callback instanceof Function)
+                        //         callback();
+                        // });
                     }
                 } catch(error) {}
             });

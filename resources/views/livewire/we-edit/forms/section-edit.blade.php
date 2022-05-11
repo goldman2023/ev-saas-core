@@ -7,7 +7,7 @@
     @display-flyout-panel.window="if($event.detail.id === id) {
         {{-- TODO: Add loading spinner over whole section-edit form so we can indicate that section data is loading --}}
         setTimeout(function() {
-            $('#section-custom-fields-html').html('');
+            document.getElementById('section-custom-fields-html').innerHTML = '';
             $wire.setSection($event.detail.section_uuid);
         }, 500);
     }"

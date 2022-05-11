@@ -51,7 +51,11 @@
                              x-init="
                                 $watch('qty', function(value) {
                                     if(!processing) {
-                                        $('.c-flyout-cart__items .cart-item').addClass('pointer-events-none'); // manually prevent pointer events while processing
+                                        let cart_items = document.querySelectorAll('.c-flyout-cart__items .cart-item');
+                                        for (const cart_item of cart_items) {
+                                            cart_item.classList.add('pointer-events-none');
+                                        }
+                                        {{-- $('.c-flyout-cart__items .cart-item').addClass('pointer-events-none'); // manually prevent pointer events while processing --}}
                                         hideWarnings();
                                         $wire.addToCart(model_id, model_type, value, false);
                                     }
@@ -62,13 +66,18 @@
                                     qty = $event.detail.qty;
                                 }
 
-                                $('.c-flyout-cart__items .cart-item').removeClass('pointer-events-none'); // manually remove prevent-pointer-events class
+                                let cart_items = document.querySelectorAll('.c-flyout-cart__items .cart-item');
+                                for (const cart_item of cart_items) {
+                                    cart_item.classList.remove('pointer-events-none');
+                                }
+
+                                //$('.c-flyout-cart__items .cart-item').removeClass('pointer-events-none'); // manually remove prevent-pointer-events class
                             "
                              @cart-item-warnings.window="
                                 $nextTick(() => {
                                     if($event.detail.warnings.length > 0) {
                                         has_warnings = true;
-                                         $($refs['c-flyout-cart__warnings-text']).html($event.detail.warnings[0].split('\\n').map(text => '<span>' + text + '</span><br>').join(''));
+                                         $refs['c-flyout-cart__warnings-text'].innerHTML($event.detail.warnings[0].split('\\n').map(text => '<span>' + text + '</span><br>').join(''));
 
                                          setTimeout(() => {
                                             hideWarnings();

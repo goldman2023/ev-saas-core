@@ -35,7 +35,6 @@
                   });
                   this.bkgColorPicker.on('input:end', function(color) {
                     section.settings.background.color = color.hexString;
-                    {{-- $('#section_settings_background_color_input').val(); --}}
                   });
                 }
               }

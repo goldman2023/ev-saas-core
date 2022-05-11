@@ -34,9 +34,11 @@
             @endif
         },
     }" x-init="$watch('current', function(value) {
-        $([document.documentElement, document.body]).animate({
-            scrollTop: $('#'+value).offset().top - $('#topbar').outerHeight() - 20
-        }, 500);
+        window.scroll({
+            behavior: 'smooth',
+            left: 0,
+            top: document.getElementById(value).offsetTop
+        });
     })" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" 
         @submit-form.window="
             onSave();
@@ -63,14 +65,20 @@
                             <span class="truncate">{{ translate('Basic information') }}</span>
                         </a>
 
-                        <a href="#"
-                            :class="{'text-primary': current === 'languageSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'languageSection'}"
-                            class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
-                            @click="current = 'languageSection'">
+                        @php
+                            $user_locale = $user_meta_fields_in_use->get('locale');
+                        @endphp
+                        @if(!empty($user_locale))
+                            <a href="#"
+                                :class="{'text-primary': current === 'languageSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'languageSection'}"
+                                class="flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                                @click="current = 'languageSection'">
 
-                            @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
-                            <span class="truncate">{{ translate('Language') }}</span>
-                        </a>
+                                @svg('heroicon-o-location-marker', ['class' => 'flex-shrink-0 -ml-1 mr-3 h-6 w-6'])
+                                <span class="truncate">{{ translate('Language') }}</span>
+                            </a>
+                        @endif
+                        
 
                         <a href="#"
                             :class="{'text-primary': current === 'passwordSection', 'text-gray-500 hover:bg-gray-50 hover:text-gray-900': current !== 'passwordSection'}"
