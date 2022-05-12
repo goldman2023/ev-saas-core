@@ -5,7 +5,7 @@
         'school': 'School/Institution...',
         'degree_title': 'Degree title...',
         'field_of_study': '',
-        'certificates': '',
+        'certificates': [{}],
         'start_date': '',
         'end_date': '',
         'description': '',
@@ -128,7 +128,7 @@
             </label>
 
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-                <x-dashboard.form.image-selector field="educations[current].certificates" id="education-files" template="simple" selected-image="educations[current].certificates"></x-dashboard.form.image-selector>
+                <x-dashboard.form.image-selector field="educations[current].certificates[0]" id="education-files" template="simple" selected-image="educations[current].certificates"></x-dashboard.form.image-selector>
 
             </div>
         </div>

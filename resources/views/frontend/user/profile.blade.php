@@ -58,7 +58,7 @@
                 ])
             </div>
         
-            <div class="px-5 pb-4 flex flex-col">
+            <div class="px-5 pb-2 flex flex-col">
                 
                 <p class="text-12 text-typ-3">{{ $user->getUserMeta('short_about_me') }}</p>
 
@@ -90,6 +90,15 @@
                          {{ $user->email }}
                     </span>
                 </div>
+
+                @if(!empty($user->getUserMeta('website')))
+                <div class="w-full flex justify-start text-sm whitespace-nowrap  mt-2">
+                    <span class="text-typ-2 mr-1">{{ translate('Website')}}:</span>
+                    <a href="{{ $user->getUserMeta('website') }}" class="text-primary" target="_blank">
+                         {{ $user->getUserMeta('website') }}
+                    </a>
+                </div>
+                @endif
             </div>
 
             @if(!empty($user->getUserMeta('social_profiles')))
@@ -115,8 +124,8 @@
         
             <div class="px-5 pb-4 flex flex-col ">
                 @if(!empty($user->getUserMeta('work_experience')))
-                    @foreach($user->getUserMeta('work_experience') as $wrk)
-                        <div class="w-full flex flex-col border-b border-gray-200 pb-3 mb-3">
+                    @foreach($user->getUserMeta('work_experience') as $index => $wrk)
+                        <div class="w-full flex flex-col  @if($index !== count($user->getUserMeta('work_experience')) - 1) border-b border-gray-200 pb-3 mb-3 @endif">
                             <strong class="block mb-0 text-16 text-typ-1">{{ $wrk['title'] ?? '' }}</strong>
                             <div class="flex flex-row items-center text-14">
                                 <strong class="text-typ-2">{{ $wrk['company_name'] }}</strong>
@@ -124,15 +133,121 @@
                                 <span class="text-typ-3">{{ $wrk['location'] }}</span>
                             </div>
                             <div class="flex flex-row items-center text-12 mt-1">
+                                @php
+                                    $start_end_diff = \Carbon::createFromTimestamp($wrk['end_date'])->diff(\Carbon::createFromTimestamp($wrk['start_date']));
+                                    $human_diff = $start_end_diff->y . ' years ' . $start_end_diff->d . ' days';
+                                @endphp
                                 <span class="text-typ-3">{{ \Carbon::createFromTimestamp($wrk['start_date'])->format('M Y').' - '.\Carbon::createFromTimestamp($wrk['end_date'])->format('M Y') }}</span>
                                 <span class="text-10 text-typ-4 mx-1">•</span>
-                                <strong class="text-typ-3">{{ \Carbon::createFromTimestamp($wrk['end_date'])->diffInDays(\Carbon::createFromTimestamp($wrk['start_date'])) }}</strong>
+                                <strong class="text-typ-3">{{ $human_diff }}</strong>
                             </div>
+                            @if(!empty($wrk['description']))
+                                <div class="w-full" x-data="{
+                                    clamped: true,
+                                    read_more_visible: false,
+                                    read_more_text: '{{ translate('Read more') }}',
+                                    init() {
+                                        $nextTick(() => {
+                                            var element = document.getElementById('work_experience_description_{{ $index }}');
+                                            if( (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)){
+                                                this.read_more_visible = true;
+                                                console.log(element);
+                                            }
+                                        });
+                                    },
+                                    readMore() {
+                                        this.clamped = !this.clamped;
+                                        if(this.clamped) {
+                                            this.read_more_text = '{{ translate('Read more') }}'
+                                        } else {
+                                            this.read_more_text = '{{ translate('Read less') }}'
+                                        }
+                                    }
+                                }" x-init="init()" x-cloak>
+                                    <p class="w-full mt-2 text-typ-3 text-14 overflow-hidden" :class="{'line-clamp-2':clamped}" id="work_experience_description_{{ $index }}">
+                                        {{ $wrk['description'] }}
+                                    </p>
+                                    <span x-text="read_more_text" class="w-full justify-center cursor-pointer text-right text-typ-3 text-12 mt-1" @click="readMore()" :class="{'hidden':!read_more_visible, 'inline-flex':read_more_visible}" ></span>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 @endif
             </div>
         </div>
+
+        <div class="w-full bg-white rounded-xl shadow">
+            <div class="w-full px-5 py-4 pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
+                <h5 class="text-14 font-semibold">{{ translate('Education') }}</h5>
+            </div>
+        
+            <div class="px-5 pb-4 flex flex-col ">
+                @if(!empty($user->getUserMeta('education')))
+                    @foreach($user->getUserMeta('education') as $index => $edu)
+                        <div class="w-full flex flex-col  @if($index !== count($user->getUserMeta('education')) - 1) border-b border-gray-200 pb-3 mb-3 @endif">
+                            <strong class="block mb-0 text-16 text-typ-1">{{ $edu['school'] ?? '' }}</strong>
+                            <div class="flex flex-row items-center text-14">
+                                <strong class="text-typ-2">{{ $edu['field_of_study'] }}</strong>
+                                <span class="text-10 text-typ-4 mx-1">•</span>
+                                <span class="text-typ-3">{{ $edu['degree_title'] }}</span>
+                            </div>
+                            <div class="flex flex-row items-center text-12 mt-1">
+                                @php
+                                    $start_end_diff = \Carbon::createFromTimestamp($edu['end_date'])->diff(\Carbon::createFromTimestamp($edu['start_date']));
+                                    $human_diff = $start_end_diff->y . ' years ' . $start_end_diff->d . ' days';
+                                @endphp
+                                <span class="text-typ-3">{{ \Carbon::createFromTimestamp($edu['start_date'])->format('M Y').' - '.\Carbon::createFromTimestamp($edu['end_date'])->format('M Y') }}</span>
+                                <span class="text-10 text-typ-4 mx-1">•</span>
+                                <strong class="text-typ-3">{{ $human_diff }}</strong>
+                            </div>
+                            
+                            @if(!empty($edu['description']))
+                                <div class="w-full" x-data="{
+                                    clamped: true,
+                                    read_more_visible: false,
+                                    read_more_text: '{{ translate('Read more') }}',
+                                    init() {
+                                        $nextTick(() => {
+                                            var element = document.getElementById('education_description_{{ $index }}');
+                                            if( (element.offsetHeight < element.scrollHeight) || (element.offsetWidth < element.scrollWidth)){
+                                                this.read_more_visible = true;
+                                            }
+                                        });
+                                    },
+                                    readMore() {
+                                        this.clamped = !this.clamped;
+                                        if(this.clamped) {
+                                            this.read_more_text = '{{ translate('Read more') }}'
+                                        } else {
+                                            this.read_more_text = '{{ translate('Read less') }}'
+                                        }
+                                    }
+                                }" x-init="init()" x-cloak>
+                                    <p class="w-full mt-2 text-typ-3 text-14 overflow-hidden" :class="{'line-clamp-2':clamped}" id="education_description_{{ $index }}">
+                                        {{ $edu['description'] }}
+                                    </p>
+                                    <span x-text="read_more_text" class="w-full justify-center cursor-pointer text-right text-typ-3 text-12 mt-1" @click="readMore()" :class="{'hidden':!read_more_visible, 'inline-flex':read_more_visible}"></span>
+                                </div>
+                            @endif
+                     
+                            
+                            @if(!empty($edu['certificates']))
+                                <div class="w-full flex flex-row items-center mt-2">
+                                    @foreach($edu['certificates'] as $key => $cert)
+                                        <a href="{{ Storage::url($cert['file_name']) }}" target="_blank" class="bg-white flex items-center rounded-lg border border-gray-200 p-2">
+                                            @svg('heroicon-o-document-text', ['class' => 'w-4 h-4 mr-2 text-typ-2'])
+                                            <span class="text-14 text-typ-2">{{ translate('Certificate').' '.($key+1) }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+        </div>
+
+        
     </div>
 
     <div class="col-span-7 space-y-4 flex flex-col">
