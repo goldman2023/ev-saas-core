@@ -11,7 +11,8 @@
     }
 </style>
 <link rel="stylesheet" href="//unpkg.com/grapesjs/dist/css/grapes.min.css">
-{{-- <link href="path/to/grapesjs-preset-webpage.min.css" rel="stylesheet" /> --}}
+{{--
+<link href="path/to/grapesjs-preset-webpage.min.css" rel="stylesheet" /> --}}
 
 <script src="//unpkg.com/grapesjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/grapesjs-preset-webpage@0.1.11/dist/grapesjs-preset-webpage.min.js"></script>
@@ -21,17 +22,17 @@
 @section('content')
 
 <div class="w-full" x-data="grapeEditor" x-init="initGrapeEditor()">
-  <div id="gjs" style="min-height: 100vh;" >
-      <div data-gjs-editable="false">
-          {!! $content !!}
-      </div>
-  </div>
+    <div id="gjs" style="min-height: 100vh;">
+        <div data-gjs-editable="false">
+            {!! $content !!}
+        </div>
+    </div>
 
-  <div class="w-full flex justify-between">
-    <a class="btn-info ml-5 my-3 " href="{{ route('page.edit', ['id' => $pageID]) }}">Go to Page</a>
+    <div class="w-full flex justify-between">
+        <a class="btn-info ml-5 my-3 " href="{{ route('page.edit', ['id' => $pageID]) }}">Go to Page</a>
 
-    <button class="btn-primary mr-5 my-3 " @click="save()">Save</button>
-  </div>
+        <button class="btn-primary mr-5 my-3 " @click="save()">Save</button>
+    </div>
 </div>
 
 
@@ -41,7 +42,7 @@
 </form>
 
 <script>
-  document.addEventListener('alpine:init', () => {
+    document.addEventListener('alpine:init', () => {
       Alpine.data('grapeEditor', () => ({
           editor: null,
           getHTML() {
@@ -61,6 +62,8 @@
                 storageManager: { type: 0 },
                 plugins: ['gjs-blocks-basic']
               });
+
+
 
               this.editor.on('component:add', (model) => {
                 // alert('Add');
@@ -88,7 +91,23 @@
                   this.editor.BlockManager.add(components[i].id, components[i].data)
                 }
               }
+
+               /* Colapse all block groups
+            Refference: https://github.com/artf/grapesjs/issues/446
+            */
+            const categories = this.editor.BlockManager.getCategories();
+            categories.each(category => {
+                console.log(category);
+                category.set('open', false).on('change:open', opened => {
+                    opened.get('open') && categories.each(category => {
+                        category !== opened && category.set('open', false)
+                    })
+                })
             });
+            });
+
+
+
 
           },
           save() {
