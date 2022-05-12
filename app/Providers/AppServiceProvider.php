@@ -102,10 +102,15 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('fbpix', function () {
             return !empty(get_tenant_setting('facebook_pixel_enabled')) && get_tenant_setting('facebook_pixel_enabled') && !empty(get_tenant_setting('facebook_pixel_id'));
         });
-        
+
         // Google Recaptcha Enabled
         Blade::if('recaptcha', function () {
             return get_tenant_setting('google_recaptcha_enabled') && !empty(get_tenant_setting('google_recaptcha_site_key')) && !empty(get_tenant_setting('google_recaptcha_secret_key'));
+        });
+
+        // WooCommerce Import Enabled
+        Blade::if('woo_import', function () {
+            return get_tenant_setting('woo_import_enabled') && !empty(get_tenant_setting('woo_import_wp_url')) && !empty(get_tenant_setting('google_recaptcha_wp_rest_api'));
         });
     }
 }
