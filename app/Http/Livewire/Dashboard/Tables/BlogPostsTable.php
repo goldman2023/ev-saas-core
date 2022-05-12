@@ -67,6 +67,12 @@ class BlogPostsTable extends DataTableComponent
                     StatusEnum::pending()->value => translate('Pending'),
                     StatusEnum::private()->value => translate('Private'),
                 ]),
+            'type' => Filter::make('Type')
+                ->select([
+                    '' => translate('All'),
+                    'blog' => translate('Blog Post'),
+                    'portfolio' => translate('Portfolio'),
+                ]),
             'subscription_based' => Filter::make('Subscription only')
                 ->select([
                     '' => translate('All'),
@@ -107,6 +113,7 @@ class BlogPostsTable extends DataTableComponent
         return BlogPost::query()
 //            ->when($this->for === 'me', fn($query, $value) => $query->where('user_id', auth()->user()?->id ?? null))
             ->when($this->for === 'shop', fn ($query, $value) => $query->where('shop_id', MyShop::getShopID()))
+            ->when($this->getFilter('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($this->getFilter('search'), fn ($query, $search) => $query->search($search))
             ->when($this->getFilter('status'), fn ($query, $status) => $query->where('status', $status))
             ->when($this->getFilter('subscription_based'), fn ($query, $bool) => $query->where('subscription_only', $bool))

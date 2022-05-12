@@ -31,7 +31,7 @@
         selected_categories: @js($selected_categories),
         predefined_types: @js(\App\Enums\AttributeTypeEnum::getPredefined() ?? []),
         core_meta: @js($core_meta),
-        product_core_meta: @js($product_core_meta),
+        model_core_meta: @js($model_core_meta),
 
         track_inventory: @js($product->track_inventory),
 
@@ -62,11 +62,11 @@
             $wire.set('custom_attributes', this.attributes, true);
 
             // CoreMeta
-            $wire.set('product_core_meta.date_type.value', this.product_core_meta.date_type.value, true);
-            $wire.set('product_core_meta.start_date.value', this.product_core_meta.start_date.value, true);
-            $wire.set('product_core_meta.end_date.value', this.product_core_meta.end_date.value, true);
-            $wire.set('product_core_meta.location_type.value', this.product_core_meta.location_type.value, true);
-            $wire.set('product_core_meta.unlockables.value', this.product_core_meta.unlockables.value, true);
+            $wire.set('model_core_meta.date_type', this.model_core_meta.date_type, true);
+            $wire.set('model_core_meta.start_date', this.model_core_meta.start_date, true);
+            $wire.set('model_core_meta.end_date', this.model_core_meta.end_date, true);
+            $wire.set('model_core_meta.location_type', this.model_core_meta.location_type, true);
+            $wire.set('model_core_meta.unlockables', this.model_core_meta.unlockables, true);
         }
     }"
      class="lw-form container-fluid"
@@ -159,8 +159,8 @@
                         </div>
 
                         <div class="mt-6 sm:mt-3 space-y-6 sm:space-y-5">
-                            <template x-if="product_core_meta.unlocakbles.value != null && product_core_meta.unlocakbles.value.length > 0">
-                                <template x-for="item in product_core_meta.unlocakbles.value">
+                            <template x-if="model_core_meta.unlocakbles != null && model_core_meta.unlocakbles.length > 0">
+                                <template x-for="item in model_core_meta.unlocakbles">
                                     <!-- Title -->
                                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
 
@@ -1029,9 +1029,9 @@
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}" wire:ignore>
                                 <div class="mt-1 sm:mt-0 sm:col-span-3">
                                     <div class="mt-1 sm:mt-0 sm:col-span-3">
-                                        <x-dashboard.form.froala field="product_core_meta.unlockables.value" id="product-unlockables-wysiwyg"></x-dashboard.form.froala>
+                                        <x-dashboard.form.froala field="model_core_meta.unlockables" id="product-unlockables-wysiwyg"></x-dashboard.form.froala>
         
-                                        <x-system.invalid-msg class="w-full" field="product_core_meta.unlockables.value"></x-system.invalid-msg>
+                                        <x-system.invalid-msg class="w-full" field="model_core_meta.unlockables"></x-system.invalid-msg>
                                     </div>
                                 </div>
                             </div>
@@ -1107,48 +1107,48 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="['remote' => 'Remote', 'offline' => 'Offline']" selected="product_core_meta.location_type.value"></x-dashboard.form.select>
+                                    <x-dashboard.form.select :items="['remote' => 'Remote', 'offline' => 'Offline']" selected="model_core_meta.location_type"></x-dashboard.form.select>
 
-                                    <x-system.invalid-msg field="product_core_meta.location_type.value"></x-system.invalid-msg>
+                                    <x-system.invalid-msg field="model_core_meta.location_type"></x-system.invalid-msg>
                                 </div>
                             </div>
                             <!-- END Location Type -->
 
                             <!-- Location Address-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="product_core_meta.location_type.value === 'offline'">
+                                x-show="model_core_meta.location_type === 'offline'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Location Address') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.location_address.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.location_address"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Location Address -->
 
                             <!-- Location Address-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="product_core_meta.location_type.value === 'offline'">
+                                x-show="model_core_meta.location_type === 'offline'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Location Address Map (URL)') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.location_address_map_link.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.location_address_map_link"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Location Address -->
 
                             <!-- Location Link-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="product_core_meta.location_type.value === 'remote'">
+                                x-show="model_core_meta.location_type === 'remote'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('Meet Link') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.location_link.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.location_link"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Location Link -->
@@ -1161,7 +1161,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="product_core_meta.date_type.value"></x-dashboard.form.select>
+                                    <x-dashboard.form.select :items="['specific' => 'Specific', 'range' => 'Range']" selected="model_core_meta.date_type"></x-dashboard.form.select>
                                 </div>
                             </div>
                             <!-- END Date Type -->
@@ -1173,20 +1173,20 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="product_core_meta.start_date.value" :enable-time="true" date-format="d.m.Y H:i"></x-dashboard.form.date>
+                                    <x-dashboard.form.date field="model_core_meta.start_date" :enable-time="true" date-format="d.m.Y H:i"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Date Start -->
 
                             <!-- Date End-->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}"
-                                x-show="product_core_meta.date_type.value === 'range'">
+                                x-show="model_core_meta.date_type === 'range'">
                                 <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
                                     {{ translate('End') }}
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.date field="product_core_meta.end_date.value" :enable-time="true" date-format="d.m.Y H:i"></x-dashboard.form.date>
+                                    <x-dashboard.form.date field="model_core_meta.end_date" :enable-time="true" date-format="d.m.Y H:i"></x-dashboard.form.date>
                                 </div>
                             </div>
                             <!-- END Date End -->
@@ -1204,7 +1204,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.calendly_link.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.calendly_link"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END Calendly link -->
@@ -1229,7 +1229,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_title.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_title"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END CTA Title (Thank you page) -->
@@ -1241,7 +1241,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_text.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_text"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END CTA Text (Thank you page) -->
@@ -1253,7 +1253,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_url.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_url"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END CTA URL (Thank you page) -->
@@ -1265,7 +1265,7 @@
                                 </label>
 
                                 <div class="mt-1 sm:mt-0 sm:col-span-2">
-                                    <x-dashboard.form.input field="product_core_meta.thank_you_cta_custom_button_title.value"></x-dashboard.form.input>
+                                    <x-dashboard.form.input field="model_core_meta.thank_you_cta_custom_button_title"></x-dashboard.form.input>
                                 </div>
                             </div>
                             <!-- END CTA URL (Thank you page) -->

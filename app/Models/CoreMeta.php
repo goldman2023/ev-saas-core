@@ -38,6 +38,13 @@ class CoreMeta extends Model
         ];
     }
 
+    public static function metaBlogPostDataTypes()
+    {
+        return [
+            'portfolio_link' => 'string',
+        ];
+    }
+
     public static function getMeta($core_meta, $content_type, $strict = false)
     {
         if (is_array($core_meta)) {
@@ -52,6 +59,8 @@ class CoreMeta extends Model
 
         if($content_type === Product::class) {
             $data_types = self::metaProductDataTypes();
+        } else if($content_type === BlogPost::class) {
+            $data_types = self::metaBlogPostDataTypes();
         }
 
         castValuesForGet($core_meta, $data_types);
@@ -59,18 +68,17 @@ class CoreMeta extends Model
         $missing = array_diff_key($data_types, $core_meta);
         $missing_clone = $missing;
         
+        // TODO: Fix logic to not include value anymore or something like that!
         if (! empty($missing)) {
             foreach ($missing as $key => $type) {
-                $missing[$key] = [
-                    'value' => null,
-                ];
+                $missing[$key] = null;
             }
             castValuesForGet($missing, $missing_clone);
         }
 
         // If strict is true, get only core_meta from $data_types, remove other meta
         if($strict) {
-            return collect(array_intersect_key(array_merge($core_meta, $missing), $data_types))->map(fn($item, $key) => ['key'=>$key, 'value'=>$item]);
+            return collect(array_intersect_key(array_merge($core_meta, $missing), $data_types))->map(fn($item, $key) => $item);
         }
 
         return array_merge($core_meta, $missing);

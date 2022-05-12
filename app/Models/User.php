@@ -154,7 +154,7 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
 
     public function blog_posts()
     {
-        return $this->hasMany(BlogPost::class);
+        return $this->morphToMany(BlogPost::class, 'subject', 'blog_post_relationships');
     }
 
     public function social_posts()
