@@ -24,6 +24,18 @@ class PageController extends Controller
             $sections = $page->content;
 
             if ($page != null) {
+
+                if(auth()->user()) {
+                    activity()
+                    ->performedOn($page)
+                    ->causedBy(auth()->user())
+                    ->withProperties([
+                        'action' => 'viewed',
+                        'action_title' => 'Viewed a page',
+                    ])
+                    ->log('viewed');
+                }
+
                 return view('frontend.custom_page', [
                     'page' => $page,
                     'sections' => $sections,
