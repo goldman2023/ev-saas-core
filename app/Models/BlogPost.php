@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BlogPostTypeEnum;
 use App\Builders\BaseBuilder;
 use App\Facades\MyShop;
 use App\Traits\CategoryTrait;
@@ -108,6 +109,14 @@ class BlogPost extends WeBaseModel
     public function plans()
     {
         return $this->morphedByMany(Plan::class, 'subject', 'blog_post_relationships');
+    }
+
+    public function isBlog() {
+        return $this->type === BlogPostTypeEnum::blog()->value;
+    }
+
+    public function isPortfolio() {
+        return $this->type === BlogPostTypeEnum::portfolio()->value;
     }
 
     public function getDynamicModelUploadProperties(): array

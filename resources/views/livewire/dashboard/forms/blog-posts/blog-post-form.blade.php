@@ -1,5 +1,6 @@
 <div class="w-full" x-data="{
     status: @js($blogPost->status ?? App\Enums\StatusEnum::draft()->value),
+    type: @js($blogPost->type ?? App\Enums\BlogPostTypeEnum::blog()->value),
     thumbnail: @js(['id' => $blogPost->thumbnail->id ?? null, 'file_name' => $blogPost->thumbnail->file_name ?? '']),
     cover: @js(['id' => $blogPost->cover->id ?? null, 'file_name' => $blogPost->cover->file_name ?? '']),
     meta_img: @js(['id' => $blogPost->meta_img->id ?? null, 'file_name' => $blogPost->meta_img->file_name ?? '']),
@@ -12,15 +13,23 @@
     features: @js($blogPost->features), --}}
     content: @entangle('blogPost.content').defer,
     selected_categories: @js($selected_categories),
+    core_meta: @js($core_meta),
+    model_core_meta: @js($model_core_meta),
     onSave() {
         $wire.set('blogPost.thumbnail', this.thumbnail.id, true);
         $wire.set('blogPost.cover', this.cover.id, true);
         $wire.set('blogPost.gallery', [], true);
         $wire.set('blogPost.meta_img', this.meta_img.id, true);
         $wire.set('blogPost.status', this.status, true);
+        $wire.set('blogPost.type', this.type, true);
         $wire.set('blogPost.subscription_only', this.subscription_only, true);
         $wire.set('blogPost.content', this.content, true);
         $wire.set('selected_categories', this.selected_categories, true);
+        $wire.set('core_meta', this.core_meta, true);
+
+        {{-- $wire.set('model_core_meta.portfolio_link', this.model_core_meta.portfolio_link, true); --}}
+
+
     }
 }" @validation-errors.window="$scrollToErrors($event.detail.errors, 700);" x-cloak>
     <div class="w-full relative">
@@ -377,6 +386,18 @@
                         </div>
                         <!-- END Status -->
 
+                        <!-- Type -->
+                        <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                            <label class="flex items-center text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                <span class="mr-2">{{ translate('Type') }}</span>
+                            </label>
+
+                            <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                <x-dashboard.form.select :items="\App\Enums\BlogPostTypeEnum::toArray()" selected="type" :nullable="false"></x-dashboard.form.select>
+                            </div>
+                        </div>
+                        <!-- END Type -->
+
                         <div
                             class="w-full flex justify-between sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5">
                             @if($is_update)
@@ -392,6 +413,24 @@
                         </div>
                     </div>
                     {{-- END Actions --}}
+
+                    {{-- Porfolio Meta --}}
+                    <div class="p-4 mt-8 border bg-white border-gray-200 rounded-lg shadow" x-show="type === 'portfolio'">
+                        <div class="w-100" >
+                            <!-- Portfolio link-->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start" x-data="{}">
+                                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
+                                    {{ translate('Portfolio link') }}
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="model_core_meta.portfolio_link"></x-dashboard.form.input>
+                                </div>
+                            </div>
+                            <!-- END Portfolio link -->
+                        </div>
+                    </div>
+                    {{-- END Porfolio Meta --}}
 
 
                     {{-- Media --}}
