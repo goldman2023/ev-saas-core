@@ -12,6 +12,7 @@ use App\Traits\SocialCommentsTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
+use App\Traits\CoreMetaTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Shetabit\Visitor\Traits\Visitable;
@@ -36,6 +37,7 @@ class BlogPost extends WeBaseModel
     use PermalinkTrait;
     use SocialCommentsTrait;
     use SocialReactionsTrait;
+    use CoreMetaTrait;
     use HasStatus;
 
     protected $table = 'blog_posts';

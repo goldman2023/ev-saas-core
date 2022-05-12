@@ -12,6 +12,7 @@ use App\Traits\SocialCommentsTrait;
 use App\Traits\PermalinkTrait;
 use App\Traits\TranslationTrait;
 use App\Traits\UploadTrait;
+use App\Traits\CoreMetaTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Shetabit\Visitor\Traits\Visitable;
@@ -24,6 +25,7 @@ class SocialPost extends WeBaseModel
     use UploadTrait;
     use GalleryTrait;
     use PermalinkTrait;
+    use CoreMetaTrait;
     use SocialReactionsTrait;
     use SocialCommentsTrait;
     use HasStatus;
