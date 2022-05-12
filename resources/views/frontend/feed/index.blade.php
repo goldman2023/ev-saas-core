@@ -1,62 +1,50 @@
-@extends('frontend.layouts.app')
+@extends('frontend.layouts.feed')
 
-@section('content')
-<div class="min-h-full bg-gray-200">
-    <div class="max-w-5xl mx-auto sm:px-6 lg:max-w-[1440px] lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8 py-10 pt-3">
-        <div class="hidden lg:block lg:col-span-2 sm:col-span-2">
-            <x-feed.elements.feed-sidebar>
-            </x-feed.elements.feed-sidebar>
+@section('feed_content')
+    <div class="lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
+        <div class="mb-3">
+            <x-feed.elements.stories-global>
+            </x-feed.elements.stories-global>
         </div>
-        <main class="sm:col-span-10 grid grid-cols-12 gap-6">
 
-            <div class="lg:px-16 col-span-12 sm:col-span-8 md:col-span-8 lg:col-span-8 flex flex-col">
-                <div class="mb-3">
-                    <x-feed.elements.stories-global>
-                    </x-feed.elements.stories-global>
-                </div>
+        <div class="grid grid-cols-12 gap-5 mt-4">
 
-                <div class="grid grid-cols-12 gap-5 mt-4">
-
-                    <div class="col-span-12 space-y-4 px-4 md:px-0">
-                       {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
-                        <livewire:feed.elements.add-post />
-                        <livewire:feed.feed-list :feed-type="$feed_type ?? 'recent'" />
-                    </div>
-                </div>
+            <div class="col-span-12 space-y-4 px-4 md:px-0">
+               {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
+               <livewire:feed.elements.add-post class="mb-4" />
+               <livewire:feed.feed-list :feed-type="$feed_type ?? 'recent'" />
             </div>
-
-            <aside class="hidden sm:block sm:col-span-4 md:col-span-4">
-                <div class="sticky top-4 space-y-4">
-                    {{-- Upcoming Events --}}
-                    <livewire:feed.blocks.upcoming-events />
-
-                    <x-feed.elements.follow-suggestions>
-                    </x-feed.elements.follow-suggestions>
-
-                    {{-- @auth
-                        <section aria-labelledby="trending-heading">
-                            <div class="bg-white rounded-lg shadow">
-                                <div class="p-6">
-                                    <h2 id="trending-heading" class="text-base font-medium text-gray-900">
-                                        {{ translate('Recently visited') }}
-                                    </h2>
-                                    <div class="mt-6 flow-root">
-                                        @livewire('feed.recently-viewed')
-                                    </div>
-                                    <div class="mt-6">
-                                        <a href="#"
-                                            class="hidden w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                                            View all </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-                    @endauth --}}
-                </div>
-            </aside>
-        </main>
-
+        </div>
     </div>
-</div>
 
+    <aside class="hidden sm:block sm:col-span-4 md:col-span-4">
+        <div class="sticky top-4 space-y-4">
+
+            {{-- Upcoming Events --}}
+            <livewire:feed.blocks.upcoming-events />
+
+            <x-feed.elements.follow-suggestions>
+            </x-feed.elements.follow-suggestions>
+
+            {{-- @auth
+                <section aria-labelledby="trending-heading">
+                    <div class="bg-white rounded-lg shadow">
+                        <div class="p-6">
+                            <h2 id="trending-heading" class="text-base font-medium text-gray-900">
+                                {{ translate('Recently visited') }}
+                            </h2>
+                            <div class="mt-6 flow-root">
+                                @livewire('feed.recently-viewed')
+                            </div>
+                            <div class="mt-6">
+                                <a href="#"
+                                    class="hidden w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                    View all </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endauth --}}
+        </div>
+    </aside>
 @endsection

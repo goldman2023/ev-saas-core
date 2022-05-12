@@ -8,129 +8,20 @@
 
 <div class="col-span-12">
 
-<section class="relative w-full mb-5 bg-white rounded-b-lg">
+<section class="relative w-full mb-5 ">
     <div class="relative w-full">
-        <x-tenant.system.image class="block h-[260px] w-full rounded-t-xl " fit="cover" :image="$user->getCover()" />
-        <x-tenant.system.image class="absolute left-[30px] bottom-[-50px] w-[160px] h-[160px] rounded-full bg-white border border-gray-200" fit="contain" :image="$user->getThumbnail()" />
-
-        {{-- <div class="absolute left-[210px] bottom-[20px] flex ">
-
-        </div> --}}
+        <x-tenant.system.image class="block h-[260px] w-full rounded-t-xl" fit="cover" :image="$user->getCover()" />
+        <x-tenant.system.image class="absolute left-[30px] bottom-[-50px] w-[160px] h-[160px] rounded-full bg-white" fit="contain" :image="$user->getThumbnail()" />
     </div>
+
     
-    <div class="w-full px-5 grid grid-cols-12 gap-6">
-        <div class="col-span-5 flex flex-col justify-center pl-[190px]">
-            <h2 class="text-18 text-typ-1 leading-none font-semibold">{{ $user->name.' '.$user->surname }}</h2>
-            @if(!empty($user->username))
-                <span class="text-14 text-primary">{{ '@'.$user->username }}</span>
-            @endif
-        </div>
-    
-        <div class="col-span-7 flex flex-col">
-            <ul class="w-full flex h-[70px]">
-                <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
-                    <span class="text-typ-1 block">{{ translate('Posts') }}</span>
-                    <strong class="text-typ-2">{{ $user->social_posts()->count() }}</strong>
-                </div>
-                <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
-                    <span class="text-typ-1 block">{{ translate('Followers') }}</span>
-                    <strong class="text-typ-2">{{ $user->followers()->count() }}</strong>
-                </div>
-                <div class="flex flex-col items-center py-3 px-3 text-16 text-typ-2 cursor-pointer">
-                    <span class="text-typ-1 block">{{ translate('Following') }}</span>
-                    <strong class="text-typ-2">{{ $user->follows_users()->count() }}</strong>
-                </div>
-            </ul>
-        </div>
+    <div class="w-full flex">
+
     </div>
 </section>
 
 <section class="grid grid-cols-12 gap-6">
-    <div class="col-span-5 flex flex-col space-y-4">
-        {{-- TODO: Shoud this go to blade template? --}}
-        <div class="w-full bg-white rounded-xl shadow">
-            <div class="w-full px-5 py-4 pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
-                <h5 class="text-14 font-semibold">{{ translate('About me') }}</h5>
 
-                @livewire('actions.social-action-button', [
-                    'object' => $user,
-                    'action' => 'follow'
-                ])
-            </div>
-        
-            <div class="px-5 pb-4 flex flex-col">
-                
-                <p class="text-12 text-typ-3">{{ $user->getUserMeta('short_about_me') }}</p>
-
-                @if($user->isVerified())
-                    <x-feed.elements.verified-badge :item="$user" class="mt-3">
-                    </x-feed.elements.verified-badge>
-                @endif
-
-                <div class="w-full flex justify-start text-sm whitespace-nowrap  mt-3">
-                    <span class="text-typ-2 mr-1">{{ translate('Account type')}}:</span>
-                    <span class="text-typ-3">
-                         {{ $user->user_type === 'seller' ? translate('Creator') : translate('Standard') }}
-                    </span>
-                </div>
-
-                @if($user->created_at)
-                    <div class="w-full flex justify-start text-sm whitespace-nowrap  mt-2">
-                        <span class="text-typ-2 mr-1">{{ translate('Joined')}}:</span>
-                        <time datetime="{{ $user->created_at }}" class="text-typ-3">
-                             {{ $user->created_at->diffForHumans() }}
-                        </time>
-                    </div>
-                @endif
-
-                {{-- TODO: Add a user setting - if user wants to disclose his/her email or phone! --}}
-                <div class="w-full flex justify-start text-sm whitespace-nowrap  mt-2">
-                    <span class="text-typ-2 mr-1">{{ translate('Email')}}:</span>
-                    <span class="text-typ-3">
-                         {{ $user->email }}
-                    </span>
-                </div>
-            </div>
-
-            @if(!empty($user->getUserMeta('social_profiles')))
-                <div class="px-5 pb-4 flex pt-3 mt-2 border-t border-gray-200 ">
-                    @foreach($user->getUserMeta('social_profiles') as $key => $profile_url)
-                    @php
-                        $icon = collect(\App\Enums\AvailableSocialFieldsEnum::icons())->filter(fn($item, $social_key) => str_starts_with($key, $social_key))?->first() ?? null;
-                    @endphp
-                        @if(!empty($profile_url) && !empty($icon))
-                            <a href="{{ $profile_url }}" class="mr-3" target="_blank">
-                                @svg($icon['icon'], ['class' => 'w-5 h-5 text-['.$icon['color'].']'])
-                            </a>
-                        @endif
-                    @endforeach
-                </div>
-            @endif
-        </div>
-
-        <div class="w-full bg-white rounded-xl shadow">
-            <div class="w-full px-5 py-4 pb-3 mb-3 flex justify-between items-center border-b border-gray-200">
-                <h5 class="text-14 font-semibold">{{ translate('Work Experience') }}</h5>
-            </div>
-        
-            <div class="px-5 pb-4 flex flex-col">
-                @if(!empty($user->getUserMeta('work_experience')))
-                    @foreach($user->getUserMeta('work_experience') as $wrk)
-                        <div class="">
-
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <div class="col-span-7 space-y-4 flex flex-col">
-        @if($user->id === auth()->user()->id)
-            <livewire:feed.elements.add-post />
-        @endif
-        <livewire:feed.feed-list feed-type="recent" :user="$user" />
-    </div>
 </section>
 
 </div>
@@ -243,10 +134,10 @@
                         <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
                             <dl class="grid grid-cols-1 gap-3 sm:grid-cols-1">
                                 @foreach($data as $item)
-                                {{-- <div class="w-full">
+                                <div class="w-full">
                                     <livewire:feed.elements.feed-card wire:key="activity_{{ $item->id }}" :item="$item">
                                     </livewire:feed.elements.feed-card>
-                                </div> --}}
+                                </div>
 
                                 @endforeach
 

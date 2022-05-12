@@ -47,7 +47,8 @@ class MyAccountForm extends Component
             'me.name' => ['required', 'min:2'],
             'me.surname' => ['required', 'min:2'],
             'me.entity' => ['required'],
-            //                'me.email' => ['required', 'email:rfs,dns'],
+            'me.username' => ['required'],
+            // 'me.email' => ['required', 'email:rfs,dns'],
             'me.phone' => [''],
             'me.thumbnail' => ['if_id_exists:App\Models\Upload,id,true'],
             'me.cover' => ['if_id_exists:App\Models\Upload,id,true'],
@@ -199,6 +200,21 @@ class MyAccountForm extends Component
             // $this->inform(translate('Work experience successfully saved.'), '', 'success');
         } catch (\Exception $e) {
             // $this->inform(translate('Could not save basic information settings.'), $e->getMessage(), 'fail');
+        }
+    }
+
+    public function saveSocialProfilesUrl() {
+        $meta_key = 'social_profiles';
+
+        try {
+            UserMeta::where([
+                ['key', $meta_key],
+                ['user_id', $this->me->id],
+            ])->update(['value' => castValueForSave($meta_key, $this->meta[$meta_key], UserMeta::metaDataTypes())]);
+
+            $this->inform(translate('Social Profile URLs successfully saved.'), '', 'success');
+        } catch (\Exception $e) {
+            $this->inform(translate('Could not save Social Profile URLs settings.'), $e->getMessage(), 'fail');
         }
     }
 

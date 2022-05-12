@@ -1,4 +1,4 @@
-<div class="bg-white p-4 sm:p-5 rounded-md shadow" x-data="{
+<div class="bg-white p-4 sm:p-5 rounded-xl shadow" x-data="{
     isModalOpen: false,
     thumbnail: @js(['id' => $post->thumbnail->id ?? null, 'file_name' => $post->thumbnail->file_name ?? '']),
 }"
