@@ -2,7 +2,7 @@
     isModalOpen: false,
     thumbnail: @js(['id' => $post->thumbnail->id ?? null, 'file_name' => $post->thumbnail->file_name ?? '']),
 }"
-x-on:reset-image-selector.window="thumbnail = @js(['id' => null, 'file_name' => ''])" 
+x-on:reset-image-selector.window="thumbnail = @js(['id' => null, 'file_name' => ''])"
 x-on:keydown.escape="isModalOpen=false">
     <div class="flex space-x-3">
         <div class="flex-shrink-0">
@@ -14,7 +14,7 @@ x-on:keydown.escape="isModalOpen=false">
         </div>
         <div class="min-w-0 flex-1">
             <div class="flex flex-col">
-                <textarea rows="1" 
+                <textarea rows="1"
                     wire:model.lazy="post.content"
                     class="mb-2 w-full bg-bg-3 px-3 py-2 text-typ-2 rounded-xl border-0 border-none focus:ring-0 focus:border-0 focus:outline-0 outline-0 focus:shadow-none resize-none"
                     placeholder="{{ translate('What\'s on your mind?') }}"
@@ -26,9 +26,12 @@ x-on:keydown.escape="isModalOpen=false">
                 <div class="text-14 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
                     <x-dashboard.form.image-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.image-selector>
                 </div>
+
+                <livewire:feed.elements.bookmark></livewire:feed.elements.bookmark>
+
             </div>
             <div class="mt-3 flex items-center justify-between">
-                <p class="group inline-flex items-start text-sm space-x-2 mb-0">                    
+                <p class="group inline-flex items-start text-sm space-x-2 mb-0">
                     @svg('heroicon-s-question-mark-circle', ['class' => 'ftext-10 lex-shrink-0 h-5 w-5 text-typ-3 group-hover:text-typ-4'])
                     <span class="text-10 text-typ-3 group-hover:text-typ-4">
                         {{ translate('Post will be visible publicly') }}
@@ -41,8 +44,8 @@ x-on:keydown.escape="isModalOpen=false">
 
                 <button @click="
                         $wire.set('post.thumbnail', thumbnail.id, true);
-                    "   
-                    wire:click="addFeedPost" 
+                    "
+                    wire:click="addFeedPost"
                     type="submit"
                     class="btn-primary">
                     {{ translate('Add a post') }}
