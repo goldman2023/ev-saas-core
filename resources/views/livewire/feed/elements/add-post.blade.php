@@ -26,8 +26,10 @@ x-on:keydown.escape="isModalOpen=false">
                 <div class="text-14 px-2 py-2 flex justify-between items-center space-x-3 sm:px-3">
                     <x-dashboard.form.image-selector field="thumbnail" id="feed-post-image" :selected-image="$post->thumbnail" template="simple"></x-dashboard.form.image-selector>
                 </div>
-
-                <livewire:feed.elements.bookmark></livewire:feed.elements.bookmark>
+                <div class="hidden">
+                {{-- TODO: @vukasin, make this work with current component --}}
+                {{-- <livewire:feed.elements.bookmark></livewire:feed.elements.bookmark> --}}
+                </div>
 
             </div>
             <div class="mt-3 flex items-center justify-between">

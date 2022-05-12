@@ -9,7 +9,7 @@
 
         <div class="grid grid-cols-12 gap-5 mt-4">
 
-            <div class="col-span-12 space-y-4 px-4 md:px-0">
+            <div class="col-span-12 space-y-4 px-0">
                {{-- <livewire:feed.elements.welcome-panel></livewire:feed.elements.welcome-panel> --}}
                <livewire:feed.elements.add-post class="mb-4" />
                <livewire:feed.feed-list :feed-type="$feed_type ?? 'recent'" />
