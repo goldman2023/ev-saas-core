@@ -389,6 +389,26 @@ class EVService
                         'enabled' => get_tenant_setting('staff_enabled', true),
                     ],
 
+                    [
+                        'label' => translate('Analytics'),
+                        'icon' => 'heroicon-s-chart-pie',
+                        'route' => route('analytics.index'),
+                        'is_active' => areActiveRoutes(['analytics.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['view_analytics'], // TODO: Add users managing permissions,
+                        'enabled' => get_tenant_setting('we_analytics_enabled', true),
+                    ],
+
+                    [
+                        'label' => translate('Integrations'),
+                        'icon' => 'heroicon-s-adjustments',
+                        'route' => route('analytics.index'),
+                        'is_active' => areActiveRoutes(['analytics.index']),
+                        'user_types' => User::$tenant_user_types,
+                        'permissions' => ['view_analytics'], // TODO: Add users managing permissions,
+                        'enabled' => get_tenant_setting('integrations_enabled', true),
+                    ],
+
                     // [
                     //     'label' => translate('Company settings'),
                     //     'icon' => 'heroicon-o-office-building',
