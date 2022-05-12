@@ -49,7 +49,7 @@ class AvailableSocialFieldsEnum extends EVBaseEnum
             'twitter' => ['icon' => 'icomoon-twitter', 'color' => '#1DA1F2'],
             'instagram' => ['icon' => 'icomoon-instagram', 'color' => '#C13584'],
             'behance' => ['icon' => 'icomoon-behance', 'color' => ''],
-            'dribble' => ['icon' => 'icomoon-dribble', 'color' => '#ea4c89'],
+            'dribbble' => ['icon' => 'icomoon-dribbble', 'color' => '#ea4c89'],
             'soundcloud' => ['icon' => 'icomoon-soundcloud2', 'color' => '#ff7700'],
         ];
     }

@@ -49,7 +49,7 @@ class ProductForm2 extends Component
 
     public $product;
 
-    public $core_meta;
+    public $model_core_meta;
 
     public $is_update;
 
@@ -124,20 +124,19 @@ class ProductForm2 extends Component
             ],
             'meta' => [
                 // TODO: Add proper conditional validation!
-                'product_core_meta.date_type.value' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
-                'product_core_meta.start_date.value' => ['exclude_unless:product.type,event', 'required_if:product.type,event'], //'required_if:product.type,event|date',
-                'product_core_meta.end_date.value' => 'nullable',
-                'product_core_meta.location_type.value' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
-                'product_core_meta.location_address.value' => 'nullable',
-                'product_core_meta.location_address_map_link.value' => 'nullable',
-                'product_core_meta.location_link.value' => 'nullable',
-                'product_core_meta.unlockables.value' => 'nullable',
-                'product_core_meta.calendly_link.value' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
-                'product_core_meta.thank_you_cta_custom_title.value' => 'nullable',
-                'product_core_meta.thank_you_cta_custom_text.value' => 'nullable',
-                'product_core_meta.thank_you_cta_custom_url.value' => 'nullable',
-                'product_core_meta.thank_you_cta_custom_button_title.value' => 'nullable',
-
+                'model_core_meta.date_type' => ['exclude_unless:product.type,event', Rule::in(['range', 'specific'])], // range, specific
+                'model_core_meta.start_date' => ['exclude_unless:product.type,event', 'required_if:product.type,event'], //'required_if:product.type,event|date',
+                'model_core_meta.end_date' => 'nullable',
+                'model_core_meta.location_type' => ['exclude_unless:product.type,event', Rule::in(['remote', 'offline'])], // remote, location
+                'model_core_meta.location_address' => 'nullable',
+                'model_core_meta.location_address_map_link' => 'nullable',
+                'model_core_meta.location_link' => 'nullable',
+                'model_core_meta.unlockables' => 'nullable',
+                'model_core_meta.calendly_link' => ['exclude_unless:product.type,bookable_service', 'required_if:product.type,bookable_service', 'url'], // should be required if product type is bookable_service or bookable_subscription_service
+                'model_core_meta.thank_you_cta_custom_title' => 'nullable',
+                'model_core_meta.thank_you_cta_custom_text' => 'nullable',
+                'model_core_meta.thank_you_cta_custom_url' => 'nullable',
+                'model_core_meta.thank_you_cta_custom_button_title' => 'nullable',
             ],
             'core_meta' => [
                 'core_meta' => '',
@@ -219,8 +218,8 @@ class ProductForm2 extends Component
         $this->initCoreMeta($this->product);
 
         /* Check if product object exits, if it doesn't exit do not try to fetch meta */
-        $this->product_core_meta = CoreMeta::getMeta($product?->core_meta ?? [], Product::class, true);
-        // dd($this->product_core_meta);
+        $this->model_core_meta = CoreMeta::getMeta($product?->core_meta ?? [], Product::class, true);
+        // dd($this->model_core_meta);
     }
 
     public function dehydrate()
@@ -336,7 +335,7 @@ class ProductForm2 extends Component
             $this->setAttributes($this->product);
 
             // Save ProductCoreMeta
-            $this->saveProductCoreMeta();
+            $this->saveModelCoreMeta();
 
             // Save Other Product Core Meta
             $this->setCoreMeta($this->product);
@@ -362,27 +361,25 @@ class ProductForm2 extends Component
     }
 
     
-    protected function saveProductCoreMeta()
+    protected function saveModelCoreMeta()
     {
-        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'product_core_meta')) as $key => $value) {
+        foreach (collect($this->getRuleSet('meta'))->filter(fn ($item, $key) => str_starts_with($key, 'model_core_meta')) as $key => $value) {
             $core_meta_key = explode('.', $key)[1]; // get the part after `core_meta.`
 
             if (! empty($core_meta_key) && $core_meta_key !== '*') {
-                if(array_key_exists('value', $this->product_core_meta[$core_meta_key])) {
-                    $new_value = castValueForSave($core_meta_key, $this->product_core_meta[$core_meta_key]['value'], CoreMeta::metaProductDataTypes());
-                } else if(is_string($this->product_core_meta[$core_meta_key])) {
-                    $new_value = castValueForSave($core_meta_key, $this->product_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
-                }
+                if(array_key_exists($core_meta_key, $this->model_core_meta->toArray())) {
+                    $new_value = castValueForSave($core_meta_key, $this->model_core_meta[$core_meta_key], CoreMeta::metaProductDataTypes());
 
-                try {
-                    CoreMeta::updateOrCreate(
-                        ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
-                        ['value' => $new_value]
-                    );
-                } catch(\Exception $e) {
-                    dd($this->product_core_meta[$core_meta_key]);
+                    try {
+                        CoreMeta::updateOrCreate(
+                            ['subject_id' => $this->product->id, 'subject_type' => $this->product::class, 'key' => $core_meta_key],
+                            ['value' => $new_value]
+                        );
+                    } catch(\Exception $e) {
+                        Log::error($e->getMessage());
+                        // dd($this->model_core_meta[$core_meta_key]);
+                    }
                 }
-                
             }
         }
     }
