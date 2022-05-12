@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Category;
+use App\Enums\AvailableSocialFieldsEnum;
 
 class UserMeta extends WeBaseModel
 {
@@ -19,11 +20,19 @@ class UserMeta extends WeBaseModel
 
     public static function metaDataTypes()
     {
+        $available_social_user_profiles = collect(AvailableSocialFieldsEnum::values());
+        $social_profiles = [];
+        foreach($available_social_user_profiles as $key => $value) {
+            $social_profiles[$value.'_profile'] = 'string';
+        }
+
         return [
             'birthday' => 'date',
             'gender' => 'select',
             'headline' => 'string',
             'short_about_me' => 'string',
+            'website' => 'string',
+            'social_profiles' => $social_profiles,
             'industry' => Category::class,
             'calendly_link' => 'string',
             'company_name' => 'string',

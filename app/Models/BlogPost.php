@@ -36,6 +36,7 @@ class BlogPost extends WeBaseModel
     use PermalinkTrait;
     use SocialCommentsTrait;
     use SocialReactionsTrait;
+    use CoreMetaTrait;
     use HasStatus;
 
     protected $table = 'blog_posts';

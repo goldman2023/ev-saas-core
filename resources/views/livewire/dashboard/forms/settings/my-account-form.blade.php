@@ -214,6 +214,21 @@
                             </div>
                             <!-- END Last name -->
 
+                            <!-- First name -->
+                            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
+                                x-data="{}">
+
+                                <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                    {{ translate('Username') }}
+                                    <span class="text-danger relative top-[-2px]">*</span>
+                                </label>
+
+                                <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                    <x-dashboard.form.input field="me.username" />
+                                </div>
+                            </div>
+                            <!-- END First name -->
+
                             <!-- Email -->
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
                                 x-data="{}">
@@ -265,6 +280,8 @@
                                     @if($key === 'work_experience' && $onboarding) 
                                         @continue 
                                     @elseif($key === 'education' && $onboarding)
+                                        @continue
+                                    @elseif($key === 'social_profiles')
                                         @continue
                                     @endif
 
@@ -362,6 +379,44 @@
                             {{-- END Save basic information --}}
                         </div>
                         {{-- END Lanuguage --}}
+                    @endif
+
+                    @php
+                        $user_social_profiles_url = $user_meta_fields_in_use->get('social_profiles');
+                    @endphp
+                    @if(!empty($user_social_profiles_url))
+                        {{-- Social Profiles --}}
+                        <div id="socialProfilesUrlSection" class="p-4 border bg-white border-gray-200 rounded-lg shadow mt-5" x-data="{}" >
+                            <div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    {{ translate('Social Profiles URLs') }}
+                                </h3>
+                            </div>
+
+                            @foreach(\App\Models\UserMeta::metaDataTypes()['social_profiles'] as $key => $type)
+                                <div class="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5" x-data="{}">
+
+                                        <label class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                                            {{ \Str::title(str_replace('_', ' ', $key)) }}
+                                        </label>
+
+                                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                            <x-dashboard.form.input field="meta.social_profiles.{{ $key }}" />
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            {{-- Save social profile --}}
+                            <div class="flex sm:items-start sm:border-t sm:border-gray-200 sm:pt-5 sm:mt-5" x-data="{}">
+                                <button type="button" class="btn btn-primary ml-auto btn-sm" @click="onSave()" wire:click="saveSocialProfilesUrl()">
+                                    {{ translate('Save') }}
+                                </button>
+                            </div>
+                            {{-- END Save social profile --}}
+                        </div>
+                        {{-- END Social Profiles --}}
                     @endif
 
                     {{-- Change password --}}

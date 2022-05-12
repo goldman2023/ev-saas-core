@@ -33,15 +33,18 @@ class FeedList extends Component
 
     public $type = 'recent';
 
+    public $user = null;
+
     public $my_new_post = null;
 
     protected $listeners = [
         'newSocialPostAdded' => 'prependNewSocialPost'
     ];
 
-    public function mount($feedType = 'recent')
+    public function mount($feedType = 'recent', $user = null)
     {
         $this->perPage = 5;
+        $this->user = $user;
         $this->activities = new \Illuminate\Database\Eloquent\Collection();
         $this->type = $feedType;
         $this->loadActivities();
@@ -82,7 +85,12 @@ class FeedList extends Component
                     })
                     ->orWhereHasMorph('subject', [Shop::class]);
             });
-        if ($this->type == 'recent') {
+
+        if(!empty($this->user)) {
+            $activities = $activities->where('causer_type', User::class)->where('causer_id', $this->user->id);
+        }
+
+        if ($this->type == 'recent') { 
             // Use Cursor Pagination for Recent
             $activities = $activities->orderBy('id', 'desc')->cursorPaginate($this->perPage, ['*'], 'cursor', Cursor::fromEncoded($this->nextCursor));
         } elseif ($this->type == 'trending') {
@@ -91,7 +99,9 @@ class FeedList extends Component
             // TODO: There are duplicates when simple pagination is used for some reason!!!!s
         }
 
-        // dd($activities);
+        
+        // dd($this->type);
+        
         // TODO: WTF???? ->withCount('comments') is not taken into account on data load!...da fuq?
         $this->activities->push(...$activities->items()); // Append paginated activities to `public $this->activities`
         $this->prepareNextPage($activities);

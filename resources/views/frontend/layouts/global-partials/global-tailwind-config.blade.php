@@ -82,6 +82,16 @@ $colors = TenantSettings::get('colors');
                     'bg-2': '{{ $colors['background-2'] ?: '#EBECF0' }}',
                     'bg-3': '{{ $colors['background-3'] ?: '#FAFBFC' }}',
                     'bg-4': '{{ $colors['background-4'] ?: '#FFFFFF' }}',
+                    'indigo-100': '{{ $colors['indigo-100'] ?: '#f40000' }}',
+                    'indigo-200': '{{ $colors['indigo-200'] ?: '#f40000' }}',
+                    'indigo-300': '{{ $colors['indigo-300'] ?: '#f40000' }}',
+                    'indigo-400': '{{ $colors['indigo-400'] ?: '#f40000' }}',
+                    'indigo-500': '{{ $colors['indigo-500'] ?: '#f40000' }}',
+                    'indigo-600': '{{ $colors['indigo-600'] ?: '#f40000' }}',
+                    'indigo-700': '{{ $colors['indigo-700'] ?: '#f40000' }}',
+                    'indigo-800': '{{ $colors['indigo-800'] ?: '#f40000' }}',
+                    'indigo-900': '{{ $colors['indigo-900'] ?: '#f40000' }}',
+
                 }
             }
           }

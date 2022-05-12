@@ -24,6 +24,7 @@ class SocialPost extends WeBaseModel
     use UploadTrait;
     use GalleryTrait;
     use PermalinkTrait;
+    use CoreMetaTrait;
     use SocialReactionsTrait;
     use SocialCommentsTrait;
     use HasStatus;

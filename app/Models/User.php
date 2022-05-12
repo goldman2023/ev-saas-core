@@ -34,8 +34,8 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     use SocialAccounts;
     use HasWalletFloat;
     use PermalinkTrait;
-    use SocialReactionsTrait;
     use CoreMetaTrait;
+    use SocialReactionsTrait;
     use SocialFollowingTrait;
 
     protected $casts = [
@@ -155,6 +155,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function blog_posts()
     {
         return $this->hasMany(BlogPost::class);
+    }
+
+    public function social_posts()
+    {
+        return $this->hasMany(SocialPost::class);
     }
 
     public function staff()
@@ -291,7 +296,11 @@ class User extends Authenticatable implements MustVerifyEmail, Wallet, WalletFlo
     public function getUserMeta($key)
     {
         // TODO: Implement castValuesForGet($core_meta, $data_types); here
-        return $this->user_meta->where('key', $key)?->first()?->value ?? null;
+        $user_meta = $this->user_meta->where('key', $key)->keyBy('key')->toArray();
+        
+        castValuesForGet($user_meta, UserMeta::metaDataTypes());
+
+        return $user_meta[$key] ?? null;
     }
 
     /**
