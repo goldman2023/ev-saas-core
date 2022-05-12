@@ -113,11 +113,21 @@
                 <h5 class="text-14 font-semibold">{{ translate('Work Experience') }}</h5>
             </div>
         
-            <div class="px-5 pb-4 flex flex-col">
+            <div class="px-5 pb-4 flex flex-col ">
                 @if(!empty($user->getUserMeta('work_experience')))
                     @foreach($user->getUserMeta('work_experience') as $wrk)
-                        <div class="">
-
+                        <div class="w-full flex flex-col border-b border-gray-200 pb-3 mb-3">
+                            <strong class="block mb-0 text-16 text-typ-1">{{ $wrk['title'] ?? '' }}</strong>
+                            <div class="flex flex-row items-center text-14">
+                                <strong class="text-typ-2">{{ $wrk['company_name'] }}</strong>
+                                <span class="text-10 text-typ-4 mx-1">•</span>
+                                <span class="text-typ-3">{{ $wrk['location'] }}</span>
+                            </div>
+                            <div class="flex flex-row items-center text-12 mt-1">
+                                <span class="text-typ-3">{{ \Carbon::createFromTimestamp($wrk['start_date'])->format('M Y').' - '.\Carbon::createFromTimestamp($wrk['end_date'])->format('M Y') }}</span>
+                                <span class="text-10 text-typ-4 mx-1">•</span>
+                                <strong class="text-typ-3">{{ \Carbon::createFromTimestamp($wrk['end_date'])->diffInDays(\Carbon::createFromTimestamp($wrk['start_date'])) }}</strong>
+                            </div>
                         </div>
                     @endforeach
                 @endif
