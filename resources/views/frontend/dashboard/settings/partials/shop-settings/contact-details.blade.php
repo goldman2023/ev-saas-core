@@ -40,6 +40,8 @@
             return null;
         }
     }" x-init="init(); currentIndex = 0; currentContact = settings.contact_details[0]; ">
+
+    
     <div class="w-full flex justify-between items-center border-b border-gray-200 mb-3 pb-3">
         <div class="shrink-0">
             <h3 class="text-lg leading-6 font-medium text-gray-900 mb-1">{{ translate('Contact details') }}</h3>
@@ -119,7 +121,7 @@
             @svg('heroicon-o-home', ['class' => 'w-[18px] h-[18px] mr-2'])
             <span>{{ translate('Contact') }}</span>
         </h3>
-    
+
         <div class="flex flex-col mb-1 grow">
             {{-- Department Name --}}
             <div class="w-full">

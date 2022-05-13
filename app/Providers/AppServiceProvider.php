@@ -77,6 +77,10 @@ class AppServiceProvider extends ServiceProvider
             return ($user?->id ?? null) === (auth()->user()?->id ?? null);
         });
 
+        Blade::if('shopowner', function ($shop) {
+            return ($shop?->id ?? null) === (auth()->user()?->shop->first()?->id ?? null);
+        });
+
         // Hooks system
         Blade::directive('do_action', function ($name, $arg = '') {
             return "<?php do_action($name, $arg); ?>";

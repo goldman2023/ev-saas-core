@@ -11,32 +11,48 @@ class ShopSetting extends Model
 
     protected $table = 'shop_settings';
 
+    protected $fillable = ['shop_id', 'setting', 'value', 'created_at', 'updated_at'];
+
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
 
-    public function getValueAttribute($value)
+    public static function metaDataTypes()
     {
-        if (is_array($value)) {
-            return $value;
-        } elseif (is_string($value)) {
-            $decoded = json_decode($value, true);
+        return [
+            'email' => 'string',
+            'phones' => 'array',
+            'phones' => 'array',
+            'tagline' => 'string',
+            'websites' => 'array',
+            'tax_number' => 'string',
+            'registration_number' => 'string',
+            'contact_details' => 'array',
+        ];
+    }
 
-            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                return $decoded;
-            }
-        } elseif (ctype_digit($value)) {
-            $int = (int) $value;
-            $float = (float) $value;
-
-            if ($int == $float) {
-                return $int;
-            }
-
-            return $float;
+    public static function createMissingSettings($shop_id)
+    {
+        if ($shop_id instanceof Shop) {
+            $shop = $shop_id;
+        } else {
+            $shop = User::find($shop_id);
         }
 
-        return $value;
+        if (!empty($shop)) {
+            $settings = $shop->settings()->select('id', 'setting', 'value')->get()->keyBy('setting')->toArray();
+            $data_types = self::metaDataTypes();
+
+            $missing = array_diff_key($data_types, $settings);
+            if (! empty($missing)) {
+                foreach ($missing as $setting => $type) {
+                    self::updateOrCreate(
+                        ['shop_id' => $shop_id, 'setting' => $setting],
+                        ['value' => $type === 'boolean' ? false : null]
+                    );
+                }
+            }
+        }
     }
 }

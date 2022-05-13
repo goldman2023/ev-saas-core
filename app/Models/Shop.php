@@ -181,6 +181,17 @@ class Shop extends WeBaseModel
         }
     }
 
+    public function getShopMeta($key)
+    {
+        // Shop meta is stored in `shop_settings` table!!!!
+
+        $shop_meta = $this->settings->where('setting', $key)->keyBy('setting')->toArray();
+        
+        castValuesForGet($shop_meta, ShopSetting::metaDataTypes());
+
+        return $shop_meta[$key] ?? null;
+    }
+
 
     /* Function to return integer value for company public rating
     TODO: How this is calculated we will implement when we have reviewable trait
