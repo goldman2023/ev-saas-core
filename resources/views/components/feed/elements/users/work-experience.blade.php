@@ -59,11 +59,11 @@
                 @svg('icomoon-briefcase', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                 <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No work experience yet...') }}</span>
 
-                @if($user->id === auth()->user()->id)
+                @owner($user)
                     <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
                         {{ translate('Add Work Experience?') }}
                     </a>
-                @endif
+                @endowner
             </div>
         @endif
     </div>

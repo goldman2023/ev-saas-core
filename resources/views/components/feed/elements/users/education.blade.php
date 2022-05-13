@@ -71,11 +71,11 @@
                 @svg('icomoon-book', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                 <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No education yet...') }}</span>
 
-                @if($user->id === auth()->user()->id)
+                @owner($user)
                     <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
                         {{ translate('Add Education?') }}
                     </a>
-                @endif
+                @endowner
             </div>
         @endif
     </div>

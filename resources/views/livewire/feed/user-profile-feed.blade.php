@@ -63,9 +63,9 @@
     
     @if($type == 'activity')
         <div class="space-y-4 flex flex-col">
-            @if($user->id === auth()->user()->id)
+            @owner($user)
                 <livewire:feed.elements.add-post />
-            @endif
+            @endowner
             <livewire:feed.feed-list feed-type="recent" :user="$user" />
         </div>
     @endif
@@ -104,11 +104,11 @@
                     @svg('icomoon-book', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                     <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No portfolios yet...') }}</span>
 
-                    @if($user->id === auth()->user()->id)
+                    @owner($user)
                         <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
                             {{ translate('Add portfolio item?') }}
                         </a>
-                    @endif
+                    @endowner
                 </div>
             @endif
         </div>
@@ -130,11 +130,11 @@
                     @svg('icomoon-newspaper', ['class' => 'mx-auto h-12 w-12 text-gray-400'])
                     <span class="mt-2 block text-sm font-medium text-typ-2">{{ translate('No blog posts yet...') }}</span>
 
-                    @if($user->id === auth()->user()->id)
+                    @owner($user)
                         <a href="{{ route('blog.post.create') }}" class="btn-primary mt-3">
                             {{ translate('Add blog post?') }}
                         </a>
-                    @endif
+                    @endowner
                 </div>
             @endif
         </div>

@@ -152,7 +152,7 @@
                     </form>
                 </div>
             @else
-                @if(auth()->user()->point_balance > 0)
+                @if((auth()->user()?->point_balance ?? 0) > 0)
                     <div class="mt-3">
                         <p>
                             {{translate('Your club point is')}}:

@@ -13,11 +13,11 @@
             <x-tenant.system.image class="block h-[180px] sm:h-[260px] w-full rounded-t-xl " fit="cover" :image="$user->getCover(['w' => 1200])" />
             <x-tenant.system.image class="absolute left-[30px] bottom-[-50px] w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] rounded-full bg-white border border-gray-200" fit="contain" :image="$user->getThumbnail()" />
 
-            @if($user->id === auth()->user()->id)
+            @owner($user)
                 <a href="{{ route('my.account.settings') }}" class="absolute top-5 right-5 btn-primary">
                     {{ translate('Edit account') }}
                 </a>
-            @endif
+            @endowner
             {{-- <div class="absolute left-[210px] bottom-[20px] flex ">
 
             </div> --}}

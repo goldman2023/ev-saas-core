@@ -8,7 +8,7 @@
             <h4 class="mb-0 h4">{{ translate('Payment methods settings')}}</h4>
         </div>
         <div class="card-body">
-            @if(auth()->user()->isAdmin())
+            @if(auth()->user()?->isAdmin() ?? false)
                 @if($universal_payment_methods->isNotEmpty())
                     @foreach($universal_payment_methods as $key => $payment_method)
                         <livewire:dashboard.forms.payment-methods.payment-method-card
